@@ -30,9 +30,10 @@ import eu.geclipse.aws.s3.test.util.AWSVoTestUtil;
 import eu.geclipse.aws.s3.test.util.S3ServiceTestUtil;
 import eu.geclipse.aws.vo.AWSVirtualOrganization;
 import eu.geclipse.core.model.GridModel;
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElementCreator;
+import eu.geclipse.core.reporting.ProblemException;
+
 
 /**
  * Test class for the {@link S3Service} entity.
@@ -73,11 +74,11 @@ public class S3AWSService_PDETest {
    * Test method for
    * {@link eu.geclipse.aws.s3.service.S3AWSService#S3AWSService(eu.geclipse.aws.s3.service.S3AWSServiceCreator, eu.geclipse.aws.vo.AWSVirtualOrganization)}.
    * 
-   * @throws GridModelException
+   * @throws ProblemException
    */
   @Test
   public void testS3AWSServiceS3AWSServiceCreatorAWSVirtualOrganization()
-    throws GridModelException
+    throws ProblemException
   {
     List<IGridElementCreator> voCreators = GridModel.getElementCreators();
 
@@ -100,10 +101,10 @@ public class S3AWSService_PDETest {
    * Test method for
    * {@link eu.geclipse.aws.s3.service.S3AWSService#canContain(eu.geclipse.core.model.IGridElement)}.
    * 
-   * @throws GridModelException
+   * @throws ProblemException
    */
   @Test
-  public void testCanContain() throws GridModelException {
+  public void testCanContain() throws ProblemException {
     S3ServiceProperties serviceProperties = new S3ServiceProperties( this.s3AWSService );
     Assert.assertTrue( this.s3AWSService.canContain( serviceProperties ) );
 
@@ -119,10 +120,10 @@ public class S3AWSService_PDETest {
    * Test method for
    * {@link eu.geclipse.aws.s3.service.S3AWSService#apply(eu.geclipse.aws.s3.service.S3AWSServiceCreator)}.
    * 
-   * @throws GridModelException
+   * @throws ProblemException
    */
   @Test
-  public void testApply() throws GridModelException {
+  public void testApply() throws ProblemException {
     Assert.assertEquals( S3ServiceTestUtil.S3_SERVICE_NAME,
                          this.s3AWSService.getName() );
 
@@ -139,10 +140,10 @@ public class S3AWSService_PDETest {
    * Test method for
    * {@link eu.geclipse.aws.s3.service.S3AWSService#getHostName()}.
    * 
-   * @throws GridModelException
+   * @throws ProblemException
    */
   @Test
-  public void testGetHostName() throws GridModelException {
+  public void testGetHostName() throws ProblemException {
     Assert.assertEquals( S3ServiceTestUtil.S3_URL,
                          this.s3AWSService.getHostName() );
     this.s3AWSService.getProperties().setS3Url( null );
@@ -153,10 +154,10 @@ public class S3AWSService_PDETest {
    * Test method for {@link eu.geclipse.aws.s3.service.S3AWSService#getURI()}.
    * 
    * @throws URISyntaxException
-   * @throws GridModelException
+   * @throws ProblemException
    */
   @Test
-  public void testGetURI() throws URISyntaxException, GridModelException {
+  public void testGetURI() throws URISyntaxException, ProblemException {
     Assert.assertEquals( new URI( S3ServiceTestUtil.S3_URL ),
                          this.s3AWSService.getURI() );
     this.s3AWSService.getProperties().setS3Url( null );
@@ -230,10 +231,10 @@ public class S3AWSService_PDETest {
    * Test method for
    * {@link eu.geclipse.aws.s3.service.S3AWSService#equals(java.lang.Object)}.
    * 
-   * @throws GridModelException
+   * @throws ProblemException
    */
   @Test
-  public void testEqualsObject() throws GridModelException {
+  public void testEqualsObject() throws ProblemException {
     Assert.assertTrue( this.s3AWSService.equals( this.s3AWSService ) );
 
     // test against newly created s3AWSService with the same name
@@ -255,10 +256,10 @@ public class S3AWSService_PDETest {
    * Test method for
    * {@link eu.geclipse.aws.s3.service.S3AWSService#getProperties()}.
    * 
-   * @throws GridModelException
+   * @throws ProblemException
    */
   @Test
-  public void testGetProperties() throws GridModelException {
+  public void testGetProperties() throws ProblemException {
     Assert.assertNotNull( this.s3AWSService.getProperties() );
   }
 
@@ -275,10 +276,10 @@ public class S3AWSService_PDETest {
    * Test method for {@link eu.geclipse.aws.s3.service.S3AWSService#load()} and
    * {@link eu.geclipse.aws.s3.service.S3AWSService#save()}..
    * 
-   * @throws GridModelException
+   * @throws ProblemException
    */
   @Test
-  public void testLoadAndSave() throws GridModelException {
+  public void testLoadAndSave() throws ProblemException {
     Assert.assertEquals( S3ServiceTestUtil.S3_SERVICE_NAME,
                          this.s3AWSService.getProperties().getServiceName() );
 

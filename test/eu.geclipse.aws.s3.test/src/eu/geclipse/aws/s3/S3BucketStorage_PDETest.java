@@ -28,9 +28,10 @@ import org.junit.Test;
 import eu.geclipse.aws.s3.service.S3AWSService;
 import eu.geclipse.aws.s3.test.util.AWSVoTestUtil;
 import eu.geclipse.aws.s3.test.util.S3ServiceTestUtil;
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IMountable.MountPoint;
 import eu.geclipse.core.model.IMountable.MountPointID;
+import eu.geclipse.core.reporting.ProblemException;
+
 
 /**
  * Test class for the {@link S3BucketStorage} class.
@@ -67,10 +68,10 @@ public class S3BucketStorage_PDETest {
    * Test method for
    * {@link eu.geclipse.aws.s3.S3BucketStorage#S3BucketStorage(eu.geclipse.aws.s3.service.S3AWSService, org.jets3t.service.model.S3Bucket)}.
    * 
-   * @throws GridModelException
+   * @throws ProblemException
    */
   @Test
-  public void testS3BucketStorage() throws GridModelException {
+  public void testS3BucketStorage() throws ProblemException {
     S3AWSService s3AWSService = S3ServiceTestUtil.getS3AWSService();
     S3Bucket bucket = new S3Bucket( S3BucketStorage_PDETest.BUCKET_NAME );
     S3BucketStorage bucketStorage = new S3BucketStorage( null,
@@ -135,10 +136,10 @@ public class S3BucketStorage_PDETest {
   /**
    * Test method for {@link eu.geclipse.aws.s3.S3BucketStorage#getParent()}.
    * 
-   * @throws GridModelException
+   * @throws ProblemException
    */
   @Test
-  public void testGetParent() throws GridModelException {
+  public void testGetParent() throws ProblemException {
     Assert.assertEquals( AWSVoTestUtil.getAwsVo(),
                          this.bucketStorage.getParent() );
   }

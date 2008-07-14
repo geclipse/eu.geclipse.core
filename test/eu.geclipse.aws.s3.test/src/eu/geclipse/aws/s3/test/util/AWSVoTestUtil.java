@@ -20,8 +20,9 @@ import java.util.List;
 import eu.geclipse.aws.vo.AWSVirtualOrganization;
 import eu.geclipse.aws.vo.AWSVoCreator;
 import eu.geclipse.core.model.GridModel;
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridElementCreator;
+import eu.geclipse.core.reporting.ProblemException;
+
 
 /**
  * Utility Class to cover various repeating task in the setup process of the
@@ -65,9 +66,9 @@ public class AWSVoTestUtil {
    * {@link #VO_NAME}}.
    * 
    * @return the new {@link AWSVirtualOrganization} with the default values
-   * @throws GridModelException when the vo could not be created
+   * @throws ProblemException when the vo could not be created
    */
-  public static AWSVirtualOrganization getAwsVo() throws GridModelException {
+  public static AWSVirtualOrganization getAwsVo() throws ProblemException {
     AWSVoCreator awsVoCreator = AWSVoTestUtil.getAwsVoCreator();
     AWSVirtualOrganization awsVo = ( AWSVirtualOrganization )awsVoCreator.create( null );
     awsVoCreator.setVoName( AWSVoTestUtil.VO_NAME );

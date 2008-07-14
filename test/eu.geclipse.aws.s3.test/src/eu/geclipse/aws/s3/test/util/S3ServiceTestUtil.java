@@ -20,8 +20,9 @@ import java.util.List;
 import eu.geclipse.aws.s3.service.S3AWSService;
 import eu.geclipse.aws.s3.service.S3AWSServiceCreator;
 import eu.geclipse.core.model.GridModel;
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridElementCreator;
+import eu.geclipse.core.reporting.ProblemException;
+
 
 /**
  * A utility class able to provide an {@link S3AWSServiceCreator} and an
@@ -63,9 +64,9 @@ public class S3ServiceTestUtil {
    * Creates a new {@link S3AWSService}.
    * 
    * @return the new {@link S3AWSServiceCreator}
-   * @throws GridModelException when the service could not be created
+   * @throws ProblemException when the service could not be created
    */
-  public static S3AWSService getS3AWSService() throws GridModelException {
+  public static S3AWSService getS3AWSService() throws ProblemException {
     S3AWSServiceCreator S3AWSServiceCreator = S3ServiceTestUtil.getS3AWSServiceCreator();
     return ( S3AWSService )S3AWSServiceCreator.create( AWSVoTestUtil.getAwsVo() );
   }

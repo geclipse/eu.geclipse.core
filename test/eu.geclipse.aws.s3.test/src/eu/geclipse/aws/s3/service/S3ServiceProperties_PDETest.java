@@ -21,8 +21,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import eu.geclipse.aws.s3.test.util.S3ServiceTestUtil;
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridContainer;
+import eu.geclipse.core.reporting.ProblemException;
+
 
 /**
  * Test class for the {@link EC2ServiceProperties} class.
@@ -46,10 +47,10 @@ public class S3ServiceProperties_PDETest {
    * Test method for
    * {@link eu.geclipse.aws.s3.service.S3ServiceProperties#S3ServiceProperties(eu.geclipse.aws.s3.service.EC2Service)}.
    * 
-   * @throws GridModelException
+   * @throws ProblemException
    */
   @Test
-  public void testS3ServicePropertiesEC2Service() throws GridModelException {
+  public void testS3ServicePropertiesEC2Service() throws ProblemException {
     new S3ServiceProperties( S3ServiceTestUtil.getS3AWSService() );
   }
 
@@ -57,11 +58,11 @@ public class S3ServiceProperties_PDETest {
    * Test method for
    * {@link eu.geclipse.aws.s3.service.S3ServiceProperties#S3ServiceProperties(eu.geclipse.aws.s3.service.EC2Service, eu.geclipse.aws.s3.service.EC2ServiceCreator)}.
    * 
-   * @throws GridModelException
+   * @throws ProblemException
    */
   @Test
   public void testS3ServicePropertiesEC2ServiceEC2ServiceCreator()
-    throws GridModelException
+    throws ProblemException
   {
     new S3ServiceProperties( S3ServiceTestUtil.getS3AWSService(),
                              S3ServiceTestUtil.getS3AWSServiceCreator() );
@@ -72,10 +73,10 @@ public class S3ServiceProperties_PDETest {
    * {@link eu.geclipse.aws.s3.service.S3ServiceProperties#load()} and
    * {@link eu.geclipse.aws.s3.service.S3ServiceProperties#save()}.
    * 
-   * @throws GridModelException
+   * @throws ProblemException
    */
   @Test
-  public void testLoadSave() throws GridModelException {
+  public void testLoadSave() throws ProblemException {
     String dummyUrl = "testUrl"; //$NON-NLS-1$
     this.s3ServiceProperties.setS3Url( dummyUrl );
     this.s3ServiceProperties.save();
@@ -90,10 +91,10 @@ public class S3ServiceProperties_PDETest {
    * Test method for
    * {@link eu.geclipse.aws.s3.service.S3ServiceProperties#getFileStore()}.
    * 
-   * @throws GridModelException
+   * @throws ProblemException
    */
   @Test
-  public void testGetFileStore() throws GridModelException {
+  public void testGetFileStore() throws ProblemException {
     S3AWSService s3Service = S3ServiceTestUtil.getS3AWSService();
     S3ServiceProperties properties = s3Service.getProperties();
 
@@ -117,10 +118,10 @@ public class S3ServiceProperties_PDETest {
    * Test method for
    * {@link eu.geclipse.aws.s3.service.S3ServiceProperties#getParent()}.
    * 
-   * @throws GridModelException
+   * @throws ProblemException
    */
   @Test
-  public void testGetParent() throws GridModelException {
+  public void testGetParent() throws ProblemException {
     S3AWSService s3Service = S3ServiceTestUtil.getS3AWSService();
     S3ServiceProperties properties = s3Service.getProperties();
     IGridContainer parent = properties.getParent();

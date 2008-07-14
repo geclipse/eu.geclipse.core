@@ -27,8 +27,9 @@ import org.junit.Test;
 import eu.geclipse.aws.s3.test.util.AWSVoTestUtil;
 import eu.geclipse.aws.s3.test.util.S3ServiceTestUtil;
 import eu.geclipse.core.model.GridModel;
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridContainer;
+import eu.geclipse.core.reporting.ProblemException;
+
 
 /**
  * Test class for the {@link S3InfoService}.
@@ -46,10 +47,10 @@ public class S3InfoService_PDETest {
   /**
    * Creates an {@link S3InfoService} to test against.
    * 
-   * @throws GridModelException
+   * @throws ProblemException
    */
   @Before
-  public void setUp() throws GridModelException {
+  public void setUp() throws ProblemException {
     this.S3AWSService = S3ServiceTestUtil.getS3AWSService();
     this.infoService = new S3InfoService( this.S3AWSService );
   }
@@ -58,10 +59,10 @@ public class S3InfoService_PDETest {
    * Test method for
    * {@link eu.geclipse.aws.s3.service.S3InfoService#S3InfoService(eu.geclipse.aws.s3.service.S3AWSService)}.
    * 
-   * @throws GridModelException
+   * @throws ProblemException
    */
   @Test
-  public void testS3InfoService() throws GridModelException {
+  public void testS3InfoService() throws ProblemException {
     GridModel.getVoManager().delete( AWSVoTestUtil.getAwsVo() );
     S3InfoService infoService = new S3InfoService( S3ServiceTestUtil.getS3AWSService() );
     Assert.assertNotNull( infoService );
@@ -71,10 +72,10 @@ public class S3InfoService_PDETest {
    * Test method for
    * {@link eu.geclipse.aws.s3.service.S3InfoService#getHostName()}.
    * 
-   * @throws GridModelException
+   * @throws ProblemException
    */
   @Test
-  public void testGetHostName() throws GridModelException {
+  public void testGetHostName() throws ProblemException {
     Assert.assertEquals( S3ServiceTestUtil.S3_URL,
                          this.infoService.getHostName() );
     this.S3AWSService.getProperties().setS3Url( null );
@@ -85,10 +86,10 @@ public class S3InfoService_PDETest {
    * Test method for {@link eu.geclipse.aws.s3.service.S3InfoService#getURI()}.
    * 
    * @throws URISyntaxException
-   * @throws GridModelException
+   * @throws ProblemException
    */
   @Test
-  public void testGetURI() throws URISyntaxException, GridModelException {
+  public void testGetURI() throws URISyntaxException, ProblemException {
     Assert.assertEquals( new URI( S3ServiceTestUtil.S3_URL ),
                          this.infoService.getURI() );
     this.S3AWSService.getProperties().setS3Url( null );

@@ -22,7 +22,8 @@ import org.junit.Test;
 
 import eu.geclipse.aws.s3.test.util.AWSVoTestUtil;
 import eu.geclipse.aws.s3.test.util.S3ServiceTestUtil;
-import eu.geclipse.core.model.GridModelException;
+import eu.geclipse.core.reporting.ProblemException;
+
 
 /**
  * Test class for the {@link S3AWSServiceCreator} class.
@@ -70,10 +71,10 @@ public class S3AWSServiceCreator_PDETest {
    * Test method for
    * {@link eu.geclipse.aws.s3.service.S3AWSServiceCreator#create(eu.geclipse.core.model.IGridContainer)}.
    * 
-   * @throws GridModelException
+   * @throws ProblemException
    */
   @Test
-  public void testCreate() throws GridModelException {
+  public void testCreate() throws ProblemException {
     S3AWSService S3AWSService = ( S3AWSService )this.serviceCreator.create( null );
     Assert.assertNull( S3AWSService );
     S3AWSService = ( S3AWSService )this.serviceCreator.create( AWSVoTestUtil.getAwsVo() );
@@ -86,10 +87,10 @@ public class S3AWSServiceCreator_PDETest {
    * Test method for
    * {@link eu.geclipse.aws.s3.internal.service.S3AWSServiceCreator#canCreate(org.eclipse.core.filesystem.IFileStore)}.
    * 
-   * @throws GridModelException
+   * @throws ProblemException
    */
   @Test
-  public void testCanCreateIFileStore() throws GridModelException {
+  public void testCanCreateIFileStore() throws ProblemException {
     S3AWSService S3AWSService = S3ServiceTestUtil.getS3AWSService();
     Assert.assertNotNull( S3AWSService );
     IFileStore fileStore = S3AWSService.getFileStore();
