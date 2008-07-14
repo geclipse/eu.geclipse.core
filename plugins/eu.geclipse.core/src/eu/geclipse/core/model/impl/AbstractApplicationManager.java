@@ -65,7 +65,8 @@ public abstract class AbstractApplicationManager
       if ( computing instanceof IGridContainer ) {
         parent = ( IGridContainer ) computing;
       }
-      result = infoService.fetchApplications( parent, this.vo, computing, null );
+      result = ( IGridApplication[] )infoService.fetchResources( parent, this.vo, GridResourceCategoryFactory.
+                                                                 getCategory( GridResourceCategoryFactory.ID_APPLICATIONS ), null );
     }
     return result;
   }
