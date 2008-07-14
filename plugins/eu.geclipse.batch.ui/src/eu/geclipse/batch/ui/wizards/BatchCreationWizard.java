@@ -27,6 +27,8 @@ import org.eclipse.ui.ide.IDE;
 
 import eu.geclipse.batch.ui.internal.Activator;
 import eu.geclipse.batch.ui.internal.Messages;
+import eu.geclipse.core.model.IGridElement;
+import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.reporting.ProblemException;
 
 
@@ -39,6 +41,7 @@ public class BatchCreationWizard extends Wizard implements INewWizard {
   private BatchLocationWizardPage fileCreationPage;
   private BatchDefinitionWizardPage definitionPage;
   private IFile file;
+  private IStructuredSelection selection;
   
   /**
    * The default constructor.
@@ -84,7 +87,7 @@ public class BatchCreationWizard extends Wizard implements INewWizard {
     }
     return result;
   }
-  
+   
   /*
    * (non-Javadoc)
    *
@@ -92,9 +95,10 @@ public class BatchCreationWizard extends Wizard implements INewWizard {
    *      org.eclipse.jface.viewers.IStructuredSelection)
    */
   public void init( final IWorkbench workbench,
-                    final IStructuredSelection selection )  {
+                    final IStructuredSelection sel )  {
+    this.selection = sel;
     // Create pages for this wizard
-    this.fileCreationPage = new BatchLocationWizardPage( selection );
+    this.fileCreationPage = new BatchLocationWizardPage( sel );
     this.definitionPage = new BatchDefinitionWizardPage();
   }
   
@@ -109,6 +113,21 @@ public class BatchCreationWizard extends Wizard implements INewWizard {
     }
   }
 
+  /**
+   * Returns the grid project
+   * 
+   * @return IGridProject if exists, <code>null</code> otherwise 
+   */
+  public IGridProject getGridProject() {
+    IGridProject result = null;
+
+    if( null != this.selection ) {
+      IGridElement selected = ( IGridElement )this.selection.getFirstElement();
+      result = selected.getProject();
+    }
+    
+    return result;
+  }
   
   /*
    * (non-Javadoc)

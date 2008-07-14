@@ -28,6 +28,8 @@ import eu.geclipse.batch.IBatchJobInfo;
 import eu.geclipse.batch.ui.internal.BatchJobManager;
 import eu.geclipse.batch.ui.internal.Messages;
 
+import eu.geclipse.core.model.IGridElement;
+import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.ui.dialogs.ProblemDialog;
 
@@ -40,7 +42,8 @@ public class MoveJobWizard extends Wizard implements INewWizard {
   private List< IBatchJobInfo > jobs;
   private MoveJobWizardPage page;
   private IWizardPage currentPage;
-
+  private IStructuredSelection selection;
+  
   /**
    * Argument constructor for this class. 
    * @param manager Provides access to the manager of batch jobs
@@ -73,10 +76,28 @@ public class MoveJobWizard extends Wizard implements INewWizard {
   /* (non-Javadoc)
    * @see org.eclipse.ui.IWorkbenchWizard#init(org.eclipse.ui.IWorkbench, org.eclipse.jface.viewers.IStructuredSelection)
    */
-  public void init( final IWorkbench workbench, final IStructuredSelection selection ) {
+  public void init( final IWorkbench workbench, final IStructuredSelection sel ) {
+    this.selection = sel;
     this.page = new MoveJobWizardPage();
   }
   
+  /**
+   * Returns the grid project
+   * 
+   * @return IGridProject if exists, <code>null</code> otherwise 
+   */
+  public IGridProject getGridProject() {
+    IGridProject result = null;
+
+//    result = ( IGridProject )ResourcesPlugin.getWorkspace().getRoot().getProject(  ); 
+    
+    if( null != this.selection ) {
+      IGridElement selected = ( IGridElement )this.selection.getFirstElement();
+      result = selected.getProject();
+    }
+    return result;
+  }
+
   /* (non-Javadoc)
    * @see org.eclipse.jface.wizard.Wizard#addPages()
    */

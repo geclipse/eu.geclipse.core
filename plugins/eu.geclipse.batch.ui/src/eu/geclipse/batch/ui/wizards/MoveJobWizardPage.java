@@ -16,8 +16,6 @@
  *****************************************************************************/
 package eu.geclipse.batch.ui.wizards;
 
-import java.util.ArrayList;
-
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -31,8 +29,13 @@ import org.eclipse.swt.widgets.Text;
 
 import eu.geclipse.batch.ui.internal.Activator;
 import eu.geclipse.batch.ui.internal.Messages;
-import eu.geclipse.info.glue.AbstractGlueTable;
-import eu.geclipse.info.glue.GlueQuery;
+import eu.geclipse.core.model.IGridComputing;
+import eu.geclipse.core.model.IGridInfoService;
+import eu.geclipse.core.model.IGridProject;
+import eu.geclipse.core.model.IVirtualOrganization;
+import eu.geclipse.core.model.impl.AbstractVirtualOrganization;
+import eu.geclipse.core.model.impl.GridResourceCategoryFactory;
+import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.ui.widgets.StoredCombo;
 
 /**
@@ -174,22 +177,32 @@ public class MoveJobWizardPage extends WizardPage {
    * Provides a default list of computing elements in the Host field.
    */
   private void addComputingElements() {
-    ArrayList<AbstractGlueTable> ceTable = 
-      GlueQuery.getGlueTable( "GlueCE", "GlueCE", null ); //$NON-NLS-1$ //$NON-NLS-2$
-    for ( AbstractGlueTable table : ceTable ) {
-      try {
-        String hostname = ( String ) table.getFieldByName( "HostName" ); //$NON-NLS-1$
-        if ( hostname != null && this.computingElementCombo.indexOf( hostname ) == -1 ) {
-          this.computingElementCombo.add( hostname );
+    IGridComputing[] elements = null;
+    IGridProject pro = ( ( MoveJobWizard ) this.getWizard() ).getGridProject();
+    
+    if ( null != pro ) {
+      IVirtualOrganization vo = ( IVirtualOrganization )pro.getVO().getAdapter( AbstractVirtualOrganization.class );
+      IGridInfoService infoService;
+
+      if ( null != vo ) { 
+        try {
+          infoService = vo.getInfoService();
+          elements = ( IGridComputing[] )infoService.fetchResources( null, vo, 
+                                                                     GridResourceCategoryFactory.getCategory( 
+                                                                           GridResourceCategoryFactory.ID_COMPUTING ), 
+                                                                     null );
+                              
+          for ( IGridComputing comp : elements ) {
+            String hostname = comp.getHostName();
+            if ( hostname != null && this.computingElementCombo.indexOf( hostname ) == -1 ) {
+              this.computingElementCombo.add( hostname );
+            }
+          }
+        } catch( ProblemException e ) {
+          // Ignore, we will not provide suggestions
         }
-      } catch( RuntimeException exception ) {
-        Activator.logException( exception );
-      } catch( IllegalAccessException exception ) {
-        Activator.logException( exception );
-      } catch( NoSuchFieldException exception ) {
-        Activator.logException( exception );
       }
     }
-  }
+  } 
 }
 

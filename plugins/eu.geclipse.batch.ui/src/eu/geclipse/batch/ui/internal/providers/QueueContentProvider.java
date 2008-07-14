@@ -50,7 +50,7 @@ public class QueueContentProvider implements IStructuredContentProvider {
       result = (Object[]) inputElement;
     }
     else if ( inputElement instanceof Collection ) {    
-      result = ( ( Collection ) inputElement ).toArray();
+      result = ( ( Collection<?> ) inputElement ).toArray();
     }
     
     return result;

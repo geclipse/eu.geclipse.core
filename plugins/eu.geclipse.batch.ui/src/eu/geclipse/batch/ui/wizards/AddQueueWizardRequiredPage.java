@@ -76,14 +76,16 @@ public class AddQueueWizardRequiredPage extends WizardPage {
 
   protected Table allowedVoTable;
 
+  protected Button editVoButton;
+
+  protected Button deleteVoButton;
+
   // Private
   private Composite mainComp;
 
   private Label nameLabel;
 
   private Label typeLabel;
-
-  private Label statusLabel;
 
   private Label timeCPULabel;
 
@@ -95,9 +97,6 @@ public class AddQueueWizardRequiredPage extends WizardPage {
 
   private Button addVoButton;
 
-  private Button editVoButton;
-
-  private Button deleteVoButton;
 
   /**
    * Create a new instance of the AddQueueWizardRequiredPage
@@ -114,7 +113,7 @@ public class AddQueueWizardRequiredPage extends WizardPage {
    */
   public void createControl( final Composite parent ) {
 
-    GridData longData, statusData, voButtonData;
+    GridData longData, voButtonData;
     Composite timeComp;
 
     this.mainComp = new Composite( parent, SWT.NONE );
