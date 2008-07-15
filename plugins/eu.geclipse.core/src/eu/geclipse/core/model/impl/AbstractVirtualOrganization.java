@@ -117,6 +117,8 @@ public abstract class AbstractVirtualOrganization
       computing = new IGridComputing[ myComputingResources.length ];
       System.arraycopy( myComputingResources, 0, computing, 0, myComputingResources.length );
     }
+    else
+      computing = new IGridComputing[ 0 ];
     
     return computing;
   }
@@ -225,6 +227,8 @@ public abstract class AbstractVirtualOrganization
       storage = new IGridStorage[ myGridStorage.length ];
       System.arraycopy( myGridStorage, 0, storage, 0, myGridStorage.length );
     }
+    else 
+      storage = new IGridStorage[ 0 ];
     
     return storage;
   }
@@ -234,18 +238,29 @@ public abstract class AbstractVirtualOrganization
   }
   
   public IGridJobService[] getJobSubmissionServices( final IProgressMonitor monitor ) throws ProblemException {
-    List< IGridJobService > jsServices
-      = new ArrayList< IGridJobService >();
-    IGridService[] services = getServices( monitor );
-    if ( services == null ) {
-      services = new IGridService[ 0 ];
+    
+    IGridJobService[] myJobServices = null;
+    IGridResource[] myGridJobResources = null;
+    
+    IGridInfoService infoService = getInfoService();
+    if ( infoService != null ) {
+      myGridJobResources = infoService.fetchResources( this,
+                                                       this,
+                                                       GridResourceCategoryFactory
+                                                         .getCategory( GridResourceCategoryFactory.ID_JOB_SERVICES ),
+                                                        false,
+                                                        IGridJobService.class,
+                                                        monitor );
     }
-    for ( IGridService service : services ) {
-      if ( service instanceof IGridJobService ) {
-        jsServices.add( ( IGridJobService ) service );
-      }
+    
+    if ( myGridJobResources != null ) {
+      myJobServices = new IGridJobService[ myGridJobResources.length ];
+      System.arraycopy( myGridJobResources, 0, myJobServices, 0, myGridJobResources.length );
     }
-    return jsServices.toArray( new IGridJobService[ jsServices.size() ] );
+    else 
+      myJobServices = new IGridJobService[ 0 ];
+    
+    return myJobServices;
   }
   
   /* (non-Javadoc)
