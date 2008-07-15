@@ -38,6 +38,7 @@ import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 
+import eu.geclipse.core.filesystem.GEclipseFileSystem;
 import eu.geclipse.core.filesystem.GEclipseURI;
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridPreferences;
@@ -216,6 +217,7 @@ public class ConnectionWizard
         GEclipseURI geclURI = new GEclipseURI( slaveURI );
         URI masterURI = geclURI.toMasterURI();
         IFileStore fileStore = EFS.getStore( masterURI );
+        GEclipseFileSystem.assureFileStoreIsActive( fileStore );
         IFileInfo fileInfo = fileStore.fetchInfo();
         
         if ( fileInfo.isDirectory() ) {

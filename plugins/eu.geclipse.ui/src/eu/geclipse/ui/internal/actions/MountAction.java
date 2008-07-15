@@ -25,6 +25,7 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Shell;
 
+import eu.geclipse.core.filesystem.GEclipseFileSystem;
 import eu.geclipse.core.filesystem.GEclipseURI;
 import eu.geclipse.core.model.IGridConnection;
 import eu.geclipse.core.model.IGridContainer;
@@ -174,6 +175,7 @@ public class MountAction extends Action {
           GEclipseURI geclURI = new GEclipseURI( uri );
           URI masterURI = geclURI.toMasterURI();
           IFileStore fileStore = EFS.getStore( masterURI );
+          GEclipseFileSystem.assureFileStoreIsActive( fileStore );
           IFileInfo fileInfo = fileStore.fetchInfo();
           
           if ( fileInfo.isDirectory() ) {
