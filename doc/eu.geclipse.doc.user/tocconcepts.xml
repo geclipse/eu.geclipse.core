@@ -155,28 +155,16 @@
       href="html/concepts/siteadministration/batchSystemConfiguration.html">
     </topic>
 
-<!--
-    <topic
-      label="Monitoring Grid Resources"
-      href="html/concepts/siteadministration/monitoring.html">
-    </topic>
--->
-    <topic
-      label="Testing Grid Resources"
-      href="html/concepts/siteadministration/testing.html">
-    </topic>
-
     <topic
       label="Simple Physical Resource Tests"
       href="html/concepts/siteadministration/simpleTests.html">
     </topic>
 
-<!--
     <topic
-      label="Benchmarking Grid Resources"
-      href="html/concepts/siteadministration/benchmarking.html">
+      label="Testing Grid Resources"
+      href="html/concepts/siteadministration/testing.html">
     </topic>
--->
+    
     <topic
       label="The Terminal View"
       href="html/concepts/siteadministration/terminalView.html">
