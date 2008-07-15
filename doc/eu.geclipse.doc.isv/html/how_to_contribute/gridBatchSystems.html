@@ -38,8 +38,8 @@
 
 <p>The Batch Editor displays the current state of a batch service and provides for interaction with the service</p>
 <img
-  width="708"
-  height="507"
+  width="876"
+  height="528"
   src="images/batchEditorView.png" />
 
 <p>The Batch Job View displays all the batch jobs residing in the selected resource in the Batch Editor</p>
@@ -54,13 +54,21 @@
   height="494"
   src="images/newQueueWizardPage.png" />
 
+
+<h3>Extension point</h3>
+<dl>
+  <dt><code>eu.geclipse.batch.batchService</code></dt>
+  <dd>Provides a scheme for defining new batch service 
+  by descriptor, id, name, and corresponding wizard</dd>
+</dl>
+
 <h2>Interfaces to implement</h2>
 <dl>
-  <dt><code>eu.geclipse.batch.IBatchWrapper</code></dt>
-  <dd>Implement this to represent a new batch service</dd>
-  <dt><code>eu.geclipse.batch.ui.editors.BatchEditor</code></dt>
-  <dd>In method setInput add the instantiation of your batch
-  service wrapper</dd>
+  <dt><code>eu.geclipse.batch.IBatchService</code></dt>
+  <dd>Implement this to represent your batch service </dd>
+  <dt><code>eu.geclipse.batch.IBatchServiceDescription</code></dt>
+  <dd>Implement this in order to hold all parameters that are
+  needed for a successful batch service creation</dd>
 </dl>
 
 </body>
