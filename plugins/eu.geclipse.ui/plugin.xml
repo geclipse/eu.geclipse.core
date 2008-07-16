@@ -165,7 +165,7 @@
          </filter>
       </page>
       <page
-            adaptable="true"
+            adaptable="false"
             class="eu.geclipse.ui.properties.GridConnectionPropertiesPage"
             id="eu.geclipse.ui.gridConnections"
             name="Grid Connections">
