@@ -37,7 +37,6 @@ import eu.geclipse.core.model.IStorableElement;
 import eu.geclipse.core.model.impl.AbstractGridContainer;
 import eu.geclipse.core.reporting.ProblemException;
 
-
 /**
  * The {@link S3AWSService} serves as the entry point to the s3 infrastructure.
  * Most importantly it provides the {@link S3InfoService}.
@@ -69,7 +68,7 @@ public class S3AWSService extends AbstractGridContainer
     try {
       apply( serviceCreator );
       addElement( new S3InfoService( this ) );
-    } catch ( ProblemException e ) {
+    } catch( ProblemException e ) {
       Activator.log( "Could not populate S3AWSAService with data from provided S3 service creator", //$NON-NLS-1$
                      e );
     }
@@ -89,7 +88,7 @@ public class S3AWSService extends AbstractGridContainer
       addElement( serviceProperties );
 
       addElement( new S3InfoService( this ) );
-    } catch ( ProblemException e ) {
+    } catch( ProblemException e ) {
       Activator.log( "Could not load the s3 service details from the filestore", //$NON-NLS-1$
                      e );
     }
@@ -106,7 +105,7 @@ public class S3AWSService extends AbstractGridContainer
    * {@link S3AWSServiceCreator} to the {@link S3AWSService}.
    * 
    * @param serviceCreator the {@link S3AWSServiceCreator} to apply the data
-   *            from
+   *          from
    * @throws ProblemException
    */
   public void apply( final S3AWSServiceCreator serviceCreator )
@@ -126,10 +125,10 @@ public class S3AWSService extends AbstractGridContainer
     S3ServiceProperties properties = null;
     try {
       properties = getProperties();
-    } catch ( ProblemException e ) {
+    } catch( ProblemException e ) {
       Activator.log( "Could not load the properties of the s3 service", e ); //$NON-NLS-1$
     }
-    if ( properties != null ) {
+    if( properties != null ) {
       return properties.getS3Url();
     }
     return null;
@@ -138,10 +137,10 @@ public class S3AWSService extends AbstractGridContainer
   public URI getURI() {
     String hostName = getHostName();
     try {
-      if ( hostName != null ) {
+      if( hostName != null ) {
         return new URI( hostName );
       }
-    } catch ( URISyntaxException e ) {
+    } catch( URISyntaxException e ) {
       Activator.log( "Could not create S3 service URI from " + hostName, e ); //$NON-NLS-1$
     }
     return null;
@@ -155,10 +154,10 @@ public class S3AWSService extends AbstractGridContainer
     S3ServiceProperties properties = null;
     try {
       properties = getProperties();
-    } catch ( ProblemException problemEx ) {
+    } catch( ProblemException problemEx ) {
       Activator.log( "Could not load the properties of the s3 service", problemEx ); //$NON-NLS-1$
     }
-    if ( properties != null ) {
+    if( properties != null ) {
       return properties.getServiceName();
     }
     return null;
@@ -187,15 +186,14 @@ public class S3AWSService extends AbstractGridContainer
   @Override
   public boolean equals( final Object obj ) {
     boolean result = false;
-    if ( obj instanceof S3AWSService ) {
+    if( obj instanceof S3AWSService ) {
       result = equals( ( S3AWSService )obj );
     }
     return result;
   }
 
   /**
-   * A comparison method using the {@link S3AWSService#awsVo} as comparison
-   * criteria.
+   * A comparison method using the name of the service as comparison criteria.
    * 
    * @param service the {@link S3AWSService} to compare with
    * @return if the two services are equal in regards to their name
@@ -211,7 +209,7 @@ public class S3AWSService extends AbstractGridContainer
    * @return this services properties or <code>null</code> if no properties
    *         could be retrieved
    * @throws ProblemException Thrown if an error occurs while fetching the
-   *             properties.
+   *           properties.
    */
   public S3ServiceProperties getProperties() throws ProblemException {
     S3ServiceProperties properties = null;
@@ -236,7 +234,7 @@ public class S3AWSService extends AbstractGridContainer
           break;
         }
       }
-    } catch ( ProblemException problemEx ) {
+    } catch( ProblemException problemEx ) {
       Activator.log( "Could not get info service from EC2Service", problemEx ); //$NON-NLS-1$
     }
     return infoService;
@@ -249,15 +247,15 @@ public class S3AWSService extends AbstractGridContainer
     IFileStore fileStore = getFileStore();
     try {
       IFileStore[] childStores = fileStore.childStores( EFS.NONE, null );
-      for ( IFileStore child : childStores ) {
+      for( IFileStore child : childStores ) {
 
-        if ( child.getName().equals( S3ServiceProperties.STORAGE_NAME ) ) {
+        if( child.getName().equals( S3ServiceProperties.STORAGE_NAME ) ) {
           S3ServiceProperties serviceProperties = new S3ServiceProperties( this );
           serviceProperties.load();
           addElement( serviceProperties );
         }
       }
-    } catch ( CoreException cExc ) {
+    } catch( CoreException cExc ) {
       throw new ProblemException( ICoreProblems.MODEL_ELEMENT_LOAD_FAILED,
                                   cExc,
                                   Activator.PLUGIN_ID );
@@ -267,10 +265,10 @@ public class S3AWSService extends AbstractGridContainer
   public void save() throws ProblemException {
     // create own storage directory
     IFileStore fileStore = getFileStore();
-    if ( ! fileStore.fetchInfo().exists() ) {
+    if( !fileStore.fetchInfo().exists() ) {
       try {
         fileStore.mkdir( EFS.NONE, new NullProgressMonitor() );
-      } catch ( CoreException e ) {
+      } catch( CoreException e ) {
         Activator.log( "Could not create storage dir for s3Service", e ); //$NON-NLS-1$
         return;
       }
@@ -278,8 +276,8 @@ public class S3AWSService extends AbstractGridContainer
 
     // save children
     IGridElement[] children = getChildren( null );
-    for ( IGridElement child : children ) {
-      if ( child instanceof IStorableElement ) {
+    for( IGridElement child : children ) {
+      if( child instanceof IStorableElement ) {
         ( ( IStorableElement )child ).save();
       }
     }
