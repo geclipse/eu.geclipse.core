@@ -54,4 +54,6 @@ public interface IGridApplication
    */
   public void setScript( URI script );
 
+  public IGridApplicationParameters getApplicationParameters();
+  
 }
