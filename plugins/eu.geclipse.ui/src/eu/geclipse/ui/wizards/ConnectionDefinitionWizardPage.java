@@ -42,7 +42,6 @@ public class ConnectionDefinitionWizardPage extends WizardPage {
   public void createControl( final Composite parent ) {
     
     this.connectionDefinitionComp = new GridConnectionDefinitionComposite( parent, SWT.NULL );
-    
     if ( this.initialURI != null ) {
       this.connectionDefinitionComp.setURI( this.initialURI );
     }

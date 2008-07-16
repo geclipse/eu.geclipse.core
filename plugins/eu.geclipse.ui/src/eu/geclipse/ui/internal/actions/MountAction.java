@@ -11,14 +11,16 @@ import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
-import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -27,12 +29,16 @@ import org.eclipse.swt.widgets.Shell;
 
 import eu.geclipse.core.filesystem.GEclipseFileSystem;
 import eu.geclipse.core.filesystem.GEclipseURI;
+import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridConnection;
+import eu.geclipse.core.model.IGridConnectionElement;
 import eu.geclipse.core.model.IGridContainer;
+import eu.geclipse.core.model.IGridPreferences;
 import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.model.IMountable;
 import eu.geclipse.core.model.IMountable.MountPoint;
 import eu.geclipse.core.model.IMountable.MountPointID;
+import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.wizards.ConnectionWizard;
 
@@ -84,24 +90,18 @@ public class MountAction extends Action {
     
     List< IStatus > errors = new ArrayList< IStatus >();
     
-    IProgressMonitor lMonitor
-      = monitor == null
-      ? new NullProgressMonitor()
-      : monitor;
-      
-    lMonitor.beginTask( "Creating mounts", this.mountables.length );
+    SubMonitor sMonitor = SubMonitor.convert( monitor, "Creating mounts", this.mountables.length );
     
     for ( IMountable mountable : this.mountables ) {
       
       try {
         
-        if ( lMonitor.isCanceled() ) {
-          break;
+        if ( sMonitor.isCanceled() ) {
+          throw new OperationCanceledException();
         }
         
-        lMonitor.subTask( "Mounting " + mountable.getName() );
-        createMount( mountable );
-        lMonitor.worked( 1 );
+        sMonitor.subTask( "Mounting " + mountable.getName() );
+        createMount( mountable, sMonitor.newChild( 1 ) );
         
       } catch ( CoreException cExc ) {
         IStatus status = new Status(
@@ -115,7 +115,7 @@ public class MountAction extends Action {
       
     }
     
-    lMonitor.done();
+    sMonitor.done();
     
     IStatus result = Status.OK_STATUS;
     
@@ -139,59 +139,131 @@ public class MountAction extends Action {
    * file is created in the connections folder of the selected project.
    * 
    * @param mountable The {@link IMountable} to be mounted.
+   * @throws CoreException 
    * @throws CoreException If the mount file count not be created.
    */
-  protected void createMount( final IMountable mountable )
-      throws CoreException {
+  protected void createMount( final IMountable mountable,
+                              final IProgressMonitor monitor ) throws CoreException {
+
+    boolean global = false;
     
-    IGridProject project = mountable.getProject();
-    IGridContainer mountFolder = project.getProjectFolder( IGridConnection.class );
-    
-    if ( mountFolder != null ) {
+    if ( mountable instanceof IGridConnectionElement ) {
       
-      MountPoint mountPoint = mountable.getMountPoint( this.mountID );
-      String mountName = mountPoint.getName();
+      IGridContainer root = ( IGridConnectionElement ) mountable;
       
-      if ( mountPoint != null ) {
-        
-        URI uri = mountPoint.getURI();
-        
-        if ( this.mountAs ) {
-          ConnectionWizard wizard = new ConnectionWizard( uri, mountName );
-          wizard.init( null, new StructuredSelection( mountFolder.getResource() ) );
-          final WizardDialog dialog = new WizardDialog( this.shell, wizard );
-          this.shell.getDisplay().syncExec( new Runnable() {
-            public void run() {
-              dialog.open();
-            }
-          } );
-        }
-        
-        else {
-        
-          IContainer mountContainer = ( IContainer ) mountFolder.getResource();
-          IPath path = new Path( mountName );
-          
-          GEclipseURI geclURI = new GEclipseURI( uri );
-          URI masterURI = geclURI.toMasterURI();
-          IFileStore fileStore = EFS.getStore( masterURI );
-          GEclipseFileSystem.assureFileStoreIsActive( fileStore );
-          IFileInfo fileInfo = fileStore.fetchInfo();
-          
-          if ( fileInfo.isDirectory() ) {
-            IFolder folder = mountContainer.getFolder( path );
-            folder.createLink( masterURI, IResource.ALLOW_MISSING_LOCAL, null );
-          } else {
-            IFile file = mountContainer.getFile( path );
-            file.createLink( masterURI, IResource.ALLOW_MISSING_LOCAL, null );
-          }
-          
-        }
-        
+      while ( ! ( root instanceof IGridConnection ) && ( root != null ) ) {
+        root = root.getParent();
+      }
+      
+      if ( ( root != null ) && ( root instanceof IGridConnection ) ) {
+        global = ( ( IGridConnection ) root ).isGlobal();
       }
       
     }
+
+    MountPoint mountPoint = mountable.getMountPoint( this.mountID );
+
+    if ( mountPoint != null ) {
+
+      String mountName = mountPoint.getName();
+      URI uri = mountPoint.getURI();
+
+      if ( this.mountAs ) {
+        ConnectionWizard wizard = new ConnectionWizard( uri, mountName, global );
+        if ( ! global ) {
+          IGridProject project = mountable.getProject();
+          IGridContainer mountFolder = project.getProjectFolder( IGridConnection.class );
+          wizard.init( null, new StructuredSelection( mountFolder.getResource() ) );
+        }
+        final WizardDialog dialog = new WizardDialog( this.shell, wizard );
+        this.shell.getDisplay().asyncExec( new Runnable() {
+          public void run() {
+            dialog.open();
+          }
+        } );
+      }
+
+      else if ( global ) {
+        createGlobalMount( uri, mountName, monitor );
+      }
+
+      else {
+        IGridProject project = mountable.getProject();
+        IGridContainer mountFolder = project.getProjectFolder( IGridConnection.class );
+        IPath path = mountFolder.getPath().append( mountName );
+        createLocalMount( uri, path, monitor );
+      }
+
+    }
     
+  }
+  
+  public static void createGlobalMount( final URI uri,
+                                        final String name,
+                                        final IProgressMonitor monitor )
+      throws CoreException {
+    
+    SubMonitor sMonitor = SubMonitor.convert( monitor, 10 );
+    
+    try {
+      
+      sMonitor.subTask( "Preparing resources" );
+      GEclipseURI geclURI = new GEclipseURI( uri );
+      boolean isDirectory = isDirectory( geclURI );
+      sMonitor.worked( 4 );
+      if ( sMonitor.isCanceled() ) {
+        throw new OperationCanceledException();
+      }
+ 
+      sMonitor.subTask( "Creating connection" );
+      IGridPreferences preferences = GridModel.getPreferences();
+      preferences.createGlobalConnection( name, geclURI.toMasterURI(), sMonitor.newChild( 6 ) );
+      
+    } finally {
+      sMonitor.done();
+    }
+    
+  }
+  
+  public static void createLocalMount( final URI uri,
+                                       final IPath path,
+                                       final IProgressMonitor monitor )
+      throws CoreException {
+    
+    SubMonitor sMonitor = SubMonitor.convert( monitor, 10 );
+    
+    try {
+    
+      sMonitor.subTask( "Preparing resources" );
+      GEclipseURI geclURI = new GEclipseURI( uri );
+      boolean isDirectory = isDirectory( geclURI );
+      sMonitor.worked( 4 );
+      if ( sMonitor.isCanceled() ) {
+        throw new OperationCanceledException();
+      }
+      
+      sMonitor.subTask( "Creating connection" );
+      if ( isDirectory ) {
+        IFolder folder = ResourcesPlugin.getWorkspace().getRoot().getFolder( path );
+        folder.createLink( geclURI.toMasterURI(), IResource.ALLOW_MISSING_LOCAL, sMonitor.newChild( 6 ) );
+      } else {
+        IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile( path );
+        file.createLink( geclURI.toMasterURI(), IResource.ALLOW_MISSING_LOCAL, sMonitor.newChild( 6 ) );
+      }
+      
+    } finally {
+      sMonitor.done();
+    }
+    
+  }
+  
+  private static boolean isDirectory( final GEclipseURI uri )
+      throws CoreException {
+    URI masterURI = uri.toMasterURI();
+    IFileStore fileStore = EFS.getStore( masterURI );
+    GEclipseFileSystem.assureFileStoreIsActive( fileStore );
+    IFileInfo fileInfo = fileStore.fetchInfo();
+    return fileInfo.isDirectory();
   }
   
 }

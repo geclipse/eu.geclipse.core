@@ -15,18 +15,14 @@
 
 package eu.geclipse.ui.wizards;
 
+import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.net.URL;
 
-import org.eclipse.core.filesystem.EFS;
-import org.eclipse.core.filesystem.IFileInfo;
-import org.eclipse.core.filesystem.IFileStore;
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -38,12 +34,14 @@ import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 
-import eu.geclipse.core.filesystem.GEclipseFileSystem;
+import eu.geclipse.core.ICoreProblems;
 import eu.geclipse.core.filesystem.GEclipseURI;
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridPreferences;
 import eu.geclipse.core.reporting.ProblemException;
+import eu.geclipse.ui.dialogs.ProblemDialog;
 import eu.geclipse.ui.internal.Activator;
+import eu.geclipse.ui.internal.actions.MountAction;
 
 
 /**
@@ -147,17 +145,24 @@ public class ConnectionWizard
   @Override
   public boolean performFinish() {
     
-    boolean result = false;
+    boolean result = true;
     URI uri = this.definitionPage.getURI();
     
     if ( uri != null ) {
-    
-      if ( this.createGlobalConnection ) {
-        result = createGlobalConnection();
-      } else {
-        result = createLocalConnection();
+      try {
+        if ( ConnectionWizard.this.createGlobalConnection ) {
+          result = createGlobalConnection( uri );
+        } else {
+          result = createLocalConnection( uri );
+        }
+      } catch ( ProblemException pExc ) {
+        ProblemDialog.openProblem(
+            getShell(),
+            "Mount failed",
+            "Unable to create connection",
+            pExc );
+        result = false;
       }
-    
     }
     
     return result;
@@ -169,79 +174,88 @@ public class ConnectionWizard
     this.initialSelection = selection;
   }
   
-  private boolean createGlobalConnection() {
+  protected boolean createGlobalConnection( final URI uri )
+      throws ProblemException {
     
-    boolean result = false;
+    boolean result = true;
     
     ConnectionNameWizardPage page
       = ( ConnectionNameWizardPage ) this.firstPage;
-    String name = page.getConnectionName();
+    final String name = page.getConnectionName();
     
-    URI slaveURI = this.definitionPage.getURI();
-
-    if ( slaveURI != null ) {
-      try {
-        GEclipseURI geclURI = new GEclipseURI( slaveURI );
-        IGridPreferences preferences = GridModel.getPreferences();
-        preferences.createGlobalConnection( name, geclURI.toMasterURI() );
-        result = true;
-      } catch ( ProblemException pExc ) {
-        page.setErrorMessage( pExc.getMessage() );
+    try {
+      getContainer().run( true, true, new IRunnableWithProgress() {
+        public void run( final IProgressMonitor monitor )
+            throws InvocationTargetException ,InterruptedException {
+          try {
+            MountAction.createGlobalMount( uri, name, monitor );
+          } catch ( CoreException pExc ) {
+            throw new InvocationTargetException( pExc );
+          } finally {
+            monitor.done();
+          }
+        }
+      } );
+    } catch ( InvocationTargetException itExc ) {
+      Throwable t = itExc.getCause();
+      if ( t instanceof ProblemException ) {
+        throw ( ProblemException ) t;
       }
-    }
-    
-    if ( ! result ) {
-      setCurrentErrorMessage( page );
+      if ( t == null ) {
+        t = itExc;
+      }
+      throw new ProblemException(
+          ICoreProblems.MODEL_ELEMENT_CREATE_FAILED,
+          "Unable to create connection",
+          t,
+          Activator.PLUGIN_ID );
+    } catch ( InterruptedException intExc ) {
+      result = false;
     }
     
     return result;
     
   }
   
-  private boolean createLocalConnection() {
+  protected boolean createLocalConnection( final URI uri )
+      throws ProblemException {
     
-    boolean result = false;
-
+    boolean result = true;
+    
     ConnectionLocationWizardPage page
       = ( ConnectionLocationWizardPage ) this.firstPage;
+    final IPath path = page.getContainerFullPath().append( page.getFileName() );
     
-    URI slaveURI = this.definitionPage.getURI();
-    
-    if ( slaveURI != null ) {
-
-      IPath path = page.getContainerFullPath();
-      path = path.append( page.getFileName() );
-      
-      try {
-        
-        GEclipseURI geclURI = new GEclipseURI( slaveURI );
-        URI masterURI = geclURI.toMasterURI();
-        IFileStore fileStore = EFS.getStore( masterURI );
-        GEclipseFileSystem.assureFileStoreIsActive( fileStore );
-        IFileInfo fileInfo = fileStore.fetchInfo();
-        
-        if ( fileInfo.isDirectory() ) {
-          IFolder folder = ResourcesPlugin.getWorkspace().getRoot().getFolder( path );
-          folder.createLink( masterURI, IResource.ALLOW_MISSING_LOCAL, null );
-        } else {
-          IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile( path );
-          file.createLink( masterURI, IResource.ALLOW_MISSING_LOCAL, null );
+    try {
+      getContainer().run( true, true, new IRunnableWithProgress() {
+        public void run( final IProgressMonitor monitor )
+            throws InvocationTargetException, InterruptedException {
+          try {
+            MountAction.createLocalMount( uri, path, monitor );
+          } catch ( CoreException cExc ) {
+            throw new InvocationTargetException( cExc );
+          }
         }
-
-        result = true;
-        
-      } catch ( CoreException cExc ) {
-        Activator.logException( cExc );
+      } );
+    } catch ( InvocationTargetException itExc ) {
+      Throwable t = itExc.getCause();
+      if ( t instanceof ProblemException ) {
+        throw ( ProblemException ) t;
       }
-      
-    }
-    
-    if ( ! result ) {
-      setCurrentErrorMessage( page );
+      if ( t == null ) {
+        t = itExc;
+      }
+      throw new ProblemException(
+          ICoreProblems.MODEL_ELEMENT_CREATE_FAILED,
+          "Unable to create connection",
+          t,
+          Activator.PLUGIN_ID );
+    } catch ( InterruptedException intExc ) {
+      result = false;
     }
     
     return result;
-    
+
   }
   
   private void setCurrentErrorMessage( final IWizardPage fromPage ) {

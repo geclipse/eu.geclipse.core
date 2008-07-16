@@ -78,10 +78,40 @@ import eu.geclipse.ui.wizards.IConnectionTokenValidator;
  * eu.geclipse.ui.efs extension point.
  */
 public class GridConnectionDefinitionComposite extends Composite {
+  
+  
+  private static class EditorFieldModifyListener implements ModifyListener {
+    
+    private GridConnectionDefinitionComposite parent;
+    
+    private boolean active;
+    
+    public EditorFieldModifyListener( final GridConnectionDefinitionComposite parent ) {
+      this.parent = parent;
+    }
+    
+    public boolean isActive() {
+      return this.active;
+    }
+    
+    public void setActive( final boolean b ) {
+      this.active = b;
+    }
+    
+    public void modifyText( final ModifyEvent e ) {
+      if ( isActive() ) {
+        this.parent.updateUI();
+      }
+    }
+    
+  }
+  
 
   private static final String FS_GECL = "gecl"; //$NON-NLS-1$
 
   private static final String FS_NULL = EFS.getNullFileSystem().getScheme();
+  
+  private static final String KEY_FIELD_ACTIVE = "field_enablement"; //$NON-NLS-1$
 
   /**
    * Hard-coded separator used for preferences.
@@ -217,7 +247,9 @@ public class GridConnectionDefinitionComposite extends Composite {
    * List of registered ModifyListeners.
    */
   private List< ModifyListener > listeners;
-
+  
+  private EditorFieldModifyListener modifyListener;
+  
   /**
    * Create a new connection definition composite.
    *
@@ -227,8 +259,9 @@ public class GridConnectionDefinitionComposite extends Composite {
   public GridConnectionDefinitionComposite( final Composite parent, final int style ) {
 
     super(parent, style);
-
+    
     GridData gData;
+    this.modifyListener = new EditorFieldModifyListener( this );
 
     setLayout( new GridLayout( 2, false ) );
     gData = new GridData( GridData.FILL_HORIZONTAL );
@@ -247,48 +280,68 @@ public class GridConnectionDefinitionComposite extends Composite {
     gData.minimumHeight = 0;
     this.schemeCombo.setLayoutData( gData );
 
-    this.schemeCombo.addModifyListener( new ModifyListener() {
-      public void modifyText( final ModifyEvent e ) {
-        updateUI();
-      }
-    } );
-
     this.uriLabel = new Label( this, SWT.NONE );
-    this.uriCombo = createEditorField( this,
-                                       this.uriLabel,
-                                       eu.geclipse.ui.widgets.Messages.getString("GridConnectionDefinitionComposite.uri_label") ); //$NON-NLS-1$
+    this.uriCombo = createEditorField(
+        this,
+        this.uriLabel,
+        eu.geclipse.ui.widgets.Messages.getString("GridConnectionDefinitionComposite.uri_label"), //$NON-NLS-1$
+        this.modifyListener
+    );
     this.schemeSpecificPartLabel = new Label( this, SWT.NONE );
-    this.schemeSpecificPartCombo = createEditorField( this,
-                                                      this.schemeSpecificPartLabel,
-                                                      eu.geclipse.ui.widgets.Messages.getString("GridConnectionDefinitionComposite.scheme_spec_part_label") ); //$NON-NLS-1$
+    this.schemeSpecificPartCombo = createEditorField(
+        this,
+        this.schemeSpecificPartLabel,
+        eu.geclipse.ui.widgets.Messages.getString("GridConnectionDefinitionComposite.scheme_spec_part_label"), //$NON-NLS-1$
+        this.modifyListener
+    );
     this.authorityLabel = new Label( this, SWT.NONE );
-    this.authorityCombo = createEditorField( this,
-                                             this.authorityLabel,
-                                             eu.geclipse.ui.widgets.Messages.getString("GridConnectionDefinitionComposite.authority_label") ); //$NON-NLS-1$
+    this.authorityCombo = createEditorField(
+        this,
+        this.authorityLabel,
+        eu.geclipse.ui.widgets.Messages.getString("GridConnectionDefinitionComposite.authority_label"), //$NON-NLS-1$
+        this.modifyListener
+                                             );
     this.userInfoLabel = new Label( this, SWT.NONE );
-    this.userInfoCombo = createEditorField( this,
-                                            this.userInfoLabel,
-                                            eu.geclipse.ui.widgets.Messages.getString("GridConnectionDefinitionComposite.user_info_label") ); //$NON-NLS-1$
+    this.userInfoCombo = createEditorField(
+        this,
+        this.userInfoLabel,
+        eu.geclipse.ui.widgets.Messages.getString("GridConnectionDefinitionComposite.user_info_label"), //$NON-NLS-1$
+        this.modifyListener
+    );
     this.hostLabel = new Label( this, SWT.NONE );
-    this.hostCombo = createEditorField( this,
-                                        this.hostLabel,
-                                        eu.geclipse.ui.widgets.Messages.getString("GridConnectionDefinitionComposite.host_label") ); //$NON-NLS-1$
+    this.hostCombo = createEditorField(
+        this,
+        this.hostLabel,
+        eu.geclipse.ui.widgets.Messages.getString("GridConnectionDefinitionComposite.host_label"), //$NON-NLS-1$
+        this.modifyListener
+    );
     this.portLabel = new Label( this, SWT.NONE );
-    this.portCombo = createEditorField( this,
-                                        this.portLabel,
-                                        eu.geclipse.ui.widgets.Messages.getString("GridConnectionDefinitionComposite.port_label") ); //$NON-NLS-1$
+    this.portCombo = createEditorField(
+        this,
+        this.portLabel,
+        eu.geclipse.ui.widgets.Messages.getString("GridConnectionDefinitionComposite.port_label"), //$NON-NLS-1$
+        this.modifyListener
+    );
     this.pathLabel = new Label( this, SWT.NONE );
-    this.pathCombo = createEditorField( this,
-                                        this.pathLabel,
-                                        eu.geclipse.ui.widgets.Messages.getString("GridConnectionDefinitionComposite.path_label") ); //$NON-NLS-1$
+    this.pathCombo = createEditorField(
+        this,
+        this.pathLabel,
+        eu.geclipse.ui.widgets.Messages.getString("GridConnectionDefinitionComposite.path_label"), //$NON-NLS-1$
+        this.modifyListener
+    );
     this.queryLabel = new Label( this, SWT.NONE );
     this.queryCombo = createEditorField( this,
-                                         this.queryLabel,
-                                         eu.geclipse.ui.widgets.Messages.getString("GridConnectionDefinitionComposite.query_label") ); //$NON-NLS-1$
+        this.queryLabel,
+        eu.geclipse.ui.widgets.Messages.getString("GridConnectionDefinitionComposite.query_label"), //$NON-NLS-1$
+        this.modifyListener
+    );
     this.fragmentLabel = new Label( this, SWT.NONE );
-    this.fragmentCombo = createEditorField( this,
-                                            this.fragmentLabel,
-                                            eu.geclipse.ui.widgets.Messages.getString("GridConnectionDefinitionComposite.fragment_label") ); //$NON-NLS-1$
+    this.fragmentCombo = createEditorField(
+        this,
+        this.fragmentLabel,
+        eu.geclipse.ui.widgets.Messages.getString("GridConnectionDefinitionComposite.fragment_label"), //$NON-NLS-1$
+        this.modifyListener
+    );
 
     Group browseGroup = new Group( this, SWT.NONE );
     browseGroup.setLayout( new GridLayout( 1, false ) );
@@ -362,6 +415,7 @@ public class GridConnectionDefinitionComposite extends Composite {
     } );
 
     setupFields();
+    this.modifyListener.setActive( true );
 
   }
 
@@ -410,31 +464,31 @@ public class GridConnectionDefinitionComposite extends Composite {
 
     try {
 
-      if ( this.uriCombo.isVisible() ) {
+      if ( isActive( this.uriCombo ) ) {
         uri = new URI( this.uriCombo.getText() );
       }
 
-      else if ( this.schemeSpecificPartCombo.isVisible() ) {
+      else if ( isActive( this.schemeSpecificPartCombo ) ) {
         String schemeSpecificPart = this.schemeSpecificPartCombo.getText();
-        String fragment = this.fragmentCombo.isVisible() ? this.fragmentCombo.getText() : null;
+        String fragment = isActive( this.fragmentCombo ) ? this.fragmentCombo.getText() : null;
         uri = new URI( scheme, schemeSpecificPart, fragment );
       }
 
-      else if ( ! this.hostCombo.isVisible() ) {
+      else if ( ! isActive( this.hostCombo ) ) {
         String authority = this.authorityCombo.getText();
-        String path = this.pathCombo.isVisible() ? this.pathCombo.getText() : null;
-        String query = this.queryCombo.isVisible() ? this.queryCombo.getText() : null;
-        String fragment = this.fragmentCombo.isVisible() ? this.fragmentCombo.getText() : null;
+        String path = isActive( this.pathCombo ) ? this.pathCombo.getText() : null;
+        String query = isActive( this.queryCombo ) ? this.queryCombo.getText() : null;
+        String fragment = isActive( this.fragmentCombo ) ? this.fragmentCombo.getText() : null;
         uri = new URI( scheme, authority, path, query, fragment );
       }
 
       else {
-        String userInfo = this.userInfoCombo.isVisible() ? this.userInfoCombo.getText() : null;
+        String userInfo = isActive( this.userInfoCombo ) ? this.userInfoCombo.getText() : null;
         String host = this.hostCombo.getText();
-        int port = this.portCombo.isVisible() ? Integer.parseInt( this.portCombo.getText() ) : -1;
-        String path = this.pathCombo.isVisible() ? this.pathCombo.getText() : null;
-        String query = this.queryCombo.isVisible() ? this.queryCombo.getText() : null;
-        String fragment = this.fragmentCombo.isVisible() ? this.fragmentCombo.getText() : null;
+        int port = isActive( this.portCombo ) ? Integer.parseInt( this.portCombo.getText() ) : -1;
+        String path = isActive( this.pathCombo ) ? this.pathCombo.getText() : null;
+        String query = isActive( this.queryCombo ) ? this.queryCombo.getText() : null;
+        String fragment = isActive( this.fragmentCombo ) ? this.fragmentCombo.getText() : null;
         uri = new URI( scheme, userInfo, host, port, path, query, fragment );
       }
 
@@ -472,55 +526,55 @@ public class GridConnectionDefinitionComposite extends Composite {
 
     if ( this.validator != null ) {
 
-      if ( this.uriCombo.isVisible() ) {
+      if ( isActive( this.uriCombo ) ) {
         newErrorMessage
           = this.validator.validateToken( IConnectionTokenValidator.URI_TOKEN,
                                           this.uriCombo.getText() );
       }
 
-      if ( ( newErrorMessage == null ) && this.schemeSpecificPartCombo.isVisible() ) {
+      if ( ( newErrorMessage == null ) && isActive( this.schemeSpecificPartCombo ) ) {
         newErrorMessage
           = this.validator.validateToken( IConnectionTokenValidator.SCHEME_SPEC_TOKEN,
                                           this.schemeSpecificPartCombo.getText() );
       }
 
-      if ( ( newErrorMessage == null ) && this.authorityCombo.isVisible() ) {
+      if ( ( newErrorMessage == null ) && isActive( this.authorityCombo ) ) {
         newErrorMessage
           = this.validator.validateToken( IConnectionTokenValidator.AUTHORITY_TOKEN,
                                           this.authorityCombo.getText() );
       }
 
-      if ( ( newErrorMessage == null ) && this.userInfoCombo.isVisible() ) {
+      if ( ( newErrorMessage == null ) && isActive( this.userInfoCombo ) ) {
         newErrorMessage
           = this.validator.validateToken( IConnectionTokenValidator.USER_INFO_TOKEN,
                                           this.userInfoCombo.getText() );
       }
 
-      if ( ( newErrorMessage == null ) && this.hostCombo.isVisible() ) {
+      if ( ( newErrorMessage == null ) && isActive( this.hostCombo ) ) {
         newErrorMessage
           = this.validator.validateToken( IConnectionTokenValidator.HOST_TOKEN,
                                           this.hostCombo.getText() );
       }
 
-      if ( ( newErrorMessage == null ) && this.portCombo.isVisible() ) {
+      if ( ( newErrorMessage == null ) && isActive( this.portCombo ) ) {
         newErrorMessage
           = this.validator.validateToken( IConnectionTokenValidator.PORT_TOKEN,
                                           this.portCombo.getText() );
       }
 
-      if ( ( newErrorMessage == null ) && this.pathCombo.isVisible() ) {
+      if ( ( newErrorMessage == null ) && isActive( this.pathCombo ) ) {
         newErrorMessage
           = this.validator.validateToken( IConnectionTokenValidator.PATH_TOKEN,
                                           this.pathCombo.getText() );
       }
 
-      if ( ( newErrorMessage == null ) && this.queryCombo.isVisible() ) {
+      if ( ( newErrorMessage == null ) && isActive( this.queryCombo ) ) {
         newErrorMessage
           = this.validator.validateToken( IConnectionTokenValidator.QUERY_TOKEN,
                                           this.queryCombo.getText() );
       }
 
-      if ( ( newErrorMessage == null ) && this.fragmentCombo.isVisible() ) {
+      if ( ( newErrorMessage == null ) && isActive( this.fragmentCombo ) ) {
         newErrorMessage
           = this.validator.validateToken( IConnectionTokenValidator.FRAGMENT_TOKEN,
                                           this.fragmentCombo.getText() );
@@ -556,9 +610,10 @@ public class GridConnectionDefinitionComposite extends Composite {
    */
   public void setURI( final URI uri ) {
 
+    this.modifyListener.setActive( false );
+    
     String scheme = uri.getScheme();
     this.schemeCombo.setText( scheme );
-    setupFields();
 
     String uris = uri.toString();
     String schemeSpecificPart = uri.getSchemeSpecificPart();
@@ -570,15 +625,19 @@ public class GridConnectionDefinitionComposite extends Composite {
     String query = uri.getQuery();
     String fragment = uri.getFragment();
 
-    this.uriCombo.setText( uris != null ? uris : "" ); //$NON-NLS-1$
-    this.schemeSpecificPartCombo.setText( schemeSpecificPart != null ? schemeSpecificPart : "" ); //$NON-NLS-1$
-    this.authorityCombo.setText( authority != null ? authority : "" ); //$NON-NLS-1$
-    this.userInfoCombo.setText( userInfo != null ? userInfo : "" ); //$NON-NLS-1$
-    this.hostCombo.setText( host != null ? host : "" ); //$NON-NLS-1$
-    this.portCombo.setText( port != -1 ? String.valueOf( uri.getPort() ) : "" ); //$NON-NLS-1$
-    this.pathCombo.setText( path != null ? path : "" ); //$NON-NLS-1$
-    this.queryCombo.setText( query != null ? query : "" ); //$NON-NLS-1$
-    this.fragmentCombo.setText( fragment != null ? fragment : "" ); //$NON-NLS-1$
+    this.uriCombo.setDefaultItem( uris != null ? uris : "" ); //$NON-NLS-1$
+    this.schemeSpecificPartCombo.setDefaultItem( schemeSpecificPart != null ? schemeSpecificPart : "" ); //$NON-NLS-1$
+    this.authorityCombo.setDefaultItem( authority != null ? authority : "" ); //$NON-NLS-1$
+    this.userInfoCombo.setDefaultItem( userInfo != null ? userInfo : "" ); //$NON-NLS-1$
+    this.hostCombo.setDefaultItem( host != null ? host : "" ); //$NON-NLS-1$
+    this.portCombo.setDefaultItem( port != -1 ? String.valueOf( uri.getPort() ) : "" ); //$NON-NLS-1$
+    this.pathCombo.setDefaultItem( path != null ? path : "" ); //$NON-NLS-1$
+    this.queryCombo.setDefaultItem( query != null ? query : "" ); //$NON-NLS-1$
+    this.fragmentCombo.setDefaultItem( fragment != null ? fragment : "" ); //$NON-NLS-1$
+    
+    this.modifyListener.setActive( true );
+    
+    updateUI();
 
   }
 
@@ -790,7 +849,8 @@ public class GridConnectionDefinitionComposite extends Composite {
    */
   private StoredCombo createEditorField( final Composite parent,
                                          final Label label,
-                                         final String text ) {
+                                         final String text,
+                                         final ModifyListener listener ) {
 
     label.setText( text + SEPARATOR );
     GridData lData = new GridData();
@@ -802,12 +862,7 @@ public class GridConnectionDefinitionComposite extends Composite {
     eData.grabExcessHorizontalSpace = true;
     eData.minimumHeight = 0;
     editor.setLayoutData( eData );
-
-    editor.addModifyListener( new ModifyListener() {
-      public void modifyText( final ModifyEvent e ) {
-        updateUI();
-      }
-    } );
+    editor.addModifyListener( listener );
 
     return editor;
 
@@ -837,6 +892,19 @@ public class GridConnectionDefinitionComposite extends Composite {
       }
     }
 
+  }
+  
+  private boolean isActive( final StoredCombo editor ) {
+    
+    boolean result = false;
+    
+    Boolean active = ( Boolean ) editor.getData( KEY_FIELD_ACTIVE );
+    if ( active != null ) {
+      result = active.booleanValue();
+    }
+    
+    return result;
+    
   }
 
   /**
@@ -994,6 +1062,7 @@ public class GridConnectionDefinitionComposite extends Composite {
     }
     label.setVisible( ! isEmpty( text ) );
     editor.setVisible( ! isEmpty( text ) );
+    editor.setData( KEY_FIELD_ACTIVE, Boolean.valueOf( ! isEmpty( text ) ) );
     ( ( GridData ) label.getLayoutData() ).exclude = isEmpty( text );
     ( ( GridData ) editor.getLayoutData() ).exclude = isEmpty( text );
   }

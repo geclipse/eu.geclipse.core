@@ -100,6 +100,8 @@ public class ConnectionLocationWizardPage
       super.initialPopulateContainerNameField();
     }
     
+    validatePage();
+    
   }
   
   protected void setInitialContent( final URI uri ) {

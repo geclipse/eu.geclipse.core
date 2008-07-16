@@ -151,7 +151,7 @@ public class MountMenu
                              final List< MountPointID > ids ) {
     int selCount = selection.size();
     int idCount = ids.size();
-    setVisible( ( idCount > 0 ) && ( this.mountAs && ( selCount == 1 ) ) || ( ! this.mountAs && ( selCount > 0 ) ) );
+    setVisible( ( idCount > 0 ) && ( ( this.mountAs && ( selCount == 1 ) ) || ( ! this.mountAs && ( selCount > 0 ) ) ) );
   }
   
   private boolean isSupported( final MountPointID mountID ) {
