@@ -32,7 +32,7 @@
          Give the installed software a tag for identification
       </description>
    </item>
-   <item title="Uninstall an application" dialog="true" skip="false">
+   <item title="Uninstall an application" dialog="true" skip="true">
       <description>
          Strat the Test Wizard as described previoursly.
 Select <b>Application Uninstall</b> and give the script that describes how to remove the software.
