@@ -115,6 +115,7 @@ public class FileSystemCreator
         IFileInfo info = connection.getConnectionFileInfo();
         if ( info instanceof FileInfo ) {
           FileInfo fileInfo = (FileInfo)info;
+          fileInfo.setName( resource.getName() );
           fileInfo.setExists( true );
           fileInfo.setDirectory( resource instanceof IFolder );
         }
