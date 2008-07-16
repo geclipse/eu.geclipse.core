@@ -419,14 +419,29 @@ public class GEclipseFileStore
     return this.ciStream != null ? this.ciStream : getSlave().openInputStream( options, monitor( monitor ) );
   }
   
-  /* (non-Javadoc)
-   * @see org.eclipse.core.filesystem.provider.FileStore#openOutputStream(int, org.eclipse.core.runtime.IProgressMonitor)
+  /*
+   * (non-Javadoc)
+   * 
+   * @see org.eclipse.core.filesystem.provider.FileStore#openOutputStream(int,
+   *      org.eclipse.core.runtime.IProgressMonitor)
    */
   @Override
   public OutputStream openOutputStream( final int options,
                                         final IProgressMonitor monitor )
-      throws CoreException {
-    return getSlave().openOutputStream( options, monitor( monitor ) );
+    throws CoreException
+  {
+    URI oldUri = getSlave().toURI();
+    OutputStream outputStream = getSlave().openOutputStream( options,
+                                                             monitor( monitor ) );
+    URI currentUri = getSlave().toURI();
+    // Gria stagers changes its URI during creating output stream for new
+    // stager, so we have to update uri in cache
+    if( !currentUri.equals( oldUri ) ) {
+      FileStoreRegistry registry = FileStoreRegistry.getInstance();
+      registry.removeStore( new GEclipseURI( oldUri ) );
+      registry.putStore( this );
+    }
+    return outputStream;
   }
   
   /* (non-Javadoc)
