@@ -14,7 +14,7 @@
    </item>
    <item title="Lauch the deployment wizard" dialog="true" skip="true">
       <description>
-         Right-click on the VO in the project view or one/many CE(s) in the <b>Computing</b> folder and choose <b>Application Deployment</b>.
+         Right-click on the CE(s) in the <b>Computing</b> folder and choose <b>Operator&apos;s job</b> or open a <b>Operator&apos;s job</b> view and start a new test.
       </description>
    </item>
    <item title="Select the deployment target" dialog="true" skip="true">
@@ -34,7 +34,7 @@
    </item>
    <item title="Uninstall an application" dialog="true" skip="false">
       <description>
-         Right-click on the application from the CE in the <b>Computing</b> folder of a VO. <br/>
+         Strat the Test Wizard as described previoursly.
 Select <b>Application Uninstall</b> and give the script that describes how to remove the software.
       </description>
    </item>
