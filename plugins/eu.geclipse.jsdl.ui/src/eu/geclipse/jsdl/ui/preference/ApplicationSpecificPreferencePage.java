@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2007 g-Eclipse consortium 
+ * Copyright (c) 2007 - 2008 g-Eclipse consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -60,7 +60,9 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.PlatformUI;
 
+import eu.geclipse.core.model.impl.GridApplicationParameters;
 import eu.geclipse.jsdl.ui.internal.Activator;
+import eu.geclipse.ui.dialogs.ProblemDialog;
 
 /**
  * Class providing contents of Application Parameters Preferences Page
@@ -81,12 +83,12 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
   public ApplicationSpecificPreferencePage() {
     super();
     setDescription( Messages.getString( "ApplicationSpecificPreferencePage.description" ) ); //$NON-NLS-1$
-    ApplicationSpecificRegistry.getInstance().addContentChangeListener( this );
+    ApplicationParametersRegistry.getInstance().addContentChangeListener( this );
   }
 
   @Override
   public void dispose() {
-    ApplicationSpecificRegistry.getInstance()
+    ApplicationParametersRegistry.getInstance()
       .removeContentChangeListener( this );
     super.dispose();
   }
@@ -131,6 +133,8 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
     TableColumn jsdlColumn = new TableColumn( this.appsTable, SWT.LEFT );
     jsdlColumn.setText( "JSDL file" ); //$NON-NLS-1$
     this.appsViewer = new TableViewer( this.appsTable );
+    ApplicationParametersRegistry.getInstance()
+      .updateApplicationsParameters( null );
     IStructuredContentProvider contentProvider = new ApplicationSpecificPageContentProvider();
     this.appsViewer.setContentProvider( contentProvider );
     this.appsViewer.setLabelProvider( new ApplicationSpecificLabelProvider() );
@@ -181,9 +185,16 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
 
       @Override
       public void widgetSelected( final SelectionEvent event ) {
-        for( ApplicationSpecificObject obj : getSelectedAppSpecificObjects() ) {
-          ApplicationSpecificRegistry.getInstance()
-            .removeApplicationSpecificData( obj );
+        for( GridApplicationParameters obj : getSelectedAppSpecificObjects() ) {
+          try {
+            ApplicationParametersRegistry.getInstance()
+              .removeApplicationParameters( obj );
+          } catch( ApplicationParametersException e ) {
+            ProblemDialog.openProblem( getShell(),
+                                       Messages.getString("ApplicationSpecificPreferencePage.removing_error_title"), //$NON-NLS-1$
+                                       Messages.getString("ApplicationSpecificPreferencePage.removing_error_message"), //$NON-NLS-1$
+                                       e );
+          }
         }
       }
     } );
@@ -191,16 +202,17 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
     return mainComp;
   }
 
-  void editAppliactionSpecificData( final ApplicationSpecificObject aSO ) {
+  void editAppliactionSpecificData( final GridApplicationParameters aSO ) {
     EditDialog dialog;
     if( aSO == null ) {
       dialog = new EditDialog( getShell() );
       if( dialog.open() == Window.OK ) {
-        ApplicationSpecificRegistry.getInstance()
+        ApplicationParametersRegistry.getInstance()
           .addApplicationSpecificData( dialog.getAppName(),
                                        dialog.getAppPath(),
                                        new Path( dialog.getXMLPath() ),
-                                       new Path( dialog.getJSDLPath() ) );
+                                       new Path( dialog.getJSDLPath() ),
+                                       null );
       }
     } else {
       String jsdlPath = null;
@@ -208,49 +220,56 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
         jsdlPath = aSO.getJsdlPath().toOSString();
       }
       dialog = new EditDialog( getShell(),
-                               aSO.getAppName(),
-                               aSO.getAppPath(),
+                               aSO.getApplicationName(),
+                               aSO.getApplicationPath(),
                                aSO.getXmlPath().toOSString(),
                                jsdlPath );
       if( dialog.open() == Window.OK ) {
-        ApplicationSpecificRegistry.getInstance()
-          .editApplicationSpecificData( aSO,
-                                        dialog.getAppName(),
-                                        dialog.getAppPath(),
-                                        dialog.getXMLPath(),
-                                        dialog.getJSDLPath() );
+        try {
+          ApplicationParametersRegistry.getInstance()
+            .editApplicationSpecificData( aSO,
+                                          dialog.getAppName(),
+                                          dialog.getAppPath(),
+                                          dialog.getXMLPath(),
+                                          dialog.getJSDLPath() );
+        } catch( ApplicationParametersException e ) {
+          ProblemDialog.openProblem( getShell(),
+                                     Messages.getString("ApplicationSpecificPreferencePage.editing_error_title"), //$NON-NLS-1$
+                                     Messages.getString("ApplicationSpecificPreferencePage.editing_error_message"), //$NON-NLS-1$
+                                     e );
+        }
       }
     }
   }
 
   /**
-   * Returns {@link ApplicationSpecificObject} corresponding to entry selected
+   * Returns {@link GridApplicationParameters} corresponding to entry selected
    * in table.
    * 
    * @return ApplicationSpecificObject selected in table
    */
-  public ApplicationSpecificObject getSelectedAppSpecificObject() {
-    ApplicationSpecificObject selectedASO = null;
+  public GridApplicationParameters getSelectedAppSpecificObject() {
+    GridApplicationParameters selectedASO = null;
     IStructuredSelection selection = ( IStructuredSelection )this.appsViewer.getSelection();
     Object obj = selection.getFirstElement();
-    if( obj instanceof ApplicationSpecificObject ) {
-      selectedASO = ( ApplicationSpecificObject )obj;
+    if( obj instanceof GridApplicationParameters ) {
+      selectedASO = ( GridApplicationParameters )obj;
     }
     return selectedASO;
   }
 
   /**
-   * Returns {@link ApplicationSpecificObject} corresponding to entry selected
+   * Returns {@link GridApplicationParameters} corresponding to entry selected
    * in table.
    * 
    * @return ApplicationSpecificObject selected in table
    */
-  public List<ApplicationSpecificObject> getSelectedAppSpecificObjects() {
-    List<ApplicationSpecificObject> selectedASO = new ArrayList<ApplicationSpecificObject>();
+  public List<GridApplicationParameters> getSelectedAppSpecificObjects() {
+    List<GridApplicationParameters> selectedASO = new ArrayList<GridApplicationParameters>();
     IStructuredSelection selection = ( IStructuredSelection )this.appsViewer.getSelection();
     for( Object selObject : selection.toList() ) {
-      if( selObject instanceof ApplicationSpecificObject ) {
-        selectedASO.add( ( ApplicationSpecificObject )selObject );
+      if( selObject instanceof GridApplicationParameters ) {
+        selectedASO.add( ( GridApplicationParameters )selObject );
       }
     }
     return selectedASO;
@@ -272,9 +291,11 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
   {
 
     public Object[] getElements( final Object inputElement ) {
-      ApplicationSpecificObject[] result = new ApplicationSpecificObject[ 0 ];
-      result = ApplicationSpecificRegistry.getInstance()
-        .getApplicationDataList()
+      GridApplicationParameters[] result = new GridApplicationParameters[ 0 ];
+      // ApplicationParametersRegistry.getInstance()
+      // .updateApplicationsParameters( null );
+      result = ApplicationParametersRegistry.getInstance()
+        .getApplicationParameters( null )
         .toArray( result );
       return result;
     }
@@ -300,13 +321,13 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
 
     public String getColumnText( final Object element, final int columnIndex ) {
       String result = null;
-      ApplicationSpecificObject asO = ( ApplicationSpecificObject )element;
+      GridApplicationParameters asO = ( GridApplicationParameters )element;
       switch( columnIndex ) {
         case 0: // name
-          result = asO.getAppName();
+          result = asO.getApplicationName();
         break;
         case 1: // appPath
-          result = asO.getAppPath();
+          result = asO.getApplicationPath();
         break;
         case 2: // XML path
           result = asO.getXmlPath().toOSString();
@@ -421,8 +442,11 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
       Button browseButton = new Button( panel, SWT.PUSH );
       gd = new GridData();
       browseButton.setLayoutData( gd );
-      URL openFileIcon = Activator.getDefault().getBundle().getEntry( "icons/obj16/open_file.gif" );
-      Image openFileImage = ImageDescriptor.createFromURL( openFileIcon ).createImage();
+      URL openFileIcon = Activator.getDefault()
+        .getBundle()
+        .getEntry( "icons/obj16/open_file.gif" ); //$NON-NLS-1$
+      Image openFileImage = ImageDescriptor.createFromURL( openFileIcon )
+        .createImage();
       browseButton.setImage( openFileImage );
       browseButton.addSelectionListener( new SelectionAdapter() {
 
@@ -529,12 +553,13 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
   }
 
   public void contentChanged( final IContentChangeNotifier source ) {
-    PlatformUI.getWorkbench().getDisplay().asyncExec( new Runnable() {
+    if( source instanceof ApplicationParametersRegistry ) {
+      PlatformUI.getWorkbench().getDisplay().asyncExec( new Runnable() {
 
-      public void run() {
-        ApplicationSpecificPreferencePage.this.appsViewer.refresh();
-      }
-    } );
-    // this.appsViewer.refresh();
+        public void run() {
+          ApplicationSpecificPreferencePage.this.appsViewer.refresh();
+        }
+      } );
+    }
   }
 }

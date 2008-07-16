@@ -58,15 +58,15 @@ import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridConnectionElement;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.jsdl.JSDLJobDescription;
-import eu.geclipse.jsdl.ui.Extensions;
 import eu.geclipse.jsdl.ui.internal.Activator;
-import eu.geclipse.jsdl.ui.preference.ApplicationSpecificRegistry;
+import eu.geclipse.jsdl.ui.preference.ApplicationParametersRegistry;
 import eu.geclipse.jsdl.ui.wizards.nodes.BasicWizardPart;
 import eu.geclipse.jsdl.ui.wizards.nodes.SpecificWizardPart;
 import eu.geclipse.jsdl.ui.wizards.specific.ApplicationSpecificPage;
 import eu.geclipse.jsdl.ui.wizards.specific.IApplicationSpecificPage;
 import eu.geclipse.ui.dialogs.GridFileDialog;
 import eu.geclipse.ui.widgets.StoredCombo;
+import eu.geclipse.ui.wizards.IVOSelectionProvider;
 
 /**
  * Wizard page that allows user to choose an executable for the grid job, name
@@ -89,15 +89,14 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
   StoredCombo executableFile;
   Composite parentP;
   /**
-   * Button for opening {@link GridFileDialog} - a dialog for choosing local
-   * or remote files
+   * Button for opening {@link GridFileDialog} - a dialog for choosing local or
+   * remote files
    */
   private Button gridFileDialogButton;
   /**
    * Holds name of the application
    */
   private Combo applicationName;
-  private Map<String, String> appsWithExtraAttributes;
   private ArrayList<WizardPage> internalPages;
   private BasicWizardPart basicNode;
   private Button chooseButton;
@@ -114,6 +113,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
   private Group stdFilesGroup;
   private Button outButton;
   private Button errButton;
+  private boolean firstTime = true;
 
   /**
    * Creates new wizard page
@@ -127,9 +127,6 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
     super( pageName );
     setTitle( Messages.getString( "ExecutableNewJobWizardPage.title" ) ); //$NON-NLS-1$
     setDescription( Messages.getString( "ExecutableNewJobWizardPage.description" ) ); //$NON-NLS-1$
-    this.appsWithExtraAttributes = Extensions.getApplicationParametersXMLMap();
-    this.appsWithParametersFromPrefs = ApplicationSpecificRegistry.getInstance()
-      .getApplicationDataMapping();
     this.internalPages = internalPages;
   }
 
@@ -141,16 +138,12 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
     // page.
     Integer aspID = this.appsWithParametersFromPrefs.get( this.applicationName.getText() );
     if( aspID != null ) {
-      IPath path = ApplicationSpecificRegistry.getInstance()
+      IPath path = ApplicationParametersRegistry.getInstance()
         .getApplicationData( aspID.intValue() )
         .getJsdlPath();
       if( path != null && !path.toOSString().equals( "" ) ) { //$NON-NLS-1$
         // getting jsdl source
         // creating temp Eclipse's resource
-        // IPath workspacePath = ResourcesPlugin.getWorkspace()
-        // .getRoot()
-        // .getLocation();
-        // workspacePath = workspacePath.append( ".tempJSDL.jsdl" );
         IPath workspacePath = ( ( NewJobWizard )this.getWizard() ).getProject();
         workspacePath = workspacePath.append( ".tempJSDL.jsdl" ); //$NON-NLS-1$
         IFile newFileHandle = ResourcesPlugin.getWorkspace()
@@ -197,7 +190,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
     IPreferenceStore prefs = Activator.getDefault().getPreferenceStore();
     URL openFileIcon = Activator.getDefault()
       .getBundle()
-      .getEntry( "icons/obj16/open_file.gif" );
+      .getEntry( "icons/obj16/open_file.gif" ); //$NON-NLS-1$
     Image openFileImage = ImageDescriptor.createFromURL( openFileIcon )
       .createImage();
     GridLayout gLayout = new GridLayout( 3, false );
@@ -215,12 +208,6 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
     applicationNameLabel.setLayoutData( layout );
     // Combo - application name
     this.applicationName = new Combo( mainComp, SWT.SINGLE );
-    for( String value : this.appsWithExtraAttributes.values() ) {
-      this.applicationName.add( value );
-    }
-    for( String value : this.appsWithParametersFromPrefs.keySet() ) {
-      this.applicationName.add( value );
-    }
     layout = new GridData();
     layout.horizontalAlignment = GridData.FILL;
     layout.horizontalSpan = 2;
@@ -264,25 +251,16 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
       @Override
       public void widgetSelected( final SelectionEvent e ) {
         GridFileDialog dialog = new GridFileDialog( getShell(),
-            GridFileDialog.STYLE_ALLOW_ONLY_EXISTING | GridFileDialog.STYLE_ALLOW_ONLY_FILES );
-//        dialog.addFileTypeFilter( "jsdl", "Job Description Files (*.jsdl)" );
-//        dialog.addFileTypeFilter( "txt", "Text Files (*.txt)" );
-        if ( dialog.open() == GridFileDialog.OK ) {
+                                                    GridFileDialog.STYLE_ALLOW_ONLY_EXISTING
+                                                        | GridFileDialog.STYLE_ALLOW_ONLY_FILES );
+        if( dialog.open() == Window.OK ) {
           URI[] uris = dialog.getSelectedURIs();
-          if ( ( uris != null ) && ( uris.length > 0 ) ) {
+          if( ( uris != null ) && ( uris.length > 0 ) ) {
             ExecutableNewJobWizardPage.this.executableFile.setText( uris[ 0 ].toString() );
           } else {
-            ExecutableNewJobWizardPage.this.executableFile.setText( "" );
+            ExecutableNewJobWizardPage.this.executableFile.setText( "" ); //$NON-NLS-1$
           }
         }
-        /*
-         * IGridConnectionElement connection = GridFileDialog.openFileDialog(
-         * getShell(), Messages.getString(
-         * "ExecutableNewJobWizardPage.grid_file_dialog_title" ), //$NON-NLS-1$
-         * null, true ); if( connection != null ) { String filename =
-         * getSelectedElementDisplayName( connection ); if( filename != null ) {
-         * ExecutableNewJobWizardPage.this.executableFile.setText( filename ); } }
-         */
       }
     } );
     // Label - arguments list
@@ -328,26 +306,14 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
       @Override
       public void widgetSelected( final SelectionEvent e ) {
         GridFileDialog dialog = new GridFileDialog( getShell(),
-                                                          GridFileDialog.STYLE_ALLOW_ONLY_FILES
-                                                              | GridFileDialog.STYLE_ALLOW_ONLY_EXISTING );
+                                                    GridFileDialog.STYLE_ALLOW_ONLY_FILES
+                                                        | GridFileDialog.STYLE_ALLOW_ONLY_EXISTING );
         if( dialog.open() == Window.OK ) {
           URI[] uris = dialog.getSelectedURIs();
           if( ( uris != null ) && ( uris.length > 0 ) ) {
             ExecutableNewJobWizardPage.this.stdin.setText( uris[ 0 ].toString() );
           }
         }
-        // IGridConnectionElement connection = GridFileDialog.openFileDialog(
-        // getShell(),
-        // Messages.getString(
-        // "ExecutableNewJobWizardPage.grid_file_dialog_title" ), //$NON-NLS-1$
-        // null,
-        // true );
-        // if( connection != null ) {
-        // String filename = getSelectedElementDisplayName( connection );
-        // if( filename != null ) {
-        // ExecutableNewJobWizardPage.this.stdin.setText( filename );
-        // }
-        // }
       }
     } );
     // Label - stdout file
@@ -375,25 +341,13 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
       @Override
       public void widgetSelected( final SelectionEvent e ) {
         GridFileDialog dialog = new GridFileDialog( getShell(),
-                                                          GridFileDialog.STYLE_ALLOW_ONLY_FILES );
+                                                    GridFileDialog.STYLE_ALLOW_ONLY_FILES );
         if( dialog.open() == Window.OK ) {
           URI[] uris = dialog.getSelectedURIs();
           if( ( uris != null ) && ( ( uris.length > 0 ) ) ) {
-            ExecutableNewJobWizardPage.this.stdout.setText( uris[0].toString() );
+            ExecutableNewJobWizardPage.this.stdout.setText( uris[ 0 ].toString() );
           }
         }
-        // IGridConnectionElement connection = GridFileDialog.openFileDialog(
-        // getShell(),
-        // Messages.getString(
-        // "ExecutableNewJobWizardPage.grid_file_dialog_title" ), //$NON-NLS-1$
-        // null,
-        // true );
-        // if( connection != null ) {
-        // String filename = getSelectedElementDisplayName( connection );
-        // if( filename != null ) {
-        // ExecutableNewJobWizardPage.this.stdout.setText( filename );
-        // }
-        // }
       }
     } );
     // Label - stderr file
@@ -420,30 +374,17 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
 
       @Override
       public void widgetSelected( final SelectionEvent e ) {
-        
-        GridFileDialog dialog = new GridFileDialog(getShell(), GridFileDialog.STYLE_ALLOW_ONLY_FILES);
-        if (dialog.open() == Window.OK){
+        GridFileDialog dialog = new GridFileDialog( getShell(),
+                                                    GridFileDialog.STYLE_ALLOW_ONLY_FILES );
+        if( dialog.open() == Window.OK ) {
           URI[] uris = dialog.getSelectedURIs();
-          if ((uris != null)&&(uris.length > 0)){
-            ExecutableNewJobWizardPage.this.stderr.setText( uris[0].toString() );
+          if( ( uris != null ) && ( uris.length > 0 ) ) {
+            ExecutableNewJobWizardPage.this.stderr.setText( uris[ 0 ].toString() );
           }
         }
-        
-// IGridConnectionElement connection = GridFileDialog.openFileDialog(
-        // getShell(),
-        // Messages.getString(
-        // "ExecutableNewJobWizardPage.grid_file_dialog_title" ), //$NON-NLS-1$
-        // null,
-        // true );
-        // if( connection != null ) {
-        // String filename = getSelectedElementDisplayName( connection );
-        // if( filename != null ) {
-        // ExecutableNewJobWizardPage.this.stderr.setText( filename );
-        // }
-        // }
       }
     } );
-    if ( this.basicNode == null ) {
+    if( this.basicNode == null ) {
       this.basicNode = new BasicWizardPart( this.internalPages,
                                             this.getWizard() );
     }
@@ -496,9 +437,9 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
   String getApplicationName() {
     String result = this.applicationName.getText();
     if( this.appsWithParametersFromPrefs.keySet().contains( result ) ) {
-      result = ApplicationSpecificRegistry.getInstance()
+      result = ApplicationParametersRegistry.getInstance()
         .getApplicationData( ( this.appsWithParametersFromPrefs.get( result ) ).intValue() )
-        .getAppName();
+        .getApplicationName();
     }
     return result;
   }
@@ -514,22 +455,21 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
     {
       int appId = this.appsWithParametersFromPrefs.get( this.applicationName.getText() )
         .intValue();
-      IPath pathA = ApplicationSpecificRegistry.getInstance()
+      IPath pathA = ApplicationParametersRegistry.getInstance()
         .getApplicationData( appId )
         .getXmlPath();
       Path path = new Path( pathA.toFile().getPath() );
       try {
-        setSelectedNode( new SpecificWizardPart( this.basicNode,
-        // this.getWizard(),
-                                                 path ) );
-        this.executableFile.setText( ApplicationSpecificRegistry.getInstance()
+        setSelectedNode( new SpecificWizardPart( this.basicNode, path ) );
+        this.executableFile.setText( ApplicationParametersRegistry.getInstance()
           .getApplicationData( appId )
-          .getAppPath() );
+          .getApplicationPath() );
       } catch( SAXException e1 ) {
         // TODO katis what to do with this exception
       } catch( ParserConfigurationException e1 ) {
         // TODO katis what to do with this exception
       } catch( IOException e1 ) {
+        // empty
       }
     } else {
       setSelectedNode( this.basicNode );
@@ -616,7 +556,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
     // page.
     Integer aspID = this.appsWithParametersFromPrefs.get( this.applicationName.getText() );
     if( aspID != null ) {
-      IPath path = ApplicationSpecificRegistry.getInstance()
+      IPath path = ApplicationParametersRegistry.getInstance()
         .getApplicationData( aspID.intValue() )
         .getJsdlPath();
       if( path != null && !path.toOSString().equals( "" ) ) { //$NON-NLS-1$
@@ -631,7 +571,6 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
             .findElement( newFileHandle );
           if( element instanceof JSDLJobDescription ) {
             this.basicJSDL = ( JSDLJobDescription )element;
-            // ((NewJobWizard)this.getWizard()).updateBasicJSDL(this.basicJSDL);
           }
         } catch( CoreException e ) {
           // TODO katis - error handling
@@ -671,5 +610,20 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
    */
   public String getStderr() {
     return this.stderr.getText();
+  }
+
+  @Override
+  public void setVisible( final boolean visible ) {
+    if( visible == true && this.firstTime ) {
+      this.firstTime = false;
+      ApplicationParametersRegistry.getInstance()
+        .updateApplicationsParameters( ( ( IVOSelectionProvider )getWizard() ).getVirtualOrganization() );
+      this.appsWithParametersFromPrefs = ApplicationParametersRegistry.getInstance()
+        .getApplicationDataMapping( ( ( IVOSelectionProvider )getWizard() ).getVirtualOrganization() );
+      for( String value : this.appsWithParametersFromPrefs.keySet() ) {
+        this.applicationName.add( value );
+      }
+    }
+    super.setVisible( visible );
   }
 }

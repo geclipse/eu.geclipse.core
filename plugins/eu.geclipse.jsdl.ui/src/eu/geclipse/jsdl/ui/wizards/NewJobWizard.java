@@ -13,7 +13,6 @@
  *     PSNC - Katarzyna Bylec
  *     Mathias Stuempert - Added transformation to other job descriptions
  *****************************************************************************/
-
 package eu.geclipse.jsdl.ui.wizards;
 
 import java.lang.reflect.InvocationTargetException;
@@ -63,23 +62,27 @@ import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridElementCreator;
 import eu.geclipse.core.model.IGridJobDescription;
 import eu.geclipse.core.model.IGridProject;
+import eu.geclipse.core.model.IVirtualOrganization;
+import eu.geclipse.core.model.IWrappedElement;
 import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.jsdl.JSDLJobDescription;
 import eu.geclipse.jsdl.JSDLJobDescriptionCreator;
 import eu.geclipse.jsdl.model.base.DataStagingType;
 import eu.geclipse.jsdl.ui.internal.Activator;
 import eu.geclipse.jsdl.ui.internal.wizards.FileType;
-import eu.geclipse.jsdl.ui.preference.ApplicationSpecificRegistry;
+import eu.geclipse.jsdl.ui.preference.ApplicationParametersRegistry;
 import eu.geclipse.jsdl.ui.wizards.specific.IApplicationSpecificPage;
 import eu.geclipse.ui.dialogs.ProblemDialog;
-
+import eu.geclipse.ui.wizards.IVOSelectionProvider;
 
 /**
  * Wizard for creating new JSDL file
  * 
  * @author katis
  */
-public class NewJobWizard extends Wizard implements INewWizard {
+public class NewJobWizard extends Wizard
+  implements INewWizard, IVOSelectionProvider
+{
 
   private IStructuredSelection selection;
   private FirstPage firstPage;
@@ -172,8 +175,7 @@ public class NewJobWizard extends Wizard implements INewWizard {
     if( translate ) {
       String fileName = this.firstPage.getFileName();
       IPath path = new Path( fileName );
-      fileName = path.removeFileExtension()
-        .addFileExtension( "jsdl" ) //$NON-NLS-1$
+      fileName = path.removeFileExtension().addFileExtension( "jsdl" ) //$NON-NLS-1$
         .lastSegment();
       this.firstPage.setFileName( fileName );
     }
@@ -196,16 +198,16 @@ public class NewJobWizard extends Wizard implements INewWizard {
         this.file = ( IFile )newElement.getResource();
       } catch( ProblemException pExc ) {
         ProblemDialog.openProblem( getShell(),
-                                   Messages.getString("NewJobWizard.CreationFailed"), //$NON-NLS-1$
-                                   Messages.getString("NewJobWizard.ErrorCreatingJobDescription"), //$NON-NLS-1$
+                                   Messages.getString( "NewJobWizard.CreationFailed" ), //$NON-NLS-1$
+                                   Messages.getString( "NewJobWizard.ErrorCreatingJobDescription" ), //$NON-NLS-1$
                                    pExc );
       } finally {
         try {
           jsdlJobDescription.getResource().delete( true, null );
         } catch( CoreException cExc ) {
           ProblemDialog.openProblem( getShell(),
-                                     Messages.getString("NewJobWizard.DeletionFailed"), //$NON-NLS-1$
-                                     Messages.getString("NewJobWizard.UnableToDelete"), //$NON-NLS-1$
+                                     Messages.getString( "NewJobWizard.DeletionFailed" ), //$NON-NLS-1$
+                                     Messages.getString( "NewJobWizard.UnableToDelete" ), //$NON-NLS-1$
                                      cExc );
         }
       }
@@ -213,7 +215,6 @@ public class NewJobWizard extends Wizard implements INewWizard {
     monitor.worked( 1 );
   }
 
-  
   void setInitialModel( final JSDLJobDescription jsdl ) {
     this.executablePage.getApplicationSpecificPage();
     if( getContainer().getCurrentPage() != this.outputFilesPage ) {
@@ -403,7 +404,7 @@ public class NewJobWizard extends Wizard implements INewWizard {
    * @param newBasicJSDL
    * @param aspName name of application (its 'display name', shown on Name list
    *            in Job Wizard, see also
-   *            {@link ApplicationSpecificRegistry#getApplicationDataMapping()})
+   *            {@link ApplicationParametersRegistry#getApplicationDataMapping()})
    */
   void updateBasicJSDL( final JSDLJobDescription newBasicJSDL,
                         final String aspName )
@@ -437,7 +438,7 @@ public class NewJobWizard extends Wizard implements INewWizard {
 
     private static final String JSDL_STANDARD = "JSDL - Job Submission Description Language (OGF Standard)"; //$NON-NLS-1$
     private IStructuredSelection iniSelection;
-    private final String initFileName = Messages.getString( Messages.getString("NewJobWizard.DefaultFileName") ); //$NON-NLS-1$
+    private final String initFileName = Messages.getString( Messages.getString( "NewJobWizard.DefaultFileName" ) ); //$NON-NLS-1$
     private Combo typeCombo;
     private Hashtable<String, IGridElementCreator> creators = new Hashtable<String, IGridElementCreator>();
 
@@ -459,7 +460,7 @@ public class NewJobWizard extends Wizard implements INewWizard {
       Composite mainComp = new Composite( parent, SWT.NONE );
       mainComp.setLayout( new GridLayout( 1, false ) );
       Label typeLabel = new Label( mainComp, SWT.NONE );
-      typeLabel.setText( Messages.getString("NewJobWizard.JobDescriptionType") ); //$NON-NLS-1$
+      typeLabel.setText( Messages.getString( "NewJobWizard.JobDescriptionType" ) ); //$NON-NLS-1$
       typeLabel.setLayoutData( new GridData( SWT.BEGINNING,
                                              SWT.CENTER,
                                              false,
@@ -497,7 +498,7 @@ public class NewJobWizard extends Wizard implements INewWizard {
     }
 
     public String getDescriptionSuffix() {
-      String result = Messages.getString("NewJobWizard.JSDL"); //$NON-NLS-1$
+      String result = Messages.getString( "NewJobWizard.JSDL" ); //$NON-NLS-1$
       String text = this.typeCombo.getText();
       if( text != null ) {
         int index = text.trim().indexOf( " " ); //$NON-NLS-1$
@@ -559,7 +560,8 @@ public class NewJobWizard extends Wizard implements INewWizard {
       IPath path = new Path( getFileName() );
       String currentExtension = path.getFileExtension();
       if( ( currentExtension == null )
-          || !currentExtension.toLowerCase().endsWith( extension ) ) { 
+          || !currentExtension.toLowerCase().endsWith( extension ) )
+      {
         setErrorMessage( String.format( Messages.getString( "NewJobWizard.wrong_file_extension_error_message" ), extension ) ); //$NON-NLS-1$
         result = false;
       }
@@ -630,5 +632,22 @@ public class NewJobWizard extends Wizard implements INewWizard {
       }
       combo.setText( JSDL_STANDARD );
     }
+  }
+
+  public IVirtualOrganization getVirtualOrganization() {
+    IVirtualOrganization result = null;
+    if( this.firstPage != null ) {
+      IPath path = this.firstPage.getContainerFullPath();
+      path = path.removeLastSegments( path.segmentCount() - 1 );
+      IGridElement project = GridModel.getRoot().findElement( path );
+      if( project instanceof IGridProject ) {
+        result = ( ( IGridProject )project ).getVO();
+        if( result instanceof IWrappedElement ) {
+           result = ( IVirtualOrganization )( ( IWrappedElement )result ).getWrappedElement();
+        }
+        
+      }
+    }
+    return result;
   }
 }
