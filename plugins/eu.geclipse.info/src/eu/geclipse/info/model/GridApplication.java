@@ -20,6 +20,7 @@ import java.net.URI;
 import java.util.ArrayList;
 
 import eu.geclipse.core.model.IGridApplication;
+import eu.geclipse.core.model.IGridApplicationParameters;
 import eu.geclipse.core.model.IGridComputing;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.info.glue.GlueLocation;
@@ -87,5 +88,11 @@ public class GridApplication extends GridGlueElement implements IGridApplication
     // TODO Auto-generated method stub
     return null;
   }
+
+  public IGridApplicationParameters getApplicationParameters() {
+    return null;
+  }
+  
+  
 
 }
