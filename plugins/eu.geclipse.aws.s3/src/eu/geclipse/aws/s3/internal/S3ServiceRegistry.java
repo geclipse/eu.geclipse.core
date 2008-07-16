@@ -151,11 +151,17 @@ public class S3ServiceRegistry implements ISecurityManagerListener {
         found = false;
 
         for( IAuthenticationToken authToken : tokens ) {
-          AWSAuthTokenDescription awsAuthTokenDesc = ( AWSAuthTokenDescription )authToken.getDescription();
+          
+          if ( authToken instanceof AWSAuthTokenDescription ) {
+          
+            AWSAuthTokenDescription awsAuthTokenDesc = ( AWSAuthTokenDescription )authToken.getDescription();
 
-          if( entry.getKey() == awsAuthTokenDesc.getAwsAccessId() ) {
-            found = true;
+            if( entry.getKey() == awsAuthTokenDesc.getAwsAccessId() ) {
+              found = true;
+            }
+            
           }
+          
         }
 
         if( !found ) {
