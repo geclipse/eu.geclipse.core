@@ -57,8 +57,7 @@ public class FileSystemCreator
     IGridElement result = null;
     IResource resource = ( IResource ) getObject();
     
-    if ( isFileSystemLink( resource )
-        && resource instanceof IFolder ) {
+    if ( isFileSystemLink( resource ) ) {
       result = createConnectionRoot( resource );
     } else {
       result = createConnectionElement( resource );
@@ -165,10 +164,10 @@ public class FileSystemCreator
   }
   
   /**
-   * Determines if the specified resource is a linked folder.
+   * Determines if the specified resource is a linked resource.
    * 
    * @param resource The resource to be tested.
-   * @return True if the specified resource is a linked folder and
+   * @return True if the specified resource is a linked resource and
    * the link is a g-Eclipse URI.
    */
   private boolean isFileSystemLink( final IResource resource ) {
