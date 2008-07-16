@@ -19,6 +19,15 @@ package eu.geclipse.info.glue;
 
 import java.util.ArrayList;
 
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtension;
+import org.eclipse.core.runtime.IExtensionPoint;
+import org.eclipse.core.runtime.IExtensionRegistry;
+import org.eclipse.core.runtime.Platform;
+
+import eu.geclipse.info.model.IGridSupportedService;
+
 /**
  * 
  * @author George Tsouloupas
@@ -142,6 +151,61 @@ public class GlueService extends AbstractGlueTable
    * @return true if it is supported and false otherwise.
    */
   public boolean isSupported() {
+    setIsSupported();
+    
     return this.isSupported;
+  }
+  
+  /**
+   * Sets whether this service is supported by geclipse.
+   */
+  public void setIsSupported()
+  {
+    boolean result = false;
+    
+    // Get the supported services
+    ArrayList<IGridSupportedService> supportedServicesArray = new ArrayList<IGridSupportedService>();
+    IGridSupportedService supportedService = null;
+    IExtensionRegistry myRegistry = Platform.getExtensionRegistry();
+    IExtensionPoint extensionPoint = myRegistry.getExtensionPoint( "eu.geclipse.info.supportedServices"); //$NON-NLS-1$
+    IExtension[] extensions = extensionPoint.getExtensions();
+    
+    for (int i = 0; i < extensions.length; i++)
+    {
+      IExtension extension = extensions[i];
+ 
+      IConfigurationElement[] elements = extension.getConfigurationElements();
+      for( IConfigurationElement element : elements ) {
+        
+        try {
+          supportedService = (IGridSupportedService) element.createExecutableExtension( "class" ); //$NON-NLS-1$
+          if (supportedService != null)
+          {
+            supportedServicesArray.add( supportedService );
+          }
+        } catch( CoreException e ) {
+          // do nothing
+        }
+      }
+    }
+    
+    for (int i=0; i<supportedServicesArray.size(); i++)
+    {
+      if (this.type.equalsIgnoreCase( supportedServicesArray.get( i ).getType() ))
+      {
+        if (supportedServicesArray.get( i ).getVersion() == null)
+          result = true;
+        else {
+          for (int j=0; j<supportedServicesArray.get( i ).getVersion().length; j++)
+          {
+            if ( supportedServicesArray.get( i ).getVersion()[j].equalsIgnoreCase( this.version ))
+              result = true;
+          }
+        }
+          
+      }
+    }
+
+    this.isSupported = result;
   }
 }
