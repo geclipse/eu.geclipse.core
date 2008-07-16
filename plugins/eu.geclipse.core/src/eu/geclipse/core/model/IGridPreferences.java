@@ -18,6 +18,7 @@ import java.net.URI;
 
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 import eu.geclipse.core.reporting.ProblemException;
 
@@ -34,10 +35,11 @@ public interface IGridPreferences {
    * 
    * @param name The name of the connection.
    * @param uri The URI from which to create the connection.
+   * @param monitor Used to monitor the progress of this operation.
    * @throws ProblemException If an error occurs during the creation of the
    *             connection.
    */
-  public void createGlobalConnection( final String name, final URI uri )
+  public void createGlobalConnection( final String name, final URI uri, final IProgressMonitor monitor )
     throws ProblemException;
 
   /**

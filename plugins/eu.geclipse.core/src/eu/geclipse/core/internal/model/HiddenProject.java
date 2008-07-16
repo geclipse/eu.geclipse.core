@@ -17,6 +17,10 @@ package eu.geclipse.core.internal.model;
 
 import java.net.URI;
 
+import org.eclipse.core.filesystem.EFS;
+import org.eclipse.core.filesystem.IFileInfo;
+import org.eclipse.core.filesystem.IFileStore;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
@@ -148,18 +152,31 @@ public class HiddenProject extends ResourceGridContainer
    * @see eu.geclipse.core.model.IGridPreferences#createGlobalConnection(java.lang.String,
    *      java.net.URI)
    */
-  public void createGlobalConnection( final String name, final URI masterURI )
+  public void createGlobalConnection( final String name, final URI masterURI, final IProgressMonitor monitor )
     throws ProblemException
   {
+    
     try {
+      
       IFolder folder = getGlobalConnectionsFolder();
-      IFolder connection = folder.getFolder( name );
-      connection.createLink( masterURI, IResource.ALLOW_MISSING_LOCAL, null );
+      
+      IFileStore fileStore = EFS.getStore( masterURI );
+      IFileInfo fileInfo = fileStore.fetchInfo();
+      
+      if ( fileInfo.isDirectory() ) {
+        IFolder connection = folder.getFolder( name );
+        connection.createLink( masterURI, IResource.ALLOW_MISSING_LOCAL, monitor );
+      } else {
+        IFile connection = folder.getFile( name );
+        connection.createLink( masterURI, IResource.ALLOW_MISSING_LOCAL, monitor );
+      }
+      
     } catch( CoreException cExc ) {
       throw new ProblemException( ICoreProblems.MODEL_ELEMENT_CREATE_FAILED,
                                   cExc,
                                   Activator.PLUGIN_ID );
     }
+    
   }
 
   /*
