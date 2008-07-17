@@ -19,7 +19,7 @@ package eu.geclipse.core.model;
 /**
  * This is the base interface for every kind of grid service.
  */
-public interface IGridService extends IGridResource, ITestable {
+public interface IGridService extends IGridResource {
   
   // Interface without additional methods
 

@@ -20,7 +20,7 @@ package eu.geclipse.core.model;
  * An {@link IGridResource} that represents computing elements in the
  * Grid.
  */
-public interface IGridComputing extends IGridResource, ITestable {
+public interface IGridComputing extends IGridResource {
   
   // Interface without additional methods
 

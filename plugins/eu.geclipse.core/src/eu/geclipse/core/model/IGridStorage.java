@@ -22,7 +22,7 @@ import java.net.URI;
  * Grid.
  */
 public interface IGridStorage
-    extends IGridResource, IMountable, ITestable {
+    extends IGridResource, IMountable {
   
   /**
    * Get tokens that offer ways to access this storage in the form of
