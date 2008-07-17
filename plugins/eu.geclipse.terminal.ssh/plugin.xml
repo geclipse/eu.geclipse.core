@@ -46,7 +46,7 @@
    <extension
 		point="org.eclipse.ui.popupMenus">
 	  <objectContribution
-            id="eu.geclipse.test.framework.objectContribution1"
+            id="eu.geclipse.servicejob.objectContribution1"
             objectClass="eu.geclipse.core.model.IGridComputing">
          <action
               class="eu.geclipse.terminal.ssh.internal.OpenAction"
