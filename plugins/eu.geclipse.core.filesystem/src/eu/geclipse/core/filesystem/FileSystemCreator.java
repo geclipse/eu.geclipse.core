@@ -19,10 +19,13 @@ import java.net.URI;
 
 import org.eclipse.core.filesystem.IFileInfo;
 import org.eclipse.core.filesystem.provider.FileInfo;
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 
 import eu.geclipse.core.filesystem.internal.Activator;
 import eu.geclipse.core.filesystem.internal.filesystem.ConnectionElement;
@@ -57,7 +60,8 @@ public class FileSystemCreator
     IGridElement result = null;
     IResource resource = ( IResource ) getObject();
     
-    if ( isFileSystemLink( resource ) ) {
+    if ( isFileSystemLink( resource )
+        && !isJobFile( resource ) ) {
       result = createConnectionRoot( resource );
     } else {
       result = createConnectionElement( resource );
@@ -188,7 +192,24 @@ public class FileSystemCreator
     }
 
     return result;
+  }
+
+  private boolean isJobFile( final IResource resource ) {
+    boolean jobFile = false;
+    IContainer parent = resource.getParent();
     
+    while( parent != null 
+        && !( parent instanceof IProject )
+        && !jobFile ) {
+      IPath location = parent.getLocation();
+      
+      if( location != null ) {
+        jobFile = "job".equals( location.getFileExtension() );
+      }
+      parent= parent.getParent();
+    }
+    
+    return jobFile;
   }
 
 }
