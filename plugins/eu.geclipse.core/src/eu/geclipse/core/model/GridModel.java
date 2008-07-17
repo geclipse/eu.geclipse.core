@@ -24,7 +24,7 @@ import eu.geclipse.core.Extensions;
 import eu.geclipse.core.internal.model.ConnectionManager;
 import eu.geclipse.core.internal.model.GridProjectCreator;
 import eu.geclipse.core.internal.model.GridRoot;
-import eu.geclipse.core.internal.model.GridTestManager;
+import eu.geclipse.core.internal.model.ServiceJobManager;
 import eu.geclipse.core.internal.model.HiddenProject;
 import eu.geclipse.core.internal.model.JobManager;
 import eu.geclipse.core.internal.model.LocalResourceCreator;
@@ -72,13 +72,13 @@ public class GridModel {
   
   /**
    * Get the manager that is dedicated to the management of
-   * {@link IGridTest}s.
+   * {@link IServiceJob}s.
    * 
-   * @return The core implementation of the {@link IGridTestManager}
+   * @return The core implementation of the {@link IServiceJobManager}
    * interface. 
    */
-  public static IGridTestManager getTestManager() {
-    return GridTestManager.getManager();
+  public static IServiceJobManager getTestManager() {
+    return ServiceJobManager.getManager();
   }
 
   /**

@@ -26,7 +26,7 @@ import org.eclipse.core.resources.IFile;
 /**
  * Interface for structural tests and simple tests.
  */
-public interface IGridTest extends IGridElement, IManageable {
+public interface IServiceJob extends IGridElement, IManageable {
 
   /**
    * This method is used to initialize instance just after it was created with
@@ -73,7 +73,7 @@ public interface IGridTest extends IGridElement, IManageable {
    * @param date date of test submission
    * @return String that is representation of single test result
    */
-  public IGridTestResult getSingleTestResult( final String testName,
+  public IServiceJobResult getSingleTestResult( final String testName,
                                               final String resourceName,
                                               final Date date );
 
@@ -103,7 +103,7 @@ public interface IGridTest extends IGridElement, IManageable {
    * 
    * @return List of single test results
    */
-  public List<IGridTestResult> getResults();
+  public List<IServiceJobResult> getResults();
 
   /**
    * Method to run a test
@@ -128,7 +128,7 @@ public interface IGridTest extends IGridElement, IManageable {
   public Date getLastUpdate();
 
   /**
-   * The same as {@link IGridTest#getLastUpdate()}, but should be used in case
+   * The same as {@link IServiceJob#getLastUpdate()}, but should be used in case
    * there can be difference in number of test runs for each tested resource.
    * 
    * @param testedResourceName name of a tested resource
@@ -150,7 +150,7 @@ public interface IGridTest extends IGridElement, IManageable {
    * @param resourceName name of tested resource (e.g. host name)
    * @return List of List of
    */
-  public List<List<IGridTestResult>> getTestResultsForResourceForDate( final String resourceName );
+  public List<List<IServiceJobResult>> getTestResultsForResourceForDate( final String resourceName );
 
   /**
    * This method should be called each time when test was run and new results
@@ -161,17 +161,17 @@ public interface IGridTest extends IGridElement, IManageable {
    * @param newResults list of new results that should be added to set of
    *            results maintained by this test's class
    */
-  public void addTestResult( final List<IGridTestResult> newResults );
+  public void addTestResult( final List<IServiceJobResult> newResults );
 
   /**
-   * Given the instance of {@link IGridTestResult} class should return input
+   * Given the instance of {@link IServiceJobResult} class should return input
    * stream of result's specific data (the type of data is determined by method
-   * {@link IGridTestResult#getResultType()}
+   * {@link IServiceJobResult#getResultType()}
    * 
    * @param result single test result
    * @return input stream for result's data
    */
-  public InputStream getInputStreamForResult( final IGridTestResult result );
+  public InputStream getInputStreamForResult( final IServiceJobResult result );
   
   public int getColumnWidth( final String singleTestName );
 

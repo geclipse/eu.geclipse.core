@@ -23,9 +23,9 @@ import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridModelEvent;
 import eu.geclipse.core.model.IGridModelListener;
 import eu.geclipse.core.model.IGridProject;
-import eu.geclipse.core.model.IGridTest;
-import eu.geclipse.core.model.IGridTestManager;
-import eu.geclipse.core.model.IGridTestStatusListener;
+import eu.geclipse.core.model.IServiceJob;
+import eu.geclipse.core.model.IServiceJobManager;
+import eu.geclipse.core.model.IServiceJobStatusListener;
 import eu.geclipse.core.reporting.ProblemException;
 
 
@@ -33,25 +33,25 @@ import eu.geclipse.core.reporting.ProblemException;
  * Abstract class that makes some core's internal interfaces available for
  * external plug-in.
  */
-public class GridTestManager
+public class ServiceJobManager
   extends
-  AbstractGridElementManager implements IGridModelListener, IGridTestManager, IGridTestStatusListener
+  AbstractGridElementManager implements IGridModelListener, IServiceJobManager, IServiceJobStatusListener
 {
   /**
    * The name of this manager.
    */
   private static final String NAME = ".tests"; //$NON-NLS-1$
 
-  private static GridTestManager singleton;
+  private static ServiceJobManager singleton;
   
-  private List<IGridTest> tests = null;
+  private List<IServiceJob> tests = null;
   
-  private List<IGridTestStatusListener> listeners;
+  private List<IServiceJobStatusListener> listeners;
   
-  public GridTestManager() {
+  public ServiceJobManager() {
     super();
-    this.tests = new ArrayList<IGridTest>();
-    this.listeners = new ArrayList<IGridTestStatusListener>();
+    this.tests = new ArrayList<IServiceJob>();
+    this.listeners = new ArrayList<IServiceJobStatusListener>();
     
   }
   
@@ -59,8 +59,8 @@ public class GridTestManager
   public boolean addElement( final IGridElement element ) throws ProblemException {
     boolean flag;
     flag = super.addElement( element );
-    if ( element instanceof IGridTest ) {
-      IGridTest test = (IGridTest) element;
+    if ( element instanceof IServiceJob ) {
+      IServiceJob test = (IServiceJob) element;
       this.tests.add( test );
     }
     return flag;
@@ -70,7 +70,7 @@ public class GridTestManager
   public boolean removeElement( final IGridElement element ) {
     boolean flag;
     flag = super.removeElement( element );
-    if ( element instanceof IGridTest ) {
+    if ( element instanceof IServiceJob ) {
       this.tests.remove( element );
     }
     return flag;
@@ -81,11 +81,11 @@ public class GridTestManager
     //TODO
   }
   
-  public void addTestStatusListener( final IGridTestStatusListener listener ) {
+  public void addTestStatusListener( final IServiceJobStatusListener listener ) {
     this.listeners.add( listener );
   }
   
-  public void addTest( final IGridTest test ) {
+  public void addTest( final IServiceJob test ) {
     this.tests.add( test );
   }
   
@@ -93,16 +93,16 @@ public class GridTestManager
     if( event.getType() == IGridModelEvent.ELEMENTS_REMOVED ) {
       IGridElement[] removedElements = event.getElements();
       for( IGridElement elem : removedElements ) {
-        if( elem instanceof IGridTest ) {
-          IGridTest test = ( IGridTest )elem;
+        if( elem instanceof IServiceJob ) {
+          IServiceJob test = ( IServiceJob )elem;
           this.tests.remove( test );
         }
       }
     } else if (event.getType() == IGridModelEvent.ELEMENTS_CHANGED){
       IGridElement[] changedElements = event.getElements();
       for (IGridElement element: changedElements){
-        if( element instanceof IGridTest ) {
-          IGridTest test = ( IGridTest )element;
+        if( element instanceof IServiceJob ) {
+          IServiceJob test = ( IServiceJob )element;
 //          test.update();       
         }
       }
@@ -110,7 +110,7 @@ public class GridTestManager
   }
 
   public boolean canManage( final IGridElement element ) {
-    return element instanceof IGridTest;
+    return element instanceof IServiceJob;
   }
 
   public String getName() {
@@ -123,22 +123,22 @@ public class GridTestManager
    * 
    * @return Singleton of test manager.
    */
-  public static GridTestManager getManager() {
+  public static ServiceJobManager getManager() {
     if ( singleton == null ) { 
-      singleton = new GridTestManager();
+      singleton = new ServiceJobManager();
     }
     return singleton;
   }
   
-  public List< IGridTest > getAvaliableTests( final Object resource ) {
+  public List< IServiceJob > getAvaliableTests( final Object resource ) {
     //TODO implement method
 //    List< IGridTest > tests = new ArrayList< IGridTest >();
     return this.tests;
   }
   
-  public IGridTest getTest( final String name, final IGridProject project ) {
-    IGridTest result = null;
-    for ( IGridTest test: this.tests ) {
+  public IServiceJob getTest( final String name, final IGridProject project ) {
+    IServiceJob result = null;
+    for ( IServiceJob test: this.tests ) {
       if ( test.getName().equalsIgnoreCase( name ) && test.getProject().equals( project )) {
         result = test;
         break;
@@ -147,12 +147,12 @@ public class GridTestManager
     return result;
   }
   
-  public List< IGridTest > getTests() {
+  public List< IServiceJob > getTests() {
     return this.tests;
   }
 
-  public void statusChanged( final IGridTest test ) {
-    for ( IGridTestStatusListener listener: this.listeners ) {
+  public void statusChanged( final IServiceJob test ) {
+    for ( IServiceJobStatusListener listener: this.listeners ) {
       listener.statusChanged( test );
     }
     

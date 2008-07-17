@@ -10,14 +10,24 @@
  * project number: FP6-IST-034327  http://www.geclipse.eu/
  *
  * Contributor(s):
- *     PSNC: 
- *      - Szymon Mueller
+ *     PSNC:
+ *      - Szymon Mueller    
  *****************************************************************************/
 package eu.geclipse.core.model;
 
+import java.util.List;
 
-public interface IGridTestStatusListener {
-  
-  public void statusChanged ( IGridTest test );
-  
+public interface IServiceJobManager extends IGridElementManager {
+
+  public List<IServiceJob> getTests();
+
+  public List<IServiceJob> getAvaliableTests( final Object resource );
+
+  // TODO usunac
+  public void addTest( IServiceJob test );
+
+  //  
+  public IServiceJob getTest( final String name, final IGridProject project );
+
+  public void addTestStatusListener( IServiceJobStatusListener listener );
 }

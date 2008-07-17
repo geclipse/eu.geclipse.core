@@ -24,7 +24,7 @@ import java.util.Date;
  * Basic implementation of this interface (in form of SOJO bean) is in
  * eu.geclipse.test.framework plug-in (<code>GridTestResult</code> class).
  */
-public interface IGridTestResult {
+public interface IServiceJobResult {
 
   /**
    * Method to access information when this test was run.
@@ -51,8 +51,8 @@ public interface IGridTestResult {
   /**
    * Method to access type of result's data. Preferably this should be file
    * extension that will determine Eclipse editor in which data should be
-   * opened. See also {@link IGridTest#getInputStreamForResult(IGridTestResult)}
-   * and {@link IGridTestResult#getResultRawData()}.
+   * opened. See also {@link IServiceJob#getInputStreamForResult(IServiceJobResult)}
+   * and {@link IServiceJobResult#getResultRawData()}.
    * 
    * @return extension of file to which test result's input stream may be saved
    *         (preferably without "." at the beginning, e.g. "TXT", not ".TXT")
