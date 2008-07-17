@@ -19,6 +19,13 @@
             properties="isGridConnection"
             type="org.eclipse.core.resources.IResource">
       </propertyTester>
+      <propertyTester
+            class="eu.geclipse.core.model.impl.GridModelPropertyTester"
+            id="eu.geclipse.core.elementTester"
+            namespace="eu.geclipse.core"
+            properties="resourceCategory"
+            type="eu.geclipse.core.model.IGridElement">
+      </propertyTester>
    </extension>
    <extension
          id="eu.geclipse.core.project.GridProjectBuilder"

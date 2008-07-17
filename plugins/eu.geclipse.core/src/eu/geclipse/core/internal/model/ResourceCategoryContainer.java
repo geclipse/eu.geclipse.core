@@ -11,11 +11,14 @@ import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridResource;
 import eu.geclipse.core.model.IGridResourceCategory;
+import eu.geclipse.core.model.IGridResourceContainer;
 import eu.geclipse.core.model.impl.ContainerMarker;
 import eu.geclipse.core.reporting.ProblemException;
 
 
-public class ResourceCategoryContainer extends VirtualGridContainer {
+public class ResourceCategoryContainer
+    extends VirtualGridContainer
+    implements IGridResourceContainer {
   
   private IGridResourceCategory category;
   
@@ -41,6 +44,10 @@ public class ResourceCategoryContainer extends VirtualGridContainer {
     return ( element instanceof IGridResource )
       || ( element instanceof ResourceCategoryContainer )
       || ( element instanceof ContainerMarker );
+  }
+  
+  public IGridResourceCategory getCategory() {
+    return this.category;
   }
 
   public boolean isLocal() {
