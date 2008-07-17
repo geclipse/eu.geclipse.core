@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2007 g-Eclipse consortium 
+ * Copyright (c) 2007-2008 g-Eclipse consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -19,10 +19,10 @@ package eu.geclipse.core.model;
 import java.util.Date;
 
 /**
- * Interface for single grid test result.<br>
+ * Interface for single service job result.<br>
  * <br>
  * Basic implementation of this interface (in form of SOJO bean) is in
- * eu.geclipse.test.framework plug-in (<code>GridTestResult</code> class).
+ * eu.geclipse.servicejob plug-in (<code>ServiceJobResult</code> class).
  */
 public interface IServiceJobResult {
 
