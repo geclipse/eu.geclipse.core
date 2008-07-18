@@ -73,7 +73,7 @@ public class DataStagingOutDialog extends Dialog {
   private Combo creationFlagCombo;
   private Combo deleteOnTerminationCombo;
   private DataStagingType dataStagingType;
-  private ArrayList<DataStagingType>dataStageList = new ArrayList<DataStagingType>();
+  private ArrayList<DataStagingType> dataStageList = new ArrayList<DataStagingType>();
   private SourceTargetType sourceTargetType;
 
   /**
@@ -88,7 +88,7 @@ public class DataStagingOutDialog extends Dialog {
   /**
    * @param parentShell
    * @param style
-   * @param existingDataStage 
+   * @param existingDataStage
    */
   public DataStagingOutDialog( final Shell parentShell,
                                final int style,
@@ -97,13 +97,12 @@ public class DataStagingOutDialog extends Dialog {
     super( parentShell );
     this.dialogStyle = style;
     this.editMode = true;
-    this.dataStagingType = existingDataStage;    
-    this.uris = new URI[1];
-    this.filename = new String[1];
-    this.uris[0] = URI.create( this.dataStagingType.getTarget().getURI() );
-    this.filename[0] = this.dataStagingType.getFileName();
+    this.dataStagingType = existingDataStage;
+    this.uris = new URI[ 1 ];
+    this.filename = new String[ 1 ];
+    this.uris[ 0 ] = URI.create( this.dataStagingType.getTarget().getURI() );
+    this.filename[ 0 ] = this.dataStagingType.getFileName();
   }
-
 
   @Override
   protected void configureShell( final Shell shell ) {
@@ -132,47 +131,36 @@ public class DataStagingOutDialog extends Dialog {
     gd.horizontalSpan = 2;
     gd.horizontalAlignment = SWT.FILL;
     this.nameText.setLayoutData( gd );
-
     if( this.dataStagingType != null ) {
       this.nameText.setText( this.dataStagingType.getFileName() );
     }
-    
-    this.nameText.addModifyListener( new ModifyListener(){
+    this.nameText.addModifyListener( new ModifyListener() {
 
       public void modifyText( final ModifyEvent e ) {
-        if ( DataStagingOutDialog.this.editMode == true){
-          DataStagingOutDialog.this.filename[0] = DataStagingOutDialog.this.nameText.getText();
+        if( DataStagingOutDialog.this.editMode == true ) {
+          DataStagingOutDialog.this.filename[ 0 ] = DataStagingOutDialog.this.nameText.getText();
         }
-        
       }
-      
-    });
-    
+    } );
     Label pathLabel = new Label( panel, SWT.LEAD );
     pathLabel.setText( Messages.getString( "DataStageInTable.target_location_field_label" ) ); //$NON-NLS-1$
     gd = new GridData();
     pathLabel.setLayoutData( gd );
     this.pathText = new Text( panel, SWT.BORDER );
-
     if( this.dataStagingType != null ) {
-      this.pathText.setText( this.dataStagingType.getTarget().getURI());      
+      this.pathText.setText( this.dataStagingType.getTarget().getURI() );
     }
-    
-    this.pathText.addModifyListener( new ModifyListener(){
+    this.pathText.addModifyListener( new ModifyListener() {
 
       public void modifyText( final ModifyEvent e ) {
-        if ( DataStagingOutDialog.this.editMode == true){
-           DataStagingOutDialog.this.uris[0] = URI.create( DataStagingOutDialog.this.pathText.getText() );
+        if( DataStagingOutDialog.this.editMode == true ) {
+          DataStagingOutDialog.this.uris[ 0 ] = URI.create( DataStagingOutDialog.this.pathText.getText() );
         }
-        
       }
-      
-    });
-    
+    } );
     gd = new GridData( GridData.FILL_HORIZONTAL );
     this.pathText.setLayoutData( gd );
     Button browseButton = new Button( panel, SWT.PUSH );
-    // IPreferenceStore prefs = Activator.getDefault().getPreferenceStore();
     ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
     Image fileImage = sharedImages.getImage( ISharedImages.IMG_OBJ_FILE );
     browseButton.setImage( fileImage );
@@ -180,50 +168,39 @@ public class DataStagingOutDialog extends Dialog {
 
       @Override
       public void widgetSelected( final SelectionEvent e ) {
-        
-        String currentURI = null;        
+        String currentURI = null;
         GridFileDialog dialog = new GridFileDialog( PlatformUI.getWorkbench()
-                                                    .getActiveWorkbenchWindow()
-                                                    .getShell(),
-                                                  GridFileDialog.STYLE_ALLOW_ONLY_EXISTING 
-                                                  | GridFileDialog.STYLE_ALLOW_ONLY_FILES 
-                                                  | GridFileDialog.STYLE_MULTI_SELECTION
-                                                      );
-
-        if (dialog.open() == Window.OK){
-          
+          .getActiveWorkbenchWindow()
+          .getShell(), GridFileDialog.STYLE_ALLOW_ONLY_FILES );
+        if( dialog.open() == Window.OK ) {
           DataStagingOutDialog.this.uris = dialog.getSelectedURIs();
-          DataStagingOutDialog.this.filename = new String[DataStagingOutDialog.this.uris.length];
-          
-          if ( (DataStagingOutDialog.this.uris!=null) && (DataStagingOutDialog.this.uris.length > 0) ){
-
-            for (int i=0; i<DataStagingOutDialog.this.uris.length; i++) {
-              
-              currentURI = DataStagingOutDialog.this.uris[i].toString();
-              DataStagingOutDialog.this.filename[i] = currentURI.substring( currentURI.lastIndexOf( "/" ) //$NON-NLS-1$
-                                                                            + 1, currentURI.length() );
-              
-              if (i==0){
-                DataStagingOutDialog.this.pathText.setText(DataStagingOutDialog.this.uris[i].toString());
+          if( ( DataStagingOutDialog.this.uris != null )
+              && ( DataStagingOutDialog.this.uris.length > 0 ) )
+          {
+            DataStagingOutDialog.this.filename = new String[ DataStagingOutDialog.this.uris.length ];
+            for( int i = 0; i < DataStagingOutDialog.this.uris.length; i++ ) {
+              currentURI = DataStagingOutDialog.this.uris[ i ].toString();
+              DataStagingOutDialog.this.filename[ i ] = currentURI.substring( currentURI.lastIndexOf( "/" ) //$NON-NLS-1$
+                                                                              + 1,
+                                                                              currentURI.length() );
+              if( i == 0 ) {
+                DataStagingOutDialog.this.pathText.setText( DataStagingOutDialog.this.uris[ i ].toString() );
                 /*
-                 * If in edit mode , then change only the source location and not the Stage-in Name.
-                 * 
+                 * If in edit mode , then change only the source location and
+                 * not the Stage-in Name.
                  */
-                if ( ( !DataStagingOutDialog.this.editMode) ) {
-                  DataStagingOutDialog.this.nameText.setText( DataStagingOutDialog.this.filename[i] );
+                if( ( !DataStagingOutDialog.this.editMode ) ) {
+                  DataStagingOutDialog.this.nameText.setText( DataStagingOutDialog.this.filename[ i ] );
                 }
-              }else{
+              } else {
                 DataStagingOutDialog.this.pathText.setText( DataStagingOutDialog.this.pathText.getText()
-                                                  + ", " + DataStagingOutDialog.this.uris[i].toString()); //$NON-NLS-1$
+                                                            + ", " + DataStagingOutDialog.this.uris[ i ].toString() ); //$NON-NLS-1$
                 DataStagingOutDialog.this.nameText.setText( DataStagingOutDialog.this.nameText.getText()
-                                                  + ", " + DataStagingOutDialog.this.filename[i] ); //$NON-NLS-1$
-              }               
+                                                            + ", " + DataStagingOutDialog.this.filename[ i ] ); //$NON-NLS-1$
+              }
             }
-
-                      
           }
         }
-        
         updateButtons();
       }
     } );
@@ -247,19 +224,17 @@ public class DataStagingOutDialog extends Dialog {
         this.creationFlagCombo.add( cFEnum.getEEnumLiteral( i ).toString() );
       }
       int indexOfOverwite;
-      
-      if( this.dataStagingType != null ) {        
-        indexOfOverwite = this.creationFlagCombo.indexOf( this.dataStagingType.getCreationFlag().getLiteral() );
+      if( this.dataStagingType != null ) {
+        indexOfOverwite = this.creationFlagCombo.indexOf( this.dataStagingType.getCreationFlag()
+          .getLiteral() );
         this.creationFlagCombo.select( indexOfOverwite );
-      }else {
+      } else {
         indexOfOverwite = this.creationFlagCombo.indexOf( "overwrite" ); //$NON-NLS-1$
         this.creationFlagCombo.select( indexOfOverwite );
       }
-      
       gd = new GridData();
       Label deleteOnTerminationLabel = new Label( panel, SWT.LEAD );
-      deleteOnTerminationLabel.setText( 
-                              Messages.getString( "DataStageInTable.DeleteOnTermination_field_label" ) ); //$NON-NLS-1$
+      deleteOnTerminationLabel.setText( Messages.getString( "DataStageInTable.DeleteOnTermination_field_label" ) ); //$NON-NLS-1$
       deleteOnTerminationLabel.setLayoutData( gd );
       this.deleteOnTerminationCombo = new Combo( panel, SWT.BORDER
                                                         | SWT.SIMPLE
@@ -268,15 +243,12 @@ public class DataStagingOutDialog extends Dialog {
       /* Populate the Combo Box with the Delete On Termination Literals */
       this.deleteOnTerminationCombo.add( "true" ); //$NON-NLS-1$
       this.deleteOnTerminationCombo.add( "false" ); //$NON-NLS-1$
-     
       if( this.dataStagingType != null ) {
-        int indexOfDelete = this.deleteOnTerminationCombo
-                                            .indexOf( Boolean.toString(this.dataStagingType.isDeleteOnTermination()));
+        int indexOfDelete = this.deleteOnTerminationCombo.indexOf( Boolean.toString( this.dataStagingType.isDeleteOnTermination() ) );
         this.deleteOnTerminationCombo.select( indexOfDelete );
       } else {
         this.deleteOnTerminationCombo.select( 0 );
       }
-      
       gd = new GridData();
       gd.horizontalSpan = 2;
       gd.horizontalAlignment = SWT.FILL;
@@ -288,65 +260,53 @@ public class DataStagingOutDialog extends Dialog {
     return composite;
   }
 
-  
-  
   /**
    * Access to the List of Data Stage-In elements.
    * 
    * @return DataStage-In list set by the user.
    */
-  public ArrayList<DataStagingType> getDataStageInList(){
+  public ArrayList<DataStagingType> getDataStageInList() {
     return this.dataStageList;
   }
-  
-  
-  
+
   @SuppressWarnings("boxing")
   @Override
   protected void okPressed() {
-    
- 
-    if( ( null != this.uris ) && ( this.uris.length > 1 ) ){
-      for (int i=0; i<this.uris.length; i++){
+    if( ( null != this.uris ) && ( this.uris.length > 1 ) ) {
+      for( int i = 0; i < this.uris.length; i++ ) {
         this.dataStagingType = JsdlFactory.eINSTANCE.createDataStagingType();
-        this.sourceTargetType = JsdlFactory.eINSTANCE.createSourceTargetType();    
-        this.sourceTargetType.setURI( this.uris[i].toString() );
-        this.dataStagingType.setName(this.filename[i] );
-        this.dataStagingType.setSource(null);
-        this.dataStagingType.setTarget( this.sourceTargetType );            
-        this.dataStagingType.setFileName( this.filename[i] );          
-//        newDataStagingType.setFilesystemName( value[0].toString() );
+        this.sourceTargetType = JsdlFactory.eINSTANCE.createSourceTargetType();
+        this.sourceTargetType.setURI( this.uris[ i ].toString() );
+        this.dataStagingType.setName( this.filename[ i ] );
+        this.dataStagingType.setSource( null );
+        this.dataStagingType.setTarget( this.sourceTargetType );
+        this.dataStagingType.setFileName( this.filename[ i ] );
+        // newDataStagingType.setFilesystemName( value[0].toString() );
         if( this.dialogStyle == ADVANCED_DIALOG ) {
-          this.dataStagingType.setCreationFlag(CreationFlagEnumeration.get(this.creationFlagCombo.getSelectionIndex()));
+          this.dataStagingType.setCreationFlag( CreationFlagEnumeration.get( this.creationFlagCombo.getSelectionIndex() ) );
           if( this.deleteOnTerminationCombo.getSelectionIndex() != -1 ) {
-            this.dataStagingType.setDeleteOnTermination( Boolean
-                                                         .valueOf( Boolean.parseBoolean( this.deleteOnTerminationCombo
-                                                       .getItem( this.deleteOnTerminationCombo.getSelectionIndex())) ));
+            this.dataStagingType.setDeleteOnTermination( Boolean.valueOf( Boolean.parseBoolean( this.deleteOnTerminationCombo.getItem( this.deleteOnTerminationCombo.getSelectionIndex() ) ) ) );
           }
         }
         this.dataStageList.add( this.dataStagingType );
       }
-    }else{
+    } else {
       this.dataStagingType = JsdlFactory.eINSTANCE.createDataStagingType();
       this.sourceTargetType = JsdlFactory.eINSTANCE.createSourceTargetType();
       this.sourceTargetType.setURI( this.pathText.getText() );
-      this.dataStagingType.setSource(null);
+      this.dataStagingType.setSource( null );
       this.dataStagingType.setTarget( this.sourceTargetType );
       this.dataStagingType.setFileName( this.nameText.getText() );
       this.dataStagingType.setName( this.nameText.getText() );
-//      newDataStagingType.setFilesystemName( value[0].toString() );
+      // newDataStagingType.setFilesystemName( value[0].toString() );
       if( this.dialogStyle == ADVANCED_DIALOG ) {
-        this.dataStagingType.setCreationFlag(CreationFlagEnumeration.get( this.creationFlagCombo.getSelectionIndex() ));
+        this.dataStagingType.setCreationFlag( CreationFlagEnumeration.get( this.creationFlagCombo.getSelectionIndex() ) );
         if( this.deleteOnTerminationCombo.getSelectionIndex() != -1 ) {
-          this.dataStagingType.setDeleteOnTermination( Boolean
-                                                       .valueOf( Boolean.parseBoolean( this.deleteOnTerminationCombo
-                                                      .getItem( this.deleteOnTerminationCombo.getSelectionIndex())) ));
+          this.dataStagingType.setDeleteOnTermination( Boolean.valueOf( Boolean.parseBoolean( this.deleteOnTerminationCombo.getItem( this.deleteOnTerminationCombo.getSelectionIndex() ) ) ) );
         }
       }
-      this.dataStageList.add( this.dataStagingType );     
-      
+      this.dataStageList.add( this.dataStagingType );
     }
-    
     super.okPressed();
   }
 
@@ -360,8 +320,6 @@ public class DataStagingOutDialog extends Dialog {
     }
   }
 
-  
-  
   @Override
   protected void createButtonsForButtonBar( final Composite parent ) {
     super.createButtonsForButtonBar( parent );

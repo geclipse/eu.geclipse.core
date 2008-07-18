@@ -57,7 +57,6 @@ import org.eclipse.swt.widgets.TableItem;
 import eu.geclipse.jsdl.JSDLModelFacade;
 import eu.geclipse.jsdl.model.base.DataStagingType;
 import eu.geclipse.jsdl.model.base.SourceTargetType;
-import eu.geclipse.jsdl.ui.internal.dialogs.DataStagingInDialog;
 import eu.geclipse.jsdl.ui.internal.dialogs.DataStagingOutDialog;
 import eu.geclipse.ui.dialogs.GridFileDialog;
 
@@ -220,27 +219,6 @@ public class DataStageOutTable {
             filename = uris[ 0 ].toString();
           }
         }
-        // IGridConnectionElement connection = GridFileDialog.openFileDialog(
-        // DataStageOutTable.this.mainComp.getShell(),
-        // Messages.getString( "DataStageOutTable.grid_file_dialog_title" ),
-        // //$NON-NLS-1$
-        // null,
-        // true );
-        // if( connection != null ) {
-        // try {
-        // filename = connection.getConnectionFileStore().toString();
-        // } catch( CoreException cExc ) {
-        // ProblemException exception = new ProblemException(
-        // ICoreProblems.NET_CONNECTION_FAILED,
-        // cExc,
-        // Activator.PLUGIN_ID );
-        // ProblemDialog.openProblem(
-        // DataStageOutTable.this.mainComp.getShell(),
-        // Messages.getString( "DataStageOutTable.error" ), //$NON-NLS-1$
-        // Messages.getString( "DataStageOutTable.error" ), //$NON-NLS-1$
-        // exception );
-        // }
-        // }
         return filename;
       }
     };
@@ -376,7 +354,7 @@ public class DataStageOutTable {
     DataStagingOutDialog dialog;
     if( selectedObject == null ) {
       dialog = new DataStagingOutDialog( this.mainComp.getShell(),
-                                         DataStagingInDialog.SIMPLE_DIALOG );
+                                         DataStagingOutDialog.SIMPLE_DIALOG );
       if( dialog.open() == Window.OK ) {
         DataStagingType newData = getNewDataStagingType( dialog.getDataStageInList() );
         if( !isDataInInput( newData ) ) {
@@ -390,7 +368,7 @@ public class DataStageOutTable {
       }
     } else {
       dialog = new DataStagingOutDialog( this.mainComp.getShell(),
-                                         DataStagingInDialog.SIMPLE_DIALOG,
+                                         DataStagingOutDialog.SIMPLE_DIALOG,
                                          selectedObject );
       if( dialog.open() == Window.OK ) {
         DataStagingType newData = getNewDataStagingType( dialog.getDataStageInList() );
@@ -406,11 +384,11 @@ public class DataStageOutTable {
             MessageDialog.openError( this.mainComp.getShell(),
                                      Messages.getString( "DataStageOutTable.edit_dialog_title" ), //$NON-NLS-1$
                                      Messages.getString( "DataStageOutTable.data_exists_error" ) ); //$NON-NLS-1$
-          } // end else
-        } // end_if(!isDataInInput( newData ))
-      } // end_if (dialog.open())
-    } // end else
-  } // end void editDataStagingEntry()
+          } 
+        } 
+      } 
+    } 
+  } 
 
   boolean isDataInInput( final DataStagingType newData ) {
     boolean result = false;
