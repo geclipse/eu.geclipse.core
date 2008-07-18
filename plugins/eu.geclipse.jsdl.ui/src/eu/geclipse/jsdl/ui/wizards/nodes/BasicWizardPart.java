@@ -23,6 +23,7 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.graphics.Point;
 
+import eu.geclipse.jsdl.ui.wizards.Messages;
 import eu.geclipse.jsdl.ui.wizards.NewJobWizard;
 
 /**
@@ -48,6 +49,7 @@ public class BasicWizardPart extends Wizard implements IWizardNode {
     this.parentWizard = wizard;
     this.addPages();
     this.isCreated = true;
+    setWindowTitle( Messages.getString( "NewJobWizard.windowTitle" ) ); //$NON-NLS-1$
   }
 
   @Override
