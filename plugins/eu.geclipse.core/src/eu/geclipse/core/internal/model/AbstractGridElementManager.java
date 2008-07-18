@@ -210,7 +210,11 @@ public abstract class AbstractGridElementManager
    * data to.
    */
   public static IFileStore getManagerStore() {
-    IPath statePath = Activator.getDefault().getStateLocation();
+    Activator activator = Activator.getDefault();
+    IPath statePath = null;
+    if (activator!=null){
+      statePath=activator.getStateLocation();
+    }
     return EFS.getLocalFileSystem().getStore( statePath );
   }
   
