@@ -75,7 +75,7 @@ public class ExtensionManager {
    * @return The extension point with the specified id or null.
    */
   public IExtensionPoint getExtensionPoint( final String extensionPointID ) {
-    return this.registry.getExtensionPoint( extensionPointID );
+    return this.registry==null?null:this.registry.getExtensionPoint( extensionPointID );
   }
   
   /**
