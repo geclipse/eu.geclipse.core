@@ -260,11 +260,29 @@ public class GEclipseFileStore
                       final IProgressMonitor monitor )
       throws CoreException {
     getSlave().delete( options, monitor( monitor ) );
-    FileStoreRegistry registry = FileStoreRegistry.getInstance();
-    registry.removeStore( this );
+    
+    removeCachedStoreWithChildren( this );
     
     if( this.parent != null ) {
       this.parent.setActive( FETCH_CHILDREN_ACTIVE_POLICY );
+    }
+  }
+  
+  private void removeCachedStoreWithChildren( final GEclipseFileStore fileStore ) {
+    FileStoreRegistry registry = FileStoreRegistry.getInstance();
+    registry.removeStore( this );
+    
+    if( this.cachedInfos != null ) {
+      for( IFileInfo childInfo : this.cachedInfos ) {
+        if( childInfo.getName() != null 
+            && childInfo.getName().length() > 0 ) {
+          IFileStore child = getSlave().getChild( childInfo.getName() );
+          
+          if( child != null ) {
+            registry.removeStore( child );
+          }
+        }
+      }
     }
   }
   
