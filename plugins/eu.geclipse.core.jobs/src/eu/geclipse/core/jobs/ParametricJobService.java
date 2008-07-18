@@ -43,6 +43,7 @@ import eu.geclipse.core.model.IGridJobID;
 import eu.geclipse.core.model.IGridJobService;
 import eu.geclipse.core.model.IGridJobStatus;
 import eu.geclipse.core.model.IGridProject;
+import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.jsdl.JSDLJobDescription;
 import eu.geclipse.jsdl.ParametricJsdlGenerator;
@@ -349,6 +350,15 @@ public class ParametricJobService implements IGridJobService {
 
   public IGridJobID submitJob( final IGridJobDescription description,
                                final IProgressMonitor monitor )
+    throws ProblemException
+  {
+    // TODO mariusz operation not supported - add exception
+    return null;
+  }
+
+  public IGridJobID submitJob( IGridJobDescription description,
+                               IVirtualOrganization vo,
+                               IProgressMonitor monitor )
     throws ProblemException
   {
     // TODO mariusz operation not supported - add exception

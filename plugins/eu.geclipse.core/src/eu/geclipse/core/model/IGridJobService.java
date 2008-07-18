@@ -51,6 +51,19 @@ public interface IGridJobService extends IGridService {
     throws ProblemException;
   
   /**
+   * Submits the given job description to the grid.
+   * 
+   * @param description the job description to be submitted.
+   * @param monitor Use to monitor progress. May be <code>null</code>.
+   * @return The id of the submitted job.
+   * @throws ProblemException if submitting the job failed.
+   */
+  public IGridJobID submitJob( final IGridJobDescription description,
+                               final IVirtualOrganization vo,
+                               final IProgressMonitor monitor )
+    throws ProblemException;
+
+  /**
    * Queries the service about the job's status.
    * 
    * @param id The id of the job whose status has to be queried.
