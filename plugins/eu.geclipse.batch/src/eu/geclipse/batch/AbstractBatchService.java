@@ -16,7 +16,6 @@
  *****************************************************************************/
 package eu.geclipse.batch;
 
-import eu.geclipse.batch.internal.SSHConnection;
 import eu.geclipse.core.reporting.ProblemException;
 
 /**

@@ -67,8 +67,13 @@ public class Activator extends Plugin {
     super.stop( context );
   }
 
-  IJSchService getJSchService() {
-    return (IJSchService)this.tracker.getService();
+  /**
+   * Returns a the jsch service reference. 
+   * 
+   * @return Returns the JSchService reference. 
+   */
+  public IJSchService getJSchService() {
+    return ( IJSchService )this.tracker.getService();
   }
 
   /**

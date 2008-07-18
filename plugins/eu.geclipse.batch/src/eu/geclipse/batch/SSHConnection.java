@@ -14,7 +14,7 @@
  *      - Harald Gjermundrod (harald@cs.ucy.ac.cy)
  *
  *****************************************************************************/
-package eu.geclipse.batch.internal;
+package eu.geclipse.batch;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -36,9 +36,7 @@ import eu.geclipse.core.reporting.ReportingPlugin;
 
 import eu.geclipse.core.portforward.ForwardType;
 import eu.geclipse.core.portforward.IForward;
-import eu.geclipse.batch.IBatchProblems;
-import eu.geclipse.batch.IBatchSolutions;
-import eu.geclipse.batch.ISSHConnectionInfo;
+import eu.geclipse.batch.internal.Activator;
 
 /**
  * Class used to establish an ssh connection to a remote server.
