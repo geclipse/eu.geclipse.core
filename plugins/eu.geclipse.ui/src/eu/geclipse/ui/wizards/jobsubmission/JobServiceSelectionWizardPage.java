@@ -43,12 +43,13 @@ public class JobServiceSelectionWizardPage extends WizardPage {
   {
     super( pageName );
     super.setTitle( "Submit job description" );
-    super.setDescription( "Retrieving list of services, please wait a while..." );
+    super.setDescription( "Choose service for submitting jobs" );
+    setMessage( "Retrieving list of services, please wait a while...", WizardPage.WARNING );
     this.jobDescriptions = _jobDescriptions;
   }
 
   public void setServices(final List<IGridJobService> _jobServices){
-    super.setDescription( "Choose service for submitting jobs" );
+    setMessage( null );
     this.jobServices = _jobServices;
     for(Iterator<IGridJobService> i=jobServices.iterator(); i.hasNext();){
       list.add( i.next().getName() );
