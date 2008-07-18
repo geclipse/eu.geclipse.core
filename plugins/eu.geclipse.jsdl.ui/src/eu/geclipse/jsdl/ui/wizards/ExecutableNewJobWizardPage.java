@@ -30,7 +30,11 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.window.Window;
@@ -49,14 +53,18 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.PlatformUI;
 import org.xml.sax.SAXException;
 
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridConnectionElement;
 import eu.geclipse.core.model.IGridElement;
+import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.jsdl.JSDLJobDescription;
 import eu.geclipse.jsdl.ui.internal.Activator;
 import eu.geclipse.jsdl.ui.preference.ApplicationParametersRegistry;
@@ -80,6 +88,8 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
    * Key for the executable file preference.
    */
   private static String INPUT_EXE_ID = "executable_file"; //$NON-NLS-1$
+  boolean done;
+  boolean firstTime = true;
   Text stdin;
   Text stdout;
   Text stderr;
@@ -113,7 +123,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
   private Group stdFilesGroup;
   private Button outButton;
   private Button errButton;
-  private boolean firstTime = true;
+  
 
   /**
    * Creates new wizard page
@@ -128,6 +138,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
     setTitle( Messages.getString( "ExecutableNewJobWizardPage.title" ) ); //$NON-NLS-1$
     setDescription( Messages.getString( "ExecutableNewJobWizardPage.description" ) ); //$NON-NLS-1$
     this.internalPages = internalPages;
+    setMessage( "Retrieving list of services, please wait a while...", WizardPage.INFORMATION );
   }
 
   @Override
@@ -614,16 +625,42 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
 
   @Override
   public void setVisible( final boolean visible ) {
-    if( visible == true && this.firstTime ) {
-      this.firstTime = false;
-      ApplicationParametersRegistry.getInstance()
-        .updateApplicationsParameters( ( ( IVOSelectionProvider )getWizard() ).getVirtualOrganization() );
-      this.appsWithParametersFromPrefs = ApplicationParametersRegistry.getInstance()
-        .getApplicationDataMapping( ( ( IVOSelectionProvider )getWizard() ).getVirtualOrganization() );
-      for( String value : this.appsWithParametersFromPrefs.keySet() ) {
-        this.applicationName.add( value );
+    final IVirtualOrganization vo = ( ( IVOSelectionProvider )getWizard() ).getVirtualOrganization();
+    Job job = new Job( "Getting application names." ) {
+
+      @Override
+      protected IStatus run( final IProgressMonitor monitor ) {
+        if( visible == true && ExecutableNewJobWizardPage.this.firstTime ) {
+          ExecutableNewJobWizardPage.this.firstTime = false;
+          ApplicationParametersRegistry.getInstance()
+            .updateApplicationsParameters( vo );
+          IWorkbench workbench = PlatformUI.getWorkbench();
+          Display display = workbench.getDisplay();
+          final Map<String, Integer> map = ApplicationParametersRegistry.getInstance()
+          .getApplicationDataMapping( vo );
+          display.syncExec( new Runnable() {
+
+            public void run() {
+              setApplications( map );
+              
+            }
+            
+          });
+          
+        }
+        return Status.OK_STATUS;
       }
-    }
+    };
+    job.setUser( false );
+    job.schedule();
     super.setVisible( visible );
+  }
+
+  void setApplications( final Map<String, Integer> map ) {
+    this.appsWithParametersFromPrefs = map;
+    for( String name : this.appsWithParametersFromPrefs.keySet() ) {
+      this.applicationName.add( name );
+    }
+    this.setMessage( null );
   }
 }
