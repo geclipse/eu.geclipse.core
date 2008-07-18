@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -123,7 +123,7 @@ public class Preferences {
   
   /**
    * Sets the status of the job updates
-   * @param status Status of updates to be set 
+   * @param status Status of updates to be set
    */
   static public void setUpdateJobsStatus( final boolean status ) {
     org.eclipse.core.runtime.Preferences preferenceStore = getPreferenceStore();
@@ -135,13 +135,16 @@ public class Preferences {
    * @return Status of job updates
    */
   static public boolean getUpdateJobsStatus() {
+    boolean valueUpdateJobsStatus = false;
     org.eclipse.core.runtime.Preferences preferenceStore = getPreferenceStore();
-    boolean valueUpdateJobsStatus = preferenceStore.getBoolean( PreferenceConstants.JOBS_UPDATE_JOBS_STATUS );
+    if ( preferenceStore != null ) {
+       valueUpdateJobsStatus = preferenceStore.getBoolean( PreferenceConstants.JOBS_UPDATE_JOBS_STATUS );
+    }
     return valueUpdateJobsStatus;
   }
   
   /**
-   * Sets the time period (in miliseconds) between job updates 
+   * Sets the time period (in miliseconds) between job updates
    * @param period Period between job status' updates
    */
   static public void setUpdateJobsPeriod( final int period ) {
@@ -150,13 +153,16 @@ public class Preferences {
   }
   
   /**
-   * Gets the time period (in seconds) 
+   * Gets the time period (in seconds)
    * @return Time in seconds between job status' udpates
    */
   static public int getUpdateJobsPeriod() {
+    int valueUpdateJobsPeriod = 30;
     org.eclipse.core.runtime.Preferences preferenceStore = getPreferenceStore();
-    int valueUpdateJobsPeriod = preferenceStore.getInt( PreferenceConstants.JOBS_UPDATE_JOBS_PERIOD );
-    return valueUpdateJobsPeriod * 1000;  
+    if ( preferenceStore != null ) {
+      valueUpdateJobsPeriod = preferenceStore.getInt( PreferenceConstants.JOBS_UPDATE_JOBS_PERIOD );
+    }
+    return valueUpdateJobsPeriod * 1000;
   }
   
   /**
@@ -192,8 +198,11 @@ public class Preferences {
    * @return The preference store of the g-Eclipse core.
    */
   static protected org.eclipse.core.runtime.Preferences getPreferenceStore() {
+    org.eclipse.core.runtime.Preferences preferenceStore = null;
     Activator activator = Activator.getDefault();
-    org.eclipse.core.runtime.Preferences preferenceStore = activator.getPluginPreferences();
+    if ( activator != null ) {
+      preferenceStore = activator.getPluginPreferences();
+    }
     return preferenceStore;
   }
   
