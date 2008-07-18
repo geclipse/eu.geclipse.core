@@ -111,8 +111,6 @@ public class WorkflowViewProvider extends AbstractViewProvider {
         return WorkflowJobViewFactory.class;
       case WorkflowJobNameEditPart.VISUAL_ID:
         return WorkflowJobNameViewFactory.class;
-//      case WorkflowJobDescriptionEditPart.VISUAL_ID:
-//        return WorkflowJobDescriptionViewFactory.class;
       case OutputPortEditPart.VISUAL_ID:
         return OutputPortViewFactory.class;
       case InputPortEditPart.VISUAL_ID:

@@ -30,6 +30,11 @@ import org.eclipse.gmf.runtime.emf.type.core.requests.IEditCommandRequest;
  */
 public class WorkflowJobEditCommand extends EditElementCommand {
 
+  /**
+   * @param label
+   * @param elementToEdit
+   * @param request
+   */
   public WorkflowJobEditCommand( String label, EObject elementToEdit, IEditCommandRequest request )
   {
     super( label, elementToEdit, request );

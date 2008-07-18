@@ -601,6 +601,8 @@
             <contribution>
               <predefinedEntry id="standardGroup/noteStack/textTool" remove="true"/>
             </contribution>
+            <contribution factoryClass="eu.geclipse.workflow.ui.part.WorkflowPaletteFactory">
+            </contribution>
            <editor id="eu.geclipse.workflow.ui.part.WorkflowDiagramEditorID">
            </editor>
          </paletteProvider>

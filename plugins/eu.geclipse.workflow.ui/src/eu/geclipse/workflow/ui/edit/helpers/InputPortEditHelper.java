@@ -16,8 +16,8 @@
 package eu.geclipse.workflow.ui.edit.helpers;
 
 /**
- * @generated
+ * @generated 
  */
 public class InputPortEditHelper extends WorkflowBaseEditHelper {
-  // 
+//
 }

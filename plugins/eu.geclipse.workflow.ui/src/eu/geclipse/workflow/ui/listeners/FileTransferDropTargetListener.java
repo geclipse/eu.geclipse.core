@@ -34,9 +34,11 @@ import eu.geclipse.core.model.IGridElement;
  */
 public class FileTransferDropTargetListener extends DiagramDropTargetListener {
 
+  /**
+   * @param viewer
+   */
   public FileTransferDropTargetListener( final EditPartViewer viewer ) {
     super( viewer,  LocalSelectionTransfer.getInstance());
-    // TODO Auto-generated constructor stub
   }
  
 

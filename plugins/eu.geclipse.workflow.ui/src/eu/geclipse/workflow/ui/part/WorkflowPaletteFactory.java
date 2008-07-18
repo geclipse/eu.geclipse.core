@@ -111,6 +111,9 @@ public class WorkflowPaletteFactory {
   /**
    * @generated NOT
    */
+  @SuppressWarnings({
+    "unchecked", "synthetic-access"
+  })
   private ToolEntry createWorkflowJobCreationTool() {
     List/*<IElementType>*/types = new ArrayList/*<IElementType>*/( 1 );
     types.add( WorkflowElementTypes.IWorkflowJob_1001 );

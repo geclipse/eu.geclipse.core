@@ -36,6 +36,8 @@ public class WorkflowReorientConnectionViewCommand extends AbstractTransactional
   private IAdaptable edgeAdaptor;
 
   /**
+   * @param editingDomain 
+   * @param label 
    * @generated
    */
   public WorkflowReorientConnectionViewCommand( TransactionalEditingDomain editingDomain, String label ) {
@@ -47,7 +49,7 @@ public class WorkflowReorientConnectionViewCommand extends AbstractTransactional
    */
   @Override
   public List getAffectedFiles() {
-    View view = ( View )edgeAdaptor.getAdapter( View.class );
+    View view = ( View )this.edgeAdaptor.getAdapter( View.class );
     if( view != null ) {
       return getWorkspaceFiles( view );
     }
@@ -55,13 +57,15 @@ public class WorkflowReorientConnectionViewCommand extends AbstractTransactional
   }
 
   /**
+   * @return edgeAdaptor
    * @generated
    */
   public IAdaptable getEdgeAdaptor() {
-    return edgeAdaptor;
+    return this.edgeAdaptor;
   }
 
   /**
+   * @param edgeAdaptor 
    * @generated
    */
   public void setEdgeAdaptor( IAdaptable edgeAdaptor ) {
@@ -74,7 +78,7 @@ public class WorkflowReorientConnectionViewCommand extends AbstractTransactional
   @Override
   protected CommandResult doExecuteWithResult( IProgressMonitor progressMonitor, IAdaptable info )
   {
-    assert null != edgeAdaptor : "Null child in WorkflowReorientConnectionViewCommand"; //$NON-NLS-1$
+    assert null != this.edgeAdaptor : "Null child in WorkflowReorientConnectionViewCommand"; //$NON-NLS-1$
     Edge edge = ( Edge )getEdgeAdaptor().getAdapter( Edge.class );
     assert null != edge : "Null edge in WorkflowReorientConnectionViewCommand"; //$NON-NLS-1$
     View tempView = edge.getSource();

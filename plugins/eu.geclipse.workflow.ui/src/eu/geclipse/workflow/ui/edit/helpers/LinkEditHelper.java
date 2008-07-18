@@ -19,5 +19,5 @@ package eu.geclipse.workflow.ui.edit.helpers;
  * @generated
  */
 public class LinkEditHelper extends WorkflowBaseEditHelper {
-  //
+//
 }

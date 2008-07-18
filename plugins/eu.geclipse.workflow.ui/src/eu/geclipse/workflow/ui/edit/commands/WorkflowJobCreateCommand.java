@@ -28,6 +28,7 @@ import org.eclipse.gmf.runtime.notation.View;
 public class WorkflowJobCreateCommand extends CreateElementCommand {
 
   /**
+   * @param req 
    * @generated
    */
   public WorkflowJobCreateCommand( CreateElementRequest req ) {

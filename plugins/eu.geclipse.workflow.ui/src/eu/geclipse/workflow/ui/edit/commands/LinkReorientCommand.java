@@ -48,27 +48,29 @@ public class LinkReorientCommand extends EditElementCommand {
   private final EObject newEnd;
 
   /**
+   * @param request 
    * @generated
    */
   public LinkReorientCommand( ReorientRelationshipRequest request ) {
     super( request.getLabel(), request.getRelationship(), request );
-    reorientDirection = request.getDirection();
-    oldEnd = request.getOldRelationshipEnd();
-    newEnd = request.getNewRelationshipEnd();
+    this.reorientDirection = request.getDirection();
+    this.oldEnd = request.getOldRelationshipEnd();
+    this.newEnd = request.getNewRelationshipEnd();
   }
 
   /**
    * @generated
    */
+  @SuppressWarnings("static-access")
   @Override
   public boolean canExecute() {
     if( !( getElementToEdit() instanceof ILink ) ) {
       return false;
     }
-    if( reorientDirection == ReorientRelationshipRequest.REORIENT_SOURCE ) {
+    if( this.reorientDirection == ReorientRelationshipRequest.REORIENT_SOURCE ) {
       return canReorientSource();
     }
-    if( reorientDirection == ReorientRelationshipRequest.REORIENT_TARGET ) {
+    if( this.reorientDirection == ReorientRelationshipRequest.REORIENT_TARGET ) {
       return canReorientTarget();
     }
     return false;
@@ -78,7 +80,7 @@ public class LinkReorientCommand extends EditElementCommand {
    * @generated
    */
   protected boolean canReorientSource() {
-    if( !( oldEnd instanceof IOutputPort && newEnd instanceof IOutputPort ) ) {
+    if( !( this.oldEnd instanceof IOutputPort && this.newEnd instanceof IOutputPort ) ) {
       return false;
     }
     IInputPort target = getLink().getTarget();
@@ -95,7 +97,7 @@ public class LinkReorientCommand extends EditElementCommand {
    * @generated
    */
   protected boolean canReorientTarget() {
-    if( !( oldEnd instanceof IInputPort && newEnd instanceof IInputPort ) ) {
+    if( !( this.oldEnd instanceof IInputPort && this.newEnd instanceof IInputPort ) ) {
       return false;
     }
     IOutputPort source = getLink().getSource();
@@ -111,6 +113,7 @@ public class LinkReorientCommand extends EditElementCommand {
   /**
    * @generated NOT
    */
+  @SuppressWarnings("static-access")
   @Override
   protected CommandResult doExecuteWithResult( IProgressMonitor monitor,
                                                IAdaptable info )
@@ -119,10 +122,10 @@ public class LinkReorientCommand extends EditElementCommand {
     if( !canExecute() ) {
       throw new ExecutionException( Messages.getString("LinkCreateCommand_InvalidArgumentsInReorientLink") ); //$NON-NLS-1$
     }
-    if( reorientDirection == ReorientRelationshipRequest.REORIENT_SOURCE ) {
+    if( this.reorientDirection == ReorientRelationshipRequest.REORIENT_SOURCE ) {
       return reorientSource();
     }
-    if( reorientDirection == ReorientRelationshipRequest.REORIENT_TARGET ) {
+    if( this.reorientDirection == ReorientRelationshipRequest.REORIENT_TARGET ) {
       return reorientTarget();
     }
     throw new IllegalStateException();
@@ -131,7 +134,7 @@ public class LinkReorientCommand extends EditElementCommand {
   /**
    * @generated
    */
-  protected CommandResult reorientSource() throws ExecutionException {
+  protected CommandResult reorientSource() {
     getLink().setSource( getNewSource() );
     return CommandResult.newOKCommandResult( getLink() );
   }
@@ -139,7 +142,7 @@ public class LinkReorientCommand extends EditElementCommand {
   /**
    * @generated
    */
-  protected CommandResult reorientTarget() throws ExecutionException {
+  protected CommandResult reorientTarget() {
     getLink().setTarget( getNewTarget() );
     return CommandResult.newOKCommandResult( getLink() );
   }
@@ -155,27 +158,27 @@ public class LinkReorientCommand extends EditElementCommand {
    * @generated
    */
   protected IOutputPort getOldSource() {
-    return ( IOutputPort )oldEnd;
+    return ( IOutputPort )this.oldEnd;
   }
 
   /**
    * @generated
    */
   protected IOutputPort getNewSource() {
-    return ( IOutputPort )newEnd;
+    return ( IOutputPort )this.newEnd;
   }
 
   /**
    * @generated
    */
   protected IInputPort getOldTarget() {
-    return ( IInputPort )oldEnd;
+    return ( IInputPort )this.oldEnd;
   }
 
   /**
    * @generated
    */
   protected IInputPort getNewTarget() {
-    return ( IInputPort )newEnd;
+    return ( IInputPort )this.newEnd;
   }
 }

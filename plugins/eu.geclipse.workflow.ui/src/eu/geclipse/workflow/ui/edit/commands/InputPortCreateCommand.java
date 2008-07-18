@@ -30,6 +30,7 @@ public class InputPortCreateCommand extends CreateElementCommand {
 
   /**
    * Constructor
+   * @param req 
    */
   public InputPortCreateCommand( CreateElementRequest req ) {
     super( req );

@@ -21,8 +21,12 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.gmf.runtime.diagram.ui.editpolicies.CanonicalEditPolicy;
 import org.eclipse.gmf.runtime.notation.View;
+
+import eu.geclipse.workflow.IWorkflowElement;
 import eu.geclipse.workflow.IWorkflowPackage;
 import eu.geclipse.workflow.ui.edit.parts.InputPortEditPart;
 import eu.geclipse.workflow.ui.edit.parts.OutputPortEditPart;
@@ -80,12 +84,12 @@ public class WorkflowJobCanonicalEditPolicy extends CanonicalEditPolicy {
    * @generated
    */
   @Override
-  protected Set getFeaturesToSynchronize() {
-    if( myFeaturesToSynchronize == null ) {
-      myFeaturesToSynchronize = new HashSet();
-      myFeaturesToSynchronize.add( IWorkflowPackage.eINSTANCE.getIWorkflowNode_Outputs() );
-      myFeaturesToSynchronize.add( IWorkflowPackage.eINSTANCE.getIWorkflowNode_Inputs() );
+  protected Set<IWorkflowElement> getFeaturesToSynchronize() {
+    if( this.myFeaturesToSynchronize == null ) {
+      this.myFeaturesToSynchronize = new HashSet<IWorkflowElement>();
+      this.myFeaturesToSynchronize.add( IWorkflowPackage.eINSTANCE.getIWorkflowNode_Outputs() );
+      this.myFeaturesToSynchronize.add( IWorkflowPackage.eINSTANCE.getIWorkflowNode_Inputs() );
     }
-    return myFeaturesToSynchronize;
+    return this.myFeaturesToSynchronize;
   }
 }

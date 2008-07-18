@@ -53,6 +53,9 @@ public class LinkCreateCommand extends CreateElementCommand {
 
   /**
    * Constructor
+   * @param request 
+   * @param source 
+   * @param target 
    */
   public LinkCreateCommand( CreateRelationshipRequest request,
                             EObject source,
@@ -70,8 +73,8 @@ public class LinkCreateCommand extends CreateElementCommand {
     for( EObject element = source; element != null; element = element.eContainer() )
     {
       if( element instanceof IWorkflow ) {
-        container = ( IWorkflow )element;
-        super.setElementToEdit( container );
+        this.container = ( IWorkflow )element;
+        super.setElementToEdit( this.container );
         break;
       }
     }
@@ -82,13 +85,13 @@ public class LinkCreateCommand extends CreateElementCommand {
    */
   @Override
   public boolean canExecute() {
-    if( source == null && target == null ) {
+    if( this.source == null && this.target == null ) {
       return false;
     }
-    if( source != null && !( source instanceof IOutputPort ) ) {
+    if( this.source != null && !( this.source instanceof IOutputPort ) ) {
       return false;
     }
-    if( target != null && !( target instanceof IInputPort ) ) {
+    if( this.target != null && !( this.target instanceof IInputPort ) ) {
       return false;
     }
     if( getSource() == null ) {
@@ -160,20 +163,21 @@ public class LinkCreateCommand extends CreateElementCommand {
    * @generated
    */
   protected IOutputPort getSource() {
-    return ( IOutputPort )source;
+    return ( IOutputPort )this.source;
   }
 
   /**
    * @generated
    */
   protected IInputPort getTarget() {
-    return ( IInputPort )target;
+    return ( IInputPort )this.target;
   }
 
   /**
+   * @return container
    * @generated
    */
   public IWorkflow getContainer() {
-    return container;
+    return this.container;
   }
 }

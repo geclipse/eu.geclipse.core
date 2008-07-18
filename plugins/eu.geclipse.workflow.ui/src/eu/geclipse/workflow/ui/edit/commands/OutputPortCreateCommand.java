@@ -28,6 +28,7 @@ import org.eclipse.gmf.runtime.notation.View;
 public class OutputPortCreateCommand extends CreateElementCommand {
 
   /**
+   * @param req 
    * @generated
    */
   public OutputPortCreateCommand( CreateElementRequest req ) {

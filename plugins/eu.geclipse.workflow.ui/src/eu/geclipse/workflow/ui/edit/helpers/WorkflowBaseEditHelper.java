@@ -94,10 +94,11 @@ public class WorkflowBaseEditHelper extends AbstractEditHelper {
    * @generated
    */
   @Override
-  protected ICommand getCreateCommand( CreateElementRequest req ) {
+  protected ICommand getCreateCommand( CreateElementRequest req )
+  {
     return null;
   }
-
+  
   /**
    * @generated
    */
