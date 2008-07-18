@@ -160,13 +160,29 @@ public class SSHPersistantConnection implements IBidirectionalConnection {
   }
   
   /**
+   * Returns the error stream for this tunnel
+   * @return Returns the error stream.
+   * @throws IOException
+   */
+  public InputStream getErrorStream() throws IOException {
+    InputStream ret = null;
+    
+    if ( null != this.channel ) 
+      ret = this.channel.getExtInputStream();
+
+    return ret;
+  }
+  
+  /**
    * Creates a SSH tunnel to the remote host.
    *    
    * @param inStream The input stream for the tunnel
    * @param outStream The output stream for the tunnel
+   * @param errStream The error stream for the tunnel
    * @throws ProblemException If the tunnel could not successfully be established 
    */
-  public void connect( final InputStream inStream, final OutputStream outStream ) throws ProblemException {
+  public void connect( final InputStream inStream, final OutputStream outStream, 
+                       final OutputStream errStream ) throws ProblemException {
     
     // We throw exception if we don't have a session 
     if ( ! this.isSessionActive() ) {
@@ -188,6 +204,7 @@ public class SSHPersistantConnection implements IBidirectionalConnection {
 //      this.channel = ( ChannelDirectTCPIP )this.session.openChannel( "direct-tcpip" ); //$NON-NLS-1$
       this.channel = ( ChannelShell )this.session.openChannel( "shell" ); //$NON-NLS-1$
       this.channel.setInputStream( inStream );
+      this.channel.setExtOutputStream( errStream );
       this.channel.setOutputStream( outStream );
       this.channel.connect();
     } catch( JSchException jschExc ) {
