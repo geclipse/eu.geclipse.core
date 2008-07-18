@@ -138,7 +138,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
     setTitle( Messages.getString( "ExecutableNewJobWizardPage.title" ) ); //$NON-NLS-1$
     setDescription( Messages.getString( "ExecutableNewJobWizardPage.description" ) ); //$NON-NLS-1$
     this.internalPages = internalPages;
-    setMessage( "Retrieving list of services, please wait a while...", WizardPage.INFORMATION );
+    setMessage( "Retrieving list of services, please wait a while...", WizardPage.WARNING );
   }
 
   @Override
