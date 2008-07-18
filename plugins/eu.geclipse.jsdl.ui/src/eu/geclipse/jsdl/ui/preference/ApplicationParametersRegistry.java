@@ -561,11 +561,15 @@ public class ApplicationParametersRegistry implements IContentChangeNotifier {
     }
     for( IGridApplicationParameters param : chosenParams ) {
       String sufix = ""; //$NON-NLS-1$
-      if( nameVsQuantity.get( param.getApplicationName() ).intValue() != 1 ) {
-        sufix = "[" + nameVsQuantity.get( param.getApplicationName() ) + "]"; //$NON-NLS-1$ //$NON-NLS-2$
+      for( int i = 1; i <= nameVsQuantity.get( param.getApplicationName() )
+        .intValue(); i++ )
+      {
+        if( i != 1 ) {
+          sufix = "[" + i + "]"; //$NON-NLS-1$ //$NON-NLS-2$
+        }
+        result.put( param.getApplicationName() + sufix,
+                    new Integer( param.getId() ) );
       }
-      result.put( param.getApplicationName() + sufix,
-                  new Integer( param.getId() ) );
     }
     return result;
   }
