@@ -32,72 +32,70 @@ import eu.geclipse.core.reporting.ProblemException;
 public interface IACLEntry {
   
   /**
-   * The policy of the ACL, either 'allow' or 'deny'.
-   * <p>
-   * Also known as 'effect' in the XACML standard.
+   * Queries the policies which are supported by this ACL entry.
+   * The supported policies are determined by the implementation.
+   * 
+   * @return an array of policies which this entry supports.
    */
-  public static enum Policy {
-    /** Allow access policy */
-    ALLOW,
-    /** Deny access policy */
-    DENY
-  }
+  public IACLPolicy[] getSupportedPolicies();
   
   /**
    * Queries the policy of this entry.
    * 
-   * @return the policy
+   * @return the policy.
    */
-  public Policy getPolicy();
+  public IACLPolicy getPolicy();
   
   /**
    * Sets the policy of this entry.
    * 
-   * @param policy the value to set
-   * @throws ProblemException if the provided policy is not allowed
-   *         (for instance, some implementations only use "allow" ACLs,
-   *         the default policy being "deny all to everybody")
+   * @param policy the value to set.
+   * @throws ProblemException if the provided policy is <code>null</code>
+   *         or not allowed.
    */
-  public void setPolicy( final Policy policy ) throws ProblemException;
+  public void setPolicy( final IACLPolicy policy ) throws ProblemException;
   
   /**
-   * Queries the supported operations or roles which can be granted
-   * or not to the actor of the ACL. The supported capabilities are
-   * determined by the implementation.
+   * Queries the supported permissions or roles which can be granted
+   * or not to the actor of this ACL entry. The supported capabilities
+   * are determined by the implementation.
    * 
-   * @return an array of either operations or roles
+   * @return an array of capabilities which this entry supports.
    */
-  public String[] getSupportedCapabilities();
+  public IACLCapability[] getSupportedCapabilities();
   
   /**
    * Returns the capability which this ACL entry refers to.
    * <p>
    * Also known as 'target-action' in the XACML standard.
    * 
-   * @return the capability name
+   * @return the capability.
    */
-  public String getCapability();
+  public IACLCapability getCapability();
   
   /**
    * Sets the capability to be (dis)allowed to the actor.
    * 
-   * @param capability the capability to set
-   * @throws ProblemException if the capability is <code>null</code> or invalid
+   * @param capability the capability to set.
+   * @throws ProblemException if the capability is <code>null</code> or invalid.
    */
-  public void setCapability( final String capability ) throws ProblemException;
+  public void setCapability( final IACLCapability capability )
+    throws ProblemException;
   
   /**
    * Returns the actor of this entry.
    * 
-   * @return the actor
+   * @return the actor.
    */
   public IACLActor getActor();
   
   /**
    * Sets the actor of this entry.
    * 
-   * @param actor the actor to set
+   * @param actor the actor to set.
+   * @throws ProblemException if the actor is <code>null</code> or invalid.
    */
-  public void setActor( final IACLActor actor );
+  public void setActor( final IACLActor actor )
+    throws ProblemException;
   
 }

@@ -30,25 +30,25 @@ public interface IACL {
   /**
    * Returns the list of access control entries contained in this ACL.
    * 
-   * @return an array of {@link IACLEntry}s
+   * @return an array of {@link IACLEntry}s.
    */
   public IACLEntry[] getEntries();
   
   /**
    * Registers an additional entry in this ACL.
    * 
-   * @param entry the ACL entry to set
+   * @param entry the ACL entry to set.
    * @throws ProblemException if the provided entry is not compatible
-   *         with the specific ACL implementation
+   *         with the specific ACL implementation.
    */
   public void addEntry( final IACLEntry entry ) throws ProblemException;
   
   /**
    * Removes an entry from this ACL.
    * 
-   * @param entry the entry to delete
+   * @param entry the entry to delete.
    * @throws ProblemException if the entry could not be deleted, for
-   *         instance because such entry was not present in this ACL
+   *         instance because such entry was not present in this ACL.
    */
   public void deleteEntry( final IACLEntry entry ) throws ProblemException;
   
