@@ -448,6 +448,9 @@ public class ConnectionElement
       }
       
       if ( ! result.isEmpty() ) {
+        if ( adapters == null ) {
+          adapters = new Hashtable< Class< ? extends IGridElement >, List< IGridElementCreator > >();
+        }
         adapters.put( target, result );
       }
       
