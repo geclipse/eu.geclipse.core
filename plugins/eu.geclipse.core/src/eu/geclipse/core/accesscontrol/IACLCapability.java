@@ -36,7 +36,7 @@ public interface IACLCapability {
    * 
    * @return a user friendly string.
    */
-  public String toString();
+  public String getName();
   
   /**
    * Returns a user friendly description of this capability, for instance
