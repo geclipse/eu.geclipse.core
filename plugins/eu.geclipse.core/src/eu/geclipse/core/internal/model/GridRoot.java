@@ -107,7 +107,7 @@ public final class GridRoot
    * not yet instantiated this method will return <code>null</code>.
    * 
    * @return The singleton instance or <code>null</code> if the
-   * singleton was not yet instatiated.
+   * singleton was not yet instantiated.
    */
   public final static GridRoot getRoot() {
     return singleton;
