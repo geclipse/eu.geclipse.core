@@ -22,7 +22,7 @@ import eu.geclipse.core.model.impl.GenericGridInstallParameters;
 /**
  * The <code>IGridInstallParameters</code> holds all necessary information to 
  * install an application on the Grid. Middleware-specific implementations may
- * extends {@link GenericGridInstallParameters}.
+ * extend {@link GenericGridInstallParameters}.
  */
 public interface IGridInstallParameters {
 
