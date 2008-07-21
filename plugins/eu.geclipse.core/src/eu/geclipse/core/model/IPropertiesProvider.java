@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2007, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2007-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -20,17 +20,18 @@ import java.util.Vector;
 
 /**
  * This interface provides dynamic set of property names for various elements.
- *
  */
 public interface IPropertiesProvider {
-  /**
-   * Provides set of property names, use one name to obtain single value. 
-   * @return Vector of property names 
-   */
-  public Vector<String> getPropertyKeys();
   
   /**
-   * This method always returns non null value.
+   * Provides set of property names, use one name to obtain single value.
+   * 
+   * @return Vector of property names 
+   */
+  public Vector< String > getPropertyKeys();
+  
+  /**
+   * This method always returns a non null value.
    * Even if there is no such key supported result shouldn't be null.
    * 
    * @param value name of the property which value is requested 
@@ -39,7 +40,7 @@ public interface IPropertiesProvider {
   public String getPropertyValue( final String value );
   
   /**
-   * @return category, in which all properties will be shown. May be <code>null</code>
+   * @return category, in which all properties will be shown. May be <code>null</code>.
    */
   public String getCategory();
   
