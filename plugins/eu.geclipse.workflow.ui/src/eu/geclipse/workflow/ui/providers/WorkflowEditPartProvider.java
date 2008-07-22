@@ -16,6 +16,10 @@
 package eu.geclipse.workflow.ui.providers;
 
 import java.lang.ref.WeakReference;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
 import org.eclipse.gmf.runtime.common.core.service.IOperation;
@@ -23,9 +27,16 @@ import org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.services.editpart.AbstractEditPartProvider;
 import org.eclipse.gmf.runtime.diagram.ui.services.editpart.CreateGraphicEditPartOperation;
 import org.eclipse.gmf.runtime.diagram.ui.services.editpart.IEditPartOperation;
+import org.eclipse.gmf.runtime.diagram.ui.editparts.DiagramEditPart;
 import org.eclipse.gmf.runtime.notation.View;
+
+import eu.geclipse.workflow.IWorkflowPackage;
+import eu.geclipse.workflow.ui.edit.parts.InputPortEditPart;
+import eu.geclipse.workflow.ui.edit.parts.LinkEditPart;
+import eu.geclipse.workflow.ui.edit.parts.OutputPortEditPart;
 import eu.geclipse.workflow.ui.edit.parts.WorkflowEditPartFactory;
 import eu.geclipse.workflow.ui.edit.parts.WorkflowEditPart;
+import eu.geclipse.workflow.ui.edit.parts.WorkflowJobEditPart;
 import eu.geclipse.workflow.ui.part.WorkflowVisualIDRegistry;
 
 /**
@@ -50,6 +61,57 @@ public class WorkflowEditPartProvider extends AbstractEditPartProvider {
    */
   private WeakReference cachedView;
 
+  
+  private Map shapeMap = new HashMap();
+  {
+    //shapeMap.put( SemanticPackage.eINSTANCE.getLED(), LEDEditPart.class );
+    this.shapeMap.put( IWorkflowPackage.eINSTANCE.getIInputPort(), InputPortEditPart.class );
+    this.shapeMap.put( IWorkflowPackage.eINSTANCE.getIOutputPort(), OutputPortEditPart.class );
+    this.shapeMap.put( IWorkflowPackage.eINSTANCE.getIWorkflow(), WorkflowEditPart.class );
+    this.shapeMap.put( IWorkflowPackage.eINSTANCE.getIWorkflowJob(), WorkflowJobEditPart.class );
+  }
+  
+  private Map connectorMap = new HashMap();
+  {
+    this.connectorMap.put( IWorkflowPackage.eINSTANCE.getILink(), LinkEditPart.class );
+  }
+  
+  /**
+   * Gets a diagram's editpart class.
+   * This method should be overridden by a provider if it wants to provide this service. 
+   * @param view the view to be <i>controlled</code> by the created editpart
+   */
+  @Override
+  protected Class getDiagramEditPartClass(View view ) {
+      if (view.getType().equals("workflow")) { //$NON-NLS-1$
+          return(DiagramEditPart.class);
+      }
+      return null;
+  }
+  
+  /**
+   * Set the editpart class to the editpart mapped to the supplied view's semantic hint.
+   * @see org.eclipse.gmf.runtime.diagram.ui.services.editpart.AbstractEditPartProvider#setConnectorEditPartClass(org.eclipse.gmf.runtime.diagram.ui.internal.view.IConnectorView)
+   */
+  @Override
+  protected Class getEdgeEditPartClass(View view) {
+      return(Class) this.connectorMap.get(getReferencedElementEClass(view));
+  }
+
+  /**
+   * Gets a Node's editpart class.
+   * This method should be overridden by a provider if it wants to provide this service. 
+   * @param view the view to be <i>controlled</code> by the created editpart
+   */
+  @Override
+  protected Class getNodeEditPartClass(View view ) {
+      Class clazz = null;
+      String semanticHint = view.getType();
+      EClass eClass = getReferencedElementEClass(view);
+      clazz =  ((Class)this.shapeMap.get(eClass));
+      return clazz;
+  }
+  
   /**
    * @generated
    */
@@ -62,7 +124,7 @@ public class WorkflowEditPartProvider extends AbstractEditPartProvider {
    * @generated
    */
   public final EditPartFactory getFactory() {
-    return factory;
+    return this.factory;
   }
 
   /**
@@ -76,7 +138,7 @@ public class WorkflowEditPartProvider extends AbstractEditPartProvider {
    * @generated
    */
   public final boolean isAllowCaching() {
-    return allowCaching;
+    return this.allowCaching;
   }
 
   /**
@@ -85,8 +147,8 @@ public class WorkflowEditPartProvider extends AbstractEditPartProvider {
   protected synchronized void setAllowCaching( boolean allowCaching ) {
     this.allowCaching = allowCaching;
     if( !allowCaching ) {
-      cachedPart = null;
-      cachedView = null;
+      this.cachedPart = null;
+      this.cachedView = null;
     }
   }
 
@@ -94,7 +156,7 @@ public class WorkflowEditPartProvider extends AbstractEditPartProvider {
    * @generated
    */
   protected IGraphicalEditPart createEditPart( View view ) {
-    EditPart part = factory.createEditPart( null, view );
+    EditPart part = this.factory.createEditPart( null, view );
     if( part instanceof IGraphicalEditPart ) {
       return ( IGraphicalEditPart )part;
     }
@@ -105,8 +167,8 @@ public class WorkflowEditPartProvider extends AbstractEditPartProvider {
    * @generated
    */
   protected IGraphicalEditPart getCachedPart( View view ) {
-    if( cachedView != null && cachedView.get() == view ) {
-      return ( IGraphicalEditPart )cachedPart.get();
+    if( this.cachedView != null && this.cachedView.get() == view ) {
+      return ( IGraphicalEditPart )this.cachedPart.get();
     }
     return null;
   }
@@ -118,8 +180,8 @@ public class WorkflowEditPartProvider extends AbstractEditPartProvider {
   public synchronized IGraphicalEditPart createGraphicEditPart( View view ) {
     if( isAllowCaching() ) {
       IGraphicalEditPart part = getCachedPart( view );
-      cachedPart = null;
-      cachedView = null;
+      this.cachedPart = null;
+      this.cachedView = null;
       if( part != null ) {
         return part;
       }
@@ -144,12 +206,13 @@ public class WorkflowEditPartProvider extends AbstractEditPartProvider {
       IGraphicalEditPart part = createEditPart( view );
       if( part != null ) {
         if( isAllowCaching() ) {
-          cachedPart = new WeakReference( part );
-          cachedView = new WeakReference( view );
+          this.cachedPart = new WeakReference( part );
+          this.cachedView = new WeakReference( view );
         }
         return true;
       }
     }
     return false;
   }
+
 }

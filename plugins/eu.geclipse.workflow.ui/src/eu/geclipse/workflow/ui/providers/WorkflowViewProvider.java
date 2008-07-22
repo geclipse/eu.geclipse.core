@@ -44,6 +44,7 @@ public class WorkflowViewProvider extends AbstractViewProvider {
   /**
    * @generated
    */
+  @SuppressWarnings("unchecked")
   @Override
   protected Class getDiagramViewClass( IAdaptable semanticAdapter, String diagramKind )
   {
@@ -59,6 +60,7 @@ public class WorkflowViewProvider extends AbstractViewProvider {
   /**
    * @generated
    */
+  @SuppressWarnings("unchecked")
   @Override
   protected Class getNodeViewClass( IAdaptable semanticAdapter, View containerView, String semanticHint )
   {
@@ -122,6 +124,7 @@ public class WorkflowViewProvider extends AbstractViewProvider {
   /**
    * @generated
    */
+  @SuppressWarnings("unchecked")
   @Override
   protected Class getEdgeViewClass( IAdaptable semanticAdapter,
                                     View containerView,
