@@ -390,6 +390,14 @@
             description="The needed features are currently not supported in this implementation"
             id="eu.geclipse.core.solution.sys.unsupportedFeature">
       </solution>
+      <problem
+            description="Cannot open closed project"
+            id="eu.geclipse.core.problem.io.openProjectFailed">
+      </problem>
+      <problem
+            description="Folder creation failed"
+            id="eu.geclipse.core.problem.io.crateFolderFailed">
+      </problem>
    </extension>
    <extension
          point="eu.geclipse.core.simpleTests">

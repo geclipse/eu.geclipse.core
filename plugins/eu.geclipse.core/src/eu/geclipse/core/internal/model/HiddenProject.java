@@ -265,10 +265,14 @@ public class HiddenProject extends ResourceGridContainer
     return result;
   }
 
-  protected IProject getAccessibleProject() throws CoreException {
+  protected IProject getAccessibleProject() throws ProblemException {
     IProject project = ( IProject )getResource();
     if( !project.isOpen() ) {
-      project.open( null );
+      try {
+        project.open( null );
+      } catch( CoreException exception ) {
+        throw new ProblemException( "eu.geclipse.core.problem.io.openProjectFailed", exception, Activator.PLUGIN_ID );
+      }
     }
     return project;
   }
@@ -278,8 +282,7 @@ public class HiddenProject extends ResourceGridContainer
     return folder;
   }
 
-  public IFolder getTemporaryFolder() throws CoreException {
-    // TODO mariusz add ProblemException instead of CoreException
+  public IFolder getTemporaryFolder() throws ProblemException {
     IFolder folder = getProjectFolder( DIR_TEMP );
     return folder;
   }
@@ -290,11 +293,16 @@ public class HiddenProject extends ResourceGridContainer
    * @param name The name of the new directory.
    * @throws CoreException If the creation of the directory failed.
    */
-  private IFolder getProjectFolder( final String name ) throws CoreException {
+  private IFolder getProjectFolder( final String name ) throws ProblemException {
     IProject project = getAccessibleProject();
     IFolder folder = project.getFolder( new Path( name ) );
     if ( !folder.exists() ) {
-      folder.create( IResource.FORCE, true, null );
+      try {
+        folder.create( IResource.FORCE, true, null );
+      } catch( CoreException exception ) {
+        String msg = String.format( "Couldn't create folder %s in project %s", name, project.getName() );
+        throw new ProblemException( "eu.geclipse.core.problem.io.crateFolderFailed", msg, exception, Activator.PLUGIN_ID ); //$NON-NLS-1$
+      }
     }
     return folder;
   }
