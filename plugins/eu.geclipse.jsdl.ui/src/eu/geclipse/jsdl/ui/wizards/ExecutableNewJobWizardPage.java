@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -114,7 +115,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
   private BasicWizardPart basicNode;
   private Button chooseButton;
   private Text argumentsLine;
-  private Map<String, Integer> appsWithParametersFromPrefs;
+  private Map<String, Integer> appsWithParametersFromPrefs = new HashMap<String, Integer>();
   /**
    * Object representing basic JSDL content for an application specific
    * settings. It is parsed (created) when the "Finish" button is pressed - not
@@ -637,7 +638,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
       this.firstTime = true;
       if( this.applicationName != null ) {
         this.applicationName.removeAll();
-        this.applicationName.setText( "" );
+//        this.applicationName.setText( "" );
       }
     }
     this.virtualOrg = vo;
