@@ -35,6 +35,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.window.Window;
@@ -125,6 +126,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
   private Group stdFilesGroup;
   private Button outButton;
   private Button errButton;
+  private IVirtualOrganization virtualOrg;
 
   /**
    * Creates new wizard page
@@ -139,8 +141,8 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
     setTitle( Messages.getString( "ExecutableNewJobWizardPage.title" ) ); //$NON-NLS-1$
     setDescription( Messages.getString( "ExecutableNewJobWizardPage.description" ) ); //$NON-NLS-1$
     this.internalPages = internalPages;
-    setMessage( "Retrieving list of services, please wait a while...",
-                WizardPage.WARNING );
+    setMessage( Messages.getString("ExecutableNewJobWizardPage.fetching_apps"), //$NON-NLS-1$
+                IMessageProvider.WARNING );
   }
 
   @Override
@@ -628,7 +630,14 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
   @Override
   public void setVisible( final boolean visible ) {
     final IVirtualOrganization vo = ( ( IVOSelectionProvider )getWizard() ).getVirtualOrganization();
-    Job job = new Job( "Getting application names." ) {
+    if( this.virtualOrg == null || this.virtualOrg != vo ) {
+      this.firstTime = true;
+      if( this.applicationName != null ) {
+        this.applicationName.removeAll();
+      }
+    }
+    this.virtualOrg = vo;
+    Job job = new Job( Messages.getString("ExecutableNewJobWizardPage.fetching_apps_job_name") ) { //$NON-NLS-1$
 
       @Override
       protected IStatus run( final IProgressMonitor monitor ) {
@@ -639,8 +648,8 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
               .updateApplicationsParameters( vo );
           } catch( ProblemException e ) {
             ProblemDialog.openProblem( getShell(),
-                                       "Error fetching resources",
-                                       "Could not access applications' parameters. Please see error log for more details.",
+                                       Messages.getString("ExecutableNewJobWizardPage.error_fetching_title"), //$NON-NLS-1$
+                                       Messages.getString("ExecutableNewJobWizardPage.error_fetching_message"), //$NON-NLS-1$
                                        e );
           }
           IWorkbench workbench = PlatformUI.getWorkbench();
@@ -658,6 +667,10 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
       }
     };
     job.setUser( false );
+    if( this.firstTime ) {
+      setMessage( Messages.getString("ExecutableNewJobWizardPage.fetching_apps"), //$NON-NLS-1$
+                  IMessageProvider.WARNING );
+    }
     job.schedule();
     super.setVisible( visible );
   }
