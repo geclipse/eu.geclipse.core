@@ -141,7 +141,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
     setTitle( Messages.getString( "ExecutableNewJobWizardPage.title" ) ); //$NON-NLS-1$
     setDescription( Messages.getString( "ExecutableNewJobWizardPage.description" ) ); //$NON-NLS-1$
     this.internalPages = internalPages;
-    setMessage( Messages.getString("ExecutableNewJobWizardPage.fetching_apps"), //$NON-NLS-1$
+    setMessage( Messages.getString( "ExecutableNewJobWizardPage.fetching_apps" ), //$NON-NLS-1$
                 IMessageProvider.WARNING );
   }
 
@@ -151,40 +151,43 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
     // temporary jsdl file - is created in workspace. This file is used to
     // generate JSDLJobDescription object which will be passed to next wizard's
     // page.
-    Integer aspID = this.appsWithParametersFromPrefs.get( this.applicationName.getText() );
-    if( aspID != null ) {
-      IPath path = ApplicationParametersRegistry.getInstance()
-        .getApplicationData( aspID.intValue() )
-        .getJsdlPath();
-      if( path != null && !path.toOSString().equals( "" ) ) { //$NON-NLS-1$
-        // getting jsdl source
-        // creating temp Eclipse's resource
-        IPath workspacePath = ( ( NewJobWizard )this.getWizard() ).getProject();
-        workspacePath = workspacePath.append( ".tempJSDL.jsdl" ); //$NON-NLS-1$
-        IFile newFileHandle = ResourcesPlugin.getWorkspace()
-          .getRoot()
-          .getFile( workspacePath );
-        try {
-          newFileHandle.createLink( path, IResource.REPLACE, null );
-          IGridElement element = GridModel.getRoot()
-            .findElement( newFileHandle );
-          if( element instanceof JSDLJobDescription ) {
-            this.basicJSDL = ( JSDLJobDescription )element;
-            ( ( NewJobWizard )this.getWizard() ).updateBasicJSDL( this.basicJSDL,
-                                                                  this.applicationName.getText() );
-          }
-        } catch( CoreException e ) {
-          // TODO katis - error handling
-        } finally {
+    if( this.applicationName != null && this.applicationName.getText() != null )
+    {
+      Integer aspID = this.appsWithParametersFromPrefs.get( this.applicationName.getText() );
+      if( aspID != null ) {
+        IPath path = ApplicationParametersRegistry.getInstance()
+          .getApplicationData( aspID.intValue() )
+          .getJsdlPath();
+        if( path != null && !path.toOSString().equals( "" ) ) { //$NON-NLS-1$
+          // getting jsdl source
+          // creating temp Eclipse's resource
+          IPath workspacePath = ( ( NewJobWizard )this.getWizard() ).getProject();
+          workspacePath = workspacePath.append( ".tempJSDL.jsdl" ); //$NON-NLS-1$
+          IFile newFileHandle = ResourcesPlugin.getWorkspace()
+            .getRoot()
+            .getFile( workspacePath );
           try {
-            newFileHandle.delete( true, null );
+            newFileHandle.createLink( path, IResource.REPLACE, null );
+            IGridElement element = GridModel.getRoot()
+              .findElement( newFileHandle );
+            if( element instanceof JSDLJobDescription ) {
+              this.basicJSDL = ( JSDLJobDescription )element;
+              ( ( NewJobWizard )this.getWizard() ).updateBasicJSDL( this.basicJSDL,
+                                                                    this.applicationName.getText() );
+            }
           } catch( CoreException e ) {
             // TODO katis - error handling
+          } finally {
+            try {
+              newFileHandle.delete( true, null );
+            } catch( CoreException e ) {
+              // TODO katis - error handling
+            }
           }
+        } else {
+          ( ( NewJobWizard )this.getWizard() ).updateBasicJSDL( null,
+                                                                this.applicationName.getText() );
         }
-      } else {
-        ( ( NewJobWizard )this.getWizard() ).updateBasicJSDL( null,
-                                                              this.applicationName.getText() );
       }
     } else {
       ( ( NewJobWizard )this.getWizard() ).updateBasicJSDL( null,
@@ -638,7 +641,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
       }
     }
     this.virtualOrg = vo;
-    Job job = new Job( Messages.getString("ExecutableNewJobWizardPage.fetching_apps_job_name") ) { //$NON-NLS-1$
+    Job job = new Job( Messages.getString( "ExecutableNewJobWizardPage.fetching_apps_job_name" ) ) { //$NON-NLS-1$
 
       @Override
       protected IStatus run( final IProgressMonitor monitor ) {
@@ -649,8 +652,8 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
               .updateApplicationsParameters( vo );
           } catch( ProblemException e ) {
             ProblemDialog.openProblem( getShell(),
-                                       Messages.getString("ExecutableNewJobWizardPage.error_fetching_title"), //$NON-NLS-1$
-                                       Messages.getString("ExecutableNewJobWizardPage.error_fetching_message"), //$NON-NLS-1$
+                                       Messages.getString( "ExecutableNewJobWizardPage.error_fetching_title" ), //$NON-NLS-1$
+                                       Messages.getString( "ExecutableNewJobWizardPage.error_fetching_message" ), //$NON-NLS-1$
                                        e );
           }
           IWorkbench workbench = PlatformUI.getWorkbench();
@@ -669,7 +672,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
     };
     job.setUser( false );
     if( this.firstTime ) {
-      setMessage( Messages.getString("ExecutableNewJobWizardPage.fetching_apps"), //$NON-NLS-1$
+      setMessage( Messages.getString( "ExecutableNewJobWizardPage.fetching_apps" ), //$NON-NLS-1$
                   IMessageProvider.WARNING );
     }
     job.schedule();
