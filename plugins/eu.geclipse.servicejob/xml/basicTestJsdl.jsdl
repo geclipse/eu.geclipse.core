@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jsdl:JobDefinition xmlns:jsdl="http://schemas.ggf.org/jsdl/2005/11/jsdl" xmlns:jsdl-posix="http://schemas.ggf.org/jsdl/2005/11/jsdl-posix">
+  <jsdl:JobDescription>
+    <jsdl:JobIdentification>
+      <jsdl:JobName>default job name</jsdl:JobName>
+    </jsdl:JobIdentification>
+    <jsdl:Application>
+      <jsdl:ApplicationName>JobBasedTest</jsdl:ApplicationName>
+      <jsdl-posix:POSIXApplication>
+        <jsdl-posix:Executable>main_test.sh</jsdl-posix:Executable>
+        <jsdl-posix:Output>output.txt</jsdl-posix:Output>
+      </jsdl-posix:POSIXApplication>
+    </jsdl:Application>
+    <jsdl:DataStaging name="output">
+      <jsdl:FileName>output</jsdl:FileName>
+      <jsdl:FilesystemName>output</jsdl:FilesystemName>
+      <jsdl:CreationFlag>overwrite</jsdl:CreationFlag>
+      <jsdl:DeleteOnTermination>true</jsdl:DeleteOnTermination>
+      <jsdl:Target>
+        <jsdl:URI>output</jsdl:URI>
+      </jsdl:Target>
+    </jsdl:DataStaging>
+  </jsdl:JobDescription>
+</jsdl:JobDefinition>

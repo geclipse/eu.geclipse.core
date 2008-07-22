@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension-point id="servicejobProvider" name="Service Job Provider" schema="schema/servicejobProvider.exsd"/>
+   <extension
+         point="eu.geclipse.core.gridElementCreator">
+      <creator
+            class="eu.geclipse.servicejob.internal.ServiceJobCreator"
+            id="eu.geclipse.servicejob.servicejobCreator"
+            name="Service job creator">
+         <source
+               class="org.eclipse.core.resources.IFile"
+               pattern="*.gtdl">
+         </source>
+         <target
+               class="eu.geclipse.core.model.IServiceJob"
+               name="eu.geclipse.servicejob.target1">
+         </target>
+      </creator>
+   </extension>
+
+</plugin>

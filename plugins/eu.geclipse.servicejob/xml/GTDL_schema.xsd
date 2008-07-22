@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.example.org/GTDL_schema" xmlns:tns="http://www.example.org/GTDL_schema" elementFormDefault="qualified">
+
+
+    <complexType name="TestType">
+    	<sequence>
+    		<element name="input" type="tns:InputType" maxOccurs="1" minOccurs="1"></element>
+    		<element name="output" type="tns:OutputType" maxOccurs="1" minOccurs="0"></element>
+    	</sequence>
+    </complexType>
+    
+
+    <complexType name="OutputType">
+    	<sequence>
+    		<element name="result" type="tns:ResultType" maxOccurs="unbounded" minOccurs="0"></element>
+    	</sequence>
+    </complexType>
+
+    <element name="test" type="tns:TestType"></element>
+
+
+    <complexType name="ResultType">
+    	<sequence>
+    		<element name="resource" type="string" maxOccurs="1"
+    			minOccurs="1">
+    		</element>
+    		<element name="date" type="string" maxOccurs="1"
+    			minOccurs="1">
+    		</element>
+    		<element name="simpleTest" type="string" maxOccurs="1"
+    			minOccurs="1">
+    		</element>
+    		<element name="BESStatusType" type="string" minOccurs="1"
+    			maxOccurs="1">
+    		</element>
+    		<element name="resultSummary" type="string" minOccurs="1"
+    			maxOccurs="1">
+    		</element>
+            <element name="resultType" type="string" minOccurs="1" maxOccurs="1"></element>
+            <element name="resultData" type="string" maxOccurs="1"
+    			minOccurs="1">
+    		</element>
+    	</sequence>
+    </complexType>
+
+    <complexType name="InputType">
+    	<sequence>
+    		<element name="pluginId" type="string" maxOccurs="1"
+    			minOccurs="1">
+    		</element>
+            <element name="testedResuources" type="tns:TestedResuourcesType" minOccurs="0" maxOccurs="1"></element>
+            <element name="inputData" type="string" maxOccurs="1"
+    			minOccurs="1">
+    		</element>
+    	</sequence>
+    </complexType>
+    
+
+    <complexType name="TestedResuourcesType">
+    	<sequence>
+    		<element name="resource" type="string" minOccurs="1" maxOccurs="unbounded"></element>
+    	</sequence>
+    </complexType>
+</schema>

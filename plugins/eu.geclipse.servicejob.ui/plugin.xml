@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            allowMultiple="false"
+            category="eu.geclipse.ui.viewcategory"
+            class="eu.geclipse.servicejob.ui.views.ServiceJobView"
+            icon="icons/geclipse16.gif"
+            id="eu.geclipse.servicejob.views.testsView"
+            name="Operator&apos;s Jobs">
+      </view>
+      <view
+            allowMultiple="false"
+            category="eu.geclipse.ui.viewcategory"
+            class="eu.geclipse.servicejob.ui.views.ServiceJobDetailsView"
+            icon="icons/geclipse16.gif"
+            id="eu.geclipse.servicejob.views.testDetailsView"
+            name="Operator&apos;s Job History">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="eu.geclipse.ui.internal.preference.GEclipsePreferencePage"
+            class="eu.geclipse.servicejob.ui.preferences.ServiceJobPreferences"
+            id="eu.geclipse.servicejob.testViewGeneral"
+            name="Operator&apos;s Jobs">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <wizard
+            category="eu.geclipse.ui.newResourceCategory"
+            class="eu.geclipse.servicejob.ui.wizard.ServiceJobWizard"
+            finalPerspective="eu.geclipse.ui.operatorPerspective"
+            icon="icons/geclipse16.gif"
+            id="eu.geclipse.servicejob.testWizard"
+            name="Operator&apos;s Job">
+      </wizard>
+   </extension>
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            id="eu.geclipse.servicejob.objectContribution1"
+            objectClass="eu.geclipse.core.model.IGridComputing">
+         <action
+               class="eu.geclipse.servicejob.ui.actions.ServiceJobComputingAction"
+               enablesFor="+"
+               id="eu.geclipse.servicejob.action1"
+               label="Run Operator&apos;s Job...">
+         </action>
+      </objectContribution>
+      <objectContribution
+            id="eu.geclipse.servicejob.objectContribution3"
+            objectClass="eu.geclipse.core.model.IGridService">
+         <action
+               class="eu.geclipse.servicejob.ui.actions.ServiceJobServiceAction"
+               enablesFor="+"
+               id="eu.geclipse.servicejob.action2"
+               label="Run Operator&apos;s Job...">
+         </action>
+      </objectContribution>
+      <objectContribution
+            id="eu.geclipse.servicejob.objectContribution2"
+            objectClass="eu.geclipse.core.model.IGridStorage">
+         <action
+               class="eu.geclipse.servicejob.ui.actions.ServiceJobStorageAction"
+               enablesFor="+"
+               id="eu.geclipse.servicejob.action3"
+               label="Run Operator&apos;s Job...">
+         </action>
+      </objectContribution>
+      <objectContribution
+            id="eu.geclipse.servicejob.objectContribution4"
+            objectClass="eu.geclipse.core.model.IServiceJob">
+         <action
+               class="eu.geclipse.servicejob.ui.actions.DeleteServiceJobAction"
+               enablesFor="+"
+               id="eu.geclipse.servicejob.deleteAction"
+               label="Delete Operator&apos;s Job">
+         </action>
+         <action
+               class="eu.geclipse.servicejob.ui.actions.ShowDetailsAction"
+               enablesFor="?"
+               id="Details"
+               label="Show details">
+         </action>
+         <action
+               class="eu.geclipse.servicejob.ui.actions.RunServiceJobAction"
+               id="eu.geclipse.servicejob.action1"
+               label="Run Operator&apos;s Job">
+         </action>
+      </objectContribution>
+   </extension>
+
+</plugin>
