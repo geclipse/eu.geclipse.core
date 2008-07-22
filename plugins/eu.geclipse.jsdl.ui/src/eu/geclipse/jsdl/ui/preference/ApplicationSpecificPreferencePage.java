@@ -61,6 +61,7 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.PlatformUI;
 
 import eu.geclipse.core.model.impl.GridApplicationParameters;
+import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.jsdl.ui.internal.Activator;
 import eu.geclipse.ui.dialogs.ProblemDialog;
 
@@ -133,8 +134,12 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
     TableColumn jsdlColumn = new TableColumn( this.appsTable, SWT.LEFT );
     jsdlColumn.setText( "JSDL file" ); //$NON-NLS-1$
     this.appsViewer = new TableViewer( this.appsTable );
-    ApplicationParametersRegistry.getInstance()
-      .updateApplicationsParameters( null );
+    try {
+      ApplicationParametersRegistry.getInstance()
+        .updateApplicationsParameters( null );
+    } catch( ProblemException e1 ) {
+      ProblemDialog.openProblem( getShell(), "Error fetching information", "Could not access applications' parameters", e1 );
+    }
     IStructuredContentProvider contentProvider = new ApplicationSpecificPageContentProvider();
     this.appsViewer.setContentProvider( contentProvider );
     this.appsViewer.setLabelProvider( new ApplicationSpecificLabelProvider() );

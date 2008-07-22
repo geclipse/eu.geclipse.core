@@ -65,6 +65,7 @@ import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridConnectionElement;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IVirtualOrganization;
+import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.jsdl.JSDLJobDescription;
 import eu.geclipse.jsdl.ui.internal.Activator;
 import eu.geclipse.jsdl.ui.preference.ApplicationParametersRegistry;
@@ -73,6 +74,7 @@ import eu.geclipse.jsdl.ui.wizards.nodes.SpecificWizardPart;
 import eu.geclipse.jsdl.ui.wizards.specific.ApplicationSpecificPage;
 import eu.geclipse.jsdl.ui.wizards.specific.IApplicationSpecificPage;
 import eu.geclipse.ui.dialogs.GridFileDialog;
+import eu.geclipse.ui.dialogs.ProblemDialog;
 import eu.geclipse.ui.widgets.StoredCombo;
 import eu.geclipse.ui.wizards.IVOSelectionProvider;
 
@@ -123,7 +125,6 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
   private Group stdFilesGroup;
   private Button outButton;
   private Button errButton;
-  
 
   /**
    * Creates new wizard page
@@ -138,7 +139,8 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
     setTitle( Messages.getString( "ExecutableNewJobWizardPage.title" ) ); //$NON-NLS-1$
     setDescription( Messages.getString( "ExecutableNewJobWizardPage.description" ) ); //$NON-NLS-1$
     this.internalPages = internalPages;
-    setMessage( "Retrieving list of services, please wait a while...", WizardPage.WARNING );
+    setMessage( "Retrieving list of services, please wait a while...",
+                WizardPage.WARNING );
   }
 
   @Override
@@ -632,21 +634,25 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
       protected IStatus run( final IProgressMonitor monitor ) {
         if( visible == true && ExecutableNewJobWizardPage.this.firstTime ) {
           ExecutableNewJobWizardPage.this.firstTime = false;
-          ApplicationParametersRegistry.getInstance()
-            .updateApplicationsParameters( vo );
+          try {
+            ApplicationParametersRegistry.getInstance()
+              .updateApplicationsParameters( vo );
+          } catch( ProblemException e ) {
+            ProblemDialog.openProblem( getShell(),
+                                       "Error fetching resources",
+                                       "Could not access applications' parameters. Please see error log for more details.",
+                                       e );
+          }
           IWorkbench workbench = PlatformUI.getWorkbench();
           Display display = workbench.getDisplay();
           final Map<String, Integer> map = ApplicationParametersRegistry.getInstance()
-          .getApplicationDataMapping( vo );
+            .getApplicationDataMapping( vo );
           display.syncExec( new Runnable() {
 
             public void run() {
               setApplications( map );
-              
             }
-            
-          });
-          
+          } );
         }
         return Status.OK_STATUS;
       }

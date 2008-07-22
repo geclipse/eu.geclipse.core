@@ -36,6 +36,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 
+import eu.geclipse.core.ICoreProblems;
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridApplication;
 import eu.geclipse.core.model.IGridApplicationParameters;
@@ -134,46 +135,52 @@ public class ApplicationParametersRegistry implements IContentChangeNotifier {
     return result;
   }
 
-  public void updateApplicationsParameters( final IVirtualOrganization vo ) {
+  public void updateApplicationsParameters( final IVirtualOrganization vo )
+    throws ProblemException
+  {
     if( vo == null ) {
       IGridElement[] els;
-      try {
-        els = GridModel.getVoManager().getChildren( new NullProgressMonitor() );
-        for( IGridElement el : els ) {
-          if( el instanceof IVirtualOrganization ) {
-            IVirtualOrganization singleVO = ( IVirtualOrganization )el;
-            List<IGridApplicationParameters> params = new ArrayList<IGridApplicationParameters>();
-            for( IGridResource param : singleVO.getAvailableResources( GridResourceCategoryFactory.getCategory( GridResourceCategoryFactory.ID_APPLICATIONS ),
-                                                                       false,
-                                                                       new NullProgressMonitor() ) )
-            {
+      els = GridModel.getVoManager().getChildren( new NullProgressMonitor() );
+      for( IGridElement el : els ) {
+        if( el instanceof IVirtualOrganization ) {
+          IVirtualOrganization singleVO = ( IVirtualOrganization )el;
+          List<IGridApplicationParameters> params = new ArrayList<IGridApplicationParameters>();
+          IGridResource[] resources = null;
+          resources = singleVO.getAvailableResources( GridResourceCategoryFactory.getCategory( GridResourceCategoryFactory.ID_APPLICATIONS ),
+                                                      false,
+                                                      new NullProgressMonitor() );
+          if( resources != null ) {
+            for( IGridResource param : resources ) {
               IGridApplicationParameters parameter = ( ( IGridApplication )param ).getApplicationParameters();
               if( parameter != null ) {
                 params.add( parameter );
               }
             }
-            replaceParametersForVO( singleVO, params );
+          } else {
+            throw new ProblemException( ICoreProblems.MODEL_FETCH_CHILDREN_FAILED,
+                                        "Cannot fetch resources",
+                                        Activator.PLUGIN_ID );
           }
+          replaceParametersForVO( singleVO, params );
         }
-      } catch( ProblemException e ) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
       }
     } else {
       List<IGridApplicationParameters> params = new ArrayList<IGridApplicationParameters>();
-      try {
-        for( IGridResource param : vo.getAvailableResources( GridResourceCategoryFactory.getCategory( GridResourceCategoryFactory.ID_APPLICATIONS ),
-                                                             false,
-                                                             new NullProgressMonitor() ) )
-        {
+      IGridResource[] resources = null;
+      resources = vo.getAvailableResources( GridResourceCategoryFactory.getCategory( GridResourceCategoryFactory.ID_APPLICATIONS ),
+                                            false,
+                                            new NullProgressMonitor() );
+      if( resources != null ) {
+        for( IGridResource param : resources ) {
           IGridApplicationParameters parameter = ( ( IGridApplication )param ).getApplicationParameters();
           if( parameter != null ) {
             params.add( parameter );
           }
         }
-      } catch( ProblemException e ) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
+      } else {
+        throw new ProblemException( ICoreProblems.MODEL_FETCH_CHILDREN_FAILED,
+                                    "Cannot fetch resources",
+                                    Activator.PLUGIN_ID );
       }
       replaceParametersForVO( vo, params );
     }
