@@ -634,6 +634,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
       this.firstTime = true;
       if( this.applicationName != null ) {
         this.applicationName.removeAll();
+        this.applicationName.setText( "" );
       }
     }
     this.virtualOrg = vo;
