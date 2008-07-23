@@ -7,14 +7,14 @@
       <creator
             class="eu.geclipse.servicejob.internal.ServiceJobCreator"
             id="eu.geclipse.servicejob.servicejobCreator"
-            name="Service job creator">
+            name="Service Job Creator">
          <source
                class="org.eclipse.core.resources.IFile"
                pattern="*.gtdl">
          </source>
          <target
                class="eu.geclipse.core.model.IServiceJob"
-               name="eu.geclipse.servicejob.target1">
+               name="Service Job">
          </target>
       </creator>
    </extension>
