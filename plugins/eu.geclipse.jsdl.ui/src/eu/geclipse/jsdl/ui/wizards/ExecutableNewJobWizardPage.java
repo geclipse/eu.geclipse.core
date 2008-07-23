@@ -17,6 +17,7 @@
 package eu.geclipse.jsdl.ui.wizards;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
@@ -32,11 +33,9 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.IMessageProvider;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.window.Window;
@@ -45,6 +44,9 @@ import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.jface.wizard.WizardSelectionPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CCombo;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -53,7 +55,6 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
@@ -94,6 +95,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
   private static String INPUT_EXE_ID = "executable_file"; //$NON-NLS-1$
   boolean done;
   boolean firstTime = true;
+  IVirtualOrganization virtualOrg;
   Text stdin;
   Text stdout;
   Text stderr;
@@ -110,7 +112,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
   /**
    * Holds name of the application
    */
-  private Combo applicationName;
+  private CCombo applicationName;
   private ArrayList<WizardPage> internalPages;
   private BasicWizardPart basicNode;
   private Button chooseButton;
@@ -127,7 +129,6 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
   private Group stdFilesGroup;
   private Button outButton;
   private Button errButton;
-  private IVirtualOrganization virtualOrg;
 
   /**
    * Creates new wizard page
@@ -142,8 +143,8 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
     setTitle( Messages.getString( "ExecutableNewJobWizardPage.title" ) ); //$NON-NLS-1$
     setDescription( Messages.getString( "ExecutableNewJobWizardPage.description" ) ); //$NON-NLS-1$
     this.internalPages = internalPages;
-    setMessage( Messages.getString( "ExecutableNewJobWizardPage.fetching_apps" ), //$NON-NLS-1$
-                IMessageProvider.WARNING );
+//    setMessage( Messages.getString( "ExecutableNewJobWizardPage.fetching_apps" ), //$NON-NLS-1$
+//                IMessageProvider.WARNING );
   }
 
   @Override
@@ -226,12 +227,24 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
     layout.horizontalAlignment = GridData.FILL;
     applicationNameLabel.setLayoutData( layout );
     // Combo - application name
-    this.applicationName = new Combo( mainComp, SWT.SINGLE );
+    this.applicationName = new CCombo( mainComp, SWT.SINGLE | SWT.BORDER );
     layout = new GridData();
     layout.horizontalAlignment = GridData.FILL;
     layout.horizontalSpan = 2;
     this.applicationName.setLayoutData( layout );
     this.applicationName.addModifyListener( this );
+    this.applicationName.addFocusListener( new FocusListener() {
+
+      public void focusGained( final FocusEvent e ) {
+        if( ExecutableNewJobWizardPage.this.firstTime ) {
+          fetchApps( ExecutableNewJobWizardPage.this.virtualOrg );
+        }
+      }
+
+      public void focusLost( final FocusEvent e ) {
+        // do nothing
+      }
+    } );
     // Label - executable file
     Label inputLabel = new Label( mainComp, GridData.HORIZONTAL_ALIGN_BEGINNING
                                             | GridData.VERTICAL_ALIGN_CENTER );
@@ -410,6 +423,51 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
     setSelectedNode( this.basicNode );
     setStdFilesGroupEnabled( false );
     setControl( mainComp );
+  }
+
+  void fetchApps( final IVirtualOrganization vo ) {
+    try {
+      getContainer().run( true, true, new IRunnableWithProgress() {
+
+        public void run( final IProgressMonitor monitor )
+          throws InvocationTargetException, InterruptedException
+        {
+          // if( visible == true && ExecutableNewJobWizardPage.this.firstTime )
+          // {
+          monitor.beginTask( "Get applications", 1 );
+          ExecutableNewJobWizardPage.this.firstTime = false;
+          try {
+            ApplicationParametersRegistry.getInstance()
+              .updateApplicationsParameters( vo );
+          } catch( ProblemException e ) {
+            ProblemDialog.openProblem( getShell(),
+                                       Messages.getString( "ExecutableNewJobWizardPage.error_fetching_title" ), //$NON-NLS-1$
+                                       Messages.getString( "ExecutableNewJobWizardPage.error_fetching_message" ), //$NON-NLS-1$
+                                       e );
+          } finally {
+            monitor.worked( 1 );
+          }
+          IWorkbench workbench = PlatformUI.getWorkbench();
+          Display display = workbench.getDisplay();
+          final Map<String, Integer> map = ApplicationParametersRegistry.getInstance()
+            .getApplicationDataMapping( vo );
+          display.syncExec( new Runnable() {
+
+            public void run() {
+              setApplications( map );
+            }
+          } );
+          // }
+          //
+        }
+      } );
+    } catch( InvocationTargetException e ) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    } catch( InterruptedException e ) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
   }
 
   void setStdFilesGroupEnabled( final boolean enabled ) {
@@ -638,45 +696,50 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
       this.firstTime = true;
       if( this.applicationName != null ) {
         this.applicationName.removeAll();
-//        this.applicationName.setText( "" );
+        // this.applicationName.setText( "" );
       }
     }
     this.virtualOrg = vo;
-    Job job = new Job( Messages.getString( "ExecutableNewJobWizardPage.fetching_apps_job_name" ) ) { //$NON-NLS-1$
-
-      @Override
-      protected IStatus run( final IProgressMonitor monitor ) {
-        if( visible == true && ExecutableNewJobWizardPage.this.firstTime ) {
-          ExecutableNewJobWizardPage.this.firstTime = false;
-          try {
-            ApplicationParametersRegistry.getInstance()
-              .updateApplicationsParameters( vo );
-          } catch( ProblemException e ) {
-            ProblemDialog.openProblem( getShell(),
-                                       Messages.getString( "ExecutableNewJobWizardPage.error_fetching_title" ), //$NON-NLS-1$
-                                       Messages.getString( "ExecutableNewJobWizardPage.error_fetching_message" ), //$NON-NLS-1$
-                                       e );
-          }
-          IWorkbench workbench = PlatformUI.getWorkbench();
-          Display display = workbench.getDisplay();
-          final Map<String, Integer> map = ApplicationParametersRegistry.getInstance()
-            .getApplicationDataMapping( vo );
-          display.syncExec( new Runnable() {
-
-            public void run() {
-              setApplications( map );
-            }
-          } );
-        }
-        return Status.OK_STATUS;
-      }
-    };
-    job.setUser( false );
-    if( this.firstTime ) {
-      setMessage( Messages.getString( "ExecutableNewJobWizardPage.fetching_apps" ), //$NON-NLS-1$
-                  IMessageProvider.WARNING );
-    }
-    job.schedule();
+    // Job job = new Job( Messages.getString(
+    // "ExecutableNewJobWizardPage.fetching_apps_job_name" ) ) { //$NON-NLS-1$
+    //
+    // @Override
+    // protected IStatus run( final IProgressMonitor monitor ) {
+    // if( visible == true && ExecutableNewJobWizardPage.this.firstTime ) {
+    // ExecutableNewJobWizardPage.this.firstTime = false;
+    // try {
+    // ApplicationParametersRegistry.getInstance()
+    // .updateApplicationsParameters( vo );
+    // } catch( ProblemException e ) {
+    // ProblemDialog.openProblem( getShell(),
+    // Messages.getString( "ExecutableNewJobWizardPage.error_fetching_title" ),
+    // //$NON-NLS-1$
+    // Messages.getString( "ExecutableNewJobWizardPage.error_fetching_message"
+    // ), //$NON-NLS-1$
+    // e );
+    // }
+    // IWorkbench workbench = PlatformUI.getWorkbench();
+    // Display display = workbench.getDisplay();
+    // final Map<String, Integer> map =
+    // ApplicationParametersRegistry.getInstance()
+    // .getApplicationDataMapping( vo );
+    // display.syncExec( new Runnable() {
+    //
+    // public void run() {
+    // setApplications( map );
+    // }
+    // } );
+    // }
+    // return Status.OK_STATUS;
+    // }
+    // };
+    // job.setUser( false );
+    // if( this.firstTime ) {
+    // setMessage( Messages.getString(
+    // "ExecutableNewJobWizardPage.fetching_apps" ), //$NON-NLS-1$
+    // IMessageProvider.WARNING );
+    // }
+    // job.schedule();
     super.setVisible( visible );
   }
 

@@ -109,6 +109,7 @@ public class NewJobWizard extends Wizard
   public void init( final IWorkbench workbench, final IStructuredSelection sel )
   {
     setWindowTitle( Messages.getString( "NewJobWizard.windowTitle" ) ); //$NON-NLS-1$
+    setNeedsProgressMonitor( true );
     this.selection = sel;
   }
 
