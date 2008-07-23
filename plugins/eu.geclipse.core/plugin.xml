@@ -323,8 +323,10 @@
       <solution
             description="You may have to install the JCE unrestricted policy files in your Java installation"
             id="eu.geclipse.core.solution.auth.jceUnrestrictedPolicyFile">
-         <urlTag
-               url="http://www.bouncycastle.org/documentation.html">
+         <urlTag>
+            <url
+                  value="http://www.bouncycastle.org/documentation.html">
+            </url>
          </urlTag>
       </solution>
       <solution
