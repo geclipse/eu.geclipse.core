@@ -311,8 +311,9 @@ public class DataStagingOutDialog extends Dialog {
   }
 
   void updateButtons() {
-    if( !this.nameText.getText().equals( "" ) //$NON-NLS-1$
-        && !this.pathText.getText().equals( "" ) ) //$NON-NLS-1$
+    if( !this.nameText.getText().equals( "" ) )//$NON-NLS-1$
+// Commented-out for Gria..refer to Bug#: 241940
+//        && !this.pathText.getText().equals( "" ) ) //$NON-NLS-1$
     {
       super.getButton( IDialogConstants.OK_ID ).setEnabled( true );
     } else {
