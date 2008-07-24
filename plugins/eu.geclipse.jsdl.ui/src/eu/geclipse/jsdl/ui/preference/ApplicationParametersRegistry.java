@@ -225,12 +225,14 @@ public class ApplicationParametersRegistry implements IContentChangeNotifier {
       for( IGridApplicationParameters param : newParams ) {
         // saveObjectToDisc( param );
         this.generatedAppsParamList.add( param );
+        notifyListeners();
       }
     } else if( list == 0 ) {
       for( IGridApplicationParameters param : newParams ) {
         try {
           saveObjectToDisc( param );
           this.userAppsParamsList.add( param );
+          notifyListeners();
         } catch( IOException e ) {
           // ignore
         }
@@ -244,6 +246,7 @@ public class ApplicationParametersRegistry implements IContentChangeNotifier {
       IGridApplicationParameters param = iterator.next();
       if( param.getVO().equals( vo ) ) {
         iterator.remove();
+        notifyListeners();
       }
     }
   }

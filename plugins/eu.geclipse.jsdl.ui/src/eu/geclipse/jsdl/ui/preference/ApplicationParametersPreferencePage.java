@@ -166,6 +166,17 @@ public class ApplicationParametersPreferencePage extends PreferencePage
                           | GridData.HORIZONTAL_ALIGN_END );
     gData.horizontalSpan = 1;
     buttonsComp.setLayoutData( gData );
+    this.refreshButton = new Button( buttonsComp, SWT.PUSH );
+    gData = new GridData( GridData.FILL_BOTH );
+    this.refreshButton.setLayoutData( gData );
+    this.refreshButton.setText( "Refresh list" );
+    this.refreshButton.addSelectionListener( new SelectionAdapter() {
+
+      @Override
+      public void widgetSelected( final SelectionEvent e ) {
+        fetchApplications();
+      }
+    } );
     this.addButton = new Button( buttonsComp, SWT.PUSH );
     gData = new GridData( GridData.FILL_BOTH );
     this.addButton.setLayoutData( gData );
@@ -207,17 +218,6 @@ public class ApplicationParametersPreferencePage extends PreferencePage
                                        e );
           }
         }
-      }
-    } );
-    this.refreshButton = new Button( buttonsComp, SWT.PUSH );
-    gData = new GridData( GridData.FILL_BOTH );
-    this.refreshButton.setLayoutData( gData );
-    this.refreshButton.setText( "Refresh list" );
-    this.refreshButton.addSelectionListener( new SelectionAdapter() {
-
-      @Override
-      public void widgetSelected( final SelectionEvent e ) {
-        fetchApplications();
       }
     } );
     updateButtons();
