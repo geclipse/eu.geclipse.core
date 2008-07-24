@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2006-2008 g-Eclipse consortium 
+ * Copyright (c) 2006-2008 g-Eclipse consortium
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -10,9 +10,9 @@
  * project number: FP6-IST-034327  http://www.geclipse.eu/
  *
  * Contributor(s):
- *     PSNC: 
+ *     PSNC:
  *      - Katarzyna Bylec (katis@man.poznan.pl)
- *           
+ *
  *****************************************************************************/
 package eu.geclipse.jsdl.ui.wizards;
 
@@ -43,7 +43,6 @@ import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.jface.wizard.WizardSelectionPage;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.ModifyEvent;
@@ -54,6 +53,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
@@ -111,7 +111,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
   /**
    * Holds name of the application
    */
-  private CCombo applicationName;
+  private Combo applicationName;
   private ArrayList<WizardPage> internalPages;
   private BasicWizardPart basicNode;
   private Button chooseButton;
@@ -131,7 +131,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
 
   /**
    * Creates new wizard page
-   * 
+   *
    * @param pageName name of the page
    * @param internalPages
    */
@@ -227,7 +227,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
     layout.horizontalAlignment = GridData.FILL;
     applicationNameLabel.setLayoutData( layout );
     // Combo - application name
-    this.applicationName = new CCombo( mainComp, SWT.SINGLE | SWT.BORDER );
+    this.applicationName = new Combo( mainComp, SWT.NONE );
     layout = new GridData();
     layout.horizontalAlignment = GridData.FILL;
     layout.horizontalSpan = 2;
@@ -494,7 +494,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
 
   /**
    * Returns name of executable to run on grid
-   * 
+   *
    * @return name of executable
    */
   public String getExecutableFile() {
@@ -504,7 +504,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
 
   /**
    * Returns application name to be run on the grid
-   * 
+   *
    * @return name of the application
    */
   String getApplicationName() {
@@ -551,7 +551,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
 
   /**
    * Method to access application specific page
-   * 
+   *
    * @return instance of {@link ApplicationSpecificPage} or null if this page
    *         wasn't used by wizard
    */
@@ -568,7 +568,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
   /**
    * Returns list of pages created from parsing XML with description of
    * additional pages specific to application
-   * 
+   *
    * @return list of application specific pages
    */
   public List<IApplicationSpecificPage> getApplicationSpecificPages() {
@@ -586,7 +586,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
 
   /**
    * Method to access value of field holding path to stdin file
-   * 
+   *
    * @return String representing remote path to stdin file
    */
   public String getStdin() {
@@ -595,7 +595,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
 
   /**
    * Method to access value of a field holding path to stdout
-   * 
+   *
    * @return String representing remote path to stdout file
    */
   public String getStdout() {
@@ -604,7 +604,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
 
   /**
    * Method to access job's arguments given by user.
-   * 
+   *
    * @return list of arguments
    */
   public ArrayList<String> getArgumentsList() {
@@ -618,7 +618,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
 
   /**
    * Method to access basic JSDL file used by application specific settings.
-   * 
+   *
    * @return object representing information kept in basic JSDL file or
    *         <code>null</code> if no such file is present.
    */
@@ -678,7 +678,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
 
   /**
    * Method to access value of path to standard error file
-   * 
+   *
    * @return string value kept in standard error text field
    */
   public String getStderr() {
