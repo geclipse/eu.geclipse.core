@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2008 g-Eclipse Consortium 
+ * Copyright (c) 2008 g-Eclipse Consortium
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -95,29 +95,29 @@ import eu.geclipse.ui.widgets.StoredCombo;
  */
 public class GridFileDialog
     extends TitleAreaDialog {
-  
+
   /**
    * Private interface used to listen to mode changes.
    */
   private interface IModeChangeListener {
-    
+
     /**
      * Invoked whenever the dialog's mode has changed.
-     * 
+     *
      * @param mode The new mode.
      */
     public void modeChanged( final int mode );
-    
+
   }
-  
+
   /**
    * The <code>ModeManager</code> does manage the dialogs modes.
    * On the one hand it manages the activation states of the
    * provided {@link ToolItem}s, on the other hand it informs
-   * listeners about mode changes. 
+   * listeners about mode changes.
    */
   private static class ModeManager extends SelectionAdapter {
-    
+
     /**
      * Mode constant for the remote mode.
      */
@@ -128,44 +128,44 @@ public class GridFileDialog
      * as root directory.
      */
     public static final int HOME_MODE = 2;
-    
+
     /**
      * Mode constant for the local mode with the workspace
      * as root directory.
      */
     public static final int WS_MODE = 3;
-    
+
     /**
      * Mode constant for the local mode with the system's root
      * as root directory.
      */
     public static final int ROOT_MODE = 4;
-    
+
     /**
      * Identifier used to tag the {@link ToolItem}s.
      */
     private static final String MODE_KEY = "button.mode"; //$NON-NLS-1$
-    
+
     /**
      * List of all available {@link ToolItem}s.
      */
     private List< ToolItem > modeItems = new ArrayList< ToolItem >();
-    
-    /** 
+
+    /**
      * List of all registered listeners.
      */
     private List< IModeChangeListener > listeners = new ArrayList< IModeChangeListener >();
-    
+
     /**
      * Standard constructor.
      */
     public ModeManager() {
       // empty implementation
     }
-    
+
     /**
      * Add a new {@link IModeChangeListener} to the list of listeners.
-     * 
+     *
      * @param l The new listener.
      */
     public void addModeChangeListener( final IModeChangeListener l ) {
@@ -173,11 +173,11 @@ public class GridFileDialog
         this.listeners.add( l );
       }
     }
-    
+
     /**
      * Add a new mode item to the list of items. Any formerly defined
      * item with the same mode will be overwritten.
-     * 
+     *
      * @param item The new item used to select the specified mode.
      * @param mode The mode that refers to the specified item.
      */
@@ -186,19 +186,19 @@ public class GridFileDialog
       this.modeItems.add( item );
       item.addSelectionListener( this );
     }
-    
+
     /**
      * Set the mode, i.e. update the selection states of the mode items.
-     * 
+     *
      * @param mode The new mode.
      */
     public void setMode( final int mode ) {
       for ( ToolItem item : this.modeItems ) {
         Integer m = ( Integer ) item.getData( MODE_KEY );
-        item.setSelection( ( m != null ) && ( m.intValue() == mode ) ); 
+        item.setSelection( ( m != null ) && ( m.intValue() == mode ) );
       }
     }
-    
+
     /* (non-Javadoc)
      * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
      */
@@ -212,11 +212,11 @@ public class GridFileDialog
         fireModeChanged( ( ( Integer ) mode ).intValue() );
       }
     }
-    
+
     /**
      * Inform all registered {@link IModeChangeListener}s about a mode
      * changed event.
-     * 
+     *
      * @param mode The new mode to be reported to the listeners.
      */
     private void fireModeChanged( final int mode ) {
@@ -224,21 +224,21 @@ public class GridFileDialog
         l.modeChanged( mode );
       }
     }
-    
+
   }
-  
+
   /**
    * {@link ViewerFilter} that filters out all non-folders.
    */
   private static class FolderFilter extends ViewerFilter {
-    
+
     /**
      * Standard constructor.
      */
     public FolderFilter() {
       // empty implementation
     }
-    
+
     /* (non-Javadoc)
      * @see org.eclipse.jface.viewers.ViewerFilter#select(org.eclipse.jface.viewers.Viewer,
      *        java.lang.Object, java.lang.Object)
@@ -262,21 +262,21 @@ public class GridFileDialog
       }
       return result;
     }
-    
+
   }
-  
+
   /**
    * {@link ViewerFilter} that filters out all non-remote elements.
    */
   private static class RemoteConnectionFilter extends ViewerFilter {
-    
+
     /**
      * Standard constructor.
      */
     public RemoteConnectionFilter() {
       // empty implementation
     }
-    
+
     @Override
     public boolean select( final Viewer viewer,
                            final Object parentElement,
@@ -289,30 +289,30 @@ public class GridFileDialog
       }
       return result;
     }
-    
+
   }
-  
+
   /**
    * {@link ViewerFilter} that filters out all files without a specific
    * file extension.
    */
   private static class FileTypeFilter extends ViewerFilter {
-    
+
     /**
      * Constant for the wildcard filter.
      */
     private static final String WILDCARD = "*"; //$NON-NLS-1$
-    
+
     /**
      * Separator used to separate filename and prefix.
      */
     private static final String PREFIX_SEPARATOR = "."; //$NON-NLS-1$
-    
+
     /**
      * The file extension for allowed files.
      */
     private String prefix;
-    
+
     /**
      * Construct a new standard filter, i.e. a filter that allows all
      * files (*.*).
@@ -320,26 +320,26 @@ public class GridFileDialog
     public FileTypeFilter() {
       this( null );
     }
-    
+
     /**
      * Construct a new filter that filters all files with other extensions
      * than the specified. Folders are not filtered.
-     * 
+     *
      * @param prefix Prefix for all non-filtered files.
      */
     public FileTypeFilter( final String prefix ) {
       this.prefix = prefix;
     }
-    
+
     /**
      * Get the prefix of the filtered files.
-     * 
+     *
      * @return The file's prefix.
      */
     public String getPrefix() {
       return this.prefix == null ? WILDCARD : this.prefix;
     }
-    
+
     /* (non-Javadoc)
      * @see org.eclipse.jface.viewers.ViewerFilter#select(org.eclipse.jface.viewers.Viewer,
      *        java.lang.Object, java.lang.Object)
@@ -348,23 +348,23 @@ public class GridFileDialog
     public boolean select( final Viewer viewer,
                            final Object parentElement,
                            final Object element ) {
-      
+
       boolean result = false;
-      
+
       if ( this.prefix != null ) {
-        
+
         if ( element instanceof IFileStore ) {
           boolean isDir = ( ( IFileStore ) element ).fetchInfo().isDirectory();
           String name = ( ( IFileStore ) element ).getName();
           result = isDir || name.endsWith( PREFIX_SEPARATOR + this.prefix );
         }
-        
+
         else if ( element instanceof IGridConnectionElement ) {
           boolean isDir = ( ( IGridConnectionElement ) element ).isFolder();
           String name = ( ( IGridConnectionElement ) element ).getName();
           result = isDir || name.endsWith( PREFIX_SEPARATOR + this.prefix );
         }
-        
+
         else if ( element instanceof IGridContainer ) {
           IResource resource = ( ( IGridContainer ) element ).getResource();
           if ( ( resource != null ) && ( resource.getType() == IResource.FILE ) ) {
@@ -374,112 +374,112 @@ public class GridFileDialog
             result = true;
           }
         }
-        
+
         else if ( element instanceof IGridElement ) {
           String name = ( ( IGridElement ) element ).getName();
           result = name.endsWith( PREFIX_SEPARATOR + this.prefix );
         }
-        
+
         else if ( element instanceof ProgressTreeNode ){
           result = true;
         }
-        
+
       }
-      
-      
+
+
       else {
         result = true;
       }
-      
+
       return result;
-      
+
     }
-    
+
   }
-  
+
   /**
    * Style constant for none styles.
    */
   public static final int STYLE_NONE = 0x00;
-  
+
   /**
    * Style constant for a dialog that allows only local files,
    * i.e. no Grid connections.
    */
   public static final int STYLE_ALLOW_ONLY_LOCAL = 0x01;
-  
+
   /**
    * Style constant for a dialog that allows Grid connections.
    */
   public static final int STYLE_ALLOW_ONLY_CONNECTIONS = 0x02;
-  
+
   /**
    * Style constant for a dialog that allows only remote files,
    * i.e. only Grid connections that are not referring to local files.
    */
   public static final int STYLE_ALLOW_ONLY_REMOTE_CONNECTIONS = 0x04;
-  
+
   /**
    * Style constant for a dialog that allows only the selection of
    * files.
    */
   public static final int STYLE_ALLOW_ONLY_FILES = 0x08;
-  
+
   /**
    * Style constant for a dialog that allows only the selection of
    * directories.
    */
   public static final int STYLE_ALLOW_ONLY_FOLDERS = 0x10;
-  
+
   /**
    * Style constant for a dialog that allows only the selection of
    * existing files/directories. The filename and url combos can not
    * be edited.
    */
   public static final int STYLE_ALLOW_ONLY_EXISTING = 0x20;
-  
+
   /**
    * Style contant for a file dialog that allows multi selection.
    */
   public static final int STYLE_MULTI_SELECTION = 0x40;
-  
+
   /**
    * Empty string constant.
    */
   private static final String EMPTY_STRING = ""; //$NON-NLS-1$
-  
+
   /**
    * Path separator.
    */
   private static final String PATH_SEPARATOR = "/"; //$NON-NLS-1$
-  
+
   /**
    * System property for the user's home directory.
    */
   private static final String HOME_PROPERTY = "user.home"; //$NON-NLS-1$
-  
+
   /**
    * Root folder constant.
    */
   private static final String ROOT_FOLDER = "/"; //$NON-NLS-1$
-  
+
   private static final Pattern POSIX_FILENAME = Pattern.compile( "^[\\w\\.][\\w\\.-]*" ); //$NON-NLS-1$
-  
+
   /**
    * The dialog's tree viewer.
    */
   protected TreeViewer treeViewer;
-  
+
   /**
    * The combo for selecting the file type.
    */
   protected Combo filetypeCombo;
-  
+
   /**
    * The combo for selecting and editing the URI directly.
    */
   protected StoredCombo uriCombo;
-  
+
   /**
    * Map of all available {@link FileTypeFilter}s.
    */
@@ -490,45 +490,45 @@ public class GridFileDialog
    * The combo for selecting and editing the filename directly.
    */
   private StoredCombo filenameCombo;
-  
+
   /**
    * {@link ModeManager} used to manage the tree viewer's mode.
    */
   private ModeManager modeManager;
-  
+
   /**
    * Listener used to listen to changes in the Grid model.
    */
   private IGridModelListener modelListener;
-  
+
   /**
    * Listener used to listen to modifications in the uri combo.
    */
   private ModifyListener uriListener;
-  
+
   /**
    * Listener used to listen to modifications in the filename combo.
    */
   private VerifyListener filenameListener;
-  
+
   /**
    * Listener used to listen to selections in the tree viewer.
    */
   private ISelectionChangedListener selectionListener;
-  
+
   /**
    * The style of the dialog.
    */
   private int style;
-  
+
   /**
    * The current selection of the tree viewer.
    */
   private IFileStore[] currentSelection;
-  
+
   /**
    * Create a new dialog with the specified style constant.
-   * 
+   *
    * @param parent The dialog's parent {@link Shell}.
    * @param style The dialog's style, i.e. a bitwise or of style
    * constants.
@@ -543,11 +543,11 @@ public class GridFileDialog
     ImageDescriptor imgDesc = ImageDescriptor.createFromURL( imgURL );
     setTitleImage( imgDesc.createImage() );
   }
-  
+
   /**
    * Convenience method to open a file dialog. If filters have to be
    * specified this method may not be used.
-   * 
+   *
    * @param parent The dialog's parent {@link Shell}.
    * @param style The dialog's style, i.e. a bitwise or of style
    * constants.
@@ -562,11 +562,11 @@ public class GridFileDialog
     }
     return result;
   }
-  
+
   /**
    * Add a file type filter to this dialog. The filter will appear in
    * the file type combo.
-   * 
+   *
    * @param prefix The prefix of files that will be shown.
    * @param description A description of the filter. This description
    * will be shown in the file type combo.
@@ -576,7 +576,7 @@ public class GridFileDialog
     FileTypeFilter filter = new FileTypeFilter( prefix );
     addFileTypeFilter( filter, description );
   }
-  
+
   /* (non-Javadoc)
    * @see org.eclipse.jface.dialogs.TrayDialog#close()
    */
@@ -587,7 +587,7 @@ public class GridFileDialog
     }
     return super.close();
   }
-  
+
   /* (non-Javadoc)
    * @see org.eclipse.jface.dialogs.Dialog#create()
    */
@@ -595,38 +595,38 @@ public class GridFileDialog
   public void create() {
     super.create();
   }
-  
+
   /**
    * Get all currently selected {@link IFileStore}s that meet the style of
    * this dialog.
-   * 
+   *
    * @return Array containing the {@link IFileStore}s of all selected elements
    * or <code>null</code> if no selection is available.
    */
   public IFileStore[] getSelectedFileStores() {
-    
+
     IFileStore[] result = null;
-    
+
     if ( ( this.currentSelection != null ) && ( this.currentSelection.length > 0 ) ) {
       result = new IFileStore[ this.currentSelection.length ];
       System.arraycopy( this.currentSelection, 0, result, 0, result.length );
     }
-    
+
     return result;
-    
+
   }
-  
+
   /**
    * Get all currently selected {@link URI}s.
-   * 
+   *
    * @return Array containing the {@link URI}s of all selected elements
    * or <code>null</code> if no selection is available.
    */
   public URI[] getSelectedURIs() {
-    
+
     URI[] result = null;
     IFileStore[] stores = getSelectedFileStores();
-    
+
     if ( ( stores != null ) && ( stores.length > 0 ) ) {
       result = new URI[ stores.length ];
       for ( int i = 0 ; i < stores.length ; i++ ) {
@@ -635,64 +635,64 @@ public class GridFileDialog
         result[ i ] = gUri.toSlaveURI();
       }
     }
-    
+
     return result;
-    
+
   }
-  
+
   /**
    * Configure the tree viewer's filters according to the dialog's style.
    */
   protected void configureViewerFilters() {
-    
+
     if ( this.treeViewer != null ) {
-      
+
       this.treeViewer.resetFilters();
-    
+
       if ( hasStyle( STYLE_ALLOW_ONLY_FOLDERS ) ) {
         this.treeViewer.addFilter( new FolderFilter() );
       }
-      
+
       if ( hasStyle( STYLE_ALLOW_ONLY_REMOTE_CONNECTIONS ) ) {
         this.treeViewer.addFilter( new RemoteConnectionFilter() );
       }
-      
+
       if ( this.filetypeCombo != null ) {
-        
+
         if ( this.filetypeCombo.getItemCount() != this.filetypeFilters.size() ) {
           initializeFileTypeCombo();
         }
-        
+
         String key = this.filetypeCombo.getText();
         FileTypeFilter filter = this.filetypeFilters.get( key );
         if ( filter != null ) {
           this.treeViewer.addFilter( filter );
         }
-        
+
       }
-      
+
     }
-    
+
   }
-  
+
   /* (non-Javadoc)
    * @see org.eclipse.jface.dialogs.TitleAreaDialog#createDialogArea(org.eclipse.swt.widgets.Composite)
    */
   @Override
   protected Control createDialogArea( final Composite parent ) {
-    
+
     this.modeManager = new ModeManager();
     this.modeManager.addModeChangeListener( new IModeChangeListener() {
       public void modeChanged( final int mode ) {
         setMode( mode );
       }
     } );
-    
+
     GridData gData;
-    
+
     Label topRule = new Label( parent, SWT.HORIZONTAL | SWT.SEPARATOR );
     topRule.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ) );
-    
+
     Composite mainComp = new Composite( parent, SWT.NONE );
     mainComp.setLayout( new GridLayout( 2, false ) );
     gData = new GridData( GridData.FILL_BOTH );
@@ -701,86 +701,86 @@ public class GridFileDialog
     gData.widthHint = 500;
     gData.heightHint = 400;
     mainComp.setLayoutData( gData );
-    
+
     Label bottomRule = new Label( parent, SWT.HORIZONTAL | SWT.SEPARATOR );
     bottomRule.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ) );
-    
+
     if ( ! hasStyle( STYLE_MULTI_SELECTION ) ) {
-      
+
       Composite uriComp = new Composite( mainComp, SWT.NONE );
       uriComp.setLayout( new GridLayout( 2, false ) );
       gData = new GridData( GridData.FILL_HORIZONTAL );
       gData.grabExcessHorizontalSpace = true;
       gData.horizontalSpan = 2;
       uriComp.setLayoutData( gData );
-      
+
       Label uriLabel = new Label( uriComp, SWT.NONE );
       uriLabel.setText( Messages.getString("GridFileDialog.label_URI") ); //$NON-NLS-1$
       gData = new GridData();
       uriLabel.setLayoutData( gData );
-      
+
       this.uriCombo = new StoredCombo( uriComp, SWT.NONE );
       gData = new GridData( GridData.FILL_HORIZONTAL );
       gData.grabExcessHorizontalSpace = true;
       this.uriCombo.setLayoutData( gData );
       this.uriCombo.setEnabled( ! hasStyle( STYLE_ALLOW_ONLY_EXISTING ) );
-      
+
     }
-    
+
     if ( ! hasStyle( STYLE_ALLOW_ONLY_CONNECTIONS | STYLE_ALLOW_ONLY_REMOTE_CONNECTIONS ) ) {
-    
+
       ToolBar modeBar = new ToolBar( mainComp, SWT.VERTICAL | SWT.BORDER );
       modeBar.setBackground( getShell().getDisplay().getSystemColor( SWT.COLOR_WHITE ) );
       gData = new GridData( GridData.FILL_VERTICAL );
       gData.grabExcessVerticalSpace = true;
       modeBar.setLayoutData( gData );
-      
+
       if ( ! hasStyle( STYLE_ALLOW_ONLY_LOCAL ) ) {
-        
+
         URL connURL = Activator.getDefault().getBundle()
                         .getResource( "icons/extras/grid_file_dialog_conn_mode.gif" ); //$NON-NLS-1$
         ImageDescriptor connDesc = ImageDescriptor.createFromURL( connURL );
-        
+
         ToolItem connItem = new ToolItem( modeBar, SWT.CHECK );
         connItem.setImage( connDesc.createImage() );
         connItem.setToolTipText( Messages.getString("GridFileDialog.switch_to_connections") ); //$NON-NLS-1$
         this.modeManager.addModeItem( connItem, ModeManager.CONNECTION_MODE );
-        
+
       }
-      
+
       if ( ! hasStyle( STYLE_ALLOW_ONLY_CONNECTIONS | STYLE_ALLOW_ONLY_REMOTE_CONNECTIONS ) ) {
-        
+
         URL wsURL = Activator.getDefault().getBundle()
                       .getResource( "icons/extras/grid_file_dialog_ws_mode.gif" ); //$NON-NLS-1$
         ImageDescriptor wsDesc = ImageDescriptor.createFromURL( wsURL );
-        
+
         ToolItem wsItem = new ToolItem( modeBar, SWT.CHECK );
         wsItem.setImage( wsDesc.createImage() );
         wsItem.setToolTipText( Messages.getString("GridFileDialog.switch_to_workspace") ); //$NON-NLS-1$
         this.modeManager.addModeItem( wsItem, ModeManager.WS_MODE );
-        
+
         URL homeURL = Activator.getDefault().getBundle()
                         .getResource( "icons/extras/grid_file_dialog_home_mode.gif" ); //$NON-NLS-1$
         ImageDescriptor homeDesc = ImageDescriptor.createFromURL( homeURL );
-        
+
         ToolItem homeItem = new ToolItem( modeBar, SWT.CHECK );
         homeItem.setImage( homeDesc.createImage() );
         homeItem.setToolTipText( Messages.getString("GridFileDialog.switch_to_home") ); //$NON-NLS-1$
         this.modeManager.addModeItem( homeItem, ModeManager.HOME_MODE );
-        
+
         URL rootURL = Activator.getDefault().getBundle()
                         .getResource( "icons/extras/grid_file_dialog_root_mode.gif" ); //$NON-NLS-1$
         ImageDescriptor rootDesc = ImageDescriptor.createFromURL( rootURL );
-        
+
         ToolItem rootItem = new ToolItem( modeBar, SWT.CHECK );
         rootItem.setImage( rootDesc.createImage() );
         rootItem.setToolTipText( Messages.getString("GridFileDialog.switch_to_root") ); //$NON-NLS-1$
         this.modeManager.addModeItem( rootItem, ModeManager.ROOT_MODE );
-      
+
       }
-      
+
     }
-    
+
     Composite browserComp = new Composite( mainComp, SWT.NONE );
     GridLayout browserLayout = new GridLayout( 1, false );
     browserLayout.marginWidth = 0;
@@ -790,14 +790,14 @@ public class GridFileDialog
     gData.grabExcessHorizontalSpace = true;
     gData.grabExcessVerticalSpace = true;
     browserComp.setLayoutData( gData );
-    
+
     int treeStyle = SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER;
     if ( hasStyle( STYLE_MULTI_SELECTION ) ) {
       treeStyle |= SWT.MULTI;
     } else {
       treeStyle |= SWT.SINGLE;
     }
-    
+
     this.treeViewer = new TreeViewer( browserComp, treeStyle );
     NewGridModelLabelProvider lProvider = new NewGridModelLabelProvider();
     lProvider.addColumn( 0, FileStoreLabelProvider.COLUMN_TYPE_NAME );
@@ -805,46 +805,46 @@ public class GridFileDialog
     lProvider.addColumn( 2, FileStoreLabelProvider.COLUMN_TYPE_MOD_DATE );
     this.treeViewer.setContentProvider( new GridFileDialogContentProvider() );
     this.treeViewer.setLabelProvider( lProvider );
-    
+
     Tree tree = this.treeViewer.getTree();
     tree.setHeaderVisible( true );
     gData = new GridData( GridData.FILL_BOTH );
     gData.grabExcessHorizontalSpace = true;
     gData.grabExcessVerticalSpace = true;
     tree.setLayoutData( gData );
-    
+
     TreeColumn nameColumn = new TreeColumn( tree, SWT.NONE );
     nameColumn.setText( Messages.getString("GridFileDialog.column_title_name") ); //$NON-NLS-1$
     nameColumn.setAlignment( SWT.LEFT );
     nameColumn.setWidth( 300 );
-    
+
     TreeColumn sizeColumn = new TreeColumn( tree, SWT.NONE );
     sizeColumn.setText( Messages.getString("GridFileDialog.column_title_size") ); //$NON-NLS-1$
     sizeColumn.setAlignment( SWT.RIGHT );
     sizeColumn.setWidth( 100 );
-    
+
     TreeColumn modColumn = new TreeColumn( tree, SWT.NONE );
     modColumn.setText( Messages.getString("GridFileDialog.column_title_last_modification") ); //$NON-NLS-1$
     modColumn.setAlignment( SWT.CENTER );
     modColumn.setWidth( 200 );
-    
+
     TreeColumnListener columnListener = new TreeColumnListener( this.treeViewer );
     for ( TreeColumn column : tree.getColumns() ) {
       column.addSelectionListener( columnListener );
     }
-    
+
     tree.setSortColumn( nameColumn );
     tree.setSortDirection( SWT.UP );
     this.treeViewer.setComparator( new TreeColumnComparator( nameColumn ) );
-    
+
     Composite fileComp = new Composite( browserComp, SWT.NONE );
     fileComp.setLayout( new GridLayout( 2, false ) );
     gData = new GridData( GridData.FILL_HORIZONTAL );
     gData.grabExcessHorizontalSpace = true;
     fileComp.setLayoutData( gData );
-    
+
     if ( ! hasStyle( STYLE_MULTI_SELECTION ) ) {
-      
+
       Label filenameLabel = new Label( fileComp, SWT.NONE );
       filenameLabel.setText(
           hasStyle( STYLE_ALLOW_ONLY_FOLDERS )
@@ -862,37 +862,37 @@ public class GridFileDialog
       gData.grabExcessHorizontalSpace = true;
       this.filenameCombo.setLayoutData( gData );
       this.filenameCombo.setEnabled( ! hasStyle( STYLE_ALLOW_ONLY_EXISTING ) );
-      
+
     }
-    
+
     if ( ! hasStyle( STYLE_ALLOW_ONLY_FOLDERS ) ) {
-    
+
       Label filetypeLabel = new Label( fileComp, SWT.NONE );
       filetypeLabel.setText( Messages.getString("GridFileDialog.label_filetype") ); //$NON-NLS-1$
       gData = new GridData();
       gData.horizontalAlignment = GridData.BEGINNING;
       filetypeLabel.setLayoutData( gData );
-      
+
       this.filetypeCombo = new Combo( fileComp, SWT.BORDER | SWT.READ_ONLY );
       gData = new GridData( GridData.FILL_HORIZONTAL );
       gData.grabExcessHorizontalSpace = true;
       this.filetypeCombo.setLayoutData( gData );
-      
+
     }
-    
+
     int mode
       = ! hasStyle( STYLE_ALLOW_ONLY_LOCAL )
       ? ModeManager.CONNECTION_MODE
-      : ModeManager.WS_MODE; 
+      : ModeManager.WS_MODE;
     this.modeManager.setMode( mode );
     setMode( mode );
-    
+
     this.treeViewer.addDoubleClickListener( new IDoubleClickListener() {
       public void doubleClick( final DoubleClickEvent event ) {
         handleDoubleClick();
       }
     } );
-    
+
     this.selectionListener = new ISelectionChangedListener() {
       public void selectionChanged( final SelectionChangedEvent event ) {
         setNotificationEnabled( false );
@@ -901,7 +901,7 @@ public class GridFileDialog
       }
     };
     this.treeViewer.addSelectionChangedListener( this.selectionListener );
-    
+
     if ( this.uriCombo != null ) {
       this.uriListener = new ModifyListener() {
         public void modifyText( final ModifyEvent e ) {
@@ -912,9 +912,9 @@ public class GridFileDialog
       };
       this.uriCombo.addModifyListener( this.uriListener );
     }
-    
+
     if ( this.filenameCombo != null ) {
-      
+
       this.filenameListener = new VerifyListener() {
         public void verifyText( final VerifyEvent e ) {
           setNotificationEnabled( false );
@@ -924,7 +924,7 @@ public class GridFileDialog
       };
       this.filenameCombo.addVerifyListener( this.filenameListener );
     }
-    
+
     if ( this.filetypeCombo != null ) {
       this.filetypeCombo.addSelectionListener( new SelectionAdapter() {
         @Override
@@ -933,7 +933,7 @@ public class GridFileDialog
         }
       } );
     }
-    
+
     this.modelListener = new IGridModelListener() {
       public void gridModelChanged( final IGridModelEvent event ) {
         if ( ( event.getType() == IGridModelEvent.ELEMENTS_ADDED )
@@ -942,20 +942,20 @@ public class GridFileDialog
         }
       }
     };
-    
+
     GridModel.getRoot().addGridModelListener( this.modelListener );
-    
+
     setTitle( Messages.getString("GridFileDialog.title") ); //$NON-NLS-1$
     setMessage( Messages.getString("GridFileDialog.message_select_your_files") ); //$NON-NLS-1$
     addFileTypeFilter( new FileTypeFilter(),
                        Messages.getString("GridFileDialog.label_all_files") ); //$NON-NLS-1$
-    if ( this.filenameCombo != null ) {
+    if ( this.filenameCombo != null && this.filenameCombo.getItemCount() != 0 ) {
       this.filetypeCombo.select( 0 );
-    }    
+    }
     return mainComp;
-    
+
   }
-  
+
   /**
    * Handler method for handling double clicks in the {@link TreeViewer}. This
    * handler expands or collapses tree nodes if the associated
@@ -973,29 +973,29 @@ public class GridFileDialog
       close();
     }
   }
-  
+
   /**
    * Handler that handles changes in the filename combo.
    */
   protected void handleFilenameChanged( final VerifyEvent e ) {
-    
+
     String errMsg = null;
     URI uri = getURI();
-    
+
     if ( uri != null ) {
-      
+
       IPath path = new Path( uri.getPath() );
       String lastSegment = path.lastSegment();
-      
+
       String filename = getFilename();
       if ( filename == null ) {
         filename = EMPTY_STRING;
       }
-      
+
       if ( ( lastSegment != null ) && lastSegment.equals( filename ) ) {
         path = path.removeLastSegments( 1 );
       }
-      
+
       String newFilename = filename.substring( 0, e.start ) + e.text + filename.substring( e.end );
       if ( ( newFilename.length() > 0 ) && ( ! validateFilename( newFilename ) ) ) {
         e.doit = false;
@@ -1005,9 +1005,9 @@ public class GridFileDialog
         if ( ! spath.startsWith( PATH_SEPARATOR ) ) {
           spath = PATH_SEPARATOR + spath;
         }
-        
+
         try {
-          
+
           uri = new URI(
               uri.getScheme(),
               uri.getUserInfo(),
@@ -1018,12 +1018,12 @@ public class GridFileDialog
               uri.getFragment()
           );
           setURI( uri );
-          
+
           try {
-            
+
             IFileStore fileStore = EFS.getStore( uri );
             IFileInfo fileInfo = fileStore.fetchInfo();
-            
+
             if ( hasStyle( STYLE_ALLOW_ONLY_FILES ) && fileInfo.isDirectory() ) {
               errMsg = "Dialog is in file-only-mode but at least one folder is selected";
             } else if ( hasStyle( STYLE_ALLOW_ONLY_FOLDERS ) && ! fileInfo.isDirectory() ) {
@@ -1031,37 +1031,37 @@ public class GridFileDialog
             } else {
               setCurrentSelection( new IFileStore[] { fileStore } );
             }
-            
+
           } catch ( CoreException cExc ) {
             errMsg = String.format( "Unable to create file store - %s", cExc.getLocalizedMessage() );
           }
-          
+
         } catch ( URISyntaxException uriExc ) {
           errMsg = String.format( "Invalid filename - ", newFilename );
         }
-        
+
       }
-      
+
     }
-    
+
     if ( errMsg != null ) {
       setCurrentSelection( null );
     }
-    
+
     setErrorMessage( errMsg );
-    
+
   }
-  
+
   protected void handleSelectionChanged() {
-    
+
     String errMsg = null;
     IFileStore[] selection = getSelection();
-    
+
     if ( ( selection == null ) || ( selection.length == 0 ) ) {
       setFilename( null );
       setURI( null );
     }
-    
+
     else if ( hasStyle( STYLE_ALLOW_ONLY_FILES ) || hasStyle( STYLE_ALLOW_ONLY_FOLDERS ) ) {
       for ( IFileStore store : selection ) {
         IFileInfo info = store.fetchInfo();
@@ -1074,7 +1074,7 @@ public class GridFileDialog
         }
       }
     }
-    
+
     if ( ( selection != null ) && ( selection.length == 1 ) ) {
       setURI( selection[ 0 ].toURI() );
       if ( errMsg == null ) {
@@ -1086,33 +1086,33 @@ public class GridFileDialog
       setURI( null );
       setFilename( null );
     }
-    
+
     if ( errMsg == null ) {
       setCurrentSelection( selection );
     } else {
       setCurrentSelection( null );
     }
-    
+
     setErrorMessage( errMsg );
-     
+
   }
-  
+
   /**
    * Handler that handles changes in the uri combo.
    */
   protected void handleUriChanged() {
-    
+
     URI uri = getURI();
-    
+
     if ( uri != null ) {
-      
+
       String errMsg = null;
-      
+
       try {
-        
+
         IFileStore fileStore = EFS.getStore( uri );
         IFileInfo fileInfo = fileStore.fetchInfo();
-        
+
         if ( hasStyle( STYLE_ALLOW_ONLY_FILES ) && fileInfo.isDirectory() ) {
           errMsg = "Dialog is in file-only-mode but at least one folder is selected";
         } else if ( hasStyle( STYLE_ALLOW_ONLY_FOLDERS ) && ! fileInfo.isDirectory() ) {
@@ -1121,25 +1121,25 @@ public class GridFileDialog
           setFilename( fileInfo.getName() );
           setCurrentSelection( new IFileStore[] { fileStore } );
         }
-        
+
       } catch ( CoreException cExc ) {
         errMsg = String.format( "Unable to create file store - %s", cExc.getLocalizedMessage() );
       }
-      
+
       if ( errMsg != null ) {
         setFilename( null );
         setCurrentSelection( null );
       }
-      
+
       setErrorMessage( errMsg );
-      
+
     } else {
       setFilename( null );
       setCurrentSelection( null );
     }
-    
+
   }
-  
+
   protected void setMode( final int mode ) {
     switch ( mode ) {
       case ModeManager.CONNECTION_MODE:
@@ -1157,12 +1157,12 @@ public class GridFileDialog
         break;
     }
   }
-  
+
   /**
    * Refreshes the {@link TreeViewer} starting with the specified element. If
    * the element is <code>null</code> the whole {@link TreeViewer} will be
    * refreshed.
-   * 
+   *
    * @param element The {@link IGridElement} that will be refreshed. This also
    *            includes the element's children.
    */
@@ -1189,10 +1189,10 @@ public class GridFileDialog
       } );
     }
   }
-  
+
   /**
    * Add the specified {@link FileTypeFilter} to this dialog's filters.
-   * 
+   *
    * @param filter The filter to be added.
    * @param description A description of the filter set as refering text
    * in the type filter combo.
@@ -1203,19 +1203,19 @@ public class GridFileDialog
     configureViewerFilters();
   }
 
-  
+
   /**
    * Helper method to determine if this dialog was constructed with
    * the specified style.
-   * 
+   *
    * @param bit One of the style constants.
    * @return True if the specified style constant was specified for
    * this dialog.
    */
   private boolean hasStyle( final int bit ) {
-    return ( this.style & bit ) != 0; 
+    return ( this.style & bit ) != 0;
   }
-  
+
   /**
    * Initialize the file type combo with the available file type filters.
    */
@@ -1235,7 +1235,7 @@ public class GridFileDialog
       this.filetypeCombo.select( 0 );
     }
   }
-  
+
   /**
    * Check if there are not ambiguities in the dialog's style.
    */
@@ -1253,33 +1253,33 @@ public class GridFileDialog
         "Only one of STYLE_ALLOW_ONLY_FILES and STYLE_ALLOW_ONLY_FOLDERS is allowed" //$NON-NLS-1$
     );
   }
-  
+
   private String getFilename() {
-    
+
     String result = null;
-    
+
     if ( ( this.filenameCombo != null ) && ! this.filenameCombo.isDisposed() ) {
       result = this.filenameCombo.getText();
     }
-    
+
     return result;
-    
+
   }
-  
+
   private IFileStore[] getSelection() {
-    
+
     IFileStore[] result = null;
-    
+
     if ( ( this.treeViewer != null ) && ! this.treeViewer.getTree().isDisposed() ) {
-      
+
       List< IFileStore > list = new ArrayList< IFileStore >();
       IStructuredSelection selection = ( IStructuredSelection ) this.treeViewer.getSelection();
       Iterator< ? > iterator = selection.iterator();
-      
+
       while ( iterator.hasNext() ) {
-        
+
         Object o = iterator.next();
-        
+
         if ( o instanceof IGridConnectionElement ) {
           try {
             o = ( ( IGridConnectionElement ) o ).getConnectionFileStore();
@@ -1289,28 +1289,28 @@ public class GridFileDialog
         } else if ( o instanceof IGridElement ) {
           o = ( ( IGridElement ) o ).getFileStore();
         }
-        
+
         if ( o instanceof IFileStore ) {
           list.add( ( IFileStore ) o );
         }
-        
+
       }
-      
+
       if ( ! list.isEmpty() ) {
         result = list.toArray( new IFileStore[ list.size() ] );
       }
-      
+
     }
-    
+
     return result;
-    
+
   }
-  
+
   private URI getURI() {
-    
+
     URI result = null;
     setErrorMessage( null );
-    
+
     if ( ( this.uriCombo != null ) && ! this.uriCombo.isDisposed() ) {
       String text = this.uriCombo.getText();
       try {
@@ -1319,11 +1319,11 @@ public class GridFileDialog
         setErrorMessage( String.format( "Invalid URI - %s", uriExc.getLocalizedMessage() ) );
       }
     }
-    
+
     return result;
-    
+
   }
-  
+
   private void setCurrentSelection( final IFileStore[] selection ) {
     if ( ( selection != null ) && ( selection.length > 0 ) ){
       this.currentSelection = new IFileStore[ selection.length ];
@@ -1334,7 +1334,7 @@ public class GridFileDialog
       getButton( IDialogConstants.OK_ID ).setEnabled( false );
     }
   }
-  
+
   private void setFilename( final String filename ) {
     if ( ( this.filenameCombo != null ) && ! this.filenameCombo.isDisposed() ) {
       if ( filename == null ) {
@@ -1344,7 +1344,7 @@ public class GridFileDialog
       }
     }
   }
-  
+
   private void setURI( final URI uri ) {
     if ( ( this.uriCombo != null ) && ! this.uriCombo.isDisposed() ) {
       if ( uri == null ) {
@@ -1355,48 +1355,48 @@ public class GridFileDialog
       }
     }
   }
-  
+
   /**
    * Enables or disables notifications about modifications of the uri
    * and filename combos and changes in the selection of the tree viewer.
-   * 
+   *
    * @param b If <code>true</code> the notifications will be switched
    * on, if <code>false</code> they will be switched of.
    */
   protected void setNotificationEnabled( final boolean b ) {
-    
+
     if ( b ) {
-      
+
       if ( this.uriCombo != null ) {
         this.uriCombo.addModifyListener( this.uriListener );
       }
-      
+
       if ( this.filenameCombo != null ) {
         this.filenameCombo.addVerifyListener( this.filenameListener );
       }
-      
+
       this.treeViewer.addSelectionChangedListener( this.selectionListener );
-      
+
     }
-    
+
     else {
-   
+
       if ( this.uriCombo != null ) {
         this.uriCombo.removeModifyListener( this.uriListener );
       }
-      
+
       if ( this.filenameCombo != null ) {
         this.filenameCombo.removeVerifyListener( this.filenameListener );
       }
-      
+
       this.treeViewer.removeSelectionChangedListener( this.selectionListener );
-      
+
     }
-    
+
   }
-  
+
   private boolean validateFilename( final String filename ) {
     return POSIX_FILENAME.matcher( filename ).matches();
   }
-  
+
 }
