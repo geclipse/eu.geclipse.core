@@ -34,7 +34,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -143,8 +142,9 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
     setTitle( Messages.getString( "ExecutableNewJobWizardPage.title" ) ); //$NON-NLS-1$
     setDescription( Messages.getString( "ExecutableNewJobWizardPage.description" ) ); //$NON-NLS-1$
     this.internalPages = internalPages;
-//    setMessage( Messages.getString( "ExecutableNewJobWizardPage.fetching_apps" ), //$NON-NLS-1$
-//                IMessageProvider.WARNING );
+    // setMessage( Messages.getString(
+    // "ExecutableNewJobWizardPage.fetching_apps" ), //$NON-NLS-1$
+    // IMessageProvider.WARNING );
   }
 
   @Override
@@ -432,9 +432,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
         public void run( final IProgressMonitor monitor )
           throws InvocationTargetException, InterruptedException
         {
-          // if( visible == true && ExecutableNewJobWizardPage.this.firstTime )
-          // {
-          monitor.beginTask( "Get applications", 1 );
+          monitor.beginTask( Messages.getString( "ExecutableNewJobWizardPage.get_apps_params_progress" ), 1 ); //$NON-NLS-1$
           ExecutableNewJobWizardPage.this.firstTime = false;
           try {
             ApplicationParametersRegistry.getInstance()
@@ -457,8 +455,6 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
               setApplications( map );
             }
           } );
-          // }
-          //
         }
       } );
     } catch( InvocationTargetException e ) {
