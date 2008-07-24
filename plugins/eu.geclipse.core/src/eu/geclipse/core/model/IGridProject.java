@@ -19,7 +19,7 @@ package eu.geclipse.core.model;
  * Grid element for projects in the grid model. These projects
  * have not necessarily to be Grid projects but can also be any
  * other type of project located in the workspace. If this is
- * really a grid project, i.e. if {@link #isGridProject()} returns
+ * really a grid project, i.e. if {@link #hasGridNature()} returns
  * true, it contains a number of standard folders.
  */
 public interface IGridProject extends IGridContainer {
@@ -67,12 +67,12 @@ public interface IGridProject extends IGridContainer {
   public IVirtualOrganization getVO();
   
   /**
-   * Returns true of this is a Grid project and false if it is any
+   * Returns true of this is a project with GridNature and false if it is any
    * other type of project.
    * 
    * @return True if this is really a Grid project.
    */
-  public boolean isGridProject();
+  public boolean hasGridNature();
   
   /**
    * Determine if this project is currently open.
