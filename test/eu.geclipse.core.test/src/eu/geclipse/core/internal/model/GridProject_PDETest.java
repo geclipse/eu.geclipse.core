@@ -113,12 +113,12 @@ public class GridProject_PDETest {
    Assert.assertNull( gridproject.getVO() );
   }
 
-  /**tests the method {@link GridProject#isGridProject()}
+  /**tests the method {@link GridProject#hasGridNature()}
    * the result is false because the created project is not a grid one
    */
   @Test
-  public void testIsGridProject() {
-    Assert.assertFalse( gridproject.isGridProject() );
+  public void testHasGridNature() {
+    Assert.assertFalse( gridproject.hasGridNature() );
   }
 
   /**tests the method {@link GridProject#isOpen()}

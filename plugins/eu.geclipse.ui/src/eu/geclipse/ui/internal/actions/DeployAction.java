@@ -67,7 +67,7 @@ public class DeployAction extends SelectionListenerAction {
     if ( structuredSelection.size() == 1 ) {
       Object object = structuredSelection.getFirstElement();
       if ( isGridProject( object ) ) {
-        isGridProjectFlag = ( ( IGridProject ) object ).isGridProject();
+        isGridProjectFlag = ( ( IGridProject ) object ).hasGridNature();
       }
     }*/
     

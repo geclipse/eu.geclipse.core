@@ -241,9 +241,9 @@ public class HiddenProject extends ResourceGridContainer
   /*
    * (non-Javadoc)
    * 
-   * @see eu.geclipse.core.model.IGridProject#isGridProject()
+   * @see eu.geclipse.core.model.IGridProject#hasGridNature()
    */
-  public boolean isGridProject() {
+  public boolean hasGridNature() {
     return false;
   }
 

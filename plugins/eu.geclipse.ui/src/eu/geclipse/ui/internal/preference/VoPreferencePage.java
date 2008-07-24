@@ -517,7 +517,7 @@ public class VoPreferencePage
           boolean used = false;
           for ( IGridElement element : projectElements ) {
             igp = (IGridProject) element;
-            if ( igp.isGridProject() && ( vo == igp.getVO() ) ) {
+            if ( vo == igp.getVO() ) {
               used = true;
               break;
             }

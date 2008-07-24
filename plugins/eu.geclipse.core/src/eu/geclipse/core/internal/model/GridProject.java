@@ -50,7 +50,7 @@ import eu.geclipse.core.reporting.ProblemException;
 /**
  * This is the grid model class that represents any project in the
  * workspace. This has not to be necessarily a grid project. Use the
- * {@link #isGridProject()} method to determine if this is really a
+ * {@link #hasGridNature()} method to determine if this is really a
  * grid project.
  */
 public class GridProject
@@ -236,9 +236,9 @@ public class GridProject
   }
 
   /* (non-Javadoc)
-   * @see eu.geclipse.core.model.IGridProject#isGridProject()
+   * @see eu.geclipse.core.model.IGridProject#hasGridNature()
    */
-  public boolean isGridProject() {
+  public boolean hasGridNature() {
     boolean result = false;
     IProject project = ( IProject ) getResource();
     try {
