@@ -1389,5 +1389,20 @@ public class JSDLJobDescription extends ResourceGridContainer
     return parametric;
   }
   
+  public void removeTargetsFromOutStaging() {
+    DocumentRoot dRoot = getDocumentRoot();
+    if( getJobDescription( dRoot ) != null ) {
+      List<DataStagingType> temp = this.jobDescription.getDataStaging();
+      if( temp != null ) {
+        for( DataStagingType dataType : temp ) {
+          if( dataType.getTarget() != null ) {
+            SourceTargetType target = this.jsdlFactory.createSourceTargetType();
+            target.setURI( "" );
+            dataType.setTarget( target );
+          }
+        }
+      }
+    }    
+  }
   
 }
