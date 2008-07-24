@@ -32,7 +32,6 @@ import eu.geclipse.core.model.IMountable.MountPoint;
 import eu.geclipse.core.model.IMountable.MountPointID;
 import eu.geclipse.core.reporting.ProblemException;
 
-
 /**
  * Test class for the {@link S3BucketStorage} class.
  * 
@@ -66,7 +65,8 @@ public class S3BucketStorage_PDETest {
 
   /**
    * Test method for
-   * {@link eu.geclipse.aws.s3.S3BucketStorage#S3BucketStorage(eu.geclipse.aws.s3.service.S3AWSService, org.jets3t.service.model.S3Bucket)}.
+   * {@link eu.geclipse.aws.s3.S3BucketStorage#S3BucketStorage(eu.geclipse.aws.s3.service.S3AWSService, org.jets3t.service.model.S3Bucket)}
+   * .
    * 
    * @throws ProblemException
    */
@@ -78,20 +78,6 @@ public class S3BucketStorage_PDETest {
                                                          s3AWSService,
                                                          bucket );
     Assert.assertNotNull( bucketStorage );
-  }
-
-  /**
-   * Test method for
-   * {@link eu.geclipse.aws.s3.S3BucketStorage#getAccessTokens()}.
-   */
-  @Test
-  public void testGetAccessTokens() {
-    URI[] accessTokens = this.bucketStorage.getAccessTokens();
-    String expectedName = "s3://" //$NON-NLS-1$
-                          + AWSVoTestUtil.AWS_ACCESS_ID
-                          + "/" //$NON-NLS-1$
-                          + this.bucketStorage.getName();
-    Assert.assertEquals( expectedName, accessTokens[ 0 ].toString() );
   }
 
   /**
@@ -170,7 +156,8 @@ public class S3BucketStorage_PDETest {
 
   /**
    * Test method for
-   * {@link S3BucketStorage#getMountPoint(eu.geclipse.core.model.IMountable.MountPointID)}.
+   * {@link S3BucketStorage#getMountPoint(eu.geclipse.core.model.IMountable.MountPointID)}
+   * .
    * 
    * @throws Exception
    */
