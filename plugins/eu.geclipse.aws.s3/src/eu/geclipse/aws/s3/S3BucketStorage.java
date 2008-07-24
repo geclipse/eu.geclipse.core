@@ -32,10 +32,11 @@ import eu.geclipse.aws.s3.service.S3AWSService;
 import eu.geclipse.aws.vo.AWSVirtualOrganization;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
+import eu.geclipse.core.model.IGridResource;
 import eu.geclipse.core.model.IGridStorage;
+import eu.geclipse.core.model.IMountable;
 import eu.geclipse.core.model.impl.AbstractGridElement;
 import eu.geclipse.core.reporting.ProblemException;
-
 
 /**
  * This {@link IGridStorage} element wraps an {@link S3Bucket}.
@@ -43,7 +44,7 @@ import eu.geclipse.core.reporting.ProblemException;
  * @author Moritz Post
  */
 public class S3BucketStorage extends AbstractGridElement
-  implements IGridStorage
+  implements IGridResource, IMountable
 {
 
   /** The id of the s3 mount point. */
@@ -98,7 +99,7 @@ public class S3BucketStorage extends AbstractGridElement
     String awsAccessId = null;
     try {
       awsAccessId = awsVo.getProperties().getAwsAccessId();
-    } catch ( ProblemException problemEx ) {
+    } catch( ProblemException problemEx ) {
       Activator.log( "Could not obtain aws properties", problemEx ); //$NON-NLS-1$
     }
     if( awsAccessId != null ) {
@@ -125,10 +126,10 @@ public class S3BucketStorage extends AbstractGridElement
       String s3Url = this.s3AWSService.getProperties().getS3Url();
       URL url = new URL( s3Url );
       return url.getHost();
-    } catch ( ProblemException problemEx ) {
+    } catch( ProblemException problemEx ) {
       Activator.log( "Could not obtain properties from s3AWSService", //$NON-NLS-1$
                      problemEx );
-    } catch ( MalformedURLException malformedURLEx ) {
+    } catch( MalformedURLException malformedURLEx ) {
       Activator.log( "Could not convert URL from s3AWSService", malformedURLEx ); //$NON-NLS-1$
     }
     return null;
@@ -151,9 +152,9 @@ public class S3BucketStorage extends AbstractGridElement
       }
       s3Url = s3Url + this.s3Bucket.getName();
       return new URI( s3Url );
-    } catch ( ProblemException problemEx ) {
+    } catch( ProblemException problemEx ) {
       Activator.log( "Could not obtain properties from awsVo", problemEx ); //$NON-NLS-1$
-    } catch ( URISyntaxException uriSyntaxEx ) {
+    } catch( URISyntaxException uriSyntaxEx ) {
       Activator.log( "Could not construct URI from awsVo: " + s3Url, //$NON-NLS-1$
                      uriSyntaxEx );
     }

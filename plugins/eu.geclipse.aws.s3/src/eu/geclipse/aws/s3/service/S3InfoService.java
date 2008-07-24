@@ -46,7 +46,6 @@ import eu.geclipse.core.model.impl.AbstractGridInfoService;
 import eu.geclipse.core.model.impl.GridResourceCategoryFactory;
 import eu.geclipse.core.reporting.ProblemException;
 
-
 /**
  * The {@link S3InfoService}is used to provide S3 specific input to the
  * underlying {@link AWSInfoService}. Mainly this constitutes to provide input
@@ -86,11 +85,12 @@ public class S3InfoService extends AbstractGridInfoService
     IGridResource[] result = null;
     if( category.equals( GridResourceCategoryFactory.getCategory( IAWSCategories.CATEGORY_AWS_STORAGE ) ) )
     {
-      result = fetchStorage( parent, vo, monitor );
+      result = fetchBuckets( parent, vo, monitor );
     }
     return result;
   }
 
+  @Deprecated
   public IGridApplication[] fetchApplications( final IGridContainer parent,
                                                final IVirtualOrganization vo,
                                                final IGridComputing computing,
@@ -100,6 +100,7 @@ public class S3InfoService extends AbstractGridInfoService
     return null;
   }
 
+  @Deprecated
   public IGridComputing[] fetchComputing( final IGridContainer parent,
                                           final IVirtualOrganization vo,
                                           final IProgressMonitor monitor )
@@ -108,6 +109,7 @@ public class S3InfoService extends AbstractGridInfoService
     return null;
   }
 
+  @Deprecated
   public IGridService[] fetchServices( final IGridContainer parent,
                                        final IVirtualOrganization vo,
                                        final IProgressMonitor monitor )
@@ -116,9 +118,26 @@ public class S3InfoService extends AbstractGridInfoService
     return null;
   }
 
+  @Deprecated
   public IGridStorage[] fetchStorage( final IGridContainer parent,
                                       final IVirtualOrganization vo,
-                                      IProgressMonitor monitor )
+                                      final IProgressMonitor monitor )
+  {
+    // not supported at the moment
+    return null;
+  }
+
+  /**
+   * Fetches the buckets of the S3 infrastructure.
+   * 
+   * @param parent the parten
+   * @param vo
+   * @param monitor
+   * @return
+   */
+  public IGridResource[] fetchBuckets( final IGridContainer parent,
+                                       final IVirtualOrganization vo,
+                                       IProgressMonitor monitor )
   {
     if( monitor == null ) {
       monitor = new NullProgressMonitor();
@@ -168,7 +187,7 @@ public class S3InfoService extends AbstractGridInfoService
       if( properties != null ) {
         return properties.getS3Url();
       }
-    } catch ( ProblemException problemEx ) {
+    } catch( ProblemException problemEx ) {
       Activator.log( "Could not load properties from s3AWSService", problemEx ); //$NON-NLS-1$
     }
     return null;
