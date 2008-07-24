@@ -17,12 +17,15 @@
 package eu.geclipse.workflow.ui.part;
 
 import java.io.InputStream;
+import java.net.URISyntaxException;
 
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.operations.OperationHistoryFactory;
-import org.eclipse.core.filesystem.EFS;
-import org.eclipse.core.filesystem.IFileInfo;
 import org.eclipse.core.filesystem.IFileStore;
+import org.eclipse.core.filesystem.URIUtil;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -38,13 +41,13 @@ import org.eclipse.gmf.runtime.emf.commands.core.command.AbstractTransactionalCo
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.window.Window;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
 
 import eu.geclipse.core.model.GridModel;
-import eu.geclipse.ui.dialogs.GridFileDialog;
 import eu.geclipse.workflow.IWorkflowJob;
 import eu.geclipse.workflow.ui.edit.parts.WorkflowJobEditPart;
 import eu.geclipse.workflow.ui.internal.WorkflowDiagramEditorPlugin;
@@ -77,43 +80,49 @@ public class GetJobDescriptionFromFileAction implements IObjectActionDelegate {
   public void run( IAction action ) {
     InputStream inStream = null;
     IStatus status = Status.OK_STATUS;
-    GridFileDialog dialog = new GridFileDialog( this.myShell,
-                                                GridFileDialog.STYLE_ALLOW_ONLY_LOCAL
-                                                    | GridFileDialog.STYLE_ALLOW_ONLY_EXISTING );
-    dialog.addFileTypeFilter( "jsdl",  //$NON-NLS-1$
-                              Messages.getString( "GetJobDescriptionFromFileAction.filterTypeDesc" ) ); //$NON-NLS-1$
-    
-    if( dialog.open() == Window.OK ) {
-      IFileStore[] result = dialog.getSelectedFileStores();
-      if( ( result != null ) && ( result.length > 0 ) ) {
-        // find the root directory of the workflow
-        TransactionalEditingDomain domain = this.mySelectedElement.getEditingDomain();
-        ResourceSet resourceSet = domain.getResourceSet();
-        Resource res = resourceSet.getResources().get( 0 );
-        URI wfRootUri = res.getURI();
-        String wfRootPath = wfRootUri.path();
-        String[] dirs = wfRootPath.split( "/" ); //$NON-NLS-1$
-        String projectName = dirs[2];
-        IFileStore wfRootFileStore = GridModel.getRoot().getFileStore().getChild( projectName ).getChild( dirs[3]).getChild( wfRootUri.lastSegment() );
-        IFileStore jsdlSource = result[0];
-        IFileStore jsdlTarget = wfRootFileStore.getChild( result[0].getName() );
-        IFileInfo jsdlInfo = jsdlTarget.fetchInfo();
-        try {
-          if ( jsdlInfo.exists() ) {
-            // deal with existing files somehow?
-            jsdlSource.copy( wfRootFileStore, EFS.OVERWRITE, null );
-          } else {
-            jsdlSource.copy( jsdlTarget, EFS.OVERWRITE, null );
-          }
-        } catch ( CoreException ex ) {
-          // ignore for now. naughty!
-        }
-        this.jobDescriptionInJSDL = jsdlTarget.toString(); // is now the file name
-        // now check if it exists in workflow directory, and copy it from source if not
-        
+    FileDialog dialog = new FileDialog( this.myShell, SWT.OPEN );
+	String[] exts = { "*.jsdl" };
+	dialog.setFilterExtensions(exts);
+	
+    // this bit find the root directory of the workflow
+    TransactionalEditingDomain domain = this.mySelectedElement.getEditingDomain();
+    ResourceSet resourceSet = domain.getResourceSet();
+    Resource res = resourceSet.getResources().get( 0 );
+    URI wfRootUri = res.getURI();
+    String wfRootPath = wfRootUri.path();
+    String[] dirs = wfRootPath.split( "/" ); //$NON-NLS-1$
+    String projectName = dirs[2];
+    IFileStore wfRootFileStore = GridModel.getRoot().getFileStore().getChild( projectName );
+	
+	dialog.setFilterPath( wfRootFileStore.toString() );
+
+    if ( dialog.open() != null ) { 
+      String result = dialog.getFileName();
+      if( ( result != null ) && ( result.length() > 0 ) ) {
+    	  IFile jsdlSource = null;
+    	  String filePath = dialog.getFilterPath() + "/" + result;
+    	  //filePath = filePath.replace(' ', '+');
+    	  java.net.URI filePathUri = null;
+    	  filePathUri = URIUtil.toURI(filePath);
+    	  IFile[] files = ResourcesPlugin.getWorkspace().getRoot().findFilesForLocationURI( filePathUri );
+    	  jsdlSource = files[0];
+    	  java.net.URI targetUri = wfRootFileStore.getChild(dirs[3]).getChild(dirs[4]).getChild( result ).toURI();    	
+	      IFile jsdlTarget = ResourcesPlugin.getWorkspace().getRoot().findFilesForLocationURI( targetUri )[0];
+	      // now check if it exists in workflow directory, and copy it from source if not	      
+	      try {
+	        if ( jsdlTarget.exists() ) {
+	          // deal with existing files somehow?
+	          jsdlSource.copy( jsdlTarget.getFullPath(), true, null );
+	        } else {
+	          jsdlSource.copy( jsdlTarget.getFullPath(), true, null );
+	        }
+	      } catch ( CoreException ex ) {
+	        // ignore for now. naughty!
+	      }
+	      this.jobDescriptionInJSDL = jsdlTarget.getLocation().toString(); // is now the file path    
+      	updateWorkflowJobDescription();
       }
     }
-    updateWorkflowJobDescription();
   }
 
   /**
