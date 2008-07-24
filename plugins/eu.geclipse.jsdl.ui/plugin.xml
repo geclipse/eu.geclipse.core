@@ -71,7 +71,7 @@
          point="org.eclipse.ui.preferencePages">
       <page
             category="eu.geclipse.ui.internal.preference.GEclipsePreferencePage"
-            class="eu.geclipse.jsdl.ui.preference.ApplicationSpecificPreferencePage"
+            class="eu.geclipse.jsdl.ui.preference.ApplicationParametersPreferencePage"
             id="eu.geclipse.jsdl.ui.applicationParameters"
             name="Application Parameters"/>
    </extension>

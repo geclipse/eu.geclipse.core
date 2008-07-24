@@ -21,7 +21,11 @@ import java.util.List;
 
 import org.eclipse.compare.IContentChangeListener;
 import org.eclipse.compare.IContentChangeNotifier;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.preference.PreferencePage;
@@ -68,7 +72,7 @@ import eu.geclipse.ui.dialogs.ProblemDialog;
 /**
  * Class providing contents of Application Parameters Preferences Page
  */
-public class ApplicationSpecificPreferencePage extends PreferencePage
+public class ApplicationParametersPreferencePage extends PreferencePage
   implements IWorkbenchPreferencePage, IContentChangeListener
 {
 
@@ -77,11 +81,12 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
   private Button editButton;
   private Button removeButton;
   private Table appsTable;
+  private Button refreshButton;
 
   /**
    * Creates new instance of preferences page
    */
-  public ApplicationSpecificPreferencePage() {
+  public ApplicationParametersPreferencePage() {
     super();
     setDescription( Messages.getString( "ApplicationSpecificPreferencePage.description" ) ); //$NON-NLS-1$
     ApplicationParametersRegistry.getInstance().addContentChangeListener( this );
@@ -134,12 +139,13 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
     TableColumn jsdlColumn = new TableColumn( this.appsTable, SWT.LEFT );
     jsdlColumn.setText( "JSDL file" ); //$NON-NLS-1$
     this.appsViewer = new TableViewer( this.appsTable );
-    try {
-      ApplicationParametersRegistry.getInstance()
-        .updateApplicationsParameters( null );
-    } catch( ProblemException e1 ) {
-      ProblemDialog.openProblem( getShell(), "Error fetching information", "Could not access applications' parameters", e1 );
-    }
+    // try {
+    // ApplicationParametersRegistry.getInstance()
+    // .updateApplicationsParameters( null );
+    // } catch( ProblemException e1 ) {
+    // ProblemDialog.openProblem( getShell(), "Error fetching information",
+    // "Could not access applications' parameters", e1 );
+    // }
     IStructuredContentProvider contentProvider = new ApplicationSpecificPageContentProvider();
     this.appsViewer.setContentProvider( contentProvider );
     this.appsViewer.setLabelProvider( new ApplicationSpecificLabelProvider() );
@@ -152,7 +158,7 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
       }
     } );
     Composite buttonsComp = new Composite( mainComp, SWT.NONE );
-    gLayout = new GridLayout( 3, false );
+    gLayout = new GridLayout( 4, false );
     gLayout.marginHeight = 0;
     gLayout.marginWidth = 0;
     buttonsComp.setLayout( gLayout );
@@ -196,15 +202,48 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
               .removeApplicationParameters( obj );
           } catch( ApplicationParametersException e ) {
             ProblemDialog.openProblem( getShell(),
-                                       Messages.getString("ApplicationSpecificPreferencePage.removing_error_title"), //$NON-NLS-1$
-                                       Messages.getString("ApplicationSpecificPreferencePage.removing_error_message"), //$NON-NLS-1$
+                                       Messages.getString( "ApplicationSpecificPreferencePage.removing_error_title" ), //$NON-NLS-1$
+                                       Messages.getString( "ApplicationSpecificPreferencePage.removing_error_message" ), //$NON-NLS-1$
                                        e );
           }
         }
       }
     } );
+    this.refreshButton = new Button( buttonsComp, SWT.PUSH );
+    gData = new GridData( GridData.FILL_BOTH );
+    this.refreshButton.setLayoutData( gData );
+    this.refreshButton.setText( "Refresh list" );
+    this.refreshButton.addSelectionListener( new SelectionAdapter() {
+
+      @Override
+      public void widgetSelected( final SelectionEvent e ) {
+        fetchApplications();
+      }
+    } );
     updateButtons();
     return mainComp;
+  }
+
+  void fetchApplications() {
+    Job job = new Job( "Get applications' parameters." ) {
+
+      @Override
+      protected IStatus run( final IProgressMonitor monitor ) {
+        IStatus result = Status.OK_STATUS;
+        try {
+          ApplicationParametersRegistry.getInstance()
+            .updateApplicationsParameters( null );
+        } catch( ProblemException problemE ) {
+          result = new Status( Status.ERROR,
+                               Activator.PLUGIN_ID,
+                               "Error while fetching applications' information.",
+                               problemE );
+        }
+        return result;
+      }
+    };
+    job.setUser( true );
+    job.schedule();
   }
 
   void editAppliactionSpecificData( final GridApplicationParameters aSO ) {
@@ -239,8 +278,8 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
                                           dialog.getJSDLPath() );
         } catch( ApplicationParametersException e ) {
           ProblemDialog.openProblem( getShell(),
-                                     Messages.getString("ApplicationSpecificPreferencePage.editing_error_title"), //$NON-NLS-1$
-                                     Messages.getString("ApplicationSpecificPreferencePage.editing_error_message"), //$NON-NLS-1$
+                                     Messages.getString( "ApplicationSpecificPreferencePage.editing_error_title" ), //$NON-NLS-1$
+                                     Messages.getString( "ApplicationSpecificPreferencePage.editing_error_message" ), //$NON-NLS-1$
                                      e );
         }
       }
@@ -562,7 +601,7 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
       PlatformUI.getWorkbench().getDisplay().asyncExec( new Runnable() {
 
         public void run() {
-          ApplicationSpecificPreferencePage.this.appsViewer.refresh();
+          ApplicationParametersPreferencePage.this.appsViewer.refresh();
         }
       } );
     }
