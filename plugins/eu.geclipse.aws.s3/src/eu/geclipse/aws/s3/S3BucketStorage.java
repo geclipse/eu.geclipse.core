@@ -77,13 +77,6 @@ public class S3BucketStorage extends AbstractGridElement
     this.s3Bucket = bucket;
   }
 
-  public URI[] getAccessTokens() {
-    URI accessToken = getMountURI();
-    return new URI[]{
-      accessToken
-    };
-  }
-
   /**
    * Creates an {@link URI} complying to the general mount paradigm of geclipse.
    * The created URI has the form:
