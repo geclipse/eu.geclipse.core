@@ -39,6 +39,8 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import eu.geclipse.core.model.IGridComputing;
 import eu.geclipse.core.model.IGridElement;
+import eu.geclipse.core.model.IGridResource;
+import eu.geclipse.core.model.impl.GridResourceCategoryFactory;
 import eu.geclipse.jsdl.JSDLJobDescription;
 import eu.geclipse.jsdl.ui.internal.Activator;
 import eu.geclipse.jsdl.ui.internal.dialogs.MultipleInputDialog.Validator;
@@ -168,8 +170,18 @@ public class CandidateHostsDialog extends Dialog {
     try {
       
       Collection <String> computingElements =  new ArrayList<String>();
-      IGridComputing[] gridComputings =  this.jobDescription.getProject().getVO()
-                                                                            .getComputing( new NullProgressMonitor() ) ;
+      
+      IGridResource[] gridComputings = this.jobDescription.getProject().getVO().getInfoService().
+                                         fetchResources( this.jobDescription.getProject().getVO(),
+                                                         this.jobDescription.getProject().getVO(),
+                                                         GridResourceCategoryFactory
+                                                         .getCategory(  GridResourceCategoryFactory.ID_COMPUTING),
+                                                         false,
+                                                         IGridComputing.class,
+                                                         new NullProgressMonitor());
+      
+//      IGridComputing[] gridComputings =  this.jobDescription.getProject().getVO()
+//                                                                            .getComputing( new NullProgressMonitor() ) ;
       String hostnameOnly;
           
       for (int i=0; i < gridComputings.length; i++){        
