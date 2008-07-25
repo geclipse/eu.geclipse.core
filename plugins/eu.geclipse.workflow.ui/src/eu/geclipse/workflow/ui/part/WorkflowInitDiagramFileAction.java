@@ -91,7 +91,7 @@ public class WorkflowInitDiagramFileAction implements IObjectActionDelegate {
     EObject diagramRoot = null;
     try {
       Resource resource = resourceSet.getResource( domainModelURI, true );
-      diagramRoot = ( EObject )resource.getContents().get( 0 );
+      diagramRoot = resource.getContents().get( 0 );
     } catch( WrappedException ex ) {
       WorkflowDiagramEditorPlugin.getInstance().logError( "Unable to load resource: " + domainModelURI, ex ); //$NON-NLS-1$
     }
