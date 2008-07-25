@@ -233,8 +233,8 @@ public abstract class AbstractVirtualOrganization
     return storage;
   }
   
-  public IGridResourceCategory[] getSupportedResources() {
-    return ProjectVo.standardResources;
+  public IGridResourceCategory[] getSupportedCategories() {
+    return ProjectVo.standardCategories;
   }
   
   public IGridJobService[] getJobSubmissionServices( final IProgressMonitor monitor ) throws ProblemException {

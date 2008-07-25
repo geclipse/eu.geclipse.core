@@ -37,7 +37,7 @@ public interface IVirtualOrganization
    * @return The {@link IGridResourceCategory} instances supported by
    * this VO.
    */
-  public IGridResourceCategory[] getSupportedResources();
+  public IGridResourceCategory[] getSupportedCategories();
   
   /**
    * Gets all available resources of the specified resource category.

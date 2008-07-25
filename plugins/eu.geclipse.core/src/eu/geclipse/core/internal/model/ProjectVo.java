@@ -47,7 +47,7 @@ public class ProjectVo
     extends AbstractGridContainer
     implements IVirtualOrganization, IWrappedElement {
   
-  public static IGridResourceCategory[] standardResources
+  public static IGridResourceCategory[] standardCategories
     = new IGridResourceCategory[] {
       GridResourceCategoryFactory.getCategory( GridResourceCategoryFactory.ID_APPLICATIONS ),
       GridResourceCategoryFactory.getCategory( GridResourceCategoryFactory.ID_COMPUTING ),
@@ -70,9 +70,9 @@ public class ProjectVo
     this.project = project;
     this.vo = vo;
     
-    IGridResourceCategory[] supportedResources = vo.getSupportedResources();
+    IGridResourceCategory[] supportedCategories = vo.getSupportedCategories();
     
-    for ( IGridResourceCategory category : supportedResources ) {
+    for ( IGridResourceCategory category : supportedCategories ) {
       try {
         getResourceContainer( category );
       } catch ( ProblemException pExc ) {
@@ -226,8 +226,8 @@ public class ProjectVo
     
   }
   
-  public IGridResourceCategory[] getSupportedResources() {
-    return this.vo != null ? this.vo.getSupportedResources() : standardResources;
+  public IGridResourceCategory[] getSupportedCategories() {
+    return this.vo != null ? this.vo.getSupportedCategories() : standardCategories;
   }
   
   public IGridJobService[] getJobSubmissionServices( final IProgressMonitor monitor )
