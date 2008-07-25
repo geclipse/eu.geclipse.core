@@ -146,6 +146,20 @@ http://www.geclipse.eu/
          unpack="false"/>
 
    <plugin
+         id="eu.geclipse.servicejob"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="eu.geclipse.servicejob.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
          id="eu.geclipse.terminal"
          download-size="0"
          install-size="0"
