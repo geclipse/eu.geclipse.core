@@ -19,6 +19,8 @@ package eu.geclipse.core.simpleTest;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.Socket;
 
 
 /**
@@ -27,6 +29,8 @@ import java.net.InetAddress;
  */
 public class PingTest extends AbstractSimpleTest {
 
+  private static int[] PORTS = new int[]{ 22, 80, 8080, 2170, 2135, 7443, 8085, 8443, 8446, 9003 };
+  
   /**
    * Create a new <code>PingTest</code> from the specified {@link ISimpleTestDescription}.
    * 
@@ -35,6 +39,22 @@ public class PingTest extends AbstractSimpleTest {
    */
   public PingTest ( final ISimpleTestDescription description ) {
     super( description );
+  }
+  
+  private boolean reachPort( final InetAddress address, final int port ) {
+    boolean ret = true;
+    Socket socket = new Socket();
+
+    // set the socket to timeout
+    try {
+      socket.connect( new InetSocketAddress( address, port ), 3000 );
+      socket.close();
+    } catch ( IOException e ) {
+      ret = false;
+    } finally {
+      socket = null; // Make sure that the gc gets this socket
+    }
+    return ret;   
   }
   
   /**
@@ -48,18 +68,29 @@ public class PingTest extends AbstractSimpleTest {
     double ret = -1;
     long start;
     long end;
-
+    
     if ( null != address ) {
       start = System.nanoTime();
       try {
         reached = address.isReachable( 3000 );
       } catch( IOException e ) {
-        // No code needed
+        // Just ignore this
       }
-      end = System.nanoTime();
-    
+      end = System.nanoTime(); 
+
       if ( reached )
         ret = ( ( double ) ( end - start ) ) / 1000000; // Covert from ns to ms
+      else {
+        // Lets try a few ports
+        for ( int i = 0; i < PORTS.length && !reached; ++i ) {
+          start = System.nanoTime();
+          reached = reachPort( address, PORTS[i] );
+        }
+        end = System.nanoTime(); 
+
+        if ( reached )
+            ret = ( ( double ) ( end - start ) ) / 1000000; // Covert from ns to ms
+      }
     }
     
     return ret;

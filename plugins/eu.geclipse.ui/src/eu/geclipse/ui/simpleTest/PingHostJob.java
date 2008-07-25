@@ -110,47 +110,41 @@ public class PingHostJob extends Job {
     for ( i = 0; i < this.numPing && !monitor.isCanceled(); ++i ) {
       this.pingDelay = this.pingTest.ping( this.hostAdr );
 
-        if ( -1 == this.pingDelay ) {
-          ++nFailed;
+      if ( -1 == this.pingDelay ) {
+        ++nFailed;
           
+      if ( !this.display.isDisposed() ) {   
+        this.display.syncExec( new Runnable() {
+          public void run() {
+            if ( !PingHostJob.this.outPut.isDisposed() )
+              PingHostJob.this.outPut.append( hostName + ": "   //$NON-NLS-1$
+                                + Messages.getString( "PingTestDialog.notReachable" )  //$NON-NLS-1$
+                                + lineDelimiter );
+          }
+        } );
+        }
+      }
+      else {
+        ++nOk;
+        if ( this.pingDelay < min )
+          min = this.pingDelay;
+        if ( this.pingDelay > max )
+          max = this.pingDelay;
+        avg += this.pingDelay;
+
         if ( !this.display.isDisposed() ) {   
           this.display.syncExec( new Runnable() {
             public void run() {
               if ( !PingHostJob.this.outPut.isDisposed() )
-                PingHostJob.this.outPut.append( hostName + ": "   //$NON-NLS-1$
-                                  + Messages.getString( "PingTestDialog.notReachable" )  //$NON-NLS-1$
-                                  + lineDelimiter );
+                PingHostJob.this.outPut.append( hostName + ": "  //$NON-NLS-1$
+                            + Messages.getString( "PingTestDialog.time" )  //$NON-NLS-1$
+                            + df.format( pingDelay ) + " ms"  //$NON-NLS-1$
+                            + PingHostJob.this.lineDelimiter );
             }
           } );
-          }
-        }
-        else {
-          ++nOk;
-          if ( this.pingDelay < min )
-            min = this.pingDelay;
-          if ( this.pingDelay > max )
-            max = this.pingDelay;
-          avg += this.pingDelay;
-
-          if ( !this.display.isDisposed() ) {   
-            this.display.syncExec( new Runnable() {
-              public void run() {
-                if ( !PingHostJob.this.outPut.isDisposed() )
-                  PingHostJob.this.outPut.append( hostName + ": "  //$NON-NLS-1$
-                              + Messages.getString( "PingTestDialog.time" )  //$NON-NLS-1$
-                              + df.format( pingDelay ) + " ms"  //$NON-NLS-1$
-                              + PingHostJob.this.lineDelimiter );
-              }
-            } );
-          }      
-        }
-
-      try {
-        Thread.sleep( this.timeOut * 1000 );
-      } catch (InterruptedException e) {
-        // Don't need to do anything
+        }      
       }
-      
+
       this.itemString[ 1 ] = Integer.toString( i + 1 );
 
       if ( !this.display.isDisposed() ) {   
@@ -164,6 +158,14 @@ public class PingHostJob extends Job {
           }
         } );
       }
+
+      // Don't want to wait the last time
+      if ( i < this.numPing - 1 )
+      try {
+          Thread.sleep( this.timeOut * 1000 );
+        } catch (InterruptedException e) {
+          // Don't need to do anything
+        }
 
       monitor.worked( 1 );
     }
