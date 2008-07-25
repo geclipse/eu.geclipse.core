@@ -73,6 +73,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * </p>
  *
  * @generated
+ * @deprecated This class is deprecated. Substitute with the respective class in package eu.geclipse.jsdl.model.base.impl
  */
 public class ResourcesTypeImpl extends EObjectImpl implements ResourcesType 
 {

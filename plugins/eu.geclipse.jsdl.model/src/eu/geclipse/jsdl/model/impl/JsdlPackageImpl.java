@@ -60,6 +60,7 @@ import org.eclipse.emf.ecore.xml.type.XMLTypePackage;
  * An implementation of the model <b>Package</b>.
  * <!-- end-user-doc -->
  * @generated
+ * @deprecated This class is deprecated. Substitute with the respective class in package eu.geclipse.jsdl.model.base.impl
  */
 public class JsdlPackageImpl extends EPackageImpl implements JsdlPackage 
 {

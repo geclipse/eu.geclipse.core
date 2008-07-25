@@ -15,6 +15,7 @@ import org.eclipse.emf.ecore.EFactory;
  * <!-- end-user-doc -->
  * @see eu.geclipse.jsdl.model.JsdlPackage
  * @generated
+ * @deprecated This interface is deprecated. Substitute with the respective class in package eu.geclipse.jsdl.model.base
  */
 public interface JsdlFactory extends EFactory
 {

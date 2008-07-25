@@ -40,6 +40,7 @@ import org.eclipse.emf.ecore.util.EDataTypeEList;
  * </p>
  *
  * @generated
+ * @deprecated This class is deprecated. Substitute with the respective class in package eu.geclipse.jsdl.model.base.impl
  */
 public class CandidateHostsTypeImpl extends EObjectImpl implements CandidateHostsType 
 {

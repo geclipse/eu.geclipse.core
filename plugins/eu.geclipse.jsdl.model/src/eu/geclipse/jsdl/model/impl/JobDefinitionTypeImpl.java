@@ -46,6 +46,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * </ul>
  * </p>
  *
+ * @deprecated This class is deprecated. Substitute with the respective class in package eu.geclipse.jsdl.model.base.impl
  * @generated
  */
 public class JobDefinitionTypeImpl extends EObjectImpl implements JobDefinitionType 

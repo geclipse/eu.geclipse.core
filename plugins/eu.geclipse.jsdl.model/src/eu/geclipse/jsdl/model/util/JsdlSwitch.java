@@ -35,6 +35,7 @@ import org.eclipse.emf.ecore.EObject;
  * <!-- end-user-doc -->
  * @see eu.geclipse.jsdl.model.JsdlPackage
  * @generated
+ * @deprecated This class is deprecated. Substitute with the respective class in package eu.geclipse.jsdl.model.base.util
  */
 public class JsdlSwitch 
 {

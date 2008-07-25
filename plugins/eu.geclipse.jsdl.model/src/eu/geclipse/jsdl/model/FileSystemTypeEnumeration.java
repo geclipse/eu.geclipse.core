@@ -20,6 +20,7 @@ import org.eclipse.emf.common.util.AbstractEnumerator;
  * @see eu.geclipse.jsdl.model.JsdlPackage#getFileSystemTypeEnumeration()
  * @model extendedMetaData="name='FileSystemTypeEnumeration'"
  * @generated
+ * @deprecated This interface is deprecated. Substitute with the respective class in package eu.geclipse.jsdl.model.base
  */
 public final class FileSystemTypeEnumeration extends AbstractEnumerator {
   /**

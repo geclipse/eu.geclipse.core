@@ -31,6 +31,7 @@ import org.eclipse.emf.ecore.util.FeatureMap;
  * @see eu.geclipse.jsdl.model.JsdlPackage#getFileSystemType()
  * @model extendedMetaData="name='FileSystem_Type' kind='elementOnly'"
  * @generated
+ * @deprecated This interface is deprecated. Substitute with the respective class in package eu.geclipse.jsdl.model.base
  */
 public interface FileSystemType extends EObject
 {

@@ -26,6 +26,7 @@ import org.eclipse.emf.ecore.util.FeatureMap;
  *
  * @see eu.geclipse.jsdl.model.JsdlPackage#getCPUArchitectureType()
  * @model extendedMetaData="name='CPUArchitecture_Type' kind='elementOnly'"
+ * @deprecated This interface is deprecated. Substitute with the respective class in package eu.geclipse.jsdl.model.base
  * @generated
  */
 public interface CPUArchitectureType extends EObject

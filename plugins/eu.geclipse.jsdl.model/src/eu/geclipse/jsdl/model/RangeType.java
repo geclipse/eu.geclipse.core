@@ -27,6 +27,7 @@ import org.eclipse.emf.ecore.util.FeatureMap;
  * @see eu.geclipse.jsdl.model.JsdlPackage#getRangeType()
  * @model extendedMetaData="name='Range_Type' kind='elementOnly'"
  * @generated
+ * @deprecated This interface is deprecated. Substitute with the respective class in package eu.geclipse.jsdl.model.base
  */
 public interface RangeType extends EObject
 {

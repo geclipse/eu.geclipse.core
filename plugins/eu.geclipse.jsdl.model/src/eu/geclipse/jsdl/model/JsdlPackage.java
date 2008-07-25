@@ -27,6 +27,7 @@ import org.eclipse.emf.ecore.EReference;
  * @see eu.geclipse.jsdl.model.JsdlFactory
  * @model kind="package"
  * @generated
+ * @deprecated This interface is deprecated. Substitute with the respective class in package eu.geclipse.jsdl.model.base
  */
 public interface JsdlPackage extends EPackage
 {

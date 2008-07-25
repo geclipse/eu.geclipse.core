@@ -74,6 +74,7 @@ import org.eclipse.emf.ecore.util.FeatureMap;
  * @see eu.geclipse.jsdl.model.JsdlPackage#getDocumentRoot()
  * @model extendedMetaData="name='' kind='mixed'"
  * @generated
+ * @deprecated This interface is deprecated. Substitute with the respective class in package eu.geclipse.jsdl.model.base
  */
 public interface DocumentRoot extends EObject
 {

@@ -27,6 +27,7 @@ import org.eclipse.emf.ecore.util.FeatureMap;
  * @see eu.geclipse.jsdl.model.JsdlPackage#getBoundaryType()
  * @model extendedMetaData="name='Boundary_Type' kind='simple'"
  * @generated
+ * @deprecated This interface is deprecated. Substitute with the respective class in package eu.geclipse.jsdl.model.base
  */
 public interface BoundaryType extends EObject
 {

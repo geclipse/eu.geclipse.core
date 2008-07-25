@@ -27,6 +27,7 @@ import org.eclipse.emf.ecore.util.FeatureMap;
  * @see eu.geclipse.jsdl.model.JsdlPackage#getOperatingSystemTypeType()
  * @model extendedMetaData="name='OperatingSystemType_Type' kind='elementOnly'"
  * @generated
+ * @deprecated This interface is deprecated. Substitute with the respective class in package eu.geclipse.jsdl.model.base
  */
 public interface OperatingSystemTypeType extends EObject
 {

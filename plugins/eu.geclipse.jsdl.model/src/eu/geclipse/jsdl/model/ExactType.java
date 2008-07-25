@@ -27,6 +27,7 @@ import org.eclipse.emf.ecore.util.FeatureMap;
  * @see eu.geclipse.jsdl.model.JsdlPackage#getExactType()
  * @model extendedMetaData="name='Exact_Type' kind='simple'"
  * @generated
+ * @deprecated This interface is deprecated. Substitute with the respective class in package eu.geclipse.jsdl.model.base
  */
 public interface ExactType extends EObject
 {
