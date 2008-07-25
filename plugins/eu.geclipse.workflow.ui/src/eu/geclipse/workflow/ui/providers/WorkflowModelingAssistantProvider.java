@@ -53,16 +53,16 @@ public class WorkflowModelingAssistantProvider extends ModelingAssistantProvider
    * @generated
    */
   @Override
-  public List getTypesForPopupBar( IAdaptable host ) {
+  public List<IElementType> getTypesForPopupBar( IAdaptable host ) {
     IGraphicalEditPart editPart = ( IGraphicalEditPart )host.getAdapter( IGraphicalEditPart.class );
     if( editPart instanceof WorkflowJobEditPart ) {
-      List types = new ArrayList();
+      List<IElementType> types = new ArrayList<IElementType>();
       types.add( WorkflowElementTypes.IOutputPort_2001 );
       types.add( WorkflowElementTypes.IInputPort_2002 );
       return types;
     }
     if( editPart instanceof WorkflowEditPart ) {
-      List types = new ArrayList();
+      List<IElementType> types = new ArrayList<IElementType>();
       types.add( WorkflowElementTypes.IWorkflowJob_1001 );
       return types;
     }
@@ -73,10 +73,10 @@ public class WorkflowModelingAssistantProvider extends ModelingAssistantProvider
    * @generated
    */
   @Override
-  public List getRelTypesOnSource( IAdaptable source ) {
+  public List<IElementType> getRelTypesOnSource( IAdaptable source ) {
     IGraphicalEditPart sourceEditPart = ( IGraphicalEditPart )source.getAdapter( IGraphicalEditPart.class );
     if( sourceEditPart instanceof OutputPortEditPart ) {
-      List types = new ArrayList();
+      List<IElementType> types = new ArrayList<IElementType>();
       types.add( WorkflowElementTypes.ILink_3001 );
       return types;
     }
@@ -87,10 +87,10 @@ public class WorkflowModelingAssistantProvider extends ModelingAssistantProvider
    * @generated
    */
   @Override
-  public List getRelTypesOnTarget( IAdaptable target ) {
+  public List<IElementType> getRelTypesOnTarget( IAdaptable target ) {
     IGraphicalEditPart targetEditPart = ( IGraphicalEditPart )target.getAdapter( IGraphicalEditPart.class );
     if( targetEditPart instanceof InputPortEditPart ) {
-      List types = new ArrayList();
+      List<IElementType> types = new ArrayList<IElementType>();
       types.add( WorkflowElementTypes.ILink_3001 );
       return types;
     }
@@ -101,12 +101,12 @@ public class WorkflowModelingAssistantProvider extends ModelingAssistantProvider
    * @generated
    */
   @Override
-  public List getRelTypesOnSourceAndTarget( IAdaptable source, IAdaptable target )
+  public List<IElementType> getRelTypesOnSourceAndTarget( IAdaptable source, IAdaptable target )
   {
     IGraphicalEditPart sourceEditPart = ( IGraphicalEditPart )source.getAdapter( IGraphicalEditPart.class );
     IGraphicalEditPart targetEditPart = ( IGraphicalEditPart )target.getAdapter( IGraphicalEditPart.class );
     if( sourceEditPart instanceof OutputPortEditPart ) {
-      List types = new ArrayList();
+      List<IElementType> types = new ArrayList<IElementType>();
       if( targetEditPart instanceof InputPortEditPart ) {
         types.add( WorkflowElementTypes.ILink_3001 );
       }
@@ -119,11 +119,11 @@ public class WorkflowModelingAssistantProvider extends ModelingAssistantProvider
    * @generated
    */
   @Override
-  public List getTypesForSource( IAdaptable target, IElementType relationshipType )
+  public List<IElementType> getTypesForSource( IAdaptable target, IElementType relationshipType )
   {
     IGraphicalEditPart targetEditPart = ( IGraphicalEditPart )target.getAdapter( IGraphicalEditPart.class );
     if( targetEditPart instanceof InputPortEditPart ) {
-      List types = new ArrayList();
+      List<IElementType> types = new ArrayList<IElementType>();
       if( relationshipType == WorkflowElementTypes.ILink_3001 ) {
         types.add( WorkflowElementTypes.IOutputPort_2001 );
       }
@@ -136,11 +136,11 @@ public class WorkflowModelingAssistantProvider extends ModelingAssistantProvider
    * @generated
    */
   @Override
-  public List getTypesForTarget( IAdaptable source, IElementType relationshipType )
+  public List<IElementType> getTypesForTarget( IAdaptable source, IElementType relationshipType )
   {
     IGraphicalEditPart sourceEditPart = ( IGraphicalEditPart )source.getAdapter( IGraphicalEditPart.class );
     if( sourceEditPart instanceof OutputPortEditPart ) {
-      List types = new ArrayList();
+      List<IElementType> types = new ArrayList<IElementType>();
       if( relationshipType == WorkflowElementTypes.ILink_3001 ) {
         types.add( WorkflowElementTypes.IInputPort_2002 );
       }
@@ -168,7 +168,7 @@ public class WorkflowModelingAssistantProvider extends ModelingAssistantProvider
   /**
    * @generated
    */
-  protected EObject selectExistingElement( IAdaptable host, Collection types ) {
+  protected EObject selectExistingElement( IAdaptable host, Collection<IElementType> types ) {
     if( types.isEmpty() ) {
       return null;
     }
@@ -177,8 +177,8 @@ public class WorkflowModelingAssistantProvider extends ModelingAssistantProvider
       return null;
     }
     Diagram diagram = ( Diagram )editPart.getRoot().getContents().getModel();
-    Collection elements = new HashSet();
-    for( Iterator it = diagram.getElement().eAllContents(); it.hasNext(); ) {
+    Collection<EObject> elements = new HashSet<EObject>();
+    for( Iterator<?> it = diagram.getElement().eAllContents(); it.hasNext(); ) {
       EObject element = ( EObject )it.next();
       if( isApplicableElement( element, types ) ) {
         elements.add( element );
@@ -187,13 +187,13 @@ public class WorkflowModelingAssistantProvider extends ModelingAssistantProvider
     if( elements.isEmpty() ) {
       return null;
     }
-    return selectElement( ( EObject[] )elements.toArray( new EObject[ elements.size() ] ) );
+    return selectElement( elements.toArray( new EObject[ elements.size() ] ) );
   }
 
   /**
    * @generated
    */
-  protected boolean isApplicableElement( EObject element, Collection types ) {
+  protected boolean isApplicableElement( EObject element, Collection<IElementType> types ) {
     IElementType type = ElementTypeRegistry.getInstance().getElementType( element );
     return types.contains( type );
   }
