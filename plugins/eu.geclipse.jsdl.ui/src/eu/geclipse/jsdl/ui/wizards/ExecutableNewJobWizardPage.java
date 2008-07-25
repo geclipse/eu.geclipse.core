@@ -33,10 +33,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -46,6 +43,7 @@ import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.jface.wizard.WizardSelectionPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.ModifyEvent;
@@ -56,7 +54,6 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
@@ -114,7 +111,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
   /**
    * Holds name of the application
    */
-  private Combo applicationName;
+  private CCombo applicationName;
   private ArrayList<WizardPage> internalPages;
   private BasicWizardPart basicNode;
   private Button chooseButton;
@@ -227,7 +224,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
     layout.horizontalAlignment = GridData.FILL;
     applicationNameLabel.setLayoutData( layout );
     // Combo - application name
-    this.applicationName = new Combo( mainComp, SWT.NONE );
+    this.applicationName = new CCombo( mainComp, SWT.NONE );
     layout = new GridData();
     layout.horizontalAlignment = GridData.FILL;
     layout.horizontalSpan = 2;
