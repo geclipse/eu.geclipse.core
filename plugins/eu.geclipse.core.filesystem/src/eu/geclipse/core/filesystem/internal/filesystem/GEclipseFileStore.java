@@ -31,6 +31,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.SubMonitor;
 
 import eu.geclipse.core.ICoreProblems;
@@ -106,7 +107,8 @@ public class GEclipseFileStore
       this.parent = null;
     }
     this.slave = slave;
-    this.fileInfo = new FileInfo();
+    this.fileInfo = new FileInfo( getNameWithoutConnect( slave ) );    
+    
     clearActive( FETCH_CHILDREN_ACTIVE_POLICY | FETCH_INFO_ACTIVE_POLICY );
   }
 
@@ -147,15 +149,14 @@ public class GEclipseFileStore
     this.fileInfo = info;
     clearActive( FETCH_CHILDREN_ACTIVE_POLICY | FETCH_INFO_ACTIVE_POLICY );
   }
-  /*
+
+  /**
    * Activate this store. After a store is activated the
    * {@link #childNames(int, IProgressMonitor)} method will delegate its
    * work to the slave store. If {@link #childNames(int, IProgressMonitor)}
    * is called without activating the store the cached names are returned.
+   * @param policy
    */
-  /*public void activate() {
-    setActive( true );
-  }*/
   public void setActive( final int policy ) {
     this.active |= policy;
   }
@@ -168,6 +169,7 @@ public class GEclipseFileStore
    * the input stream the cached stream is returned instead of the normal
    * one. To release the cache consumers have to call {@link #discardCachedInputStream()}
    * in order to free the used system resources.
+   * @param cElement 
    * 
    * @param monitor A {@link IProgressMonitor} used to monitor the caching
    * procedure.
@@ -288,12 +290,12 @@ public class GEclipseFileStore
   
   /**
    * If the input stream of this file store was formerly cached with
-   * {@link #cacheInputStream(IProgressMonitor)} this method releases
+   * {@link #cacheInputStream(IGridConnectionElement, IProgressMonitor)} this method releases
    * the cache and frees all used system resources. Subsequent calls to
    * {@link #openInputStream(int, IProgressMonitor)} return the original
    * stream of the slave instead of a cached one.
    * 
-   * @see #cacheInputStream(IProgressMonitor)
+   * @see #cacheInputStream(IGridConnectionElement, IProgressMonitor)
    */
   public void discardCachedInputStream() {
     if ( this.ciStream != null ) {
@@ -543,5 +545,22 @@ public class GEclipseFileStore
     }
     return result;
   }
+  
+  private String getNameWithoutConnect( final IFileStore slaveStore ) {
+    String name = null;
+    
+    String path = slaveStore.toURI().getPath();
+    if( path != null ) {
+      name = new Path( path ).lastSegment();
+    }
+    
+    if( name == null 
+        || name.length() == 0 ) {
+      name = Messages.getString("GEclipseFileStore.filenameUnknown"); // eclipse workspace doesn't like resources with name "" //$NON-NLS-1$
+    }        
+    
+    return name;
+  }
+  
 
 }
