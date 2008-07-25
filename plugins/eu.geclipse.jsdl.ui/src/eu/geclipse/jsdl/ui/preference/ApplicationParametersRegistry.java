@@ -27,9 +27,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.management.monitor.Monitor;
+
 import org.eclipse.compare.IContentChangeListener;
 import org.eclipse.compare.IContentChangeNotifier;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -135,36 +138,46 @@ public class ApplicationParametersRegistry implements IContentChangeNotifier {
     return result;
   }
 
-  public void updateApplicationsParameters( final IVirtualOrganization vo )
+  public void updateApplicationsParameters( final IVirtualOrganization vo,
+                                            final IProgressMonitor monitor )
     throws ProblemException
   {
+    monitor.beginTask( "Fetching information", IProgressMonitor.UNKNOWN );
     if( vo == null ) {
       IGridElement[] els;
       els = GridModel.getVoManager().getChildren( new NullProgressMonitor() );
+      monitor.worked( 1 );
       for( IGridElement el : els ) {
         if( el instanceof IVirtualOrganization ) {
           IVirtualOrganization singleVO = ( IVirtualOrganization )el;
           List<IGridApplicationParameters> params = new ArrayList<IGridApplicationParameters>();
           IGridResource[] resources = null;
+          monitor.setTaskName( "Fetching list of applications" );
           resources = singleVO.getAvailableResources( GridResourceCategoryFactory.getCategory( GridResourceCategoryFactory.ID_APPLICATIONS ),
                                                       false,
                                                       new NullProgressMonitor() );
+          monitor.worked( 1 );
           if( resources != null ) {
             for( IGridResource param : resources ) {
+              monitor.setTaskName( "Proccessing application's data" );
               IGridApplicationParameters parameter = ( ( IGridApplication )param ).getApplicationParameters();
               if( parameter != null ) {
                 params.add( parameter );
               }
+              monitor.worked( 1 );
             }
           } else {
             throw new ProblemException( ICoreProblems.MODEL_FETCH_CHILDREN_FAILED,
                                         "Cannot fetch resources",
                                         Activator.PLUGIN_ID );
           }
+          monitor.setTaskName( "Updating applications registry" );
           replaceParametersForVO( singleVO, params );
+          monitor.worked( 1 );
         }
       }
     } else {
+      monitor.beginTask( "Fetching list of applications", IProgressMonitor.UNKNOWN );
       List<IGridApplicationParameters> params = new ArrayList<IGridApplicationParameters>();
       IGridResource[] resources = null;
       resources = vo.getAvailableResources( GridResourceCategoryFactory.getCategory( GridResourceCategoryFactory.ID_APPLICATIONS ),
@@ -172,17 +185,21 @@ public class ApplicationParametersRegistry implements IContentChangeNotifier {
                                             new NullProgressMonitor() );
       if( resources != null ) {
         for( IGridResource param : resources ) {
+          monitor.setTaskName( "Proccessing application's data" );
           IGridApplicationParameters parameter = ( ( IGridApplication )param ).getApplicationParameters();
           if( parameter != null ) {
             params.add( parameter );
           }
+          monitor.worked( 1 );
         }
       } else {
         throw new ProblemException( ICoreProblems.MODEL_FETCH_CHILDREN_FAILED,
                                     "Cannot fetch resources",
                                     Activator.PLUGIN_ID );
       }
+      monitor.setTaskName( "Updating applications registry" );
       replaceParametersForVO( vo, params );
+      monitor.worked( 1 );
     }
   }
 

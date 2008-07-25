@@ -33,7 +33,10 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -131,7 +134,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
 
   /**
    * Creates new wizard page
-   *
+   * 
    * @param pageName name of the page
    * @param internalPages
    */
@@ -142,9 +145,6 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
     setTitle( Messages.getString( "ExecutableNewJobWizardPage.title" ) ); //$NON-NLS-1$
     setDescription( Messages.getString( "ExecutableNewJobWizardPage.description" ) ); //$NON-NLS-1$
     this.internalPages = internalPages;
-    // setMessage( Messages.getString(
-    // "ExecutableNewJobWizardPage.fetching_apps" ), //$NON-NLS-1$
-    // IMessageProvider.WARNING );
   }
 
   @Override
@@ -436,7 +436,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
           ExecutableNewJobWizardPage.this.firstTime = false;
           try {
             ApplicationParametersRegistry.getInstance()
-              .updateApplicationsParameters( vo );
+              .updateApplicationsParameters( vo, monitor );
           } catch( ProblemException e ) {
             ProblemDialog.openProblem( getShell(),
                                        Messages.getString( "ExecutableNewJobWizardPage.error_fetching_title" ), //$NON-NLS-1$
@@ -494,7 +494,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
 
   /**
    * Returns name of executable to run on grid
-   *
+   * 
    * @return name of executable
    */
   public String getExecutableFile() {
@@ -504,7 +504,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
 
   /**
    * Returns application name to be run on the grid
-   *
+   * 
    * @return name of the application
    */
   String getApplicationName() {
@@ -551,7 +551,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
 
   /**
    * Method to access application specific page
-   *
+   * 
    * @return instance of {@link ApplicationSpecificPage} or null if this page
    *         wasn't used by wizard
    */
@@ -568,7 +568,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
   /**
    * Returns list of pages created from parsing XML with description of
    * additional pages specific to application
-   *
+   * 
    * @return list of application specific pages
    */
   public List<IApplicationSpecificPage> getApplicationSpecificPages() {
@@ -586,7 +586,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
 
   /**
    * Method to access value of field holding path to stdin file
-   *
+   * 
    * @return String representing remote path to stdin file
    */
   public String getStdin() {
@@ -595,7 +595,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
 
   /**
    * Method to access value of a field holding path to stdout
-   *
+   * 
    * @return String representing remote path to stdout file
    */
   public String getStdout() {
@@ -604,7 +604,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
 
   /**
    * Method to access job's arguments given by user.
-   *
+   * 
    * @return list of arguments
    */
   public ArrayList<String> getArgumentsList() {
@@ -618,7 +618,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
 
   /**
    * Method to access basic JSDL file used by application specific settings.
-   *
+   * 
    * @return object representing information kept in basic JSDL file or
    *         <code>null</code> if no such file is present.
    */
@@ -678,7 +678,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
 
   /**
    * Method to access value of path to standard error file
-   *
+   * 
    * @return string value kept in standard error text field
    */
   public String getStderr() {

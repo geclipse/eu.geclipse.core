@@ -25,6 +25,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -101,6 +102,7 @@ public class ApplicationParametersPreferencePage extends PreferencePage
 
   @Override
   protected Control createContents( final Composite parent ) {
+    
     initializeDialogUnits( parent );
     noDefaultAndApplyButton();
     Composite mainComp = new Composite( parent, SWT.NONE );
@@ -139,13 +141,6 @@ public class ApplicationParametersPreferencePage extends PreferencePage
     TableColumn jsdlColumn = new TableColumn( this.appsTable, SWT.LEFT );
     jsdlColumn.setText( "JSDL file" ); //$NON-NLS-1$
     this.appsViewer = new TableViewer( this.appsTable );
-    // try {
-    // ApplicationParametersRegistry.getInstance()
-    // .updateApplicationsParameters( null );
-    // } catch( ProblemException e1 ) {
-    // ProblemDialog.openProblem( getShell(), "Error fetching information",
-    // "Could not access applications' parameters", e1 );
-    // }
     IStructuredContentProvider contentProvider = new ApplicationSpecificPageContentProvider();
     this.appsViewer.setContentProvider( contentProvider );
     this.appsViewer.setLabelProvider( new ApplicationSpecificLabelProvider() );
@@ -230,14 +225,21 @@ public class ApplicationParametersPreferencePage extends PreferencePage
       @Override
       protected IStatus run( final IProgressMonitor monitor ) {
         IStatus result = Status.OK_STATUS;
+        monitor.beginTask( "name", IProgressMonitor.UNKNOWN );
+
         try {
-          ApplicationParametersRegistry.getInstance()
-            .updateApplicationsParameters( null );
+          if( !monitor.isCanceled() ) {
+            ApplicationParametersRegistry.getInstance()
+              .updateApplicationsParameters( null, new SubProgressMonitor(monitor, IProgressMonitor.UNKNOWN) );
+            monitor.worked( 1 );
+          }
         } catch( ProblemException problemE ) {
           result = new Status( Status.ERROR,
                                Activator.PLUGIN_ID,
                                "Error while fetching applications' information.",
                                problemE );
+        } finally {
+          monitor.done();
         }
         return result;
       }
