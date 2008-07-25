@@ -50,15 +50,6 @@ public class GridGlueStorage_Test {
     Assert.assertNotNull( storage );
   }
 
-  /**tests the method {@link GridGlueStorage#getAccessTokens()}
-   * 
-   */
-  @Test
-  public void testGetAccessTokens() {
-    URI[] urilist = storage.getAccessTokens();
-    Assert.assertNotNull( urilist );
-  }
-
   /**tests the method {@link GridGlueStorage#getGlueSe()}
    * 
    */

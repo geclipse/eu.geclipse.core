@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -13,6 +13,7 @@
  *    Mathias Stuempert - initial API and implementation
  *    Harald Gjermundrod - added the getHostName method
  *****************************************************************************/
+
 package eu.geclipse.info.model;
 
 import java.net.URI;
@@ -28,6 +29,7 @@ import eu.geclipse.info.glue.GlueQuery;
 import eu.geclipse.info.glue.GlueSA;
 import eu.geclipse.info.glue.GlueSE;
 import eu.geclipse.info.glue.GlueSEAccessProtocol;
+
 
 /**
  * Implementation of the {@link eu.geclipse.core.model.IGridElement} interface
@@ -46,49 +48,6 @@ public class GridGlueStorage extends GridGlueElement implements IGridStorage {
     super( parent, glueSE );
   }
 
-  public URI[] getAccessTokens() {
-    ArrayList<URI> uriList = new ArrayList<URI>();
-    IVirtualOrganization vo = getVo();
-    for( GlueSA sa : getGlueSe().glueSAList ) {
-      if( ( vo == null ) || GlueQuery.saSupportsVO( sa, vo.getName() ) ) {
-        try {
-          String host = getGlueSe().UniqueID;
-          List<GlueSEAccessProtocol> list = getGlueSe().glueSEAccessProtocolList;
-          if( ( list != null ) && !list.isEmpty() ) {
-            int protocolCount = list.size();
-            for( int i = 0; i < protocolCount; i++ ) {
-              GlueSEAccessProtocol ap = getGlueSe().glueSEAccessProtocolList.get( i );
-              String scheme = null;
-              if( ap.Type.toLowerCase().startsWith( "srm" ) ) { //$NON-NLS-1$
-                scheme = ap.Type.toLowerCase();
-              } else {
-                scheme = ap.Type;
-              }
-              String newPath = sa.Path.endsWith( "/" ) ? sa.Path : sa.Path + "/"; //$NON-NLS-1$ //$NON-NLS-2$
-              uriList.add( new URI( scheme,
-                                    null,
-                                    host,
-                                    ap.Port.intValue(),
-                                    newPath,
-                                    null,
-                                    null ) );
-            }
-          }
-        } catch( RuntimeException e ) {
-          // Just catch and do nothing here
-        } catch( URISyntaxException e ) {
-          // Just catch and do nothing here
-        }
-      }
-    }
-    URI[] result = new URI[ uriList.size() ];
-    int i = 0;
-    for( URI uri : uriList ) {
-      result[ i ] = uri;
-      ++i;
-    }
-    return result;
-  }
 
   /**
    * Convenience method for getting the glue SE.
@@ -200,7 +159,7 @@ public class GridGlueStorage extends GridGlueElement implements IGridStorage {
     if( apList != null ) {
       for ( GlueSEAccessProtocol ap : apList ) {
         String scheme = getAccessProtocolScheme( ap );
-        if ( "srm".equals( scheme ) ) {
+        if ( "srm".equals( scheme ) ) { //$NON-NLS-1$
           result = getMountPoint( ap );
           break;
         }
@@ -213,7 +172,7 @@ public class GridGlueStorage extends GridGlueElement implements IGridStorage {
   
   private String getAccessProtocolUID( final GlueSEAccessProtocol ap ) {
     String scheme = getAccessProtocolScheme( ap );
-    return String.format( "%s:%d", scheme, ap.Port );
+    return String.format( "%s:%d", scheme, ap.Port ); //$NON-NLS-1$
   }
   
   private String getAccessProtocolScheme( final GlueSEAccessProtocol ap ) {
@@ -231,7 +190,7 @@ public class GridGlueStorage extends GridGlueElement implements IGridStorage {
     
     try {
       URI uri = new URI( scheme, null, host, port, path, null, null );
-      String name = String.format( "%s @ %s.%d", scheme, host, port );
+      String name = String.format( "%s @ %s.%d", scheme, host, port ); //$NON-NLS-1$
       result = new MountPoint( name, uri );
     } catch ( URISyntaxException uriExc ) {
       // Just catch and ignore
@@ -249,8 +208,8 @@ public class GridGlueStorage extends GridGlueElement implements IGridStorage {
     for ( GlueSA sa : getGlueSe().glueSAList ) {
       if( ( vo == null ) || GlueQuery.saSupportsVO( sa, vo.getName() ) ) {
         path = sa.Path;
-        if ( ! path.endsWith( "/" ) ) {
-          path += "/";
+        if ( ! path.endsWith( "/" ) ) { //$NON-NLS-1$
+          path += "/"; //$NON-NLS-1$
         }
         break;
       }
