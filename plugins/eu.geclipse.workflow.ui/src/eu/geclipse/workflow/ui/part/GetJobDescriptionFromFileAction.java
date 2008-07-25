@@ -17,14 +17,12 @@
 package eu.geclipse.workflow.ui.part;
 
 import java.io.InputStream;
-import java.net.URISyntaxException;
 
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.operations.OperationHistoryFactory;
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.filesystem.URIUtil;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
@@ -62,12 +60,15 @@ public class GetJobDescriptionFromFileAction implements IObjectActionDelegate {
    * The WorkflowJobEditPart that has been selected.
    */
   protected WorkflowJobEditPart mySelectedElement;
+  
   /**
    * 
    */
   private Shell myShell;
-  String jobDescriptionInJSDL = null;
-  String fileName = null;
+  private String jobDescriptionInJSDL = null;
+  private String fileName = null;
+  private IFileStore wfRootFileStore = null;
+  private String[] dirs = null;
 
   public void setActivePart( IAction action, IWorkbenchPart targetPart ) {
     this.myShell = targetPart.getSite().getShell();
@@ -90,9 +91,9 @@ public class GetJobDescriptionFromFileAction implements IObjectActionDelegate {
     Resource res = resourceSet.getResources().get( 0 );
     URI wfRootUri = res.getURI();
     String wfRootPath = wfRootUri.path();
-    String[] dirs = wfRootPath.split( "/" ); //$NON-NLS-1$
+    dirs = wfRootPath.split( "/" ); //$NON-NLS-1$
     String projectName = dirs[2];
-    IFileStore wfRootFileStore = GridModel.getRoot().getFileStore().getChild( projectName );
+    wfRootFileStore = GridModel.getRoot().getFileStore().getChild( projectName );
 	
 	dialog.setFilterPath( wfRootFileStore.toString() );
 
@@ -110,12 +111,20 @@ public class GetJobDescriptionFromFileAction implements IObjectActionDelegate {
 	      IFile jsdlTarget = ResourcesPlugin.getWorkspace().getRoot().findFilesForLocationURI( targetUri )[0];
 	      // now check if it exists in workflow directory, and copy it from source if not	      
 	      try {
-	        if ( jsdlTarget.exists() ) {
-	          // deal with existing files somehow?
-	          jsdlSource.copy( jsdlTarget.getFullPath(), true, null );
-	        } else {
-	          jsdlSource.copy( jsdlTarget.getFullPath(), true, null );
-	        }
+	    	  // no need to copy if the file selected is in .workflow folder anyway
+	    	if ( !jsdlTarget.equals(jsdlSource)) {
+	    		// deal with existing files somehow? change target to append [n] to filename
+	    		int numTarget = findJsdlTarget( jsdlTarget );
+		        if ( numTarget > 0 ) {
+		          String targetNamePart = jsdlTarget.getName().split("\\.")[0];
+		          String newTargetName = targetNamePart + "[" + numTarget + "]" + ".jsdl";
+		          // make new jsdlTarget
+		          targetUri = wfRootFileStore.getChild(dirs[3]).getChild(dirs[4]).getChild( newTargetName ).toURI();    	
+			      jsdlTarget = ResourcesPlugin.getWorkspace().getRoot().findFilesForLocationURI( targetUri )[0];        		          		          		       
+		        } 
+		      jsdlSource.copy( jsdlTarget.getFullPath(), true, null );
+		        
+	    	}
 	      } catch ( CoreException ex ) {
 	        // ignore for now. naughty!
 	      }
@@ -123,6 +132,22 @@ public class GetJobDescriptionFromFileAction implements IObjectActionDelegate {
       	updateWorkflowJobDescription();
       }
     }
+  }
+  
+  private int findJsdlTarget( IFile jsdlTarget ) {
+	  // search through the .workflow directory for the target name and target[n] names to work out how many exist
+	  int numTarget = 0;
+	  while(jsdlTarget.exists()) {
+          String targetNamePart = jsdlTarget.getName().split("\\.")[0];
+          String newTargetName = "";
+          if (targetNamePart.endsWith("[" + numTarget + "]")) {
+        	  targetNamePart = targetNamePart.substring(0, (targetNamePart.length() - ("[" + numTarget + "]").length()));        	  
+          }
+          newTargetName = targetNamePart + "[" + ++numTarget + "]" + ".jsdl";         
+		  java.net.URI targetUri = wfRootFileStore.getChild(dirs[3]).getChild(dirs[4]).getChild( newTargetName ).toURI();    	
+	      jsdlTarget = ResourcesPlugin.getWorkspace().getRoot().findFilesForLocationURI( targetUri )[0];		  
+	  }
+	  return numTarget;
   }
 
   /**
