@@ -164,7 +164,7 @@ public class ApplicationParametersPreferencePage extends PreferencePage
     this.refreshButton = new Button( buttonsComp, SWT.PUSH );
     gData = new GridData( GridData.FILL_BOTH );
     this.refreshButton.setLayoutData( gData );
-    this.refreshButton.setText( "Refresh list" );
+    this.refreshButton.setText( Messages.getString("ApplicationParametersPreferencePage.refresh_list") ); //$NON-NLS-1$
     this.refreshButton.addSelectionListener( new SelectionAdapter() {
 
       @Override
@@ -220,12 +220,12 @@ public class ApplicationParametersPreferencePage extends PreferencePage
   }
 
   void fetchApplications() {
-    Job job = new Job( "Get applications' parameters." ) {
+    Job job = new Job( Messages.getString("ApplicationParametersPreferencePage.get_apps_params") ) { //$NON-NLS-1$
 
       @Override
       protected IStatus run( final IProgressMonitor monitor ) {
         IStatus result = Status.OK_STATUS;
-        monitor.beginTask( "name", IProgressMonitor.UNKNOWN );
+        monitor.beginTask( Messages.getString("ApplicationParametersPreferencePage.updating)_registry"), IProgressMonitor.UNKNOWN ); //$NON-NLS-1$
 
         try {
           if( !monitor.isCanceled() ) {
@@ -234,9 +234,9 @@ public class ApplicationParametersPreferencePage extends PreferencePage
             monitor.worked( 1 );
           }
         } catch( ProblemException problemE ) {
-          result = new Status( Status.ERROR,
+          result = new Status( IStatus.ERROR,
                                Activator.PLUGIN_ID,
-                               "Error while fetching applications' information.",
+                               Messages.getString("ApplicationParametersPreferencePage.error_fetching_apps"), //$NON-NLS-1$
                                problemE );
         } finally {
           monitor.done();

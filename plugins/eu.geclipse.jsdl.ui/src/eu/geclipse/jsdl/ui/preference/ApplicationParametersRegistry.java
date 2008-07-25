@@ -27,8 +27,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.management.monitor.Monitor;
-
 import org.eclipse.compare.IContentChangeListener;
 import org.eclipse.compare.IContentChangeNotifier;
 import org.eclipse.core.runtime.IPath;
@@ -115,6 +113,12 @@ public class ApplicationParametersRegistry implements IContentChangeNotifier {
     }
   }
 
+  /**
+   * Returns the only instance (singleton) of this registry. If this instance
+   * was not created yet - this method will trigger a constructor.
+   * 
+   * @return singleton instance of registry
+   */
   public static ApplicationParametersRegistry getInstance() {
     if( instance == null ) {
       instance = new ApplicationParametersRegistry();
@@ -122,6 +126,19 @@ public class ApplicationParametersRegistry implements IContentChangeNotifier {
     return instance;
   }
 
+  /**
+   * Returns stored values of applications' parameters for given virtual
+   * organization.
+   * 
+   * @param vo virtual organization for which applications' parameters will be
+   *            returned. This value can be <code>null</code> - indicating
+   *            that parameters for all available virtual organizations should
+   *            be returned.
+   * @return list of applications' parameters stored by this registry. To make
+   *         sure you will get the most up-to-date values call
+   *         {@link ApplicationParametersRegistry#updateApplicationsParameters(IVirtualOrganization, IProgressMonitor)}
+   *         before calling this method.
+   */
   public List<IGridApplicationParameters> getApplicationParameters( final IVirtualOrganization vo )
   {
     List<IGridApplicationParameters> result = new ArrayList<IGridApplicationParameters>();
@@ -138,11 +155,27 @@ public class ApplicationParametersRegistry implements IContentChangeNotifier {
     return result;
   }
 
+  /**
+   * Updates registry with most up-to-date values of applications' parameters of
+   * a given virtual organization. Calling this method results in contacting
+   * info service and replacing data held by this data with new values obtained
+   * from this service. </br>This method do not affects applications parameters
+   * defined by user through user interface .
+   * 
+   * @param vo virtual organization for which applications' parameters will be
+   *            updated. This value can be <code>null</code> - indicating that
+   *            parameters for all available virtual organizations should be
+   *            updated.
+   * @param monitor this may be a long-running operation. Parent method calling
+   *            this operation should provide a progress monitor for it.
+   * @throws ProblemException it is thrown in case registry was not able to
+   *             access resources
+   */
   public void updateApplicationsParameters( final IVirtualOrganization vo,
                                             final IProgressMonitor monitor )
     throws ProblemException
   {
-    monitor.beginTask( "Fetching information", IProgressMonitor.UNKNOWN );
+    monitor.beginTask( Messages.getString("ApplicationParametersRegistry.fetching_information"), IProgressMonitor.UNKNOWN ); //$NON-NLS-1$
     if( vo == null ) {
       IGridElement[] els;
       els = GridModel.getVoManager().getChildren( new NullProgressMonitor() );
@@ -152,14 +185,14 @@ public class ApplicationParametersRegistry implements IContentChangeNotifier {
           IVirtualOrganization singleVO = ( IVirtualOrganization )el;
           List<IGridApplicationParameters> params = new ArrayList<IGridApplicationParameters>();
           IGridResource[] resources = null;
-          monitor.setTaskName( "Fetching list of applications" );
+          monitor.setTaskName( Messages.getString("ApplicationParametersRegistry.fetching_apps_list") ); //$NON-NLS-1$
           resources = singleVO.getAvailableResources( GridResourceCategoryFactory.getCategory( GridResourceCategoryFactory.ID_APPLICATIONS ),
                                                       false,
                                                       new NullProgressMonitor() );
           monitor.worked( 1 );
           if( resources != null ) {
             for( IGridResource param : resources ) {
-              monitor.setTaskName( "Proccessing application's data" );
+              monitor.setTaskName( Messages.getString("ApplicationParametersRegistry.processing_apps_data") ); //$NON-NLS-1$
               IGridApplicationParameters parameter = ( ( IGridApplication )param ).getApplicationParameters();
               if( parameter != null ) {
                 params.add( parameter );
@@ -168,16 +201,17 @@ public class ApplicationParametersRegistry implements IContentChangeNotifier {
             }
           } else {
             throw new ProblemException( ICoreProblems.MODEL_FETCH_CHILDREN_FAILED,
-                                        "Cannot fetch resources",
+                                        Messages.getString("ApplicationParametersRegistry.cannot_fetch_resources"), //$NON-NLS-1$
                                         Activator.PLUGIN_ID );
           }
-          monitor.setTaskName( "Updating applications registry" );
+          monitor.setTaskName( Messages.getString("ApplicationParametersRegistry.updating_registry") ); //$NON-NLS-1$
           replaceParametersForVO( singleVO, params );
           monitor.worked( 1 );
         }
       }
     } else {
-      monitor.beginTask( "Fetching list of applications", IProgressMonitor.UNKNOWN );
+      monitor.beginTask( Messages.getString("ApplicationParametersRegistry.fetching_apps_list"), //$NON-NLS-1$
+                         IProgressMonitor.UNKNOWN );
       List<IGridApplicationParameters> params = new ArrayList<IGridApplicationParameters>();
       IGridResource[] resources = null;
       resources = vo.getAvailableResources( GridResourceCategoryFactory.getCategory( GridResourceCategoryFactory.ID_APPLICATIONS ),
@@ -185,7 +219,7 @@ public class ApplicationParametersRegistry implements IContentChangeNotifier {
                                             new NullProgressMonitor() );
       if( resources != null ) {
         for( IGridResource param : resources ) {
-          monitor.setTaskName( "Proccessing application's data" );
+          monitor.setTaskName( Messages.getString("ApplicationParametersRegistry.processing_apps_data") ); //$NON-NLS-1$
           IGridApplicationParameters parameter = ( ( IGridApplication )param ).getApplicationParameters();
           if( parameter != null ) {
             params.add( parameter );
@@ -194,32 +228,13 @@ public class ApplicationParametersRegistry implements IContentChangeNotifier {
         }
       } else {
         throw new ProblemException( ICoreProblems.MODEL_FETCH_CHILDREN_FAILED,
-                                    "Cannot fetch resources",
+                                    Messages.getString("ApplicationParametersRegistry.cannot_fetch_resources"), //$NON-NLS-1$
                                     Activator.PLUGIN_ID );
       }
-      monitor.setTaskName( "Updating applications registry" );
+      monitor.setTaskName( Messages.getString("ApplicationParametersRegistry.updating_registry") ); //$NON-NLS-1$
       replaceParametersForVO( vo, params );
       monitor.worked( 1 );
     }
-  }
-
-  private List<IGridApplicationParameters> getAppsParamsForSingleVO( final IVirtualOrganization vo )
-  {
-    List<IGridApplicationParameters> result = new ArrayList<IGridApplicationParameters>();
-    if( vo != null ) {
-      try {
-        for( IGridResource param : vo.getAvailableResources( GridResourceCategoryFactory.getCategory( GridResourceCategoryFactory.ID_APPLICATIONS ),
-                                                             false,
-                                                             new NullProgressMonitor() ) )
-        {
-          result.add( ( ( IGridApplication )param ).getApplicationParameters() );
-        }
-      } catch( ProblemException e ) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
-      }
-    }
-    return result;
   }
 
   /**
@@ -240,7 +255,6 @@ public class ApplicationParametersRegistry implements IContentChangeNotifier {
   {
     if( list == 1 ) {
       for( IGridApplicationParameters param : newParams ) {
-        // saveObjectToDisc( param );
         this.generatedAppsParamList.add( param );
         notifyListeners();
       }
@@ -447,6 +461,18 @@ public class ApplicationParametersRegistry implements IContentChangeNotifier {
     }
   }
 
+  /**
+   * Method for removing application's parameters from registry. All listeners
+   * are informed that parameter was removed.</br>Note that this can be done
+   * only for user-defined parameters - not for those fetched from info system,
+   * as they are defined on "server side" and removing them from registy might
+   * result in confusion if they are deleted also on "the server side" or not.
+   * 
+   * @param param parameter to be removed
+   * @throws ApplicationParametersException is thrown when registry doesn't
+   *             contain user-defined parameter equal to one passed to this
+   *             method
+   */
   public void removeApplicationParameters( final GridApplicationParameters param )
     throws ApplicationParametersException
   {
@@ -463,6 +489,21 @@ public class ApplicationParametersRegistry implements IContentChangeNotifier {
     }
   }
 
+  /**
+   * Method for adding user-defined parameters to this registry. All listeners
+   * are informed that new parameter was added.
+   * 
+   * @param appName application name
+   * @param appPath application executable path, this is optional and may be
+   *            <code>null</code>
+   * @param xmlPath path to file containing XML definition of JSDL wizard
+   *            additional pages.
+   * @param jsdlPath path to file containing base JSDL file which will be used
+   *            as a "parent" for JSDL files created for this application.
+   * @param vo virtual application for which this application is defined,
+   *            <code>null</code> indicates that it is defined for all virtual
+   *            organization available
+   */
   public void addApplicationSpecificData( final String appName,
                                           final String appPath,
                                           final Path xmlPath,
@@ -488,7 +529,11 @@ public class ApplicationParametersRegistry implements IContentChangeNotifier {
 
   /**
    * Changes given {@link GridApplicationParameters}. In this object given
-   * values will be set.
+   * values will be set. All listeners are notified of this change. </br>Note
+   * that this can be done only for user-defined parameters - not for those
+   * fetched from info system, as they are defined on "server side" and
+   * modifying them from registy might result in confusion if they are changed
+   * also on "the server side" or not.
    * 
    * @param oldASO object to change
    * @param newAppName application name to change in given
@@ -499,6 +544,9 @@ public class ApplicationParametersRegistry implements IContentChangeNotifier {
    *            ApplicationSpecificObject
    * @param newJSDLPath path to JSDL file to change in given
    *            ApplicationSpecificObject
+   * @throws ApplicationParametersException is thrown when registry doesn't
+   *             contain user-defined parameter equal to one passed to this
+   *             method
    */
   public void editApplicationSpecificData( final GridApplicationParameters oldASO,
                                            final String newAppName,
@@ -542,6 +590,20 @@ public class ApplicationParametersRegistry implements IContentChangeNotifier {
     }
   }
 
+  /**
+   * Returns map of applications names as a keys and corresponding application's
+   * parameters object's id as a value. The key - application name - is modified
+   * this way that if there are more then one applications with the same name an
+   * ordinal numeral is added to name. This change affects only list returned by
+   * this method - not applications' parameters contained by this registry.
+   * 
+   * @param vo virtual organization for which list of application's parameters
+   *            should be created. <code>null</code> value indicates all
+   *            virtual organizations available.
+   * @return map of applications names (modified with an ordinal number when
+   *         needed) as a keys and corresponding application's parameters
+   *         object's id as a value
+   */
   public Map<String, Integer> getApplicationDataMapping( final IVirtualOrganization vo )
   {
     Map<String, Integer> result = new HashMap<String, Integer>();
@@ -601,6 +663,13 @@ public class ApplicationParametersRegistry implements IContentChangeNotifier {
     return result;
   }
 
+  /**
+   * Returns application parameter object with given id.
+   * 
+   * @param paramId id of application parameter object
+   * @return application parameter object with given id or <code>null</code>
+   *         if registry does not hold object with such id
+   */
   public IGridApplicationParameters getApplicationData( final int paramId ) {
     IGridApplicationParameters result = null;
     boolean haveIt = false;

@@ -19,9 +19,20 @@ package eu.geclipse.jsdl.ui.preference;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 
+import eu.geclipse.core.model.IGridApplicationParameters;
 
+/**
+ * Exception for invalid operations with {@link IGridApplicationParameters}
+ * objects or {@link ApplicationParametersRegistry}.
+ */
 public class ApplicationParametersException extends CoreException {
 
+  /**
+   * Creates instance of exception.
+   * 
+   * @param status status which will be used as a base for this exception's
+   *            instance
+   */
   public ApplicationParametersException( final IStatus status ) {
     super( status );
   }
