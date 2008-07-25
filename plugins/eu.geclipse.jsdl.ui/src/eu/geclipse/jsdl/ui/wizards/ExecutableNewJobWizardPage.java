@@ -224,7 +224,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
     layout.horizontalAlignment = GridData.FILL;
     applicationNameLabel.setLayoutData( layout );
     // Combo - application name
-    this.applicationName = new CCombo( mainComp, SWT.NONE );
+    this.applicationName = new CCombo( mainComp, SWT.BORDER );
     layout = new GridData();
     layout.horizontalAlignment = GridData.FILL;
     layout.horizontalSpan = 2;
