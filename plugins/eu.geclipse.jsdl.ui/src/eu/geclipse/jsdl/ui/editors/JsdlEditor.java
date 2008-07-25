@@ -54,6 +54,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.Resource.IOWrappedException;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
@@ -810,6 +811,9 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
     try {
       this.editor.doSave( null );
     } catch( Exception e ) {
+      if (e instanceof IOWrappedException) {
+        System.out.println("TEST IO");
+      }
       Activator.logException( e );
     }
     
@@ -894,13 +898,16 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
     IFile[] files = null;
     
     // Assumes that the input is a file object.
-    if (getEditorInput() instanceof IFileEditorInput){
+    if ( getEditorInput() instanceof IFileEditorInput ) {
+      
       IFileEditorInput modelFile = ( IFileEditorInput )getEditorInput();
       resourceURI = URI.createPlatformResourceURI( modelFile.getFile().getFullPath().toString(), false );
-    }else if( getEditorInput() instanceof FileStoreEditorInput){
+      
+    }  else if( getEditorInput() instanceof FileStoreEditorInput){
+      
       FileStoreEditorInput modelFile = ( FileStoreEditorInput )getEditorInput();
       resourceURI = URI.createFileURI( modelFile.getURI().getPath() );
-      System.out.println(resourceURI+ "   - IN EDITOR URI");
+
 //      resourceURI = URI.createPlatformResourceURI( modelFile.getURI().getPath(), false);
       
    }
@@ -913,6 +920,9 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
       resource = this.editingDomain.getResourceSet().getResource( resourceURI, true );      
     }
     catch ( Exception e ) {
+      if (e instanceof IOWrappedException){
+        System.out.println("WRAPPED EXCEPTION");
+      }
       exception = e;
       resource = this.editingDomain.getResourceSet().getResource( resourceURI, false );
     }
@@ -939,7 +949,7 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
   }
   
   
-  
+   
   protected void refreshEditor() {
     
     this.refreshedModel = true;
