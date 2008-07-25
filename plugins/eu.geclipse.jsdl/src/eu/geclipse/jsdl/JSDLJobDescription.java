@@ -39,6 +39,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.Resource.IOWrappedException;
 import org.eclipse.emf.ecore.resource.Resource.Factory.Registry;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.ExtendedMetaData;
@@ -171,7 +172,12 @@ public class JSDLJobDescription extends ResourceGridContainer
         for( IGridElement gridElement : elements ) {
           if( gridElement instanceof JSDLJobDescription ) {
             JSDLJobDescription jsdlDescription = ( JSDLJobDescription )gridElement;
-            jsdlDescription.loadModel( ( IFile )jsdlDescription.getResource() );
+            try {
+              jsdlDescription.loadModel( ( IFile )jsdlDescription.getResource() );
+            } catch( IOWrappedException e ) {
+              // TODO Auto-generated catch block
+              Activator.logException( e );
+            }
           }
         }
       }
@@ -181,7 +187,7 @@ public class JSDLJobDescription extends ResourceGridContainer
   /**
    * @param file
    */
-  public void loadModel( final IFile file ) {
+  public void loadModel( final IFile file ) throws IOWrappedException {
     String filePath = file.getFullPath().toString();
     URI uri = URI.createPlatformResourceURI( filePath, false );
     ResourceSet resourceSet = new ResourceSetImpl();
@@ -198,6 +204,10 @@ public class JSDLJobDescription extends ResourceGridContainer
       this.jobDescription = this.jobDefinition.getJobDescription();
       this.jobIdentification = this.documentRoot.getJobIdentification();
     } catch( IOException ioEx ) {
+      if (ioEx instanceof IOWrappedException){
+        IOWrappedException ioWEx = (IOWrappedException) ioEx;
+        throw ioWEx;
+      }
       Activator.logException( ioEx );
     }
   }
@@ -472,7 +482,12 @@ public class JSDLJobDescription extends ResourceGridContainer
 
   protected DocumentRoot getDocumentRoot() {
     if( this.documentRoot == null ) {
-      this.loadModel( ( IFile )this.getResource() );
+      try {
+        this.loadModel( ( IFile )this.getResource() );
+      } catch( IOWrappedException e ) {
+        // TODO Auto-generated catch block
+        Activator.logException( e );
+      }
     }
     return this.documentRoot;
   }
@@ -1397,7 +1412,7 @@ public class JSDLJobDescription extends ResourceGridContainer
         for( DataStagingType dataType : temp ) {
           if( dataType.getTarget() != null ) {
             SourceTargetType target = this.jsdlFactory.createSourceTargetType();
-            target.setURI( "" );
+            target.setURI( "" ); //$NON-NLS-1$
             dataType.setTarget( target );
           }
         }
