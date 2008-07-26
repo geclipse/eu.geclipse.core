@@ -15,6 +15,8 @@
 
 package eu.geclipse.core.model;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+
 import eu.geclipse.core.accesscontrol.IACL;
 import eu.geclipse.core.reporting.ProblemException;
 
@@ -28,20 +30,24 @@ import eu.geclipse.core.reporting.ProblemException;
 public interface IProtectable {
   
   /**
-   * Returns the access control list attached to this grid object
-   * (file, service, etc.).
+   * Fetches the access control list attached to this grid object
+   * (file, service, etc.). For remote objects this is an online operation.
    * 
+   * @param monitor a progress monitor, or null if progress reporting is not desired.
    * @return an {@link IACL} object.
    * @throws ProblemException if an error occurs while querying the ACL.
    */
-  public IACL getACL() throws ProblemException;
+  public IACL fetchACL( IProgressMonitor monitor ) throws ProblemException;
   
   /**
-   * Modifies the access control list associated to this grid object.
+   * Writes the access control list associated with this grid object.
+   * Only when this method is called changes to the object's access
+   * permissions are really made effective.
    * 
    * @param acl the {@link IACL} to set on this element.
+   * @param monitor a progress monitor, or null if progress reporting is not desired.
    * @throws ProblemException if an error occurs while changing the ACL.
    */
-  public void setACL( final IACL acl ) throws ProblemException;
+  public void putACL( final IACL acl, IProgressMonitor monitor ) throws ProblemException;
 
 }
