@@ -37,7 +37,8 @@ public interface IProtectable {
    * @return an {@link IACL} object.
    * @throws ProblemException if an error occurs while querying the ACL.
    */
-  public IACL fetchACL( IProgressMonitor monitor ) throws ProblemException;
+  public IACL fetchACL( final IProgressMonitor monitor )
+    throws ProblemException;
   
   /**
    * Writes the access control list associated with this grid object.
@@ -48,6 +49,7 @@ public interface IProtectable {
    * @param monitor a progress monitor, or null if progress reporting is not desired.
    * @throws ProblemException if an error occurs while changing the ACL.
    */
-  public void putACL( final IACL acl, IProgressMonitor monitor ) throws ProblemException;
+  public void putACL( final IACL acl, final IProgressMonitor monitor )
+    throws ProblemException;
 
 }
