@@ -94,6 +94,53 @@
       </creator>
    </extension>
    <extension
+         point="eu.geclipse.core.gridResourceCategory">
+      <category
+            active="true"
+            id="eu.geclipse.core.model.category.applications"
+            name="Applications">
+      </category>
+      <category
+            active="true"
+            id="eu.geclipse.core.model.category.computing"
+            name="Computing">
+      </category>
+      <category
+            active="false"
+            id="eu.geclipse.core.model.category.services"
+            name="Services">
+      </category>
+      <category
+            active="true"
+            id="eu.geclipse.core.model.category.services.data"
+            name="Data Services"
+            parent="eu.geclipse.core.model.category.services">
+      </category>
+      <category
+            active="true"
+            id="eu.geclipse.core.model.category.services.info"
+            name="Info Services"
+            parent="eu.geclipse.core.model.category.services">
+      </category>
+      <category
+            active="true"
+            id="eu.geclipse.core.model.category.services.jobs"
+            name="Job Services"
+            parent="eu.geclipse.core.model.category.services">
+      </category>
+      <category
+            active="true"
+            id="eu.geclipse.core.model.category.services.others"
+            name="Other Services"
+            parent="eu.geclipse.core.model.category.services">
+      </category>
+      <category
+            active="true"
+            id="eu.geclipse.core.model.category.storage"
+            name="Storage">
+      </category>
+   </extension>
+   <extension
          point="eu.geclipse.core.reporting.problemReporting">
       <problem
             description="Invalid access control actor"
@@ -428,52 +475,5 @@
             id="eu.geclipse.core.simpleTest.pingTest"
             name="Ping Test">
       </test>
-   </extension>
-   <extension
-         point="eu.geclipse.core.gridResourceCategory">
-      <category
-            active="true"
-            id="eu.geclipse.core.model.category.applications"
-            name="Applications">
-      </category>
-      <category
-            active="true"
-            id="eu.geclipse.core.model.category.computing"
-            name="Computing">
-      </category>
-      <category
-            active="false"
-            id="eu.geclipse.core.model.category.services"
-            name="Services">
-      </category>
-      <category
-            active="true"
-            id="eu.geclipse.core.model.category.services.data"
-            name="Data Services"
-            parent="eu.geclipse.core.model.category.services">
-      </category>
-      <category
-            active="true"
-            id="eu.geclipse.core.model.category.services.info"
-            name="Info Services"
-            parent="eu.geclipse.core.model.category.services">
-      </category>
-      <category
-            active="true"
-            id="eu.geclipse.core.model.category.services.jobs"
-            name="Job Services"
-            parent="eu.geclipse.core.model.category.services">
-      </category>
-      <category
-            active="true"
-            id="eu.geclipse.core.model.category.services.others"
-            name="Other Services"
-            parent="eu.geclipse.core.model.category.services">
-      </category>
-      <category
-            active="true"
-            id="eu.geclipse.core.model.category.storage"
-            name="Storage">
-      </category>
    </extension>
 </plugin>
