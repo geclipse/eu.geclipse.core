@@ -31,6 +31,16 @@ public interface ICoreProblems {
    * Please keep the list sorted by extensionID!
    */
   
+  // Access control
+  public static final String ACCESSCONTROL_INVALID_ACTOR
+    = "eu.geclipse.core.problem.accesscontrol.invalidActor"; //$NON-NLS-1$
+  public static final String ACCESSCONTROL_INVALID_CAPABILITY
+    = "eu.geclipse.core.problem.accesscontrol.invalidCapability"; //$NON-NLS-1$
+  public static final String ACCESSCONTROL_INVALID_ENTRY
+    = "eu.geclipse.core.problem.accesscontrol.invalidEntry"; //$NON-NLS-1$
+  public static final String ACCESSCONTROL_INVALID_POLICY
+    = "eu.geclipse.core.problem.accesscontrol.invalidPolicy"; //$NON-NLS-1$
+  
   // Auth
   public static final String AUTH_CERTIFICATE_LOAD_FAILED
     = "eu.geclipse.core.problem.auth.certificateLoadFailed"; //$NON-NLS-1$

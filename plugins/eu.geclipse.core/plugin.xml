@@ -96,6 +96,26 @@
    <extension
          point="eu.geclipse.core.reporting.problemReporting">
       <problem
+            description="Invalid access control actor"
+            id="eu.geclipse.core.problem.accesscontrol.invalidActor"
+            mailto="">
+      </problem>
+      <problem
+            description="Invalid access control capability"
+            id="eu.geclipse.core.problem.accesscontrol.invalidCapability"
+            mailto="">
+      </problem>
+      <problem
+            description="Invalid access control list entry"
+            id="eu.geclipse.core.problem.accesscontrol.invalidEntry"
+            mailto="">
+      </problem>
+      <problem
+            description="Invalid access control policy"
+            id="eu.geclipse.core.problem.accesscontrol.invalidPolicy"
+            mailto="">
+      </problem>
+      <problem
             description="Unable to load certificate"
             id="eu.geclipse.core.problem.auth.certificateLoadFailed"
             mailto="">
