@@ -18,12 +18,14 @@ package eu.geclipse.core.accesscontrol;
 
 /**
  * A policy to be used in the ACL entries.
- * The supported policies are determined by the implementation.
- * The simplest case would have only the <b>allow</b> policy. Other
- * examples would have for instance <b>allow</b> and <b>deny</b> policies.
- * The implementation determines how different policies are prioritized
- * and evaluated. The recommended implementation is an <code>enum</code>
- * containing all the policies allowed by the middleware.
+ * <p>
+ * The supported policies are determined by the implementation. The simplest
+ * case would have the <b>allow</b> policy only. Other examples would have
+ * <b>allow</b> and <b>deny</b> policies, for instance. The implementation
+ * determines how different policies are prioritized and evaluated.
+ * <p>
+ * The recommended implementation is an <code>enum</code> containing all
+ * the policies allowed by the middleware.
  * <p>
  * Also known as 'effect' in the XACML standard.
  * 
