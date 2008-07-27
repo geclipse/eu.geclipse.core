@@ -263,6 +263,15 @@ public class MountAction extends Action {
     IFileStore fileStore = EFS.getStore( masterURI );
     GEclipseFileSystem.assureFileStoreIsActive( fileStore );
     IFileInfo fileInfo = fileStore.fetchInfo();
+    
+    // Check if the server could be really contacted
+    if ( ! fileInfo.exists() ) {
+      throw new CoreException( new Status( IStatus.ERROR,
+                                           Activator.PLUGIN_ID,
+                                           String.format( "Error contacting the server for mounting %s",
+                                                          fileStore.toString() ) ) );
+    }
+    
     return fileInfo.isDirectory();
   }
   
