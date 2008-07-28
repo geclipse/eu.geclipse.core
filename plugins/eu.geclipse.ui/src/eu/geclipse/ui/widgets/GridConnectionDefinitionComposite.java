@@ -69,6 +69,7 @@ import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.providers.ConnectionViewContentProvider;
 import eu.geclipse.ui.providers.GridModelLabelProvider;
 import eu.geclipse.ui.wizards.IConnectionTokenValidator;
+import eu.geclipse.ui.wizards.IConnectionUriProcessor;
 
 
 /**
@@ -242,6 +243,11 @@ public class GridConnectionDefinitionComposite extends Composite {
    * Validator used to validate the tokens or the URI.
    */
   private IConnectionTokenValidator validator;
+  
+  /**
+   * Prozessor used to process the final URI.
+   */
+  private IConnectionUriProcessor processor;
 
   /**
    * List of registered ModifyListeners.
@@ -250,15 +256,21 @@ public class GridConnectionDefinitionComposite extends Composite {
   
   private EditorFieldModifyListener modifyListener;
   
+  private IGridContainer mountPoint;
+  
   /**
    * Create a new connection definition composite.
    *
    * @param parent The parent of the composite.
    * @param style The composite's style.
    */
-  public GridConnectionDefinitionComposite( final Composite parent, final int style ) {
+  public GridConnectionDefinitionComposite( final IGridContainer mountPoint,
+                                            final Composite parent,
+                                            final int style ) {
 
     super(parent, style);
+    
+    this.mountPoint = mountPoint;
     
     GridData gData;
     this.modifyListener = new EditorFieldModifyListener( this );
@@ -504,6 +516,10 @@ public class GridConnectionDefinitionComposite extends Composite {
         || ( ( oldErrorMessage != null ) && ! oldErrorMessage.equals( newErrorMessage ) ) ) {
       this.errorMessage = newErrorMessage;
       fireModifyEvent();
+    }
+    
+    if ( this.processor != null ) {
+      uri = this.processor.processURI( this.mountPoint, uri );
     }
 
     return uri;
@@ -818,6 +834,15 @@ public class GridConnectionDefinitionComposite extends Composite {
           = ( IConnectionTokenValidator ) extension.createExecutableExtension( Extensions.EFS_VALIDATOR_ATT );
       } catch ( CoreException cExc ) {
         // Since the validator is optional this may fail and
+        // may throw an exception that we would not like
+        // to handle here
+      }
+      
+      try {
+        this.processor
+          = ( IConnectionUriProcessor ) extension.createExecutableExtension( Extensions.EFS_PROCESSOR_ATT );
+      } catch ( CoreException cExc ) {
+        // Since the processor is optional this may fail and
         // may throw an exception that we would not like
         // to handle here
       }

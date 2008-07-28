@@ -67,6 +67,16 @@
                </appInfo>
             </annotation>
          </attribute>
+         <attribute name="processor" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appInfo>
+                  <meta.attribute kind="java" basedOn=":eu.geclipse.ui.wizards.IConnectionUriProzessor"/>
+               </appInfo>
+            </annotation>
+         </attribute>
       </complexType>
    </element>
 

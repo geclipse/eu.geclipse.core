@@ -23,25 +23,30 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.widgets.Composite;
 
+import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.ui.widgets.GridConnectionDefinitionComposite;
 
 public class ConnectionDefinitionWizardPage extends WizardPage {
   
   private GridConnectionDefinitionComposite connectionDefinitionComp;
   
+  private IGridContainer mountPoint;
+  
   private URI initialURI;
     
-  public ConnectionDefinitionWizardPage( final URI uri ) {
+  public ConnectionDefinitionWizardPage( final IGridContainer mountPoint,
+                                         final URI uri ) {
     super( Messages.getString("ConnectionDefinitionWizardPage.name"), //$NON-NLS-1$
            Messages.getString("ConnectionDefinitionWizardPage.title"), //$NON-NLS-1$
            null );
+    this.mountPoint = mountPoint;
     this.initialURI = uri;
     setDescription( Messages.getString("ConnectionDefinitionWizardPage.description") ); //$NON-NLS-1$
   }
 
   public void createControl( final Composite parent ) {
     
-    this.connectionDefinitionComp = new GridConnectionDefinitionComposite( parent, SWT.NULL );
+    this.connectionDefinitionComp = new GridConnectionDefinitionComposite( mountPoint, parent, SWT.NULL );
     if ( this.initialURI != null ) {
       this.connectionDefinitionComp.setURI( this.initialURI );
     }

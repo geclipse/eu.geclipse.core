@@ -19,7 +19,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.net.URL;
 
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -37,6 +39,8 @@ import org.eclipse.ui.IWorkbench;
 import eu.geclipse.core.ICoreProblems;
 import eu.geclipse.core.filesystem.GEclipseURI;
 import eu.geclipse.core.model.GridModel;
+import eu.geclipse.core.model.IGridContainer;
+import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridPreferences;
 import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.ui.dialogs.ProblemDialog;
@@ -122,7 +126,8 @@ public class ConnectionWizard
     }
     addPage( this.firstPage );
     
-    this.definitionPage = new ConnectionDefinitionWizardPage( this.initialURI );
+    IGridContainer mountPoint = getMountPoint();
+    this.definitionPage = new ConnectionDefinitionWizardPage( mountPoint, this.initialURI );
     addPage( this.definitionPage );
     
   }
@@ -256,6 +261,29 @@ public class ConnectionWizard
     
     return result;
 
+  }
+  
+  private IGridContainer getMountPoint() {
+    
+    IGridContainer result = null;
+    
+    if ( ( this.initialSelection != null ) && ( this.initialSelection instanceof StructuredSelection ) ) {
+      StructuredSelection sSelection = ( StructuredSelection ) this.initialSelection;
+      Object object = sSelection.getFirstElement();
+      if ( object instanceof IGridContainer ) {
+        result = ( IGridContainer ) object;
+      } else if ( object instanceof IResource ) {
+        IGridElement element = GridModel.getRoot().findElement( ( IResource ) object );
+        if ( ( element != null ) && ( element instanceof IGridContainer ) ) {
+          result = ( IGridContainer ) element;
+        }
+      } else if ( object instanceof IAdaptable ) {
+        result = ( IGridContainer ) ( ( IAdaptable ) object ).getAdapter( IGridContainer.class );
+      }
+    }
+    
+    return result;
+    
   }
   
   private void setCurrentErrorMessage( final IWizardPage fromPage ) {

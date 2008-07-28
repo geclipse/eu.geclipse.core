@@ -88,7 +88,8 @@ public class GridConnectionPropertiesPage extends PropertyPage {
    */
   @Override
   protected Control createContents( final Composite parent ) {
-    this.connectionDefinitionComp = new GridConnectionDefinitionComposite( parent, SWT.NULL );
+    // TODO mathias correct for the mount point
+    this.connectionDefinitionComp = new GridConnectionDefinitionComposite( null, parent, SWT.NULL );
     updateConnectionDefinitionComposite();
     return this.connectionDefinitionComp;
   }
@@ -107,6 +108,7 @@ public class GridConnectionPropertiesPage extends PropertyPage {
    * available, i.e. set the URI of the selected element.
    */
   private void updateConnectionDefinitionComposite() {
+    // TODO mathias correct for the mount point
     if ( this.connectionDefinitionComp != null ) {
       IFolder folder = ( IFolder ) getElement().getAdapter( IFolder.class );
       if ( folder != null ) {

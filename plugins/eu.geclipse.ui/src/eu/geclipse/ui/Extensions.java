@@ -51,6 +51,9 @@ public class Extensions {
   public static final String EFS_VALIDATOR_ATT
     = "validator"; //$NON-NLS-1$
   
+  public static final String EFS_PROCESSOR_ATT
+    = "processor"; //$NON-NLS-1$
+  
   public static final String EFS_URI_ATT
     = "uri"; //$NON-NLS-1$
   
