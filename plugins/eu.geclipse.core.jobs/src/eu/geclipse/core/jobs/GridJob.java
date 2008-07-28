@@ -362,8 +362,8 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
       IGridJobService service = getJobService();
       if ( service != null
           && this.jobID.getJobID() != GridJobID.UNKNOWN )
-      {        
-        newJobStatus = service.getJobStatus( this.jobID, subMonitor );
+      {
+        newJobStatus = service.getJobStatus( this.jobID, getProject().getVO(), subMonitor );
       }
       if ( newJobStatus != null && newJobStatus instanceof GridJobStatus ) {
         this.jobStatus = ( GridJobStatus )newJobStatus;
@@ -892,7 +892,7 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
       IGridJobService service = getJobService();
       
       if ( service != null ) {
-        service.deleteJob( this.getID(), monitor );
+        service.deleteJob( this.getID(), getProject().getVO(), monitor );
       }
     } finally {
       monitor.done();

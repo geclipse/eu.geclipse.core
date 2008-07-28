@@ -75,7 +75,8 @@ public class ServiceJobUpdater extends Job {
         if( srvCreator != null ) {
           try {
             IGridJobService jobService = ( IGridJobService )srvCreator.create( null );
-            IGridJobStatus newStatus = jobService.getJobStatus( jobID, monitor );
+            // TODO szymon !!! pass correct VO instead of null
+            IGridJobStatus newStatus = jobService.getJobStatus( jobID, null, monitor );
             lastRefreshTime = newStatus.getLastUpdateTime();
             if( newStatus.canChange() ) {
               this.test.setJobResult( jobID,

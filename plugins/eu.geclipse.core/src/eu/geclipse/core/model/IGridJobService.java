@@ -54,6 +54,7 @@ public interface IGridJobService extends IGridService {
    * Submits the given job description to the grid.
    * 
    * @param description the job description to be submitted.
+   * @param vo Virtual Organization, to which job is submitted
    * @param monitor Use to monitor progress. May be <code>null</code>.
    * @return The id of the submitted job.
    * @throws ProblemException if submitting the job failed.
@@ -67,21 +68,23 @@ public interface IGridJobService extends IGridService {
    * Queries the service about the job's status.
    * 
    * @param id The id of the job whose status has to be queried.
+   * @param vo Virtual Organization, to which job with passed id belongs to
    * @param monitor Use to monitor progress. May be <code>null</code>.
    * @return IGridJobStatus the current status of the job.
    * @throws ProblemException if the status query failed.
    */
-  public IGridJobStatus getJobStatus( final IGridJobID id, final IProgressMonitor monitor )
+  public IGridJobStatus getJobStatus( final IGridJobID id, final IVirtualOrganization vo, final IProgressMonitor monitor )
     throws ProblemException;
   
   /**
    * Deletes the given job from the server and releases resources on it.
+   * @param id The id of job, which will be deleted
+   * @param vo Virtual Organization, to which job with passed id belongs to
    * 
-   * @param job The job which has to be deleted.
    * @param monitor Use to monitor progress. May be <code>null</code>.
    * @throws ProblemException if deleting the job failed.
    */
-  public void deleteJob( final IGridJobID id, IProgressMonitor monitor )
+  public void deleteJob( final IGridJobID id, final IVirtualOrganization vo, IProgressMonitor monitor )
     throws ProblemException;
 
 }

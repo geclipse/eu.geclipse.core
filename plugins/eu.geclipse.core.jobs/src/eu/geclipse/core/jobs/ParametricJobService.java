@@ -80,7 +80,7 @@ public class ParametricJobService implements IGridJobService {
   /* (non-Javadoc)
    * @see eu.geclipse.core.model.IGridJobService#deleteJob(eu.geclipse.core.model.IGridJob, org.eclipse.core.runtime.IProgressMonitor)
    */
-  public void deleteJob( final IGridJobID dummyJobId, final IProgressMonitor monitor )
+  public void deleteJob( final IGridJobID dummyJobId, final IVirtualOrganization vo, final IProgressMonitor monitor )
     throws ProblemException
   {
     SubMonitor subMonitor = SubMonitor.convert( monitor );
@@ -95,7 +95,7 @@ public class ParametricJobService implements IGridJobService {
   /* (non-Javadoc)
    * @see eu.geclipse.core.model.IGridJobService#getJobStatus(eu.geclipse.core.model.IGridJobID, org.eclipse.core.runtime.IProgressMonitor)
    */
-  public IGridJobStatus getJobStatus( final IGridJobID id, final IProgressMonitor progressMonitor ) throws ProblemException {
+  public IGridJobStatus getJobStatus( final IGridJobID id, final IVirtualOrganization vo, final IProgressMonitor progressMonitor ) throws ProblemException {
     SubMonitor subMonitor = SubMonitor.convert( progressMonitor );
     Set<String> statusNames = new HashSet<String>();
     int statusType = IGridJobStatus.DONE;
@@ -356,9 +356,9 @@ public class ParametricJobService implements IGridJobService {
     return null;
   }
 
-  public IGridJobID submitJob( IGridJobDescription description,
-                               IVirtualOrganization vo,
-                               IProgressMonitor monitor )
+  public IGridJobID submitJob( final IGridJobDescription description,
+                               final IVirtualOrganization vo,
+                               final IProgressMonitor monitor )
     throws ProblemException
   {
     // TODO mariusz operation not supported - add exception
