@@ -50,124 +50,112 @@ import eu.geclipse.workflow.internal.Activator;
 /**
  * Grid element for workflow description
  */
-public class GridWorkflow
-    extends ResourceGridContainer
-    implements IGridWorkflow {  
+public class GridWorkflow extends ResourceGridContainer
+implements IGridWorkflow
+{
 
   private WorkflowImpl rootImpl;
   private List<IGridWorkflowJob> jobs;
   static {
     GridModel.addGridModelListener( createGridModelListener() );
-  }  
+  }
 
   protected GridWorkflow( final IResource resource ) {
     super( resource );
   }
-  
+
   @Override
   public boolean canContain( final IGridElement element ) {
     return ( element instanceof IGridJobDescription )
-      || ( element instanceof ResourceGridElement );
+    || ( element instanceof ResourceGridElement );
   }
 
   public String getDescription() {
-    // TODO Auto-generated method stub
     return null;
   }
 
   public String getExecutable() {
-    // TODO Auto-generated method stub
     return null;
   }
 
   public List<String> getExecutableArguments() {
-    // TODO Auto-generated method stub
     return null;
   }
 
   public String getStdErrorFileName() {
-    // TODO Auto-generated method stub
     return null;
   }
 
   public URI getStdErrorUri() throws ProblemException {
-    // TODO Auto-generated method stub
     return null;
   }
 
   public String getStdInputFileName() {
-    // TODO Auto-generated method stub
     return null;
   }
 
   public URI getStdInputUri() throws ProblemException {
-    // TODO Auto-generated method stub
     return null;
   }
 
   public String getStdOutputFileName() {
-    // TODO Auto-generated method stub
     return null;
   }
 
   public URI getStdOutputUri() throws ProblemException {
-    // TODO Auto-generated method stub
     return null;
   }
-  
+
   public List<IGridWorkflowJob> getChildrenJobs() {
     if( this.jobs == null ) {
       WorkflowImpl root = getRoot();
-      
       if( root != null ) {
         this.jobs = new ArrayList<IGridWorkflowJob>();
-        
         for( IWorkflowNode node : root.getNodes() ) {
           if( node instanceof IWorkflowJob ) {
-            this.jobs.add( new GridWorkflowJob( ( IWorkflowJob )node ) );        
-          }        
+            this.jobs.add( new GridWorkflowJob( ( IWorkflowJob )node ) );
+          }
         }
       }
     }
-    
     return this.jobs;
   }
-  
+
   private WorkflowImpl getRoot() {
     if( this.rootImpl == null ) {
       IFile root = null;
-      if (getResource() instanceof IFolder) {
-        IFolder rootFolder = (IFolder)getResource();
+      if( getResource() instanceof IFolder ) {
+        IFolder rootFolder = ( IFolder )getResource();
         root = rootFolder.getFile( rootFolder.getName() );
       }
       loadModel( root );
     }
-    
     return this.rootImpl;
   }
- 
+
   private void loadModel( final IFile file ) {
     String filePath = file.getFullPath().toString();
     // System.out.println( filePath );
-    org.eclipse.emf.common.util.URI uri = org.eclipse.emf.common.util.URI.createPlatformResourceURI( filePath, false );
+    org.eclipse.emf.common.util.URI uri = org.eclipse.emf.common.util.URI.createPlatformResourceURI( filePath,
+                                                                                                     false );
     ResourceSet resourceSet = new ResourceSetImpl();
     Resource resource = resourceSet.createResource( uri );
     Map<String, Object> options = new HashMap<String, Object>();
     options.put( XMLResource.OPTION_ENCODING, "UTF8" ); //$NON-NLS-1$
     try {
       resource.load( options );
-      this.rootImpl = (WorkflowImpl)resource.getContents().get( 0 );
-      this.jobs = new ArrayList<IGridWorkflowJob>();      
+      this.rootImpl = ( WorkflowImpl )resource.getContents().get( 0 );
+      this.jobs = new ArrayList<IGridWorkflowJob>();
       for( IWorkflowNode node : this.rootImpl.getNodes() ) {
         if( node instanceof IWorkflowJob ) {
-          this.jobs.add( new GridWorkflowJob( ( IWorkflowJob )node ) );        
-        }        
+          this.jobs.add( new GridWorkflowJob( ( IWorkflowJob )node ) );
+        }
       }
     } catch( IOException ioEx ) {
       Activator.logException( ioEx );
     }
   }
-  
+
   private static IGridModelListener createGridModelListener() {
     return new IGridModelListener() {
 
@@ -180,7 +168,7 @@ public class GridWorkflow
                 onWorkflowChanged( event.getElements() );
               }
             }
-          break;
+            break;
         }
       }
 
@@ -196,13 +184,20 @@ public class GridWorkflow
       }
     };
   }
-  
+
   /**
    * @return
    */
   public File getWorkflowFilePath() {
-    File workflowFilePath = new File (this.getResource().getLocation().toFile().toString() + "/" + this.getResource().getLocation().toFile().getName());
+    File workflowFilePath = new File( this.getResource()
+                                      .getLocation()
+                                      .toFile()
+                                      .toString()
+                                      + "/"
+                                      + this.getResource()
+                                      .getLocation()
+                                      .toFile()
+                                      .getName() );
     return workflowFilePath;
   }
-
 }

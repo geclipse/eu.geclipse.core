@@ -27,7 +27,6 @@ public class Activator extends Plugin {
 
   /** The plug-in ID */
   public static final String PLUGIN_ID = "eu.geclipse.workflow"; //$NON-NLS-1$
-
   // The shared instance
   private static Activator plugin;
 
@@ -76,7 +75,8 @@ public class Activator extends Plugin {
    */
   public static void logException( final Throwable exc ) {
     String message = exc.getLocalizedMessage();
-    if ( message == null ) message = exc.getClass().getName();
+    if( message == null )
+      message = exc.getClass().getName();
     IStatus status = new Status( IStatus.ERROR,
                                  PLUGIN_ID,
                                  IStatus.OK,

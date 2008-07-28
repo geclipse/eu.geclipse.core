@@ -30,8 +30,8 @@ import org.eclipse.emf.ecore.EObject;
  * @see eu.geclipse.workflow.IWorkflowPackage
  * @generated
  */
-public class WorkflowAdapterFactory extends AdapterFactoryImpl
-{
+public class WorkflowAdapterFactory extends AdapterFactoryImpl {
+
   /**
    * The cached model package.
    * @generated
@@ -42,10 +42,8 @@ public class WorkflowAdapterFactory extends AdapterFactoryImpl
    * Creates an instance of the adapter factory.
    * @generated
    */
-  public WorkflowAdapterFactory()
-  {
-    if (modelPackage == null)
-    {
+  public WorkflowAdapterFactory() {
+    if( modelPackage == null ) {
       modelPackage = IWorkflowPackage.eINSTANCE;
     }
   }
@@ -59,72 +57,67 @@ public class WorkflowAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   @Override
-  public boolean isFactoryForType(Object object)
-  {
-    if (object == modelPackage)
-    {
+  public boolean isFactoryForType( Object object ) {
+    if( object == modelPackage ) {
       return true;
     }
-    if (object instanceof EObject)
-    {
-      return ((EObject)object).eClass().getEPackage() == modelPackage;
+    if( object instanceof EObject ) {
+      return ( ( EObject )object ).eClass().getEPackage() == modelPackage;
     }
     return false;
   }
-
   /**
    * The switch the delegates to the <code>createXXX</code> methods.
    * @generated
    */
-  protected WorkflowSwitch<Adapter> modelSwitch =
-    new WorkflowSwitch<Adapter>()
-    {
-      @Override
-      public Adapter caseIPort(IPort object)
-      {
-        return createIPortAdapter();
-      }
-      @Override
-      public Adapter caseILink(ILink object)
-      {
-        return createILinkAdapter();
-      }
-      @Override
-      public Adapter caseIInputPort(IInputPort object)
-      {
-        return createIInputPortAdapter();
-      }
-      @Override
-      public Adapter caseIOutputPort(IOutputPort object)
-      {
-        return createIOutputPortAdapter();
-      }
-      @Override
-      public Adapter caseIWorkflow(IWorkflow object)
-      {
-        return createIWorkflowAdapter();
-      }
-      @Override
-      public Adapter caseIWorkflowJob(IWorkflowJob object)
-      {
-        return createIWorkflowJobAdapter();
-      }
-      @Override
-      public Adapter caseIWorkflowElement(IWorkflowElement object)
-      {
-        return createIWorkflowElementAdapter();
-      }
-      @Override
-      public Adapter caseIWorkflowNode(IWorkflowNode object)
-      {
-        return createIWorkflowNodeAdapter();
-      }
-      @Override
-      public Adapter defaultCase(EObject object)
-      {
-        return createEObjectAdapter();
-      }
-    };
+  protected WorkflowSwitch<Adapter> modelSwitch = new WorkflowSwitch<Adapter>()
+  {
+
+    @Override
+    public Adapter caseIPort( IPort object ) {
+      return createIPortAdapter();
+    }
+
+    @Override
+    public Adapter caseILink( ILink object ) {
+      return createILinkAdapter();
+    }
+
+    @Override
+    public Adapter caseIInputPort( IInputPort object ) {
+      return createIInputPortAdapter();
+    }
+
+    @Override
+    public Adapter caseIOutputPort( IOutputPort object ) {
+      return createIOutputPortAdapter();
+    }
+
+    @Override
+    public Adapter caseIWorkflow( IWorkflow object ) {
+      return createIWorkflowAdapter();
+    }
+
+    @Override
+    public Adapter caseIWorkflowJob( IWorkflowJob object ) {
+      return createIWorkflowJobAdapter();
+    }
+
+    @Override
+    public Adapter caseIWorkflowElement( IWorkflowElement object ) {
+      return createIWorkflowElementAdapter();
+    }
+
+    @Override
+    public Adapter caseIWorkflowNode( IWorkflowNode object ) {
+      return createIWorkflowNodeAdapter();
+    }
+
+    @Override
+    public Adapter defaultCase( EObject object ) {
+      return createEObjectAdapter();
+    }
+  };
 
   /**
    * Creates an adapter for the <code>target</code>.
@@ -133,11 +126,9 @@ public class WorkflowAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   @Override
-  public Adapter createAdapter(Notifier target)
-  {
-    return modelSwitch.doSwitch((EObject)target);
+  public Adapter createAdapter( Notifier target ) {
+    return this.modelSwitch.doSwitch( ( EObject )target );
   }
-
 
   /**
    * Creates a new adapter for an object of class '{@link eu.geclipse.workflow.IPort <em>IPort</em>}'.
@@ -149,8 +140,7 @@ public class WorkflowAdapterFactory extends AdapterFactoryImpl
    * @see eu.geclipse.workflow.IPort
    * @generated
    */
-  public Adapter createIPortAdapter()
-  {
+  public Adapter createIPortAdapter() {
     return null;
   }
 
@@ -164,8 +154,7 @@ public class WorkflowAdapterFactory extends AdapterFactoryImpl
    * @see eu.geclipse.workflow.ILink
    * @generated
    */
-  public Adapter createILinkAdapter()
-  {
+  public Adapter createILinkAdapter() {
     return null;
   }
 
@@ -179,8 +168,7 @@ public class WorkflowAdapterFactory extends AdapterFactoryImpl
    * @see eu.geclipse.workflow.IInputPort
    * @generated
    */
-  public Adapter createIInputPortAdapter()
-  {
+  public Adapter createIInputPortAdapter() {
     return null;
   }
 
@@ -194,8 +182,7 @@ public class WorkflowAdapterFactory extends AdapterFactoryImpl
    * @see eu.geclipse.workflow.IOutputPort
    * @generated
    */
-  public Adapter createIOutputPortAdapter()
-  {
+  public Adapter createIOutputPortAdapter() {
     return null;
   }
 
@@ -209,8 +196,7 @@ public class WorkflowAdapterFactory extends AdapterFactoryImpl
    * @see eu.geclipse.workflow.IWorkflow
    * @generated
    */
-  public Adapter createIWorkflowAdapter()
-  {
+  public Adapter createIWorkflowAdapter() {
     return null;
   }
 
@@ -224,8 +210,7 @@ public class WorkflowAdapterFactory extends AdapterFactoryImpl
    * @see eu.geclipse.workflow.IWorkflowJob
    * @generated
    */
-  public Adapter createIWorkflowJobAdapter()
-  {
+  public Adapter createIWorkflowJobAdapter() {
     return null;
   }
 
@@ -239,8 +224,7 @@ public class WorkflowAdapterFactory extends AdapterFactoryImpl
    * @see eu.geclipse.workflow.IWorkflowElement
    * @generated
    */
-  public Adapter createIWorkflowElementAdapter()
-  {
+  public Adapter createIWorkflowElementAdapter() {
     return null;
   }
 
@@ -254,8 +238,7 @@ public class WorkflowAdapterFactory extends AdapterFactoryImpl
    * @see eu.geclipse.workflow.IWorkflowNode
    * @generated
    */
-  public Adapter createIWorkflowNodeAdapter()
-  {
+  public Adapter createIWorkflowNodeAdapter() {
     return null;
   }
 
@@ -267,9 +250,7 @@ public class WorkflowAdapterFactory extends AdapterFactoryImpl
    * @return the new adapter.
    * @generated
    */
-  public Adapter createEObjectAdapter()
-  {
+  public Adapter createEObjectAdapter() {
     return null;
   }
-
 } //WorkflowAdapterFactory

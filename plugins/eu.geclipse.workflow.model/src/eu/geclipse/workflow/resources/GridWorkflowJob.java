@@ -18,11 +18,11 @@ package eu.geclipse.workflow.resources;
 import eu.geclipse.core.model.IGridWorkflowJob;
 import eu.geclipse.workflow.IWorkflowJob;
 
-
 /**
  * Wrapper to emf implementation
  */
 public class GridWorkflowJob implements IGridWorkflowJob {
+
   private IWorkflowJob jobImpl;
 
   GridWorkflowJob( final IWorkflowJob jobImpl ) {
@@ -33,7 +33,7 @@ public class GridWorkflowJob implements IGridWorkflowJob {
   /* (non-Javadoc)
    * @see eu.geclipse.core.model.IGridWorkflowJob#getDescription()
    */
-  public String getDescription() { 
+  public String getDescription() {
     return this.jobImpl.getJobDescription();
   }
 

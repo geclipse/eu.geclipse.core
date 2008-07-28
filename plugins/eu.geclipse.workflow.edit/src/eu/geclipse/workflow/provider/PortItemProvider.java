@@ -56,12 +56,11 @@ public class PortItemProvider extends WorkflowElementItemProvider
    * @generated
    */
   @Override
-  public List<IItemPropertyDescriptor> getPropertyDescriptors( Object object )
-  {
-    if( itemPropertyDescriptors == null ) {
+  public List<IItemPropertyDescriptor> getPropertyDescriptors( Object object ) {
+    if( this.itemPropertyDescriptors == null ) {
       super.getPropertyDescriptors( object );
     }
-    return itemPropertyDescriptors;
+    return this.itemPropertyDescriptors;
   }
 
   /**
@@ -71,8 +70,7 @@ public class PortItemProvider extends WorkflowElementItemProvider
    * @generated
    */
   @Override
-  public String getText( Object object )
-  {
+  public String getText( Object object ) {
     String label = ( ( IPort )object ).getId();
     return label == null || label.length() == 0
                                                ? getString( "_UI_IPort_type" ) //$NON-NLS-1$
@@ -90,8 +88,7 @@ public class PortItemProvider extends WorkflowElementItemProvider
    * @generated
    */
   @Override
-  public void notifyChanged( Notification notification )
-  {
+  public void notifyChanged( Notification notification ) {
     updateChildren( notification );
     super.notifyChanged( notification );
   }
@@ -117,8 +114,7 @@ public class PortItemProvider extends WorkflowElementItemProvider
    * @generated
    */
   @Override
-  public ResourceLocator getResourceLocator()
-  {
+  public ResourceLocator getResourceLocator() {
     return WorkflowEditPlugin.INSTANCE;
   }
 }

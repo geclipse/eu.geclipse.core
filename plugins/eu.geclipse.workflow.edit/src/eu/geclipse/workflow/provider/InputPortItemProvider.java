@@ -32,9 +32,8 @@ import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 
 /**
  * This is the item provider adapter for a
- * {@link eu.geclipse.workflow.IInputPort} object. 
- * <!-- begin-user-doc --> 
- * <!-- end-user-doc -->
+ * {@link eu.geclipse.workflow.IInputPort} object. <!-- begin-user-doc --> <!--
+ * end-user-doc -->
  * 
  * @generated
  */
@@ -44,9 +43,8 @@ public class InputPortItemProvider extends PortItemProvider
 {
 
   /**
-   * This constructs an instance from a factory and a notifier. 
-   * <!-- begin-user-doc --> 
-   * <!-- end-user-doc -->
+   * This constructs an instance from a factory and a notifier. <!--
+   * begin-user-doc --> <!-- end-user-doc -->
    * 
    * @generated
    */
@@ -55,15 +53,13 @@ public class InputPortItemProvider extends PortItemProvider
   }
 
   /**
-   * This returns the property descriptors for the adapted class. 
-   * <!-- begin-user-doc --> 
-   * <!-- end-user-doc -->
+   * This returns the property descriptors for the adapted class. <!--
+   * begin-user-doc --> <!-- end-user-doc -->
    * 
    * @generated
    */
   @Override
-  public List<IItemPropertyDescriptor> getPropertyDescriptors( Object object )
-  {
+  public List<IItemPropertyDescriptor> getPropertyDescriptors( Object object ) {
     if( this.itemPropertyDescriptors == null ) {
       super.getPropertyDescriptors( object );
       addLinksPropertyDescriptor( object );
@@ -72,60 +68,50 @@ public class InputPortItemProvider extends PortItemProvider
   }
 
   /**
-   * This adds a property descriptor for the Links feature. 
-   * <!-- begin-user-doc --> 
-   * <!-- end-user-doc -->
+   * This adds a property descriptor for the Links feature. <!-- begin-user-doc
+   * --> <!-- end-user-doc -->
    * 
    * @generated
    */
   protected void addLinksPropertyDescriptor( Object object ) {
-    this.itemPropertyDescriptors.add( createItemPropertyDescriptor( ( ( ComposeableAdapterFactory )adapterFactory ).getRootAdapterFactory(),
-                                                               getResourceLocator(),
-                                                               getString( "_UI_IInputPort_links_feature" ), //$NON-NLS-1$
-                                                               getString( "_UI_PropertyDescriptor_description", //$NON-NLS-1$
-                                                                          "_UI_IInputPort_links_feature", //$NON-NLS-1$
-                                                                          "_UI_IInputPort_type" ), //$NON-NLS-1$
-                                                               IWorkflowPackage.Literals.IINPUT_PORT__LINKS,
-                                                               true,
-                                                               false,
-                                                               true,
-                                                               null,
-                                                               null,
-                                                               null ) );
+    this.itemPropertyDescriptors.add( createItemPropertyDescriptor( ( ( ComposeableAdapterFactory )this.adapterFactory ).getRootAdapterFactory(),
+                                                                    getResourceLocator(),
+                                                                    getString( "_UI_IInputPort_links_feature" ), //$NON-NLS-1$
+                                                                    getString( "_UI_PropertyDescriptor_description", //$NON-NLS-1$
+                                                                               "_UI_IInputPort_links_feature", //$NON-NLS-1$
+                                                                               "_UI_IInputPort_type" ), //$NON-NLS-1$
+                                                                    IWorkflowPackage.Literals.IINPUT_PORT__LINKS,
+                                                                    true,
+                                                                    false,
+                                                                    true,
+                                                                    null,
+                                                                    null,
+                                                                    null ) );
   }
 
   /**
-   * This returns InputPort.gif. 
-   * <!-- begin-user-doc --> 
-   * <!-- end-user-doc -->
+   * This returns InputPort.gif. <!-- begin-user-doc --> <!-- end-user-doc -->
    * 
    * @generated NOT
    */
   @Override
-  public Object getImage( Object object )
-  {
+  public Object getImage( Object object ) {
     return overlayImage( object,
                          getResourceLocator().getImage( "full/obj16/InputPort" ) ); //$NON-NLS-1$
   }
 
   /**
-   * This returns the label text for the adapted class. 
-   * <!-- begin-user-doc -->
+   * This returns the label text for the adapted class. <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * 
    */
   @Override
-  public String getText( Object object )
-  {
+  public String getText( Object object ) {
     IInputPort inPort = ( IInputPort )object;
     String label = ""; //$NON-NLS-1$
-    
     String portName = inPort.getNode().getName();
-    
-    if (!(portName == null || portName.length() == 0))
+    if( !( portName == null || portName.length() == 0 ) )
       label += " belonging to " + portName; //$NON-NLS-1$
-    
-        return label == null || label.length() == 0
+    return label == null || label.length() == 0
                                                ? getString( "_UI_IInputPort_type" ) //$NON-NLS-1$
                                                : getString( "_UI_IInputPort_type" ) //$NON-NLS-1$
                                                  + " " //$NON-NLS-1$
@@ -135,24 +121,22 @@ public class InputPortItemProvider extends PortItemProvider
   /**
    * This handles model notifications by calling {@link #updateChildren} to
    * update any cached children and by creating a viewer notification, which it
-   * passes to {@link #fireNotifyChanged}. 
-   * <!-- begin-user-doc --> 
-   * <!-- end-user-doc -->
+   * passes to {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!--
+   * end-user-doc -->
    * 
    * @generated
    */
   @Override
-  public void notifyChanged( Notification notification )
-  {
+  public void notifyChanged( Notification notification ) {
     updateChildren( notification );
     super.notifyChanged( notification );
   }
 
   /**
-   * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children
-   * that can be created under this object.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+   * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s
+   * describing the children that can be created under this object. <!--
+   * begin-user-doc --> <!-- end-user-doc -->
+   * 
    * @generated
    */
   @Override
@@ -163,14 +147,13 @@ public class InputPortItemProvider extends PortItemProvider
   }
 
   /**
-   * Return the resource locator for this item provider's resources.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+   * Return the resource locator for this item provider's resources. <!--
+   * begin-user-doc --> <!-- end-user-doc -->
+   * 
    * @generated
    */
   @Override
-  public ResourceLocator getResourceLocator()
-  {
+  public ResourceLocator getResourceLocator() {
     return WorkflowEditPlugin.INSTANCE;
   }
 }

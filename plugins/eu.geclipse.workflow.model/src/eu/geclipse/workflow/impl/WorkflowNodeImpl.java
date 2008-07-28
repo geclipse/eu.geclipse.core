@@ -1,9 +1,18 @@
-/**
- * <copyright>
- * </copyright>
- *
- * $Id$
- */
+/*******************************************************************************
+ * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * All rights reserved. This program and the accompanying materials 
+ * are made available under the terms of the Eclipse Public License v1.0 
+ * which accompanies this distribution, and is available at 
+ * http://www.eclipse.org/legal/epl-v10.html 
+ * 
+ * Initial development of the original code was made for the g-Eclipse project 
+ * funded by European Union project number: FP6-IST-034327 
+ * http://www.geclipse.eu/
+ *  
+ * Contributors:
+ *     RUR (http://acet.rdg.ac.uk/)
+ *     - Ashish Thandavan - initial API and implementation
+ ******************************************************************************/
 package eu.geclipse.workflow.impl;
 
 import eu.geclipse.workflow.IInputPort;
@@ -29,78 +38,74 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>IWorkflow Node</b></em>'.
+ * <!-- begin-user-doc --> An implementation of the model object '<em><b>IWorkflow Node</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link eu.geclipse.workflow.impl.IWorkflowNodeImpl#getWorkflow <em>Workflow</em>}</li>
- *   <li>{@link eu.geclipse.workflow.impl.IWorkflowNodeImpl#getOutputs <em>Outputs</em>}</li>
- *   <li>{@link eu.geclipse.workflow.impl.IWorkflowNodeImpl#getInputs <em>Inputs</em>}</li>
- *   <li>{@link eu.geclipse.workflow.impl.IWorkflowNodeImpl#isIsStart <em>Is Start</em>}</li>
- *   <li>{@link eu.geclipse.workflow.impl.IWorkflowNodeImpl#isIsFinish <em>Is Finish</em>}</li>
+ * <li>{@link eu.geclipse.workflow.impl.IWorkflowNodeImpl#getWorkflow <em>Workflow</em>}</li>
+ * <li>{@link eu.geclipse.workflow.impl.IWorkflowNodeImpl#getOutputs <em>Outputs</em>}</li>
+ * <li>{@link eu.geclipse.workflow.impl.IWorkflowNodeImpl#getInputs <em>Inputs</em>}</li>
+ * <li>{@link eu.geclipse.workflow.impl.IWorkflowNodeImpl#isIsStart <em>Is Start</em>}</li>
+ * <li>{@link eu.geclipse.workflow.impl.IWorkflowNodeImpl#isIsFinish <em>Is Finish</em>}</li>
  * </ul>
  * </p>
- *
+ * 
  * @generated
  */
-public abstract class WorkflowNodeImpl extends WorkflowElementImpl implements IWorkflowNode
+public abstract class WorkflowNodeImpl extends WorkflowElementImpl
+  implements IWorkflowNode
 {
+
   /**
-   * The cached value of the '{@link #getOutputs() <em>Outputs</em>}' containment reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+   * The cached value of the '{@link #getOutputs() <em>Outputs</em>}'
+   * containment reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
+   * 
    * @see #getOutputs()
    * @generated
    * @ordered
    */
   protected EList<IOutputPort> outputs;
-
   /**
-   * The cached value of the '{@link #getInputs() <em>Inputs</em>}' containment reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+   * The cached value of the '{@link #getInputs() <em>Inputs</em>}'
+   * containment reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
+   * 
    * @see #getInputs()
    * @generated
    * @ordered
    */
   protected EList<IInputPort> inputs;
-
   /**
-   * The default value of the '{@link #isIsStart() <em>Is Start</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+   * The default value of the '{@link #isIsStart() <em>Is Start</em>}'
+   * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+   * 
    * @see #isIsStart()
    * @generated
    * @ordered
    */
   protected static final boolean IS_START_EDEFAULT = false;
-
   /**
-   * The cached value of the '{@link #isIsStart() <em>Is Start</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+   * The cached value of the '{@link #isIsStart() <em>Is Start</em>}'
+   * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+   * 
    * @see #isIsStart()
    * @generated
    * @ordered
    */
   protected boolean isStart = IS_START_EDEFAULT;
-
   /**
-   * The default value of the '{@link #isIsFinish() <em>Is Finish</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+   * The default value of the '{@link #isIsFinish() <em>Is Finish</em>}'
+   * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+   * 
    * @see #isIsFinish()
    * @generated
    * @ordered
    */
   protected static final boolean IS_FINISH_EDEFAULT = false;
-
   /**
-   * The cached value of the '{@link #isIsFinish() <em>Is Finish</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+   * The cached value of the '{@link #isIsFinish() <em>Is Finish</em>}'
+   * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+   * 
    * @see #isIsFinish()
    * @generated
    * @ordered
@@ -108,214 +113,232 @@ public abstract class WorkflowNodeImpl extends WorkflowElementImpl implements IW
   protected boolean isFinish = IS_FINISH_EDEFAULT;
 
   /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+   * <!-- begin-user-doc --> <!-- end-user-doc -->
+   * 
    * @generated
    */
-  protected WorkflowNodeImpl()
-  {
+  protected WorkflowNodeImpl() {
     super();
   }
 
   /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+   * <!-- begin-user-doc --> <!-- end-user-doc -->
+   * 
    * @generated
    */
   @Override
-  protected EClass eStaticClass()
-  {
+  protected EClass eStaticClass() {
     return IWorkflowPackage.Literals.IWORKFLOW_NODE;
   }
 
   /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+   * <!-- begin-user-doc --> <!-- end-user-doc -->
+   * 
    * @generated
    */
-  public IWorkflow getWorkflow()
-  {
-    if (eContainerFeatureID != IWorkflowPackage.IWORKFLOW_NODE__WORKFLOW) return null;
-    return (IWorkflow)eContainer();
+  public IWorkflow getWorkflow() {
+    if( this.eContainerFeatureID != IWorkflowPackage.IWORKFLOW_NODE__WORKFLOW )
+      return null;
+    return ( IWorkflow )eContainer();
   }
 
   /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+   * <!-- begin-user-doc --> <!-- end-user-doc -->
+   * 
    * @generated
    */
-  public NotificationChain basicSetWorkflow(IWorkflow newWorkflow, NotificationChain msgs)
+  public NotificationChain basicSetWorkflow( IWorkflow newWorkflow,
+                                             NotificationChain msgs )
   {
-    msgs = eBasicSetContainer((InternalEObject)newWorkflow, IWorkflowPackage.IWORKFLOW_NODE__WORKFLOW, msgs);
+    msgs = eBasicSetContainer( ( InternalEObject )newWorkflow,
+                               IWorkflowPackage.IWORKFLOW_NODE__WORKFLOW,
+                               msgs );
     return msgs;
   }
 
   /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+   * <!-- begin-user-doc --> <!-- end-user-doc -->
+   * 
    * @generated
    */
-  public void setWorkflow(IWorkflow newWorkflow)
-  {
-    if (newWorkflow != eInternalContainer() || (eContainerFeatureID != IWorkflowPackage.IWORKFLOW_NODE__WORKFLOW && newWorkflow != null))
+  public void setWorkflow( IWorkflow newWorkflow ) {
+    if( newWorkflow != eInternalContainer()
+        || ( this.eContainerFeatureID != IWorkflowPackage.IWORKFLOW_NODE__WORKFLOW && newWorkflow != null ) )
     {
-      if (EcoreUtil.isAncestor(this, newWorkflow))
-        throw new IllegalArgumentException("Recursive containment not allowed for " + toString()); //$NON-NLS-1$
+      if( EcoreUtil.isAncestor( this, newWorkflow ) )
+        throw new IllegalArgumentException( "Recursive containment not allowed for " + toString() ); //$NON-NLS-1$
       NotificationChain msgs = null;
-      if (eInternalContainer() != null)
-        msgs = eBasicRemoveFromContainer(msgs);
-      if (newWorkflow != null)
-        msgs = ((InternalEObject)newWorkflow).eInverseAdd(this, IWorkflowPackage.IWORKFLOW__NODES, IWorkflow.class, msgs);
-      msgs = basicSetWorkflow(newWorkflow, msgs);
-      if (msgs != null) msgs.dispatch();
+      if( eInternalContainer() != null )
+        msgs = eBasicRemoveFromContainer( msgs );
+      if( newWorkflow != null )
+        msgs = ( ( InternalEObject )newWorkflow ).eInverseAdd( this,
+                                                               IWorkflowPackage.IWORKFLOW__NODES,
+                                                               IWorkflow.class,
+                                                               msgs );
+      msgs = basicSetWorkflow( newWorkflow, msgs );
+      if( msgs != null )
+        msgs.dispatch();
+    } else if( eNotificationRequired() )
+      eNotify( new ENotificationImpl( this,
+                                      Notification.SET,
+                                      IWorkflowPackage.IWORKFLOW_NODE__WORKFLOW,
+                                      newWorkflow,
+                                      newWorkflow ) );
+  }
+
+  /**
+   * <!-- begin-user-doc --> <!-- end-user-doc -->
+   * 
+   * @generated
+   */
+  public EList<IOutputPort> getOutputs() {
+    if( this.outputs == null ) {
+      this.outputs = new EObjectContainmentWithInverseEList<IOutputPort>( IOutputPort.class,
+                                                                     this,
+                                                                     IWorkflowPackage.IWORKFLOW_NODE__OUTPUTS,
+                                                                     IWorkflowPackage.IOUTPUT_PORT__NODE );
     }
-    else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, IWorkflowPackage.IWORKFLOW_NODE__WORKFLOW, newWorkflow, newWorkflow));
+    return this.outputs;
   }
 
   /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+   * <!-- begin-user-doc --> <!-- end-user-doc -->
+   * 
    * @generated
    */
-  public EList<IOutputPort> getOutputs()
-  {
-    if (outputs == null)
-    {
-      outputs = new EObjectContainmentWithInverseEList<IOutputPort>(IOutputPort.class, this, IWorkflowPackage.IWORKFLOW_NODE__OUTPUTS, IWorkflowPackage.IOUTPUT_PORT__NODE);
+  public EList<IInputPort> getInputs() {
+    if( this.inputs == null ) {
+      this.inputs = new EObjectContainmentWithInverseEList<IInputPort>( IInputPort.class,
+                                                                   this,
+                                                                   IWorkflowPackage.IWORKFLOW_NODE__INPUTS,
+                                                                   IWorkflowPackage.IINPUT_PORT__NODE );
     }
-    return outputs;
+    return this.inputs;
   }
 
   /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+   * <!-- begin-user-doc --> <!-- end-user-doc -->
+   * 
    * @generated
    */
-  public EList<IInputPort> getInputs()
-  {
-    if (inputs == null)
-    {
-      inputs = new EObjectContainmentWithInverseEList<IInputPort>(IInputPort.class, this, IWorkflowPackage.IWORKFLOW_NODE__INPUTS, IWorkflowPackage.IINPUT_PORT__NODE);
-    }
-    return inputs;
+  public boolean isIsStart() {
+    return this.isStart;
   }
 
   /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+   * <!-- begin-user-doc --> <!-- end-user-doc -->
+   * 
    * @generated
    */
-  public boolean isIsStart()
-  {
-    return isStart;
+  public void setIsStart( boolean newIsStart ) {
+    boolean oldIsStart = this.isStart;
+    this.isStart = newIsStart;
+    if( eNotificationRequired() )
+      eNotify( new ENotificationImpl( this,
+                                      Notification.SET,
+                                      IWorkflowPackage.IWORKFLOW_NODE__IS_START,
+                                      oldIsStart,
+                                      this.isStart ) );
   }
 
   /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+   * <!-- begin-user-doc --> <!-- end-user-doc -->
+   * 
    * @generated
    */
-  public void setIsStart(boolean newIsStart)
-  {
-    boolean oldIsStart = isStart;
-    isStart = newIsStart;
-    if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, IWorkflowPackage.IWORKFLOW_NODE__IS_START, oldIsStart, isStart));
+  public boolean isIsFinish() {
+    return this.isFinish;
   }
 
   /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+   * <!-- begin-user-doc --> <!-- end-user-doc -->
+   * 
    * @generated
    */
-  public boolean isIsFinish()
-  {
-    return isFinish;
+  public void setIsFinish( boolean newIsFinish ) {
+    boolean oldIsFinish = this.isFinish;
+    this.isFinish = newIsFinish;
+    if( eNotificationRequired() )
+      eNotify( new ENotificationImpl( this,
+                                      Notification.SET,
+                                      IWorkflowPackage.IWORKFLOW_NODE__IS_FINISH,
+                                      oldIsFinish,
+                                      this.isFinish ) );
   }
 
   /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public void setIsFinish(boolean newIsFinish)
-  {
-    boolean oldIsFinish = isFinish;
-    isFinish = newIsFinish;
-    if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, IWorkflowPackage.IWORKFLOW_NODE__IS_FINISH, oldIsFinish, isFinish));
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+   * <!-- begin-user-doc --> <!-- end-user-doc -->
+   * 
    * @generated
    */
   @SuppressWarnings("unchecked")
   @Override
-  public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs)
+  public NotificationChain eInverseAdd( InternalEObject otherEnd,
+                                        int featureID,
+                                        NotificationChain msgs )
   {
-    switch (featureID)
-    {
+    switch( featureID ) {
       case IWorkflowPackage.IWORKFLOW_NODE__WORKFLOW:
-        if (eInternalContainer() != null)
-          msgs = eBasicRemoveFromContainer(msgs);
-        return basicSetWorkflow((IWorkflow)otherEnd, msgs);
+        if( eInternalContainer() != null )
+          msgs = eBasicRemoveFromContainer( msgs );
+        return basicSetWorkflow( ( IWorkflow )otherEnd, msgs );
       case IWorkflowPackage.IWORKFLOW_NODE__OUTPUTS:
-        return ((InternalEList<InternalEObject>)(InternalEList<?>)getOutputs()).basicAdd(otherEnd, msgs);
+        return ( ( InternalEList<InternalEObject> )( InternalEList<?> )getOutputs() ).basicAdd( otherEnd,
+                                                                                                msgs );
       case IWorkflowPackage.IWORKFLOW_NODE__INPUTS:
-        return ((InternalEList<InternalEObject>)(InternalEList<?>)getInputs()).basicAdd(otherEnd, msgs);
+        return ( ( InternalEList<InternalEObject> )( InternalEList<?> )getInputs() ).basicAdd( otherEnd,
+                                                                                               msgs );
     }
-    return super.eInverseAdd(otherEnd, featureID, msgs);
+    return super.eInverseAdd( otherEnd, featureID, msgs );
   }
 
   /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+   * <!-- begin-user-doc --> <!-- end-user-doc -->
+   * 
    * @generated
    */
   @Override
-  public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
+  public NotificationChain eInverseRemove( InternalEObject otherEnd,
+                                           int featureID,
+                                           NotificationChain msgs )
   {
-    switch (featureID)
-    {
+    switch( featureID ) {
       case IWorkflowPackage.IWORKFLOW_NODE__WORKFLOW:
-        return basicSetWorkflow(null, msgs);
+        return basicSetWorkflow( null, msgs );
       case IWorkflowPackage.IWORKFLOW_NODE__OUTPUTS:
-        return ((InternalEList<?>)getOutputs()).basicRemove(otherEnd, msgs);
+        return ( ( InternalEList<?> )getOutputs() ).basicRemove( otherEnd, msgs );
       case IWorkflowPackage.IWORKFLOW_NODE__INPUTS:
-        return ((InternalEList<?>)getInputs()).basicRemove(otherEnd, msgs);
+        return ( ( InternalEList<?> )getInputs() ).basicRemove( otherEnd, msgs );
     }
-    return super.eInverseRemove(otherEnd, featureID, msgs);
+    return super.eInverseRemove( otherEnd, featureID, msgs );
   }
 
   /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+   * <!-- begin-user-doc --> <!-- end-user-doc -->
+   * 
    * @generated
    */
   @Override
-  public NotificationChain eBasicRemoveFromContainerFeature(NotificationChain msgs)
+  public NotificationChain eBasicRemoveFromContainerFeature( NotificationChain msgs )
   {
-    switch (eContainerFeatureID)
-    {
+    switch( this.eContainerFeatureID ) {
       case IWorkflowPackage.IWORKFLOW_NODE__WORKFLOW:
-        return eInternalContainer().eInverseRemove(this, IWorkflowPackage.IWORKFLOW__NODES, IWorkflow.class, msgs);
+        return eInternalContainer().eInverseRemove( this,
+                                                    IWorkflowPackage.IWORKFLOW__NODES,
+                                                    IWorkflow.class,
+                                                    msgs );
     }
-    return super.eBasicRemoveFromContainerFeature(msgs);
+    return super.eBasicRemoveFromContainerFeature( msgs );
   }
 
   /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+   * <!-- begin-user-doc --> <!-- end-user-doc -->
+   * 
    * @generated
    */
   @Override
-  public Object eGet(int featureID, boolean resolve, boolean coreType)
-  {
-    switch (featureID)
-    {
+  public Object eGet( int featureID, boolean resolve, boolean coreType ) {
+    switch( featureID ) {
       case IWorkflowPackage.IWORKFLOW_NODE__WORKFLOW:
         return getWorkflow();
       case IWorkflowPackage.IWORKFLOW_NODE__OUTPUTS:
@@ -323,57 +346,57 @@ public abstract class WorkflowNodeImpl extends WorkflowElementImpl implements IW
       case IWorkflowPackage.IWORKFLOW_NODE__INPUTS:
         return getInputs();
       case IWorkflowPackage.IWORKFLOW_NODE__IS_START:
-        return isIsStart() ? Boolean.TRUE : Boolean.FALSE;
+        return isIsStart()
+                          ? Boolean.TRUE
+                          : Boolean.FALSE;
       case IWorkflowPackage.IWORKFLOW_NODE__IS_FINISH:
-        return isIsFinish() ? Boolean.TRUE : Boolean.FALSE;
+        return isIsFinish()
+                           ? Boolean.TRUE
+                           : Boolean.FALSE;
     }
-    return super.eGet(featureID, resolve, coreType);
+    return super.eGet( featureID, resolve, coreType );
   }
 
   /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+   * <!-- begin-user-doc --> <!-- end-user-doc -->
+   * 
    * @generated
    */
   @SuppressWarnings("unchecked")
   @Override
-  public void eSet(int featureID, Object newValue)
-  {
-    switch (featureID)
-    {
+  public void eSet( int featureID, Object newValue ) {
+    switch( featureID ) {
       case IWorkflowPackage.IWORKFLOW_NODE__WORKFLOW:
-        setWorkflow((IWorkflow)newValue);
+        setWorkflow( ( IWorkflow )newValue );
         return;
       case IWorkflowPackage.IWORKFLOW_NODE__OUTPUTS:
         getOutputs().clear();
-        getOutputs().addAll((Collection<? extends IOutputPort>)newValue);
+        getOutputs().addAll( ( Collection<? extends IOutputPort> )newValue );
         return;
       case IWorkflowPackage.IWORKFLOW_NODE__INPUTS:
         getInputs().clear();
-        getInputs().addAll((Collection<? extends IInputPort>)newValue);
+        getInputs().addAll( ( Collection<? extends IInputPort> )newValue );
         return;
       case IWorkflowPackage.IWORKFLOW_NODE__IS_START:
-        setIsStart(((Boolean)newValue).booleanValue());
+        setIsStart( ( ( Boolean )newValue ).booleanValue() );
         return;
       case IWorkflowPackage.IWORKFLOW_NODE__IS_FINISH:
-        setIsFinish(((Boolean)newValue).booleanValue());
+        setIsFinish( ( ( Boolean )newValue ).booleanValue() );
         return;
     }
-    super.eSet(featureID, newValue);
+    super.eSet( featureID, newValue );
   }
 
   /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+   * <!-- begin-user-doc --> <!-- end-user-doc -->
+   * 
    * @generated
    */
   @Override
-  public void eUnset(int featureID)
-  {
-    switch (featureID)
-    {
+  public void eUnset( int featureID ) {
+    switch( featureID ) {
       case IWorkflowPackage.IWORKFLOW_NODE__WORKFLOW:
-        setWorkflow((IWorkflow)null);
+        setWorkflow( ( IWorkflow )null );
         return;
       case IWorkflowPackage.IWORKFLOW_NODE__OUTPUTS:
         getOutputs().clear();
@@ -382,13 +405,13 @@ public abstract class WorkflowNodeImpl extends WorkflowElementImpl implements IW
         getInputs().clear();
         return;
       case IWorkflowPackage.IWORKFLOW_NODE__IS_START:
-        setIsStart(IS_START_EDEFAULT);
+        setIsStart( IS_START_EDEFAULT );
         return;
       case IWorkflowPackage.IWORKFLOW_NODE__IS_FINISH:
-        setIsFinish(IS_FINISH_EDEFAULT);
+        setIsFinish( IS_FINISH_EDEFAULT );
         return;
     }
-    super.eUnset(featureID);
+    super.eUnset( featureID );
   }
 
   /**
@@ -397,22 +420,20 @@ public abstract class WorkflowNodeImpl extends WorkflowElementImpl implements IW
    * @generated
    */
   @Override
-  public boolean eIsSet(int featureID)
-  {
-    switch (featureID)
-    {
+  public boolean eIsSet( int featureID ) {
+    switch( featureID ) {
       case IWorkflowPackage.IWORKFLOW_NODE__WORKFLOW:
         return getWorkflow() != null;
       case IWorkflowPackage.IWORKFLOW_NODE__OUTPUTS:
-        return outputs != null && !outputs.isEmpty();
+        return this.outputs != null && !this.outputs.isEmpty();
       case IWorkflowPackage.IWORKFLOW_NODE__INPUTS:
-        return inputs != null && !inputs.isEmpty();
+        return this.inputs != null && !this.inputs.isEmpty();
       case IWorkflowPackage.IWORKFLOW_NODE__IS_START:
-        return isStart != IS_START_EDEFAULT;
+        return this.isStart != IS_START_EDEFAULT;
       case IWorkflowPackage.IWORKFLOW_NODE__IS_FINISH:
-        return isFinish != IS_FINISH_EDEFAULT;
+        return this.isFinish != IS_FINISH_EDEFAULT;
     }
-    return super.eIsSet(featureID);
+    return super.eIsSet( featureID );
   }
 
   /**
@@ -421,17 +442,15 @@ public abstract class WorkflowNodeImpl extends WorkflowElementImpl implements IW
    * @generated
    */
   @Override
-  public String toString()
-  {
-    if (eIsProxy()) return super.toString();
-
-    StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (isStart: "); //$NON-NLS-1$
-    result.append(isStart);
-    result.append(", isFinish: "); //$NON-NLS-1$
-    result.append(isFinish);
-    result.append(')');
+  public String toString() {
+    if( eIsProxy() )
+      return super.toString();
+    StringBuffer result = new StringBuffer( super.toString() );
+    result.append( " (isStart: " ); //$NON-NLS-1$
+    result.append( this.isStart );
+    result.append( ", isFinish: " ); //$NON-NLS-1$
+    result.append( this.isFinish );
+    result.append( ')' );
     return result.toString();
   }
-
 } //IWorkflowNodeImpl

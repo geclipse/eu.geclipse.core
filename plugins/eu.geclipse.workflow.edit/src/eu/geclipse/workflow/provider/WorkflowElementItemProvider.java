@@ -62,14 +62,13 @@ public class WorkflowElementItemProvider extends ItemProviderAdapter
    * @generated
    */
   @Override
-  public List<IItemPropertyDescriptor> getPropertyDescriptors( Object object )
-  {
-    if( itemPropertyDescriptors == null ) {
+  public List<IItemPropertyDescriptor> getPropertyDescriptors( Object object ) {
+    if( this.itemPropertyDescriptors == null ) {
       super.getPropertyDescriptors( object );
       addNamePropertyDescriptor( object );
       addIdPropertyDescriptor( object );
     }
-    return itemPropertyDescriptors;
+    return this.itemPropertyDescriptors;
   }
 
   /**
@@ -79,7 +78,7 @@ public class WorkflowElementItemProvider extends ItemProviderAdapter
    * @generated
    */
   protected void addNamePropertyDescriptor( Object object ) {
-    itemPropertyDescriptors.add( createItemPropertyDescriptor( ( ( ComposeableAdapterFactory )adapterFactory ).getRootAdapterFactory(),
+    this.itemPropertyDescriptors.add( createItemPropertyDescriptor( ( ( ComposeableAdapterFactory )this.adapterFactory ).getRootAdapterFactory(),
                                                                getResourceLocator(),
                                                                getString( "_UI_IWorkflowElement_name_feature" ), //$NON-NLS-1$
                                                                getString( "_UI_PropertyDescriptor_description", //$NON-NLS-1$
@@ -101,7 +100,7 @@ public class WorkflowElementItemProvider extends ItemProviderAdapter
    * @generated
    */
   protected void addIdPropertyDescriptor( Object object ) {
-    itemPropertyDescriptors.add( createItemPropertyDescriptor( ( ( ComposeableAdapterFactory )adapterFactory ).getRootAdapterFactory(),
+    this.itemPropertyDescriptors.add( createItemPropertyDescriptor( ( ( ComposeableAdapterFactory )this.adapterFactory ).getRootAdapterFactory(),
                                                                getResourceLocator(),
                                                                getString( "_UI_IWorkflowElement_id_feature" ), //$NON-NLS-1$
                                                                getString( "_UI_PropertyDescriptor_description", //$NON-NLS-1$
@@ -123,8 +122,7 @@ public class WorkflowElementItemProvider extends ItemProviderAdapter
    * @generated
    */
   @Override
-  public String getText( Object object )
-  {
+  public String getText( Object object ) {
     String label = ( ( IWorkflowElement )object ).getName();
     return label == null || label.length() == 0
                                                ? getString( "_UI_IWorkflowElement_type" ) //$NON-NLS-1$
@@ -141,8 +139,7 @@ public class WorkflowElementItemProvider extends ItemProviderAdapter
    * @generated
    */
   @Override
-  public void notifyChanged( Notification notification )
-  {
+  public void notifyChanged( Notification notification ) {
     updateChildren( notification );
     switch( notification.getFeatureID( IWorkflowElement.class ) ) {
       case IWorkflowPackage.IWORKFLOW_ELEMENT__NAME:
@@ -177,8 +174,7 @@ public class WorkflowElementItemProvider extends ItemProviderAdapter
    * @generated
    */
   @Override
-  public ResourceLocator getResourceLocator()
-  {
+  public ResourceLocator getResourceLocator() {
     return WorkflowEditPlugin.INSTANCE;
   }
 }

@@ -62,13 +62,12 @@ public class OutputPortItemProvider extends PortItemProvider
    * @generated
    */
   @Override
-  public List<IItemPropertyDescriptor> getPropertyDescriptors( Object object )
-  {
-    if( itemPropertyDescriptors == null ) {
+  public List<IItemPropertyDescriptor> getPropertyDescriptors( Object object ) {
+    if( this.itemPropertyDescriptors == null ) {
       super.getPropertyDescriptors( object );
       addLinksPropertyDescriptor( object );
     }
-    return itemPropertyDescriptors;
+    return this.itemPropertyDescriptors;
   }
 
   /**
@@ -79,7 +78,7 @@ public class OutputPortItemProvider extends PortItemProvider
    * @generated
    */
   protected void addLinksPropertyDescriptor( Object object ) {
-    itemPropertyDescriptors.add( createItemPropertyDescriptor( ( ( ComposeableAdapterFactory )adapterFactory ).getRootAdapterFactory(),
+    this.itemPropertyDescriptors.add( createItemPropertyDescriptor( ( ( ComposeableAdapterFactory )this.adapterFactory ).getRootAdapterFactory(),
                                                                getResourceLocator(),
                                                                getString( "_UI_IOutputPort_links_feature" ), //$NON-NLS-1$
                                                                getString( "_UI_PropertyDescriptor_description", //$NON-NLS-1$
@@ -102,8 +101,7 @@ public class OutputPortItemProvider extends PortItemProvider
    * @generated NOT
    */
   @Override
-  public Object getImage( Object object )
-  {
+  public Object getImage( Object object ) {
     return overlayImage( object,
                          getResourceLocator().getImage( "full/obj16/OutputPort" ) ); //$NON-NLS-1$
   }
@@ -115,16 +113,12 @@ public class OutputPortItemProvider extends PortItemProvider
    * 
    */
   @Override
-  public String getText( Object object )
-  {
+  public String getText( Object object ) {
     IOutputPort outPort = ( IOutputPort )object;
     String label = ""; //$NON-NLS-1$
-    
     String portName = outPort.getNode().getName();
-    
-    if (!( portName == null || portName.length() == 0 ))
+    if( !( portName == null || portName.length() == 0 ) )
       label = " belonging to " + portName; //$NON-NLS-1$
-    
     return label == null || label.length() == 0
                                                ? getString( "_UI_IOutputPort_type" ) //$NON-NLS-1$
                                                : getString( "_UI_IOutputPort_type" ) //$NON-NLS-1$
@@ -142,8 +136,7 @@ public class OutputPortItemProvider extends PortItemProvider
    * @generated
    */
   @Override
-  public void notifyChanged( Notification notification )
-  {
+  public void notifyChanged( Notification notification ) {
     updateChildren( notification );
     super.notifyChanged( notification );
   }
@@ -169,8 +162,7 @@ public class OutputPortItemProvider extends PortItemProvider
    * @generated
    */
   @Override
-  public ResourceLocator getResourceLocator()
-  {
+  public ResourceLocator getResourceLocator() {
     return WorkflowEditPlugin.INSTANCE;
   }
 }

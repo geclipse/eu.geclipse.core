@@ -35,7 +35,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
 
 /**
  * This is the item provider adapter for a
- * {@link eu.geclipse.workflow.IWorkflowJob} object. 
+ * {@link eu.geclipse.workflow.IWorkflowJob} object.
  * 
  * @generated
  */
@@ -45,7 +45,7 @@ public class WorkflowJobItemProvider extends WorkflowNodeItemProvider
 {
 
   /**
-   * This constructs an instance from a factory and a notifier. 
+   * This constructs an instance from a factory and a notifier.
    * 
    * @generated
    */
@@ -54,13 +54,12 @@ public class WorkflowJobItemProvider extends WorkflowNodeItemProvider
   }
 
   /**
-   * This returns the property descriptors for the adapted class. 
+   * This returns the property descriptors for the adapted class.
    * 
    * @generated
    */
   @Override
-  public List<IItemPropertyDescriptor> getPropertyDescriptors( Object object )
-  {
+  public List<IItemPropertyDescriptor> getPropertyDescriptors( Object object ) {
     if( this.itemPropertyDescriptors == null ) {
       super.getPropertyDescriptors( object );
       addJobDescriptionPropertyDescriptor( object );
@@ -69,68 +68,64 @@ public class WorkflowJobItemProvider extends WorkflowNodeItemProvider
   }
 
   /**
-   * This adds a property descriptor for the Job Description feature. 
+   * This adds a property descriptor for the Job Description feature.
    * 
    * @generated NOT
    */
   protected void addJobDescriptionPropertyDescriptor( Object object ) {
     this.itemPropertyDescriptors.add( createItemPropertyDescriptor( ( ( ComposeableAdapterFactory )this.adapterFactory ).getRootAdapterFactory(),
-                                                               getResourceLocator(),
-                                                               getString( "_UI_IWorkflowJob_jobDescription_feature" ), //$NON-NLS-1$
-                                                               getString( "_UI_PropertyDescriptor_description", //$NON-NLS-1$
-                                                                          "_UI_IWorkflowJob_jobDescription_feature", //$NON-NLS-1$
-                                                                          "_UI_IWorkflowJob_type" ), //$NON-NLS-1$
-                                                               IWorkflowPackage.Literals.IWORKFLOW_JOB__JOB_DESCRIPTION,
-                                                               true,
-                                                               true,
-                                                               false,
-                                                               ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-                                                               null,
-                                                               null ) );
+                                                                    getResourceLocator(),
+                                                                    getString( "_UI_IWorkflowJob_jobDescription_feature" ), //$NON-NLS-1$
+                                                                    getString( "_UI_PropertyDescriptor_description", //$NON-NLS-1$
+                                                                               "_UI_IWorkflowJob_jobDescription_feature", //$NON-NLS-1$
+                                                                               "_UI_IWorkflowJob_type" ), //$NON-NLS-1$
+                                                                    IWorkflowPackage.Literals.IWORKFLOW_JOB__JOB_DESCRIPTION,
+                                                                    true,
+                                                                    true,
+                                                                    false,
+                                                                    ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+                                                                    null,
+                                                                    null ) );
   }
 
   /**
    * This adds a property descriptor for the Job Description File Name feature.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+   * <!-- begin-user-doc --> <!-- end-user-doc -->
+   * 
    * @generated
    */
-  protected void addJobDescriptionFileNamePropertyDescriptor(Object object)
-  {
-    this.itemPropertyDescriptors.add
-      (createItemPropertyDescriptor
-        (((ComposeableAdapterFactory)this.adapterFactory).getRootAdapterFactory(),
-         getResourceLocator(),
-         getString("_UI_IWorkflowJob_jobDescriptionFileName_feature"), //$NON-NLS-1$
-         getString("_UI_PropertyDescriptor_description", "_UI_IWorkflowJob_jobDescriptionFileName_feature", "_UI_IWorkflowJob_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-         IWorkflowPackage.Literals.IWORKFLOW_JOB__JOB_DESCRIPTION_FILE_NAME,
-         true,
-         false,
-         false,
-         ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-         null,
-         null));
+  protected void addJobDescriptionFileNamePropertyDescriptor( Object object ) {
+    this.itemPropertyDescriptors.add( createItemPropertyDescriptor( ( ( ComposeableAdapterFactory )this.adapterFactory ).getRootAdapterFactory(),
+                                                                    getResourceLocator(),
+                                                                    getString( "_UI_IWorkflowJob_jobDescriptionFileName_feature" ), //$NON-NLS-1$
+                                                                    getString( "_UI_PropertyDescriptor_description", "_UI_IWorkflowJob_jobDescriptionFileName_feature", "_UI_IWorkflowJob_type" ), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                                                                    IWorkflowPackage.Literals.IWORKFLOW_JOB__JOB_DESCRIPTION_FILE_NAME,
+                                                                    true,
+                                                                    false,
+                                                                    false,
+                                                                    ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+                                                                    null,
+                                                                    null ) );
   }
 
   /**
-   * This returns IWorkflowJob.gif. 
+   * This returns IWorkflowJob.gif.
    * 
    * @generated
    */
   @Override
-  public Object getImage( Object object )
-  {
-    return overlayImage( object, getResourceLocator().getImage( "full/obj16/WorkflowJob" ) ); //$NON-NLS-1$
+  public Object getImage( Object object ) {
+    return overlayImage( object,
+                         getResourceLocator().getImage( "full/obj16/WorkflowJob" ) ); //$NON-NLS-1$
   }
 
   /**
-   * This returns the label text for the adapted class. 
+   * This returns the label text for the adapted class.
    * 
    * @generated
    */
   @Override
-  public String getText( Object object )
-  {
+  public String getText( Object object ) {
     String label = ( ( IWorkflowJob )object ).getName();
     return label == null || label.length() == 0
                                                ? getString( "_UI_IWorkflowJob_type" ) //$NON-NLS-1$
@@ -139,17 +134,15 @@ public class WorkflowJobItemProvider extends WorkflowNodeItemProvider
                                                  + label;
   }
 
-
   /**
    * This handles model notifications by calling {@link #updateChildren} to
    * update any cached children and by creating a viewer notification, which it
-   * passes to {@link #fireNotifyChanged}. 
+   * passes to {@link #fireNotifyChanged}.
    * 
    * @generated
    */
   @Override
-  public void notifyChanged( Notification notification )
-  {
+  public void notifyChanged( Notification notification ) {
     updateChildren( notification );
     switch( notification.getFeatureID( IWorkflowJob.class ) ) {
       case IWorkflowPackage.IWORKFLOW_JOB__JOB_DESCRIPTION:
@@ -180,8 +173,7 @@ public class WorkflowJobItemProvider extends WorkflowNodeItemProvider
    * @generated
    */
   @Override
-  public ResourceLocator getResourceLocator()
-  {
+  public ResourceLocator getResourceLocator() {
     return WorkflowEditPlugin.INSTANCE;
   }
 }

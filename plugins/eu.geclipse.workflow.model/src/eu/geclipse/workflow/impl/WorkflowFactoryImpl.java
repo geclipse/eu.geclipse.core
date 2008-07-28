@@ -27,144 +27,134 @@ import org.eclipse.emf.ecore.plugin.EcorePlugin;
 import eu.geclipse.workflow.IWorkflowPackage;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model <b>IWorkflowFactory</b>.
+ * <!-- begin-user-doc --> An implementation of the model <b>IWorkflowFactory</b>.
  * <!-- end-user-doc -->
+ * 
  * @generated
  */
-public class WorkflowFactoryImpl extends EFactoryImpl implements IWorkflowFactory
+public class WorkflowFactoryImpl extends EFactoryImpl
+  implements IWorkflowFactory
 {
+
   /**
-   * Creates the default factory implementation.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+   * Creates the default factory implementation. <!-- begin-user-doc --> <!--
+   * end-user-doc -->
+   * 
    * @return WorkflowFactoryImpl
    * @generated
    */
-  public static IWorkflowFactory init()
-  {
-    try
-    {
-      IWorkflowFactory theWorkflowFactory = (IWorkflowFactory)EPackage.Registry.INSTANCE.getEFactory("http:///eu/geclipse/workflow.ecore"); //$NON-NLS-1$ 
-      if (theWorkflowFactory != null)
-      {
+  public static IWorkflowFactory init() {
+    try {
+      IWorkflowFactory theWorkflowFactory = ( IWorkflowFactory )EPackage.Registry.INSTANCE.getEFactory( "http:///eu/geclipse/workflow.ecore" ); //$NON-NLS-1$ 
+      if( theWorkflowFactory != null ) {
         return theWorkflowFactory;
       }
-    }
-    catch (Exception exception)
-    {
-      EcorePlugin.INSTANCE.log(exception);
+    } catch( Exception exception ) {
+      EcorePlugin.INSTANCE.log( exception );
     }
     return new WorkflowFactoryImpl();
   }
 
   /**
-   * Creates an instance of the factory.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+   * Creates an instance of the factory. <!-- begin-user-doc --> <!--
+   * end-user-doc -->
+   * 
    * @generated
    */
-  public WorkflowFactoryImpl()
-  {
+  public WorkflowFactoryImpl() {
     super();
   }
 
   /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+   * <!-- begin-user-doc --> <!-- end-user-doc -->
+   * 
    * @generated
    */
   @Override
-  public EObject create(EClass eClass)
-  {
-    switch (eClass.getClassifierID())
-    {
-      case IWorkflowPackage.ILINK: return createILink();
-      case IWorkflowPackage.IINPUT_PORT: return createIInputPort();
-      case IWorkflowPackage.IOUTPUT_PORT: return createIOutputPort();
-      case IWorkflowPackage.IWORKFLOW: return createIWorkflow();
-      case IWorkflowPackage.IWORKFLOW_JOB: return createIWorkflowJob();
+  public EObject create( EClass eClass ) {
+    switch( eClass.getClassifierID() ) {
+      case IWorkflowPackage.ILINK:
+        return createILink();
+      case IWorkflowPackage.IINPUT_PORT:
+        return createIInputPort();
+      case IWorkflowPackage.IOUTPUT_PORT:
+        return createIOutputPort();
+      case IWorkflowPackage.IWORKFLOW:
+        return createIWorkflow();
+      case IWorkflowPackage.IWORKFLOW_JOB:
+        return createIWorkflowJob();
       default:
-        throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
+        throw new IllegalArgumentException( "The class '" + eClass.getName() + "' is not a valid classifier" ); //$NON-NLS-1$ //$NON-NLS-2$
     }
   }
 
   /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+   * <!-- begin-user-doc --> <!-- end-user-doc -->
+   * 
    * @generated
    */
-  public ILink createILink()
-  {
+  public ILink createILink() {
     LinkImpl iLink = new LinkImpl();
     return iLink;
   }
 
   /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+   * <!-- begin-user-doc --> <!-- end-user-doc -->
+   * 
    * @generated
    */
-  public IInputPort createIInputPort()
-  {
+  public IInputPort createIInputPort() {
     InputPortImpl iInputPort = new InputPortImpl();
     return iInputPort;
   }
 
   /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+   * <!-- begin-user-doc --> <!-- end-user-doc -->
+   * 
    * @generated
    */
-  public IOutputPort createIOutputPort()
-  {
+  public IOutputPort createIOutputPort() {
     OutputPortImpl iOutputPort = new OutputPortImpl();
     return iOutputPort;
   }
 
   /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+   * <!-- begin-user-doc --> <!-- end-user-doc -->
+   * 
    * @generated
    */
-  public IWorkflow createIWorkflow()
-  {
+  public IWorkflow createIWorkflow() {
     WorkflowImpl iWorkflow = new WorkflowImpl();
     return iWorkflow;
   }
 
   /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+   * <!-- begin-user-doc --> <!-- end-user-doc -->
+   * 
    * @generated
    */
-  public IWorkflowJob createIWorkflowJob()
-  {
+  public IWorkflowJob createIWorkflowJob() {
     WorkflowJobImpl iWorkflowJob = new WorkflowJobImpl();
     return iWorkflowJob;
   }
 
   /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+   * <!-- begin-user-doc --> <!-- end-user-doc -->
+   * 
    * @generated
    */
-  public IWorkflowPackage getWorkflowPackage()
-  {
-    return (IWorkflowPackage)getEPackage();
+  public IWorkflowPackage getWorkflowPackage() {
+    return ( IWorkflowPackage )getEPackage();
   }
 
   /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+   * <!-- begin-user-doc --> <!-- end-user-doc -->
+   * 
    * @deprecated
    * @generated
    */
   @Deprecated
-  public static IWorkflowPackage getPackage()
-  {
+  public static IWorkflowPackage getPackage() {
     return IWorkflowPackage.eINSTANCE;
   }
-
-
-} //WorkflowFactoryImpl
+} // WorkflowFactoryImpl

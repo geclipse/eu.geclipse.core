@@ -23,13 +23,12 @@ import eu.geclipse.core.model.IGridWorkflow;
 import eu.geclipse.core.model.impl.AbstractGridElementCreator;
 import eu.geclipse.core.reporting.ProblemException;
 
-
 /**
  * 
  * @author ash
  */
 public class GridWorkflowCreator extends AbstractGridElementCreator {
-  
+
   private static final String FILE_EXTENSION = "workflow"; //$NON-NLS-1$
 
   public boolean canCreate( final Class<? extends IGridElement> elementType ) {
@@ -37,27 +36,22 @@ public class GridWorkflowCreator extends AbstractGridElementCreator {
   }
 
   public IGridElement create( final IGridContainer parent )
-      throws ProblemException {
-    IFolder folder = ( IFolder ) getObject();
+    throws ProblemException
+  {
+    IFolder folder = ( IFolder )getObject();
     GridWorkflow workflow = new GridWorkflow( folder );
     return workflow;
   }
 
   @Override
   protected boolean internalCanCreate( final Object fromObject ) {
-    
     boolean result = false;
-    
-    if ( fromObject instanceof IFolder ) {
-      String extension = ( ( IFolder ) fromObject ).getFileExtension();
-      if ( FILE_EXTENSION.equalsIgnoreCase( extension ) ) {
+    if( fromObject instanceof IFolder ) {
+      String extension = ( ( IFolder )fromObject ).getFileExtension();
+      if( FILE_EXTENSION.equalsIgnoreCase( extension ) ) {
         result = true;
       }
     }
-    
     return result;
-    
   }
-  
 }
- 

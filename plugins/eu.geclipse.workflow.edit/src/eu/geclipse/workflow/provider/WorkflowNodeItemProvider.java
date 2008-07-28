@@ -36,7 +36,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
 
 /**
  * This is the item provider adapter for a
- * {@link eu.geclipse.workflow.IWorkflowNode} object. 
+ * {@link eu.geclipse.workflow.IWorkflowNode} object.
  * 
  * @generated
  */
@@ -62,14 +62,13 @@ public class WorkflowNodeItemProvider extends WorkflowElementItemProvider
    * @generated
    */
   @Override
-  public List<IItemPropertyDescriptor> getPropertyDescriptors( Object object )
-  {
-    if( itemPropertyDescriptors == null ) {
+  public List<IItemPropertyDescriptor> getPropertyDescriptors( Object object ) {
+    if( this.itemPropertyDescriptors == null ) {
       super.getPropertyDescriptors( object );
       addIsStartPropertyDescriptor( object );
       addIsFinishPropertyDescriptor( object );
     }
-    return itemPropertyDescriptors;
+    return this.itemPropertyDescriptors;
   }
 
   /**
@@ -79,19 +78,19 @@ public class WorkflowNodeItemProvider extends WorkflowElementItemProvider
    * @generated
    */
   protected void addIsStartPropertyDescriptor( Object object ) {
-    itemPropertyDescriptors.add( createItemPropertyDescriptor( ( ( ComposeableAdapterFactory )adapterFactory ).getRootAdapterFactory(),
-                                                               getResourceLocator(),
-                                                               getString( "_UI_IWorkflowNode_isStart_feature" ), //$NON-NLS-1$
-                                                               getString( "_UI_PropertyDescriptor_description", //$NON-NLS-1$
-                                                                          "_UI_IWorkflowNode_isStart_feature", //$NON-NLS-1$
-                                                                          "_UI_IWorkflowNode_type" ), //$NON-NLS-1$
-                                                               IWorkflowPackage.Literals.IWORKFLOW_NODE__IS_START,
-                                                               true,
-                                                               false,
-                                                               false,
-                                                               ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
-                                                               null,
-                                                               null ) );
+    this.itemPropertyDescriptors.add( createItemPropertyDescriptor( ( ( ComposeableAdapterFactory )this.adapterFactory ).getRootAdapterFactory(),
+                                                                    getResourceLocator(),
+                                                                    getString( "_UI_IWorkflowNode_isStart_feature" ), //$NON-NLS-1$
+                                                                    getString( "_UI_PropertyDescriptor_description", //$NON-NLS-1$
+                                                                               "_UI_IWorkflowNode_isStart_feature", //$NON-NLS-1$
+                                                                               "_UI_IWorkflowNode_type" ), //$NON-NLS-1$
+                                                                    IWorkflowPackage.Literals.IWORKFLOW_NODE__IS_START,
+                                                                    true,
+                                                                    false,
+                                                                    false,
+                                                                    ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+                                                                    null,
+                                                                    null ) );
   }
 
   /**
@@ -101,19 +100,19 @@ public class WorkflowNodeItemProvider extends WorkflowElementItemProvider
    * @generated
    */
   protected void addIsFinishPropertyDescriptor( Object object ) {
-    itemPropertyDescriptors.add( createItemPropertyDescriptor( ( ( ComposeableAdapterFactory )adapterFactory ).getRootAdapterFactory(),
-                                                               getResourceLocator(),
-                                                               getString( "_UI_IWorkflowNode_isFinish_feature" ), //$NON-NLS-1$
-                                                               getString( "_UI_PropertyDescriptor_description", //$NON-NLS-1$
-                                                                          "_UI_IWorkflowNode_isFinish_feature", //$NON-NLS-1$
-                                                                          "_UI_IWorkflowNode_type" ), //$NON-NLS-1$
-                                                               IWorkflowPackage.Literals.IWORKFLOW_NODE__IS_FINISH,
-                                                               true,
-                                                               false,
-                                                               false,
-                                                               ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
-                                                               null,
-                                                               null ) );
+    this.itemPropertyDescriptors.add( createItemPropertyDescriptor( ( ( ComposeableAdapterFactory )this.adapterFactory ).getRootAdapterFactory(),
+                                                                    getResourceLocator(),
+                                                                    getString( "_UI_IWorkflowNode_isFinish_feature" ), //$NON-NLS-1$
+                                                                    getString( "_UI_PropertyDescriptor_description", //$NON-NLS-1$
+                                                                               "_UI_IWorkflowNode_isFinish_feature", //$NON-NLS-1$
+                                                                               "_UI_IWorkflowNode_type" ), //$NON-NLS-1$
+                                                                    IWorkflowPackage.Literals.IWORKFLOW_NODE__IS_FINISH,
+                                                                    true,
+                                                                    false,
+                                                                    false,
+                                                                    ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+                                                                    null,
+                                                                    null ) );
   }
 
   /**
@@ -129,12 +128,12 @@ public class WorkflowNodeItemProvider extends WorkflowElementItemProvider
   @Override
   public Collection<? extends EStructuralFeature> getChildrenFeatures( Object object )
   {
-    if( childrenFeatures == null ) {
+    if( this.childrenFeatures == null ) {
       super.getChildrenFeatures( object );
-      childrenFeatures.add( IWorkflowPackage.Literals.IWORKFLOW_NODE__OUTPUTS );
-      childrenFeatures.add( IWorkflowPackage.Literals.IWORKFLOW_NODE__INPUTS );
+      this.childrenFeatures.add( IWorkflowPackage.Literals.IWORKFLOW_NODE__OUTPUTS );
+      this.childrenFeatures.add( IWorkflowPackage.Literals.IWORKFLOW_NODE__INPUTS );
     }
-    return childrenFeatures;
+    return this.childrenFeatures;
   }
 
   /**
@@ -143,8 +142,7 @@ public class WorkflowNodeItemProvider extends WorkflowElementItemProvider
    * @generated
    */
   @Override
-  protected EStructuralFeature getChildFeature( Object object, Object child )
-  {
+  protected EStructuralFeature getChildFeature( Object object, Object child ) {
     // Check the type of the specified child object and return the proper
     // feature to use for
     // adding (see {@link AddCommand}) it as a child.
@@ -158,8 +156,7 @@ public class WorkflowNodeItemProvider extends WorkflowElementItemProvider
    * @generated
    */
   @Override
-  public String getText( Object object )
-  {
+  public String getText( Object object ) {
     String label = ( ( IWorkflowNode )object ).getName();
     return label == null || label.length() == 0
                                                ? getString( "_UI_IWorkflowNode_type" ) //$NON-NLS-1$
@@ -177,8 +174,7 @@ public class WorkflowNodeItemProvider extends WorkflowElementItemProvider
    * @generated
    */
   @Override
-  public void notifyChanged( Notification notification )
-  {
+  public void notifyChanged( Notification notification ) {
     updateChildren( notification );
     switch( notification.getFeatureID( IWorkflowNode.class ) ) {
       case IWorkflowPackage.IWORKFLOW_NODE__IS_START:
@@ -200,10 +196,10 @@ public class WorkflowNodeItemProvider extends WorkflowElementItemProvider
   }
 
   /**
-   * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children
-   * that can be created under this object.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+   * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s
+   * describing the children that can be created under this object. <!--
+   * begin-user-doc --> <!-- end-user-doc -->
+   * 
    * @generated
    */
   @Override
@@ -218,14 +214,13 @@ public class WorkflowNodeItemProvider extends WorkflowElementItemProvider
   }
 
   /**
-   * Return the resource locator for this item provider's resources.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+   * Return the resource locator for this item provider's resources. <!--
+   * begin-user-doc --> <!-- end-user-doc -->
+   * 
    * @generated
    */
   @Override
-  public ResourceLocator getResourceLocator()
-  {
+  public ResourceLocator getResourceLocator() {
     return WorkflowEditPlugin.INSTANCE;
   }
 }

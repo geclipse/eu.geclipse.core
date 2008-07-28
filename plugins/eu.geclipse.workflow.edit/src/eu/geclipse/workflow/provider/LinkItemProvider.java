@@ -58,14 +58,13 @@ public class LinkItemProvider extends WorkflowElementItemProvider
    * @generated
    */
   @Override
-  public List<IItemPropertyDescriptor> getPropertyDescriptors( Object object )
-  {
-    if( itemPropertyDescriptors == null ) {
+  public List<IItemPropertyDescriptor> getPropertyDescriptors( Object object ) {
+    if( this.itemPropertyDescriptors == null ) {
       super.getPropertyDescriptors( object );
       addTargetPropertyDescriptor( object );
       addSourcePropertyDescriptor( object );
     }
-    return itemPropertyDescriptors;
+    return this.itemPropertyDescriptors;
   }
 
   /**
@@ -75,7 +74,7 @@ public class LinkItemProvider extends WorkflowElementItemProvider
    * @generated
    */
   protected void addTargetPropertyDescriptor( Object object ) {
-    itemPropertyDescriptors.add( createItemPropertyDescriptor( ( ( ComposeableAdapterFactory )adapterFactory ).getRootAdapterFactory(),
+    this.itemPropertyDescriptors.add( createItemPropertyDescriptor( ( ( ComposeableAdapterFactory )this.adapterFactory ).getRootAdapterFactory(),
                                                                getResourceLocator(),
                                                                getString( "_UI_ILink_target_feature" ), //$NON-NLS-1$
                                                                getString( "_UI_PropertyDescriptor_description", //$NON-NLS-1$
@@ -97,7 +96,7 @@ public class LinkItemProvider extends WorkflowElementItemProvider
    * @generated
    */
   protected void addSourcePropertyDescriptor( Object object ) {
-    itemPropertyDescriptors.add( createItemPropertyDescriptor( ( ( ComposeableAdapterFactory )adapterFactory ).getRootAdapterFactory(),
+    this.itemPropertyDescriptors.add( createItemPropertyDescriptor( ( ( ComposeableAdapterFactory )this.adapterFactory ).getRootAdapterFactory(),
                                                                getResourceLocator(),
                                                                getString( "_UI_ILink_source_feature" ), //$NON-NLS-1$
                                                                getString( "_UI_PropertyDescriptor_description", //$NON-NLS-1$
@@ -118,8 +117,7 @@ public class LinkItemProvider extends WorkflowElementItemProvider
    * @generated
    */
   @Override
-  public Object getImage( Object object )
-  {
+  public Object getImage( Object object ) {
     return overlayImage( object,
                          getResourceLocator().getImage( "full/obj16/Link" ) ); //$NON-NLS-1$
   }
@@ -130,20 +128,16 @@ public class LinkItemProvider extends WorkflowElementItemProvider
    * <!-- end-user-doc -->
    */
   @Override
-  public String getText( Object object )
-  {
-    ILink l = (ILink)object;
+  public String getText( Object object ) {
+    ILink l = ( ILink )object;
     String label = ""; //$NON-NLS-1$
     // String label = getString("_UI_ILink_type");
-
     String fromNode = l.getSource().getNode().getName();
     String toNode = l.getTarget().getNode().getName();
-
-    if (!(fromNode == null || fromNode.length() == 0))
+    if( !( fromNode == null || fromNode.length() == 0 ) )
       label += " from " + fromNode; //$NON-NLS-1$
-    if (!(toNode == null || toNode.length() == 0))
+    if( !( toNode == null || toNode.length() == 0 ) )
       label += " to " + toNode; //$NON-NLS-1$
-    
     return label == null || label.length() == 0
                                                ? getString( "_UI_ILink_type" ) //$NON-NLS-1$
                                                : getString( "_UI_ILink_type" ) //$NON-NLS-1$
@@ -159,8 +153,7 @@ public class LinkItemProvider extends WorkflowElementItemProvider
    * @generated
    */
   @Override
-  public void notifyChanged( Notification notification )
-  {
+  public void notifyChanged( Notification notification ) {
     updateChildren( notification );
     super.notifyChanged( notification );
   }
@@ -186,8 +179,7 @@ public class LinkItemProvider extends WorkflowElementItemProvider
    * @generated
    */
   @Override
-  public ResourceLocator getResourceLocator()
-  {
+  public ResourceLocator getResourceLocator() {
     return WorkflowEditPlugin.INSTANCE;
   }
 }

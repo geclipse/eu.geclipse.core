@@ -61,12 +61,11 @@ public class WorkflowItemProvider extends WorkflowElementItemProvider
    * @generated
    */
   @Override
-  public List<IItemPropertyDescriptor> getPropertyDescriptors( Object object )
-  {
-    if( itemPropertyDescriptors == null ) {
+  public List<IItemPropertyDescriptor> getPropertyDescriptors( Object object ) {
+    if( this.itemPropertyDescriptors == null ) {
       super.getPropertyDescriptors( object );
     }
-    return itemPropertyDescriptors;
+    return this.itemPropertyDescriptors;
   }
 
   /**
@@ -82,12 +81,12 @@ public class WorkflowItemProvider extends WorkflowElementItemProvider
   @Override
   public Collection<? extends EStructuralFeature> getChildrenFeatures( Object object )
   {
-    if( childrenFeatures == null ) {
+    if( this.childrenFeatures == null ) {
       super.getChildrenFeatures( object );
-      childrenFeatures.add( IWorkflowPackage.Literals.IWORKFLOW__NODES );
-      childrenFeatures.add( IWorkflowPackage.Literals.IWORKFLOW__LINKS );
+      this.childrenFeatures.add( IWorkflowPackage.Literals.IWORKFLOW__NODES );
+      this.childrenFeatures.add( IWorkflowPackage.Literals.IWORKFLOW__LINKS );
     }
-    return childrenFeatures;
+    return this.childrenFeatures;
   }
 
   /**
@@ -96,8 +95,7 @@ public class WorkflowItemProvider extends WorkflowElementItemProvider
    * @generated
    */
   @Override
-  protected EStructuralFeature getChildFeature( Object object, Object child )
-  {
+  protected EStructuralFeature getChildFeature( Object object, Object child ) {
     // Check the type of the specified child object and return the proper
     // feature to use for
     // adding (see {@link AddCommand}) it as a child.
@@ -110,8 +108,7 @@ public class WorkflowItemProvider extends WorkflowElementItemProvider
    * @generated
    */
   @Override
-  public Object getImage( Object object )
-  {
+  public Object getImage( Object object ) {
     return overlayImage( object,
                          getResourceLocator().getImage( "full/obj16/Workflow" ) ); //$NON-NLS-1$
   }
@@ -123,8 +120,7 @@ public class WorkflowItemProvider extends WorkflowElementItemProvider
    * @generated
    */
   @Override
-  public String getText( Object object )
-  {
+  public String getText( Object object ) {
     String label = ( ( IWorkflow )object ).getName();
     return label == null || label.length() == 0
                                                ? getString( "_UI_IWorkflow_type" ) //$NON-NLS-1$
@@ -142,8 +138,7 @@ public class WorkflowItemProvider extends WorkflowElementItemProvider
    * @generated
    */
   @Override
-  public void notifyChanged( Notification notification )
-  {
+  public void notifyChanged( Notification notification ) {
     updateChildren( notification );
     switch( notification.getFeatureID( IWorkflow.class ) ) {
       case IWorkflowPackage.IWORKFLOW__NODES:
@@ -182,8 +177,7 @@ public class WorkflowItemProvider extends WorkflowElementItemProvider
    * @generated
    */
   @Override
-  public ResourceLocator getResourceLocator()
-  {
+  public ResourceLocator getResourceLocator() {
     return WorkflowEditPlugin.INSTANCE;
   }
 }
