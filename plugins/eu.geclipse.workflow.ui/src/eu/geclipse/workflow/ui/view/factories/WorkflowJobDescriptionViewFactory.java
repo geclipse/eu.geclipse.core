@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.gmf.runtime.diagram.ui.view.factories.BasicNodeViewFactory;
+import org.eclipse.gmf.runtime.notation.NotationFactory;
 import org.eclipse.gmf.runtime.notation.View;
 
 /**
@@ -29,6 +30,7 @@ public class WorkflowJobDescriptionViewFactory extends BasicNodeViewFactory {
   /**
    * @generated
    */
+  @Override
   protected List createStyles( View view ) {
     List styles = new ArrayList();
     return styles;

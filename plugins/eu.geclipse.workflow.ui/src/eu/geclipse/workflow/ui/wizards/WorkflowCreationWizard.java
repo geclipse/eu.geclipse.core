@@ -101,11 +101,13 @@ public class WorkflowCreationWizard extends Wizard implements INewWizard {
   /**
    * @generated
    */
-  public void init( final IWorkbench workbench1, final IStructuredSelection selection1 ) {
+  public void init( final IWorkbench workbench1,
+                    final IStructuredSelection selection1 )
+  {
     this.workbench = workbench1;
     this.selection = selection1;
-    setWindowTitle( Messages.getString("WorkflowCreationWizard_WindowTitle") ); //$NON-NLS-1$
-    setDefaultPageImageDescriptor( WorkflowDiagramEditorPlugin.getBundledImageDescriptor( "icons/wizban/NewWorkflowWizard.gif" ) );
+    setWindowTitle( Messages.getString( "WorkflowCreationWizard_WindowTitle" ) ); //$NON-NLS-1$
+    setDefaultPageImageDescriptor( WorkflowDiagramEditorPlugin.getBundledImageDescriptor( "icons/wizban/NewWorkflowWizard.gif" ) ); //$NON-NLS-1$
     setNeedsProgressMonitor( true );
   }
 
@@ -114,9 +116,9 @@ public class WorkflowCreationWizard extends Wizard implements INewWizard {
    */
   @Override
   public void addPages() {
-    this.diagramModelFilePage = new WorkflowCreationWizardPage( Messages.getString( "WorkflowCreationWizard_PageName" ),  //$NON-NLS-1$
-                                                                getSelection(), 
-                                                                "workflow" );  //$NON-NLS-1$
+    this.diagramModelFilePage = new WorkflowCreationWizardPage( Messages.getString( "WorkflowCreationWizard_PageName" ), //$NON-NLS-1$
+                                                                getSelection(),
+                                                                "workflow" ); //$NON-NLS-1$
     this.diagramModelFilePage.setTitle( Messages.getString( "WorkflowCreationWizard_Title" ) ); //$NON-NLS-1$
     this.diagramModelFilePage.setDescription( Messages.getString( "WorkflowCreationWizard_Description" ) ); //$NON-NLS-1$
     addPage( this.diagramModelFilePage );
@@ -135,10 +137,13 @@ public class WorkflowCreationWizard extends Wizard implements INewWizard {
       {
         IFolder folder = WorkflowCreationWizard.this.diagramModelFilePage.createNewFolder();
         IFile file = folder.getFile( folder.getName() );
-        URI uri = URI.createPlatformResourceURI( file.getFullPath().toString(), false );
+        URI uri = URI.createPlatformResourceURI( file.getFullPath().toString(),
+                                                 false );
         WorkflowCreationWizard.this.diagram = WorkflowDiagramEditorUtil.createDiagram( uri,
                                                                                        monitor );
-        if( isOpenNewlyCreatedDiagramEditor() && WorkflowCreationWizard.this.diagram != null ) {
+        if( isOpenNewlyCreatedDiagramEditor()
+            && WorkflowCreationWizard.this.diagram != null )
+        {
           try {
             WorkflowDiagramEditorUtil.openDiagram( WorkflowCreationWizard.this.diagram );
           } catch( PartInitException e ) {

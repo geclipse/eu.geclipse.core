@@ -20,6 +20,7 @@ import java.util.List;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.gmf.runtime.diagram.ui.view.factories.AbstractShapeViewFactory;
 import org.eclipse.gmf.runtime.notation.NotationFactory;
+import org.eclipse.gmf.runtime.notation.ShapeStyle;
 import org.eclipse.gmf.runtime.notation.View;
 import eu.geclipse.workflow.ui.edit.parts.InputPortEditPart;
 import eu.geclipse.workflow.ui.part.WorkflowVisualIDRegistry;
@@ -33,8 +34,8 @@ public class InputPortViewFactory extends AbstractShapeViewFactory {
    * @generated
    */
   @Override
-  protected List createStyles( View view ) {
-    List styles = new ArrayList();
+  protected List<ShapeStyle> createStyles( View view ) {
+    List<ShapeStyle> styles = new ArrayList<ShapeStyle>();
     styles.add( NotationFactory.eINSTANCE.createShapeStyle() );
     return styles;
   }

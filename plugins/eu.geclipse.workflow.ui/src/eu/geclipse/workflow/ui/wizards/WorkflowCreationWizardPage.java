@@ -16,10 +16,7 @@
 package eu.geclipse.workflow.ui.wizards;
 
 
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.dialogs.WizardNewFolderMainPage;
 
 /**
@@ -36,9 +33,9 @@ public class WorkflowCreationWizardPage extends WizardNewFolderMainPage {
   /**
    * @generated
    */
-  public WorkflowCreationWizardPage( String pageName,
-                                     IStructuredSelection selection,
-                                     String fileExtension )
+  public WorkflowCreationWizardPage( final String pageName,
+                                     final IStructuredSelection selection,
+                                     final String fileExtension )
   {
     super( pageName, selection );
     this.fileExtension = fileExtension;

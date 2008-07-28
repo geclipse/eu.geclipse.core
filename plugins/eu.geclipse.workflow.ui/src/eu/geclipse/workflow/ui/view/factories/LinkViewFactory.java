@@ -20,6 +20,7 @@ import java.util.List;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.gmf.runtime.diagram.ui.view.factories.ConnectionViewFactory;
 import org.eclipse.gmf.runtime.notation.NotationFactory;
+import org.eclipse.gmf.runtime.notation.Style;
 import org.eclipse.gmf.runtime.notation.View;
 import eu.geclipse.workflow.ui.edit.parts.LinkEditPart;
 import eu.geclipse.workflow.ui.part.WorkflowVisualIDRegistry;
@@ -33,8 +34,8 @@ public class LinkViewFactory extends ConnectionViewFactory {
    * @generated
    */
   @Override
-  protected List createStyles( View view ) {
-    List styles = new ArrayList();
+  protected List<Style> createStyles( View view ) {
+    List<Style> styles = new ArrayList<Style>();
     styles.add( NotationFactory.eINSTANCE.createConnectorStyle() );
     styles.add( NotationFactory.eINSTANCE.createFontStyle() );
     return styles;

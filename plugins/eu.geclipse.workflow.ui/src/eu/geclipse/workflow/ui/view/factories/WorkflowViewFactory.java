@@ -18,6 +18,7 @@ package eu.geclipse.workflow.ui.view.factories;
 import java.util.ArrayList;
 import java.util.List;
 import org.eclipse.gmf.runtime.diagram.ui.view.factories.DiagramViewFactory;
+import org.eclipse.gmf.runtime.notation.DiagramStyle;
 import org.eclipse.gmf.runtime.notation.MeasurementUnit;
 import org.eclipse.gmf.runtime.notation.NotationFactory;
 import org.eclipse.gmf.runtime.notation.View;
@@ -31,8 +32,8 @@ public class WorkflowViewFactory extends DiagramViewFactory {
    * @generated
    */
   @Override
-  protected List createStyles( View view ) {
-    List styles = new ArrayList();
+  protected List<DiagramStyle> createStyles( View view ) {
+    List<DiagramStyle> styles = new ArrayList<DiagramStyle>();
     styles.add( NotationFactory.eINSTANCE.createDiagramStyle() );
     return styles;
   }
