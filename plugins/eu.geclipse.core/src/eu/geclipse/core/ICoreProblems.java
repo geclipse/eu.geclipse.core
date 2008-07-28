@@ -54,6 +54,8 @@ public interface ICoreProblems {
     = "eu.geclipse.core.problem.auth.keyLoadFailed"; //$NON-NLS-1$
   public static final String AUTH_LOGIN_FAILED
     = "eu.geclipse.core.problem.auth.loginFailed"; //$NON-NLS-1$
+  public static final String AUTH_PERMISSION_DENIED
+    = "eu.geclipse.core.problem.auth.permissionDenied"; //$NON-NLS-1$  
   public static final String AUTH_TOKEN_ACTIVATE_FAILED
     = "eu.geclipse.core.problem.auth.tokenActivateFailed"; //$NON-NLS-1$
   public static final String AUTH_TOKEN_NOT_YET_VALID

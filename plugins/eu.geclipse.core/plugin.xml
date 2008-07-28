@@ -192,6 +192,10 @@
             id="eu.geclipse.core.problem.auth.loginFailed">
       </problem>
       <problem
+            description="Permission denied"
+            id="eu.geclipse.core.problem.auth.permissionDenied">
+      </problem>
+      <problem
             description="Unable to activate token"
             id="eu.geclipse.core.problem.auth.tokenActivateFailed"
             mailto="">
