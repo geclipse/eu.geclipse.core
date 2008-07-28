@@ -258,7 +258,10 @@ public class ProblemDialog extends ErrorDialog {
     }
 
     else {
-      String message = throwable.getMessage();
+      String message = null;
+      if ( throwable != null ) {
+        message = throwable.getMessage();
+      } 
       if ( message == null ) {
         message = Messages.getString( "ProblemDialog.no_further_info" ); //$NON-NLS-1$
       }
@@ -270,6 +273,7 @@ public class ProblemDialog extends ErrorDialog {
     }
 
     return result;
+    
   }
 
 }

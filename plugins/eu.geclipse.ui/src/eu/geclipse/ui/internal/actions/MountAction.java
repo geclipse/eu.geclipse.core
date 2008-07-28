@@ -7,7 +7,6 @@ import java.util.List;
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileInfo;
 import org.eclipse.core.filesystem.IFileStore;
-import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
@@ -18,7 +17,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.jobs.Job;
@@ -38,7 +36,7 @@ import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.model.IMountable;
 import eu.geclipse.core.model.IMountable.MountPoint;
 import eu.geclipse.core.model.IMountable.MountPointID;
-import eu.geclipse.core.reporting.ProblemException;
+import eu.geclipse.ui.dialogs.ProblemDialog;
 import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.wizards.ConnectionWizard;
 
@@ -191,7 +189,9 @@ public class MountAction extends Action {
         IGridProject project = mountable.getProject();
         IGridContainer mountFolder = project.getProjectFolder( IGridConnection.class );
         IPath path = mountFolder.getPath().append( mountName );
-        createLocalMount( uri, path, monitor );
+        if ( ! checkExists( path ) ) {
+          createLocalMount( uri, path, monitor );
+        }
       }
 
     }
@@ -254,6 +254,25 @@ public class MountAction extends Action {
     } finally {
       sMonitor.done();
     }
+    
+  }
+  
+  private boolean checkExists( final IPath target ) {
+    
+    boolean result
+      = ResourcesPlugin.getWorkspace().getRoot().getFile( target ).exists()
+      || ResourcesPlugin.getWorkspace().getRoot().getFolder( target ).exists();
+    
+    if ( result ) {
+      ProblemDialog.openProblem(
+          this.shell,
+          "Resource already exists",
+          String.format( "The mount target already exists: %s", target.toString() ),
+          null
+      );
+    }
+    
+    return result;
     
   }
   
