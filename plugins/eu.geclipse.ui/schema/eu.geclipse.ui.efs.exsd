@@ -73,7 +73,7 @@
                   
                </documentation>
                <appInfo>
-                  <meta.attribute kind="java" basedOn=":eu.geclipse.ui.wizards.IConnectionUriProzessor"/>
+                  <meta.attribute kind="java" basedOn=":eu.geclipse.ui.wizards.IConnectionUriProcessor"/>
                </appInfo>
             </annotation>
          </attribute>
