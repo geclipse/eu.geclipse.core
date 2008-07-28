@@ -43,48 +43,44 @@ import eu.geclipse.workflow.ui.providers.WorkflowElementTypes;
  * @author nloulloud
  *
  */
-public class WorkflowDiagramDragDropEditPolicy extends DiagramDragDropEditPolicy {
-  
-  /* (non-Javadoc)
+public class WorkflowDiagramDragDropEditPolicy
+  extends DiagramDragDropEditPolicy
+{
+
+  /*
+   * (non-Javadoc)
+   * 
    * @see org.eclipse.gmf.runtime.diagram.ui.editpolicies.DiagramDragDropEditPolicy#getDropObjectsCommand(org.eclipse.gmf.runtime.diagram.ui.requests.DropObjectsRequest)
    */
   @SuppressWarnings("unchecked")
   @Override
   public Command getDropObjectsCommand( DropObjectsRequest dropRequest ) {
-      List objects = dropRequest.getObjects();
-      for (Object o : objects) {
-          if ( (o instanceof JSDLJobDescription)) {
-            JSDLJobDescription jsdl = (JSDLJobDescription) o;
-            WorkflowEditPart selectedElement = (WorkflowEditPart) getHost();
-            System.out.println(jsdl.getResource());
-            String jobSemanticHint = WorkflowVisualIDRegistry.getType( WorkflowJobEditPart.VISUAL_ID );
-            WorkflowJobEditPart metaDataLinkCompartment = (WorkflowJobEditPart)selectedElement.getChildBySemanticHint(jobSemanticHint);
-
-            IElementType type = WorkflowElementTypes.IWorkflowJob_1001;
-            
-            ViewAndElementDescriptor viewDescriptor = new ViewAndElementDescriptor(new CreateElementRequestAdapter(new CreateElementRequest(type)),Node.class, ((IHintedType) type).getSemanticHint(), selectedElement.getDiagramPreferencesHint());
-
-            CreateViewAndElementRequest req = new CreateViewAndElementRequest(viewDescriptor);
-                       
-            CompoundCommand cmd = new CompoundCommand("Create 1 metaDataLink");
-
-
-            cmd.add(metaDataLinkCompartment.getCommand(req));
-
-            
-            return cmd;
-           
-          }
+    List objects = dropRequest.getObjects();
+    for( Object o : objects ) {
+      if( ( o instanceof JSDLJobDescription ) ) {
+        JSDLJobDescription jsdl = ( JSDLJobDescription )o;
+        WorkflowEditPart selectedElement = ( WorkflowEditPart )getHost();
+        // System.out.println(jsdl.getResource());
+        String jobSemanticHint = WorkflowVisualIDRegistry.getType( WorkflowJobEditPart.VISUAL_ID );
+        WorkflowJobEditPart metaDataLinkCompartment = ( WorkflowJobEditPart )selectedElement.getChildBySemanticHint( jobSemanticHint );
+        IElementType type = WorkflowElementTypes.IWorkflowJob_1001;
+        ViewAndElementDescriptor viewDescriptor = new ViewAndElementDescriptor( new CreateElementRequestAdapter( new CreateElementRequest( type ) ),
+                                                                                Node.class,
+                                                                                ( ( IHintedType )type ).getSemanticHint(),
+                                                                                selectedElement.getDiagramPreferencesHint() );
+        CreateViewAndElementRequest req = new CreateViewAndElementRequest( viewDescriptor );
+        CompoundCommand cmd = new CompoundCommand( "Create 1 metaDataLink" );
+        cmd.add( metaDataLinkCompartment.getCommand( req ) );
+        return cmd;
       }
-      return super.getDropObjectsCommand(dropRequest);
+    }
+    return super.getDropObjectsCommand( dropRequest );
   }
-  
+
   /**
    * @generated
    */
   protected final Command getGEFWrapper( ICommand cmd ) {
     return new ICommandProxy( cmd );
   }
-
-
 }

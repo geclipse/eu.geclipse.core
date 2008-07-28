@@ -48,8 +48,8 @@ public class WorkflowEditPart extends DiagramEditPart {
                        new WorkflowItemSemanticEditPolicy() );
     installEditPolicy( EditPolicyRoles.CANONICAL_ROLE,
                        new WorkflowCanonicalEditPolicy() );
-    installEditPolicy(EditPolicyRoles.DRAG_DROP_ROLE,
-                      new WorkflowDiagramDragDropEditPolicy());
+//    installEditPolicy(EditPolicyRoles.DRAG_DROP_ROLE,
+//                      new WorkflowDiagramDragDropEditPolicy());
 
     // removeEditPolicy(org.eclipse.gmf.runtime.diagram.ui.editpolicies.EditPolicyRoles.POPUPBAR_ROLE);
   }
