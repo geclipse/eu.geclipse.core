@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials 
  * are made available under the terms of the Eclipse Public License v1.0 
  * which accompanies this distribution, and is available at 
@@ -12,6 +12,7 @@
  * Contributors:
  *     RUR (http://acet.rdg.ac.uk/)
  *     - Ashish Thandavan - initial API and implementation
+ *     - David Johnson
  ******************************************************************************/
 package eu.geclipse.workflow.ui.edit.parts;
 
@@ -26,16 +27,16 @@ import org.eclipse.gef.requests.CreateRequest;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.ShapeNodeEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editpolicies.CreationEditPolicy;
-import org.eclipse.gmf.runtime.diagram.ui.editpolicies.DragDropEditPolicy;
 import org.eclipse.gmf.runtime.diagram.ui.editpolicies.EditPolicyRoles;
 import org.eclipse.gmf.runtime.draw2d.ui.figures.ConstrainedToolbarLayout;
 import org.eclipse.gmf.runtime.gef.ui.figures.DefaultSizeNodeFigure;
 import org.eclipse.gmf.runtime.gef.ui.figures.NodeFigure;
 import org.eclipse.gmf.runtime.notation.View;
 
-import eu.geclipse.workflow.ui.internal.WorkflowJobFigure;
 import eu.geclipse.workflow.ui.edit.policies.WorkflowJobCanonicalEditPolicy;
+import eu.geclipse.workflow.ui.edit.policies.WorkflowJobDragDropEditPolicy;
 import eu.geclipse.workflow.ui.edit.policies.WorkflowJobItemSemanticEditPolicy;
+import eu.geclipse.workflow.ui.internal.WorkflowJobFigure;
 
 /**
  * The class that connects the Figure and Model of the WorkflowJob
@@ -67,7 +68,8 @@ public class WorkflowJobEditPart extends ShapeNodeEditPart {
     super.createDefaultEditPolicies();
     installEditPolicy( EditPolicyRoles.SEMANTIC_ROLE,
                        new WorkflowJobItemSemanticEditPolicy() );
-    installEditPolicy( EditPolicyRoles.DRAG_DROP_ROLE, new DragDropEditPolicy() );
+    installEditPolicy( EditPolicyRoles.DRAG_DROP_ROLE, 
+                       new WorkflowJobDragDropEditPolicy() );
     installEditPolicy( EditPolicyRoles.CANONICAL_ROLE,
                        new WorkflowJobCanonicalEditPolicy() );
     installEditPolicy( EditPolicy.LAYOUT_ROLE, createLayoutEditPolicy() );
