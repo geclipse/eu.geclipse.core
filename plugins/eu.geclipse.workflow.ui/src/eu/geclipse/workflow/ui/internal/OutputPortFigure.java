@@ -16,29 +16,80 @@
 package eu.geclipse.workflow.ui.internal;
 
 import org.eclipse.draw2d.ColorConstants;
-import org.eclipse.draw2d.RectangleFigure;
+import org.eclipse.draw2d.Graphics;
+import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.draw2d.geometry.PointList;
+import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.gmf.runtime.draw2d.ui.mapmode.IMapMode;
+import org.eclipse.gmf.runtime.draw2d.ui.mapmode.MapModeUtil;
+import org.eclipse.gmf.runtime.gef.ui.figures.NodeFigure;
 
 /**
  * A GEF figure for an OutputPort.
  */
-public class OutputPortFigure extends RectangleFigure {
+public class OutputPortFigure extends NodeFigure {
+  private static final PointList points = new PointList();
 
-  private boolean myUseLocalCoordinates = false;
+  static {
+      points.addPoint(1, 1);
+      points.addPoint(1, 11);
+      points.addPoint(3, 8);
+      points.addPoint(5, 5);
+      points.addPoint(7, 2);
+      points.addPoint(9, 5);
+      points.addPoint(11, 8);
+      points.addPoint(13, 11);
+      points.addPoint(13, 1);
+  }   
+
+  private Dimension preferredSize;
+  
+  /**
+   * Constructor
+   */
+  public OutputPortFigure(){
+    this.setBackgroundColor( ColorConstants.darkBlue );
+    this.setSize( 13, 13 );
+  }
+  /**
+   * Creates a new OutputPortFigure
+   */
+  public OutputPortFigure(final Dimension prefSize) {
+      getBounds().width = prefSize.width; 
+      getBounds().height = prefSize.height;
+      this.preferredSize = new Dimension(prefSize);
+  }
 
   /**
-   * Default Constructor
+   * @see org.eclipse.draw2d.Figure#getPreferredSize(int, int)
    */
-  public OutputPortFigure() {
-    this.setBackgroundColor( ColorConstants.darkBlue );
-    this.setSize( 10, 10 );
-  }
-
-  protected void setUseLocalCoordinates( boolean useLocalCoordinates ) {
-    this.myUseLocalCoordinates = useLocalCoordinates;
-  }
-
   @Override
-  protected boolean useLocalCoordinates() {
-    return this.myUseLocalCoordinates;
+  public Dimension getPreferredSize(final int wHint, final int hHint) {
+    if (this.preferredSize != null)
+      return new Dimension(this.preferredSize);
+    return new Dimension(13,13);
+  }
+
+  /**
+   * @see org.eclipse.draw2d.Figure#paintFigure(Graphics)
+   */
+  @Override
+  protected void paintFigure(final Graphics g) {
+      final Rectangle r = getBounds().getCopy();
+      
+      final IMapMode mm = MapModeUtil.getMapMode(this);
+      r.translate(mm.DPtoLP(2), mm.DPtoLP(2));
+      r.setSize(mm.DPtoLP(9), mm.DPtoLP(11));
+  
+      // draw a line at the bottom
+      //g.drawLine(r.x, r.bottom(), r.right(), r.bottom());
+      
+      //draw figure
+      g.translate(getLocation());
+      final PointList outline = points.getCopy();
+      mm.DPtoLP(outline);
+      g.fillPolygon(outline);
+      g.drawPolyline(outline);
+      g.translate(getLocation().getNegated());
   }
 }

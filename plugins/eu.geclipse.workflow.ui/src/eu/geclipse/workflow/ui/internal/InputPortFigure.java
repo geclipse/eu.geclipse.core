@@ -15,52 +15,86 @@
  ******************************************************************************/
 package eu.geclipse.workflow.ui.internal;
 
-import java.net.URL;
-
 import org.eclipse.draw2d.ColorConstants;
-import org.eclipse.draw2d.GridLayout;
-import org.eclipse.draw2d.RectangleFigure;
-import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.swt.graphics.Image;
-
-import eu.geclipse.workflow.ui.internal.WorkflowDiagramEditorPlugin;
+import org.eclipse.draw2d.Graphics;
+import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.draw2d.geometry.PointList;
+import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.gmf.runtime.draw2d.ui.mapmode.IMapMode;
+import org.eclipse.gmf.runtime.draw2d.ui.mapmode.MapModeUtil;
+import org.eclipse.gmf.runtime.gef.ui.figures.NodeFigure;
 
 
 /**
  * A GEF figure for an InputPort.
  */
-public class InputPortFigure extends RectangleFigure {
+public class InputPortFigure extends NodeFigure {
+  
+  private static final PointList points = new PointList();
 
-  private boolean myUseLocalCoordinates = false;
+  static {
+      points.addPoint(1, 11);
+      points.addPoint(1, 1);
+      points.addPoint(3, 4);
+      points.addPoint(5, 7);
+      points.addPoint(7, 10);
+      points.addPoint(9, 7);
+      points.addPoint(11, 4);
+      points.addPoint(13, 1);
+      points.addPoint(13, 11);
+  }   
+
+  private Dimension preferredSize;
   
-  private Image img;
-  
-  public ImageDescriptor getImageDescriptor( final Object resource ) {
-    URL imgUrl = WorkflowDiagramEditorPlugin.getDefault().getBundle().getEntry( "icons/obj16/InputPort.gif" ); //$NON-NLS-1$
-    return ImageDescriptor.createFromURL( imgUrl );
+  /**
+   * Constructor
+   */
+  public InputPortFigure(){
+    this.setBackgroundColor( ColorConstants.darkBlue );
+    this.setSize( 13, 13 );
   }
-
-/*  public InputPortFigure() {    
-    ImageDescriptor imgdesc = getImageDescriptor( null );
-    img = imgdesc.createImage();
-    this.add( img );
-  }*/
+  
+  /**
+   * Creates a new InputPortFigure
+   */
+  public InputPortFigure(final Dimension prefSize) {
+      getBounds().width = prefSize.width; 
+      getBounds().height = prefSize.height;
+      this.preferredSize = new Dimension(prefSize);
+  }
 
   /**
-   * Default Constructor
+   * @see org.eclipse.draw2d.Figure#getPreferredSize(int, int)
    */
-  public InputPortFigure() {
-    this.setBackgroundColor( ColorConstants.lightBlue );
-    this.setSize( 10, 10 );
-  }
-  
-  protected void setUseLocalCoordinates( boolean useLocalCoordinates ) {
-    this.myUseLocalCoordinates = useLocalCoordinates;
+  @Override
+  public Dimension getPreferredSize(final int wHint, final int hHint) {
+    if (this.preferredSize != null) {
+      return new Dimension(this.preferredSize);
+    }
+    return new Dimension(13,13);
   }
 
+  /**
+   * @see org.eclipse.draw2d.Figure#paintFigure(Graphics)
+   */
   @Override
-  protected boolean useLocalCoordinates() {
-    return this.myUseLocalCoordinates;
+  protected void paintFigure(final Graphics g) {
+      final Rectangle r = getBounds().getCopy();
+      
+      final IMapMode mm = MapModeUtil.getMapMode(this);
+      r.translate(mm.DPtoLP(2), mm.DPtoLP(2));
+      r.setSize(mm.DPtoLP(11), mm.DPtoLP(9));
+  
+      //draw a line at the top
+      //g.drawLine(r.x-1, r.y-1, r.right(), r.y-1);
+
+      //draw figure
+      g.translate(getLocation());
+      final PointList outline = points.getCopy();
+      mm.DPtoLP(outline);
+      g.fillPolygon(outline);
+      g.drawPolyline(outline);
+      g.translate(getLocation().getNegated());
   }
 
 }
