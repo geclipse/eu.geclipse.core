@@ -33,6 +33,13 @@ package eu.geclipse.core.accesscontrol;
  */
 public interface IACLPolicy {
   
+  /** Flag for a policy which essentially allows the actor access on the resource */
+  public static short TYPE_ALLOW = 1;
+  /** Flag for a policy which essentially denies the actor access on the resource */
+  public static short TYPE_DENY = -1;
+  /** Flag for a policy whose effect is not so directly 'allow' or 'deny' */
+  public static short TYPE_OTHER = 0;
+  
   /**
    * Returns the name of this policy, for instance "Allow".
    * 
@@ -47,5 +54,14 @@ public interface IACLPolicy {
    * @return a user friendly string explaining the policy.
    */
   public String getDescription();
+  
+  /**
+   * Returns the policy type, to be used for sorting and grouping
+   * similar rules.
+   * 
+   * @return a flag, one of {@link IACLPolicy.TYPE_ALLOW},
+   *         {@link IACLPolicy.TYPE_DENY}, {@link IACLPolicy.TYPE_OTHER}.
+   */
+  public short getType();
 
 }
