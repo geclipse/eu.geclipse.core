@@ -22,10 +22,12 @@ import java.util.List;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.viewers.CheckStateChangedEvent;
+import org.eclipse.jface.viewers.CheckboxTreeViewer;
+import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardPage;
@@ -35,13 +37,11 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.ui.PlatformUI;
+import org.eclipse.swt.widgets.Tree;
 
 import eu.geclipse.core.model.IGridComputing;
-import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridResource;
 import eu.geclipse.core.model.IGridResourceCategory;
 import eu.geclipse.core.model.IGridService;
@@ -50,7 +50,9 @@ import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.core.model.impl.GridResourceCategoryFactory;
 import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.servicejob.ui.Activator;
-import eu.geclipse.ui.dialogs.ProblemDialog;
+import eu.geclipse.servicejob.ui.internal.CategoryContainer;
+import eu.geclipse.servicejob.ui.internal.CategoryResourcesTreeCProvider;
+import eu.geclipse.servicejob.ui.internal.CategoryResourcesTreeLProvider;
 import eu.geclipse.ui.wizards.IVOSelectionProvider;
 
 /**
@@ -59,14 +61,14 @@ import eu.geclipse.ui.wizards.IVOSelectionProvider;
  */
 public class ResourcesSelectionPage extends WizardPage {
 
-  List<IGridResource> selectedResources;
-  TableViewer viewer;
+  CheckboxTreeViewer viewer;
   private IVOSelectionProvider voProvider;
-  private boolean showComputing;
-  private boolean showStorage;
-  private boolean showService;
   private IVirtualOrganization oldVO;
   private List<IGridResourceCategory> visibleCategories = new ArrayList<IGridResourceCategory>();
+  private Button selectAllButton;
+  private Button revertSelectionButton;
+  private Button deselectAllButton;
+  private List<IGridResource> selectedResources;
 
   /**
    * Constructor of ResourceSelectionPage objects.
@@ -83,10 +85,6 @@ public class ResourcesSelectionPage extends WizardPage {
     this.voProvider = selectionProvider;
     this.setTitle( "Resource selection" );
     this.setDescription( "Choose services to perform operator's job on." );
-    this.showComputing = showComputing;
-    this.showStorage = showStorage;
-    this.showService = showService;
-    this.selectedResources = new ArrayList<IGridResource>();
     this.oldVO = null;
     this.visibleCategories.add( GridResourceCategoryFactory.getCategory( GridResourceCategoryFactory.ID_COMPUTING ) );
     this.visibleCategories.add( GridResourceCategoryFactory.getCategory( GridResourceCategoryFactory.ID_STORAGE ) );
@@ -128,7 +126,7 @@ public class ResourcesSelectionPage extends WizardPage {
   @Override
   public boolean canFlipToNextPage() {
     boolean flag = false;
-    if( this.selectedResources.size() > 0 ) {
+    if (this.viewer.getCheckedElements().length != 0){
       flag = true;
     }
     return flag && getNextPage() != null;
@@ -140,7 +138,13 @@ public class ResourcesSelectionPage extends WizardPage {
    * @return list of resources which were selected by user
    */
   public List<IGridResource> getSelectedResources() {
-    return this.selectedResources;
+    List<IGridResource> result = new ArrayList<IGridResource>();
+    for (Object checked: this.viewer.getCheckedElements()){
+      if( checked instanceof IGridResource ) {
+        result.add( ( IGridResource )checked );
+      }
+    }
+    return result; 
   }
 
   public void createControl( final Composite parent ) {
@@ -151,43 +155,139 @@ public class ResourcesSelectionPage extends WizardPage {
     gd.grabExcessHorizontalSpace = true;
     gd.grabExcessVerticalSpace = true;
     gd.verticalSpan = 3;
-    gd.horizontalSpan = 2;
+    gd.horizontalSpan = 1;
     gd.widthHint = 300;
     gd.heightHint = 100;
-    Table table = new Table( mainComp, SWT.BORDER
-                                       | SWT.H_SCROLL
-                                       | SWT.V_SCROLL
-                                       | SWT.MULTI );
-    table.setLayoutData( gd );
-    this.viewer = new TableViewer( table );
-    this.viewer.setContentProvider( new ContentProvider() );
-    this.viewer.setLabelProvider( new LabelProvider1() );
-    table.addSelectionListener( new SelectionAdapter() {
+    Tree tree = new Tree( mainComp, SWT.BORDER
+                                    | SWT.H_SCROLL
+                                    | SWT.V_SCROLL
+                                    | SWT.CHECK );
+    tree.setLayoutData( gd );
+    this.viewer = new CheckboxTreeViewer( tree );
+    this.viewer.setContentProvider( new CategoryResourcesTreeCProvider() );
+    this.viewer.setLabelProvider( new CategoryResourcesTreeLProvider() );
+    this.viewer.addCheckStateListener( new ICheckStateListener() {
 
-      @Override
-      public void widgetSelected( final SelectionEvent e ) {
-        ResourcesSelectionPage.this.selectedResources.clear();
-        for( TableItem tableItem : ResourcesSelectionPage.this.viewer.getTable()
-          .getSelection() )
-        {
-          if( tableItem.getData() instanceof IGridResource ) {
-            ResourcesSelectionPage.this.selectedResources.add( ( IGridResource )tableItem.getData() );
-          }
+      public void checkStateChanged( final CheckStateChangedEvent event ) {
+        updateParent( event );
+        if( event.getChecked() ) {
+          ResourcesSelectionPage.this.viewer.setSubtreeChecked( event.getElement(),
+                                                                true );
+        } else {
+          ResourcesSelectionPage.this.viewer.setSubtreeChecked( event.getElement(),
+                                                                false );
         }
-        ResourcesSelectionPage.this.updateButtons();
       }
     } );
-    for( TableItem item : this.viewer.getTable().getItems() ) {
-      if( item instanceof IGridResource ) {
-        if( item == selectedResources.get( 0 ) ) {
-          this.viewer.getTable().setSelection( item );
-        }
-      }
-    }
+    createButtons( mainComp );
     setControl( mainComp );
   }
 
+  private void createButtons( final Composite composite ) {
+    Composite buttonsComp = new Composite( composite, SWT.NONE );
+    buttonsComp.setLayout( new GridLayout( 1, false ) );
+    GridData gd = new GridData();
+    buttonsComp.setLayoutData( gd );
+    this.selectAllButton = new Button( buttonsComp, SWT.PUSH );
+    gd = new GridData( GridData.FILL_HORIZONTAL );
+    this.selectAllButton.setText( "Select all" );
+    this.selectAllButton.setLayoutData( gd );
+    this.deselectAllButton = new Button( buttonsComp, SWT.PUSH );
+    gd = new GridData( GridData.FILL_HORIZONTAL );
+    this.deselectAllButton.setLayoutData( gd );
+    this.deselectAllButton.setText( "Deselect all" );
+    this.revertSelectionButton = new Button( buttonsComp, SWT.PUSH );
+    gd = new GridData( GridData.FILL_HORIZONTAL );
+    this.revertSelectionButton.setLayoutData( gd );
+    this.revertSelectionButton.setText( "Revert selection" );
+    createListenersForButtons();
+  }
+
+  private void changeStateAllTreeItems( final boolean checked ) {
+    CategoryContainer[] input = ( CategoryContainer[] )this.viewer.getInput();
+    for( CategoryContainer category : input ) {
+      viewer.setChecked( category, checked );
+      viewer.setSubtreeChecked( category, checked );
+    }
+  }
+
+  private void revertSelection() {
+    CategoryContainer[] input = ( CategoryContainer[] )this.viewer.getInput();
+    for( CategoryContainer category : input ) {
+      IGridResource childRef = null;
+      boolean child = true;
+      for( IGridResource resource : category.getContainedResources() ) {
+        child = viewer.getChecked( resource);
+        viewer.setChecked( resource, !child );
+        if( child ) {
+          childRef = resource;
+        }
+      }
+      if( childRef == null ) {
+        childRef = category.getContainedResources().get( 0 );
+      }
+      updateParent( childRef );
+    }
+  }
+
+  private void createListenersForButtons() {
+    this.selectAllButton.addSelectionListener( new SelectionAdapter() {
+
+      @Override
+      public void widgetSelected( final SelectionEvent event ) {
+        changeStateAllTreeItems( true );
+        updateButtons();
+      }
+    } );
+    this.deselectAllButton.addSelectionListener( new SelectionAdapter() {
+
+      @Override
+      public void widgetSelected( final SelectionEvent event ) {
+        changeStateAllTreeItems( false );
+        updateButtons();
+      }
+    } );
+    this.revertSelectionButton.addSelectionListener( new SelectionAdapter() {
+
+      @Override
+      public void widgetSelected( final SelectionEvent event ) {
+        revertSelection();
+        updateButtons();
+      }
+    } );
+  }
+
+  void updateParent( final Object element ) {
+    if( element instanceof IGridResource ) {
+      IGridResource gridResource = ( IGridResource )element;
+      CategoryContainer[] input = ( CategoryContainer[] )this.viewer.getInput();
+      CategoryContainer parent = null;
+      for( CategoryContainer category : input ) {
+        if( category.getContainedResources().contains( gridResource ) ) {
+          parent = category;
+          break;
+        }
+      }
+      if( parent != null ) {
+        // we've got the parent :)
+        if( viewer.getChecked( element ) ) {
+          boolean childrenChecked = true;
+          for( IGridResource child : parent.getContainedResources() ) {
+            if( !this.viewer.getChecked( child ) ) {
+              childrenChecked = false;
+              break;
+            }
+          }
+          this.viewer.setChecked( parent, childrenChecked );
+        } else {
+          this.viewer.setChecked( parent, false );
+        }
+      }
+    }
+  }
+
   protected void updateButtons() {
+    
     this.getContainer().updateButtons();
   }
 
@@ -198,102 +298,31 @@ public class ResourcesSelectionPage extends WizardPage {
    * @param vo VO object from which resources will be presented on this page
    */
   public void setSelectedVO( final IVirtualOrganization vo ) {
-    String message = "computing";
     if( this.viewer != null ) {
       try {
-        List<IGridElement> inputList = new ArrayList<IGridElement>();
+        List<CategoryContainer> categories = new ArrayList<CategoryContainer>();
         for( IGridResourceCategory category : this.visibleCategories ) {
+          CategoryContainer catContainer = new CategoryContainer( category );
+          categories.add( catContainer );
           for( IGridResource res : vo.getAvailableResources( category,
                                                              false,
                                                              new NullProgressMonitor() ) )
           {
-            inputList.add( res );
+            catContainer.addResource( res );
           }
         }
-     
-//    }
-    
-    
-//    if( this.viewer != null ) {
-//      List<IGridElement> inputList = new ArrayList<IGridElement>();
-//      try {
-//        if( this.showComputing ) {
-//          for( IGridComputing comp : vo.getComputing( null ) ) {
-//            inputList.add( comp );
-//          }
-//        }
-//        message = "storage";
-//        if( this.showStorage ) {
-//          for( IGridStorage storage : vo.getStorage( null ) ) {
-//            inputList.add( storage );
-//          }
-//        }
-//        message = "service";
-//        if( this.showService ) {
-//          for( IGridService service : vo.getServices( null ) ) {
-//            inputList.add( service );
-//          }
-//        }
-        IGridResource[] input = new IGridResource[ inputList.size() ];
-        input = inputList.toArray( input );
+        CategoryContainer[] input = new CategoryContainer[ categories.size() ];
+        input = categories.toArray( input );
         this.viewer.setInput( input );
         this.viewer.refresh();
-        if( this.selectedResources.size() > 0 ) {
-          List<TableItem> selTable = new ArrayList<TableItem>();
-          for( TableItem item : this.viewer.getTable().getItems() ) {
-            if( item.getData() instanceof IGridResource ) {
-              for( IGridResource res : selectedResources ) {
-                if( ( ( IGridResource )item.getData() ).getName()
-                  .equals( res.getName() ) )
-                {
-                  selTable.add( item );
-                  break;
-                }
-              }
-            }
-            TableItem[] tableI = new TableItem[ selTable.size() ];
-            this.viewer.getTable().setSelection( selTable.toArray( tableI ) );
-          }
-        }
+        this.viewer.expandAll();
       } catch( ProblemException e ) {
-        ProblemDialog.openProblem( PlatformUI.getWorkbench()
-                                     .getActiveWorkbenchWindow()
-                                     .getShell(),
-                                   "Error occured when fetching vo contents",
-                                   "Error occured when fetching "
-                                       + message
-                                       + " elements of the "
-                                       + vo.getName()
-                                       + " virtual organization",
-                                   e );
-      } catch( NullPointerException nullExc ) {
-        String[] table = new String[ 1 ];
-        table[ 0 ] = "No input";
-        this.viewer.setInput( table );
-        this.viewer.refresh();
+        // TODO Auto-generated catch block
+        e.printStackTrace();
       }
     }
   }
 
-  /**
-   * Method to set selection on this page.
-   * 
-   * @param selectedResource list of resources which should be marked as
-   *            selected.
-   */
-  public void setSelection( final List<IGridResource> selectedResource ) {
-    if( selectedResource != null ) {
-      this.selectedResources = selectedResource;
-      // for( TableItem item : this.viewer.getTable().getItems() ) {
-      // if( item instanceof IGridResource ) {
-      // if( item == selectedResource ) {
-      // this.viewer.getTable().setSelection( item );
-      // this.selectedResources = selectedResource;
-      // }
-      // }
-      // }
-    }
-  }
 
   @Override
   public IWizardPage getNextPage() {
