@@ -39,7 +39,7 @@ import eu.geclipse.info.model.FetchJob;
  * 
  * @author George Tsouloupas
  */
-public class GlueIndex implements IGridModelListener, java.io.Serializable {
+public class GlueIndex implements java.io.Serializable {
 
   /**
    * 
@@ -339,29 +339,7 @@ public class GlueIndex implements IGridModelListener, java.io.Serializable {
   protected String getTag() {
     return "basis";
   }
-
-  public void gridModelChanged( final IGridModelEvent event ) {
-    
-    int type = event.getType();    
-    switch ( type ) {
-      case IGridModelEvent.ELEMENTS_ADDED:
-      case IGridModelEvent.ELEMENTS_REMOVED:
-      case IGridModelEvent.PROJECT_CLOSED:
-      case IGridModelEvent.PROJECT_OPENED:
-
-        for ( IGridElement gridElement : event.getElements() ) {
-          if (gridElement instanceof IGridProject){
-            FetchJob fetchJob = FetchJob.getInstance(" Retrieving Information"); //$NON-NLS-1$
-            fetchJob.schedule(); // Getting the information from the info services.
-            break;
-          }
-        }
-        break;
-      default:
-        break;
-    }
-  }
-
+  
   /**
    * @return the singleton instance to the Glue information datastructure
    */
@@ -370,8 +348,6 @@ public class GlueIndex implements IGridModelListener, java.io.Serializable {
     
     if ( glueIndexInstance == null ) {          
       glueIndexInstance = new GlueIndex();
-      
-      GridModel.getRoot().addGridModelListener( glueIndexInstance );
     }
     return glueIndexInstance;
   }
@@ -382,51 +358,7 @@ public class GlueIndex implements IGridModelListener, java.io.Serializable {
    */
   public static void drop() {
     
-    GridModel.getRoot().removeGridModelListener( glueIndexInstance );
     glueIndexInstance = null;
-    /*
-    glueIndexInstance.glueBatchJob.clear();
-    glueIndexInstance.glueBatchJob.clear();
-    glueIndexInstance.glueBatchQueue.clear();
-    glueIndexInstance.glueBatchSystem.clear();
-    glueIndexInstance.glueCE.clear();
-    glueIndexInstance.glueCEAccessControlBaseRule.clear();
-    glueIndexInstance.glueCEContactString.clear();
-    glueIndexInstance.glueCESEBind.clear();
-    glueIndexInstance.glueCEVOView.clear();
-    glueIndexInstance.glueCEVOViewAccessControlBaseRule.clear();
-    glueIndexInstance.glueCluster.clear();
-    glueIndexInstance.glueHost.clear();
-    glueIndexInstance.glueHostLocalFileSystem.clear();
-    glueIndexInstance.glueHostNetworkAdapter.clear();
-    glueIndexInstance.glueHostPoolAccount.clear();
-    glueIndexInstance.glueHostProcess.clear();
-    glueIndexInstance.glueHostRemoteFileSystem.clear();
-    glueIndexInstance.glueHostRole.clear();
-    glueIndexInstance.glueSA.clear();
-    glueIndexInstance.glueSAAccessControlBaseRule.clear();
-    glueIndexInstance.glueSE.clear();
-    glueIndexInstance.glueSEAccessProtocol.clear();
-    glueIndexInstance.glueSEAccessProtocolCapability.clear();
-    glueIndexInstance.glueService.clear();
-    glueIndexInstance.glueServiceAccessControlRule.clear();
-    glueIndexInstance.glueServiceAssociation.clear();
-    glueIndexInstance.glueServiceData.clear();
-    glueIndexInstance.glueServiceOwner.clear();
-    glueIndexInstance.glueServiceStatus.clear();
-    glueIndexInstance.glueSite.clear();
-    glueIndexInstance.glueSiteInfo.clear();
-    glueIndexInstance.glueSiteSponsor.clear();
-    glueIndexInstance.glueSL.clear();
-    glueIndexInstance.glueSubCluster.clear();
-    glueIndexInstance.glueSubClusterLocation.clear();
-    glueIndexInstance.glueSubClusterSoftwareRunTimeEnvironment.clear();
-    glueIndexInstance.glueVO.clear();
-   */
-    //IPath serPath = getGridInfoLocation();
-    //serPath.toFile().delete(); 
-    
-    //serializeInstance(); Commented out for the bug 204787
   }
   
   private static IPath getGridInfoLocation() {

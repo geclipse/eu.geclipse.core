@@ -70,6 +70,8 @@ import org.eclipse.ui.part.ViewPart;
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridInfoService;
+import eu.geclipse.core.model.IGridModelEvent;
+import eu.geclipse.core.model.IGridModelListener;
 import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.info.InfoCacheListenerHandler;
@@ -90,7 +92,7 @@ import eu.geclipse.info.ui.internal.Messages;
  * @author George Tsouloupas
  */
 public class GlueInfoViewer extends ViewPart
-    implements ISelectionProvider, IGlueStoreChangeListerner {
+    implements ISelectionProvider, IGlueStoreChangeListerner, IGridModelListener {
 
   FetchJob fetchJob;
   TreeViewer viewer;
@@ -501,6 +503,7 @@ public class GlueInfoViewer extends ViewPart
   public GlueInfoViewer() {
     
     InfoCacheListenerHandler.getInstance().addListener( GlueInfoViewer.this );
+    GridModel.getRoot().addGridModelListener( GlueInfoViewer.this );
     
     this.fetchJob = FetchJob.getInstance( " Retrieving Information" ); //$NON-NLS-1$
     this.showOnlyFilledInfoElements = false;
@@ -828,5 +831,27 @@ public class GlueInfoViewer extends ViewPart
     
     // Remove the listener that is added in the constructor.
     InfoCacheListenerHandler.getInstance().removeListener( GlueInfoViewer.this );
+    GridModel.getRoot().removeGridModelListener( GlueInfoViewer.this );
+  }
+
+  public void gridModelChanged( IGridModelEvent event ) {
+    int type = event.getType();    
+    switch ( type ) {
+      case IGridModelEvent.ELEMENTS_ADDED:
+      case IGridModelEvent.ELEMENTS_REMOVED:
+      case IGridModelEvent.PROJECT_CLOSED:
+      case IGridModelEvent.PROJECT_OPENED:
+
+        for ( IGridElement gridElement : event.getElements() ) {
+          if (gridElement instanceof IGridProject){
+            FetchJob myFetchJob = FetchJob.getInstance(" Retrieving Information"); //$NON-NLS-1$
+            myFetchJob.schedule(); // Getting the information from the info services.
+            break;
+          }
+        }
+        break;
+      default:
+        break;
+    }
   }
 }
