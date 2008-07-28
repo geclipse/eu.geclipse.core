@@ -122,8 +122,7 @@ final public class BoxEditPart extends BatchEditPart  {
    }
    catch(Exception z)
    { 
-     //no code needed
-     System.out.println();
+     // No code needed
    } 
    
    if(!this.firstTime){
