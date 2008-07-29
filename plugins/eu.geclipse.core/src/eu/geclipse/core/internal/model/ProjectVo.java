@@ -47,6 +47,10 @@ public class ProjectVo
     extends AbstractGridContainer
     implements IVirtualOrganization, IWrappedElement {
   
+  /**
+   * Definition of standard categories that are used whenever a VO does not specify
+   * dedicated categories.
+   */
   public static IGridResourceCategory[] standardCategories
     = new IGridResourceCategory[] {
       GridResourceCategoryFactory.getCategory( GridResourceCategoryFactory.ID_APPLICATIONS ),
@@ -58,9 +62,11 @@ public class ProjectVo
       GridResourceCategoryFactory.getCategory( GridResourceCategoryFactory.ID_STORAGE )
   };
   
+  private static final String NA_STRING = "N/A"; //$NON-NLS-1$
+  
   private IGridProject project;
   
-  private IVirtualOrganization vo;
+  private String voName;
   
   protected ProjectVo( final IGridProject project,
                        final IVirtualOrganization vo ) {
@@ -68,7 +74,7 @@ public class ProjectVo
     super();
     
     this.project = project;
-    this.vo = vo;
+    this.voName = vo.getName();
     
     IGridResourceCategory[] supportedCategories = vo.getSupportedCategories();
     
@@ -88,11 +94,13 @@ public class ProjectVo
   }
 
   public String getTypeName() {
-    return this.vo.getTypeName();
+    IVirtualOrganization vo = getSlave();
+    return vo != null ? vo.getTypeName() : NA_STRING;
   }
   
   public IGridApplicationManager getApplicationManager() {
-    return this.vo.getApplicationManager();
+    IVirtualOrganization vo = getSlave();
+    return vo != null ? vo.getApplicationManager() : null;
   }
   
   public IGridResource[] getAvailableResources( final IGridResourceCategory category,
@@ -100,10 +108,11 @@ public class ProjectVo
                                                 final IProgressMonitor monitor )
       throws ProblemException {
     IGridResource[] result = null;
-    if ( this.vo != null ) {
-      IGridInfoService infoService = this.vo.getInfoService();
+    IVirtualOrganization vo = getSlave();
+    if ( vo != null ) {
+      IGridInfoService infoService = vo.getInfoService();
       if ( infoService != null ) {
-        result = infoService.fetchResources( this, this.vo, category, false, null, monitor );
+        result = infoService.fetchResources( this, vo, category, false, null, monitor );
       }
     }
     return result;
@@ -113,13 +122,14 @@ public class ProjectVo
       throws ProblemException {
     
     IGridComputing[] result = null;
+    IVirtualOrganization vo = getSlave();
     
-    if ( this.vo != null ) {
+    if ( vo != null ) {
       
-      IGridInfoService infoService = this.vo.getInfoService();
+      IGridInfoService infoService = vo.getInfoService();
       IGridResource[] resources = infoService.fetchResources(
           this,
-          this.vo,
+          vo,
           GridResourceCategoryFactory.getCategory( GridResourceCategoryFactory.ID_COMPUTING ),
           false,
           IGridComputing.class,
@@ -144,11 +154,13 @@ public class ProjectVo
   
   public IGridInfoService getInfoService()
       throws ProblemException {
-    return this.vo.getInfoService();
+    IVirtualOrganization vo = getSlave();
+    return vo != null ? vo.getInfoService() : null;
   }
 
   public String getName() {
-    return this.vo != null ? this.vo.getName() : "Vo-Wrapper"; //$NON-NLS-1$
+    IVirtualOrganization vo = getSlave();
+    return vo != null ? vo.getName() : "Vo-Wrapper"; //$NON-NLS-1$
   }
 
   public IGridContainer getParent() {
@@ -172,13 +184,14 @@ public class ProjectVo
       throws ProblemException {
     
     IGridService[] result = null;
+    IVirtualOrganization vo = getSlave();
     
-    if ( this.vo != null ) {
+    if ( vo != null ) {
       
-      IGridInfoService infoService = this.vo.getInfoService();
+      IGridInfoService infoService = vo.getInfoService();
       IGridResource[] resources = infoService.fetchResources(
           this,
-          this.vo,
+          vo,
           GridResourceCategoryFactory.getCategory( GridResourceCategoryFactory.ID_SERVICES ),
           false,
           IGridService.class,
@@ -201,13 +214,14 @@ public class ProjectVo
       throws ProblemException {
     
     IGridStorage[] result = null;
+    IVirtualOrganization vo = getSlave();
     
-    if ( this.vo != null ) {
+    if ( vo != null ) {
       
-      IGridInfoService infoService = this.vo.getInfoService();
+      IGridInfoService infoService = vo.getInfoService();
       IGridResource[] resources = infoService.fetchResources(
           this,
-          this.vo,
+          vo,
           GridResourceCategoryFactory.getCategory( GridResourceCategoryFactory.ID_STORAGE ),
           false,
           IGridStorage.class,
@@ -227,16 +241,18 @@ public class ProjectVo
   }
   
   public IGridResourceCategory[] getSupportedCategories() {
-    return this.vo != null ? this.vo.getSupportedCategories() : standardCategories;
+    IVirtualOrganization vo = getSlave();
+    return vo != null ? vo.getSupportedCategories() : standardCategories;
   }
   
   public IGridJobService[] getJobSubmissionServices( final IProgressMonitor monitor )
       throws ProblemException {
-    return this.vo.getJobSubmissionServices( monitor );
+    IVirtualOrganization vo = getSlave();
+    return vo != null ? vo.getJobSubmissionServices( monitor ) : new IGridJobService[ 0 ];
   }
   
   public IGridElement getWrappedElement() {
-    return this.vo;
+    return getSlave();
   }
   
   public boolean isLazy() {
@@ -250,15 +266,28 @@ public class ProjectVo
   @SuppressWarnings( "unchecked" )
   @Override
   public Object getAdapter( final Class adapter ) {
-    return this.vo.getAdapter( adapter );
+    IVirtualOrganization vo = getSlave();
+    return vo != null ? vo.getAdapter( adapter ) : null;
   }
 
   public void load() throws ProblemException {
     // TODO mathias
   }
+  
+  public void refreshResources( final IGridResourceCategory category,
+                                final IProgressMonitor monitor )
+      throws ProblemException {
+    
+    ResourceCategoryContainer container = getResourceContainer( category );
+    
+    if ( container != null ) {
+      container.refresh( monitor );
+    }
+    
+  }
 
   public void save() throws ProblemException {
-    // TODO mathias
+    // Empty implementation
   }
   
   @Override
@@ -279,7 +308,14 @@ public class ProjectVo
    * @see eu.geclipse.core.model.IVirtualOrganization#getWizardId()
    */
   public String getWizardId() {
-    return this.vo.getWizardId();
+    IVirtualOrganization vo = getSlave();
+    return vo != null ? vo.getWizardId() : null;
+  }
+  
+  protected IVirtualOrganization getSlave() {
+    IVirtualOrganization result
+      = ( IVirtualOrganization ) VoManager.getManager().findChild( this.voName );
+    return result;
   }
   
   private ResourceCategoryContainer getResourceContainer( final IGridResourceCategory category )
@@ -313,7 +349,8 @@ public class ProjectVo
   }
 
   public String getId() {
-    return this.vo.getId();
+    IVirtualOrganization vo = getSlave();
+    return vo != null ? vo.getId() : NA_STRING;
   }
   
 }
