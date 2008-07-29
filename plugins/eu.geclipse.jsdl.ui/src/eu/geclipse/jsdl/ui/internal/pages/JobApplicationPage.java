@@ -27,8 +27,6 @@ import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.TableWrapData;
 
 import eu.geclipse.jsdl.model.base.JobDefinitionType;
-import eu.geclipse.jsdl.ui.adapters.jsdl.ApplicationTypeAdapter;
-import eu.geclipse.jsdl.ui.adapters.posix.PosixApplicationTypeAdapter;
 import eu.geclipse.jsdl.ui.internal.pages.sections.AdditionalPosixElementSection;
 import eu.geclipse.jsdl.ui.internal.pages.sections.ApplicationSection;
 import eu.geclipse.jsdl.ui.internal.pages.sections.PosixApplicationSection;
@@ -90,8 +88,6 @@ public final class JobApplicationPage extends JsdlFormPage  {
    * type adapters for the elements of this page. This method must be called
    * only from the JSDL Editor. Associated Type Adapters for this page are:
    * 
-   * @see ApplicationTypeAdapter
-   * @see PosixApplicationTypeAdapter
    * @param jobDefinitionRoot
    * @param refreshStatus Set to TRUE if the original page content is already
    *            set, but there is a need to refresh the page because there was a

@@ -66,6 +66,7 @@ import eu.geclipse.jsdl.ui.internal.pages.Messages;
  * <p>
  * - Target
  *
+ * @deprecated. This class is deprecated. Its functionality has been embedded in  DataStageIn and DataStageOut classes.
  */
 public class DataStageTypeAdapter extends JsdlAdaptersFactory {
   

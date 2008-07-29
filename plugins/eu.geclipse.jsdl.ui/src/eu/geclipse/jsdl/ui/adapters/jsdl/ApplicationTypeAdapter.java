@@ -47,6 +47,7 @@ import eu.geclipse.jsdl.ui.internal.pages.JobDefinitionPage;
  * - ApplicationVersion
  * <p>
  * - Description
+ * @deprecated This class is now deprecated. It's functionality has been embedded in the ApplicationSection class.
  * 
  */
 public final class ApplicationTypeAdapter extends JsdlAdaptersFactory {

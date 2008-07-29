@@ -42,6 +42,7 @@ import eu.geclipse.jsdl.ui.internal.pages.JobDefinitionPage;
  * <p>
  * - ID
  *
+ *@deprecated. This class is deprecated. Its functionality has been embedded in the JobDefinitionSection class.
  */
 public final class JobDefinitionTypeAdapter extends JsdlAdaptersFactory {
   

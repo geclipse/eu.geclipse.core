@@ -75,6 +75,7 @@ import eu.geclipse.jsdl.ui.internal.pages.JobDefinitionPage;
  * <p>
  * - CPUArchitecture
  *
+ *@deprecated. This class is deprecated.
  */
 
 

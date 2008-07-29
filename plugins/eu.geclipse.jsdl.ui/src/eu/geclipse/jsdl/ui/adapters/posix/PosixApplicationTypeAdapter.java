@@ -68,6 +68,7 @@ import eu.geclipse.jsdl.ui.internal.pages.JobDefinitionPage;
  * This class provides adapters for manipulating <b>POSIXApplication</b> elements 
  * through the Application Page of the JSDL editor.
  * 
+ * @deprecated. This class is deprecated.
  */
 public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
   

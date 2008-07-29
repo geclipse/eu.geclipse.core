@@ -59,6 +59,7 @@ import eu.geclipse.jsdl.model.base.JsdlPackage;
  * - JobAnnotation
  * <p>
  * - JobProject
+ * @deprecated. This class is deprecated. Its functionality has been embedded in the JobIdentificationSection class.
  *
  */
 public final class JobIdentificationTypeAdapter extends JsdlAdaptersFactory {
