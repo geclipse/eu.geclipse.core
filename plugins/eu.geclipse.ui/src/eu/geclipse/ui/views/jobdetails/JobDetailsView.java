@@ -144,7 +144,7 @@ implements ISelectionListener, IViewConfiguration, IGridJobStatusListener
    */
   public void refresh() {
     refreshEmptyJobDescription();
-    getSectionsManager().refresh( this.inputJob );    
+    getSectionsManager().refresh( this.inputJob );
     this.topScrolledForm.reflow( true );
   }
 

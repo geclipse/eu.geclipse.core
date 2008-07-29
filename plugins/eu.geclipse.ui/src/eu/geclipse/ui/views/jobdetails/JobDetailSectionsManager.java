@@ -137,13 +137,23 @@ public class JobDetailSectionsManager {
   /**
    * @param name name for section
    * @param order
-   * @return created section
+   * @param lazy <code>true</code> if section should be collapsed after creation, and refresh for details will be called after expansion by user
+   * @return created section ID
    */
-  public Integer createSection( final String name, final int order ) {
+  public Integer createSection( final String name, final int order, final boolean lazy ) {
     Integer id = Integer.valueOf( getNextId() );
-    JobDetailsSection section = new JobDetailsSection( name, order, this.viewConfiguration );
+    JobDetailsSection section = new JobDetailsSection( name, order, this.viewConfiguration, lazy );
     this.sectionsMap.put( id, section );
     return id;
+  }
+  
+  /**
+   * @param name name for section
+   * @param order
+   * @return created section ID
+   */
+  public Integer createSection( final String name, final int order ) {
+    return createSection( name, order, false );
   }
 
   /**

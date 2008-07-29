@@ -137,8 +137,7 @@ abstract public class JobTextDetail extends JobDetail {
    */
   protected Text getDetailText() {
     return this.detailText;
-  }
-
+  }  
   
   /**
    * @return the name

@@ -119,7 +119,7 @@ abstract public class JobComplexDetail extends JobTextDetail {
         try {
           IGridJob inputJob = getInputJob();
           if( inputJob != null ) {
-            String value = getValue( inputJob );
+            String value = getComplexValue( inputJob );
             if( value != null ) {
               IDE.openEditor( PlatformUI.getWorkbench()
                                 .getActiveWorkbenchWindow()
@@ -134,6 +134,10 @@ abstract public class JobComplexDetail extends JobTextDetail {
       }
     } );
     return createdButton;
+  }
+  
+  protected String getComplexValue( final IGridJob inputJob ) {
+    return getValue( inputJob  );
   }
   
   protected IEditorInput createEditorInput( final IGridJob inputJob, final String value ) {

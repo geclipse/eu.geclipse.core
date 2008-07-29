@@ -23,6 +23,9 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.forms.events.ExpansionAdapter;
+import org.eclipse.ui.forms.events.ExpansionEvent;
+import org.eclipse.ui.forms.events.IExpansionListener;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
@@ -38,18 +41,21 @@ public class JobDetailsSection implements IJobDetailsSection {
   private int order;
   private Section sectionWidget;
   private List<IJobDetail> details = new LinkedList<IJobDetail>();
-  private IViewConfiguration viewConfiguration;
+  IViewConfiguration viewConfiguration;
+  private boolean lazy;
 
   /**
    * @param name section name
    * @param order value used to sort sections before creation
    * @param viewConfiguration the configuration of view
+   * @param lazy <code>true</code> if section should be collapsed after creation, and refresh for details will be called after expansion by user
    */
-  public JobDetailsSection( final String name, final int order, final IViewConfiguration viewConfiguration ) {
+  public JobDetailsSection( final String name, final int order, final IViewConfiguration viewConfiguration, final boolean lazy ) {
     super();
     this.name = name;
     this.order = order;
     this.viewConfiguration = viewConfiguration;
+    this.lazy = lazy;
   }
 
   public int getOrder() {
@@ -63,13 +69,18 @@ public class JobDetailsSection implements IJobDetailsSection {
     if( !isWidgetCreated() ) {
       createWidgets( parent, this.viewConfiguration.getFormToolkit() );
     }
-    for( IJobDetail detail : this.details ) {
-      atLeastOneDetailSpecified |= detail.refresh( gridJob,
-                                                   ( Composite )this.sectionWidget.getClient(),
-                                                   this.viewConfiguration );
+    
+    if( !this.lazy 
+        || this.sectionWidget.isExpanded() ) {
+      for( IJobDetail detail : this.details ) {
+        atLeastOneDetailSpecified |= detail.refresh( gridJob,
+                                                     ( Composite )this.sectionWidget.getClient(),
+                                                     this.viewConfiguration );
+      }
     }
     setVisible( this.viewConfiguration.isShowEmptyEnabled()
-                || atLeastOneDetailSpecified );
+                || atLeastOneDetailSpecified
+                || this.lazy );
   }
 
   private void createWidgets( final Composite parent,
@@ -83,10 +94,14 @@ public class JobDetailsSection implements IJobDetailsSection {
     gridData.verticalAlignment = SWT.TOP;
     this.sectionWidget.setLayoutData( gridData );
     this.sectionWidget.setText( this.name );
-    this.sectionWidget.setExpanded( true );
+    this.sectionWidget.setExpanded( !this.lazy );
     Composite clientComposite = formToolkit.createComposite( this.sectionWidget );
     clientComposite.setLayout( new GridLayout( 2, false ) );
     this.sectionWidget.setClient( clientComposite );
+    
+    if( this.lazy ) {
+      this.sectionWidget.addExpansionListener( createExpansionListener() );
+    }
   }
 
   private boolean isWidgetCreated() {
@@ -136,4 +151,21 @@ public class JobDetailsSection implements IJobDetailsSection {
   public IGridJob getInputJob() {
     return this.viewConfiguration.getInputJob();
   }
+  
+  private IExpansionListener createExpansionListener() {
+    return new ExpansionAdapter() {
+
+      @Override
+      public void expansionStateChanged( final ExpansionEvent e ) {
+        if( e.getState() ) {
+          JobDetailsSection.this.viewConfiguration.refresh();
+        }
+      }      
+    };
+  }
+  
+  public IViewConfiguration getViewConfiguration() {
+    return this.viewConfiguration;
+  }   
+  
 }

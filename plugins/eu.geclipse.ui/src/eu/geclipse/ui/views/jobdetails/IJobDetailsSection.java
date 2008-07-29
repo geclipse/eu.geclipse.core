@@ -71,4 +71,9 @@ public interface IJobDetailsSection {
    * @return the job currently shown in view
    */
   IGridJob getInputJob();
+  
+  /**
+   * @return current configuration of Job Details View
+   */
+  IViewConfiguration getViewConfiguration();
 }

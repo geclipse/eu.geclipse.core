@@ -43,4 +43,9 @@ public interface IViewConfiguration {
    * @return get job actually shown in view 
    */
   IGridJob getInputJob();
+
+  /**
+   * Refresh whole view using current input job
+   */  
+  void refresh();
 }
