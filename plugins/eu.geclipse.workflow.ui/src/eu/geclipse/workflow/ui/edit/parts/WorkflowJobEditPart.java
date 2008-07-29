@@ -37,6 +37,7 @@ import eu.geclipse.workflow.ui.edit.policies.WorkflowJobCanonicalEditPolicy;
 import eu.geclipse.workflow.ui.edit.policies.WorkflowJobDragDropEditPolicy;
 import eu.geclipse.workflow.ui.edit.policies.WorkflowJobItemSemanticEditPolicy;
 import eu.geclipse.workflow.ui.internal.WorkflowJobFigure;
+import eu.geclipse.workflow.ui.part.WorkflowVisualIDRegistry;
 
 /**
  * The class that connects the Figure and Model of the WorkflowJob
@@ -47,9 +48,7 @@ public class WorkflowJobEditPart extends ShapeNodeEditPart {
    * @generated
    */
   public static final int VISUAL_ID = 1001;
-
   protected IFigure contentPane;
-
   protected IFigure primaryShape;
 
   /**
@@ -73,7 +72,8 @@ public class WorkflowJobEditPart extends ShapeNodeEditPart {
     installEditPolicy( EditPolicyRoles.CANONICAL_ROLE,
                        new WorkflowJobCanonicalEditPolicy() );
     installEditPolicy( EditPolicy.LAYOUT_ROLE, createLayoutEditPolicy() );
-    // XXX need an SCR to runtime to have another abstract superclass that would let children add reasonable editpolicies
+    // XXX need an SCR to runtime to have another abstract superclass that would 
+    // let children add reasonable editpolicies
     removeEditPolicy( EditPolicyRoles.CONNECTION_HANDLES_ROLE);
   }
 

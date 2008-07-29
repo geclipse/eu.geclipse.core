@@ -18,8 +18,8 @@ package eu.geclipse.workflow.ui.edit.parts;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.DiagramEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editpolicies.EditPolicyRoles;
 import org.eclipse.gmf.runtime.notation.View;
+
 import eu.geclipse.workflow.ui.edit.policies.WorkflowCanonicalEditPolicy;
-import eu.geclipse.workflow.ui.edit.policies.WorkflowDiagramDragDropEditPolicy;
 import eu.geclipse.workflow.ui.edit.policies.WorkflowItemSemanticEditPolicy;
 
 /**

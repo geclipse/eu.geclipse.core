@@ -12,6 +12,7 @@
  * Contributors:
  *     RUR (http://acet.rdg.ac.uk/)
  *     - Ashish Thandavan - initial API and implementation
+ *     - David Johnson
  ******************************************************************************/
 package eu.geclipse.workflow.ui.editor;
 
@@ -50,6 +51,7 @@ import org.eclipse.ui.part.FileEditorInput;
 
 import eu.geclipse.workflow.ui.internal.WorkflowDiagramEditorPlugin;
 import eu.geclipse.workflow.ui.listeners.FileTransferDropTargetListener;
+import eu.geclipse.workflow.ui.listeners.JSDLTransferDropTargetListener;
 import eu.geclipse.workflow.ui.part.WorkflowPaletteFactory;
 
 /**
@@ -94,7 +96,7 @@ public class WorkflowDiagramEditor extends DiagramDocumentEditor implements IGot
   
   @Override
   protected void initializeGraphicalViewer() {
-    getGraphicalViewer().addDropTargetListener( new FileTransferDropTargetListener(getGraphicalViewer()));
+    getGraphicalViewer().addDropTargetListener( new JSDLTransferDropTargetListener(getGraphicalViewer()));
     super.initializeGraphicalViewer();
     
 }

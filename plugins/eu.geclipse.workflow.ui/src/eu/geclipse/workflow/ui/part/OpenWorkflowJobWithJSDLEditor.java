@@ -57,19 +57,21 @@ public class OpenWorkflowJobWithJSDLEditor implements IObjectActionDelegate {
   public void run( IAction action ) {
     IWorkflowJob job = ( IWorkflowJob )OpenWorkflowJobWithJSDLEditor.this.mySelectedElement.resolveSemanticElement();
     String filename = job.getJobDescription();
-    URI fileNameURI = URIUtil.toURI( filename );
-    IFile[] file = ResourcesPlugin.getWorkspace().getRoot().findFilesForLocationURI( fileNameURI ); 
-    try {
-      if( (file.length != 0) && file[ 0 ].exists() ) {
-        IDE.openEditor( WorkflowDiagramEditorPlugin.getDefault()
-          .getWorkbench()
-          .getActiveWorkbenchWindow()
-          .getActivePage(), file[ 0 ], true );
-      } else {
-    	  // need to handle if file does not exist
+    if ( filename != null ) {
+      URI fileNameURI = URIUtil.toURI( filename );
+      IFile[] file = ResourcesPlugin.getWorkspace().getRoot().findFilesForLocationURI( fileNameURI ); 
+      try {
+        if( (file.length != 0) && file[ 0 ].exists() ) {
+          IDE.openEditor( WorkflowDiagramEditorPlugin.getDefault()
+            .getWorkbench()
+            .getActiveWorkbenchWindow()
+            .getActivePage(), file[ 0 ], true );
+        } else {
+            // need to handle if file does not exist
+        }
+      } catch( PartInitException partInitException ) {
+        WorkflowDiagramEditorPlugin.logException( partInitException );
       }
-    } catch( PartInitException partInitException ) {
-      WorkflowDiagramEditorPlugin.logException( partInitException );
     }
   }
 
