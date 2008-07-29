@@ -77,7 +77,7 @@ public class ReachableHostJob extends Job {
   public ReachableHostJob( final InetAddress hostAdr, final int nPing, final long timeOut, 
                       final Text outPut, final Table table, final String[] itemString, 
                       final int index, final ReachableTest pingTest ) {
-    super( Messages.getString( "PingHostJob.pingMsg" ) + hostAdr.getHostName() ); //$NON-NLS-1$
+    super( Messages.getString( "ReachableHostJob.pingMsg" ) + hostAdr.getHostName() ); //$NON-NLS-1$
     
     this.hostName = hostAdr.getHostName();
     this.hostAdr = hostAdr;
