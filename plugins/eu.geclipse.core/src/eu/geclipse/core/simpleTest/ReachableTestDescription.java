@@ -22,10 +22,10 @@ package eu.geclipse.core.simpleTest;
  * @author harald
  *
  */
-public class PingTestDescription implements ISimpleTestDescription {
+public class ReachableTestDescription implements ISimpleTestDescription {
 
   public ISimpleTest createSimpleTest() {
-    return new PingTest( this );
+    return new ReachableTest( this );
   }
 
   /* (non-Javadoc)
@@ -44,7 +44,7 @@ public class PingTestDescription implements ISimpleTestDescription {
   public boolean matches( final ISimpleTestDescription otherTest ) {
     boolean result = false;
     
-    if ( otherTest instanceof PingTestDescription ) {
+    if ( otherTest instanceof ReachableTestDescription ) {
       result = true;
     }
     

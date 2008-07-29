@@ -364,9 +364,9 @@
             name="DNS LookUp UI Factory">
       </factory>
       <factory
-            class="eu.geclipse.ui.simpleTest.PingTestUIFactory"
-            id="eu.geclipse.ui.simpleTest.pingTestUIFactory"
-            name="Ping Test UI Factory">
+            class="eu.geclipse.ui.simpleTest.ReachableTestUIFactory"
+            id="eu.geclipse.ui.simpleTest.reachableTestUIFactory"
+            name="Reachable Test UI Factory">
       </factory>
       <factory
             class="eu.geclipse.ui.simpleTest.PortScanUIFactory"
