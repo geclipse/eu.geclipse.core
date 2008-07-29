@@ -23,7 +23,7 @@ import org.eclipse.swt.widgets.Shell;
 import eu.geclipse.core.model.IGridResource;
 import eu.geclipse.core.simpleTest.ISimpleTest;
 import eu.geclipse.core.simpleTest.ISimpleTestDescription;
-import eu.geclipse.core.simpleTest.ReachableTestDescription;
+import eu.geclipse.core.simpleTest.ReachabilityTestDescription;
 import eu.geclipse.ui.AbstractSimpleTestUIFactory;
 import eu.geclipse.ui.dialogs.AbstractSimpleTestDialog;
 
@@ -34,12 +34,12 @@ import eu.geclipse.ui.dialogs.AbstractSimpleTestDialog;
  * @author harald
  *
  */
-public class ReachableTestUIFactory extends AbstractSimpleTestUIFactory {
+public class ReachabilityTestUIFactory extends AbstractSimpleTestUIFactory {
 
   public AbstractSimpleTestDialog getSimpleTestDialog( final ISimpleTest test, 
                                                        final List< IGridResource > resources, 
                                                        final Shell parentShell ) {
-    ReachableTestDialog dialog = new ReachableTestDialog( test, resources, parentShell );
+    ReachabilityTestDialog dialog = new ReachabilityTestDialog( test, resources, parentShell );
     return dialog;
   }
   
@@ -47,7 +47,7 @@ public class ReachableTestUIFactory extends AbstractSimpleTestUIFactory {
    * @see eu.geclipse.ui.ISimpleTestUIFactory#getSupportedDescription()
    */
   public ISimpleTestDescription getSupportedDescription() {
-    return new ReachableTestDescription();
+    return new ReachabilityTestDescription();
   }
 
 }

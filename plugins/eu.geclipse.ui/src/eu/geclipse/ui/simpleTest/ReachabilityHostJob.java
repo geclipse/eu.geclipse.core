@@ -25,20 +25,20 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
 
-import eu.geclipse.core.simpleTest.ReachableTest;
+import eu.geclipse.core.simpleTest.ReachabilityTest;
 
 /**
  * A Job class that is used to ping a host a number of times
  * 
  * @author kgjermun
  */
-public class ReachableHostJob extends Job {
+public class ReachabilityHostJob extends Job {
   
   private static DecimalFormat df = new DecimalFormat( "0.000" ); //$NON-NLS-1$
 
   protected String lineDelimiter;
   
-  protected ReachableTest pingTest;
+  protected ReachabilityTest pingTest;
   
   protected Display display;
 
@@ -74,10 +74,10 @@ public class ReachableHostJob extends Job {
    * @param index The index into the table for this row
    * @param pingTest A reference to the ping test class to be used. 
    */
-  public ReachableHostJob( final InetAddress hostAdr, final int nPing, final long timeOut, 
+  public ReachabilityHostJob( final InetAddress hostAdr, final int nPing, final long timeOut, 
                       final Text outPut, final Table table, final String[] itemString, 
-                      final int index, final ReachableTest pingTest ) {
-    super( Messages.getString( "ReachableHostJob.pingMsg" ) + hostAdr.getHostName() ); //$NON-NLS-1$
+                      final int index, final ReachabilityTest pingTest ) {
+    super( Messages.getString( "ReachabilityHostJob.pingMsg" ) + hostAdr.getHostName() ); //$NON-NLS-1$
     
     this.hostName = hostAdr.getHostName();
     this.hostAdr = hostAdr;
@@ -103,9 +103,9 @@ public class ReachableHostJob extends Job {
     
     IStatus result = Status.CANCEL_STATUS;
     
-    monitor.beginTask( Messages.getString( "ReachableTestDialog.pingMsg" ) + this.hostName //$NON-NLS-1$ 
+    monitor.beginTask( Messages.getString( "ReachabilityTestDialog.pingMsg" ) + this.hostName //$NON-NLS-1$ 
                        + " " + this.numPing //$NON-NLS-1$
-                       + Messages.getString( "ReachableTestDialog.spacePlusTimes" ), this.numPing ); //$NON-NLS-1$
+                       + Messages.getString( "ReachabilityTestDialog.spacePlusTimes" ), this.numPing ); //$NON-NLS-1$
     
     for ( i = 0; i < this.numPing && !monitor.isCanceled(); ++i ) {
       this.pingDelay = this.pingTest.ping( this.hostAdr );
@@ -116,9 +116,9 @@ public class ReachableHostJob extends Job {
       if ( !this.display.isDisposed() ) {   
         this.display.syncExec( new Runnable() {
           public void run() {
-            if ( !ReachableHostJob.this.outPut.isDisposed() )
-              ReachableHostJob.this.outPut.append( hostName + ": "   //$NON-NLS-1$
-                                + Messages.getString( "ReachableTestDialog.notReachable" )  //$NON-NLS-1$
+            if ( !ReachabilityHostJob.this.outPut.isDisposed() )
+              ReachabilityHostJob.this.outPut.append( hostName + ": "   //$NON-NLS-1$
+                                + Messages.getString( "ReachabilityTestDialog.notReachable" )  //$NON-NLS-1$
                                 + lineDelimiter );
           }
         } );
@@ -135,11 +135,11 @@ public class ReachableHostJob extends Job {
         if ( !this.display.isDisposed() ) {   
           this.display.syncExec( new Runnable() {
             public void run() {
-              if ( !ReachableHostJob.this.outPut.isDisposed() )
-                ReachableHostJob.this.outPut.append( hostName + ": "  //$NON-NLS-1$
-                            + Messages.getString( "ReachableTestDialog.time" )  //$NON-NLS-1$
+              if ( !ReachabilityHostJob.this.outPut.isDisposed() )
+                ReachabilityHostJob.this.outPut.append( hostName + ": "  //$NON-NLS-1$
+                            + Messages.getString( "ReachabilityTestDialog.time" )  //$NON-NLS-1$
                             + df.format( pingDelay ) + " ms"  //$NON-NLS-1$
-                            + ReachableHostJob.this.lineDelimiter );
+                            + ReachabilityHostJob.this.lineDelimiter );
             }
           } );
         }      
@@ -151,8 +151,8 @@ public class ReachableHostJob extends Job {
         this.display.syncExec( new Runnable() {
           public void run() {
             // Write the summary
-            if ( !ReachableHostJob.this.table.isDisposed() ) { 
-              ReachableHostJob.this.table.clear( ReachableHostJob.this.index );
+            if ( !ReachabilityHostJob.this.table.isDisposed() ) { 
+              ReachabilityHostJob.this.table.clear( ReachabilityHostJob.this.index );
 
             }
           }
@@ -171,14 +171,14 @@ public class ReachableHostJob extends Job {
     }
     
     this.summary = this.lineDelimiter + "Summary for: " + this.hostName + this.lineDelimiter  //$NON-NLS-1$
-                   + i + Messages.getString( "ReachableTestDialog.transmitted" )  //$NON-NLS-1$
-                   + nOk + Messages.getString( "ReachableTestDialog.receivedPlusSpace" )  //$NON-NLS-1$
+                   + i + Messages.getString( "ReachabilityTestDialog.transmitted" )  //$NON-NLS-1$
+                   + nOk + Messages.getString( "ReachabilityTestDialog.receivedPlusSpace" )  //$NON-NLS-1$
                    + df.format( ( ( ( double )nFailed ) / i ) * 100 ) 
-                   + Messages.getString( "ReachableTestDialog.packetLoss" )  //$NON-NLS-1$
+                   + Messages.getString( "ReachabilityTestDialog.packetLoss" )  //$NON-NLS-1$
                    + this.lineDelimiter;
     
     if ( nOk > 0 ) {
-      this.summary = this.summary.concat( Messages.getString( "ReachableTestDialog.summaryPlusSpace" )  //$NON-NLS-1$
+      this.summary = this.summary.concat( Messages.getString( "ReachabilityTestDialog.summaryPlusSpace" )  //$NON-NLS-1$
                     + df.format( min ) + "/"  //$NON-NLS-1$
                     + df.format( avg/nOk ) + "/"  //$NON-NLS-1$
                     + df.format( max ) + " ms"  //$NON-NLS-1$
@@ -191,23 +191,23 @@ public class ReachableHostJob extends Job {
       this.itemString[ 5 ] = df.format(  max );
     }
     else {
-      this.summary = this.summary.concat( Messages.getString( "ReachableTestDialog.summaryFailed" )  //$NON-NLS-1$
+      this.summary = this.summary.concat( Messages.getString( "ReachabilityTestDialog.summaryFailed" )  //$NON-NLS-1$
                     + this.lineDelimiter + this.lineDelimiter );
 
       this.itemString[ 1 ] = Integer.toString( i );
       this.itemString[ 2 ] = Integer.toString( 0 ); 
-      this.itemString[ 3 ] = Messages.getString( "ReachableTestDialog.n_a" ); //$NON-NLS-1$
-      this.itemString[ 4 ] = Messages.getString( "ReachableTestDialog.n_a" ); //$NON-NLS-1$
-      this.itemString[ 5 ] = Messages.getString( "ReachableTestDialog.n_a" ); //$NON-NLS-1$
+      this.itemString[ 3 ] = Messages.getString( "ReachabilityTestDialog.n_a" ); //$NON-NLS-1$
+      this.itemString[ 4 ] = Messages.getString( "ReachabilityTestDialog.n_a" ); //$NON-NLS-1$
+      this.itemString[ 5 ] = Messages.getString( "ReachabilityTestDialog.n_a" ); //$NON-NLS-1$
     }
 
     if ( !this.display.isDisposed() ) {   
       this.display.syncExec( new Runnable() {
         public void run() {
           // Write the summary
-          if ( !ReachableHostJob.this.outPut.isDisposed() ) { 
-            ReachableHostJob.this.outPut.append( ReachableHostJob.this.summary );
-            ReachableHostJob.this.table.clear( ReachableHostJob.this.index );
+          if ( !ReachabilityHostJob.this.outPut.isDisposed() ) { 
+            ReachabilityHostJob.this.outPut.append( ReachabilityHostJob.this.summary );
+            ReachabilityHostJob.this.table.clear( ReachabilityHostJob.this.index );
 
           }
         }

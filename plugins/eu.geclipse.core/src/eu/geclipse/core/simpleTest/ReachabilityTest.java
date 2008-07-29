@@ -27,7 +27,7 @@ import java.net.Socket;
  * @author harald
  *
  */
-public class ReachableTest extends AbstractSimpleTest {
+public class ReachabilityTest extends AbstractSimpleTest {
 
   private static int[] PORTS = new int[]{ 22, 80, 8080, 2170, 2135, 7443, 8085, 8443, 8446, 9003 };
   
@@ -35,9 +35,9 @@ public class ReachableTest extends AbstractSimpleTest {
    * Create a new <code>PingTest</code> from the specified {@link ISimpleTestDescription}.
    * 
    * @param description The test description holding the information needed to create the 
-   * test. This should always be a {@link ReachableTestDescription}.
+   * test. This should always be a {@link ReachabilityTestDescription}.
    */
-  public ReachableTest ( final ISimpleTestDescription description ) {
+  public ReachabilityTest ( final ISimpleTestDescription description ) {
     super( description );
   }
   

@@ -44,7 +44,7 @@ import org.eclipse.swt.widgets.Text;
 
 import eu.geclipse.core.model.IGridResource;
 import eu.geclipse.core.simpleTest.ISimpleTest;
-import eu.geclipse.core.simpleTest.ReachableTest;
+import eu.geclipse.core.simpleTest.ReachabilityTest;
 import eu.geclipse.ui.dialogs.AbstractSimpleTestDialog;
 
 
@@ -53,8 +53,8 @@ import eu.geclipse.ui.dialogs.AbstractSimpleTestDialog;
  * @author hgjermund
  *
  */
-public class ReachableTestDialog extends AbstractSimpleTestDialog  {
-  protected ArrayList< ReachableHostJob > pingJobs = new ArrayList< ReachableHostJob >();
+public class ReachabilityTestDialog extends AbstractSimpleTestDialog  {
+  protected ArrayList< ReachabilityHostJob > pingJobs = new ArrayList< ReachabilityHostJob >();
   protected Table tableOutPut = null;
   protected String[][] itemStrings;
 
@@ -74,7 +74,7 @@ public class ReachableTestDialog extends AbstractSimpleTestDialog  {
    * @param resources The resources that this test should be applied to.
    * @param parentShell  The parent shell of this dialog.
    */
-  public ReachableTestDialog( final ISimpleTest test, final List< IGridResource > resources, final Shell parentShell ) {
+  public ReachabilityTestDialog( final ISimpleTest test, final List< IGridResource > resources, final Shell parentShell ) {
     super( test, resources, parentShell );
 
     // First we gather the host name of all the resources
@@ -97,12 +97,12 @@ public class ReachableTestDialog extends AbstractSimpleTestDialog  {
   protected void configureShell( final Shell newShell ) {
     super.configureShell( newShell );
     newShell.setMinimumSize( 500, 400 );
-    newShell.setText( Messages.getString( "ReachableTestDialog.dialogTitle" ) ); //$NON-NLS-1$
+    newShell.setText( Messages.getString( "ReachabilityTestDialog.dialogTitle" ) ); //$NON-NLS-1$
   }
 
   @Override
   public boolean close() {
-    for ( ReachableHostJob job : ReachableTestDialog.this.pingJobs ) {
+    for ( ReachabilityHostJob job : ReachabilityTestDialog.this.pingJobs ) {
       job.cancel();
     }
 
@@ -124,13 +124,13 @@ public class ReachableTestDialog extends AbstractSimpleTestDialog  {
     
     Group settingsGroup = new Group( mainComp, SWT.NONE );
     settingsGroup.setLayout( new GridLayout( 3, false ) );
-    settingsGroup.setText( Messages.getString( "ReachableTestDialog.settings_group" ) ); //$NON-NLS-1$
+    settingsGroup.setText( Messages.getString( "ReachabilityTestDialog.settings_group" ) ); //$NON-NLS-1$
     gData = new GridData( GridData.FILL_HORIZONTAL );
     gData.grabExcessHorizontalSpace = true;
     settingsGroup.setLayoutData( gData );
 
     Label numPingsLabel = new Label( settingsGroup, SWT.LEFT  );
-    numPingsLabel.setText( Messages.getString( "ReachableTestDialog.nPingsLabel" ) ); //$NON-NLS-1$
+    numPingsLabel.setText( Messages.getString( "ReachabilityTestDialog.nPingsLabel" ) ); //$NON-NLS-1$
     gData = new GridData();
     numPingsLabel.setLayoutData( gData );
     
@@ -142,7 +142,7 @@ public class ReachableTestDialog extends AbstractSimpleTestDialog  {
     this.numberSpn.setLayoutData( gData );    
 
     Label delayLabel = new Label( settingsGroup, SWT.LEFT );
-    delayLabel.setText( Messages.getString( "ReachableTestDialog.delayLabel" ) ); //$NON-NLS-1$
+    delayLabel.setText( Messages.getString( "ReachabilityTestDialog.delayLabel" ) ); //$NON-NLS-1$
     gData = new GridData();
     delayLabel.setLayoutData( gData );
 
@@ -155,7 +155,7 @@ public class ReachableTestDialog extends AbstractSimpleTestDialog  {
     
     Group outPutGroup = new Group( mainComp, SWT.NONE );
     outPutGroup.setLayout( new GridLayout( 3, false ) );
-    outPutGroup.setText( Messages.getString( "ReachableTestDialog.output_group" ) ); //$NON-NLS-1$
+    outPutGroup.setText( Messages.getString( "ReachabilityTestDialog.output_group" ) ); //$NON-NLS-1$
     gData = new GridData( GridData.FILL_BOTH );
     gData.grabExcessHorizontalSpace = true;
     gData.grabExcessVerticalSpace = true;
@@ -165,7 +165,7 @@ public class ReachableTestDialog extends AbstractSimpleTestDialog  {
     TabFolder tabFolder = new TabFolder ( outPutGroup, SWT.NONE );
 
     TabItem itemTblOutPut = new TabItem ( tabFolder, SWT.NULL );
-    itemTblOutPut.setText ( Messages.getString( "ReachableTestDialog.results" ) ); //$NON-NLS-1$
+    itemTblOutPut.setText ( Messages.getString( "ReachabilityTestDialog.results" ) ); //$NON-NLS-1$
 
     // Create the table that holds the result
     this.tableOutPut = new Table( tabFolder, SWT.MULTI | SWT.VIRTUAL | SWT.BORDER );
@@ -173,32 +173,32 @@ public class ReachableTestDialog extends AbstractSimpleTestDialog  {
     this.tableOutPut.setLinesVisible( true );    
     
     TableColumn hostColumn = new TableColumn( this.tableOutPut, SWT.NONE );
-    hostColumn.setText( Messages.getString( "ReachableTestDialog.hostName" ) ); //$NON-NLS-1$
+    hostColumn.setText( Messages.getString( "ReachabilityTestDialog.hostName" ) ); //$NON-NLS-1$
     hostColumn.setWidth( 150 );    
     hostColumn.setAlignment( SWT.LEFT );
 
     TableColumn sndColumn = new TableColumn( this.tableOutPut, SWT.CENTER );
-    sndColumn.setText( Messages.getString( "ReachableTestDialog.snd" ) ); //$NON-NLS-1$
+    sndColumn.setText( Messages.getString( "ReachabilityTestDialog.snd" ) ); //$NON-NLS-1$
     sndColumn.setWidth( 75 );    
     sndColumn.setAlignment( SWT.CENTER );
     
     TableColumn recColumn = new TableColumn( this.tableOutPut, SWT.CENTER );
-    recColumn.setText( Messages.getString( "ReachableTestDialog.rec" ) ); //$NON-NLS-1$
+    recColumn.setText( Messages.getString( "ReachabilityTestDialog.rec" ) ); //$NON-NLS-1$
     recColumn.setWidth( 75 );    
     recColumn.setAlignment( SWT.CENTER );
     
     TableColumn minColumn = new TableColumn( this.tableOutPut, SWT.CENTER );
-    minColumn.setText( Messages.getString( "ReachableTestDialog.min" ) ); //$NON-NLS-1$
+    minColumn.setText( Messages.getString( "ReachabilityTestDialog.min" ) ); //$NON-NLS-1$
     minColumn.setWidth( 75 );    
     minColumn.setAlignment( SWT.CENTER );
     
     TableColumn avgColumn = new TableColumn( this.tableOutPut, SWT.CENTER );
-    avgColumn.setText( Messages.getString( "ReachableTestDialog.avg" ) ); //$NON-NLS-1$
+    avgColumn.setText( Messages.getString( "ReachabilityTestDialog.avg" ) ); //$NON-NLS-1$
     avgColumn.setWidth( 75 );    
     avgColumn.setAlignment( SWT.CENTER );
     
     TableColumn maxColumn = new TableColumn( this.tableOutPut, SWT.CENTER );
-    maxColumn.setText( Messages.getString( "ReachableTestDialog.max" ) ); //$NON-NLS-1$
+    maxColumn.setText( Messages.getString( "ReachabilityTestDialog.max" ) ); //$NON-NLS-1$
     maxColumn.setWidth( 75 );    
     maxColumn.setAlignment( SWT.CENTER );
     
@@ -208,15 +208,15 @@ public class ReachableTestDialog extends AbstractSimpleTestDialog  {
     this.tableOutPut.addListener( SWT.SetData, new Listener() {
       public void handleEvent( final Event event ) {
         TableItem item = ( TableItem ) event.item;
-        int index = ReachableTestDialog.this.tableOutPut.indexOf( item );
-        item.setText( ReachableTestDialog.this.itemStrings [ index ] );
+        int index = ReachabilityTestDialog.this.tableOutPut.indexOf( item );
+        item.setText( ReachabilityTestDialog.this.itemStrings [ index ] );
       }
     });
 
     this.tableOutPut.setItemCount( this.hostNames.size() );
     
     TabItem itemRawOutPut = new TabItem ( tabFolder, SWT.NULL );
-    itemRawOutPut.setText ( Messages.getString( "ReachableTestDialog.logging" ) ); //$NON-NLS-1$
+    itemRawOutPut.setText ( Messages.getString( "ReachabilityTestDialog.logging" ) ); //$NON-NLS-1$
     
     this.outPut = new Text( tabFolder, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.MULTI );
     this.outPut.setEditable( false );
@@ -236,22 +236,22 @@ public class ReachableTestDialog extends AbstractSimpleTestDialog  {
     outControls.setLayoutData( gData );    
     
     Button pingButton = new Button( outControls, SWT.PUSH );
-    pingButton.setText( Messages.getString( "ReachableTestDialog.pingButton" ) ); //$NON-NLS-1$
-    pingButton.setToolTipText( Messages.getString( "ReachableTestDialog.pingButtonToolTip" ) ); //$NON-NLS-1$
+    pingButton.setText( Messages.getString( "ReachabilityTestDialog.pingButton" ) ); //$NON-NLS-1$
+    pingButton.setToolTipText( Messages.getString( "ReachabilityTestDialog.pingButtonToolTip" ) ); //$NON-NLS-1$
     gData = new GridData( GridData.FILL_HORIZONTAL );
     gData.verticalAlignment = GridData.BEGINNING;
     pingButton.setLayoutData( gData );
 
     Button stopButton = new Button( outControls, SWT.PUSH );
-    stopButton.setText( Messages.getString( "ReachableTestDialog.stopButton" ) ); //$NON-NLS-1$
-    stopButton.setToolTipText( Messages.getString( "ReachableTestDialog.stopButtonToolTip" ) ); //$NON-NLS-1$
+    stopButton.setText( Messages.getString( "ReachabilityTestDialog.stopButton" ) ); //$NON-NLS-1$
+    stopButton.setToolTipText( Messages.getString( "ReachabilityTestDialog.stopButtonToolTip" ) ); //$NON-NLS-1$
     gData = new GridData( GridData.FILL_HORIZONTAL );
     gData.verticalAlignment = GridData.BEGINNING;
     stopButton.setLayoutData( gData );
 
     Button clearButton = new Button( outControls, SWT.PUSH );
-    clearButton.setText( Messages.getString( "ReachableTestDialog.clearButton" ) ); //$NON-NLS-1$
-    clearButton.setToolTipText( Messages.getString( "ReachableTestDialog.clearButtonToolTip" ) ); //$NON-NLS-1$
+    clearButton.setText( Messages.getString( "ReachabilityTestDialog.clearButton" ) ); //$NON-NLS-1$
+    clearButton.setToolTipText( Messages.getString( "ReachabilityTestDialog.clearButtonToolTip" ) ); //$NON-NLS-1$
     gData = new GridData( GridData.FILL_HORIZONTAL );
     gData.verticalAlignment = GridData.BEGINNING;
     clearButton.setLayoutData( gData );
@@ -262,24 +262,24 @@ public class ReachableTestDialog extends AbstractSimpleTestDialog  {
 
         // Make sure the potential current pings are done
         boolean done = true;
-        for ( ReachableHostJob job : ReachableTestDialog.this.pingJobs ) {
+        for ( ReachabilityHostJob job : ReachabilityTestDialog.this.pingJobs ) {
           if ( null == job.getResult() )
             done = false;
         }
         // At least one of the prev. jobs haven't finished yet
         if ( done )
-          ReachableTestDialog.this.runPing();
+          ReachabilityTestDialog.this.runPing();
       }
     });
     
     stopButton.addSelectionListener( new SelectionAdapter() {
       @Override
       public void widgetSelected( final SelectionEvent e) {
-        for ( ReachableHostJob job : ReachableTestDialog.this.pingJobs ) {
+        for ( ReachabilityHostJob job : ReachabilityTestDialog.this.pingJobs ) {
           job.cancel();
         }
         
-        ReachableTestDialog.this.pingJobs.clear();
+        ReachabilityTestDialog.this.pingJobs.clear();
       }
     });
 
@@ -288,13 +288,13 @@ public class ReachableTestDialog extends AbstractSimpleTestDialog  {
       public void widgetSelected( final SelectionEvent e) {
         // Make sure the potential current pings are done
         boolean done = true;
-        for ( ReachableHostJob job : ReachableTestDialog.this.pingJobs ) {
+        for ( ReachabilityHostJob job : ReachabilityTestDialog.this.pingJobs ) {
           if ( null == job.getResult() )
             done = false;
         }
         // At least one of the prev. jobs haven't finished yet
         if ( done )
-          ReachableTestDialog.this.clearLogs();
+          ReachabilityTestDialog.this.clearLogs();
       }
     });
 
@@ -321,7 +321,7 @@ public class ReachableTestDialog extends AbstractSimpleTestDialog  {
       this.clearItemString();
       
       // For each of the hosts to test
-      this.outPut.append( Messages.getString( "ReachableTestDialog.pingHostsPlusSpace" )  //$NON-NLS-1$
+      this.outPut.append( Messages.getString( "ReachabilityTestDialog.pingHostsPlusSpace" )  //$NON-NLS-1$
                           + this.outPut.getLineDelimiter() );
         
       for ( String host : this.hostNames ) {
@@ -333,7 +333,7 @@ public class ReachableTestDialog extends AbstractSimpleTestDialog  {
         } catch( UnknownHostException e ) {
           this.hostAdrs.add( null );
           // Print out which host we ping
-          this.outPut.append( Messages.getString( "ReachableTestDialog.UnknownHostException" )  //$NON-NLS-1$
+          this.outPut.append( Messages.getString( "ReachabilityTestDialog.UnknownHostException" )  //$NON-NLS-1$
                               + host + this.outPut.getLineDelimiter() );
         }
       }
@@ -344,17 +344,17 @@ public class ReachableTestDialog extends AbstractSimpleTestDialog  {
         InetAddress tmpAdr = this.hostAdrs.get( i );
       
         if ( null != tmpAdr ) { 
-          ReachableHostJob pingJob = new ReachableHostJob( tmpAdr, number, delay, this.outPut, this.tableOutPut, 
-                                                 this.itemStrings[ i ], i, ( ReachableTest )this.test );
+          ReachabilityHostJob pingJob = new ReachabilityHostJob( tmpAdr, number, delay, this.outPut, this.tableOutPut, 
+                                                 this.itemStrings[ i ], i, ( ReachabilityTest )this.test );
           pingJob.schedule();
           
           this.pingJobs.add( pingJob );
         } else {
-          this.itemStrings[ i ][ 1 ] = Messages.getString( "ReachableTestDialog.n_a" ); //$NON-NLS-1$
-          this.itemStrings[ i ][ 2 ] = Messages.getString( "ReachableTestDialog.n_a" ); //$NON-NLS-1$ 
-          this.itemStrings[ i ][ 3 ] = Messages.getString( "ReachableTestDialog.n_a" ); //$NON-NLS-1$
-          this.itemStrings[ i ][ 4 ] = Messages.getString( "ReachableTestDialog.n_a" ); //$NON-NLS-1$
-          this.itemStrings[ i ][ 5 ] = Messages.getString( "ReachableTestDialog.n_a" ); //$NON-NLS-1$
+          this.itemStrings[ i ][ 1 ] = Messages.getString( "ReachabilityTestDialog.n_a" ); //$NON-NLS-1$
+          this.itemStrings[ i ][ 2 ] = Messages.getString( "ReachabilityTestDialog.n_a" ); //$NON-NLS-1$ 
+          this.itemStrings[ i ][ 3 ] = Messages.getString( "ReachabilityTestDialog.n_a" ); //$NON-NLS-1$
+          this.itemStrings[ i ][ 4 ] = Messages.getString( "ReachabilityTestDialog.n_a" ); //$NON-NLS-1$
+          this.itemStrings[ i ][ 5 ] = Messages.getString( "ReachabilityTestDialog.n_a" ); //$NON-NLS-1$
           this.tableOutPut.clear( i );
         }
       }        

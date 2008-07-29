@@ -22,10 +22,10 @@ package eu.geclipse.core.simpleTest;
  * @author harald
  *
  */
-public class ReachableTestDescription implements ISimpleTestDescription {
+public class ReachabilityTestDescription implements ISimpleTestDescription {
 
   public ISimpleTest createSimpleTest() {
-    return new ReachableTest( this );
+    return new ReachabilityTest( this );
   }
 
   /* (non-Javadoc)
@@ -44,7 +44,7 @@ public class ReachableTestDescription implements ISimpleTestDescription {
   public boolean matches( final ISimpleTestDescription otherTest ) {
     boolean result = false;
     
-    if ( otherTest instanceof ReachableTestDescription ) {
+    if ( otherTest instanceof ReachabilityTestDescription ) {
       result = true;
     }
     

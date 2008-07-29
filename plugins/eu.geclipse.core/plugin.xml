@@ -476,8 +476,8 @@
          point="eu.geclipse.core.simpleTests">
       <test
             description="eu.geclipse.core.simpleTest.ISimpleTestDescription"
-            id="eu.geclipse.core.simpleTest.reachableTest"
-            name="Reachable Test">
+            id="eu.geclipse.core.simpleTest.reachabilityTest"
+            name="Reachability Test">
       </test>
    </extension>
 </plugin>
