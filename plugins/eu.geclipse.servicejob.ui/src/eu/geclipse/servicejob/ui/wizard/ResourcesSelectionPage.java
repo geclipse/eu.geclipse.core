@@ -177,6 +177,7 @@ public class ResourcesSelectionPage extends WizardPage {
           ResourcesSelectionPage.this.viewer.setSubtreeChecked( event.getElement(),
                                                                 false );
         }
+        updateButtons();
       }
     } );
     createButtons( mainComp );
@@ -208,6 +209,7 @@ public class ResourcesSelectionPage extends WizardPage {
     for( CategoryContainer category : input ) {
       viewer.setChecked( category, checked );
       viewer.setSubtreeChecked( category, checked );
+      updateButtons();
     }
   }
 
