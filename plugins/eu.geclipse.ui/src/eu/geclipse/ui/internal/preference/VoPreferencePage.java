@@ -75,6 +75,9 @@ import eu.geclipse.ui.listeners.TableColumnListener;
 import eu.geclipse.ui.wizards.wizardselection.ExtPointWizardSelectionListPage;
 
 
+/**
+ * The VO preferences page which allows add, remove and edit the available VOs.
+ */
 public class VoPreferencePage
     extends PreferencePage
     implements IWorkbenchPreferencePage, IGridModelListener {
@@ -424,7 +427,7 @@ public class VoPreferencePage
       = ( IStructuredSelection ) this.voViewer.getSelection();
     List< ? > selectionList = selection.toList();
     List< IVirtualOrganization > result = new ArrayList< IVirtualOrganization >();
-    for( Object element : selectionList ) {
+    for ( Object element : selectionList ) {
       if ( element instanceof IVirtualOrganization ) {
         IVirtualOrganization vo = ( IVirtualOrganization ) element;
         result.add( vo );
@@ -494,12 +497,14 @@ public class VoPreferencePage
    * Remove all VOs that are currently selected in the table control.
    */
   protected void removeSelectedVOs() {
+    
     List< IVirtualOrganization > vos = getSelectedVos();
-    if ( !vos.isEmpty() ) {
-      boolean confirm = !MessageDialog.openConfirm( getShell(),
-                                                    Messages.getString("VoPreferencePage.delete_vos"), //$NON-NLS-1$
-                                                    Messages.getString("VoPreferencePage.really_delete_vos") ); //$NON-NLS-1$
-      if ( !confirm ) {
+    
+    if ( ! vos.isEmpty() ) {
+      boolean confirm = ! MessageDialog.openConfirm( getShell(),
+                                                     Messages.getString("VoPreferencePage.delete_vos"), //$NON-NLS-1$
+                                                     Messages.getString("VoPreferencePage.really_delete_vos") ); //$NON-NLS-1$
+      if ( ! confirm ) {
         IGridElement[] projectElements = {};
         
         // Collect a list of children of the GridRoot
@@ -516,8 +521,12 @@ public class VoPreferencePage
           // Check if the given VO is used by some GridProject on the WS
           boolean used = false;
           for ( IGridElement element : projectElements ) {
-            igp = (IGridProject) element;
-            if ( vo == igp.getVO() ) {
+            igp = ( IGridProject ) element;
+            
+            // Projects have a ProjectVO wrapper, not the real VO
+            IVirtualOrganization realVo = null;
+            realVo = ( IVirtualOrganization ) igp.getVO().getAdapter( IVirtualOrganization.class );
+            if ( ( realVo != null ) && ( vo == realVo ) ) {
               used = true;
               break;
             }
