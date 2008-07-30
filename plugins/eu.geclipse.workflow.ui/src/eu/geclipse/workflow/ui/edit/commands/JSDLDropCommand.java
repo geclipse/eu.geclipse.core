@@ -125,6 +125,9 @@ public class JSDLDropCommand extends AbstractTransactionalCommand {
         // ignore for now. naughty!
       }
       wfJob.setJobDescription( jobDescriptionInJSDL );
+      if (wfJob.getName()==null) {
+        wfJob.setName( jsdlTarget.getName().substring( 0, jsdlTarget.getName().indexOf( "." + jsdlTarget.getFileExtension() ) ) );
+      }
     }
     return CommandResult.newOKCommandResult();
   }
