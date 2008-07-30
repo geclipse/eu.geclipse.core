@@ -161,8 +161,7 @@ public class ProjectSelectionPage extends WizardPage {
     gd = new GridData();
     nameLabel.setLayoutData( gd );
     this.nameText = new Text( textComp, SWT.BORDER | SWT.LEAD );
-    gd = new GridData( GridData.GRAB_HORIZONTAL | GridData.FILL_BOTH );
-    gd.grabExcessHorizontalSpace = true;
+    gd = new GridData( GridData.FILL_HORIZONTAL );
     this.nameText.setLayoutData( gd );
     this.nameText.addModifyListener( new ModifyListener() {
 
