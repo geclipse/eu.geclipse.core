@@ -15,8 +15,6 @@
 
 package eu.geclipse.terminal.ssh.internal;
 
-import java.util.ArrayList;
-
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -32,11 +30,13 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
 import eu.geclipse.core.model.GridModel;
+import eu.geclipse.core.model.IGridComputing;
 import eu.geclipse.core.model.IGridElement;
+import eu.geclipse.core.model.IGridInfoService;
+import eu.geclipse.core.model.IGridProject;
+import eu.geclipse.core.model.impl.GridResourceCategoryFactory;
 import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.core.util.TokenValidator;
-import eu.geclipse.info.glue.AbstractGlueTable;
-import eu.geclipse.info.glue.GlueQuery;
 import eu.geclipse.ui.widgets.NumberVerifier;
 import eu.geclipse.ui.widgets.StoredCombo;
 
@@ -78,27 +78,32 @@ class SSHConnectionComposite extends Composite {
   }
 
   private void addComputingElements() {
+   
+    IGridComputing[] elements = null;
+    IGridElement[] projectElements;
     try {
-      IGridElement[] vos = GridModel.getVoManager().getChildren(null);
-      for ( IGridElement vo : vos ) {
-        ArrayList<AbstractGlueTable> ceTable = GlueQuery.getGlueTable( "GlueCE", "GlueCE", vo.getName() ); //$NON-NLS-1$ //$NON-NLS-2$
-        for ( AbstractGlueTable table : ceTable ) {
-          try {
-            String hostname = ( String ) table.getFieldByName( "HostName" ); //$NON-NLS-1$
-            if ( hostname != null && this.hostnameCombo.indexOf( hostname ) == -1 ) {
-              this.hostnameCombo.add( hostname );
+      projectElements = GridModel.getRoot().getChildren( null );
+      for( IGridElement element : projectElements ) {
+        IGridProject igp=(IGridProject)element;
+        if(igp.isOpen() && igp.getVO()!=null ){
+          IGridInfoService infoService = igp.getVO().getInfoService();
+          elements = ( IGridComputing[] )infoService.fetchResources( null, igp.getVO(), 
+                                                                     GridResourceCategoryFactory.getCategory( 
+                                                                                                             GridResourceCategoryFactory.ID_COMPUTING ), 
+                                                                                                             null );
+
+          for ( IGridComputing comp : elements ) {
+            String host = comp.getHostName(); 
+
+            if ( host != null && this.hostnameCombo.indexOf( host ) == -1 ) {
+              this.hostnameCombo.add( host );
             }
-          } catch ( RuntimeException exception ) {
-            Activator.logException( exception );
-          } catch ( IllegalAccessException exception ) {
-            Activator.logException( exception );
-          } catch ( NoSuchFieldException exception ) {
-            Activator.logException( exception );
           }
         }
       }
-    } catch( ProblemException exception ) {
-      Activator.logException( exception );
+
+    } catch ( ProblemException e ) {
+      Activator.logException( e );
     }
   }
 
