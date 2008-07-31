@@ -56,6 +56,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
@@ -88,6 +89,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
   implements ModifyListener
 {
 
+  private static final String STD_FILES_TOOL_TIP = "Specify executable file to activate this field";
   /**
    * Key for the executable file preference.
    */
@@ -304,6 +306,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
     this.argumentsLine.setLayoutData( layout );
     // Group - std files group
     this.stdFilesGroup = new Group( mainComp, SWT.NONE );
+    this.stdFilesGroup.setToolTipText( STD_FILES_TOOL_TIP );
     this.stdFilesGroup.setText( Messages.getString( "ExecutableNewJobWizardPage.composite_group_title" ) ); //$NON-NLS-1$
     this.stdFilesGroup.setLayout( new GridLayout( 3, false ) );
     layout = new GridData( GridData.FILL_HORIZONTAL );
@@ -470,6 +473,11 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
     this.outButton.setEnabled( enabled );
     this.stderr.setEnabled( enabled );
     this.errButton.setEnabled( enabled );
+    if (enabled){
+    this.stdFilesGroup.setToolTipText( null );
+    } else {
+      this.stdFilesGroup.setToolTipText( STD_FILES_TOOL_TIP );
+    }
   }
 
   String getSelectedElementDisplayName( final IGridConnectionElement element ) {
