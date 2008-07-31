@@ -58,12 +58,10 @@ import eu.geclipse.batch.ui.internal.providers.QueueLabelProvider;
  * @author nloulloud
  *
  */
-public class SimpleQueueConfigPage extends FormPage
-  implements INotifyChangedListener
+public class SimpleQueueConfigPage extends FormPage implements INotifyChangedListener
 {
 
-  protected static final String PAGE_ID = "SIMPLE_PAGE";  //$NON-NLS-1$
-  private static final int WIDGET_HEIGHT = 100;
+  protected static final String PAGE_ID = "SIMPLE_PAGE";  //$NON-NLS-1$ 
 
   protected Composite composite = null;
   protected Composite body = null;  
@@ -75,7 +73,9 @@ public class SimpleQueueConfigPage extends FormPage
   protected Label lblMaxWallTime = null;
   protected Label lblVOS = null;
   protected Label lblDivider;
+  protected Label lblQueueDescripiton = null;
   protected Text txtQueueName = null;
+  protected Text txtQueueDescription = null;
   protected Combo cmbQueueType = null;
   protected Combo cmbQueueStatus = null;
   protected Combo cmbQueueStarted = null;
@@ -94,7 +94,7 @@ public class SimpleQueueConfigPage extends FormPage
 
   private boolean contentRefreshed = false;
   private boolean dirtyFlag = false;
-   
+  private final int WIDGET_HEIGHT = 100;
   
   
   
@@ -102,12 +102,9 @@ public class SimpleQueueConfigPage extends FormPage
    * @param editor
    */
   public SimpleQueueConfigPage( final QueueEditor editor ) {
-    super( editor, 
-           PAGE_ID,
-           Messages.getString("SimpleQueueConfigPage_TabTitle")); //$NON-NLS-1$
+    super( editor, PAGE_ID, Messages.getString("SimpleQueueConfigPage_TabTitle")); //$NON-NLS-1$
 
   }
-  
   
   
   @Override
@@ -121,7 +118,6 @@ public class SimpleQueueConfigPage extends FormPage
     } // end_if active
     
   }
-  
   
   
   /**
@@ -143,9 +139,7 @@ public class SimpleQueueConfigPage extends FormPage
    */
 
   
-  public void setPageContent( final QueueType queue, 
-                              final boolean refreshStatus ){
-
+  public void setPageContent( final QueueType queue, final boolean refreshStatus ) {
        
    if ( refreshStatus ) {
       this.contentRefreshed = true;
@@ -205,7 +199,8 @@ public class SimpleQueueConfigPage extends FormPage
      this.composite.setLayout( FormLayoutFactory.createFormPaneTableWrapLayout( false, 1 ) );
      this.composite.setLayoutData( new TableWrapData(TableWrapData.FILL_GRAB ) );
      /* Create Job Definition Section */
-     createSimpleSection( this.composite , toolkit );
+     createSimpleSection( this.composite , toolkit );     
+    
      
      /* Load the JobDefinition Adapter for this page */
      this.queueAdapter.load();
@@ -214,23 +209,18 @@ public class SimpleQueueConfigPage extends FormPage
 //     addFormPageHelp( form );
 
    }
-   
+                                          
    
   /* 
    * Create the Simple Section which includes the following:
    *  
    */  
-   private void createSimpleSection( final Composite parent,
-                                     final FormToolkit toolkit )
-   {
+   private void createSimpleSection( final Composite parent, final FormToolkit toolkit ) {
      
      String sectionTitle =  Messages.getString( "SimpleQueueConfigPage_RequiredTitle" );  //$NON-NLS-1$
      String sectionDescription = Messages.getString( "SimpleQueueConfigPage_RequiredDescr" );   //$NON-NLS-1$
          
-     
-
      GridData gd;
-     
      
      Composite client = FormSectionFactory.createGridStaticSection( toolkit,
                                                                     parent,
@@ -239,7 +229,7 @@ public class SimpleQueueConfigPage extends FormPage
                                                                     4 );
    
      this.lblQueueName = toolkit.createLabel( client,
-                        Messages.getString( "SimpleQueueConfigPage_QueueName" ) ); //$NON-NLS-1$
+                                              Messages.getString( "SimpleQueueConfigPage_QueueName" ) ); //$NON-NLS-1$
      
      this.txtQueueName = toolkit.createText( client, "", SWT.NONE );     //$NON-NLS-1$
      this.queueAdapter.attachQueueName( this.txtQueueName );
@@ -247,17 +237,44 @@ public class SimpleQueueConfigPage extends FormPage
      gd = new GridData();
      gd.grabExcessHorizontalSpace = true;
      gd.verticalAlignment = GridData.CENTER;
+     gd.horizontalSpan = 3;
      gd.widthHint = 300;
      this.txtQueueName.setLayoutData( gd );
+     
+     /*==================== Queue Description Widgets =====================*/
+     
+     gd = new GridData();
+     gd.horizontalSpan = 1;
+     gd.verticalAlignment = GridData.BEGINNING;
+     this.lblQueueDescripiton =  toolkit.createLabel( client,
+                                      Messages.getString( "SimpleQueueConfigPage_QueueDescription" ) ); //$NON-NLS-1$
+     
+     this.lblQueueDescripiton.setLayoutData( gd );
+     
+     this.txtQueueDescription = toolkit.createText( client, "", SWT.NONE //$NON-NLS-1$
+                                                              | SWT.V_SCROLL
+                                                              | SWT.WRAP);
+     
+     gd = new GridData();
+     gd.grabExcessHorizontalSpace = true;
+     gd.verticalAlignment = GridData.CENTER;
+     gd.horizontalSpan = 3;
+     gd.widthHint = 285;
+     gd.heightHint = 100;
+     this.txtQueueDescription.setLayoutData( gd );
      
      
      /*==================== Queue Type Widgets =====================*/
      this.lblQueueType  = toolkit.createLabel( client,
                                Messages.getString( "SimpleQueueConfigPage_QueueType" ) ); //$NON-NLS-1$
+     gd = new GridData();
      this.cmbQueueType = new Combo( client, SWT.SIMPLE | SWT.DROP_DOWN | SWT.READ_ONLY );
      this.cmbQueueType.setData( FormToolkit.KEY_DRAW_BORDER );
      this.queueAdapter.attachQueueType( this.cmbQueueType );
-     gd.horizontalSpan = 3; 
+     gd.horizontalSpan = 3;
+     gd.widthHint = 300;
+     gd.grabExcessHorizontalSpace = true;
+     gd.verticalAlignment = GridData.CENTER;
      this.cmbQueueType.setLayoutData( gd );
      
      /*==================== Queue Status Widgets =====================*/
@@ -294,11 +311,6 @@ public class SimpleQueueConfigPage extends FormPage
 
      this.lblDivider = toolkit.createLabel( timeComp, "sec" ); //$NON-NLS-1$
      this.queueAdapter.attachMaxCPUTimeSpinner( this.timeCPUHourSpin );
-//     this.lblDivider = toolkit.createLabel( timeComp, ":" ); //$NON-NLS-1$
-//   
-//     
-//     this.timeCPUMinSpin = new Spinner( timeComp, SWT.NONE );
-//     this.timeCPUMinSpin.setValues( 0, 0, 59, 0, 1, 2 );
      gd.horizontalSpan = 3;
      timeComp.setLayoutData( gd );
      
@@ -317,11 +329,6 @@ public class SimpleQueueConfigPage extends FormPage
      
      this.lblDivider = toolkit.createLabel(timeComp, "sec" ); //$NON-NLS-1$
      this.queueAdapter.attachMaxWallTimeSpinner( this.timeWallHourSpin );
-//     this.lblDivider = toolkit.createLabel( timeComp, ":" ); //$NON-NLS-1$
-//
-//     
-//     this.timeWallMinSpin = new Spinner( timeComp, SWT.NONE );
-//     this.timeWallMinSpin.setValues( 0, 0, 59, 0, 1, 2 );
      gd.horizontalSpan = 3;
      timeComp.setLayoutData( gd );
      
@@ -345,8 +352,7 @@ public class SimpleQueueConfigPage extends FormPage
      this.tableViewer.setContentProvider( new QueueContentProvider() );
      this.tableViewer.setLabelProvider( new QueueLabelProvider() );    
      this.queueAdapter.attachAllowedVOs( this.tableViewer );
-     this.tableViewer.addSelectionChangedListener( new ISelectionChangedListener()
-     {
+     this.tableViewer.addSelectionChangedListener( new ISelectionChangedListener() {
 
        public void selectionChanged( final SelectionChangedEvent event ) {
          updateButtons( ( TableViewer )event.getSource() );
@@ -354,15 +360,15 @@ public class SimpleQueueConfigPage extends FormPage
      } );
      this.tblAllowedVOs.setData( FormToolkit.KEY_DRAW_BORDER );
      this.tblAllowedVOs.setLayoutData( gd );
+     
      /* Create "Add" Button */
      gd = new GridData();
      gd.horizontalSpan = 2;
      gd.verticalSpan = 1;
      gd.widthHint = 60;
      
-     this.btnAdd = toolkit.createButton( client,
-                                              Messages.getString( "QueueEditor_AddButton" ), //$NON-NLS-1$
-                                              SWT.BUTTON1 );
+     this.btnAdd = toolkit.createButton( client, Messages.getString( "QueueEditor_AddButton" ), //$NON-NLS-1$
+                                         SWT.BUTTON1 );
      
      this.btnAdd.addSelectionListener( new SelectionListener() {
 
@@ -385,8 +391,8 @@ public class SimpleQueueConfigPage extends FormPage
      gd.verticalSpan = 1;
      gd.widthHint = 60;
      this.btnEdit = toolkit.createButton( client,
-                                               Messages.getString( "QueueEditor_EditButton" ), //$NON-NLS-1$
-                                               SWT.PUSH );
+                                          Messages.getString( "QueueEditor_EditButton" ), //$NON-NLS-1$
+                                          SWT.PUSH );
      
      this.btnEdit.addSelectionListener( new SelectionListener() {
 
@@ -411,8 +417,8 @@ public class SimpleQueueConfigPage extends FormPage
      gd.widthHint = 60;
      gd.verticalAlignment = GridData.BEGINNING;
      this.btnDel = toolkit.createButton( client,
-                                              Messages.getString( "QueueEditor_RemoveButton" ), //$NON-NLS-1$
-                                              SWT.PUSH );
+                                         Messages.getString( "QueueEditor_RemoveButton" ), //$NON-NLS-1$
+                                         SWT.PUSH );
      this.btnDel.setEnabled( false );
      
      this.btnDel.addSelectionListener( new SelectionListener(){
@@ -445,7 +451,6 @@ public class SimpleQueueConfigPage extends FormPage
   private boolean isContentRefreshed() {          
     return this.contentRefreshed;
   }
-
   
   
   /* (non-Javadoc)
@@ -454,7 +459,6 @@ public class SimpleQueueConfigPage extends FormPage
   public void notifyChanged( final Notification notification ) {
     setDirty( true );
   }
-  
   
   
   protected void updateButtons( final TableViewer tblViewer ) {
@@ -473,7 +477,7 @@ public class SimpleQueueConfigPage extends FormPage
   
   
   
-protected void handleAddDialog( final String dialogTitle, final Button button ) {
+  protected void handleAddDialog( final String dialogTitle, final Button button ) {
     
     this.value = null;
     
@@ -497,7 +501,7 @@ protected void handleAddDialog( final String dialogTitle, final Button button ) 
     this.value = dialog.getValue();
     
     
-  } // end void handleArguments
+  } // end void handleAddDialog
   
   
 }

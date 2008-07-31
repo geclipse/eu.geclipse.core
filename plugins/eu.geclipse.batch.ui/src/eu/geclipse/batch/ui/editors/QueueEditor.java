@@ -88,8 +88,15 @@ import eu.geclipse.batch.ui.internal.pages.SimpleQueueConfigPage;
 
 
 /**
- * The Editor for a qdl file
- *
+ * The QueueEditor class is responsible for instantiating a GUI multi-page editor for
+ * editing files with the *.qdl extension. Such files have an XML content that describe the 
+ * configuration of Grid Batch Queues. 
+ * 
+ * The QueueEditor contains three pages:
+ * 1) a page for manipulating simple Batch Queue configuration settings,
+ * 2) a page for manipulating advanced Batch Queue configuration settings,
+ * 3) a raw source editor for editing the raw XML content of the *.qdl file.    
+ * 
  */
 public class QueueEditor extends FormEditor implements IEditingDomainProvider {
   
@@ -361,10 +368,8 @@ public class QueueEditor extends FormEditor implements IEditingDomainProvider {
   
   
   
-  protected void doTextEditorSave(){
-    
-    this.editor.doSave( null );
-    
+  protected void doTextEditorSave() {   
+    this.editor.doSave( null );    
   }
   
     

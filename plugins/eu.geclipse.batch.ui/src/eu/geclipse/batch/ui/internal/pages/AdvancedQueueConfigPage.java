@@ -44,9 +44,7 @@ import eu.geclipse.batch.ui.internal.adapters.AdvancedQueueAdapter;
  * @author nloulloud
  *
  */
-public class AdvancedQueueConfigPage extends FormPage
-  implements INotifyChangedListener
-{
+public class AdvancedQueueConfigPage extends FormPage implements INotifyChangedListener {
   
   protected static final String PAGE_ID = "ADVANCED_PAGE";  //$NON-NLS-1$
   protected Composite composite = null;
@@ -74,10 +72,7 @@ public class AdvancedQueueConfigPage extends FormPage
    * @param editor
    */
   public AdvancedQueueConfigPage( final QueueEditor editor ) {
-    super( editor, 
-           PAGE_ID,
-           Messages.getString("AdvancedQueueConfigPage_TabTitle")); //$NON-NLS-1$
-
+    super( editor, PAGE_ID,  Messages.getString("AdvancedQueueConfigPage_TabTitle")); //$NON-NLS-1$
   }
   
   
@@ -113,21 +108,17 @@ public class AdvancedQueueConfigPage extends FormPage
    */
 
   
-  public void setPageContent( final QueueType queue, 
-                              final boolean refreshStatus ){
-
+  public void setPageContent( final QueueType queue, final boolean refreshStatus ){
        
    if ( refreshStatus ) {
       this.contentRefreshed = true;
       this.advancedQueueAdapter.setContent( queue );
-    }
-   else {     
+    }else{     
       this.advancedQueueAdapter = new AdvancedQueueAdapter( queue );
       this.advancedQueueAdapter.addListener( this );
    }
           
   } // End void setPageContent()
-  
   
   
   /* This method is used to create the Forms content by
@@ -136,7 +127,6 @@ public class AdvancedQueueConfigPage extends FormPage
   */
   @Override
   protected void createFormContent( final IManagedForm managedForm ) {
-     
          
      ScrolledForm form = managedForm.getForm();
      FormToolkit toolkit = managedForm.getToolkit();
@@ -160,20 +150,17 @@ public class AdvancedQueueConfigPage extends FormPage
 
   }
   
-   
+  
  /* 
   * Create the Advanced Section which includes the following:
   *  
   */   
-  private void createAdvancedSection( final Composite parent,
-                                      final FormToolkit toolkit )
-  {
+  private void createAdvancedSection( final Composite parent, final FormToolkit toolkit ) {
     
     String sectionTitle =  Messages.getString( "SimpleQueueConfigPage_AdvancedTitle" );  //$NON-NLS-1$
     String sectionDescription = Messages.getString( "AdvancedQueueConfigPage_Descr" );   //$NON-NLS-1$
         
     
-
     GridData gd;    
     
     Composite client = FormSectionFactory.createGridStaticSection( toolkit,
@@ -181,6 +168,7 @@ public class AdvancedQueueConfigPage extends FormPage
                                                                    sectionTitle,
                                                                    sectionDescription,
                                                                    3 );
+    
     /*==================== Priority Widgets =====================*/    
     Composite priorityComp;
 
@@ -312,7 +300,6 @@ public class AdvancedQueueConfigPage extends FormPage
   }
   
   
-  
   /**
    * This method set's the dirty status of the page.
    * 
@@ -330,14 +317,12 @@ public class AdvancedQueueConfigPage extends FormPage
   }
   
   
-  
   /*
    *  Checks if the content of the model for this page is refreshed.
    */
   private boolean isContentRefreshed() {          
     return this.contentRefreshed;
   }
-
   
   
   /* (non-Javadoc)
