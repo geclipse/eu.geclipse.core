@@ -54,7 +54,6 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.resource.Resource.IOWrappedException;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
@@ -811,9 +810,6 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
     try {
       this.editor.doSave( null );
     } catch( Exception e ) {
-      if (e instanceof IOWrappedException) {
-        System.out.println("TEST IO");
-      }
       Activator.logException( e );
     }
     
@@ -895,7 +891,7 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
     boolean result = false;
     
     URI resourceURI = null;
-    IFile[] files = null;
+//    IFile[] files = null;
     
     // Assumes that the input is a file object.
     if ( getEditorInput() instanceof IFileEditorInput ) {
@@ -920,9 +916,6 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
       resource = this.editingDomain.getResourceSet().getResource( resourceURI, true );      
     }
     catch ( Exception e ) {
-      if (e instanceof IOWrappedException){
-        System.out.println("WRAPPED EXCEPTION");
-      }
       exception = e;
       resource = this.editingDomain.getResourceSet().getResource( resourceURI, false );
     }

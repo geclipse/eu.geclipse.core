@@ -31,7 +31,7 @@ import eu.geclipse.jsdl.ui.adapters.jsdl.JobIdentificationTypeAdapter;
 import eu.geclipse.jsdl.ui.adapters.jsdl.ResourcesTypeAdapter;
 import eu.geclipse.jsdl.ui.editors.JsdlEditor;
 import eu.geclipse.jsdl.ui.internal.Activator;
-import eu.geclipse.jsdl.ui.internal.pages.sections.AdditionalResourceElemetsSection;
+import eu.geclipse.jsdl.ui.internal.pages.sections.AdditionalResourceElementsSection;
 import eu.geclipse.jsdl.ui.internal.pages.sections.CandidateHostsSection;
 import eu.geclipse.jsdl.ui.internal.pages.sections.CpuArchitectureSection;
 import eu.geclipse.jsdl.ui.internal.pages.sections.ExclusiveExecutionSection;
@@ -55,7 +55,7 @@ public final class ResourcesPage extends JsdlFormPage {
   protected Composite left = null;
   protected Composite right = null; 
   
-  private AdditionalResourceElemetsSection additionalResourceElemetsSection = null;
+  private AdditionalResourceElementsSection additionalResourceElemetsSection = null;
   private CandidateHostsSection candidateHostsSection = null;
   private OperatingSystemSection operatingSystemSection = null;
   private CpuArchitectureSection cpuArchitectureSection = null;
@@ -190,7 +190,7 @@ public final class ResourcesPage extends JsdlFormPage {
     this.exclusiveExecutionSection.addListener( this );
     
     /* Create the Additional Elements Section */
-    this.additionalResourceElemetsSection = new AdditionalResourceElemetsSection(this, this.right, toolkit);
+    this.additionalResourceElemetsSection = new AdditionalResourceElementsSection(this, this.right, toolkit);
     this.additionalResourceElemetsSection.setInput( this.jobDefinitionType );
     this.additionalResourceElemetsSection.addListener( this );
    

@@ -55,7 +55,7 @@ import eu.geclipse.ui.widgets.DoubleNumberVerifier;
  * @author nloulloud
  *
  */
-public class AdditionalResourceElemetsSection extends JsdlFormPageSection {
+public class AdditionalResourceElementsSection extends JsdlFormPageSection {
   
   protected static final String LOWER_BOUND = JsdlPackage.Literals.RANGE_VALUE_TYPE__LOWER_BOUND.getName();
   protected static final String UPPER_BOUND = JsdlPackage.Literals.RANGE_VALUE_TYPE__UPPER_BOUND.getName();
@@ -116,7 +116,7 @@ public class AdditionalResourceElemetsSection extends JsdlFormPageSection {
  * @param parent
  * @param toolkit
  */
-  public AdditionalResourceElemetsSection( final FormPage formPage,
+  public AdditionalResourceElementsSection( final FormPage formPage,
                                            final Composite parent,
                                            final FormToolkit toolkit ) {
         
@@ -177,8 +177,8 @@ public class AdditionalResourceElemetsSection extends JsdlFormPageSection {
 
       public void widgetSelected( final SelectionEvent e ) {
         
-        setResourceElement( AdditionalResourceElemetsSection.this.txtIndCPUSp,
-                            AdditionalResourceElemetsSection.this.cmbIndividualCPUSpeed,
+        setResourceElement( AdditionalResourceElementsSection.this.txtIndCPUSp,
+                            AdditionalResourceElementsSection.this.cmbIndividualCPUSpeed,
                             JsdlPackage.RESOURCES_TYPE__INDIVIDUAL_CPU_SPEED );
         
       }
@@ -193,8 +193,8 @@ public class AdditionalResourceElemetsSection extends JsdlFormPageSection {
       public void modifyText( final ModifyEvent e ) {    
         
         
-        setResourceElement( AdditionalResourceElemetsSection.this.txtIndCPUSp,
-                            AdditionalResourceElemetsSection.this.cmbIndividualCPUSpeed,
+        setResourceElement( AdditionalResourceElementsSection.this.txtIndCPUSp,
+                            AdditionalResourceElementsSection.this.cmbIndividualCPUSpeed,
                             JsdlPackage.RESOURCES_TYPE__INDIVIDUAL_CPU_SPEED );
           
         }
@@ -220,8 +220,8 @@ public class AdditionalResourceElemetsSection extends JsdlFormPageSection {
 
       public void widgetSelected( final SelectionEvent e ) {
         
-        setResourceElement( AdditionalResourceElemetsSection.this.txtIndCPUTime,
-                            AdditionalResourceElemetsSection.this.cmbIndividualCPUTime,
+        setResourceElement( AdditionalResourceElementsSection.this.txtIndCPUTime,
+                            AdditionalResourceElementsSection.this.cmbIndividualCPUTime,
                             JsdlPackage.RESOURCES_TYPE__INDIVIDUAL_CPU_TIME );
         
       }
@@ -236,8 +236,8 @@ public class AdditionalResourceElemetsSection extends JsdlFormPageSection {
       public void modifyText( final ModifyEvent e ) {    
         
         
-        setResourceElement( AdditionalResourceElemetsSection.this.txtIndCPUTime,
-                            AdditionalResourceElemetsSection.this.cmbIndividualCPUTime,
+        setResourceElement( AdditionalResourceElementsSection.this.txtIndCPUTime,
+                            AdditionalResourceElementsSection.this.cmbIndividualCPUTime,
                             JsdlPackage.RESOURCES_TYPE__INDIVIDUAL_CPU_TIME );
           
         }
@@ -263,8 +263,8 @@ public class AdditionalResourceElemetsSection extends JsdlFormPageSection {
 
       public void widgetSelected( final SelectionEvent e ) {
         
-        setResourceElement( AdditionalResourceElemetsSection.this.txtIndCPUCount,
-                            AdditionalResourceElemetsSection.this.cmbIndividualCPUCount,
+        setResourceElement( AdditionalResourceElementsSection.this.txtIndCPUCount,
+                            AdditionalResourceElementsSection.this.cmbIndividualCPUCount,
                             JsdlPackage.RESOURCES_TYPE__INDIVIDUAL_CPU_COUNT );
         
       }
@@ -278,8 +278,8 @@ public class AdditionalResourceElemetsSection extends JsdlFormPageSection {
       public void modifyText( final ModifyEvent e ) {    
         
         
-        setResourceElement( AdditionalResourceElemetsSection.this.txtIndCPUCount,
-                            AdditionalResourceElemetsSection.this.cmbIndividualCPUCount,
+        setResourceElement( AdditionalResourceElementsSection.this.txtIndCPUCount,
+                            AdditionalResourceElementsSection.this.cmbIndividualCPUCount,
                             JsdlPackage.RESOURCES_TYPE__INDIVIDUAL_CPU_COUNT );
           
         }
@@ -306,8 +306,8 @@ public class AdditionalResourceElemetsSection extends JsdlFormPageSection {
 
       public void widgetSelected( final SelectionEvent e ) {
         
-        setResourceElement( AdditionalResourceElemetsSection.this.txtIndNetBand,
-                            AdditionalResourceElemetsSection.this.cmbIndividualNetworkBandwidth,
+        setResourceElement( AdditionalResourceElementsSection.this.txtIndNetBand,
+                            AdditionalResourceElementsSection.this.cmbIndividualNetworkBandwidth,
                             JsdlPackage.RESOURCES_TYPE__INDIVIDUAL_NETWORK_BANDWIDTH );
         
       }
@@ -321,8 +321,8 @@ public class AdditionalResourceElemetsSection extends JsdlFormPageSection {
       public void modifyText( final ModifyEvent e ) {    
         
         
-        setResourceElement( AdditionalResourceElemetsSection.this.txtIndNetBand,
-                            AdditionalResourceElemetsSection.this.cmbIndividualNetworkBandwidth,
+        setResourceElement( AdditionalResourceElementsSection.this.txtIndNetBand,
+                            AdditionalResourceElementsSection.this.cmbIndividualNetworkBandwidth,
                             JsdlPackage.RESOURCES_TYPE__INDIVIDUAL_NETWORK_BANDWIDTH );
           
         }
@@ -348,8 +348,8 @@ public class AdditionalResourceElemetsSection extends JsdlFormPageSection {
 
       public void widgetSelected( final SelectionEvent e ) {
         
-        setResourceElement( AdditionalResourceElemetsSection.this.txtPhysMem,
-                            AdditionalResourceElemetsSection.this.cmbIndividualPhysicalMemory,
+        setResourceElement( AdditionalResourceElementsSection.this.txtPhysMem,
+                            AdditionalResourceElementsSection.this.cmbIndividualPhysicalMemory,
                             JsdlPackage.RESOURCES_TYPE__INDIVIDUAL_PHYSICAL_MEMORY );
         
       }
@@ -365,8 +365,8 @@ public class AdditionalResourceElemetsSection extends JsdlFormPageSection {
       public void modifyText( final ModifyEvent e ) {    
         
         
-        setResourceElement( AdditionalResourceElemetsSection.this.txtPhysMem,
-                            AdditionalResourceElemetsSection.this.cmbIndividualPhysicalMemory,
+        setResourceElement( AdditionalResourceElementsSection.this.txtPhysMem,
+                            AdditionalResourceElementsSection.this.cmbIndividualPhysicalMemory,
                             JsdlPackage.RESOURCES_TYPE__INDIVIDUAL_PHYSICAL_MEMORY );
           
         }
@@ -444,8 +444,8 @@ public class AdditionalResourceElemetsSection extends JsdlFormPageSection {
 
       public void widgetSelected( final SelectionEvent e ) {
         
-        setResourceElement( AdditionalResourceElemetsSection.this.txtTotPhMem,
-                            AdditionalResourceElemetsSection.this.cmbTotalPhysicalMemory,
+        setResourceElement( AdditionalResourceElementsSection.this.txtTotPhMem,
+                            AdditionalResourceElementsSection.this.cmbTotalPhysicalMemory,
                             JsdlPackage.RESOURCES_TYPE__TOTAL_PHYSICAL_MEMORY );
         
       }
@@ -459,8 +459,8 @@ public class AdditionalResourceElemetsSection extends JsdlFormPageSection {
       public void modifyText( final ModifyEvent e ) {    
         
         
-        setResourceElement( AdditionalResourceElemetsSection.this.txtTotPhMem,
-                            AdditionalResourceElemetsSection.this.cmbTotalPhysicalMemory,
+        setResourceElement( AdditionalResourceElementsSection.this.txtTotPhMem,
+                            AdditionalResourceElementsSection.this.cmbTotalPhysicalMemory,
                             JsdlPackage.RESOURCES_TYPE__TOTAL_PHYSICAL_MEMORY );
           
         }
@@ -516,7 +516,7 @@ public class AdditionalResourceElemetsSection extends JsdlFormPageSection {
     
     if (eObject != null && eObject.eIsProxy() ) {
      
-      eObject =  EcoreUtil.resolve( eObject, AdditionalResourceElemetsSection.this.resourcesType );
+      eObject =  EcoreUtil.resolve( eObject, AdditionalResourceElementsSection.this.resourcesType );
     }
         
     return eObject;
@@ -786,7 +786,7 @@ public class AdditionalResourceElemetsSection extends JsdlFormPageSection {
         rangeValueType.getExact().addAll( collection );
         contentChanged();
       } else{       
-          setMessage( "Please select Boundary !!!!", IMessageProvider.ERROR );        
+          setMessage( Messages.getString( "ResourcesPage_SelectBoundary" ), IMessageProvider.ERROR );  //$NON-NLS-1$
       }
       
       
