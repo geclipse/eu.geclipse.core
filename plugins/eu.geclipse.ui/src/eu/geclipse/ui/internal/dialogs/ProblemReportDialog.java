@@ -11,6 +11,7 @@
  *
  * Contributors:
  *    Mathias Stuempert - initial API and implementation
+ *    Ariel Garcia      - modified to work for any Throwable
  *****************************************************************************/
 
 package eu.geclipse.ui.internal.dialogs;
@@ -47,6 +48,7 @@ import org.eclipse.ui.browser.IWebBrowser;
 import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
 
 import eu.geclipse.core.reporting.IProblem;
+import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.ui.dialogs.GridFileDialog;
 import eu.geclipse.ui.internal.Activator;
 
@@ -72,7 +74,12 @@ public class ProblemReportDialog extends TitleAreaDialog {
   private static final int COPY_ID = 0x03;
   
   /**
-   * The problem to be reported.
+   * The throwable to be reported.
+   */
+  private Throwable exc;
+  
+  /**
+   * The associated problem to be reported, if any.
    */
   private IProblem problem;
   
@@ -90,11 +97,18 @@ public class ProblemReportDialog extends TitleAreaDialog {
    * Create a new problem report dialog for the specified problem.
    * 
    * @param parentShell The dialog's parent {@link Shell}.
-   * @param problem The {@link IProblem} to be reported.
+   * @param throwable The {@link Throwable} to be reported.
    */
-  public ProblemReportDialog( final Shell parentShell, final IProblem problem ) {
+  public ProblemReportDialog( final Shell parentShell, final Throwable throwable ) {
     super( parentShell );
-    this.problem = problem;
+    this.exc = throwable;
+    
+    if ( this.exc instanceof ProblemException ) {
+      this.problem = ( ( ProblemException ) this.exc ).getProblem();
+    } else {
+      this.problem = null;
+    }
+    
     setShellStyle( SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL | SWT.RESIZE );
     URL imgURL = Activator.getDefault().getBundle()
                    .getResource( "icons/extras/problem_report_dlg.gif" ); //$NON-NLS-1$
@@ -150,7 +164,10 @@ public class ProblemReportDialog extends TitleAreaDialog {
     mailtoLabel.setLayoutData( new GridData() );
     
     this.mailtoText = new Text( mainComp, SWT.BORDER );
-    String mailto = this.problem.getMailTo();
+    String mailto = null;
+    if ( this.problem != null ) {
+      mailto = this.problem.getMailTo();
+    }
     this.mailtoText.setText( mailto == null ? "" : mailto ); //$NON-NLS-1$
     this.mailtoText.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true, false ) );
     
@@ -159,7 +176,7 @@ public class ProblemReportDialog extends TitleAreaDialog {
     reportLabel.setLayoutData( new GridData() );
     
     this.reportText = new Text( mainComp, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER );
-    ProblemReport factory = new ProblemReport( this.problem );
+    ProblemReport factory = new ProblemReport( this.exc );
     this.reportText.setText( factory.createReport() );
     GridData gData = new GridData( SWT.FILL, SWT.FILL, true, true );
     gData.widthHint = 500;

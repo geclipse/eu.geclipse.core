@@ -46,7 +46,7 @@ import eu.geclipse.core.reporting.ISolution;
 import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.internal.LogExceptionSolution;
-import eu.geclipse.ui.internal.MailToSolution;
+import eu.geclipse.ui.internal.ReportProblemSolution;
 
 
 /**
@@ -140,7 +140,7 @@ public class ProblemDialog extends ErrorDialog {
                                            | GridData.VERTICAL_ALIGN_BEGINNING ) );
     composite.setLayout( new GridLayout( 1, false ) );
 
-    if (this.message != null) {
+    if ( this.message != null ) {
       this.messageLabel = new Label( composite, getMessageLabelStyle() );
       this.messageLabel.setText( this.message );
       gData = new GridData( GridData.GRAB_HORIZONTAL
@@ -159,7 +159,7 @@ public class ProblemDialog extends ErrorDialog {
 
       String[] reasons = problem.getReasons();
 
-      if ( ( reasons != null ) && ( reasons.length >0 ) ) {
+      if ( ( reasons != null ) && ( reasons.length > 0 ) ) {
 
         Composite reasonComposite = new Composite( composite, SWT.NONE );
         reasonComposite.setLayout( new GridLayout( 1, false ) );
@@ -191,7 +191,7 @@ public class ProblemDialog extends ErrorDialog {
       solutions.add( new LogExceptionSolution( this.exc ) );
     }
 
-    solutions.add( new MailToSolution( problem ) );
+    solutions.add( new ReportProblemSolution( this.exc ) );
 
     if ( solutions.size() != 0 ) {
 

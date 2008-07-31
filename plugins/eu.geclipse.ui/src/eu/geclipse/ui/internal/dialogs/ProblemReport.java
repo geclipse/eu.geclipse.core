@@ -11,6 +11,7 @@
  *
  * Contributors:
  *    Mathias Stuempert - initial API and implementation
+ *    Ariel Garcia      - modified to work for any Throwable
  *****************************************************************************/
 
 package eu.geclipse.ui.internal.dialogs;
@@ -20,9 +21,10 @@ import java.io.StringWriter;
 
 import eu.geclipse.core.reporting.IProblem;
 import eu.geclipse.core.reporting.ISolution;
+import eu.geclipse.core.reporting.ProblemException;
 
 /**
- * This class creates a problem report for a specific {@link IProblem}.
+ * This class creates a problem report for a given {@link Throwable}.
  */
 public class ProblemReport {
   
@@ -38,6 +40,8 @@ public class ProblemReport {
 
   private static final String STACKTRACE_HEADER = "Stacktrace"; //$NON-NLS-1$
   
+  private static final String THROWABLE_DESCRIPTION_TEXT = "Caught an exception: "; //$NON-NLS-1$
+  
   private static final String HEADER_PREFIX = ":"; //$NON-NLS-1$
   
   private static final String FIELD_PREFIX = "\t"; //$NON-NLS-1$
@@ -47,17 +51,17 @@ public class ProblemReport {
   private static final String NA_STRING = "N/A"; //$NON-NLS-1$
   
   /**
-   * The problem for which to create a report.
+   * The throwable for which to create a report.
    */
-  private IProblem problem;
+  private Throwable exc;
   
   /**
-   * Create a new problem report for the specified {@link IProblem}.
+   * Create a new problem report for the given {@link Throwable}.
    * 
-   * @param problem The problem for which to create the report.
+   * @param throwable The throwable for which to create the report.
    */
-  public ProblemReport( final IProblem problem ) {
-    this.problem = problem;
+  public ProblemReport( final Throwable throwable ) {
+    this.exc = throwable;
   }
   
   /**
@@ -67,15 +71,27 @@ public class ProblemReport {
    */
   public String createReport() {
     
+    IProblem problem = null;
+    
+    if ( this.exc instanceof ProblemException ) {
+      problem = ( ( ProblemException ) this.exc ).getProblem();
+    }
+    
     StringWriter sWriter = new StringWriter();
     PrintWriter pWriter = new PrintWriter( sWriter );
 
-    writeField( pWriter, PLUG_IN_HEADER, this.problem.getPluginID() );
-    writeField( pWriter, CONTACT_ADDRESS_HEADER, this.problem.getMailTo() );
-    writeField( pWriter, DESCRIPTION_HEADER, this.problem.getDescription() );
-    writeField( pWriter, REASONS_HEADER, this.problem.getReasons() );
-    writeField( pWriter, SOLUTIONS_HEADER, this.problem.getSolutions() );
-    writeField( pWriter, STACKTRACE_HEADER, this.problem.getException() );
+    if ( problem != null ) {
+      writeField( pWriter, PLUG_IN_HEADER, problem.getPluginID() );
+      writeField( pWriter, CONTACT_ADDRESS_HEADER, problem.getMailTo() );
+      writeField( pWriter, DESCRIPTION_HEADER, problem.getDescription() );
+      writeField( pWriter, REASONS_HEADER, problem.getReasons() );
+      writeField( pWriter, SOLUTIONS_HEADER, problem.getSolutions() );
+    } else {
+      writeField( pWriter,
+                  DESCRIPTION_HEADER,
+                  THROWABLE_DESCRIPTION_TEXT + this.exc.getClass().getName() );
+    }
+    writeField( pWriter, STACKTRACE_HEADER, this.exc );
     
     pWriter.close();
     
@@ -111,7 +127,6 @@ public class ProblemReport {
    * @param header The header used to specify the field.
    * @param solutions The {@link ISolution}s to be written.
    */
-  @SuppressWarnings("null")
   private void writeField( final PrintWriter writer,
                            final String header,
                            final ISolution[] solutions ) {
