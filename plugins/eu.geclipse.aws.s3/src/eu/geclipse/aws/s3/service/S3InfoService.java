@@ -74,7 +74,6 @@ public class S3InfoService extends AbstractGridInfoService
     this.s3Service = s3Service;
   }
 
-  @Override
   public IGridResource[] fetchResources( final IGridContainer parent,
                                          final IVirtualOrganization vo,
                                          final IGridResourceCategory category,

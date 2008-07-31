@@ -17,6 +17,8 @@ package eu.geclipse.core.model;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 
+import eu.geclipse.core.reporting.ProblemException;
+
 /**
  * An info service is an {@link IGridService} that provides access
  * to a grid-related information database.
@@ -39,13 +41,15 @@ public interface IGridInfoService extends IGridService {
    * or no resources (if <code>exclusive</code> is true) will be returned.
    * @param monitor A progress monitor used to monitor this operation.
    * @return An array of Grid resources that apply to the specified arguments.
+   * @throws ProblemException A problem Exception
    * @see #fetchResources(IGridContainer, IVirtualOrganization, IGridResourceCategory, boolean, Class, IProgressMonitor)
    * @see IGridResourceCategory
    */
   public IGridResource[] fetchResources( final IGridContainer parent,
                                          final IVirtualOrganization vo,
                                          final IGridResourceCategory category,
-                                         final IProgressMonitor monitor );
+                                         final IProgressMonitor monitor ) 
+  throws ProblemException;
   
   /**
    * This method fetches resources that are available for the specified VO.
@@ -72,6 +76,7 @@ public interface IGridInfoService extends IGridService {
    * to the filtered type. This parameter may be <code>null</code>.
    * @param monitor A progress monitor used to monitor this operation.
    * @return An array of Grid resources that apply to the specified arguments.
+   * @throws ProblemException A problem Exception
    * @see #fetchResources(IGridContainer, IVirtualOrganization, IGridResourceCategory, IProgressMonitor)
    * @see IGridResourceCategory
    */
@@ -80,7 +85,8 @@ public interface IGridInfoService extends IGridService {
                                          final IGridResourceCategory category,
                                          final boolean exclusive,
                                          final Class< ? extends IGridResource > typeFilter,
-                                         final IProgressMonitor monitor );
+                                         final IProgressMonitor monitor ) 
+  throws ProblemException;
   
   /**
    * Fetch the applications from the underlying database that

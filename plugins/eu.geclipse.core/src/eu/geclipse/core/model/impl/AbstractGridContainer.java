@@ -117,7 +117,6 @@ public abstract class AbstractGridContainer
         
         this.container.deleteAll();
         IStatus status = this.container.fetchChildren( mon );
-        //this.container.setDirty( ! status.isOK() );
         
         if ( ! status.isOK() ) {
           this.exception = status.getException();
