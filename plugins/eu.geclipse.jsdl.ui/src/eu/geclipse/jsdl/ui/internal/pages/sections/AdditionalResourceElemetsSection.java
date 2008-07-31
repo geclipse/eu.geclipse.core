@@ -338,9 +338,39 @@ public class AdditionalResourceElemetsSection extends JsdlFormPageSection {
     
     this.cmbIndividualPhysicalMemory = new Combo( client, SWT.SIMPLE | SWT.DROP_DOWN | SWT.READ_ONLY );
     this.cmbIndividualPhysicalMemory.setData( FormToolkit.KEY_DRAW_BORDER );
-    this.cmbIndividualPhysicalMemory.setItems( RESOURCES_BOUNDARY_ITEMS ); 
+    this.cmbIndividualPhysicalMemory.setItems( RESOURCES_BOUNDARY_ITEMS );
+    this.cmbIndividualPhysicalMemory.addSelectionListener( new SelectionListener(){
+
+      public void widgetDefaultSelected( final SelectionEvent e ) {
+        // TODO Auto-generated method stub
+        
+      }
+
+      public void widgetSelected( final SelectionEvent e ) {
+        
+        setResourceElement( AdditionalResourceElemetsSection.this.txtPhysMem,
+                            AdditionalResourceElemetsSection.this.cmbIndividualPhysicalMemory,
+                            JsdlPackage.RESOURCES_TYPE__INDIVIDUAL_PHYSICAL_MEMORY );
+        
+      }
+      
+    });    
+    
+    
     this.txtPhysMem = toolkit.createText( client, EMPTY_STRING, SWT.NONE );
     this.txtPhysMem.addListener( SWT.Verify, new DoubleNumberVerifier() );
+    this.txtPhysMem.addModifyListener( new ModifyListener() {
+      
+      
+      public void modifyText( final ModifyEvent e ) {    
+        
+        
+        setResourceElement( AdditionalResourceElemetsSection.this.txtPhysMem,
+                            AdditionalResourceElemetsSection.this.cmbIndividualPhysicalMemory,
+                            JsdlPackage.RESOURCES_TYPE__INDIVIDUAL_PHYSICAL_MEMORY );
+          
+        }
+      } );  
     this.txtPhysMem.setLayoutData( td );
     
     /*================Individual Virtual Memory Widgets ======================*/
@@ -364,7 +394,8 @@ public class AdditionalResourceElemetsSection extends JsdlFormPageSection {
     
     this.cmbIndividualDiskSpace = new Combo( client, SWT.SIMPLE | SWT.DROP_DOWN | SWT.READ_ONLY );
     this.cmbIndividualDiskSpace.setData( FormToolkit.KEY_DRAW_BORDER );
-    this.cmbIndividualDiskSpace.setItems( RESOURCES_BOUNDARY_ITEMS ); 
+    this.cmbIndividualDiskSpace.setItems( RESOURCES_BOUNDARY_ITEMS );    
+    
     this.txtIndDiskSpac = toolkit.createText( client, EMPTY_STRING, SWT.NONE );
     this.txtIndDiskSpac.addListener( SWT.Verify, new DoubleNumberVerifier() );
     this.txtIndDiskSpac.setLayoutData( td );
@@ -404,8 +435,36 @@ public class AdditionalResourceElemetsSection extends JsdlFormPageSection {
     this.cmbTotalPhysicalMemory = new Combo( client, SWT.SIMPLE | SWT.DROP_DOWN | SWT.READ_ONLY );
     this.cmbTotalPhysicalMemory.setData( FormToolkit.KEY_DRAW_BORDER );
     this.cmbTotalPhysicalMemory.setItems( RESOURCES_BOUNDARY_ITEMS ); 
+    this.cmbTotalPhysicalMemory.addSelectionListener( new SelectionListener(){
+
+      public void widgetDefaultSelected( final SelectionEvent e ) {
+        // TODO Auto-generated method stub
+        
+      }
+
+      public void widgetSelected( final SelectionEvent e ) {
+        
+        setResourceElement( AdditionalResourceElemetsSection.this.txtTotPhMem,
+                            AdditionalResourceElemetsSection.this.cmbTotalPhysicalMemory,
+                            JsdlPackage.RESOURCES_TYPE__TOTAL_PHYSICAL_MEMORY );
+        
+      }
+      
+    });    
     this.txtTotPhMem = toolkit.createText( client, EMPTY_STRING, SWT.NONE );
     this.txtTotPhMem.addListener( SWT.Verify, new DoubleNumberVerifier() );
+    this.txtTotPhMem.addModifyListener( new ModifyListener() {
+      
+      
+      public void modifyText( final ModifyEvent e ) {    
+        
+        
+        setResourceElement( AdditionalResourceElemetsSection.this.txtTotPhMem,
+                            AdditionalResourceElemetsSection.this.cmbTotalPhysicalMemory,
+                            JsdlPackage.RESOURCES_TYPE__TOTAL_PHYSICAL_MEMORY );
+          
+        }
+      } );  
     this.txtTotPhMem.setLayoutData( td );
 
     /*======================Total Virtual Memory Widgets =====================*/
@@ -473,6 +532,7 @@ public class AdditionalResourceElemetsSection extends JsdlFormPageSection {
     EList<?> exactTypeList;
     ExactType exactType;
     
+    /* Total Individual CPU Speed */ 
     if (this.resourcesType.getIndividualCPUSpeed() != null ){
       if (this.resourcesType.getIndividualCPUSpeed().getLowerBound() != null ) {    
         boundaryType = this.resourcesType.getIndividualCPUSpeed().getLowerBound();        
@@ -502,6 +562,7 @@ public class AdditionalResourceElemetsSection extends JsdlFormPageSection {
     }   
     
   } 
+  /* Total Individual CPU Time */ 
   if (this.resourcesType.getIndividualCPUTime() != null ){
     if (this.resourcesType.getIndividualCPUTime().getLowerBound() != null ) {    
       boundaryType = this.resourcesType.getIndividualCPUTime().getLowerBound();        
@@ -528,7 +589,7 @@ public class AdditionalResourceElemetsSection extends JsdlFormPageSection {
       }       
      }
    }
-    
+  /* Total Individual CPU Count */ 
   if (this.resourcesType.getIndividualCPUCount() != null ){
       
     if (this.resourcesType.getIndividualCPUCount().getLowerBound() != null ) {    
@@ -558,7 +619,7 @@ public class AdditionalResourceElemetsSection extends JsdlFormPageSection {
         
     }
   }
-  
+  /* Total Netwokr Bandwidth */
   if (this.resourcesType.getIndividualNetworkBandwidth() != null ){
     
     if (this.resourcesType.getIndividualNetworkBandwidth().getLowerBound() != null ) {    
@@ -583,6 +644,66 @@ public class AdditionalResourceElemetsSection extends JsdlFormPageSection {
             exactType = (ExactType)testType;          
             this.txtIndNetBand.setText( Double.toString( exactType.getValue() ) );
             this.cmbIndividualNetworkBandwidth.setText( EXACT );
+          }          
+        }       
+        
+    }
+  }
+  /* Individual Physical Memory */
+  if (this.resourcesType.getIndividualPhysicalMemory() != null ){
+    
+    if (this.resourcesType.getIndividualPhysicalMemory().getLowerBound() != null ) {    
+      boundaryType = this.resourcesType.getIndividualPhysicalMemory().getLowerBound();        
+      /* check for Lazy Loading */  
+      boundaryType = (BoundaryType) checkProxy( boundaryType );    
+      this.txtPhysMem.setText( Double.toString( boundaryType.getValue() ) );
+      this.cmbIndividualPhysicalMemory.setText( LOWER_BOUND );
+    } else if ( this.resourcesType.getIndividualPhysicalMemory().getUpperBound() != null ) {        
+        boundaryType = this.resourcesType.getIndividualPhysicalMemory().getUpperBound();        
+        /* check for Lazy Loading */  
+        boundaryType = (BoundaryType) checkProxy( boundaryType );    
+        this.txtPhysMem.setText( Double.toString( boundaryType.getValue() ) );
+        this.cmbIndividualPhysicalMemory.setText( UPPER_BOUND );        
+    } else {
+        exactTypeList  = this.resourcesType.getIndividualPhysicalMemory().getExact();
+        Iterator<?> it = exactTypeList.iterator();
+          
+        while (it.hasNext()) {
+          Object testType = it.next();
+          if (testType instanceof ExactType){
+            exactType = (ExactType)testType;          
+            this.txtPhysMem.setText( Double.toString( exactType.getValue() ) );
+            this.cmbIndividualPhysicalMemory.setText( EXACT );
+          }          
+        }       
+        
+    }
+  }
+  /* Total Physical Memory */
+  if (this.resourcesType.getTotalPhysicalMemory() != null ){
+    
+    if (this.resourcesType.getTotalPhysicalMemory().getLowerBound() != null ) {    
+      boundaryType = this.resourcesType.getTotalPhysicalMemory().getLowerBound();        
+      /* check for Lazy Loading */  
+      boundaryType = (BoundaryType) checkProxy( boundaryType );    
+      this.txtTotPhMem.setText( Double.toString( boundaryType.getValue() ) );
+      this.cmbTotalPhysicalMemory.setText( LOWER_BOUND );
+    } else if ( this.resourcesType.getTotalPhysicalMemory().getUpperBound() != null ) {        
+        boundaryType = this.resourcesType.getTotalPhysicalMemory().getUpperBound();        
+        /* check for Lazy Loading */  
+        boundaryType = (BoundaryType) checkProxy( boundaryType );    
+        this.txtTotPhMem.setText( Double.toString( boundaryType.getValue() ) );
+        this.cmbTotalPhysicalMemory.setText( UPPER_BOUND );        
+    } else {
+        exactTypeList  = this.resourcesType.getTotalPhysicalMemory().getExact();
+        Iterator<?> it = exactTypeList.iterator();
+          
+        while (it.hasNext()) {
+          Object testType = it.next();
+          if (testType instanceof ExactType){
+            exactType = (ExactType)testType;          
+            this.txtTotPhMem.setText( Double.toString( exactType.getValue() ) );
+            this.cmbTotalPhysicalMemory.setText( EXACT );
           }          
         }       
         
