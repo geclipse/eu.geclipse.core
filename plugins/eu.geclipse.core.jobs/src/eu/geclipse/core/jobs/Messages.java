@@ -9,6 +9,8 @@
  * project g-Eclipse founded by European Union
  * project number: FP6-IST-034327  http://www.geclipse.eu/
  *
+ * Contributor(s):
+ *     Pawel Wolniewicz - PSNC
  *****************************************************************************/
 package eu.geclipse.core.jobs;
 
