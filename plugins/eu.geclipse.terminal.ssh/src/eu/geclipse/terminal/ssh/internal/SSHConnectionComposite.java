@@ -40,28 +40,44 @@ import eu.geclipse.core.util.TokenValidator;
 import eu.geclipse.ui.widgets.NumberVerifier;
 import eu.geclipse.ui.widgets.StoredCombo;
 
-
 class SSHConnectionComposite extends Composite {
+
   private static final String sshDefaultPort = "22"; //$NON-NLS-1$
+
   private static final String USERNAMES = "usernames"; //$NON-NLS-1$  //  @jve:decl-index=0:
+
   private static final String HOSTNAMES = "hostnames"; //$NON-NLS-1$
+
   private Label usernameLabel = null;
+
   private StoredCombo usernameCombo = null;
+
   private Label hostnameLabel = null;
+
   private StoredCombo hostnameCombo = null;
+
   private Label passwordLabel = null;
+
   private Text passwordText = null;
+
   private Label portLabel = null;
+
   private Text portText = null;
 
-  SSHConnectionComposite( final Composite parent, final int style, final Listener page, final String preSelectedHostname ) {
+  SSHConnectionComposite( final Composite parent,
+                          final int style,
+                          final Listener page,
+                          final String preSelectedHostname )
+  {
     super( parent, style );
     initialize();
     Activator activator = Activator.getDefault();
     IPreferenceStore preferenceStore = activator.getPreferenceStore();
-    this.usernameCombo.setPreferences( preferenceStore, USERNAMES );
-    this.hostnameCombo.setPreferences( preferenceStore, HOSTNAMES );
-    if ( preSelectedHostname != null ) {
+    this.usernameCombo.setPreferences( preferenceStore,
+                                       SSHConnectionComposite.USERNAMES );
+    this.hostnameCombo.setPreferences( preferenceStore,
+                                       SSHConnectionComposite.HOSTNAMES );
+    if( preSelectedHostname != null ) {
       this.hostnameCombo.setText( preSelectedHostname );
     }
     this.usernameCombo.addListener( SWT.Modify, page );
@@ -69,7 +85,7 @@ class SSHConnectionComposite extends Composite {
     this.passwordText.addListener( SWT.Modify, page );
     this.portText.addListener( SWT.Modify, page );
     this.portText.addListener( SWT.Verify, new NumberVerifier() );
-    GridData portTextGridData = (GridData) this.portText.getLayoutData();
+    GridData portTextGridData = ( GridData )this.portText.getLayoutData();
     GC gc = new GC( this.portText );
     FontMetrics fm = gc.getFontMetrics();
     portTextGridData.widthHint = 7 * fm.getAverageCharWidth();
@@ -78,31 +94,33 @@ class SSHConnectionComposite extends Composite {
   }
 
   private void addComputingElements() {
-   
-    IGridComputing[] elements = null;
+
+    IGridElement[] elements = null;
     IGridElement[] projectElements;
     try {
       projectElements = GridModel.getRoot().getChildren( null );
       for( IGridElement element : projectElements ) {
-        IGridProject igp=(IGridProject)element;
-        if(igp.isOpen() && igp.getVO()!=null ){
+        IGridProject igp = ( IGridProject )element;
+        if( igp.isOpen() && igp.getVO() != null ) {
           IGridInfoService infoService = igp.getVO().getInfoService();
-          elements = ( IGridComputing[] )infoService.fetchResources( null, igp.getVO(), 
-                                                                     GridResourceCategoryFactory.getCategory( 
-                                                                                                             GridResourceCategoryFactory.ID_COMPUTING ), 
-                                                                                                             null );
+          elements = infoService.fetchResources( null,
+                                                 igp.getVO(),
+                                                 GridResourceCategoryFactory.getCategory( GridResourceCategoryFactory.ID_COMPUTING ),
+                                                 null );
 
-          for ( IGridComputing comp : elements ) {
-            String host = comp.getHostName(); 
-
-            if ( host != null && this.hostnameCombo.indexOf( host ) == -1 ) {
-              this.hostnameCombo.add( host );
+          for( IGridElement comp : elements ) {
+            if( comp instanceof IGridComputing ) {
+              IGridComputing gridComputing = ( IGridComputing )comp;
+              String host = gridComputing.getHostName();
+              if( host != null && this.hostnameCombo.indexOf( host ) == -1 ) {
+                this.hostnameCombo.add( host );
+              }
             }
           }
         }
       }
 
-    } catch ( ProblemException e ) {
+    } catch( ProblemException e ) {
       Activator.logException( e );
     }
   }
@@ -128,25 +146,25 @@ class SSHConnectionComposite extends Composite {
     usernameComboGridData.verticalAlignment = GridData.CENTER;
     GridLayout gridLayout = new GridLayout();
     gridLayout.numColumns = 4;
-    this.hostnameLabel = new Label(this, SWT.NONE);
-    this.hostnameLabel.setText(Messages.getString("SSHConnectionComposite.hostName")); //$NON-NLS-1$
-    this.hostnameCombo = new StoredCombo(this, SWT.DROP_DOWN);
-    this.hostnameCombo.setLayoutData(hostnameComboGridData);
-    this.portLabel = new Label(this, SWT.NONE);
-    this.portLabel.setText(Messages.getString("SSHConnectionComposite.port")); //$NON-NLS-1$
-    this.portText = new Text(this, SWT.BORDER);
-    this.portText.setTextLimit(5);
-    this.portText.setText(sshDefaultPort);
-    this.portText.setLayoutData(portTextGridData);
-    this.usernameLabel = new Label(this, SWT.NONE);
-    this.usernameLabel.setText(Messages.getString("SSHConnectionComposite.userName")); //$NON-NLS-1$
-    this.usernameCombo = new StoredCombo(this, SWT.DROP_DOWN);
-    this.usernameCombo.setLayoutData(usernameComboGridData);
-    this.passwordLabel = new Label(this, SWT.NONE);
-    this.passwordLabel.setText(Messages.getString("SSHConnectionComposite.password")); //$NON-NLS-1$
-    this.passwordText = new Text(this, SWT.BORDER | SWT.PASSWORD);
-    this.passwordText.setLayoutData(passwordTextGridData);
-    this.setLayout(gridLayout);
+    this.hostnameLabel = new Label( this, SWT.NONE );
+    this.hostnameLabel.setText( Messages.getString( "SSHConnectionComposite.hostName" ) ); //$NON-NLS-1$
+    this.hostnameCombo = new StoredCombo( this, SWT.DROP_DOWN );
+    this.hostnameCombo.setLayoutData( hostnameComboGridData );
+    this.portLabel = new Label( this, SWT.NONE );
+    this.portLabel.setText( Messages.getString( "SSHConnectionComposite.port" ) ); //$NON-NLS-1$
+    this.portText = new Text( this, SWT.BORDER );
+    this.portText.setTextLimit( 5 );
+    this.portText.setText( SSHConnectionComposite.sshDefaultPort );
+    this.portText.setLayoutData( portTextGridData );
+    this.usernameLabel = new Label( this, SWT.NONE );
+    this.usernameLabel.setText( Messages.getString( "SSHConnectionComposite.userName" ) ); //$NON-NLS-1$
+    this.usernameCombo = new StoredCombo( this, SWT.DROP_DOWN );
+    this.usernameCombo.setLayoutData( usernameComboGridData );
+    this.passwordLabel = new Label( this, SWT.NONE );
+    this.passwordLabel.setText( Messages.getString( "SSHConnectionComposite.password" ) ); //$NON-NLS-1$
+    this.passwordText = new Text( this, SWT.BORDER | SWT.PASSWORD );
+    this.passwordText.setLayoutData( passwordTextGridData );
+    this.setLayout( gridLayout );
     setSize( new Point( 300, 200 ) );
   }
 
@@ -156,30 +174,42 @@ class SSHConnectionComposite extends Composite {
 
     try {
       port = new Integer( this.portText.getText() );
-    } catch ( NumberFormatException exception ) {
+    } catch( NumberFormatException exception ) {
       // ignore
     }
-    if ( port == null || port.intValue() < 1 || port.intValue() > 0xffff ) {
+    if( port == null || port.intValue() < 1 || port.intValue() > 0xffff ) {
       validPort = false;
     }
 
-    IStatus status = new Status( IStatus.OK, Activator.PLUGIN_ID, IStatus.OK,
-                                 "",  null ); //$NON-NLS-1$
-    if ( this.usernameCombo.getText().length() == 0 ) {
-      status = new Status( IStatus.ERROR, Activator.PLUGIN_ID, IStatus.OK,
-                           Messages.getString("SSHConnectionComposite.userNameMustNotBeEmpty"), null ); //$NON-NLS-1$
-    } else if ( this.hostnameCombo.getText().length() == 0 ) {
-      status = new Status( IStatus.ERROR, Activator.PLUGIN_ID, IStatus.OK,
-                           Messages.getString("SSHConnectionComposite.hostNameMustNotBeEmpty"), null ); //$NON-NLS-1$
-    } else if ( !validPort ) {
-      status = new Status( IStatus.ERROR, Activator.PLUGIN_ID, IStatus.OK,
-                           Messages.getString("SSHConnectionComposite.AValidPortNumberMustBeEntered"), null ); //$NON-NLS-1$
-    } else if ( !TokenValidator.validateFQHN( this.hostnameCombo.getText() ) ) {
-      status = new Status( IStatus.WARNING, Activator.PLUGIN_ID, IStatus.OK,
-                           Messages.getString("SSHConnectionComposite.invalidHostname"), null ); //$NON-NLS-1$
-    } else if ( this.passwordText.getText().length() == 0 ) {
-      status = new Status( IStatus.INFO, Activator.PLUGIN_ID, IStatus.OK,
-                           Messages.getString("SSHConnectionComposite.passwordIsRequiredIfYouAreNotUsingPubKeyAuth"), //$NON-NLS-1$
+    IStatus status = new Status( IStatus.OK,
+                                 Activator.PLUGIN_ID,
+                                 IStatus.OK,
+                                 "", null ); //$NON-NLS-1$
+    if( this.usernameCombo.getText().length() == 0 ) {
+      status = new Status( IStatus.ERROR,
+                           Activator.PLUGIN_ID,
+                           IStatus.OK,
+                           Messages.getString( "SSHConnectionComposite.userNameMustNotBeEmpty" ), null ); //$NON-NLS-1$
+    } else if( this.hostnameCombo.getText().length() == 0 ) {
+      status = new Status( IStatus.ERROR,
+                           Activator.PLUGIN_ID,
+                           IStatus.OK,
+                           Messages.getString( "SSHConnectionComposite.hostNameMustNotBeEmpty" ), null ); //$NON-NLS-1$
+    } else if( !validPort ) {
+      status = new Status( IStatus.ERROR,
+                           Activator.PLUGIN_ID,
+                           IStatus.OK,
+                           Messages.getString( "SSHConnectionComposite.AValidPortNumberMustBeEntered" ), null ); //$NON-NLS-1$
+    } else if( !TokenValidator.validateFQHN( this.hostnameCombo.getText() ) ) {
+      status = new Status( IStatus.WARNING,
+                           Activator.PLUGIN_ID,
+                           IStatus.OK,
+                           Messages.getString( "SSHConnectionComposite.invalidHostname" ), null ); //$NON-NLS-1$
+    } else if( this.passwordText.getText().length() == 0 ) {
+      status = new Status( IStatus.INFO,
+                           Activator.PLUGIN_ID,
+                           IStatus.OK,
+                           Messages.getString( "SSHConnectionComposite.passwordIsRequiredIfYouAreNotUsingPubKeyAuth" ), //$NON-NLS-1$
                            null );
     }
     return status;
