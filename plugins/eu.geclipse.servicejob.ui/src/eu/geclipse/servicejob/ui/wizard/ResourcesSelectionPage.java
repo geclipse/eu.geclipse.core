@@ -126,7 +126,7 @@ public class ResourcesSelectionPage extends WizardPage {
   @Override
   public boolean canFlipToNextPage() {
     boolean flag = false;
-    if (this.viewer.getCheckedElements().length != 0){
+    if( this.viewer.getCheckedElements().length != 0 ) {
       flag = true;
     }
     return flag && getNextPage() != null;
@@ -139,12 +139,12 @@ public class ResourcesSelectionPage extends WizardPage {
    */
   public List<IGridResource> getSelectedResources() {
     List<IGridResource> result = new ArrayList<IGridResource>();
-    for (Object checked: this.viewer.getCheckedElements()){
+    for( Object checked : this.viewer.getCheckedElements() ) {
       if( checked instanceof IGridResource ) {
         result.add( ( IGridResource )checked );
       }
     }
-    return result; 
+    return result;
   }
 
   public void createControl( final Composite parent ) {
@@ -219,7 +219,7 @@ public class ResourcesSelectionPage extends WizardPage {
       IGridResource childRef = null;
       boolean child = true;
       for( IGridResource resource : category.getContainedResources() ) {
-        child = viewer.getChecked( resource);
+        child = viewer.getChecked( resource );
         viewer.setChecked( resource, !child );
         if( child ) {
           childRef = resource;
@@ -289,7 +289,6 @@ public class ResourcesSelectionPage extends WizardPage {
   }
 
   protected void updateButtons() {
-    
     this.getContainer().updateButtons();
   }
 
@@ -320,11 +319,10 @@ public class ResourcesSelectionPage extends WizardPage {
         this.viewer.expandAll();
       } catch( ProblemException e ) {
         // TODO Auto-generated catch block
-        e.printStackTrace();
+        Activator.logException( e );
       }
     }
   }
-
 
   @Override
   public IWizardPage getNextPage() {
