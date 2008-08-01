@@ -175,7 +175,7 @@ public class ApplicationParametersRegistry implements IContentChangeNotifier {
                                             final IProgressMonitor monitor )
     throws ProblemException
   {
-    monitor.beginTask( Messages.getString("ApplicationParametersRegistry.fetching_information"), IProgressMonitor.UNKNOWN ); //$NON-NLS-1$
+    monitor.beginTask( Messages.getString( "ApplicationParametersRegistry.fetching_information" ), IProgressMonitor.UNKNOWN ); //$NON-NLS-1$
     if( vo == null ) {
       IGridElement[] els;
       els = GridModel.getVoManager().getChildren( new NullProgressMonitor() );
@@ -185,14 +185,14 @@ public class ApplicationParametersRegistry implements IContentChangeNotifier {
           IVirtualOrganization singleVO = ( IVirtualOrganization )el;
           List<IGridApplicationParameters> params = new ArrayList<IGridApplicationParameters>();
           IGridResource[] resources = null;
-          monitor.setTaskName( Messages.getString("ApplicationParametersRegistry.fetching_apps_list") ); //$NON-NLS-1$
+          monitor.setTaskName( Messages.getString( "ApplicationParametersRegistry.fetching_apps_list" ) ); //$NON-NLS-1$
           resources = singleVO.getAvailableResources( GridResourceCategoryFactory.getCategory( GridResourceCategoryFactory.ID_APPLICATIONS ),
                                                       false,
                                                       new NullProgressMonitor() );
           monitor.worked( 1 );
           if( resources != null ) {
             for( IGridResource param : resources ) {
-              monitor.setTaskName( Messages.getString("ApplicationParametersRegistry.processing_apps_data") ); //$NON-NLS-1$
+              monitor.setTaskName( Messages.getString( "ApplicationParametersRegistry.processing_apps_data" ) ); //$NON-NLS-1$
               IGridApplicationParameters parameter = ( ( IGridApplication )param ).getApplicationParameters();
               if( parameter != null ) {
                 params.add( parameter );
@@ -201,16 +201,16 @@ public class ApplicationParametersRegistry implements IContentChangeNotifier {
             }
           } else {
             throw new ProblemException( ICoreProblems.MODEL_FETCH_CHILDREN_FAILED,
-                                        Messages.getString("ApplicationParametersRegistry.cannot_fetch_resources"), //$NON-NLS-1$
+                                        Messages.getString( "ApplicationParametersRegistry.cannot_fetch_resources" ), //$NON-NLS-1$
                                         Activator.PLUGIN_ID );
           }
-          monitor.setTaskName( Messages.getString("ApplicationParametersRegistry.updating_registry") ); //$NON-NLS-1$
+          monitor.setTaskName( Messages.getString( "ApplicationParametersRegistry.updating_registry" ) ); //$NON-NLS-1$
           replaceParametersForVO( singleVO, params );
           monitor.worked( 1 );
         }
       }
     } else {
-      monitor.beginTask( Messages.getString("ApplicationParametersRegistry.fetching_apps_list"), //$NON-NLS-1$
+      monitor.beginTask( Messages.getString( "ApplicationParametersRegistry.fetching_apps_list" ), //$NON-NLS-1$
                          IProgressMonitor.UNKNOWN );
       List<IGridApplicationParameters> params = new ArrayList<IGridApplicationParameters>();
       IGridResource[] resources = null;
@@ -219,7 +219,7 @@ public class ApplicationParametersRegistry implements IContentChangeNotifier {
                                             new NullProgressMonitor() );
       if( resources != null ) {
         for( IGridResource param : resources ) {
-          monitor.setTaskName( Messages.getString("ApplicationParametersRegistry.processing_apps_data") ); //$NON-NLS-1$
+          monitor.setTaskName( Messages.getString( "ApplicationParametersRegistry.processing_apps_data" ) ); //$NON-NLS-1$
           IGridApplicationParameters parameter = ( ( IGridApplication )param ).getApplicationParameters();
           if( parameter != null ) {
             params.add( parameter );
@@ -228,10 +228,10 @@ public class ApplicationParametersRegistry implements IContentChangeNotifier {
         }
       } else {
         throw new ProblemException( ICoreProblems.MODEL_FETCH_CHILDREN_FAILED,
-                                    Messages.getString("ApplicationParametersRegistry.cannot_fetch_resources"), //$NON-NLS-1$
+                                    Messages.getString( "ApplicationParametersRegistry.cannot_fetch_resources" ), //$NON-NLS-1$
                                     Activator.PLUGIN_ID );
       }
-      monitor.setTaskName( Messages.getString("ApplicationParametersRegistry.updating_registry") ); //$NON-NLS-1$
+      monitor.setTaskName( Messages.getString( "ApplicationParametersRegistry.updating_registry" ) ); //$NON-NLS-1$
       replaceParametersForVO( vo, params );
       monitor.worked( 1 );
     }
@@ -616,7 +616,7 @@ public class ApplicationParametersRegistry implements IContentChangeNotifier {
         els = GridModel.getVoManager().getChildren( new NullProgressMonitor() );
       } catch( ProblemException e ) {
         // TODO Auto-generated catch block
-        e.printStackTrace();
+        Activator.logException( e );
       }
       for( IGridElement el : els ) {
         if( el instanceof IVirtualOrganization ) {
