@@ -459,10 +459,10 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
       } );
     } catch( InvocationTargetException e ) {
       // TODO Auto-generated catch block
-      e.printStackTrace();
+      Activator.logException( e );
     } catch( InterruptedException e ) {
       // TODO Auto-generated catch block
-      e.printStackTrace();
+      Activator.logException( e );
     }
   }
 

@@ -623,7 +623,8 @@ public class NewJobWizard extends Wizard
           names.add( name );
         } catch( CoreException e ) {
           // TODO Auto-generated catch block
-          e.printStackTrace();
+//          e.printStackTrace();
+          Activator.logException( e );
         }
       }
       names.add( JSDL_STANDARD );
