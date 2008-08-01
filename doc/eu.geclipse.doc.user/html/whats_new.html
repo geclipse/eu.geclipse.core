@@ -19,10 +19,20 @@
 <ul>
   <li><b>g-Eclipse 1.0 M8</b>
   <ul>
-    <li>It is now possible to associate a keystore to a GRIA VO, allowing to seamless access different servers from different projects</li>
-    <li>It is now possible to associate an access ID an AmazonWS VO, allowing to use different accounts at the same time</li>
-    <li>As source in jsdl for GRIA jobs user may choose any kind of file accessibled by g-eclipse: file, gria data stagers, gridFTP, SRM, LFC...
-    <li>... and as always a lot of bug fixes</li>
+    <li>It is now possible to associate a keystore with a GRIA VO, allowing seamless access to different servers from different projects</li>
+    <li>It is now possible to associate an access ID with an AmazonWS VO, allowing one to use different accounts at the same time</li>
+    <li>One may choose any kind of file accessible by g-Eclipse as a source in the jsdl for GRIA jobs: file, gria data stagers, 
+        gridFTP, SRM, LFC, etc.
+    <li>The workflow component in g-Eclipse has a number of improvements:
+      <ul>
+         <li>Each Workflow is now stored in a dedicated folder which holds the .workflow file as well as the JSDL files corresponding
+             to each Workflow Job (Note: one needs to explicitly provide the .workflow extension when creating the workflow)</li>
+         <li>To associate a Workflow Job with a JSDL file, one can either select the action via a right-click context menu on the Workflow Job 
+             or simply drag and drop a JSDL file from the Grid Projects View onto the WorkflowJob in question</li>
+         <li>The JSDL file associated with any Workflow Job can be opened and edited in the JSDL Editor via a right-click context menu 
+             action on the Workflow Job, directly from the graphical workflow editor</li>               
+      </ul> </li> 
+    <li>... and, as always, a lot of bug fixes!</li>
   </ul>
   <li><b>g-Eclipse 1.0 M7</b>
   <ul>
