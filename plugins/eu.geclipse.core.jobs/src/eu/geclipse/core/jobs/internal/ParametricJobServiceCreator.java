@@ -21,10 +21,11 @@ import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.impl.AbstractGridElementCreator;
 import eu.geclipse.core.reporting.ProblemException;
 
-
 public class ParametricJobServiceCreator extends AbstractGridElementCreator {
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   * 
    * @see eu.geclipse.core.model.impl.AbstractGridElementCreator#internalCanCreate(java.lang.Object)
    */
   @Override
@@ -32,24 +33,28 @@ public class ParametricJobServiceCreator extends AbstractGridElementCreator {
     return fromObject instanceof ParametricJobID;
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   * 
    * @see eu.geclipse.core.model.IGridElementCreator#canCreate(java.lang.Class)
    */
   public boolean canCreate( final Class<? extends IGridElement> elementType ) {
     return elementType.isAssignableFrom( ParametricJobService.class );
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   * 
    * @see eu.geclipse.core.model.IGridElementCreator#create(eu.geclipse.core.model.IGridContainer)
    */
-  public IGridElement create( final IGridContainer parent ) throws ProblemException
+  public IGridElement create( final IGridContainer parent )
+    throws ProblemException
   {
     IGridElement result = null;
     Object object = getObject();
     if( object instanceof ParametricJobID ) {
-      result = new ParametricJobService( (ParametricJobID)object );
+      result = new ParametricJobService( ( ParametricJobID )object );
     }
     return result;
   }
-
 }
