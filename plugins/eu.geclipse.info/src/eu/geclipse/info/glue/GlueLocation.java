@@ -1,6 +1,3 @@
-package eu.geclipse.info.glue;
-
-
 /******************************************************************************
  * Copyright (c) 2008 g-Eclipse consortium
  * All rights reserved. This program and the accompanying materials
@@ -17,6 +14,9 @@ package eu.geclipse.info.glue;
  *      - Nikolaos Tsioutsias
  *
  *****************************************************************************/
+package eu.geclipse.info.glue;
+
+
 public class GlueLocation extends AbstractGlueTable{
   
   /**
