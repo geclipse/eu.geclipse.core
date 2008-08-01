@@ -209,7 +209,7 @@ public class ServiceJobDetailsView extends ViewPart
                     }
                   } catch( PartInitException e ) {
                     // TODO katis
-                    e.printStackTrace();
+                    Activator.logException( e );
                   }
                 }
                 break;
@@ -422,7 +422,7 @@ public class ServiceJobDetailsView extends ViewPart
           }
         } catch( IOException e ) {
           // TODO Auto-generated catch block
-          e.printStackTrace();
+          Activator.logException( e );
         }
       }
     }

@@ -79,7 +79,7 @@ public class ServiceJobWizard extends Wizard
    * @param resource grid resource for which new test will be created
    */
   public ServiceJobWizard( final IGridProject project,
-                     final List<IGridResource> resource )
+                           final List<IGridResource> resource )
   {
     setForcePreviousAndNextButtons( true );
     this.project = project;
@@ -182,16 +182,16 @@ public class ServiceJobWizard extends Wizard
     // return test;
     catch( IOException e ) {
       // TODO Auto-generated catch block
-      e.printStackTrace();
+      Activator.logException( e );
     } catch( ParserConfigurationException e ) {
       // TODO Auto-generated catch block
-      e.printStackTrace();
+      Activator.logException( e );
     } catch( SAXException e ) {
       // TODO Auto-generated catch block
-      e.printStackTrace();
+      Activator.logException( e );
     } catch( TransformerException e ) {
       // TODO Auto-generated catch block
-      e.printStackTrace();
+      Activator.logException( e );
     }
   }
 
