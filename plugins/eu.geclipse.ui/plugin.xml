@@ -143,7 +143,7 @@
             class="eu.geclipse.ui.internal.preference.PerspectivePreferencePage"
             id="eu.geclipse.ui.internal.preference.PerspectivePreferencePage"
             name="%page.perspectives">
-      </page>      
+      </page>
       <page
             category="eu.geclipse.ui.internal.preference.GEclipsePreferencePage"
             class="eu.geclipse.ui.visualisation.preferences.VisualisationPreferencePage"
@@ -212,13 +212,13 @@
             icon="icons/job.gif"
             id="eu.geclipse.ui.views.jobdetails.JobDetailsView"
             name="%view.jobDetails"/>
-      <view
+<!--      <view
             allowMultiple="true"
             category="eu.geclipse.ui.viewcategory"
             class="eu.geclipse.ui.views.ProcessStatView"
             icon="icons/job.gif"
             id="eu.geclipse.ui.views.ProcessStatView"
-            name="Process Status Viewer"/>
+            name="Process Status Viewer"/>  -->
    </extension>
    <extension
          point="eu.geclipse.core.authTokenProvider">
