@@ -16,6 +16,7 @@
  *****************************************************************************/
 package eu.geclipse.batch.ui.wizards;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
@@ -274,6 +275,13 @@ public class BatchDefinitionWizardPage extends WizardPage {
               }
             }
           }
+          String[] items = this.hostNameCombo.getItems();
+          if (items != null && items.length > 0){ 
+            Arrays.sort(items);
+            this.hostNameCombo.removeAll();
+            this.hostNameCombo.setItems(items);
+          }
+          
         } catch( ProblemException e ) {
           // Ignore, we will not provide suggestions
         }

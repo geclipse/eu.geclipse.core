@@ -16,6 +16,8 @@
  *****************************************************************************/
 package eu.geclipse.batch.ui.wizards;
 
+import java.util.Arrays;
+
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -91,7 +93,7 @@ public class MoveJobWizardPage extends WizardPage {
     this.computingElementCombo = new StoredCombo( this.mainComp, SWT.DROP_DOWN );
     this.computingElementCombo.setPreferences( preferenceStore, HOSTNAME_STRINGS );
     this.computingElementCombo.setLayoutData( gData );
-    
+    addComputingElements();
     this.computingElementCombo.addModifyListener( new ModifyListener() {
       public void modifyText( final ModifyEvent e ) {
         updateUI();
@@ -108,7 +110,7 @@ public class MoveJobWizardPage extends WizardPage {
       }
     } );
     
-    addComputingElements();
+    
 
     setControl( this.mainComp );
   }
@@ -201,6 +203,12 @@ public class MoveJobWizardPage extends WizardPage {
                 this.computingElementCombo.add( hostname );
               }
             }
+          }
+          String[] items = this.computingElementCombo.getItems();
+          if (items != null && items.length > 0){ 
+            Arrays.sort(items);
+            this.computingElementCombo.removeAll();
+            this.computingElementCombo.setItems(items);
           }
         } catch( ProblemException e ) {
           // Ignore, we will not provide suggestions
