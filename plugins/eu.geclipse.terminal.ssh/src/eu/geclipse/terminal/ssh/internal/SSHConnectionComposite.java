@@ -15,6 +15,8 @@
 
 package eu.geclipse.terminal.ssh.internal;
 
+import java.util.Arrays;
+
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -80,6 +82,7 @@ class SSHConnectionComposite extends Composite {
     if( preSelectedHostname != null ) {
       this.hostnameCombo.setText( preSelectedHostname );
     }
+    addComputingElements();
     this.usernameCombo.addListener( SWT.Modify, page );
     this.hostnameCombo.addListener( SWT.Modify, page );
     this.passwordText.addListener( SWT.Modify, page );
@@ -90,7 +93,7 @@ class SSHConnectionComposite extends Composite {
     FontMetrics fm = gc.getFontMetrics();
     portTextGridData.widthHint = 7 * fm.getAverageCharWidth();
     gc.dispose();
-    addComputingElements();
+    
   }
 
   private void addComputingElements() {
@@ -116,6 +119,12 @@ class SSHConnectionComposite extends Composite {
                 this.hostnameCombo.add( host );
               }
             }
+          }
+          String[] items = this.hostnameCombo.getItems();
+          if (items != null && items.length > 0){ 
+            Arrays.sort(items);
+            this.hostnameCombo.removeAll();
+            this.hostnameCombo.setItems(items);
           }
         }
       }
