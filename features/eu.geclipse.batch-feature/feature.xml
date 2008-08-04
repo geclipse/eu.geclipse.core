@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="eu.geclipse.batch"
-      label="g-Eclipse (Incubation)"
+      label="g-Eclipse Batch System Management Components (Incubation)"
       version="1.0.0.qualifier"
       provider-name="Eclipse.org"
       plugin="eu.geclipse">
 
    <description url="http://www.eclipse.org/geclipse">
       g-Eclipse provides tools and frameworks to access Computing Grids.
-This feature contains the batch system management component.
+This feature contains the batch system management components.
    </description>
 
    <copyright url="http://www.eclipse.org/legal/epl-v10.html">
