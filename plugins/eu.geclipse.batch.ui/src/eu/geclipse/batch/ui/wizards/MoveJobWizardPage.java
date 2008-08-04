@@ -30,6 +30,7 @@ import org.eclipse.swt.widgets.Text;
 import eu.geclipse.batch.ui.internal.Activator;
 import eu.geclipse.batch.ui.internal.Messages;
 import eu.geclipse.core.model.IGridComputing;
+import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridInfoService;
 import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.model.IVirtualOrganization;
@@ -177,7 +178,7 @@ public class MoveJobWizardPage extends WizardPage {
    * Provides a default list of computing elements in the Host field.
    */
   private void addComputingElements() {
-    IGridComputing[] elements = null;
+    IGridElement[] elements = null;
     IGridProject pro = ( ( MoveJobWizard ) this.getWizard() ).getGridProject();
     
     if ( null != pro ) {
@@ -187,15 +188,18 @@ public class MoveJobWizardPage extends WizardPage {
       if ( null != vo ) { 
         try {
           infoService = vo.getInfoService();
-          elements = ( IGridComputing[] )infoService.fetchResources( null, vo, 
-                                                                     GridResourceCategoryFactory.getCategory( 
-                                                                           GridResourceCategoryFactory.ID_COMPUTING ), 
-                                                                     null );
-                              
-          for ( IGridComputing comp : elements ) {
-            String hostname = comp.getHostName();
-            if ( hostname != null && this.computingElementCombo.indexOf( hostname ) == -1 ) {
-              this.computingElementCombo.add( hostname );
+          elements = infoService.fetchResources( null, vo, 
+                                                 GridResourceCategoryFactory.getCategory( 
+                                                                                         GridResourceCategoryFactory.ID_COMPUTING ), 
+                                                                                         null );
+
+          for ( IGridElement elem : elements ) {
+            if (elem instanceof IGridComputing){
+              IGridComputing comp = (IGridComputing)elem;
+              String hostname = comp.getHostName();
+              if ( hostname != null && this.computingElementCombo.indexOf( hostname ) == -1 ) {
+                this.computingElementCombo.add( hostname );
+              }
             }
           }
         } catch( ProblemException e ) {
