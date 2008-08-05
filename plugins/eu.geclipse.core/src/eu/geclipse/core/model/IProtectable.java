@@ -39,17 +39,5 @@ public interface IProtectable {
    */
   public IACL fetchACL( final IProgressMonitor monitor )
     throws ProblemException;
-  
-  /**
-   * Writes the access control list associated with this grid object.
-   * Only when this method is called changes to the object's access
-   * permissions are really made effective.
-   * 
-   * @param acl the {@link IACL} to set on this element.
-   * @param monitor a progress monitor, or null if progress reporting is not desired.
-   * @throws ProblemException if an error occurs while changing the ACL.
-   */
-  public void putACL( final IACL acl, final IProgressMonitor monitor )
-    throws ProblemException;
 
 }
