@@ -29,6 +29,7 @@ import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.util.OpenStrategy;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorDescriptor;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
@@ -38,7 +39,6 @@ import org.eclipse.ui.part.FileEditorInput;
 
 import eu.geclipse.core.model.IGridConnectionElement;
 import eu.geclipse.ui.dialogs.ProblemDialog;
-import eu.geclipse.ui.internal.Activator;
 
 /**
  * This action provides support for opening connections with progress monitoring
@@ -183,18 +183,26 @@ public class OpenFileAction
               element.releaseCachedConnectionFileStore( cfs );
             }
           } catch ( CoreException cExc ) {
-            Activator.logException( cExc );
+            showProblemDialog( cExc, element.getResource().getName() );
           } finally {
             sMonitor.done();
           }
           return Status.OK_STATUS;
         }
+        
+        private void showProblemDialog( final CoreException exc, String filename ) {          
+          Shell shell = workbenchPage.getWorkbenchWindow().getShell();
+          String msg = String.format( "Problem occured during opening file ", filename );
+          ProblemDialog.openProblem( shell, "Cannot open file", msg, exc );
+        }
+
       };
       job.setUser( true );
       job.schedule();
       
     }
-    
   }
+
+
 
 }
