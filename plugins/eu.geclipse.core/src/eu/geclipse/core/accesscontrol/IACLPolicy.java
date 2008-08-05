@@ -43,13 +43,13 @@ public interface IACLPolicy {
   /**
    * Returns the name of this policy, for instance "Allow".
    * 
-   * @return a user friendly string.
+   * @return a user friendly string. Must be non empty.
    */
   public String toString();
   
   /**
    * Returns a description of this policy, for instance to be used
-   * in tooltips.
+   * in tool-tips.
    * 
    * @return a user friendly string explaining the policy.
    */

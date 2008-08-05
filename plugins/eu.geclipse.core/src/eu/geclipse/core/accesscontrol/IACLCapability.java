@@ -34,13 +34,13 @@ public interface IACLCapability {
   /**
    * Returns the name of this capability, for instance "Write".
    * 
-   * @return a user friendly string.
+   * @return a user friendly string. Must be non empty.
    */
   public String getName();
   
   /**
    * Returns a user friendly description of this capability, for instance
-   * to be used in tooltips.
+   * to be used in tool-tips.
    * 
    * @return a string explaining the capability.
    */
