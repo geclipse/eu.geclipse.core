@@ -20,7 +20,9 @@ import org.eclipse.gmf.runtime.diagram.ui.editpolicies.EditPolicyRoles;
 import org.eclipse.gmf.runtime.notation.View;
 
 import eu.geclipse.workflow.ui.edit.policies.WorkflowCanonicalEditPolicy;
+import eu.geclipse.workflow.ui.edit.policies.WorkflowDiagramDragDropEditPolicy;
 import eu.geclipse.workflow.ui.edit.policies.WorkflowItemSemanticEditPolicy;
+
 
 /**
  * The class that connects the Figure and Model of the Workflow
@@ -48,8 +50,8 @@ public class WorkflowEditPart extends DiagramEditPart {
                        new WorkflowItemSemanticEditPolicy() );
     installEditPolicy( EditPolicyRoles.CANONICAL_ROLE,
                        new WorkflowCanonicalEditPolicy() );
-//    installEditPolicy(EditPolicyRoles.DRAG_DROP_ROLE,
-//                      new WorkflowDiagramDragDropEditPolicy());
+    installEditPolicy(EditPolicyRoles.DRAG_DROP_ROLE,
+                      new WorkflowDiagramDragDropEditPolicy());
 
     // removeEditPolicy(org.eclipse.gmf.runtime.diagram.ui.editpolicies.EditPolicyRoles.POPUPBAR_ROLE);
   }
