@@ -21,7 +21,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Calendar;
@@ -702,65 +701,55 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
   }
 
   private void createStagingFolders( final IFolder jobFolder )
-    throws ProblemException
   {
     if( this.jobDescription instanceof JSDLJobDescription ) {
-      JSDLJobDescription jsdlDesc = ( JSDLJobDescription )this.jobDescription;
-      Map<String, String> inStagingMap = jsdlDesc.getDataStagingInStrings();
-      Map<String, String> outStagingMap = jsdlDesc.getDataStagingOutStrings();
-      if( inStagingMap != null && !inStagingMap.isEmpty() ) {
-        try {
-          IFolder inputFolder = createStagingFilesFolder( jobFolder,
-                                                          FOLDERNAME_INPUT_FILES );
-          createStagingFilesLinks( inputFolder, inStagingMap );
-        } catch( CoreException exception ) {
-          throw new ProblemException( ICoreProblems.MODEL_ELEMENT_CREATE_FAILED,
-                                      Messages.getString( "GridJob.errCreateInputFolder" ), //$NON-NLS-1$
-                                      exception,
-                                      Activator.PLUGIN_ID );
+      IGridJobService service = getJobService();
+
+      try {
+        Map<String, URI> inputFilesMap = service.getInputFiles( getID(),
+                                                                getJobDescription(),
+                                                                getProject().getVO() );
+        if( inputFilesMap != null && inputFilesMap.size() > 0 ) {
+          createStagingFilesFolder( jobFolder,
+                                    FOLDERNAME_INPUT_FILES,
+                                    inputFilesMap );
         }
+      } catch( CoreException exception ) {
+        Activator.logException( exception );
       }
-      if( outStagingMap != null && !outStagingMap.isEmpty() ) {
-        try {
-          IFolder outputFolder = createStagingFilesFolder( jobFolder,
-                                                           FOLDERNAME_OUTPUT_FILES );
-          createStagingFilesLinks( outputFolder, outStagingMap );
-        } catch( CoreException exception ) {
-          throw new ProblemException( ICoreProblems.MODEL_ELEMENT_CREATE_FAILED,
-                                      Messages.getString( "GridJob.errCreateOutputFolder" ), //$NON-NLS-1$
-                                      exception,
-                                      Activator.PLUGIN_ID );
+      
+      try {
+        Map<String, URI> outputFilesMap = service.getOutputFiles( getID(),
+                                                                getJobDescription(),
+                                                                getProject().getVO() );
+        if( outputFilesMap != null && outputFilesMap.size() > 0 ) {
+          createStagingFilesFolder( jobFolder,
+                                    FOLDERNAME_OUTPUT_FILES,
+                                    outputFilesMap );
         }
+      } catch( CoreException exception ) {
+        Activator.logException( exception );
       }
     }
   }
 
   private IFolder createStagingFilesFolder( final IFolder jobFolder,
-                                            final String folderName )
+                                            final String folderName,
+                                            final Map<String, URI> filesMap )
     throws CoreException
   {
     IFolder folder = jobFolder.getFolder( folderName );
     if( !folder.exists() ) {
       folder.create( true, true, null );
     }
-    return folder;
-  }
-
-  private void createStagingFilesLinks( final IFolder localFolder,
-                                        final Map<String, String> dataStagingMap )
-  {
-    for( String filename : dataStagingMap.keySet() ) {
-      String uriString = dataStagingMap.get( filename );
-      try {
-        URI uri = new URI( uriString );
-        if( uri.getScheme() != null ) {
-          createFileLink( localFolder, filename, uri );
-        }
-      } catch( URISyntaxException exception ) {
-        Activator.logException( exception,
-                                Messages.getString( "GridJob.errCreateLink" ) + uriString ); //$NON-NLS-1$
+    for( String filename : filesMap.keySet() ) {
+      URI uri = filesMap.get( filename );
+      String scheme = uri.getScheme();
+      if( scheme != null && scheme.length() > 0 ) {
+        createFileLink( folder, filename, uri );
       }
     }
+    return folder;
   }
 
   private void createFileLink( final IFolder localFolder,

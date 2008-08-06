@@ -16,6 +16,9 @@
 
 package eu.geclipse.core.model;
 
+import java.net.URI;
+import java.util.Map;
+
 import org.eclipse.core.runtime.IProgressMonitor;
 
 import eu.geclipse.core.reporting.ProblemException;
@@ -86,5 +89,29 @@ public interface IGridJobService extends IGridService {
    */
   public void deleteJob( final IGridJobID id, final IVirtualOrganization vo, IProgressMonitor monitor )
     throws ProblemException;
-
+  
+  /**
+   * Get pairs (filename, URI) of input files for job.
+   * @param jobId id of job, for which input files will be returned
+   * @param jobDescription job description, which was used to submit job
+   * @param vo Virtual Organization, for which job belongs to
+   * @return URI Map containing input files used by job. Map contains pairs: <b>filename</b> (used to create link), and <b>URI</b> of input file.<br/>
+   * It's possible to return <code>null</code> if input files cannot be returned
+   * @throws ProblemException thrown, when input files cannot be retrieved, because of any error
+   */
+  public Map<String, URI> getInputFiles( IGridJobID jobId, IGridJobDescription jobDescription, IVirtualOrganization vo )
+    throws ProblemException;
+  
+  /**
+   * Get pairs (filename, URI) of output files for job.
+   * @param jobId id of job, for which input files will be returned
+   * @param jobDescription job description, which was used to submit job
+   * @param vo Virtual Organization, for which job belongs to
+   * @return URI Map containing output files created by job. Map contains pairs: <b>filename</b> (used to create link), and <b>URI</b> of output file.<br/>
+   * It's possible to return <code>null</code> if input files cannot be returned
+   * @throws ProblemException
+   */
+  public Map<String, URI> getOutputFiles( IGridJobID jobId, IGridJobDescription jobDescription, IVirtualOrganization vo )
+    throws ProblemException;
+  
 }

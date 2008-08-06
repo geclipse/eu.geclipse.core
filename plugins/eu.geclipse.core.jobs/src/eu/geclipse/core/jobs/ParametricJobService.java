@@ -19,6 +19,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.filesystem.IFileStore;
@@ -362,6 +363,24 @@ public class ParametricJobService implements IGridJobService {
     throws ProblemException
   {
     // TODO mariusz operation not supported - add exception
+    return null;
+  }
+
+  public Map<String, URI> getInputFiles( final IGridJobID jobId,
+                                         final IGridJobDescription jobDescription,
+                                         final IVirtualOrganization vo )
+    throws ProblemException
+  {
+    // TODO mariusz Auto-generated method stub
+    return null;
+  }
+
+  public Map<String, URI> getOutputFiles( final IGridJobID jobId,
+                                          final IGridJobDescription jobDescription,
+                                          final IVirtualOrganization vo )
+    throws ProblemException
+  {
+    // TODO mariusz Auto-generated method stub
     return null;
   }
 }
