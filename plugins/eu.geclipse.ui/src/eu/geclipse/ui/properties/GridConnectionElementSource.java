@@ -25,9 +25,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 
 import eu.geclipse.core.filesystem.internal.filesystem.GEclipseFileStore;
-import eu.geclipse.core.model.IGridConnection;
 import eu.geclipse.core.model.IGridConnectionElement;
-import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IPropertiesProvider;
 import eu.geclipse.ui.internal.Activator;
 
@@ -98,31 +96,9 @@ public class GridConnectionElementSource extends AbstractPropertySource<IGridCon
       @Override
       public Object getValue( final IGridConnectionElement sourceObject ) {
         String uriString = null;
-        IGridContainer parent = sourceObject;
-        int lastRelativeSegments = 0;
-        while( parent != null && !( parent instanceof IGridConnection ) ) {
-          parent = parent.getParent();
-          lastRelativeSegments++;
-        }
-        if( sourceObject == parent ) {
-          URI uri = sourceObject.getURI();
-          if( uri != null ) {
-            uriString = uri.toString();
-          }
-        } else if( parent != null && parent instanceof IGridConnection ) {
-          URI parentUri = ( ( IGridConnection )parent ).getURI();
-          IPath localPath = sourceObject.getPath();
-          if( lastRelativeSegments <= localPath.segmentCount() ) {
-            IPath relativePath = localPath.removeFirstSegments( localPath.segmentCount()
-                                                                - lastRelativeSegments );
-            parentUri = addSeparator( parentUri );
-            try {
-              URI newUri = parentUri.resolve( relativePath.toString() );
-              uriString = newUri.toString();
-            } catch( IllegalArgumentException exception ) {
-              // do nothing
-            }
-          }
+        URI uri = sourceObject.getURI();
+        if( uri != null ) {
+          uriString = uri.toString();
         }
         return uriString;
       }
