@@ -1392,14 +1392,16 @@ public class JSDLJobDescription extends ResourceGridContainer
    */
   public boolean isParametric() {
     boolean parametric = false;
-    FeatureMap featureMap = this.jobDefinition.getAny();    
-    
-    for( Entry entry : featureMap ) {
-      if( entry.getValue() instanceof SweepTypeImpl ) {
-        parametric = true;
-        break;
+    if( this.jobDefinition != null ) {
+      FeatureMap featureMap = this.jobDefinition.getAny();    
+      
+      for( Entry entry : featureMap ) {
+        if( entry.getValue() instanceof SweepTypeImpl ) {
+          parametric = true;
+          break;
+        }
       }
-    }      
+    }
 
     return parametric;
   }
