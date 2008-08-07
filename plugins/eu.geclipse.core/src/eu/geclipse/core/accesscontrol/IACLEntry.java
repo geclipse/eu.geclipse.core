@@ -95,7 +95,6 @@ public interface IACLEntry {
    * @param actor the actor to set.
    * @throws ProblemException if the actor is <code>null</code> or invalid.
    */
-  public void setActor( final IACLActor actor )
-    throws ProblemException;
+  public void setActor( final IACLActor actor ) throws ProblemException;
   
 }

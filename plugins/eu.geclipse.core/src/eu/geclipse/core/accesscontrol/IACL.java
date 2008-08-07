@@ -41,8 +41,8 @@ public interface IACL {
   
   /**
    * Registers an additional entry in this ACL. If {@link IACL#canSaveWholeACL()}
-   * returns <code>false</code>, and the IProtectable object is remote,
-   * the changes are immediately performed online.
+   * returns <code>false</code> the changes are stored immediately, i.e.,
+   * online if the IProtectable object is remote.
    * 
    * @param entry the ACL entry to set.
    * @param monitor used to monitor progress, can be <code>null</code>.
@@ -55,8 +55,8 @@ public interface IACL {
   
   /**
    * Removes an entry from this ACL. If {@link IACL#canSaveWholeACL()}
-   * returns <code>false</code>, and the IProtectable object is remote,
-   * the changes are immediately performed online.
+   * returns <code>false</code> the changes are stored immediately, i.e.,
+   * online if the IProtectable object is remote.
    * 
    * @param entry the entry to delete.
    * @param monitor used to monitor progress, can be <code>null</code>.
