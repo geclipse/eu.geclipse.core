@@ -55,12 +55,12 @@ public class Messages extends NLS {
   /**
    * 
    */
-  public static String JsdlJobDescSource_Min;
+  public static String JsdlJobDescSource_JsdlJobDescSource_Min;
   
   /**
    * 
    */
-  public static String JsdlJobDescSource_Max;
+  public static String JsdlJobDescSource_JsdlJobDescSource_Max;
   
   private static final String BUNDLE_NAME = "eu.geclipse.jsdl.ui.properties.messages"; //$NON-NLS-1$
   
