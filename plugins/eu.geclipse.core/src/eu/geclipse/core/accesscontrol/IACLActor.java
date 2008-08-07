@@ -30,39 +30,6 @@ import eu.geclipse.core.reporting.ProblemException;
 public interface IACLActor {
   
   /**
-   * The different types an ACL actor can be. Most of these types
-   * require a type-specific extra field, like the X509's DN, to
-   * identify the actor. Others, like type 'ANYBODY' do not require
-   * more data. Not all implementations support all actor types.
-   */
-  public static enum ActorType {
-    /** Absolutely anybody */
-    ANYBODY,
-    /** Anybody registered with a certificate of a known CA */
-    CA_ANY_DN_ANY,
-    /** Anybody registered with the given CA */
-    CA_NAME_DN_ANY,
-    /** The users satisfying the given certificate DN pattern */
-    CA_NAME_DN_PATTERN,
-    /** The user with the given certificate DN */
-    CA_NAME_DN_NAME,
-    /** Members of access groups satisfying the given pattern */
-    GROUP_PATTERN,
-    /** Members of the given access group */
-    GROUP_NAME,
-    /** The users satisfying the given user name pattern */
-    USER_PATTERN,
-    /** The user with the given user name */
-    USER_NAME,
-    /** The user identified by the given email address */
-    USER_EMAIL,
-    /** Users carrying the given SAML attribute */
-    SAML_ATTRIBUTE,
-    /** Other kind of actor, for implementation specific extensions */
-    OTHER
-  }
-  
-  /**
    * Queries the {@link ActorType}s supported by this implementation.
    * 
    * @return an array of supported ActorTypes.
