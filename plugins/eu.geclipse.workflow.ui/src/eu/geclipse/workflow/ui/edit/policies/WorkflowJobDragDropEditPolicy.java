@@ -15,26 +15,34 @@
  ******************************************************************************/
 package eu.geclipse.workflow.ui.edit.policies;
 
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.emf.ecore.EObject;
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gmf.runtime.diagram.core.edithelpers.CreateElementRequestAdapter;
 import org.eclipse.gmf.runtime.diagram.ui.commands.ICommandProxy;
 import org.eclipse.gmf.runtime.diagram.ui.editpolicies.DragDropEditPolicy;
+import org.eclipse.gmf.runtime.diagram.ui.editpolicies.EditPolicyRoles;
 import org.eclipse.gmf.runtime.diagram.ui.requests.CreateViewAndElementRequest;
 import org.eclipse.gmf.runtime.diagram.ui.requests.DropObjectsRequest;
 import org.eclipse.gmf.runtime.diagram.ui.requests.CreateViewAndElementRequest.ViewAndElementDescriptor;
 import org.eclipse.gmf.runtime.emf.type.core.IElementType;
 import org.eclipse.gmf.runtime.emf.type.core.IHintedType;
 import org.eclipse.gmf.runtime.emf.type.core.requests.CreateElementRequest;
+import org.eclipse.gmf.runtime.emf.type.core.requests.DestroyElementRequest;
 import org.eclipse.gmf.runtime.notation.Node;
 
 import eu.geclipse.jsdl.JSDLJobDescription;
+import eu.geclipse.workflow.ui.edit.commands.InputPortAfterCreateCommand;
 import eu.geclipse.workflow.ui.edit.commands.JSDLDropCommand;
+import eu.geclipse.workflow.ui.edit.commands.OutputPortAfterCreateCommand;
+import eu.geclipse.workflow.ui.edit.parts.InputPortEditPart;
+import eu.geclipse.workflow.ui.edit.parts.OutputPortEditPart;
 import eu.geclipse.workflow.ui.edit.parts.WorkflowJobEditPart;
 import eu.geclipse.workflow.ui.providers.WorkflowElementTypes;
 
@@ -62,10 +70,31 @@ public class WorkflowJobDragDropEditPolicy extends DragDropEditPolicy {
       if( o instanceof JSDLJobDescription ) {
         jsdl = ( JSDLJobDescription )o;
         this.selectedElement = ( WorkflowJobEditPart )getHost();
-        dropCmd = new JSDLDropCommand( this.selectedElement.resolveSemanticElement(), ((EObject)this.selectedElement.getModel()).eResource(), jsdl);
+        dropCmd = new JSDLDropCommand( this.selectedElement.resolveSemanticElement(), jsdl);
       }
       
-      Command cmd = new ICommandProxy(dropCmd);
+      CompoundCommand cmd = new CompoundCommand();
+      cmd.add( new ICommandProxy(dropCmd) );
+      
+      // if we're dropping a new JSDL onto the job, clear the old ports before creating new ports that match
+      // get WorkflowJobEditPart's children
+      List childParts = this.selectedElement.getChildren();
+      // find input ports and make a DestroyRequest for each one
+      for (Iterator i = childParts.iterator(); i.hasNext();) {
+        Object child = i.next();
+        if( child instanceof InputPortEditPart ) {
+          InputPortEditPart inputPortPart = ( InputPortEditPart )child;
+          Command destroyCmd = destroyInputPortCommand(inputPortPart);
+          if (destroyCmd!=null)
+          cmd.add( destroyCmd );
+        }
+        if( child instanceof OutputPortEditPart ) {
+          OutputPortEditPart outputPortPart = ( OutputPortEditPart )child;
+          Command destroyCmd = destroyOutputPortCommand(outputPortPart);
+          if (destroyCmd!=null)
+          cmd.add( destroyCmd );
+        }
+      }
       
       // this bit reads staging in and out to determine what in/out ports are needed
       // on a WF job    
@@ -73,13 +102,15 @@ public class WorkflowJobDragDropEditPolicy extends DragDropEditPolicy {
       Set<String> s = m.keySet();
       for (Iterator<String> i = s.iterator(); i.hasNext(); ) {
         String filename = i.next();
-        cmd = cmd.chain( createInputPortCommand() );
+        String uri = m.get( filename );
+        cmd.add( createInputPortCommand(uri) );
       }      
       m = jsdl.getDataStagingOutStrings();
       s = m.keySet();
       for (Iterator<String> i = s.iterator(); i.hasNext(); ) {
         String filename = i.next();
-        cmd = cmd.chain( createOutputPortCommand() );
+        String uri = m.get( filename );
+        cmd.add( createOutputPortCommand(uri) );
       }
 //      if (jsdl.getParent() instanceof IGridWorkflow) {
 //        System.out.println("All children jobs are...");
@@ -97,27 +128,41 @@ public class WorkflowJobDragDropEditPolicy extends DragDropEditPolicy {
     return super.getDropObjectsCommand( dropRequest );
   }
   
-  private Command createInputPortCommand() {
-    WorkflowJobEditPart selectedElement = ( WorkflowJobEditPart )getHost();
+  private Command destroyOutputPortCommand( OutputPortEditPart outputPortPart )
+  {
+    WorkflowJobItemSemanticEditPolicy semanticEditPolicy = ( WorkflowJobItemSemanticEditPolicy )selectedElement.getEditPolicy( EditPolicyRoles.SEMANTIC_ROLE );
+    Command cmd =  semanticEditPolicy.getDestroyElementCommand( new DestroyElementRequest(outputPortPart.resolveSemanticElement(), false) );
+    return cmd;
+  }
+
+  private Command destroyInputPortCommand( InputPortEditPart inputPortPart ) {
+    WorkflowJobItemSemanticEditPolicy semanticEditPolicy = ( WorkflowJobItemSemanticEditPolicy )selectedElement.getEditPolicy( EditPolicyRoles.SEMANTIC_ROLE );
+    Command cmd =  semanticEditPolicy.getDestroyElementCommand( new DestroyElementRequest(inputPortPart.resolveSemanticElement(), false) );
+    return cmd;
+  }
+
+  private Command createInputPortCommand(String uri) {
     IElementType type = WorkflowElementTypes.IInputPort_2002;
     ViewAndElementDescriptor viewDescriptor = new ViewAndElementDescriptor( new CreateElementRequestAdapter( new CreateElementRequest( type ) ),
                                                                             Node.class,
                                                                             ( ( IHintedType )type ).getSemanticHint(),
                                                                             selectedElement.getDiagramPreferencesHint() );
-    
-    Command cmd = selectedElement.getCommand( new CreateViewAndElementRequest(viewDescriptor) );
+    CreateViewAndElementRequest createRequest = new CreateViewAndElementRequest(viewDescriptor);
+    Command cmd = selectedElement.getCommand( createRequest );
+    cmd = cmd.chain( new InputPortAfterCreateCommand(((Collection<IAdaptable>)createRequest.getNewObject()).iterator().next(), uri, selectedElement.getEditingDomain()) );
     return cmd;
   }
   
-  private Command createOutputPortCommand() {
-    WorkflowJobEditPart selectedElement = ( WorkflowJobEditPart )getHost();
+  private Command createOutputPortCommand(String uri) {
     IElementType type = WorkflowElementTypes.IOutputPort_2001;
     ViewAndElementDescriptor viewDescriptor = new ViewAndElementDescriptor( new CreateElementRequestAdapter( new CreateElementRequest( type ) ),
                                                                             Node.class,
                                                                             ( ( IHintedType )type ).getSemanticHint(),
                                                                             selectedElement.getDiagramPreferencesHint() );
     
-    Command cmd = selectedElement.getCommand( new CreateViewAndElementRequest(viewDescriptor) );
+    CreateViewAndElementRequest createRequest = new CreateViewAndElementRequest(viewDescriptor);
+    Command cmd = selectedElement.getCommand( createRequest );
+    cmd = cmd.chain( new OutputPortAfterCreateCommand(((Collection<IAdaptable>)createRequest.getNewObject()).iterator().next(), uri, selectedElement.getEditingDomain()) );    
     return cmd;
   }  
   

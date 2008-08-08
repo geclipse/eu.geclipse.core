@@ -43,20 +43,16 @@ import eu.geclipse.workflow.ui.part.Messages;
 public class JSDLDropCommand extends AbstractTransactionalCommand {
 
   private EObject domainElement;
-  private Resource diagramResource;
   private JSDLJobDescription jsdl;
   private String[] dirs;
   private IFileStore wfRootFileStore;
 
-  public JSDLDropCommand( EObject domainElt,
-                          Resource diagResource,
-                          JSDLJobDescription jsdl )
+  public JSDLDropCommand( EObject domainElt, JSDLJobDescription jsdl )
   {
     super( TransactionUtil.getEditingDomain( domainElt ),
            Messages.getString("JSDLDropCommand_constructorMessage"), //$NON-NLS-1$
            null );
     this.domainElement = domainElt;
-    this.diagramResource = diagResource;
     this.jsdl = jsdl;
   }
 
@@ -118,16 +114,12 @@ public class JSDLDropCommand extends AbstractTransactionalCommand {
           }
           jsdlSource.copy( jsdlTarget.getFullPath(), true, null );
           jobDescriptionInJSDL = jsdlTarget.getLocation().toString();
-          // the next line doesn't work as it is a read-only environment when
-          // we are creating a command.
         }
       } catch( CoreException ex ) {
         // ignore for now. naughty!
       }
       wfJob.setJobDescription( jobDescriptionInJSDL );
-      if (wfJob.getName()==null) {
-        wfJob.setName( jsdlTarget.getName().substring( 0, jsdlTarget.getName().indexOf( "." + jsdlTarget.getFileExtension() ) ) );
-      }
+      wfJob.setName( jsdlTarget.getName().substring( 0, jsdlTarget.getName().indexOf( "." + jsdlTarget.getFileExtension() ) ) );
     }
     return CommandResult.newOKCommandResult();
   }

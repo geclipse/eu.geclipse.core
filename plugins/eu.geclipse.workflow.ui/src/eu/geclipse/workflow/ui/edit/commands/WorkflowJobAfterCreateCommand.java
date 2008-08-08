@@ -16,6 +16,10 @@
 package eu.geclipse.workflow.ui.edit.commands;
 
 import java.net.URI;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.operations.OperationHistoryFactory;
@@ -33,17 +37,27 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
-import org.eclipse.emf.transaction.util.TransactionUtil;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gmf.runtime.common.core.command.CommandResult;
+import org.eclipse.gmf.runtime.diagram.core.edithelpers.CreateElementRequestAdapter;
+import org.eclipse.gmf.runtime.diagram.ui.requests.CreateViewAndElementRequest;
+import org.eclipse.gmf.runtime.diagram.ui.requests.CreateViewAndElementRequest.ViewAndElementDescriptor;
 import org.eclipse.gmf.runtime.emf.commands.core.command.AbstractTransactionalCommand;
+import org.eclipse.gmf.runtime.emf.type.core.IElementType;
+import org.eclipse.gmf.runtime.emf.type.core.IHintedType;
+import org.eclipse.gmf.runtime.emf.type.core.requests.CreateElementRequest;
+import org.eclipse.gmf.runtime.notation.Node;
 
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.jsdl.JSDLJobDescription;
 import eu.geclipse.workflow.IWorkflowJob;
+import eu.geclipse.workflow.ui.edit.parts.WorkflowEditPart;
+import eu.geclipse.workflow.ui.edit.parts.WorkflowJobEditPart;
 import eu.geclipse.workflow.ui.internal.WorkflowDiagramEditorPlugin;
-import eu.geclipse.workflow.ui.part.GetJobDescriptionFromFileAction;
 import eu.geclipse.workflow.ui.part.Messages;
+import eu.geclipse.workflow.ui.providers.WorkflowElementTypes;
 
 /**
  * 
@@ -58,11 +72,15 @@ public class WorkflowJobAfterCreateCommand extends Command {
   private TransactionalEditingDomain domain;
   protected String[] dirs;
   protected IFileStore wfRootFileStore;
+  private WorkflowEditPart diagram;
+  private WorkflowJobEditPart newWorkflowJobEditPart;
   
-  public WorkflowJobAfterCreateCommand(IAdaptable adapter, JSDLJobDescription jsdl, TransactionalEditingDomain domain) {
+  
+  public WorkflowJobAfterCreateCommand(IAdaptable adapter, JSDLJobDescription jsdl, WorkflowEditPart diagram) {
     this.adapter = adapter;
     this.jsdl = jsdl;
-    this.domain = domain;
+    this.domain = diagram.getEditingDomain();
+    this.diagram = diagram;
   }
 
   public void execute() {
@@ -134,9 +152,7 @@ public class WorkflowJobAfterCreateCommand extends Command {
              // ignore for now. naughty!
            }
            newElement.setJobDescription( jobDescriptionInJSDL );
-           if (newElement.getName()==null) {
-             newElement.setName( jsdlTarget.getName().substring( 0, jsdlTarget.getName().indexOf( "." + jsdlTarget.getFileExtension() ) ) );
-           }
+           newElement.setName( jsdlTarget.getName().substring( 0, jsdlTarget.getName().indexOf( "." + jsdlTarget.getFileExtension() ) ) );
            return CommandResult.newOKCommandResult();
          }
        };
@@ -150,6 +166,27 @@ public class WorkflowJobAfterCreateCommand extends Command {
                               Messages.getString( "GetJobDescriptionFromFileAction.errorUpdatingJobDescription" ), //$NON-NLS-1$
                               eE ); 
        }
+       
+       CompoundCommand cmd = new CompoundCommand();
+       EditPart part = diagram.findEditPart( diagram, newElement );
+       if (part instanceof WorkflowJobEditPart) {
+         newWorkflowJobEditPart = (WorkflowJobEditPart) part;
+       }
+       Map<String, String> m = jsdl.getDataStagingInStrings();
+       Set<String> s = m.keySet();
+       for (Iterator<String> i = s.iterator(); i.hasNext(); ) {
+         String filename = i.next();
+         String uri = m.get( filename );
+         cmd.add( createInputPortCommand(uri) );
+       }      
+       m = jsdl.getDataStagingOutStrings();
+       s = m.keySet();
+       for (Iterator<String> i = s.iterator(); i.hasNext(); ) {
+         String filename = i.next();
+         String uri = m.get( filename );
+         cmd.add( createOutputPortCommand(uri) );
+       }
+       cmd.execute();       
     }
   }
   
@@ -177,5 +214,30 @@ public class WorkflowJobAfterCreateCommand extends Command {
     }
     return numTarget;
   }  
+  
+  private Command createInputPortCommand(String uri) {
+    IElementType type = WorkflowElementTypes.IInputPort_2002;
+    ViewAndElementDescriptor viewDescriptor = new ViewAndElementDescriptor( new CreateElementRequestAdapter( new CreateElementRequest( type ) ),
+                                                                            Node.class,
+                                                                            ( ( IHintedType )type ).getSemanticHint(),
+                                                                            newWorkflowJobEditPart.getDiagramPreferencesHint() );
+    CreateViewAndElementRequest createRequest = new CreateViewAndElementRequest(viewDescriptor);
+    Command cmd = newWorkflowJobEditPart.getCommand( createRequest );
+    cmd = cmd.chain( new InputPortAfterCreateCommand(((Collection<IAdaptable>)createRequest.getNewObject()).iterator().next(), uri, newWorkflowJobEditPart.getEditingDomain()) );
+    return cmd;
+  }
+  
+  private Command createOutputPortCommand(String uri) {
+    IElementType type = WorkflowElementTypes.IOutputPort_2001;
+    ViewAndElementDescriptor viewDescriptor = new ViewAndElementDescriptor( new CreateElementRequestAdapter( new CreateElementRequest( type ) ),
+                                                                            Node.class,
+                                                                            ( ( IHintedType )type ).getSemanticHint(),
+                                                                            newWorkflowJobEditPart.getDiagramPreferencesHint() );
+    
+    CreateViewAndElementRequest createRequest = new CreateViewAndElementRequest(viewDescriptor);
+    Command cmd = newWorkflowJobEditPart.getCommand( createRequest );
+    cmd = cmd.chain( new OutputPortAfterCreateCommand(((Collection<IAdaptable>)createRequest.getNewObject()).iterator().next(), uri, newWorkflowJobEditPart.getEditingDomain()) );    
+    return cmd;
+  }    
   
 }
