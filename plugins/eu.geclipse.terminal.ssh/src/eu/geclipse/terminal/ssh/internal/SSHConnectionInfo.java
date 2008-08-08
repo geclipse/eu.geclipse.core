@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006, 2007 g-Eclipse Consortium
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -18,10 +18,12 @@ package eu.geclipse.terminal.ssh.internal;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
+
+import com.jcraft.jsch.UIKeyboardInteractive;
 import com.jcraft.jsch.UserInfo;
 import eu.geclipse.ui.dialogs.PasswordDialog;
 
-class SSHConnectionInfo implements UserInfo {
+class SSHConnectionInfo implements UserInfo, UIKeyboardInteractive {
   String passphrase;
   String passwd;
   boolean canceledPWValue;
@@ -43,20 +45,20 @@ class SSHConnectionInfo implements UserInfo {
     this.port = portNumber;
     this.canceledPWValue = false;
   }
-  
+
   public String getPassword() {
     this.promptPasswd = true;
     return this.passwd;
   }
-  
+
   String getUsername() {
     return this.user;
   }
-  
+
   String getHostname() {
     return this.host;
   }
-  
+
   int getPort() {
     return this.port;
   }
@@ -100,7 +102,7 @@ class SSHConnectionInfo implements UserInfo {
 
   public boolean promptPassword( final String message ) {
     final int[] result = { Window.OK };
-    
+
     if ( this.promptPasswd ) {
       Display.getDefault().syncExec( new Runnable() {
         public void run() {
@@ -137,5 +139,13 @@ class SSHConnectionInfo implements UserInfo {
    */
   public boolean getCanceledPWValue() {
     return this.canceledPWValue;
+  }
+
+  public String[] promptKeyboardInteractive( final String arg0,
+                                             final String arg1,
+                                             final String arg2,
+                                             final String[] arg3,
+                                             final boolean[] arg4 ) {
+    return new String[]{this.passwd};
   }
 }
