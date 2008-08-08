@@ -18,9 +18,13 @@
  *****************************************************************************/
 package eu.geclipse.workflow.ui.edit.policies;
 
+import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gmf.runtime.common.core.command.ICommand;
 import org.eclipse.gmf.runtime.diagram.core.edithelpers.CreateElementRequestAdapter;
 import org.eclipse.gmf.runtime.diagram.ui.commands.ICommandProxy;
@@ -34,6 +38,7 @@ import org.eclipse.gmf.runtime.emf.type.core.requests.CreateElementRequest;
 import org.eclipse.gmf.runtime.notation.Node;
 
 import eu.geclipse.jsdl.JSDLJobDescription;
+import eu.geclipse.workflow.ui.edit.commands.WorkflowJobAfterCreateCommand;
 import eu.geclipse.workflow.ui.edit.parts.WorkflowEditPart;
 import eu.geclipse.workflow.ui.providers.WorkflowElementTypes;
 
@@ -64,55 +69,65 @@ public class WorkflowDiagramDragDropEditPolicy
                                                                                 Node.class,
                                                                                 ( ( IHintedType )type ).getSemanticHint(),
                                                                                 selectedElement.getDiagramPreferencesHint() );
-        Command cmd = selectedElement.getCommand( new CreateViewAndElementRequest(viewDescriptor) );
+//        Command cmd = selectedElement.getCommand( new CreateViewAndElementRequest( viewDescriptor ) );
+        CreateViewAndElementRequest createRequest = new CreateViewAndElementRequest(viewDescriptor);
+        CompoundCommand cmd = new CompoundCommand();
+        cmd.add( selectedElement.getCommand( createRequest ) );
+        TransactionalEditingDomain domain = selectedElement.getEditingDomain();
+        WorkflowJobAfterCreateCommand afterCreateCmd = new WorkflowJobAfterCreateCommand(((Collection<IAdaptable>)createRequest.getNewObject()).iterator().next(), jsdl, domain);
+        cmd.add( afterCreateCmd );
         
-//         NOTE: the following won't work until we can figure out how to get the newly
-//         created editpart
-//         this bit reads stdin/out and staging in and out to determine what in/out ports are needed
-//         on a WF job    
-//        Map<String, String> m = jsdl.getDataStagingInStrings();
-//        Set<String> s = m.keySet();
-//        for (Iterator<String> i = s.iterator(); i.hasNext(); ) {
-//          String filename = i.next();
-//          cmd = cmd.chain( createInputPortCommand() );
-//        }      
-//        m = jsdl.getDataStagingOutStrings();
-//        s = m.keySet();
-//        for (Iterator<String> i = s.iterator(); i.hasNext(); ) {
-//          String filename = i.next();
-//          cmd = cmd.chain( createOutputPortCommand() );
-//        }
+
+        // NOTE: the following won't work until we can figure out how to get the
+        // newly created editpart 
+        // this bit reads stdin/out and staging in and out to determine what
+        // in/out ports are needed on a WF job
+        // Map<String, String> m = jsdl.getDataStagingInStrings();
+        // Set<String> s = m.keySet();
+        // for (Iterator<String> i = s.iterator(); i.hasNext(); ) {
+        // String filename = i.next();
+        // cmd = cmd.chain( createInputPortCommand() );
+        // }
+        // m = jsdl.getDataStagingOutStrings();
+        // s = m.keySet();
+        // for (Iterator<String> i = s.iterator(); i.hasNext(); ) {
+        // String filename = i.next();
+        // cmd = cmd.chain( createOutputPortCommand() );
+        // }
         return cmd;
       }
     }
     return super.getDropObjectsCommand( dropRequest );
   }
-  
-//  
-//  private Command createInputPortCommand() {
-//    WorkflowJobEditPart selectedElement = ( WorkflowJobEditPart )getHost();
-//    IElementType type = WorkflowElementTypes.IInputPort_2002;
-//    ViewAndElementDescriptor viewDescriptor = new ViewAndElementDescriptor( new CreateElementRequestAdapter( new CreateElementRequest( type ) ),
-//                                                                            Node.class,
-//                                                                            ( ( IHintedType )type ).getSemanticHint(),
-//                                                                            selectedElement.getDiagramPreferencesHint() );
-//    
-//    Command cmd = selectedElement.getCommand( new CreateViewAndElementRequest(viewDescriptor) );
-//    return cmd;
-//  }
-//  
-//  private Command createOutputPortCommand() {
-//    WorkflowJobEditPart selectedElement = ( WorkflowJobEditPart )getHost();
-//    IElementType type = WorkflowElementTypes.IOutputPort_2001;
-//    ViewAndElementDescriptor viewDescriptor = new ViewAndElementDescriptor( new CreateElementRequestAdapter( new CreateElementRequest( type ) ),
-//                                                                            Node.class,
-//                                                                            ( ( IHintedType )type ).getSemanticHint(),
-//                                                                            selectedElement.getDiagramPreferencesHint() );
-//    
-//    Command cmd = selectedElement.getCommand( new CreateViewAndElementRequest(viewDescriptor) );
-//    return cmd;
-//  }    
 
+  //  
+  // private Command createInputPortCommand() {
+  // WorkflowJobEditPart selectedElement = ( WorkflowJobEditPart )getHost();
+  // IElementType type = WorkflowElementTypes.IInputPort_2002;
+  // ViewAndElementDescriptor viewDescriptor = new ViewAndElementDescriptor( new
+  // CreateElementRequestAdapter( new CreateElementRequest( type ) ),
+  // Node.class,
+  // ( ( IHintedType )type ).getSemanticHint(),
+  // selectedElement.getDiagramPreferencesHint() );
+  //    
+  // Command cmd = selectedElement.getCommand( new
+  // CreateViewAndElementRequest(viewDescriptor) );
+  // return cmd;
+  // }
+  //  
+  // private Command createOutputPortCommand() {
+  // WorkflowJobEditPart selectedElement = ( WorkflowJobEditPart )getHost();
+  // IElementType type = WorkflowElementTypes.IOutputPort_2001;
+  // ViewAndElementDescriptor viewDescriptor = new ViewAndElementDescriptor( new
+  // CreateElementRequestAdapter( new CreateElementRequest( type ) ),
+  // Node.class,
+  // ( ( IHintedType )type ).getSemanticHint(),
+  // selectedElement.getDiagramPreferencesHint() );
+  //    
+  // Command cmd = selectedElement.getCommand( new
+  // CreateViewAndElementRequest(viewDescriptor) );
+  //    return cmd;
+  //  }    
   /**
    * @generated
    */
