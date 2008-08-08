@@ -32,6 +32,8 @@ class SSHConnectionInfo implements UserInfo, UIKeyboardInteractive {
   private int port;
   private boolean promptPasswd;
   private boolean promptPassphrase;
+  private boolean passwordInteractiveUsed;
+  private String[] keyboardInteractiveResult;
 
   SSHConnectionInfo( final String username, final String hostname,
                      final String password, final String passphrase,
@@ -141,11 +143,27 @@ class SSHConnectionInfo implements UserInfo, UIKeyboardInteractive {
     return this.canceledPWValue;
   }
 
-  public String[] promptKeyboardInteractive( final String arg0,
-                                             final String arg1,
-                                             final String arg2,
-                                             final String[] arg3,
-                                             final boolean[] arg4 ) {
-    return new String[]{this.passwd};
+  public String[] promptKeyboardInteractive( final String destination,
+                                             final String name,
+                                             final String instruction,
+                                             final String[] prompt,
+                                             final boolean[] echo ) {
+    String[] result;
+    if ( this.passwordInteractiveUsed ) {
+      Display.getDefault().syncExec( new Runnable() {
+        public void run() {
+          PasswordDialog dlg = new PasswordDialog( Display.getCurrent().getActiveShell(),
+                                                   Messages.getString( "SshShell.sshTerminal" ), //$NON-NLS-1$
+                                                   prompt[0], null, null);
+          dlg.open();
+          keyboardInteractiveResult = new String[]{dlg.getValue()};
+        }
+      } );
+      result = this.keyboardInteractiveResult;
+    } else {
+      this.passwordInteractiveUsed = true;
+      result = new String[]{this.passwd};
+    }
+    return result;
   }
 }
