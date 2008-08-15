@@ -19,53 +19,45 @@ package eu.geclipse.aws.s3;
  * Problem IDs for AWS problems.
  */
 public interface IS3Problems {
-  
+
   /**
    * ID for the service creation failed problem.
    */
-  public static final String REST_SERVICE_CREATION_FAILED
-    = "eu.geclipse.aws.s3.problem.service.s3.rest.creationFailed"; //$NON-NLS-1$
-  
+  public static final String REST_SERVICE_CREATION_FAILED = "eu.geclipse.aws.s3.problem.service.rest.creationFailed"; //$NON-NLS-1$
+
   /**
    * ID for the bucket creation failed problem.
    */
-  public static final String S3_BUCKET_CREATION_FAILED
-    = "eu.geclipse.aws.s3.problem.s3.bucketCreateFailed"; //$NON-NLS-1$
-  
+  public static final String S3_BUCKET_CREATION_FAILED = "eu.geclipse.aws.s3.problem.bucketCreateFailed"; //$NON-NLS-1$
+
   /**
    * ID for the bucket creation failed problem.
    */
-  public static final String S3_BUCKET_IN_BUCKET_FAILED
-    = "eu.geclipse.aws.s3.problem.s3.bucketInBucketFailed"; //$NON-NLS-1$
-  
+  public static final String S3_BUCKET_IN_BUCKET_FAILED = "eu.geclipse.aws.s3.problem.bucketInBucketFailed"; //$NON-NLS-1$
+
   /**
    * ID for the list failed problem.
    */
-  public static final String S3_LIST_FAILED =
-    "eu.geclipse.aws.s3.problem.s3.listFailed"; //$NON-NLS-1$
-  
+  public static final String S3_LIST_FAILED = "eu.geclipse.aws.s3.problem.listFailed"; //$NON-NLS-1$
+
   /**
    * ID for the input failed problem.
    */
-  public static final String S3_INPUT_FAILED =
-    "eu.geclipse.aws.s3.problem.s3.inputFailed"; //$NON-NLS-1$
-  
+  public static final String S3_INPUT_FAILED = "eu.geclipse.aws.s3.problem.inputFailed"; //$NON-NLS-1$
+
   /**
    * ID for the output failed problem.
    */
-  public static final String S3_OUTPUT_FAILED =
-    "eu.geclipse.aws.s3.problem.s3.outputFailed"; //$NON-NLS-1$
-  
+  public static final String S3_OUTPUT_FAILED = "eu.geclipse.aws.s3.problem.outputFailed"; //$NON-NLS-1$
+
   /**
    * ID for the object load failed problem.
    */
-  public static final String S3_OBJECT_LOAD_FAILED =
-    "eu.geclipse.aws.s3.problem.s3.objectLoadFailed"; //$NON-NLS-1$
-  
+  public static final String S3_OBJECT_LOAD_FAILED = "eu.geclipse.aws.s3.problem.objectLoadFailed"; //$NON-NLS-1$
+
   /**
    * ID for the delete failed problem.
    */
-  public static final String S3_DELETE_FAILED =
-    "eu.geclipse.aws.s3.problem.s3.deleteFailed"; //$NON-NLS-1$
+  public static final String S3_DELETE_FAILED = "eu.geclipse.aws.s3.problem.deleteFailed"; //$NON-NLS-1$
 
 }
