@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+	<extension-point id="Statistics" name="Statistics"
+		schema="schema/Statistics.exsd" />
+	<extension-point id="Visualizations" name="Visualizations"
+		schema="schema/Visualizations.exsd" />
+ <extension-point id="Category" name="Category" schema="schema/Category.exsd"/>
+	<extension point="eu.geclipse.traceview.TraceVisualization">
+		<VisualizationProviderClass
+			class="eu.geclipse.traceview.statistics.StatisticsVisualisationProvider"
+			id="eu.geclipse.traceview.statistics.StatisticsVisProvider"
+			label="Statistics">
+		</VisualizationProviderClass>
+	</extension>
+	<extension point="eu.geclipse.traceview.statistics.Statistics">
+		<StatisticsClass
+			class="eu.geclipse.traceview.statistics.providers.FunctionDistributionIndividual"
+			id="eu.geclipse.traceview.statistics.FunctionDistributionIndividual">
+		</StatisticsClass>
+		<StatisticsClass
+			class="eu.geclipse.traceview.statistics.providers.IndividualTimeConsumption"
+			id="eu.geclipse.traceview.statistics.IndividualTimeConsumption">
+		</StatisticsClass>
+  <StatisticsClass
+        class="eu.geclipse.traceview.statistics.providers.FunctionDistributionCombined"
+        id="eu.geclipse.traceview.statistics.providers.FunctionDistributionCombined">
+  </StatisticsClass>
+	</extension>
+
+
+	<extension
+		point="eu.geclipse.traceview.statistics.Visualizations">
+		<VisualisationClass
+			class="eu.geclipse.traceview.statistics.chartbuilder.PieChartBuilder"
+			id="eu.geclipse.traceview.statistics.chartbuilder.PieChartBuilder"
+			name="Pie Chart" x="1" y="category">
+		</VisualisationClass>
+		<VisualisationClass
+			class="eu.geclipse.traceview.statistics.chartbuilder.StackedChartBuilder"
+			id="eu.geclipse.traceview.statistics.chartbuilder.StackedChartBuilder"
+			name="Stacked Chart" x="1" y="2" z="category">
+		</VisualisationClass>
+  <VisualisationClass
+        class="eu.geclipse.traceview.statistics.chartbuilder.MultiplePieChartBuilder"
+        id="eu.geclipse.traceview.statistics.MultiplePieChartBuilder"
+        name="Multpile Pie Chart"
+        x="1"
+        y="2"
+        z="category">
+  </VisualisationClass>
+	</extension>
+ <extension
+       point="eu.geclipse.traceview.statistics.Category">
+    <Category
+          id="eu.geclipse.traceview.statistics.Category.one"
+          name="abc">
+    </Category>
+    
+ </extension>
+
+</plugin>

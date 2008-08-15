@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            name="Nope Legend"
+            icon="icons/sample.gif"
+            category="eu.geclipse.ui.viewcategory"
+            class="eu.geclipse.traceview.nope.views.Legend"
+            id="eu.geclipse.eventgraph.mpi.views.Legend">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="eu.geclipse.ui.gEclipsePerspective">
+      </perspectiveExtension>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="eu.geclipse.traceview.nope.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+   <extension
+         point="eu.geclipse.traceview.EventMarker">
+      <MarkerClass
+            id="eu.geclipse.traceview.nope.markers.NopeEventMarker"
+            class="eu.geclipse.traceview.nope.markers.NopeEventMarker"
+            label="Nope Event Marker">
+      </MarkerClass>
+   </extension>
+   <extension
+         point="eu.geclipse.traceview.TraceReader">
+      <ReaderClass
+            class="eu.geclipse.traceview.nope.tracereader.Trace"
+            fileextension="000"
+            label="NOPE trace file">
+      </ReaderClass>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="eu.geclipse.traceview.preferences.TraceViewPreferencesPage"
+            class="eu.geclipse.traceview.nope.preferences.PreferencePage"
+            id="eu.geclipse.traceview.nope.NopePreferencesPage"
+            name="Nope Trace Reader">
+      </page>
+   </extension>
+
+</plugin>

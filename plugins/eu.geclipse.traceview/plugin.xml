@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension-point id="TraceReader" name="Trace Reader" schema="schema/TraceReader.exsd"/>
+   <extension-point id="EventMarker" name="Event Marker" schema="schema/EventMarker.exsd"/>
+   <extension-point id="TraceVisualization" name="Trace Visualization" schema="schema/TraceVisualization.exsd"/>
+
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            category="eu.geclipse.ui.viewcategory"
+            class="eu.geclipse.traceview.views.TraceView"
+            icon="icons/test.gif"
+            id="eu.geclipse.traceview.views.TraceView"
+            name="Trace Viewer">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="eu.geclipse.ui.gEclipsePerspective">
+         <view
+               closeable="true"
+               id="eu.geclipse.traceview.views.TraceView"
+               moveable="true"
+               ratio="1.0"
+               relationship="stack"
+               relative="eu.geclipse.ui.gEclipsePerspective.main"
+               showTitle="true"
+               visible="true">
+         </view>
+      </perspectiveExtension>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="eu.geclipse.ui.internal.preference.GEclipsePreferencePage"
+            class="eu.geclipse.traceview.preferences.PreferencesPage"
+            id="eu.geclipse.traceview.preferences.TraceViewPreferencesPage"
+            name="Trace Viewer"/>
+<!--      <page
+            category="eu.geclipse.traceview.preferences.TraceViewPreferencesPage"
+            class="eu.geclipse.traceview.preferences.MarkerPreferencesPage"
+            id="eu.geclipse.traceview.preferences.MarkerPreferencesPage"
+            name="Markers"/> -->
+   </extension>
+   <extension
+         id="testid"
+         name="test"
+         point="org.eclipse.core.runtime.preferences">
+      <initializer class="eu.geclipse.traceview.preferences.PreferenceInitializer"/>
+   </extension>
+   <extension
+         point="eu.geclipse.traceview.TraceVisualization">
+      <VisualizationProviderClass
+            class="eu.geclipse.traceview.logicalgraph.LogicalGraphProvider"
+            id="eu.geclipse.traceview.logicalgraph.LogicalGraphProvider"
+            label="Logical Graph">
+      </VisualizationProviderClass>
+      <VisualizationProviderClass
+            class="eu.geclipse.traceview.physicalgraph.PhysicalGraphProvider"
+            id="eu.geclipse.traceview.physicalgraph.PhysicalGraphProvider"
+            label="Physical Graph"/>
+   </extension>
+
+   <extension point="org.eclipse.ui.popupMenus">
+      <objectContribution
+        id="eu.geclipse.traceview.internal.GotoSourceActionID"
+        objectClass="eu.geclipse.traceview.ISourceLocation">
+            <action
+                id="eu.geclipse.traceview.internal.GotoSourceAction"
+                label="Goto Source"
+                class="eu.geclipse.traceview.internal.GotoSourceAction">
+            </action>
+           </objectContribution>
+   <objectContribution
+         id="eu.geclipse.traceview.internal.CauseEffectActionID"
+         objectClass="eu.geclipse.traceview.IVectorEvent">
+      <action
+            class="eu.geclipse.traceview.internal.CauseEffectAction"
+            id="eu.geclipse.traceview.internal.CauseEffectAction"
+            label="Cause Effect">
+      </action>
+   </objectContribution>
+    </extension>
+   <extension
+         point="eu.geclipse.traceview.EventMarker">
+      <MarkerClass
+            class="eu.geclipse.traceview.internal.CauseEffectMarker"
+            id="eu.geclipse.traceview.markers.CauseEffectMarker"
+            label="Cause Effect Marker">
+      </MarkerClass>
+   </extension>
+</plugin>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         point="eu.geclipse.traceview.EventMarker">
+      <MarkerClass
+            id="eu.geclipse.traceview.nope.debug.EventBreakpointMarker"
+            class="eu.geclipse.traceview.debug.EventBreakpointMarker"
+            label="Event Breakpoint Marker"/>
+   </extension>
+   <extension point="org.eclipse.ui.popupMenus">
+      <objectContribution
+        id="eu.geclipse.traceview.nope.debug.EventBreakpointAction"
+        objectClass="eu.geclipse.traceview.ISourceLocation">
+            <action
+                id="eu.geclipse.traceview.nope.debug.EventBreakpointAction" 
+                label="Toggle Local Breakpoint"
+                icon="icons/obj16/brkp_obj.gif"
+                class="eu.geclipse.traceview.debug.actions.LocalBreakpointAction">
+            </action>
+            <action
+                class="eu.geclipse.traceview.debug.actions.GlobalBreakpointAction"
+                icon="icons/obj16/brkp_obj.gif"
+                id="eu.geclipse.traceview.nope.debug.action1"
+                label="Toggle Global Breakpoint">
+            </action>
+      </objectContribution>
+   </extension>
+   <extension
+      id="eu.geclipse.traceview.debug.BreakpointMarker"
+      point="org.eclipse.core.resources.markers">
+      <super
+            type="org.eclipse.cdt.debug.core.commonCLineBreakpointMarker">
+      </super>
+       <persistent
+            value="true">
+      </persistent>
+   </extension>
+   <extension
+         point="org.eclipse.debug.core.breakpoints">
+      <breakpoint
+            class="eu.geclipse.traceview.debug.EventBreakpoint"
+            id="eu.geclipse.traceview.debug.pbreakpoint"
+            markerType="eu.geclipse.traceview.debug.BreakpointMarker"
+            name="Test Break point">
+      </breakpoint>
+   </extension>
+</plugin>
