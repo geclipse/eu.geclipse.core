@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -156,13 +156,12 @@ public class StoredCombo extends Combo {
   }
   
   /**
-   * Set the item that is displayed as default. The item is tested for validity with the 
-   * {@link #isValidItem(String)} method. If the item is not valid it is ignored and not
-   * set as default. This method returns the result of {@link #isValidItem(String)} and
-   * therefore returns true if the item was set successfully as default.
+   * Set the item that is displayed as default. The item is tested for validity
+   * (with the isValidItem() method), and if invalid it is ignored and not set
+   * as default. This method returns true if the item was set successfully as default.
    * 
    * @param defaultItem The item that should be set as default.
-   * @return True of the item is valid and could be set as default, false otherwise.
+   * @return true if the item is valid and could be set as default, false otherwise.
    */
   public boolean setDefaultItem( final String defaultItem ) {
     boolean valid = isValidItem( defaultItem ); 
