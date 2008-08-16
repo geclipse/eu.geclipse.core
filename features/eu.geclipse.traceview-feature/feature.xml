@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="eu.geclipse.traceview"
+      label="g-Eclipse Traceview Components (Incubation)"
+      version="1.0.0.qualifier"
+      provider-name="Eclipse.org"
+      plugin="eu.geclipse">
+
+   <description url="http://www.eclipse.org/geclipse">
+      g-Eclipse provides tools and frameworks to access Computing Grids.
+This feature contains the traceview components for parallel programs analysis.
+   </description>
+
+   <copyright url="http://www.eclipse.org/legal/epl-v10.html">
+      Copyright (c) 2006-2008 g-Eclipse consortium
+All rights reserved. This program and the accompanying materials
+are made available under the terms of the Eclipse Public License
+v1.0 which accompanies this distribution, and is available at
+http://www.eclipse.org/legal/epl-v10.html
+Initial development of the original code was made for the g-Eclipse
+project founded by European Union project number: FP5-IST-034327
+http://www.geclipse.eu/
+   </copyright>
+
+   <license url="http://www.eclipse.org/legal/epl-v10.html">
+      %license
+   </license>
+
+   <url>
+      <update label="g-Eclipse (incubation) main Update Site" url="http://download.eclipse.org/technology/geclipse/updates/1.0milestones/site.xml"/>
+   </url>
+
+   <requires>
+      <import plugin="org.eclipse.birt.chart.engine"/>
+      <import plugin="org.eclipse.cdt.core"/>
+      <import plugin="org.eclipse.cdt.debug.core"/>
+      <import plugin="org.eclipse.core.filebuffers"/>
+      <import plugin="org.eclipse.core.resources"/>
+      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="org.eclipse.debug.core"/>
+      <import plugin="org.eclipse.jface"/>
+      <import plugin="org.eclipse.jface.text"/>
+      <import plugin="org.eclipse.swt"/>
+      <import plugin="org.eclipse.ui"/>
+      <import plugin="org.eclipse.ui.browser"/>
+      <import plugin="org.eclipse.ui.editors"/>
+      <import plugin="org.eclipse.ui.ide"/>
+      <import plugin="org.eclipse.ui.views"/>
+   </requires>
+
+   <plugin
+         id="eu.geclipse"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+   <plugin
+         id="eu.geclipse.traceview"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="eu.geclipse.traceview.debug"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="eu.geclipse.traceview.nope"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="eu.geclipse.traceview.otf"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="eu.geclipse.traceview.statistics"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>
