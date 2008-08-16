@@ -142,8 +142,8 @@ public class StatisticsVisualisation extends TraceVisualization {
     try {
       PluginSettings ps = PluginSettings.instance();
       this.render = ps.getDevice( "dv.SWT" ); //$NON-NLS-1$
-    } catch( ChartException ex ) {
-      ex.printStackTrace();
+    } catch( ChartException exception ) {
+      Activator.logException( exception );
     }
     // Scrolled Composite
     Label l = new Label( chartGroup, SWT.NONE );
@@ -345,8 +345,8 @@ public class StatisticsVisualisation extends TraceVisualization {
       this.render.setProperty( IDeviceRenderer.GRAPHICS_CONTEXT, gc );
       Generator gr = Generator.instance();
       gr.render( this.render, this.state );
-    } catch( ChartException ex ) {
-      ex.printStackTrace();
+    } catch( ChartException exception ) {
+      Activator.logException( exception );
     } finally {
       if( gc != null )
         gc.dispose();
@@ -371,8 +371,8 @@ public class StatisticsVisualisation extends TraceVisualization {
                              null,
                              null,
                              null );
-    } catch( ChartException ex ) {
-      ex.printStackTrace();
+    } catch( ChartException exception ) {
+      Activator.logException( exception );
     }
     this.cachedImage = null;
   }

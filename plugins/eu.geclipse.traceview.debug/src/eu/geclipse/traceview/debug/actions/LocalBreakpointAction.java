@@ -34,8 +34,8 @@ public class LocalBreakpointAction extends AbstractEventBreakpointAction {
         DebugPlugin.getDefault()
           .getBreakpointManager()
           .addBreakpoint( eventBreakpoint );
-      } catch( CoreException e ) {
-        e.printStackTrace();
+      } catch( CoreException exception ) {
+        Activator.logException( exception );
       }
       Display.getDefault().asyncExec( new Runnable() {
 

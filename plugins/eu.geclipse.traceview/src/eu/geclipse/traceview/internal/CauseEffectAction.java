@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2008 g-Eclipse Consortium 
+ * Copyright (c) 2006, 2008 g-Eclipse Consortium
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -63,9 +63,8 @@ public class CauseEffectAction extends Action implements IActionDelegate {
             .getActivePage()
             .showView( "eu.geclipse.traceview.views.TraceView" ); //$NON-NLS-1$
           traceView.redraw();
-        } catch( PartInitException e ) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
+        } catch( PartInitException exception ) {
+          Activator.logException( exception );
         }
       }
     } );

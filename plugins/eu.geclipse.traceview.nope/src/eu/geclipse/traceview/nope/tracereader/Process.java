@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2008 g-Eclipse Consortium 
+ * Copyright (c) 2006, 2008 g-Eclipse Consortium
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -30,18 +30,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
 
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 
 import eu.geclipse.traceview.EventType;
 import eu.geclipse.traceview.ITrace;
+import eu.geclipse.traceview.nope.Activator;
 import eu.geclipse.traceview.utils.AbstractFileCacheProcess;
 
 /**
  * NOPE (NOndeterministic Program Evaluator) Process
  */
 public class Process extends AbstractFileCacheProcess {
-  
+
   /* StatusByte */
   /** a processors byte ordering */
   public static byte trcLittleEndian = ( byte )0x80;
@@ -107,11 +109,11 @@ public class Process extends AbstractFileCacheProcess {
   public static byte trcTTestLoop = 0x05;
   /** array inspection type */
   public static byte trcTArrInsp = 0x06;
-  
+
   private static final String PROP_ID = "Process.Id"; //$NON-NLS-1$
-  
+
   private static IPropertyDescriptor[] descriptors;
-  
+
   /*
    * Information of from the File
    */
@@ -229,9 +231,9 @@ public class Process extends AbstractFileCacheProcess {
     } catch( EOFException eofException ) {
       // do nothing (because of unsupported event types)
     } catch( FileNotFoundException fileNotFoundException ) {
-      fileNotFoundException.printStackTrace();
+      Activator.logException( fileNotFoundException );
     } catch( IOException ioException ) {
-      ioException.printStackTrace();
+      Activator.logException( ioException );
     }
   }
 
@@ -240,7 +242,7 @@ public class Process extends AbstractFileCacheProcess {
   // *****************************************************
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see org.eclipse.ui.views.properties.IPropertySource#getPropertyDescriptors()
    */
   @Override
@@ -250,7 +252,7 @@ public class Process extends AbstractFileCacheProcess {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java.lang.Object)
    */
   @Override
@@ -263,7 +265,7 @@ public class Process extends AbstractFileCacheProcess {
   // *****************************************************
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see eu.geclipse.traceview.IProcess#getEventByLogicalClock(int)
    */
   public Event getEventByLogicalClock( final int index )
@@ -291,60 +293,64 @@ public class Process extends AbstractFileCacheProcess {
     return result;
   }
 
+  private void debugOutput( final String message ) {
+//    System.out.println( message );
+  }
+
   private void headerInfo() {
-    System.out.println( "version of trace file : " + this.version ); //$NON-NLS-1$
-    System.out.println( "processor             : " + this.processId ); //$NON-NLS-1$
-    System.out.println( "filename:             : " + this.traceFileName ); //$NON-NLS-1$
-    System.out.println( "filesize:             : " + this.fileSize ); //$NON-NLS-1$
+    debugOutput( "version of trace file : " + this.version ); //$NON-NLS-1$
+    debugOutput( "processor             : " + this.processId ); //$NON-NLS-1$
+    debugOutput( "filename:             : " + this.traceFileName ); //$NON-NLS-1$
+    debugOutput( "filesize:             : " + this.fileSize ); //$NON-NLS-1$
     if( this.isTrcBigEndian ) {
-      System.out.println( "byte ordering         : big endian" ); //$NON-NLS-1$
+      debugOutput( "byte ordering         : big endian" ); //$NON-NLS-1$
     } else {
-      System.out.println( "byte ordering         : little endian" ); //$NON-NLS-1$
+      debugOutput( "byte ordering         : little endian" ); //$NON-NLS-1$
     }
-    System.out.println( "trace amount          : " + this.traceAmount ); //$NON-NLS-1$
-    System.out.println( "source switch         : " + this.source ); //$NON-NLS-1$
-    System.out.println( "level of impl         : " + this.level ); //$NON-NLS-1$
-    System.out.println( "data amount           : " + this.dataAmount ); //$NON-NLS-1$
-    System.out.println( "multiprocessor        : " + this.multiprocessor ); //$NON-NLS-1$
-    System.out.println( "program name          : " + this.filename ); //$NON-NLS-1$ 
-    System.out.println( "program args          : " + this.arguments ); //$NON-NLS-1$
-    System.out.println( "run time start        : " + this.runTimeStart ); //$NON-NLS-1$
-    System.out.println( "mon strategy          : " + this.monStrat ); //$NON-NLS-1$
-    System.out.println( "model of prog         : " + this.monPModel ); //$NON-NLS-1$
-    System.out.println( "error mon             : " + this.monError ); //$NON-NLS-1$
-    System.out.println( "flushing mode         : " + this.monFlush ); //$NON-NLS-1$
-    System.out.println( "file buffer           : " + this.monBuffer ); //$NON-NLS-1$
-    System.out.println( "tracing disk          : " + this.monStor ); //$NON-NLS-1$
+    debugOutput( "trace amount          : " + this.traceAmount ); //$NON-NLS-1$
+    debugOutput( "source switch         : " + this.source ); //$NON-NLS-1$
+    debugOutput( "level of impl         : " + this.level ); //$NON-NLS-1$
+    debugOutput( "data amount           : " + this.dataAmount ); //$NON-NLS-1$
+    debugOutput( "multiprocessor        : " + this.multiprocessor ); //$NON-NLS-1$
+    debugOutput( "program name          : " + this.filename ); //$NON-NLS-1$
+    debugOutput( "program args          : " + this.arguments ); //$NON-NLS-1$
+    debugOutput( "run time start        : " + this.runTimeStart ); //$NON-NLS-1$
+    debugOutput( "mon strategy          : " + this.monStrat ); //$NON-NLS-1$
+    debugOutput( "model of prog         : " + this.monPModel ); //$NON-NLS-1$
+    debugOutput( "error mon             : " + this.monError ); //$NON-NLS-1$
+    debugOutput( "flushing mode         : " + this.monFlush ); //$NON-NLS-1$
+    debugOutput( "file buffer           : " + this.monBuffer ); //$NON-NLS-1$
+    debugOutput( "tracing disk          : " + this.monStor ); //$NON-NLS-1$
   }
 
   private void eventInfo( final Event event ) {
-    System.out.println( "Type: " + event.getType() ); //$NON-NLS-1$
-    System.out.println();
-    System.out.println( "traceComm.blocking: " + event.getBlocking() ); //$NON-NLS-1$
-    System.out.println( "traceComm.commname: " + event.getSubType() ); //$NON-NLS-1$
-    System.out.println();
-    System.out.println( "(traceComm.supposed)->partner: " //$NON-NLS-1$
+    debugOutput( "Type: " + event.getType() ); //$NON-NLS-1$
+    debugOutput( "" );
+    debugOutput( "traceComm.blocking: " + event.getBlocking() ); //$NON-NLS-1$
+    debugOutput( "traceComm.commname: " + event.getSubType() ); //$NON-NLS-1$
+    debugOutput( "" );
+    debugOutput( "(traceComm.supposed)->partner: " //$NON-NLS-1$
                         + event.getSupposedPartnerProcess() );
-    System.out.println( "(traceComm.supposed)->msgtype: " //$NON-NLS-1$
+    debugOutput( "(traceComm.supposed)->msgtype: " //$NON-NLS-1$
                         + event.getSupposedMessageType() );
-    System.out.println( "(traceComm.supposed)->msglength: " //$NON-NLS-1$
+    debugOutput( "(traceComm.supposed)->msglength: " //$NON-NLS-1$
                         + event.getSupposedMessageLength() );
-    System.out.println();
-    System.out.println( "(traceComm.accepted)->partner: " //$NON-NLS-1$
+    debugOutput( "" );
+    debugOutput( "(traceComm.accepted)->partner: " //$NON-NLS-1$
                         + event.getAcceptedPartnerProcess() );
-    System.out.println( "(traceComm.accepted)->msgtype: " //$NON-NLS-1$
+    debugOutput( "(traceComm.accepted)->msgtype: " //$NON-NLS-1$
                         + event.getAcceptedMessageType() );
-    System.out.println( "(traceComm.accepted)->msglength: " //$NON-NLS-1$
+    debugOutput( "(traceComm.accepted)->msglength: " //$NON-NLS-1$
                         + event.getAcceptedMessageLength() );
-    System.out.println();
-    System.out.println( "traceTime.log: " + event.getLogicalClock() ); //$NON-NLS-1$
-    System.out.println( "traceTime.partnerLog: " //$NON-NLS-1$
+    debugOutput( "" );
+    debugOutput( "traceTime.log: " + event.getLogicalClock() ); //$NON-NLS-1$
+    debugOutput( "traceTime.partnerLog: " //$NON-NLS-1$
                         + event.getPartnerLogicalClock() );
-    System.out.println( "traceTime.timeStart: " + event.getPhysicalStartClock() ); //$NON-NLS-1$
-    System.out.println( "traceTime.timeStop: " + event.getPhysicalStopClock() ); //$NON-NLS-1$
-    System.out.println();
-    System.out.println( "traceExt.line: " + event.getSourceLineNumber() ); //$NON-NLS-1$
-    System.out.println( "traceExt.file: " + event.getSourceFilename() ); //$NON-NLS-1$
+    debugOutput( "traceTime.timeStart: " + event.getPhysicalStartClock() ); //$NON-NLS-1$
+    debugOutput( "traceTime.timeStop: " + event.getPhysicalStopClock() ); //$NON-NLS-1$
+    debugOutput( "" );
+    debugOutput( "traceExt.line: " + event.getSourceLineNumber() ); //$NON-NLS-1$
+    debugOutput( "traceExt.file: " + event.getSourceFilename() ); //$NON-NLS-1$
   }
 
   void readHeader() throws IOException {
@@ -384,11 +390,11 @@ public class Process extends AbstractFileCacheProcess {
       readSourceEvent();
       event = readEvent();
     } else if( traceType == trcOthers ) {
-      System.out.println( "unimplemented event type: trcOthers" ); //$NON-NLS-1$
+      Activator.logMessage( IStatus.WARNING, "unimplemented event type: trcOthers" ); //$NON-NLS-1$
     } else if( traceType == trcTrace ) {
       event = readTraceEvent();
     } else {
-      System.out.println( "unknown event type" ); //$NON-NLS-1$
+      Activator.logMessage( IStatus.ERROR, "unknown event type" ); //$NON-NLS-1$
     }
     return event;
   }
@@ -437,7 +443,7 @@ public class Process extends AbstractFileCacheProcess {
     event.setAcceptedMessageType( readInt() );
     event.setAcceptedMessageLength( readInt() );
     readInt();
-//    int logicalClock = 
+//    int logicalClock =
 //    if( logicalClock != this.previousLogicalClock ) {
 //      System.out.println( "logical clock mismatch: "
 //                          + logicalClock
@@ -467,17 +473,17 @@ public class Process extends AbstractFileCacheProcess {
     Event event = null;
     byte subtype = this.dataInputStream.readByte();
     if( subtype == trcTVarInsp ) {
-      System.out.println( "subtype trcTVarInsp not supported" ); //$NON-NLS-1$
+      Activator.logMessage( IStatus.WARNING, "subtype trcTVarInsp not supported" ); //$NON-NLS-1$
     } else if( subtype == trcTFlush ) {
-      System.out.println( "subtype trcTFlush not supported" ); //$NON-NLS-1$
+      Activator.logMessage( IStatus.WARNING, "subtype trcTFlush not supported" ); //$NON-NLS-1$
     } else if( subtype == trcTOnOff ) {
       event = readEventSubTypeTOnOff();
     } else if( subtype == trcTTimer ) {
-      System.out.println( "subtype trcTTimer not supported" ); //$NON-NLS-1$
+      Activator.logMessage( IStatus.WARNING, "subtype trcTTimer not supported" ); //$NON-NLS-1$
     } else if( subtype == trcTMsgQueue ) {
-      System.out.println( "subtype trcTMsgQueue not supported" ); //$NON-NLS-1$
+      Activator.logMessage( IStatus.WARNING, "subtype trcTMsgQueue not supported" ); //$NON-NLS-1$
     } else if( subtype == trcTTestLoop ) {
-      System.out.println( "subtype trcTTestLoop not supported" ); //$NON-NLS-1$
+      Activator.logMessage( IStatus.WARNING, "subtype trcTTestLoop not supported" ); //$NON-NLS-1$
     } else if( subtype == trcTArrInsp ) {
       event = readEventSubTypeTArrInsp();
     }
@@ -572,7 +578,7 @@ public class Process extends AbstractFileCacheProcess {
 
   /**
    * Converts event type from TrcUtil constant to {@link EventType} enum
-   * 
+   *
    * @param type TrcUtil constant.
    * @return EventType matching the TrcUtil constant.
    */

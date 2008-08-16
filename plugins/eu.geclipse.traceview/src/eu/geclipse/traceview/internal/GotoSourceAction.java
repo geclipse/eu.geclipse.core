@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2008 g-Eclipse Consortium 
+ * Copyright (c) 2006, 2008 g-Eclipse Consortium
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -46,7 +46,7 @@ import org.eclipse.ui.texteditor.ITextEditor;
 import eu.geclipse.traceview.ISourceLocation;
 
 /**
- * 
+ *
  *
  */
 public class GotoSourceAction extends Action implements IActionDelegate {
@@ -87,15 +87,12 @@ public class GotoSourceAction extends Action implements IActionDelegate {
                                  new Status(IStatus.ERROR, Activator.PLUGIN_ID, Messages.getString("GotoSourceAction.noSourceLocation"))); //$NON-NLS-1$
         }
       }
-    } catch( PartInitException e ) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch( CoreException e ) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch( BadLocationException e ) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
+    } catch( PartInitException exception ) {
+      Activator.logException( exception );
+    } catch( CoreException exception ) {
+      Activator.logException( exception );
+    } catch( BadLocationException exception ) {
+      Activator.logException( exception );
     }
   }
 

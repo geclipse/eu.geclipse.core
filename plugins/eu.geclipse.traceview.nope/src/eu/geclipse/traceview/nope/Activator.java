@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2008 g-Eclipse Consortium 
+ * Copyright (c) 2006, 2008 g-Eclipse Consortium
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -40,7 +40,7 @@ public class Activator extends AbstractUIPlugin {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
    */
   @Override
@@ -51,7 +51,7 @@ public class Activator extends AbstractUIPlugin {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
    */
   @Override
@@ -62,7 +62,7 @@ public class Activator extends AbstractUIPlugin {
 
   /**
    * Returns the shared instance
-   * 
+   *
    * @return the shared instance
    */
   public static Activator getDefault() {
@@ -72,7 +72,7 @@ public class Activator extends AbstractUIPlugin {
   /**
    * Returns an image descriptor for the image file at the given plug-in
    * relative path
-   * 
+   *
    * @param path the path
    * @return the image descriptor
    */
@@ -82,7 +82,7 @@ public class Activator extends AbstractUIPlugin {
 
   /**
    * Logs an exception.
-   * 
+   *
    * @param exception the exception.
    */
   public static void logException( final Exception exception ) {
@@ -95,6 +95,21 @@ public class Activator extends AbstractUIPlugin {
                                  IStatus.OK,
                                  message,
                                  exception );
+    getDefault().getLog().log( status );
+  }
+
+  /**
+   * Logs a message.
+   *
+   * @param severity severity constant (defined in IStatus).
+   * @param message the message to log.
+   */
+  public static void logMessage( final int severity, final String message ) {
+    IStatus status = new Status( severity,
+                                 PLUGIN_ID,
+                                 IStatus.OK,
+                                 message,
+                                 null );
     getDefault().getLog().log( status );
   }
 }

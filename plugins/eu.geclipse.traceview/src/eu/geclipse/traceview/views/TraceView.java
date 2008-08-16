@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2008 g-Eclipse Consortium 
+ * Copyright (c) 2006, 2008 g-Eclipse Consortium
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -77,7 +77,7 @@ public class TraceView extends ViewPart implements ITraceView {
 
   /**
    * Creates the toolbar
-   * 
+   *
    * @param id
    */
   public void createToolbar( final String id ) {
@@ -98,10 +98,10 @@ public class TraceView extends ViewPart implements ITraceView {
                 ITraceReader traceReader = ( ITraceReader )configurationElement.createExecutableExtension( "class" ); //$NON-NLS-1$
                 ITrace trace = traceReader.openTrace( path );
                 addTrace( trace );
-              } catch( CoreException e ) {
-                e.printStackTrace();
-              } catch( IOException e ) {
-                e.printStackTrace();
+              } catch( CoreException exception ) {
+                Activator.logException( exception );
+              } catch( IOException exception ) {
+                Activator.logException( exception );
               }
             }
           }
@@ -207,7 +207,7 @@ public class TraceView extends ViewPart implements ITraceView {
 
   /**
    * Returns the MenuManager
-   * 
+   *
    * @return menuManager
    */
   public MenuManager getContextMenuManager() {
@@ -221,7 +221,7 @@ public class TraceView extends ViewPart implements ITraceView {
 
   /**
    * Returns the trace of the active visualization
-   * 
+   *
    * @return trace
    */
   public ITrace getTrace() {

@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2008 g-Eclipse Consortium 
+ * Copyright (c) 2006, 2008 g-Eclipse Consortium
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -24,6 +24,7 @@ import eu.geclipse.traceview.ILamportEvent;
 import eu.geclipse.traceview.ILamportProcess;
 import eu.geclipse.traceview.IPhysicalEvent;
 import eu.geclipse.traceview.IPhysicalProcess;
+import eu.geclipse.traceview.internal.Activator;
 
 public abstract class AbstractProcess
   implements ILamportProcess, IPhysicalProcess
@@ -39,7 +40,7 @@ public abstract class AbstractProcess
   // *****************************************************
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see org.eclipse.ui.views.properties.IPropertySource#getPropertyDescriptors()
    */
   public IPropertyDescriptor[] getPropertyDescriptors() {
@@ -48,7 +49,7 @@ public abstract class AbstractProcess
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java.lang.Object)
    */
   public Object getPropertyValue( final Object id ) {
@@ -58,7 +59,7 @@ public abstract class AbstractProcess
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java.lang.Object,
    *      java.lang.Object)
    */
@@ -68,7 +69,7 @@ public abstract class AbstractProcess
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see org.eclipse.ui.views.properties.IPropertySource#isPropertySet(java.lang.Object)
    */
   public boolean isPropertySet( final Object id ) {
@@ -77,7 +78,7 @@ public abstract class AbstractProcess
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see org.eclipse.ui.views.properties.IPropertySource#resetPropertyValue(java.lang.Object)
    */
   public void resetPropertyValue( final Object id ) {
@@ -86,7 +87,7 @@ public abstract class AbstractProcess
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see org.eclipse.ui.views.properties.IPropertySource#getEditableValue()
    */
   public Object getEditableValue() {
@@ -99,7 +100,7 @@ public abstract class AbstractProcess
   // *****************************************************
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see eu.geclipse.traceview.IProcess#getEventsByLogicalClock(int, int)
    */
   public IEvent[] getEventsByLogicalClock( final int fromIndex,
@@ -115,7 +116,7 @@ public abstract class AbstractProcess
   // *****************************************************
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see eu.geclipse.traceview.ILamportProcess#getMaximumLamportClock()
    */
   public int getMaximumLamportClock() {
@@ -124,7 +125,7 @@ public abstract class AbstractProcess
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see eu.geclipse.traceview.ILamportProcess#getEventByLamportClock(int)
    */
   public ILamportEvent getEventByLamportClock( final int index ) {
@@ -150,7 +151,7 @@ public abstract class AbstractProcess
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see eu.geclipse.traceview.ILamportProcess#getEventsByLamportClock(int,
    *      int)
    */
@@ -191,8 +192,8 @@ public abstract class AbstractProcess
       {
         events[ i ] = ( ILamportEvent )getEventByLogicalClock( logicalClock );
       }
-    } catch( Exception e ) {
-      e.printStackTrace();
+    } catch( Exception exception ) {
+      Activator.logException( exception );
     }
     return events;
   }
@@ -202,7 +203,7 @@ public abstract class AbstractProcess
   // *****************************************************
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see eu.geclipse.traceview.IPhysicalProcess#getMaximumPhysicalClock()
    */
   public int getMaximumPhysicalClock() {
@@ -233,7 +234,7 @@ public abstract class AbstractProcess
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see eu.geclipse.traceview.IPhysicalProcess#getEventsByPhysicalClock(int,
    *      int)
    */

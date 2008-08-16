@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2008 g-Eclipse Consortium 
+ * Copyright (c) 2006, 2008 g-Eclipse Consortium
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -79,9 +79,8 @@ public class IndividualTimeConsumption implements IStatistics {
                              - runtime;
           runtime = 0;
         }
-      } catch( IndexOutOfBoundsException e1 ) {
-        // TODO Auto-generated catch block
-        e1.printStackTrace();
+      } catch( IndexOutOfBoundsException exception ) {
+        Activator.logException( exception );
       }
       this.y[ 0 ] = calculation;
       this.y[ 1 ] = communication;
@@ -106,7 +105,7 @@ public class IndividualTimeConsumption implements IStatistics {
   public String getTitle() {
     return getName();
   }
-  
+
   public Image getImage() {
     // TODO dispose
     return Activator.getImageDescriptor( "icons/obj16/clock.gif" ).createImage(); //$NON-NLS-1$

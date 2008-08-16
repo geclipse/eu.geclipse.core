@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2008 g-Eclipse Consortium 
+ * Copyright (c) 2006, 2008 g-Eclipse Consortium
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -383,7 +383,7 @@ class LogicalGraphPaintListener implements PaintListener {
 
   /**
    * Draw a connection with an arrowhead from (x1,y1) to (x2,y2).
-   * 
+   *
    * @param x1
    * @param y1
    * @param x2
@@ -807,8 +807,8 @@ class LogicalGraphPaintListener implements PaintListener {
             }
           }
         }
-      } catch( Exception e ) {
-        e.printStackTrace();
+      } catch( Exception exception ) {
+        Activator.logException( exception );
       }
       // loop through
     }
@@ -904,7 +904,7 @@ class LogicalGraphPaintListener implements PaintListener {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see org.eclipse.swt.events.PaintListener#paintControl(org.eclipse.swt.events.PaintEvent)
    */
   public void paintControl( final PaintEvent e ) {

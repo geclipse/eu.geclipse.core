@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2008 g-Eclipse Consortium 
+ * Copyright (c) 2006, 2008 g-Eclipse Consortium
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -64,7 +64,7 @@ public class LogicalGraph extends TraceVisualization {
 
   /**
    * Creates a new Logical Graph
-   * 
+   *
    * @param parent
    * @param style
    * @param viewSite
@@ -103,7 +103,7 @@ public class LogicalGraph extends TraceVisualization {
         eventMarker.setTrace( trace );
         this.eventMarkers.add( eventMarker );
       } catch( CoreException coreException ) {
-        coreException.printStackTrace();
+        Activator.logException( coreException );
       }
     }
     this.trace = trace;
@@ -206,7 +206,7 @@ public class LogicalGraph extends TraceVisualization {
 
   /**
    * Returns the Event Markers
-   * 
+   *
    * @return IEventMarker
    */
   public ArrayList<IEventMarker> getEventMarkers() {
@@ -299,7 +299,7 @@ public class LogicalGraph extends TraceVisualization {
     }
     updateZoomButtons();
   }
-  
+
   void updateZoomButtons() {
     int zoom = getZoomFactor();
     this.zoomout.setEnabled( zoom != 1 );

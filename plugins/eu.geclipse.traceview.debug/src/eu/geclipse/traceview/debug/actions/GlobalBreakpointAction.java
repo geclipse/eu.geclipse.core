@@ -9,40 +9,20 @@
  ******************************************************************************/
 package eu.geclipse.traceview.debug.actions;
 
-import static eu.geclipse.traceview.debug.Activator.logException;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 
-import org.eclipse.cdt.core.model.CModelException;
-import org.eclipse.cdt.core.model.CoreModel;
-import org.eclipse.cdt.core.model.ICProject;
-import org.eclipse.cdt.core.model.ISourceRoot;
-import org.eclipse.cdt.core.model.ITranslationUnit;
-import org.eclipse.cdt.debug.core.CDebugCorePlugin;
-import org.eclipse.cdt.debug.core.model.ICBreakpoint;
-import org.eclipse.core.resources.IMarker;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.DebugPlugin;
-import org.eclipse.debug.core.model.IBreakpoint;
-import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.ErrorDialog;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.IActionDelegate;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 
 import eu.geclipse.traceview.EventType;
 import eu.geclipse.traceview.IEvent;
-import eu.geclipse.traceview.ISourceLocation;
 import eu.geclipse.traceview.ITrace;
 import eu.geclipse.traceview.ITraceView;
 import eu.geclipse.traceview.IVectorEvent;
@@ -91,12 +71,10 @@ public class GlobalBreakpointAction extends AbstractEventBreakpointAction {
           DebugPlugin.getDefault()
             .getBreakpointManager()
             .addBreakpoints( eventBreakpoints.toArray( new EventBreakpoint[ 0 ] ) );
-        } catch( IndexOutOfBoundsException e ) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch( CoreException e ) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
+        } catch( IndexOutOfBoundsException exception ) {
+          Activator.logException( exception );
+        } catch( CoreException exception ) {
+          Activator.logException( exception );
         }
         // redraw traceview
         Display.getDefault().asyncExec( new Runnable() {
@@ -179,7 +157,6 @@ public class GlobalBreakpointAction extends AbstractEventBreakpointAction {
         this.first[ i ] = event.getLogicalClock();
         this.last[ i ] = event.getLogicalClock();
       }
-      System.out.println( i + " " + this.first[ i ] + " " + this.last[ i ] );
     }
     // calc
     boolean changed = true;
