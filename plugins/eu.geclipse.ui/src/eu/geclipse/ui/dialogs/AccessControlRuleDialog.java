@@ -90,7 +90,7 @@ public class AccessControlRuleDialog extends Dialog {
     
     Group entryGroup = new Group( mainComp, SWT.NONE );
     entryGroup.setLayout( new GridLayout( 2, false ) );
-    entryGroup.setText( Messages.getString("AccessControlRuleDialog.permission_rule") ); //$NON-NLS-1$
+    entryGroup.setText( Messages.getString("AccessControlRuleDialog.group_title") ); //$NON-NLS-1$
     gData = new GridData( SWT.FILL, SWT.FILL, true, true );
     gData.heightHint = 180;
     gData.widthHint = 500;
@@ -100,7 +100,7 @@ public class AccessControlRuleDialog extends Dialog {
     Label policyLabel = new Label( entryGroup, SWT.LEAD );
     gData = new GridData( SWT.LEAD, SWT.CENTER, false, false);
     policyLabel.setLayoutData( gData );
-    policyLabel.setText( Messages.getString("AccessControlRuleDialog.policy") ); //$NON-NLS-1$
+    policyLabel.setText( Messages.getString("AccessControlRuleDialog.policy_label") ); //$NON-NLS-1$
     
     Combo policyCombo = new Combo( entryGroup, SWT.READ_ONLY | SWT.DROP_DOWN | SWT.LEAD );
     gData = new GridData( SWT.FILL, SWT.CENTER, true, false);
@@ -110,7 +110,7 @@ public class AccessControlRuleDialog extends Dialog {
     Label capLabel = new Label( entryGroup, SWT.LEAD );
     gData = new GridData( SWT.LEAD, SWT.CENTER, false, false);
     capLabel.setLayoutData( gData );
-    capLabel.setText( Messages.getString("AccessControlRuleDialog.capability") ); //$NON-NLS-1$
+    capLabel.setText( Messages.getString("AccessControlRuleDialog.capability_label") ); //$NON-NLS-1$
     
     Combo capCombo = new Combo( entryGroup, SWT.READ_ONLY | SWT.DROP_DOWN | SWT.LEAD );
     gData = new GridData( SWT.FILL, SWT.CENTER, true, false);
@@ -120,7 +120,7 @@ public class AccessControlRuleDialog extends Dialog {
     Label actorTypeLabel = new Label( entryGroup, SWT.LEAD );
     gData = new GridData( SWT.LEAD, SWT.CENTER, false, false);
     actorTypeLabel.setLayoutData( gData );
-    actorTypeLabel.setText( Messages.getString("AccessControlRuleDialog.actor_type") ); //$NON-NLS-1$
+    actorTypeLabel.setText( Messages.getString("AccessControlRuleDialog.actor_type_label") ); //$NON-NLS-1$
     
     Combo actorTypeCombo = new Combo( entryGroup, SWT.READ_ONLY | SWT.DROP_DOWN | SWT.LEAD );
     gData = new GridData( SWT.FILL, SWT.CENTER, true, false);
@@ -130,7 +130,7 @@ public class AccessControlRuleDialog extends Dialog {
     Label actorIDLabel = new Label( entryGroup, SWT.LEAD );
     gData = new GridData( SWT.LEAD, SWT.CENTER, false, false);
     actorIDLabel.setLayoutData( gData );
-    actorIDLabel.setText( Messages.getString("AccessControlRuleDialog.actor_ID") ); //$NON-NLS-1$
+    actorIDLabel.setText( Messages.getString("AccessControlRuleDialog.actor_ID_label") ); //$NON-NLS-1$
     
     StoredCombo actorIDCombo = new StoredCombo( entryGroup, SWT.NONE | SWT.LEAD );
     gData = new GridData( SWT.FILL, SWT.CENTER, true, false);
@@ -140,7 +140,7 @@ public class AccessControlRuleDialog extends Dialog {
     Label actorCALabel = new Label( entryGroup, SWT.LEAD );
     gData = new GridData( SWT.LEAD, SWT.CENTER, false, false);
     actorCALabel.setLayoutData( gData );
-    actorCALabel.setText( Messages.getString("AccessControlRuleDialog.signing_CA") ); //$NON-NLS-1$
+    actorCALabel.setText( Messages.getString("AccessControlRuleDialog.signing_CA_label") ); //$NON-NLS-1$
     
     StoredCombo actorCACombo = new StoredCombo( entryGroup, SWT.NONE | SWT.LEAD );
     gData = new GridData( SWT.FILL, SWT.CENTER, true, false);
@@ -199,7 +199,7 @@ public class AccessControlRuleDialog extends Dialog {
   @Override
   protected void configureShell( final Shell shell ) {
     super.configureShell( shell );
-    shell.setText( Messages.getString("AccessControlRuleDialog.access_control_rule") ); //$NON-NLS-1$
+    shell.setText( Messages.getString("AccessControlRuleDialog.dialog_title") ); //$NON-NLS-1$
   }
   
   /**
@@ -212,7 +212,7 @@ public class AccessControlRuleDialog extends Dialog {
     // We change just the label of the OK button
     String buttonText = null;
     if ( this.withSaveButton ) {
-      buttonText = "Save"; //$NON-NLS-1$
+      buttonText = Messages.getString("AccessControlRuleDialog.save_button_text"); //$NON-NLS-1$
     } else {
       buttonText = IDialogConstants.OK_LABEL;
     }
