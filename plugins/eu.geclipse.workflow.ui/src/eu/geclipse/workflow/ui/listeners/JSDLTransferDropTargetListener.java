@@ -37,72 +37,73 @@ public class JSDLTransferDropTargetListener
   extends AbstractTransferDropTargetListener
 {
 
-  public JSDLTransferDropTargetListener( EditPartViewer viewer ) {
+  public JSDLTransferDropTargetListener( final EditPartViewer viewer ) {
     super( viewer, LocalSelectionTransfer.getInstance() );
   }
 
- @Override
-protected Request createTargetRequest() {
+  @Override
+  protected Request createTargetRequest() {
     DropObjectsRequest req = new DropObjectsRequest();
-     return req;
- }
+    return req;
+  }
 
- protected final DropObjectsRequest getDropObjectsRequest() {
-     return ((DropObjectsRequest) getTargetRequest());
- }
+  protected final DropObjectsRequest getDropObjectsRequest() {
+    return ( ( DropObjectsRequest ) getTargetRequest() );
+  }
 
- protected List<JSDLJobDescription> getObjectsBeingDropped() {
-   List<JSDLJobDescription> result = new ArrayList<JSDLJobDescription>();   
-   if (getTransfer() instanceof LocalSelectionTransfer) {
-     LocalSelectionTransfer transfer = (LocalSelectionTransfer) getTransfer();
-     IStructuredSelection selection = (IStructuredSelection) transfer.getSelection();
-     Object object = selection.getFirstElement();
-     if(object instanceof JSDLJobDescription) {
-       result.add((JSDLJobDescription) object);
-     }
-   }
-   return result;
- }
+  protected List< JSDLJobDescription > getObjectsBeingDropped() {
+    List< JSDLJobDescription > result = new ArrayList< JSDLJobDescription >();
+    if ( getTransfer() instanceof LocalSelectionTransfer ) {
+      LocalSelectionTransfer transfer = ( LocalSelectionTransfer ) getTransfer();
+      IStructuredSelection selection = ( IStructuredSelection ) transfer.getSelection();
+      List< ? > objects = selection.toList();
+      for ( Object o : objects ) {
+        if ( o instanceof JSDLJobDescription ) {
+          result.add( ( JSDLJobDescription ) o );
+        }
+      }
+    }
+    return result;
+  }
 
- @Override
-public void dragEnter(DropTargetEvent event) {
-     super.dragEnter(event);
-     handleDragEnter(); // called to properly initialize the effect
- }
+  @Override
+  public void dragEnter( final DropTargetEvent event ) {
+    super.dragEnter( event );
+    handleDragEnter(); // called to properly initialize the effect
+  }
 
- protected void handleDragEnter() {
-     handleDragOver();
- }    
+  protected void handleDragEnter() {
+    handleDragOver();
+  }    
 
- @Override
-protected void handleDragOver() {
-   // do nothing when we drag over!
- }
+  @Override
+  protected void handleDragOver() {
+    // do nothing when we drag over!
+  }
 
- @Override
-protected void handleDrop() {
-     getViewer().setCursor(Cursors.WAIT);
-     super.handleDrop();
-     getViewer().setCursor(null);
-     getViewer().select( getTargetEditPart() );
-     getViewer().flush();
- }
+  @Override
+  protected void handleDrop() {
+    getViewer().setCursor( Cursors.WAIT );
+    super.handleDrop();
+    getViewer().setCursor(null);
+    getViewer().select( getTargetEditPart() );
+    getViewer().flush();
+  }
 
- @Override
-protected void updateTargetRequest() {
-     DropObjectsRequest request = getDropObjectsRequest();
-     request.setLocation(getDropLocation());
-     request.setObjects(getObjectsBeingDropped());
-     request.setAllowedDetail(getCurrentEvent().operations);
- }
+  @Override
+  protected void updateTargetRequest() {
+    DropObjectsRequest request = getDropObjectsRequest();
+    request.setLocation( getDropLocation() );
+    request.setObjects( getObjectsBeingDropped() );
+    request.setAllowedDetail( getCurrentEvent().operations );
+  }
 
- protected boolean isDataTransfered() {
-     return true;
- }
- 
- protected Object getJavaObject(final TransferData data) {
-   return LocalSelectionTransfer.getInstance().nativeToJava(data);
- }
+  protected boolean isDataTransfered() {
+    return true;
+  }
 
+  protected Object getJavaObject( final TransferData data ) {
+    return LocalSelectionTransfer.getInstance().nativeToJava( data );
+  }
 
 }

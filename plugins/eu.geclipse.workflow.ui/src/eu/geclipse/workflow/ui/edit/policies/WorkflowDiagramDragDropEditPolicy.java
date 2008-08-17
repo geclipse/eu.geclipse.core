@@ -22,6 +22,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gmf.runtime.common.core.command.ICommand;
@@ -43,8 +44,8 @@ import eu.geclipse.workflow.ui.providers.WorkflowElementTypes;
 
 
 /**
+ * 
  * @author nloulloud
- *
  */
 public class WorkflowDiagramDragDropEditPolicy
   extends DiagramDragDropEditPolicy
@@ -52,32 +53,40 @@ public class WorkflowDiagramDragDropEditPolicy
 
   /*
    * (non-Javadoc)
-   * 
-   * @see org.eclipse.gmf.runtime.diagram.ui.editpolicies.DiagramDragDropEditPolicy#getDropObjectsCommand(org.eclipse.gmf.runtime.diagram.ui.requests.DropObjectsRequest)
+   * @see org.eclipse.gmf.runtime.diagram.ui.editpolicies.DiagramDragDropEditPolicy
+   *        #getDropObjectsCommand(org.eclipse.gmf.runtime.diagram.ui.requests.DropObjectsRequest)
    */
   @SuppressWarnings("unchecked")
   @Override
   public Command getDropObjectsCommand( DropObjectsRequest dropRequest ) {
     List objects = dropRequest.getObjects();
-    for( Object o : objects ) {
-      if( ( o instanceof JSDLJobDescription ) ) {
-        JSDLJobDescription jsdl = ( JSDLJobDescription )o;
-        WorkflowEditPart selectedElement = ( WorkflowEditPart )getHost();
+    CompoundCommand cmd = new CompoundCommand();
+    Point dropLocation = dropRequest.getLocation();
+    for ( Object o : objects ) {
+      if ( ( o instanceof JSDLJobDescription ) ) {
+        JSDLJobDescription jsdl = ( JSDLJobDescription ) o;
+        WorkflowEditPart selectedElement = ( WorkflowEditPart ) getHost();
         IElementType type = WorkflowElementTypes.IWorkflowJob_1001;
-        ViewAndElementDescriptor viewDescriptor = new ViewAndElementDescriptor( new CreateElementRequestAdapter( new CreateElementRequest( type ) ),
-                                                                                Node.class,
-                                                                                ( ( IHintedType )type ).getSemanticHint(),
-                                                                                selectedElement.getDiagramPreferencesHint() );
-        CreateViewAndElementRequest createRequest = new CreateViewAndElementRequest(viewDescriptor);
-        createRequest.setLocation( dropRequest.getLocation() );
-        CompoundCommand cmd = new CompoundCommand();
+        ViewAndElementDescriptor viewDescriptor
+          = new ViewAndElementDescriptor( new CreateElementRequestAdapter( new CreateElementRequest( type ) ),
+                                          Node.class,
+                                          ( ( IHintedType )type ).getSemanticHint(),
+                                          selectedElement.getDiagramPreferencesHint() );
+        CreateViewAndElementRequest createRequest = new CreateViewAndElementRequest( viewDescriptor );
+        createRequest.setLocation( dropLocation );
+        // translate each subsequent drop slightly, maybe find a more intelligent way of doing this?
+        dropLocation.translate( 25, 25 );
         cmd.add( selectedElement.getCommand( createRequest ) );
-        WorkflowJobAfterCreateCommand afterCreateCmd = new WorkflowJobAfterCreateCommand(((Collection<IAdaptable>)createRequest.getNewObject()).iterator().next(), jsdl, selectedElement);
+        WorkflowJobAfterCreateCommand afterCreateCmd
+          = new WorkflowJobAfterCreateCommand( ( ( Collection< IAdaptable > ) createRequest.getNewObject() )
+                                                 .iterator().next(),
+                                               jsdl,
+                                               selectedElement );
         cmd.add( afterCreateCmd );
-        return cmd;
       }
     }
-    return super.getDropObjectsCommand( dropRequest );
+    return cmd;
+//  return super.getDropObjectsCommand( dropRequest );
   }
   
   /**
@@ -86,4 +95,5 @@ public class WorkflowDiagramDragDropEditPolicy
   protected final Command getGEFWrapper( ICommand cmd ) {
     return new ICommandProxy( cmd );
   }
+
 }
