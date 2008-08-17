@@ -19,6 +19,9 @@ package eu.geclipse.ui.internal.dialogs;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IStatus;
+
 import eu.geclipse.core.reporting.IProblem;
 import eu.geclipse.core.reporting.ISolution;
 import eu.geclipse.core.reporting.ProblemException;
@@ -39,6 +42,8 @@ public class ProblemReport {
   private static final String SOLUTIONS_HEADER = "Proposed Solutions"; //$NON-NLS-1$
 
   private static final String STACKTRACE_HEADER = "Stacktrace"; //$NON-NLS-1$
+
+  private static final String SEVERITY_HEADER = "Severity"; //$NON-NLS-1$
   
   private static final String THROWABLE_DESCRIPTION_TEXT = "Caught an exception: "; //$NON-NLS-1$
   
@@ -72,21 +77,31 @@ public class ProblemReport {
   public String createReport() {
     
     IProblem problem = null;
+    IStatus status = null;
     
     if ( this.exc instanceof ProblemException ) {
       problem = ( ( ProblemException ) this.exc ).getProblem();
+    } else if ( this.exc instanceof CoreException ) {
+      status = ( ( CoreException ) this.exc ).getStatus();
     }
     
     StringWriter sWriter = new StringWriter();
     PrintWriter pWriter = new PrintWriter( sWriter );
 
     if ( problem != null ) {
+      // A ProblemException
       writeField( pWriter, PLUG_IN_HEADER, problem.getPluginID() );
       writeField( pWriter, CONTACT_ADDRESS_HEADER, problem.getMailTo() );
       writeField( pWriter, DESCRIPTION_HEADER, problem.getDescription() );
       writeField( pWriter, REASONS_HEADER, problem.getReasons() );
       writeField( pWriter, SOLUTIONS_HEADER, problem.getSolutions() );
+    } else if ( status != null ) {
+      // A CoreException
+      writeField( pWriter, PLUG_IN_HEADER, status.getPlugin() );
+      writeField( pWriter, DESCRIPTION_HEADER, status.getMessage() );
+      writeField( pWriter, SEVERITY_HEADER, severity( status.getSeverity() ) );
     } else {
+      // Any other Throwable
       writeField( pWriter,
                   DESCRIPTION_HEADER,
                   THROWABLE_DESCRIPTION_TEXT + this.exc.getClass().getName() );
@@ -99,6 +114,39 @@ public class ProblemReport {
     
   }
   
+  /**
+   * Converts the integer severity value carried by a CoreException to a string.
+   * 
+   * @param severity one of {@link IStatus.OK}, {@link IStatus.INFO},
+   *        {@link IStatus.WARNING}, {@link IStatus.ERROR}, {@link IStatus.CANCEL}.
+   * @return a string describing the severity.
+   */
+  private String severity( final int severity ) {
+    String sSeverity = NA_STRING;
+    
+    switch ( severity ) {
+      case IStatus.OK :
+        sSeverity = "OK"; //$NON-NLS-1$
+        break;
+      case IStatus.INFO :
+        sSeverity = "INFO"; //$NON-NLS-1$
+        break;
+      case IStatus.WARNING :
+        sSeverity = "WARNING"; //$NON-NLS-1$
+        break;
+      case IStatus.ERROR :
+        sSeverity = "ERROR"; //$NON-NLS-1$
+        break;
+      case IStatus.CANCEL :
+        sSeverity = "CANCEL"; //$NON-NLS-1$
+        break;
+      default:
+        sSeverity = NA_STRING;
+    }
+    
+    return sSeverity;
+  }
+
   /**
    * Write the specified {@link Throwable} to the specified {@link PrintWriter}.
    * 
