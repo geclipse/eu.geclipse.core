@@ -62,7 +62,6 @@ public class Log4jEclipseAppender extends AppenderSkeleton {
   /* (non-Javadoc)
    * @see org.apache.log4j.Appender#close()
    */
-  @Override
   public void close() {
     // not required
   }
@@ -70,7 +69,6 @@ public class Log4jEclipseAppender extends AppenderSkeleton {
   /* (non-Javadoc)
    * @see org.apache.log4j.Appender#requiresLayout()
    */
-  @Override
   public boolean requiresLayout() {
     return false;
   }
