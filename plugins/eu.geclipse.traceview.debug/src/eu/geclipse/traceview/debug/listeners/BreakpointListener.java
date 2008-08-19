@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2008 g-Eclipse Consortium
+ * Copyright (c) 2006, 2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -15,6 +15,8 @@
 
 package eu.geclipse.traceview.debug.listeners;
 
+import org.eclipse.cdt.debug.core.CDIDebugModel;
+import org.eclipse.cdt.debug.core.model.ICBreakpointFilterExtension;
 import org.eclipse.cdt.debug.core.model.ICDebugTarget;
 import org.eclipse.cdt.debug.core.model.ICLineBreakpoint;
 import org.eclipse.core.resources.IMarkerDelta;
@@ -63,7 +65,10 @@ public class BreakpointListener implements IBreakpointListener {
     if( breakpoint instanceof EventBreakpoint ) {
       EventBreakpoint eventBreakPoint = ( EventBreakpoint )breakpoint;
       try {
-        for( ICDebugTarget target : eventBreakPoint.getTargetFilters() ) {
+        ICBreakpointFilterExtension extension = ( ICBreakpointFilterExtension )eventBreakPoint.getExtension( CDIDebugModel.getPluginIdentifier(),
+                                                                                                             ICBreakpointFilterExtension.class );
+        // TODO only filter if all targets are available
+        for( ICDebugTarget target : extension.getTargetFilters() ) {
           try {
             while( !target.isSuspended() ) {
               // wait here;
@@ -73,11 +78,11 @@ public class BreakpointListener implements IBreakpointListener {
             Activator.logException( interruptedException );
           }
           // TODO add my own ProcessTarget with getProcess method
-          int a = Integer.parseInt( target.toString()
+          int processID = Integer.parseInt( target.toString()
             .substring( target.toString().lastIndexOf( "s " ) + 2, //$NON-NLS-1$
                         target.toString().indexOf( "(" ) - 1 ) ); //$NON-NLS-1$
-          if( eventBreakPoint.getProcess() != a ) {
-            eventBreakPoint.removeTargetFilter( target );
+          if( eventBreakPoint.getProcess() != processID ) {
+            extension.removeTargetFilter( target );
           }
         }
       } catch( CoreException exception ) {
