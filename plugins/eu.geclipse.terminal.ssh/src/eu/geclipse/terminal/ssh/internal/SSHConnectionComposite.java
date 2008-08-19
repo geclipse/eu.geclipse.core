@@ -79,10 +79,10 @@ class SSHConnectionComposite extends Composite {
                                        SSHConnectionComposite.USERNAMES );
     this.hostnameCombo.setPreferences( preferenceStore,
                                        SSHConnectionComposite.HOSTNAMES );
+    addComputingElements();
     if( preSelectedHostname != null ) {
       this.hostnameCombo.setText( preSelectedHostname );
     }
-    addComputingElements();
     this.usernameCombo.addListener( SWT.Modify, page );
     this.hostnameCombo.addListener( SWT.Modify, page );
     this.passwordText.addListener( SWT.Modify, page );
