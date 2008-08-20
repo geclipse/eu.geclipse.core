@@ -329,6 +329,7 @@ public class ConnectionElement
       ssMonitor.subTask( Messages.getString("ConnectionElement.task_refreshing") ); //$NON-NLS-1$
       fileStore.setExternalMonitor( ssMonitor );
       res.refreshLocal( IResource.DEPTH_ONE, ssMonitor );
+      fileStore.setExternalMonitor( null ); // don't use this external monitor in next operations, because it could be cancelled
       result = Status.OK_STATUS;
       
       if ( res instanceof IContainer ) {
@@ -346,7 +347,6 @@ public class ConnectionElement
       
       this.fetchError = t;
       result = new Status( IStatus.ERROR, Activator.PLUGIN_ID, Messages.getString("ConnectionElement.fetch_error"), t ); //$NON-NLS-1$
-      
       try {
         addElement( ContainerMarker.getErrorMarker( this, t ) );
       } catch ( ProblemException pExc ) {

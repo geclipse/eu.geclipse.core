@@ -207,8 +207,9 @@ public class GridModelContentProvider
    */
   public void treeCollapsed( final TreeExpansionEvent event ) {
     Object element = event.getElement();
-    if ( ( element instanceof IGridContainer ) && ( ( IGridContainer ) element ).isLazy() ) {
+    if ( ( element instanceof IGridContainer ) && ( ( IGridContainer ) element ).isLazy() ) {            
       IGridContainer container = ( IGridContainer ) element;
+      this.progressNodes.remove( container );
       container.setDirty();
       container.dispose();
     }

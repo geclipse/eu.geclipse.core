@@ -52,87 +52,98 @@ public abstract class AbstractGridContainer
     extends AbstractGridElement
     implements IGridContainer {
   
-  private static class ChildFetcher
-      extends Job {
-    
+  private static class ChildFetcher extends Job {
+
     private AbstractGridContainer container;
-    
     private IProgressMonitor externalMonitor;
-    
     private Throwable exception;
     
     /**
+     * true if this cancel was called for that fetcher but run() hasn't finished
+     * yet
+     */
+    private boolean canceling;
+
+    /**
      * Construct a new child fetcher for the specified container.
-     *  
+     * 
      * @param container The container whose children should be fetched.
      */
     public ChildFetcher( final AbstractGridContainer container ) {
       super( "Child Fetcher @ " + container.getName() ); //$NON-NLS-1$
       this.container = container;
     }
-    
+
     /**
-     * Get an exception that occurred during child
-     * fetching or <code>null</code> of no such exception occurred.
-     *  
-     * @return The exception of <code>null</code> if either the
-     * fetcher did not yet run or no exception occurred.
+     * Get an exception that occurred during child fetching or <code>null</code>
+     * of no such exception occurred.
+     * 
+     * @return The exception of <code>null</code> if either the fetcher did not
+     *         yet run or no exception occurred.
      */
     public Throwable getException() {
       return this.exception;
     }
-    
+
     /**
-     * True if this fetcher has not yet run, i.e. it is currently
-     * scheduled, or if it currently runs.
+     * True if this fetcher has not yet run, i.e. it is currently scheduled, or
+     * if it currently runs.
      * 
      * @return True if the job has not yet finished.
      */
     public boolean isFetching() {
       return getState() != NONE;
     }
-    
+
     /**
-     * Set a progress monitor that is used in the run method in parallel
-     * with the monitor provided by the run method parameter.
+     * Set a progress monitor that is used in the run method in parallel with
+     * the monitor provided by the run method parameter.
      * 
      * @param monitor The external monitor.
      */
     public void setExternalMonitor( final IProgressMonitor monitor ) {
       this.externalMonitor = monitor;
-    }
-    
-    /* (non-Javadoc)
-     * @see org.eclipse.core.runtime.jobs.Job#run(org.eclipse.core.runtime.IProgressMonitor)
+    }    
+
+    /*
+     * (non-Javadoc)
+     * @seeorg.eclipse.core.runtime.jobs.Job#run(org.eclipse.core.runtime.
+     * IProgressMonitor)
      */
     @Override
     protected IStatus run( final IProgressMonitor monitor ) {
-      
       IProgressMonitor mon = new MasterMonitor( monitor, this.externalMonitor );
-      
+      this.canceling = false;
       this.exception = null;
       this.container.lock();
-      
+
       try {
-        
         this.container.deleteAll();
         IStatus status = this.container.fetchChildren( mon );
-        
-        if ( ! status.isOK() ) {
+        if( !status.isOK() ) {
           this.exception = status.getException();
         }
-        
-      } catch ( Throwable t ) {
+      } catch( Throwable t ) {
         this.exception = t;
       } finally {
-        this.container.setDirty( false );
+        if( !this.canceling ) {
+          this.container.setDirty( false );
+        }
         this.container.unlock();
+        this.canceling = false;
       }
-      
       return Status.OK_STATUS;
-      
     }
-    
+
+    @Override
+    protected void canceling() {
+      this.canceling = true;
+      super.canceling();
+    }
+
+    public boolean isCanceling() {
+      return this.canceling;
+    }
   }
   
   /**
@@ -175,7 +186,7 @@ public abstract class AbstractGridContainer
   public IGridElement create( final IGridElementCreator creator )
       throws ProblemException {
     IGridElement element = creator.create( this );
-    element = addElement( element ); 
+    element = addElement( element );
     return element;
   }
   
@@ -388,8 +399,7 @@ public abstract class AbstractGridContainer
    * @return True if the operation was successful.
    */
   @SuppressWarnings("unused")
-  protected IStatus fetchChildren( @SuppressWarnings("unused")
-                                   final IProgressMonitor monitor )
+  protected IStatus fetchChildren( final IProgressMonitor monitor )
       throws ProblemException {
     return Status.OK_STATUS;
   }
@@ -471,12 +481,15 @@ public abstract class AbstractGridContainer
 
     if ( this.fetcher == null ) {
       this.fetcher = new ChildFetcher( this );
-    }
+    }    
     
-    if ( ! this.fetcher.isFetching() ) {
-      this.fetcher.setExternalMonitor( monitor );
+    this.fetcher.setExternalMonitor( monitor );
+    
+    // if canceling, then schedule again (don't wait for finish cancelation - scheduler start job again).
+    if ( ! this.fetcher.isFetching()
+        || this.fetcher.isCanceling() ) {      
       this.fetcher.schedule();
-    }
+    }    
     
     try {
       this.fetcher.join();
@@ -488,8 +501,7 @@ public abstract class AbstractGridContainer
     
     if ( exc != null ) {
       throw exc;
-    }
-    
+    }    
   }
   
   /**
