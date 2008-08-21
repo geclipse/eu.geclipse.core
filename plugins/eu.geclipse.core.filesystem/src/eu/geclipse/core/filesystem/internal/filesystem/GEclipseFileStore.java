@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -11,6 +11,7 @@
  *
  * Contributors:
  *    Mathias Stuempert - initial API and implementation
+ *    Ariel Garcia      - overridden getAdapter() for access control
  *****************************************************************************/
 
 package eu.geclipse.core.filesystem.internal.filesystem;
@@ -39,6 +40,7 @@ import eu.geclipse.core.filesystem.GEclipseFileSystem;
 import eu.geclipse.core.filesystem.GEclipseURI;
 import eu.geclipse.core.filesystem.internal.Activator;
 import eu.geclipse.core.model.IGridConnectionElement;
+import eu.geclipse.core.model.IProtectable;
 import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.core.util.MasterMonitor;
 
@@ -562,5 +564,32 @@ public class GEclipseFileStore
     return name;
   }
   
+  /*
+   * (non-Javadoc)
+   * @see org.eclipse.core.runtime.PlatformObject#getAdapter(java.lang.Class)
+   */
+  @Override
+  @SuppressWarnings("unchecked")
+  public Object getAdapter( final Class adapter ) {
+    Object result = null;
+    
+    // If we are required to adapt to IProtectable, we have to return the one from the slave
+    if ( adapter == IProtectable.class ) {
+      if ( this.slave != null ) {
+        if ( this.slave instanceof IProtectable ) {
+          result = this.slave;
+        } else {
+          result = this.slave.getAdapter( adapter );
+        }
+      }
+    }
+    
+    // Otherwise do the default
+    if ( result == null ) {
+      result = super.getAdapter( adapter );
+    }
+    
+    return result;
+  }
 
 }

@@ -11,6 +11,7 @@
  *
  * Contributors:
  *    Mathias Stuempert - initial API and implementation
+ *    Ariel Garcia      - overridden getAdapter() for access control
  *****************************************************************************/
 
 package eu.geclipse.core.filesystem.internal.filesystem;
@@ -43,6 +44,7 @@ import eu.geclipse.core.model.IGridConnectionElement;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridElementCreator;
+import eu.geclipse.core.model.IProtectable;
 import eu.geclipse.core.model.impl.AbstractGridContainer;
 import eu.geclipse.core.model.impl.ContainerMarker;
 import eu.geclipse.core.reporting.ProblemException;
@@ -475,6 +477,33 @@ public class ConnectionElement
     }    
  
     super.refresh( monitor );
+  }
+  
+  /*
+   * (non-Javadoc)
+   * @see eu.geclipse.core.model.impl.AbstractGridElement#getAdapter(java.lang.Class)
+   */
+  @Override
+  @SuppressWarnings("unchecked")
+  public Object getAdapter( final Class adapter ) {
+    Object result = null;
+    
+    // If we are required to adapt to IProtectable, we have to return the one from the slave
+    if ( adapter == IProtectable.class ) {
+      try {
+        result = getConnectionFileStore().getAdapter( adapter );
+      } catch ( CoreException ce ) {
+        // Just continue if no FileStore is available
+        Activator.logException( ce );
+      }
+    }
+    
+    // Otherwise do the default
+    if ( result == null ) {
+      result = super.getAdapter( adapter );
+    }
+    
+    return result;
   }
 
 }
