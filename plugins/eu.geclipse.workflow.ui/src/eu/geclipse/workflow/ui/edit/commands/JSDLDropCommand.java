@@ -47,8 +47,7 @@ public class JSDLDropCommand extends AbstractTransactionalCommand {
   private String[] dirs;
   private IFileStore wfRootFileStore;
 
-  public JSDLDropCommand( EObject domainElt, JSDLJobDescription jsdl )
-  {
+  public JSDLDropCommand( EObject domainElt, JSDLJobDescription jsdl ) {
     super( TransactionUtil.getEditingDomain( domainElt ),
            Messages.getString("JSDLDropCommand_constructorMessage"), //$NON-NLS-1$
            null );
@@ -61,7 +60,7 @@ public class JSDLDropCommand extends AbstractTransactionalCommand {
                                                IAdaptable arg1 )
     throws ExecutionException
   {
-    if( this.domainElement instanceof IWorkflowJob ) {
+    if ( this.domainElement instanceof IWorkflowJob ) {
       // must make sure it's in .workflow folder, and/or copy if necessary.
       IWorkflowJob wfJob = ( IWorkflowJob )this.domainElement;
       URI jsdlPathUri = null;
@@ -77,13 +76,18 @@ public class JSDLDropCommand extends AbstractTransactionalCommand {
       String wfRootPath = wfRootUri.path();
       this.dirs = wfRootPath.split( "/" ); //$NON-NLS-1$
       String projectName = this.dirs[ 2 ];
-      this.wfRootFileStore = GridModel.getRoot()
-        .getFileStore()
-        .getChild( projectName );
-      java.net.URI targetUri = this.wfRootFileStore.getChild( this.dirs[ 3 ] )
-        .getChild( this.dirs[ 4 ] )
-        .getChild( jsdlSource.getName() )
-        .toURI();
+      this.wfRootFileStore = GridModel.getRoot().getFileStore().getChild( projectName );
+      int numDirs = this.dirs.length;
+      java.net.URI targetUri = null;
+      
+      IFileStore fs = this.wfRootFileStore;
+      for ( int i = 3; i < numDirs - 1; i++ ) {
+        String dir = this.dirs[ i ];
+        dir = dir.replace( "%20", " " ); //$NON-NLS-1$ //$NON-NLS-2$
+        fs = fs.getChild( dir );
+      }
+      fs = fs.getChild( jsdlSource.getName() );
+      targetUri =  fs.toURI();
       IFile jsdlTarget = ResourcesPlugin.getWorkspace()
         .getRoot()
         .findFilesForLocationURI( targetUri )[ 0 ];
@@ -92,22 +96,29 @@ public class JSDLDropCommand extends AbstractTransactionalCommand {
       try {
         // no need to copy if the file selected is in .workflow folder
         // anyway
-        if( !jsdlTarget.equals( jsdlSource ) ) {
+        if ( ! jsdlTarget.equals( jsdlSource ) ) {
           // deal with existing files somehow? change target to append [n]
           // to filename
           int numTarget = findJsdlTarget( jsdlTarget );
-          if( numTarget > 0 ) {
+          if ( numTarget > 0 ) {
             String targetNamePart = jsdlTarget.getName().split( "\\." )[ 0 ]; //$NON-NLS-1$
             String newTargetName = targetNamePart
                                    + "[" //$NON-NLS-1$
                                    + numTarget
                                    + "]" //$NON-NLS-1$
                                    + ".jsdl"; //$NON-NLS-1$
-            // make new jsdlTarget
-            targetUri = this.wfRootFileStore.getChild( this.dirs[ 3 ] )
-              .getChild( this.dirs[ 4 ] )
-              .getChild( newTargetName )
-              .toURI();
+         // make new jsdlTarget
+            numDirs = this.dirs.length;
+            targetUri = null;
+            
+            fs = this.wfRootFileStore;
+            for ( int i = 3; i < numDirs - 1; i++ ) {
+              String dir = this.dirs[ i ];
+              dir = dir.replace( "%20", " " ); //$NON-NLS-1$ //$NON-NLS-2$
+              fs = fs.getChild( dir );
+            }
+            fs = fs.getChild( newTargetName );
+            targetUri =  fs.toURI();
             jsdlTarget = ResourcesPlugin.getWorkspace()
               .getRoot()
               .findFilesForLocationURI( targetUri )[ 0 ];
@@ -115,11 +126,11 @@ public class JSDLDropCommand extends AbstractTransactionalCommand {
           jsdlSource.copy( jsdlTarget.getFullPath(), true, null );
           jobDescriptionInJSDL = jsdlTarget.getLocation().toString();
         }
-      } catch( CoreException ex ) {
+      } catch ( CoreException ex ) {
         // ignore for now. naughty!
       }
       wfJob.setJobDescription( jobDescriptionInJSDL );
-      wfJob.setName( jsdlTarget.getName().substring( 0, jsdlTarget.getName().indexOf( "." + jsdlTarget.getFileExtension() ) ) );
+      wfJob.setName( jsdlTarget.getName().substring( 0, jsdlTarget.getName().indexOf( "." + jsdlTarget.getFileExtension() ) ) ); //$NON-NLS-1$
     }
     return CommandResult.newOKCommandResult();
   }
@@ -128,19 +139,27 @@ public class JSDLDropCommand extends AbstractTransactionalCommand {
     // search through the .workflow directory for the target name and target[n]
     // names to work out how many exist
     int numTarget = 0;
-    while( jsdlTarget.exists() ) {
+    while ( jsdlTarget.exists() ) {
       String targetNamePart = jsdlTarget.getName().split( "\\." )[ 0 ]; //$NON-NLS-1$
       String newTargetName = ""; //$NON-NLS-1$
-      if( targetNamePart.endsWith( "[" + numTarget + "]" ) ) { //$NON-NLS-1$ //$NON-NLS-2$
+      if ( targetNamePart.endsWith( "[" + numTarget + "]" ) ) { //$NON-NLS-1$ //$NON-NLS-2$
         targetNamePart = targetNamePart.substring( 0,
-                                                   ( targetNamePart.length() - ( "[" //$NON-NLS-1$
-                                                                                 + numTarget + "]" ).length() ) ); //$NON-NLS-1$
+                           ( targetNamePart.length() - ( "[" //$NON-NLS-1$
+                             + numTarget + "]" ).length() ) ); //$NON-NLS-1$
       }
       newTargetName = targetNamePart + "[" + ++numTarget + "]" + ".jsdl"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-      java.net.URI targetUri = this.wfRootFileStore.getChild( this.dirs[ 3 ] )
-        .getChild( this.dirs[ 4 ] )
-        .getChild( newTargetName )
-        .toURI();
+      // make new jsdlTarget
+      int numDirs = this.dirs.length;
+      java.net.URI targetUri = null;
+      
+      IFileStore fs = this.wfRootFileStore;
+      for ( int i = 3; i < numDirs - 1; i++ ) {
+        String dir = this.dirs[ i ];
+        dir = dir.replace( "%20", " " ); //$NON-NLS-1$ //$NON-NLS-2$
+        fs = fs.getChild( dir );
+      }
+      fs = fs.getChild( newTargetName );
+      targetUri =  fs.toURI();
       jsdlTarget = ResourcesPlugin.getWorkspace()
         .getRoot()
         .findFilesForLocationURI( targetUri )[ 0 ];

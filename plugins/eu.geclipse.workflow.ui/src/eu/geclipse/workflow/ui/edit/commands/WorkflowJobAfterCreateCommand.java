@@ -30,9 +30,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -55,14 +53,12 @@ import eu.geclipse.jsdl.JSDLJobDescription;
 import eu.geclipse.workflow.IWorkflowJob;
 import eu.geclipse.workflow.ui.edit.parts.WorkflowEditPart;
 import eu.geclipse.workflow.ui.edit.parts.WorkflowJobEditPart;
-import eu.geclipse.workflow.ui.internal.WorkflowDiagramEditorPlugin;
 import eu.geclipse.workflow.ui.part.Messages;
 import eu.geclipse.workflow.ui.providers.WorkflowElementTypes;
 
 /**
  * 
  * @author david
- *
  */
 public class WorkflowJobAfterCreateCommand extends Command {
   
@@ -84,16 +80,14 @@ public class WorkflowJobAfterCreateCommand extends Command {
   }
 
   public void execute() {
-    EObject newVisualElement = (EObject)adapter.getAdapter(EObject.class);
+    EObject newVisualElement = ( EObject ) this.adapter.getAdapter( EObject.class );
     Object o = newVisualElement.eCrossReferences().get( 0 );
-    if (o instanceof IWorkflowJob) {
-       newElement = ( IWorkflowJob )o;
-       IStatus status = Status.OK_STATUS;
-       AbstractTransactionalCommand command = new AbstractTransactionalCommand( domain,
+    if ( o instanceof IWorkflowJob ) {
+       this.newElement = ( IWorkflowJob )o;
+       AbstractTransactionalCommand command = new AbstractTransactionalCommand( this.domain,
                                                                                 Messages.getString( "GetJobDescriptionFromFileAction.updatingJobDescription" ), //$NON-NLS-1$
                                                                                 null )
        {
-         IStatus status = Status.OK_STATUS;
          @Override
          protected CommandResult doExecuteWithResult( IProgressMonitor monitor,
                                                       IAdaptable info )
@@ -113,10 +107,17 @@ public class WorkflowJobAfterCreateCommand extends Command {
            WorkflowJobAfterCreateCommand.this.wfRootFileStore = GridModel.getRoot()
              .getFileStore()
              .getChild( projectName );
-           java.net.URI targetUri = WorkflowJobAfterCreateCommand.this.wfRootFileStore.getChild( WorkflowJobAfterCreateCommand.this.dirs[ 3 ] )
-             .getChild( WorkflowJobAfterCreateCommand.this.dirs[ 4 ] )
-             .getChild( jsdlSource.getName() )
-             .toURI();
+           int numDirs = WorkflowJobAfterCreateCommand.this.dirs.length;
+           java.net.URI targetUri = null;
+           
+           IFileStore fs = WorkflowJobAfterCreateCommand.this.wfRootFileStore;
+           for ( int i = 3; i < numDirs - 1; i++ ) {
+             String dir = WorkflowJobAfterCreateCommand.this.dirs[ i ];
+             dir = dir.replace( "%20", " " ); //$NON-NLS-1$ //$NON-NLS-2$
+             fs = fs.getChild( dir );
+           }
+           fs = fs.getChild( jsdlSource.getName() );
+           targetUri =  fs.toURI();
            IFile jsdlTarget = ResourcesPlugin.getWorkspace()
              .getRoot()
              .findFilesForLocationURI( targetUri )[ 0 ];
@@ -125,11 +126,12 @@ public class WorkflowJobAfterCreateCommand extends Command {
            try {
              // no need to copy if the file selected is in .workflow folder
              // anyway
-             if( !jsdlTarget.equals( jsdlSource ) ) {
+             boolean isTargetSource = ! jsdlTarget.equals( jsdlSource );
+             if ( isTargetSource ) {
                // deal with existing files somehow? change target to append [n]
                // to filename
                int numTarget = findJsdlTarget( jsdlTarget );
-               if( numTarget > 0 ) {
+               if ( numTarget > 0 ) {
                  String targetNamePart = jsdlTarget.getName().split( "\\." )[ 0 ]; //$NON-NLS-1$
                  String newTargetName = targetNamePart
                                         + "[" //$NON-NLS-1$
@@ -137,10 +139,17 @@ public class WorkflowJobAfterCreateCommand extends Command {
                                         + "]" //$NON-NLS-1$
                                         + ".jsdl"; //$NON-NLS-1$
                  // make new jsdlTarget
-                 targetUri = WorkflowJobAfterCreateCommand.this.wfRootFileStore.getChild( WorkflowJobAfterCreateCommand.this.dirs[ 3 ] )
-                   .getChild( WorkflowJobAfterCreateCommand.this.dirs[ 4 ] )
-                   .getChild( newTargetName )
-                   .toURI();
+                 numDirs = WorkflowJobAfterCreateCommand.this.dirs.length;
+                 targetUri = null;
+                 
+                 fs = WorkflowJobAfterCreateCommand.this.wfRootFileStore;
+                 for ( int i = 3; i < numDirs - 1; i++ ) {
+                   String dir = WorkflowJobAfterCreateCommand.this.dirs[ i ];
+                   dir = dir.replace( "%20", " " ); //$NON-NLS-1$ //$NON-NLS-2$
+                   fs = fs.getChild( dir );
+                 }
+                 fs = fs.getChild( newTargetName );
+                 targetUri =  fs.toURI();
                  jsdlTarget = ResourcesPlugin.getWorkspace()
                    .getRoot()
                    .findFilesForLocationURI( targetUri )[ 0 ];
@@ -148,38 +157,49 @@ public class WorkflowJobAfterCreateCommand extends Command {
                jsdlSource.copy( jsdlTarget.getFullPath(), true, null );
                jobDescriptionInJSDL = jsdlTarget.getLocation().toString();
              }
-           } catch( CoreException ex ) {
+           } catch ( CoreException ex ) {
              // ignore for now. naughty!
            }
            newElement.setJobDescription( jobDescriptionInJSDL );
-           newElement.setName( jsdlTarget.getName().substring( 0, jsdlTarget.getName().indexOf( "." + jsdlTarget.getFileExtension() ) ) );
+           newElement.setName( jsdlTarget.getName().substring( 0, jsdlTarget.getName().indexOf( "." + jsdlTarget.getFileExtension() ) ) ); //$NON-NLS-1$
            return CommandResult.newOKCommandResult();
          }
        };
        try {
          OperationHistoryFactory.getOperationHistory()
            .execute( command, new NullProgressMonitor(), null );
-       } catch( ExecutionException eE ) {
-         status = new Status( IStatus.ERROR,
-                              WorkflowDiagramEditorPlugin.ID,
-                              IStatus.OK,
-                              Messages.getString( "GetJobDescriptionFromFileAction.errorUpdatingJobDescription" ), //$NON-NLS-1$
-                              eE ); 
+       } catch ( ExecutionException eE ) {
+         // ignore for now... very naughty!
        }
        
        CompoundCommand cmd = new CompoundCommand();
-       EditPart part = diagram.findEditPart( diagram, newElement );
-       if (part instanceof WorkflowJobEditPart) {
-         newWorkflowJobEditPart = (WorkflowJobEditPart) part;
+       EditPart part = this.diagram.findEditPart( this.diagram, this.newElement );
+       if ( part instanceof WorkflowJobEditPart ) {
+         this.newWorkflowJobEditPart = ( WorkflowJobEditPart ) part;
        }
-       Map<String, String> m = jsdl.getDataStagingInStrings();
+       String stdInputUri = ""; //$NON-NLS-1$
+       String stdOutputUri = ""; //$NON-NLS-1$
+       String stdErrorUri = ""; //$NON-NLS-1$
+       stdInputUri = this.jsdl.getStdInputFileName();
+       stdOutputUri = this.jsdl.getStdOutputFileName();
+       stdErrorUri = this.jsdl.getStdErrorFileName();
+       if ( stdInputUri != null ) {
+         cmd.add( createInputPortCommand( stdInputUri ) );
+       }
+       if ( stdOutputUri != null ) {
+         cmd.add( createOutputPortCommand( stdOutputUri ) );
+       }
+       if ( stdErrorUri != null ) {
+         cmd.add( createOutputPortCommand( stdErrorUri ) );
+       }
+       Map<String, String> m = this.jsdl.getDataStagingInStrings();
        Set<String> s = m.keySet();
-       for (Iterator<String> i = s.iterator(); i.hasNext(); ) {
+       for ( Iterator< String > i = s.iterator(); i.hasNext(); ) {
          String filename = i.next();
          String uri = m.get( filename );
-         cmd.add( createInputPortCommand(uri) );
+         cmd.add( createInputPortCommand( uri ) );
        }      
-       m = jsdl.getDataStagingOutStrings();
+       m = this.jsdl.getDataStagingOutStrings();
        s = m.keySet();
        for (Iterator<String> i = s.iterator(); i.hasNext(); ) {
          String filename = i.next();
@@ -195,19 +215,27 @@ public class WorkflowJobAfterCreateCommand extends Command {
     // search through the .workflow directory for the target name and target[n]
     // names to work out how many exist
     int numTarget = 0;
-    while( jsdlTarget.exists() ) {
+    while ( jsdlTarget.exists() ) {
       String targetNamePart = jsdlTarget.getName().split( "\\." )[ 0 ]; //$NON-NLS-1$
       String newTargetName = ""; //$NON-NLS-1$
-      if( targetNamePart.endsWith( "[" + numTarget + "]" ) ) { //$NON-NLS-1$ //$NON-NLS-2$
+      if ( targetNamePart.endsWith( "[" + numTarget + "]" ) ) { //$NON-NLS-1$ //$NON-NLS-2$
         targetNamePart = targetNamePart.substring( 0,
                                                    ( targetNamePart.length() - ( "[" //$NON-NLS-1$
                                                                                  + numTarget + "]" ).length() ) ); //$NON-NLS-1$
       }
       newTargetName = targetNamePart + "[" + ++numTarget + "]" + ".jsdl"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-      java.net.URI targetUri = this.wfRootFileStore.getChild( this.dirs[ 3 ] )
-        .getChild( this.dirs[ 4 ] )
-        .getChild( newTargetName )
-        .toURI();
+      // make new jsdlTarget
+      int numDirs = this.dirs.length;
+      java.net.URI targetUri = null;
+      
+      IFileStore fs = WorkflowJobAfterCreateCommand.this.wfRootFileStore;
+      for ( int i = 3; i < numDirs - 1; i++ ) {
+        String dir = WorkflowJobAfterCreateCommand.this.dirs[ i ];
+        dir = dir.replace( "%20", " " ); //$NON-NLS-1$ //$NON-NLS-2$
+        fs = fs.getChild( dir );
+      }
+      fs = fs.getChild( newTargetName );
+      targetUri = fs.toURI();
       jsdlTarget = ResourcesPlugin.getWorkspace()
         .getRoot()
         .findFilesForLocationURI( targetUri )[ 0 ];
@@ -220,10 +248,10 @@ public class WorkflowJobAfterCreateCommand extends Command {
     ViewAndElementDescriptor viewDescriptor = new ViewAndElementDescriptor( new CreateElementRequestAdapter( new CreateElementRequest( type ) ),
                                                                             Node.class,
                                                                             ( ( IHintedType )type ).getSemanticHint(),
-                                                                            newWorkflowJobEditPart.getDiagramPreferencesHint() );
-    CreateViewAndElementRequest createRequest = new CreateViewAndElementRequest(viewDescriptor);
-    Command cmd = newWorkflowJobEditPart.getCommand( createRequest );
-    cmd = cmd.chain( new InputPortAfterCreateCommand(((Collection<IAdaptable>)createRequest.getNewObject()).iterator().next(), uri, newWorkflowJobEditPart.getEditingDomain()) );
+                                                                            this.newWorkflowJobEditPart.getDiagramPreferencesHint() );
+    CreateViewAndElementRequest createRequest = new CreateViewAndElementRequest( viewDescriptor );
+    Command cmd = this.newWorkflowJobEditPart.getCommand( createRequest );
+    cmd = cmd.chain( new InputPortAfterCreateCommand( ( ( Collection< IAdaptable > )createRequest.getNewObject() ).iterator().next(), uri, this.newWorkflowJobEditPart.getEditingDomain() ) );
     return cmd;
   }
   
@@ -232,11 +260,11 @@ public class WorkflowJobAfterCreateCommand extends Command {
     ViewAndElementDescriptor viewDescriptor = new ViewAndElementDescriptor( new CreateElementRequestAdapter( new CreateElementRequest( type ) ),
                                                                             Node.class,
                                                                             ( ( IHintedType )type ).getSemanticHint(),
-                                                                            newWorkflowJobEditPart.getDiagramPreferencesHint() );
+                                                                            this.newWorkflowJobEditPart.getDiagramPreferencesHint() );
     
     CreateViewAndElementRequest createRequest = new CreateViewAndElementRequest(viewDescriptor);
-    Command cmd = newWorkflowJobEditPart.getCommand( createRequest );
-    cmd = cmd.chain( new OutputPortAfterCreateCommand(((Collection<IAdaptable>)createRequest.getNewObject()).iterator().next(), uri, newWorkflowJobEditPart.getEditingDomain()) );    
+    Command cmd = this.newWorkflowJobEditPart.getCommand( createRequest );
+    cmd = cmd.chain( new OutputPortAfterCreateCommand( ( ( Collection< IAdaptable > )createRequest.getNewObject() ).iterator().next(), uri, this.newWorkflowJobEditPart.getEditingDomain() ) );
     return cmd;
   }    
   
