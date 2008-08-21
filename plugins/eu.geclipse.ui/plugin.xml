@@ -323,6 +323,10 @@
             description="Allow redrawing into the currently opened tab"
             id="eu.geclipse.ui.allowRedrawInTheSameTabSolution">
       </solution>
+      <problem
+            description="Selected source and target is the same. File cannot overwrite itself."
+            id="eu.geclipse.ui.problem.fileCannotOverwriteItself">
+      </problem>
    </extension>
    <extension
          point="eu.geclipse.ui.efs">

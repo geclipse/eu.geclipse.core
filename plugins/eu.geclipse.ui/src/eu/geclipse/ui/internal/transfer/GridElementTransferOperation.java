@@ -183,8 +183,7 @@ public class GridElementTransferOperation
       status.merge( pExc.getStatus() );
     }
    
-    return status;
-    
+    return status;    
   }
   
   /**
@@ -195,7 +194,7 @@ public class GridElementTransferOperation
    * @param from The source of the transfer.
    * @param to The target of the transfer.
    * @param monitor A progress monitor used to track the transfer.
-   * @return A status object tracking errors of the transfer.
+   * @return A status object tracking errors of the transfer. 
    */
   private IStatus copy( final IFileStore from,
                         final IFileStore to,
@@ -323,6 +322,7 @@ public class GridElementTransferOperation
       this.sourceFile = sourceFile;
       this.targetDirectory = toDirectory;
       this.targetFile = to;
+      this.sourceFileInfo = sourceFileInfo;
       this.monitor = monitor;
     }
   }
@@ -440,6 +440,9 @@ public class GridElementTransferOperation
         
       }
       
+    } catch( ProblemException e ) {
+      String msg = String.format( Messages.getString("GridElementTransferOperation.errCannotCopyFile"), from.getName() ); //$NON-NLS-1$
+      data.status = new Status( IStatus.ERROR, Activator.PLUGIN_ID, msg, e );
     } finally {
       
       monitor.subTask( Messages.getString("GridElementTransferOperation.closing_streams") ); //$NON-NLS-1$
@@ -643,9 +646,15 @@ public class GridElementTransferOperation
     return result; 
   }
   
-  private void checkExistingTarget( final TransferParams data ) {
+  private void checkExistingTarget( final TransferParams data ) throws ProblemException {
     IFileInfo targetInfo = data.targetFile.fetchInfo();
     if( targetInfo.exists() ) {
+      
+      if( data.sourceFile.toURI().equals( data.targetFile.toURI() ) ) {
+        String msg = String.format( Messages.getString("GridElementTransferOperation.errSourceAndTargetAreTheSame"), data.sourceFile.getName() ); //$NON-NLS-1$
+        throw new ProblemException( "eu.geclipse.ui.problem.fileCannotOverwriteItself", msg, Activator.PLUGIN_ID ); //$NON-NLS-1$
+      }
+      
       switch( this.overwriteMode ) {
         case ASK:
           askOverwrite( data, targetInfo );
