@@ -55,14 +55,14 @@ public class ACLEntryLabelProvider extends LabelProvider
       IACLEntry entry = ( IACLEntry ) element;
       switch ( columnIndex ) {
         case COL_POLICY:
-          result = entry.getPolicy().toString();
+          result = entry.getPolicy().getName();
           break;
         case COL_CAPABILITY:
           result = entry.getCapability().getName();
           break;
         case COL_ACTOR_TYPE:
           ActorType type = entry.getActor().getActorType();
-          result = getActorTypeName( type );
+          result = type.toString() ;
           break;
         case COL_ACTOR_ID:
           result = entry.getActor().getID();
@@ -162,42 +162,6 @@ public class ACLEntryLabelProvider extends LabelProvider
       img = ImageLoader.get( ImageLoader.IMG_ACL_SAML );
     }
     return img;
-  }
-  
-  /**
-   * Helper method to assign a name to the actor type column.
-   * 
-   * @param type an {@link ActorType}.
-   * @return an string, eventually empty if none was found.
-   */
-  private String getActorTypeName( final ActorType type ) {
-    String result = null;
-    
-    if ( type == ActorType.ANYBODY ) {
-      result = Messages.getString("ACLEntryLabelProvider.anybody"); //$NON-NLS-1$
-    } else if ( type == ActorType.CA_ANY_DN_ANY ) {
-      result = Messages.getString("ACLEntryLabelProvider.any_CA"); //$NON-NLS-1$
-    } else if ( type == ActorType.CA_NAME_DN_ANY ) {
-      result = Messages.getString("ACLEntryLabelProvider.given_CA"); //$NON-NLS-1$
-    } else if ( type == ActorType.CA_NAME_DN_PATTERN ) {
-      result = Messages.getString("ACLEntryLabelProvider.certificate_pattern"); //$NON-NLS-1$
-    } else if ( type == ActorType.CA_NAME_DN_NAME ) {
-      result = Messages.getString("ACLEntryLabelProvider.certificate_subject"); //$NON-NLS-1$
-    } else if ( type == ActorType.GROUP_NAME ) {
-      result = Messages.getString("ACLEntryLabelProvider.group_name"); //$NON-NLS-1$
-    } else if ( type == ActorType.GROUP_PATTERN ) {
-      result = Messages.getString("ACLEntryLabelProvider.group_pattern"); //$NON-NLS-1$
-    } else if ( type == ActorType.USER_PATTERN ) {
-      result = Messages.getString("ACLEntryLabelProvider.user_pattern"); //$NON-NLS-1$
-    } else if ( type == ActorType.USER_NAME ) {
-      result = Messages.getString("ACLEntryLabelProvider.user_name"); //$NON-NLS-1$
-    } else if ( type == ActorType.USER_EMAIL ) {
-      result = Messages.getString("ACLEntryLabelProvider.user_email"); //$NON-NLS-1$
-    } else if ( type == ActorType.SAML_ATTRIBUTE ) {
-      result = Messages.getString("ACLEntryLabelProvider.SAML_attribute"); //$NON-NLS-1$
-    }
-    
-    return result;
   }
 
 }
