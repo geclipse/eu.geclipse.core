@@ -61,8 +61,7 @@ public class ACLEntryLabelProvider extends LabelProvider
           result = entry.getCapability().getName();
           break;
         case COL_ACTOR_TYPE:
-          ActorType type = entry.getActor().getActorType();
-          result = type.toString() ;
+          result = entry.getActor().getActorType().getName();
           break;
         case COL_ACTOR_ID:
           result = entry.getActor().getID();

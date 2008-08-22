@@ -29,7 +29,7 @@ public enum ActorType {
    */
   ANYBODY {
     @Override
-    public String toString() {
+    public String getName() {
       return Messages.getString("ActorType.anybody"); //$NON-NLS-1$
     }
   },
@@ -39,7 +39,7 @@ public enum ActorType {
    */
   CA_ANY_DN_ANY {
     @Override
-    public String toString() {
+    public String getName() {
       return Messages.getString("ActorType.CA_any"); //$NON-NLS-1$
     }
   },
@@ -49,7 +49,7 @@ public enum ActorType {
    */
   CA_NAME_DN_ANY {
     @Override
-    public String toString() {
+    public String getName() {
       return Messages.getString("ActorType.CA_subject"); //$NON-NLS-1$
     }
   },
@@ -59,7 +59,7 @@ public enum ActorType {
    */
   CA_NAME_DN_PATTERN {
     @Override
-    public String toString() {
+    public String getName() {
       return Messages.getString("ActorType.CA_subject_DN_pattern"); //$NON-NLS-1$
     }
   },
@@ -69,7 +69,7 @@ public enum ActorType {
    */
   CA_NAME_DN_NAME {
     @Override
-    public String toString() {
+    public String getName() {
       return Messages.getString("ActorType.CA_subject_DN_subject"); //$NON-NLS-1$
     }
   },
@@ -79,7 +79,7 @@ public enum ActorType {
    */
   GROUP_PATTERN {
     @Override
-    public String toString() {
+    public String getName() {
       return Messages.getString("ActorType.group_pattern"); //$NON-NLS-1$
     }
   },
@@ -89,7 +89,7 @@ public enum ActorType {
    */
   GROUP_NAME {
     @Override
-    public String toString() {
+    public String getName() {
       return Messages.getString("ActorType.group_name"); //$NON-NLS-1$
     }
   },
@@ -99,7 +99,7 @@ public enum ActorType {
    */
   USER_PATTERN {
     @Override
-    public String toString() {
+    public String getName() {
       return Messages.getString("ActorType.user_pattern"); //$NON-NLS-1$
     }
   },
@@ -109,7 +109,7 @@ public enum ActorType {
    */
   USER_NAME {
     @Override
-    public String toString() {
+    public String getName() {
       return Messages.getString("ActorType.user_name"); //$NON-NLS-1$
     }
   },
@@ -119,7 +119,7 @@ public enum ActorType {
    */
   USER_EMAIL {
     @Override
-    public String toString() {
+    public String getName() {
       return Messages.getString("ActorType.user_email"); //$NON-NLS-1$
     }
   },
@@ -129,7 +129,7 @@ public enum ActorType {
    */
   SAML_ATTRIBUTE {
     @Override
-    public String toString() {
+    public String getName() {
       return Messages.getString("ActorType.SAML_attribute"); //$NON-NLS-1$
     }
   },
@@ -139,9 +139,16 @@ public enum ActorType {
    */
   OTHER {
     @Override
-    public String toString() {
+    public String getName() {
       return Messages.getString("ActorType.other"); //$NON-NLS-1$
     }
-  }
+  };
+  
+  /**
+   * Returns the name of this actor type.
+   * 
+   * @return a user friendly name.
+   */
+  abstract public String getName();
 
 }
