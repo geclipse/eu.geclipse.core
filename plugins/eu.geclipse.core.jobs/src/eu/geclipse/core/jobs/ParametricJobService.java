@@ -31,6 +31,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.SubMonitor;
 
 import eu.geclipse.core.jobs.internal.Activator;
@@ -228,9 +229,9 @@ public class ParametricJobService implements IGridJobService {
     GridJobCreator jobCreator = new GridJobCreator();
     monitor.setWorkRemaining( generatedJsdls.size() );
     
-    int iteration = 0;
     for ( JSDLJobDescription jobDescription : generatedJsdls ) {
-      String subjobName = String.format( Messages.getString("ParametricJobService.formatIteration"), jobName, Integer.valueOf( iteration++ ) ); //$NON-NLS-1$
+      String subjobName = getSubJobName( jobDescription, jobName );      
+      
       testCancelled( monitor );
       
       monitor.setTaskName( String.format( Messages.getString("ParametricJobService.taskSubmitting"), jobDescription.getName() ) ); //$NON-NLS-1$
@@ -247,6 +248,20 @@ public class ParametricJobService implements IGridJobService {
     }
     
     return submittedJobs;
+  }
+
+  private String getSubJobName( final JSDLJobDescription jobDescription,
+                                final String jobName )
+  {
+    String subJobName = jobName;
+    String jsdlName = new Path( jobDescription.getName() ).removeFileExtension().toString();    
+    int suffixIndex = jsdlName.indexOf( '[' );        
+    
+    if( suffixIndex > -1 ) {
+      subJobName = jobName + jsdlName.substring( suffixIndex );
+    }
+    
+    return subJobName;
   }
 
   private void testCancelled( final SubMonitor monitor ) {

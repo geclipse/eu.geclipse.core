@@ -70,7 +70,15 @@ public class ParametricJsdlGenerator {
   
   private static class GenerationParams {
     JSDLJobDescription parametricJsdl;
-    Document baseJsdl;  // original jsdl without sweep nodes
+    
+    /**
+     * Contains current values of iterations  during generation.
+     * List have to be used because sweeps can be nested
+     */
+    List<Integer> iterationsStack;  // contains current values of iteration numbers during generation
+    
+    // TODO mariusz probably baseJsdl member can be removed
+    Document baseJsdl;  // original jsdl without sweep nodes    
     IFolder targetFolder;
     List<JSDLJobDescription> generatedJsdlList;
 
@@ -79,6 +87,7 @@ public class ParametricJsdlGenerator {
       this.baseJsdl = baseJsdl;
       this.targetFolder = targetFolder;
       this.generatedJsdlList = generatedJsdlList;
+      this.iterationsStack = new ArrayList<Integer>();
     }
   }
   
@@ -113,7 +122,7 @@ public class ParametricJsdlGenerator {
       deleteTargetFolder( targetFolder );
       createTargetFolder( targetFolder );
       NodeList sweeps = findSweeps( parametricXml.getDocumentElement() );
-      processSweeps( sweeps, generationParams );
+      processSweeps( sweeps, baseJsdl, generationParams );
     } catch ( ProblemException exc ) {
       // TODO mariusz 
       Activator.logException( exc );
@@ -184,14 +193,14 @@ public class ParametricJsdlGenerator {
     return targetFolder;    
   }
 
-  private NodeList findSweeps( final Element documentElement ) throws ProblemException
+  private NodeList findSweeps( final Node node ) throws ProblemException
   {
     try {
       if( this.xPathSweeps == null ) {
           this.xPathSweeps = getXPathEngine().compile( "./sweep:Sweep" ); //$NON-NLS-1$
       }
       
-      return (NodeList)this.xPathSweeps.evaluate( documentElement, XPathConstants.NODESET );      
+      return (NodeList)this.xPathSweeps.evaluate( node, XPathConstants.NODESET );      
       
     } catch( XPathExpressionException exception ) {
       throw new ProblemException( "eu.geclipse.jsdl.problem.createXPathQueryFailed", exception, Activator.PLUGIN_ID ); //$NON-NLS-1$
@@ -241,49 +250,55 @@ public class ParametricJsdlGenerator {
       throw new ProblemException( "eu.geclipse.jsdl.problem.createXPathQueryFailed", exception, Activator.PLUGIN_ID ); //$NON-NLS-1$
     }   
   }
-  
 
-  private void processSweeps( final NodeList sweeps, final GenerationParams generationParams ) throws ProblemException {
+  private void processSweeps( final NodeList sweeps, final Document processedJsdl, final GenerationParams generationParams ) throws ProblemException {
     List<ParametricAssignment> assignmentList = new ArrayList<ParametricAssignment>();
-    for( int index = 0; index < sweeps.getLength(); index++ ) {
-      Node item = sweeps.item( index );
+    
+    generationParams.iterationsStack.add( new Integer( 0 ) );
+    
+    for( int index = 0; index < sweeps.getLength(); index++ ) {      
+      Node sweepItem = sweeps.item( index );
       
-      if( item instanceof Element ) {
-        Element currentSweep = ( Element )item;
+      if( sweepItem instanceof Element ) {
+        Element currentSweep = ( Element )sweepItem;
         
         processAssignments( findAssignments( currentSweep ), assignmentList );
+        NodeList childSweeps = findSweeps( sweepItem );
         
-        createJsdls( assignmentList, generationParams );
+        int maxIterations = countIterations( assignmentList );
         
-        // process children sweeps
-//        processSweeps( findSweeps( currentSweep ), generationParams );
+        for( int iteration = 0; iteration < maxIterations; iteration++ ) {
+          // we will modify copy of jsdl
+          Document currentJsdl = ( Document )processedJsdl.cloneNode( true );
+          subtituteParams( assignmentList, iteration, currentJsdl );
+          
+          if( childSweeps.getLength() > 0 ) {
+            processSweeps( childSweeps, currentJsdl, generationParams );
+          } else {
+            saveJsdl( currentJsdl, generationParams );
+          }
+          
+          increaseCurrentIteration( generationParams.iterationsStack );
+        }
+        
+        
       } // TODO mariusz throw exc: expected sweep with children
     }
+    
+    generationParams.iterationsStack.remove( generationParams.iterationsStack.size() - 1 );
   }
 
-  private void createJsdls( final List<ParametricAssignment> assignmentList,
-                            final GenerationParams generationParams )
-  {
-    int maxIterations = countIterations( assignmentList );
-    
-    for( int iteration = 0; iteration < maxIterations; iteration++ ) {
-      // we will modify copy of jsdl
-      Document currentJsdl = ( Document )generationParams.baseJsdl.cloneNode( true );
-      
-      subtituteParams( assignmentList, iteration, currentJsdl );
-      
-      
-      saveJsdl( currentJsdl, generationParams, iteration );
-    }
-    
+  private void increaseCurrentIteration( final List<Integer> iterationsStack ) {
+    int lastIndex = iterationsStack.size() - 1;
+    Integer iteration = iterationsStack.get( lastIndex );
+    iterationsStack.set( lastIndex, Integer.valueOf( iteration.intValue() + 1 ) );    
   }
 
   private void saveJsdl( final Document currentJsdl,
-                         final GenerationParams generationParams,
-                         final int iteration )
+                         final GenerationParams generationParams )
   {
     try {
-      String filename = getJsdlFileName( generationParams, iteration );
+      String filename = getJsdlFileName( generationParams );
       
       IFile file = generationParams.targetFolder.getFile( filename );
       
@@ -321,11 +336,17 @@ public class ParametricJsdlGenerator {
     }
   }
 
-  private String getJsdlFileName( final GenerationParams generationParams, final int iteration ) {
+  private String getJsdlFileName( final GenerationParams generationParams ) {
     Path jsdlName = new Path( generationParams.parametricJsdl.getName() );
+    StringBuilder builder = new StringBuilder( jsdlName.removeFileExtension().toString() );
     
-    return String.format( "%s[%03d].jsdl", jsdlName.removeFileExtension().toString(), //$NON-NLS-1$
-                                     Integer.valueOf( iteration ) );
+    for( Integer iteration : generationParams.iterationsStack ) {
+      builder.append( String.format( "[%03d]", iteration ) ); //$NON-NLS-1$
+    }
+    
+    builder.append( ".jsdl" ); //$NON-NLS-1$
+    
+    return builder.toString();
   }
 
   private void subtituteParams( final List<ParametricAssignment> assignmentList,
