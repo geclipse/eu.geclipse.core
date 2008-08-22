@@ -235,8 +235,8 @@ public class AccessControlDialog extends Dialog {
   
   /**
    * Create the dialog buttons. We override the superclass' method to be
-   * able to modify the OK button label if the ACL can be saved as a whole,
-   * and presenting only the OK button if the entries are saved by the
+   * able to modify the 'OK' button label if the ACL can be saved as a whole,
+   * and presenting only a 'Done' button if the entries are saved by the
    * sub-dialog {@link AccessControlRuleDialog}.
    */
   @Override
@@ -247,7 +247,7 @@ public class AccessControlDialog extends Dialog {
     if ( this.canSaveWholeACL ) {
       buttonText = Messages.getString("AccessControlDialog.save_button_text"); //$NON-NLS-1$
     } else {
-      buttonText = IDialogConstants.OK_LABEL;
+      buttonText = Messages.getString("AccessControlDialog.done_button_text"); //$NON-NLS-1$
     }
     
     createButton( parent, IDialogConstants.OK_ID,
