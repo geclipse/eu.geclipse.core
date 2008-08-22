@@ -45,7 +45,7 @@ public interface IACLPolicy {
    * 
    * @return a user friendly string. Must be non empty.
    */
-  public String toString();
+  public String getName();
   
   /**
    * Returns a description of this policy, for instance to be used
