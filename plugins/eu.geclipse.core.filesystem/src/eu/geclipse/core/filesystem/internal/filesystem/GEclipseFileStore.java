@@ -48,8 +48,7 @@ import eu.geclipse.core.util.MasterMonitor;
  * Implementation of {@link IFileStore} for the g-Eclipse file system.
  */
 public class GEclipseFileStore
-    extends FileStore
-    implements IFileStore {
+    extends FileStore {
   
   public static final int FETCH_CHILDREN_ACTIVE_POLICY = 0x01;
   
@@ -578,9 +577,17 @@ public class GEclipseFileStore
       if ( this.slave != null ) {
         if ( this.slave instanceof IProtectable ) {
           result = this.slave;
-        } else {
-          result = this.slave.getAdapter( adapter );
         }
+      }
+    }
+    
+    if( result == null ) {
+      if( adapter.isAssignableFrom( getClass() ) ) {
+        result = this;
+      } else if( adapter.isAssignableFrom( this.slave.getClass() ) ) {
+        result = this.slave;      
+      } else {
+        result = this.slave.getAdapter( adapter );
       }
     }
     

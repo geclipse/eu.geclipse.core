@@ -17,8 +17,9 @@ package eu.geclipse.jsdl.ui.properties;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
 import eu.geclipse.jsdl.JSDLJobDescription;
-import eu.geclipse.jsdl.model.base.RangeValueType;
 import eu.geclipse.ui.properties.AbstractProperty;
 import eu.geclipse.ui.properties.AbstractPropertySource;
 import eu.geclipse.ui.properties.IProperty;
@@ -66,6 +67,9 @@ public class JsdlJobDescSource
     propertiesList.add( createOSVersion() );
     propertiesList.add( createCandidateHost() );
 //    propertiesList.add( createNetworkBandwidth() );
+    propertiesList.add( createApplicationName() );
+    propertiesList.add( createInputStagers() );
+    propertiesList.add( createOutputStagers() );
     return propertiesList;
   }
 
@@ -109,11 +113,11 @@ public class JsdlJobDescSource
 
       @Override
       public Object getValue( final JSDLJobDescription source ) {
-        String result = "";
+        String result = ""; //$NON-NLS-1$
         for( String host : source.getCandidateHostsNames() ) {
-          result = result + ", " + host;
+          result = result + ", " + host; //$NON-NLS-1$
         }
-        if( !result.equals( "" ) ) {
+        if( !result.equals( "" ) ) { //$NON-NLS-1$
           result = result.substring( 2 );
         } else {
           result = null;
@@ -161,4 +165,63 @@ public class JsdlJobDescSource
       }
     };
   }
+  
+  private static IProperty<JSDLJobDescription> createApplicationName() {
+    return new AbstractProperty<JSDLJobDescription>( Messages.JsdlJobDescSource_propAppName,
+                                                     null,
+                                                     false )
+    {
+
+      @Override
+      public Object getValue( final JSDLJobDescription source ) {
+        return source.getApplicationName();
+      }
+    };
+  }
+
+  private static IProperty<JSDLJobDescription> createInputStagers() {
+    return new AbstractProperty<JSDLJobDescription>( Messages.JsdlJobDescSource_propInputDataStagers,
+                                                     null,
+                                                     false )
+    {
+
+      @Override
+      public Object getValue( final JSDLJobDescription source ) {
+        return formatStagers( source.getDataStagingInStrings() );
+      }
+
+
+
+    };
+  }
+  
+  private static IProperty<JSDLJobDescription> createOutputStagers() {
+    return new AbstractProperty<JSDLJobDescription>( Messages.JsdlJobDescSource_propOutputDataStagers,
+                                                     null,
+                                                     false )
+    {      
+
+      @Override
+      public Object getValue( final JSDLJobDescription source ) {
+        return formatStagers( source.getDataStagingOutStrings() );
+      }
+
+    };
+  }
+
+  protected static Object formatStagers( final Map<String, String> dataStagings ) {
+    String value = null;
+    if( dataStagings != null ) {
+      for( String stagerName : dataStagings.keySet() ) {
+        if( value == null ) {
+          value = stagerName;
+        } else {
+          value = value + ", " + stagerName; //$NON-NLS-1$
+        }
+      }
+    }
+    
+    return value;
+  }
+  
 }
