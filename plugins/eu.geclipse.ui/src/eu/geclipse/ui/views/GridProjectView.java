@@ -38,7 +38,6 @@ import eu.geclipse.ui.internal.actions.ActionGroupManager;
 import eu.geclipse.ui.internal.actions.BuildActions;
 import eu.geclipse.ui.internal.actions.EditorActions;
 import eu.geclipse.ui.internal.actions.MonitorActions;
-import eu.geclipse.ui.internal.actions.MountActions;
 import eu.geclipse.ui.internal.actions.NewWizardActions;
 import eu.geclipse.ui.internal.actions.ProjectActions;
 import eu.geclipse.ui.internal.actions.SimpleTestActions;
@@ -47,6 +46,7 @@ import eu.geclipse.ui.internal.actions.TransformActions;
 import eu.geclipse.ui.internal.actions.VisualisationActions;
 import eu.geclipse.ui.providers.GridModelContentProvider;
 import eu.geclipse.ui.providers.GridModelLabelProvider;
+
 
 /**
  * The grid project view is the central view of the g-Eclipse
@@ -127,19 +127,10 @@ public class GridProjectView
     TransformActions transformActions = new TransformActions( site );
     groups.addGroup( transformActions );
     
-    //DeployActions deployActions = new DeployActions( site );
-    //groups.addGroup(  deployActions );
-    
-    //UninstallActions uninstallActions = new UninstallActions (site);
-    //groups.addGroup( uninstallActions );
-    
-    //ValidateActions validateActions = new ValidateActions(site);
-    //groups.addGroup( validateActions );
-    
     ProjectActions projectActions = new ProjectActions( site );
     groups.addGroup( projectActions );
     
-    BuildActions  buildActions = new BuildActions( site );
+    BuildActions buildActions = new BuildActions( site );
     groups.addGroup( buildActions );
     
     MonitorActions monitorActions = new MonitorActions ( site );
@@ -147,10 +138,10 @@ public class GridProjectView
     
     VisualisationActions visualizationActions = new VisualisationActions ( site );
     groups.addGroup ( visualizationActions );
-
+    
     SimpleTestActions simpleTestActions = new SimpleTestActions( site );
     groups.addGroup( simpleTestActions );
-
+    
     this.editorActions = new EditorActions( this );
     groups.addGroup( this.editorActions );
     
