@@ -581,10 +581,10 @@ public class GEclipseFileStore
       }
     }
     
-    if( result == null ) {
-      if( adapter.isAssignableFrom( getClass() ) ) {
+    if ( result == null ) {
+      if ( adapter.isAssignableFrom( getClass() ) ) {
         result = this;
-      } else if( adapter.isAssignableFrom( this.slave.getClass() ) ) {
+      } else if ( adapter.isAssignableFrom( this.slave.getClass() ) ) {
         result = this.slave;      
       } else {
         result = this.slave.getAdapter( adapter );
