@@ -40,6 +40,14 @@ public interface IACL {
     throws ProblemException;
   
   /**
+   * Returns an empty ACL entry corresponding to this ACL implementation,
+   * which can then be added with <code>addEntry(...)</code>.
+   * 
+   * @return an array of {@link IACLEntry}s.
+   */
+  public IACLEntry getEmptyEntry();
+  
+  /**
    * Registers an additional entry in this ACL. If {@link IACL#canSaveWholeACL()}
    * returns <code>false</code> the changes are stored immediately, i.e.,
    * online if the IProtectable object is remote.
@@ -58,23 +66,28 @@ public interface IACL {
    * returns <code>false</code> the changes are stored immediately, i.e.,
    * online if the IProtectable object is remote.
    * 
-   * @param entry the entry to delete.
+   * @param entry the entry to remove.
    * @param monitor used to monitor progress, can be <code>null</code>.
-   * @throws ProblemException if the entry can not be deleted, for
+   * @throws ProblemException if the entry can not be removed, for
    *         instance because such entry was not present in this ACL,
-   *         or an error occurs while deleting the entry.
+   *         or an error occurs while removing it.
    */
-  public void deleteEntry( final IACLEntry entry, final IProgressMonitor monitor )
+  public void removeEntry( final IACLEntry entry, final IProgressMonitor monitor )
     throws ProblemException;
   
   /**
-   * Returns if the implementation is able to save changes to an ACL as
-   * a whole or single {@link IACLEntry}'s must be stored independently.
+   * Saves the changes made to the given entry of the ACL, if
+   * {@link IACL#canSaveWholeACL()} returns <code>false</code>. Does nothing
+   * otherwise, as {@link IACL#save(IProgressMonitor)} must be used in that case
+   * for saving the changes of the ACL as a whole. For remote objects this is
+   * an online operation.
    * 
-   * @return true if the implementation allows to store the whole ACL,
-   *         false otherwise.
+   * @param entry the entry to save.
+   * @param monitor used to monitor progress, can be <code>null</code>.
+   * @throws ProblemException if an error occurs while saving the entry.
    */
-  public boolean canSaveWholeACL();
+  public void saveEntry( final IACLEntry entry, final IProgressMonitor monitor )
+    throws ProblemException;
   
   /**
    * Saves the changes made to this ACL, if {@link IACL#canSaveWholeACL()}
@@ -82,9 +95,22 @@ public interface IACL {
    * must be saved separately. For remote objects this is an online operation.
    * 
    * @param monitor used to monitor progress, can be <code>null</code>.
-   * @throws ProblemException if an error occurs while saving the entry.
+   * @throws ProblemException if an error occurs while saving the ACL.
    */
   public void save( final IProgressMonitor monitor )
     throws ProblemException;
   
+  /**
+   * Returns if the implementation is able to save changes to an ACL as
+   * a whole or single {@link IACLEntry}'s must be stored independently.
+   * Depending on the value returned by this method either
+   * {@link IACL#save(IProgressMonitor)} (<code>canSaveWholeACL = true</code>) or
+   * {@link IACL#saveEntry(IACLEntry, IProgressMonitor)}
+   * (<code>canSaveWholeACL = false</code>) must be used for saving the ACL changes.
+   * 
+   * @return true if the implementation allows to store the whole ACL,
+   *         false otherwise.
+   */
+  public boolean canSaveWholeACL();
+
 }

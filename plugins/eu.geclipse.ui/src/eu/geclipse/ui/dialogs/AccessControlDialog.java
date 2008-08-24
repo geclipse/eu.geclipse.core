@@ -20,6 +20,7 @@ import java.util.List;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
@@ -41,7 +42,6 @@ import eu.geclipse.core.accesscontrol.IACLEntry;
 import eu.geclipse.core.model.IProtectable;
 import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.ui.comparators.TableColumnComparator;
-import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.listeners.TableColumnListener;
 import eu.geclipse.ui.providers.ACLEntryLabelProvider;
 
@@ -49,6 +49,14 @@ import eu.geclipse.ui.providers.ACLEntryLabelProvider;
 /**
  * A dialog for managing the access permissions of grid elements
  * implementing {@link IProtectable}.
+ * <p>
+ * Editing multiple ACLs is supported only if:
+ * <ul>
+ * <li>for all of them <code>canSaveWholeACL() == true</code> (saving single
+ *     entries at a time would be too risky)</li>
+ * <li>all of them belong to objects of the same type, resp. are instances
+ *     of the same class</li>
+ * </ul>
  * 
  * @author agarcia
  */
@@ -56,52 +64,33 @@ public class AccessControlDialog extends Dialog {
   
   boolean canSaveWholeACL;
   
-  private TableViewer tableViewer;
+  /** The list of ACLs to manage */
+  List< IACL > aclList;
   
   /** The list of ACL entries to display in the dialog */
   private List< IACLEntry > entriesList;
   
+  private TableViewer tableViewer;
+  
   /**
-   * The constructor.
+   * Constructs the dialog used for access control management.
    * 
-   * @param elements The {@link IProtectable} elements whose permissions
-   *        should be managed.
-   * @param parentShell The parent shell for this (modal) dialog.
+   * @param acls the list of {@link IACL}s which should be managed.
+   * @param canSaveWholeACL if true then the ACL supports being saved as a whole.
+   * @param parentShell the parent shell for this (modal) dialog.
    */
-  public AccessControlDialog( final List< IProtectable > elements,
-                            final Shell parentShell )
+  public AccessControlDialog( final List< IACL > acls,
+                              final boolean canSaveWholeACL,
+                              final Shell parentShell )
   {
     super( parentShell );
     
     setShellStyle( SWT.CLOSE | SWT.TITLE | SWT.BORDER | SWT.APPLICATION_MODAL
                    | SWT.RESIZE | SWT.MIN | SWT.MAX );
     
-    this.entriesList = new ArrayList< IACLEntry >( 0 );
-    
-    // TODO support more than one element
-    // TODO add Progress monitor!!
-    // TODO remove this code from the constructor
-    IACL acl;
-    try {
-      acl = elements.get( 0 ).fetchACL( null );
-      
-      this.canSaveWholeACL = acl.canSaveWholeACL();
-      
-      if ( acl != null ) {
-        for ( IACLEntry entry : acl.getEntries( null ) ) {
-          this.entriesList.add( entry );
-        }
-      }
-    } catch ( ProblemException pe ) {
-      
-      ProblemDialog.openProblem(
-        this.getShell(),
-        Messages.getString("AccessControlDialog.error_fetching_ACL_title"), //$NON-NLS-1$
-        Messages.getString("AccessControlDialog.error_fetching_ACL_description"), //$NON-NLS-1$
-        pe );
-      
-      Activator.logException( pe );
-    }
+    this.canSaveWholeACL = canSaveWholeACL;
+    this.aclList = acls;
+    this.entriesList = new ArrayList< IACLEntry >();
   }
   
   /*
@@ -179,10 +168,6 @@ public class AccessControlDialog extends Dialog {
     // Set also the capability column as fall back sorting column
     this.tableViewer.setComparator( new TableColumnComparator( capabilityColumn ) );
     
-    if ( this.entriesList != null ) {
-      this.tableViewer.setInput( this.entriesList );
-    }
-    
     Composite buttons = new Composite( aclGroup, SWT.NULL );
     gData = new GridData( SWT.CENTER, SWT.BEGINNING, false, false );
     gData.horizontalSpan = 1;
@@ -196,7 +181,21 @@ public class AccessControlDialog extends Dialog {
     addEntryButton.setText( Messages.getString("AccessControlDialog.add_button_text") ); //$NON-NLS-1$
     gData = new GridData( GridData.FILL_HORIZONTAL );
     addEntryButton.setLayoutData( gData );
-
+    addEntryButton.addSelectionListener( new SelectionAdapter() {
+      
+      @Override
+      public void widgetSelected( final SelectionEvent e ) {
+        
+        IACLEntry newEntry = AccessControlDialog.this.aclList.get( 0 ).getEmptyEntry();
+        AccessControlRuleDialog dialog
+          = new AccessControlRuleDialog( newEntry,
+                                         ! AccessControlDialog.this.canSaveWholeACL,
+                                         AccessControlDialog.this.getShell() );
+        
+        dialog.open();
+      }
+    } );
+    
     Button editEntryButton = new Button( buttons, SWT.PUSH );
     editEntryButton.setText( Messages.getString("AccessControlDialog.edit_button_text") ); //$NON-NLS-1$
     gData = new GridData( GridData.FILL_HORIZONTAL );
@@ -207,8 +206,8 @@ public class AccessControlDialog extends Dialog {
       public void widgetSelected( final SelectionEvent e ) {
         
         AccessControlRuleDialog dialog
-          = new AccessControlRuleDialog( ! AccessControlDialog.this.canSaveWholeACL,
-                                         getSelectedEntry(),
+          = new AccessControlRuleDialog( getSelectedEntry(),
+                                         ! AccessControlDialog.this.canSaveWholeACL,
                                          AccessControlDialog.this.getShell() );
         
         dialog.open();
@@ -219,8 +218,43 @@ public class AccessControlDialog extends Dialog {
     removeEntryButton.setText( Messages.getString("AccessControlDialog.remove_button_text") ); //$NON-NLS-1$
     gData = new GridData( GridData.FILL_HORIZONTAL );
     removeEntryButton.setLayoutData( gData );
-
+    removeEntryButton.addSelectionListener( new SelectionAdapter() {
+      
+      @Override
+      public void widgetSelected( final SelectionEvent e ) {
+        removeEntry();
+      }
+    
+    } );
+    
+    // Fetch the entries to initialize the table
+    initialize();
+    
+    if ( this.entriesList != null ) {
+      this.tableViewer.setInput( this.entriesList );
+    }
+    
     return mainComp;
+  }
+  
+  /**
+   * Initializes the entries which should be displayed and managed in the
+   * dialog.
+   */
+  private void initialize() {
+    
+    // TODO add Progress monitor!!
+    
+    IACL acl = this.aclList.get( 0 );
+    if ( acl != null ) {
+      try {
+        for ( IACLEntry entry : acl.getEntries( null ) ) {
+          this.entriesList.add( entry );
+        }
+      } catch ( ProblemException pe ) {
+        // TODO: handle exception
+      }
+    }
   }
   
   /*
@@ -262,7 +296,7 @@ public class AccessControlDialog extends Dialog {
   }
   
   /**
-   * Gets the currently selected ACL entry.
+   * Returns the currently selected ACL entry.
    * 
    * @return the {@link IACLEntry} that is currently selected in the table control.
    */
@@ -275,6 +309,42 @@ public class AccessControlDialog extends Dialog {
       entry = ( IACLEntry ) obj;
     }
     return entry;
+  }
+  
+  /**
+   * Helper method for removing the entry selected in the table.
+   */
+  void removeEntry() {
+    
+    /*
+     * We only ask for confirmation if the changes cannot be canceled,
+     * i.e. if single ACL entries have to be saved separately.
+     */
+    boolean confirm = true;
+    if ( ! this.canSaveWholeACL ) {
+      confirm = MessageDialog.openConfirm( this.getShell(),
+                  "Remove rule",
+                  "You are going to remove this access control rule. Continue?" );
+    }
+    
+    // TODO add Progress monitor!!
+    
+    if ( confirm ) {
+      
+      IACLEntry entry = getSelectedEntry();
+      
+      try {
+        for( IACL acl : this.aclList ) {
+          acl.removeEntry( entry, null );
+        }
+        this.entriesList.remove( entry );
+      } catch ( ProblemException pe ) {
+        ProblemDialog.openProblem( this.getShell(),
+                                   "Error deleting rule",
+                                   "The selected rule could not be deleted",
+                                   pe );
+      }
+    }
   }
 
 }

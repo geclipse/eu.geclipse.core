@@ -31,6 +31,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 
 import eu.geclipse.core.accesscontrol.ActorType;
+import eu.geclipse.core.accesscontrol.IACLActor;
 import eu.geclipse.core.accesscontrol.IACLCapability;
 import eu.geclipse.core.accesscontrol.IACLEntry;
 import eu.geclipse.core.accesscontrol.IACLPolicy;
@@ -54,13 +55,13 @@ public class AccessControlRuleDialog extends Dialog {
   /**
    * The constructor.
    * 
+   * @param entry the {@link IACLEntry} to edit.
    * @param withSaveButton display a "Save" button instead of the "OK" one.
    *        To be used in the case single ACL entries must be saved separately.
-   * @param entry the {@link IACLEntry} to edit.
    * @param parentShell the parent shell.
    */
-  protected AccessControlRuleDialog( final boolean withSaveButton,
-                                     final IACLEntry entry,
+  protected AccessControlRuleDialog( final IACLEntry entry,
+                                     final boolean withSaveButton,
                                      final Shell parentShell )
   {
     super( parentShell );
@@ -148,38 +149,44 @@ public class AccessControlRuleDialog extends Dialog {
     
     
     // Fill in the policy data
-    List< String > policyNames = new ArrayList< String >( 0 );
+    List< String > policyNames = new ArrayList< String >( 5 );
     IACLPolicy[] policies = this.entry.getSupportedPolicies();
     for ( IACLPolicy policy : policies ) {
       String name = policy.toString();
       policyNames.add( name != null ? name : "" ); //$NON-NLS-1$
     }
-    policyCombo.setItems( policyNames.toArray( new String[ 0 ] ) );
-    int selectionIndex = policyCombo.indexOf( this.entry.getPolicy().toString() );
-    policyCombo.select( selectionIndex );
+    policyCombo.setItems( policyNames.toArray( new String[ policyNames.size() ] ) );
+    IACLPolicy policy = this.entry.getPolicy();
+    if ( policy != null ) {
+      policyCombo.select( policyCombo.indexOf( policy.toString() ) );
+    }
     
     // Fill in the capability data
-    List< String > capNames = new ArrayList< String >( 0 );
+    List< String > capNames = new ArrayList< String >( 5 );
     IACLCapability[] capabilities = this.entry.getSupportedCapabilities();
     for ( IACLCapability capability : capabilities ) {
       String name = capability.getName();
       capNames.add( name != null ? name : "" ); //$NON-NLS-1$
     }
-    capCombo.setItems( capNames.toArray( new String[ 0 ] ) );
-    selectionIndex = capCombo.indexOf( this.entry.getCapability().getName() );
-    capCombo.select( selectionIndex );
+    capCombo.setItems( capNames.toArray( new String[ capNames.size() ] ) );
+    IACLCapability capability = this.entry.getCapability();
+    if ( capability != null ) {
+      capCombo.select( capCombo.indexOf( capability.getName() ) );
+    }
     
     // Fill in the actor type data
-    List< String > aTypeNames = new ArrayList< String >( 0 );
-    ActorType[] aTypes = this.entry.getActor().getSupportedTypes();
+    List< String > aTypeNames = new ArrayList< String >( 5 );
+    IACLActor actor = this.entry.getActor();
+    assert actor != null
+           : "Null actor in ACL entry: implementation BUG."; //$NON-NLS-1$
+    ActorType[] aTypes = actor.getSupportedTypes();
     for ( ActorType aType : aTypes ) {
       String name = aType.toString();
       aTypeNames.add( name != null ? name : "" ); //$NON-NLS-1$
     }
-    actorTypeCombo.setItems( aTypeNames.toArray( new String[ 0 ] ) );
-    selectionIndex = actorTypeCombo.indexOf( this.entry.getActor()
-                                               .getActorType().toString() );
-    actorTypeCombo.select( selectionIndex );
+    actorTypeCombo.setItems( aTypeNames.toArray( new String[ aTypeNames.size() ] ) );
+    int index = actorTypeCombo.indexOf( actor.getActorType().toString() );
+    actorTypeCombo.select( index );
     
     // Fill in the actor ID data
     String actorID = this.entry.getActor().getID();
