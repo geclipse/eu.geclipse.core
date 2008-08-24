@@ -25,6 +25,7 @@ import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.IWorkbenchSite;
 import org.eclipse.ui.actions.SelectionListenerAction;
 
+import eu.geclipse.core.ICoreProblems;
 import eu.geclipse.core.accesscontrol.IACL;
 import eu.geclipse.core.model.IProtectable;
 import eu.geclipse.core.reporting.ProblemException;
@@ -74,7 +75,13 @@ public class ManagePermissionsAction extends SelectionListenerAction {
       IProtectable next;
       while ( it.hasNext() ) {
         next = ( IProtectable ) it.next();
-        aclList.add( next.fetchACL( null ) );
+        IACL acl = next.fetchACL( null );
+        if ( acl == null ) {
+          throw new ProblemException( ICoreProblems.ACCESSCONTROL_INVALID_ACL,
+                      Messages.getString("ManagePermissionsAction.null_ACL_error"), //$NON-NLS-1$
+                      Activator.PLUGIN_ID );
+        }
+        aclList.add( acl );
       }
       
       // All elements of the list must be of the same type, so query the first
