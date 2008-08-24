@@ -48,6 +48,7 @@ import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridModelEvent;
 import eu.geclipse.core.model.IGridModelListener;
 import eu.geclipse.ui.decorators.GridProjectFolderDecorator;
+import eu.geclipse.ui.internal.actions.AccessControlActions;
 import eu.geclipse.ui.internal.actions.ActionGroupManager;
 import eu.geclipse.ui.internal.actions.CommonActions;
 import eu.geclipse.ui.internal.actions.FileActions;
@@ -236,7 +237,10 @@ public abstract class GridModelViewPart
     
     MountActions mountActions = new MountActions( getSite() );
     groups.addGroup( mountActions );
-     
+    
+    AccessControlActions aclActions = new AccessControlActions( getSite() );
+    groups.addGroup( aclActions );
+    
     CommonActions commonActions = new CommonActions( this );
     groups.addGroup( commonActions );
     
