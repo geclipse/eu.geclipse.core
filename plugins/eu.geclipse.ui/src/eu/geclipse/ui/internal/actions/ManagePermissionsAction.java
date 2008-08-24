@@ -61,6 +61,10 @@ public class ManagePermissionsAction extends SelectionListenerAction {
   }
   
   
+  /*
+   * (non-Javadoc)
+   * @see org.eclipse.jface.action.Action#run()
+   */
   @Override
   public void run() {
     
