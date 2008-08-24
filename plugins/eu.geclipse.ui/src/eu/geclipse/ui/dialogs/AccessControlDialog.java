@@ -195,6 +195,8 @@ public class AccessControlDialog extends Dialog {
         dialog.open();
       }
     } );
+    // TODO reenable when write support is available
+    addEntryButton.setEnabled( false );
     
     Button editEntryButton = new Button( buttons, SWT.PUSH );
     editEntryButton.setText( Messages.getString("AccessControlDialog.edit_button_text") ); //$NON-NLS-1$
@@ -226,6 +228,8 @@ public class AccessControlDialog extends Dialog {
       }
     
     } );
+    // TODO reenable when write support is available
+    removeEntryButton.setEnabled( false );
     
     // Fetch the entries to initialize the table
     initialize();

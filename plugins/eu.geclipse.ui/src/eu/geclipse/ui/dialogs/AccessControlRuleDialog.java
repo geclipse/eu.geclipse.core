@@ -23,6 +23,7 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -224,8 +225,11 @@ public class AccessControlRuleDialog extends Dialog {
       buttonText = IDialogConstants.OK_LABEL;
     }
     
-    createButton( parent, IDialogConstants.OK_ID,
+    Button button;
+    button = createButton( parent, IDialogConstants.OK_ID,
                   buttonText, true );
+    // TODO reenable when write support is available
+    button.setEnabled( false );
     createButton( parent, IDialogConstants.CANCEL_ID,
                   IDialogConstants.CANCEL_LABEL, false );
   }
