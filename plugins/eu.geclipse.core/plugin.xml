@@ -143,6 +143,11 @@
    <extension
          point="eu.geclipse.core.reporting.problemReporting">
       <problem
+            description="Invalid access control list"
+            id="eu.geclipse.core.problem.accesscontrol.invalidACL"
+            mailto="">
+      </problem>
+      <problem
             description="Invalid access control actor"
             id="eu.geclipse.core.problem.accesscontrol.invalidActor"
             mailto="">

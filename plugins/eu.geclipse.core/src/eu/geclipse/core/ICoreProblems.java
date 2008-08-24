@@ -32,6 +32,8 @@ public interface ICoreProblems {
    */
   
   // Access control
+  public static final String ACCESSCONTROL_INVALID_ACL
+    = "eu.geclipse.core.problem.accesscontrol.invalidACL"; //$NON-NLS-1$
   public static final String ACCESSCONTROL_INVALID_ACTOR
     = "eu.geclipse.core.problem.accesscontrol.invalidActor"; //$NON-NLS-1$
   public static final String ACCESSCONTROL_INVALID_CAPABILITY
