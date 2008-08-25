@@ -40,71 +40,73 @@ import eu.geclipse.core.reporting.ProblemException;
 public class GridProcess {
   protected int pid = 0;
   protected IFileStore procinfo = null;
-  protected Hashtable<String,Integer> values = null;
+  protected Hashtable< String,Integer > values = null;
   
   private final String[] captions = {
     Messages.getString("ProcessStatView.pid"), //$NON-NLS-1$
     Messages.getString("ProcessStatView.comm"), //$NON-NLS-1$
-    Messages.getString("ProcessStatView.state"),  //$NON-NLS-1$ 
-    Messages.getString("ProcessStatView.ppid"),  //$NON-NLS-1$
-    Messages.getString("ProcessStatView.pgrp"),  //$NON-NLS-1$
+    Messages.getString("ProcessStatView.state"), //$NON-NLS-1$ 
+    Messages.getString("ProcessStatView.ppid"), //$NON-NLS-1$
+    Messages.getString("ProcessStatView.pgrp"), //$NON-NLS-1$
     Messages.getString("ProcessStatView.session"), //$NON-NLS-1$
     Messages.getString("ProcessStatView.tty_nr"), //$NON-NLS-1$
     Messages.getString("ProcessStatView.tpgid"), //$NON-NLS-1$
     Messages.getString("ProcessStatView.flags"), //$NON-NLS-1$
-    Messages.getString("ProcessStatView.minflt"),  //$NON-NLS-1$
-    Messages.getString("ProcessStatView.cminflt"),  //$NON-NLS-1$
-    Messages.getString("ProcessStatView.majflt"),  //$NON-NLS-1$
-    Messages.getString("ProcessStatView.cmajflt"),  //$NON-NLS-1$
-    Messages.getString("ProcessStatView.utime"),  //$NON-NLS-1$
-    Messages.getString("ProcessStatView.stime"),  //$NON-NLS-1$
-    Messages.getString("ProcessStatView.cutime"),  //$NON-NLS-1$
-    Messages.getString("ProcessStatView.cstime"),  //$NON-NLS-1$
+    Messages.getString("ProcessStatView.minflt"), //$NON-NLS-1$
+    Messages.getString("ProcessStatView.cminflt"), //$NON-NLS-1$
+    Messages.getString("ProcessStatView.majflt"), //$NON-NLS-1$
+    Messages.getString("ProcessStatView.cmajflt"), //$NON-NLS-1$
+    Messages.getString("ProcessStatView.utime"), //$NON-NLS-1$
+    Messages.getString("ProcessStatView.stime"), //$NON-NLS-1$
+    Messages.getString("ProcessStatView.cutime"), //$NON-NLS-1$
+    Messages.getString("ProcessStatView.cstime"), //$NON-NLS-1$
     Messages.getString("ProcessStatView.priority"), //$NON-NLS-1$
-    Messages.getString("ProcessStatView.nice"),  //$NON-NLS-1$
-    "",   //$NON-NLS-1$
-    Messages.getString("ProcessStatView.itrealvalue"),  //$NON-NLS-1$
-    Messages.getString("ProcessStatView.starttime"),  //$NON-NLS-1$
-    Messages.getString("ProcessStatView.vsize"),  //$NON-NLS-1$
-    Messages.getString("ProcessStatView.rss"),  //$NON-NLS-1$
-    Messages.getString("ProcessStatView.rlim"),  //$NON-NLS-1$
+    Messages.getString("ProcessStatView.nice"), //$NON-NLS-1$
+    "", //$NON-NLS-1$
+    Messages.getString("ProcessStatView.itrealvalue"), //$NON-NLS-1$
+    Messages.getString("ProcessStatView.starttime"), //$NON-NLS-1$
+    Messages.getString("ProcessStatView.vsize"), //$NON-NLS-1$
+    Messages.getString("ProcessStatView.rss"), //$NON-NLS-1$
+    Messages.getString("ProcessStatView.rlim"), //$NON-NLS-1$
     Messages.getString("ProcessStatView.startcode"), //$NON-NLS-1$
-    Messages.getString("ProcessStatView.endcode"),  //$NON-NLS-1$
-    Messages.getString("ProcessStatView.startstack"),  //$NON-NLS-1$
-    Messages.getString("ProcessStatView.kstkesp"),  //$NON-NLS-1$
-    Messages.getString("ProcessStatView.ksteip"),  //$NON-NLS-1$
-    Messages.getString("ProcessStatView.signal"),  //$NON-NLS-1$
-    Messages.getString("ProcessStatView.blocked"),  //$NON-NLS-1$
-    Messages.getString("ProcessStatView.sigignore"),  //$NON-NLS-1$
-    Messages.getString("ProcessStatView.sigcatch"),  //$NON-NLS-1$
-    Messages.getString("ProcessStatView.wchan"),  //$NON-NLS-1$
-    Messages.getString("ProcessStatView.nswap"),  //$NON-NLS-1$
-    Messages.getString("ProcessStatView.cnswap"),  //$NON-NLS-1$
-    Messages.getString("ProcessStatView.exit_signal"),  //$NON-NLS-1$
-    Messages.getString("ProcessStatView.processor"),  //$NON-NLS-1$
-    Messages.getString("ProcessStatView.rt_priority"),  //$NON-NLS-1$
-    Messages.getString("ProcessStatView.policy"),  //$NON-NLS-1$
+    Messages.getString("ProcessStatView.endcode"), //$NON-NLS-1$
+    Messages.getString("ProcessStatView.startstack"), //$NON-NLS-1$
+    Messages.getString("ProcessStatView.kstkesp"), //$NON-NLS-1$
+    Messages.getString("ProcessStatView.ksteip"), //$NON-NLS-1$
+    Messages.getString("ProcessStatView.signal"), //$NON-NLS-1$
+    Messages.getString("ProcessStatView.blocked"), //$NON-NLS-1$
+    Messages.getString("ProcessStatView.sigignore"), //$NON-NLS-1$
+    Messages.getString("ProcessStatView.sigcatch"), //$NON-NLS-1$
+    Messages.getString("ProcessStatView.wchan"), //$NON-NLS-1$
+    Messages.getString("ProcessStatView.nswap"), //$NON-NLS-1$
+    Messages.getString("ProcessStatView.cnswap"), //$NON-NLS-1$
+    Messages.getString("ProcessStatView.exit_signal"), //$NON-NLS-1$
+    Messages.getString("ProcessStatView.processor"), //$NON-NLS-1$
+    Messages.getString("ProcessStatView.rt_priority"), //$NON-NLS-1$
+    Messages.getString("ProcessStatView.policy"), //$NON-NLS-1$
     Messages.getString("ProcessStatView.delayacct_blkio_ticks") }; //$NON-NLS-1$
   
   /**
-   * Constructs a GridProcess object and associates a /proc/stat IFilesStore resource with it
-   * @param proc a valid org.eclipse.core.filesystem.IFileStore representing a processes /proc/stat file
+   * Constructs a GridProcess object and associates a /proc/stat IFilesStore
+   * resource with it.
+   * 
+   * @param proc a valid {@link IFileStore} representing a processes /proc/stat file.
    */
   public GridProcess( final IFileStore proc ) {
-      
-    if ( proc != null && proc.fetchInfo().isDirectory() ) {   // roughly check the validity of the FileStore 
+    
+    if ( proc != null && proc.fetchInfo().isDirectory() ) { // roughly check the validity of the FileStore
         String dirname = proc.getName();
         this.pid = Integer.parseInt( dirname );
         if ( this.pid > 0 ) {
           this.procinfo = proc;
         }
     }
-    this.values = new Hashtable<String, Integer>();
+    this.values = new Hashtable< String, Integer >();
   }
   
   /**
    * Calling this method causes the process data associated with
-   * this object to be re-read
+   * this object to be re-read.
    * 
    * @throws ProblemException
    */
@@ -131,11 +133,11 @@ public class GridProcess {
                                       "Error reading/parsing stat of remote process " + this.pid, //$NON-NLS-1$
                                       cause,
                                       Activator.PLUGIN_ID );
-        } 
+        }
         if ( inr != null ) {
           try {
             inr.close();
-          } catch( IOException e ) {
+          } catch ( IOException e ) {
             // do nothing here
           }
         }
@@ -144,10 +146,12 @@ public class GridProcess {
   }
   
   /**
-   * return the processes /proc/stat values as a localized Hashtable
-   * @return a localized Hashtable containing /proc/<pid>/stat
+   * Returns the processes /proc/stat values as a localized {@link Hashtable}.
+   * 
+   * @return a localized Hashtable containing /proc/<pid>/stat.
    */
-  public Hashtable<String, Integer> getStat() {
+  public Hashtable< String, Integer > getStat() {
     return this.values;
   }
+
 }
