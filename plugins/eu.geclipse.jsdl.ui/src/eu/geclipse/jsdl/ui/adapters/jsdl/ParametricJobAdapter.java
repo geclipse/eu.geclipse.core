@@ -125,14 +125,14 @@ public class ParametricJobAdapter extends JsdlAdaptersFactory {
             int argumentsCount = posixApp.getArgument().size();
             if( argumentsCount > 1 ) {
               for( int j = 0; j < argumentsCount; j++ ) {
-                result.add( "POSIXApplication/Argument[" + ( j + 1 ) + "]" );
+                result.add( "/*//jsdl-posix:POSIXApplication/jsdl-posix:Argument[" + ( j + 1 ) + "]" );
               }
             } else if( argumentsCount == 1 ) {
-              result.add( "POSIXApplication/Argument" );
+              result.add( "/*//jsdl-posix:POSIXApplication/jsdl-posix:Argument" );
             }
           }
           if( posixApp.getExecutable() != null ) {
-            result.add( "POSIXApplication/Executable" );
+            result.add( "/*//jsdl-posix:POSIXApplication/jsdl-posix:Executable" );
           }
           if( posixApp.getInput() != null ) {
             result.add( "POSIXApplication/Input" );
