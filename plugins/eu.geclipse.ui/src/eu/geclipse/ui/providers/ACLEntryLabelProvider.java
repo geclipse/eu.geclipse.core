@@ -99,15 +99,9 @@ public class ACLEntryLabelProvider extends LabelProvider
           short pType = entry.getPolicy().getType();
           img = getPolicyImage( pType );
           break;
-        case COL_CAPABILITY:
-          break;
         case COL_ACTOR_TYPE:
           ActorType type = entry.getActor().getActorType();
           img = getActorTypeImage( type );
-          break;
-        case COL_ACTOR_ID:
-          break;
-        case COL_ACTOR_CA:
           break;
         default:
           break;
