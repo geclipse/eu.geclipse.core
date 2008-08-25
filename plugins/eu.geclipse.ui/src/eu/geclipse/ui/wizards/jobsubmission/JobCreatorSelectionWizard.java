@@ -149,7 +149,7 @@ public class JobCreatorSelectionWizard extends Wizard {
 
   @Override
   public boolean canFinish() {
-    return super.canFinish() & this.getSubmissionService() != null;
+    return super.canFinish() && this.getSubmissionService() != null;
   }
 
   /*
