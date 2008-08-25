@@ -48,6 +48,10 @@ public class OpenUrlSolver implements IConfigurableSolver {
   private String[] urls;
 
 
+  /*
+   * (non-Javadoc)
+   * @see eu.geclipse.core.reporting.ISolver#solve()
+   */
   public void solve() throws InvocationTargetException {
     try {
       IWorkbenchBrowserSupport browserSupport
@@ -74,12 +78,16 @@ public class OpenUrlSolver implements IConfigurableSolver {
     }
   }
 
+  /*
+   * (non-Javadoc)
+   * @see org.eclipse.core.runtime.IExecutableExtension#setInitializationData(org.eclipse.core.runtime.IConfigurationElement, java.lang.String, java.lang.Object)
+   */
   public void setInitializationData( final IConfigurationElement config,
                                      final String propertyName,
                                      final Object data)
       throws CoreException {
 
-    List< String > urlsList = new ArrayList< String >( 0 );
+    List< String > urlsList = new ArrayList< String >( 3 );
     IConfigurationElement[] subelements = config.getChildren( URL_SUB_ELEMENT );
 
     for ( IConfigurationElement subelement : subelements ) {
@@ -89,7 +97,7 @@ public class OpenUrlSolver implements IConfigurableSolver {
       }
     }
     
-    this.urls = urlsList.toArray( new String[ 0 ] );  
+    this.urls = urlsList.toArray( new String[ urlsList.size() ] );
   }
 
 }
