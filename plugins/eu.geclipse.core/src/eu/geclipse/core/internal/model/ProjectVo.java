@@ -51,7 +51,7 @@ public class ProjectVo
    * Definition of standard categories that are used whenever a VO does not specify
    * dedicated categories.
    */
-  public static IGridResourceCategory[] standardCategories
+  public static final IGridResourceCategory[] standardCategories
     = new IGridResourceCategory[] {
       GridResourceCategoryFactory.getCategory( GridResourceCategoryFactory.ID_APPLICATIONS ),
       GridResourceCategoryFactory.getCategory( GridResourceCategoryFactory.ID_COMPUTING ),
