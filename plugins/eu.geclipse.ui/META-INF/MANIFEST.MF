@@ -40,7 +40,6 @@ Export-Package: eu.geclipse.ui,
  eu.geclipse.ui.visualisation.preferences,
  eu.geclipse.ui.widgets,
  eu.geclipse.ui.wizards,
- eu.geclipse.ui.wizards.deployment,
  eu.geclipse.ui.wizards.jobsubmission,
  eu.geclipse.ui.wizards.portforward,
  eu.geclipse.ui.wizards.wizardselection
