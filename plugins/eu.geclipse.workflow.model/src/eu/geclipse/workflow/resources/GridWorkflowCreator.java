@@ -19,9 +19,9 @@ import org.eclipse.core.resources.IFolder;
 
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
-import eu.geclipse.core.model.IGridWorkflow;
 import eu.geclipse.core.model.impl.AbstractGridElementCreator;
 import eu.geclipse.core.reporting.ProblemException;
+import eu.geclipse.workflow.IGridWorkflowDescription;
 
 /**
  * 
@@ -32,7 +32,7 @@ public class GridWorkflowCreator extends AbstractGridElementCreator {
   private static final String FILE_EXTENSION = "workflow"; //$NON-NLS-1$
 
   public boolean canCreate( final Class<? extends IGridElement> elementType ) {
-    return IGridWorkflow.class.isAssignableFrom( elementType );
+    return IGridWorkflowDescription.class.isAssignableFrom( elementType );
   }
 
   public IGridElement create( final IGridContainer parent )

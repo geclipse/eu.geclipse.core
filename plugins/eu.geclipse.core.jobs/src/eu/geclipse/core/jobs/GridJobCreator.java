@@ -38,12 +38,12 @@ import eu.geclipse.core.model.IGridJob;
 import eu.geclipse.core.model.IGridJobDescription;
 import eu.geclipse.core.model.IGridJobID;
 import eu.geclipse.core.model.IGridJobService;
-import eu.geclipse.core.model.IGridWorkflow;
-import eu.geclipse.core.model.IGridWorkflowJob;
-import eu.geclipse.core.model.IGridWorkflowJobID;
 import eu.geclipse.core.model.impl.AbstractGridJobCreator;
 import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.jsdl.JSDLJobDescription;
+import eu.geclipse.workflow.IGridWorkflowDescription;
+import eu.geclipse.workflow.IGridWorkflowJobDescription;
+import eu.geclipse.workflow.IGridWorkflowJobID;
 
 /**
  * GridJobCreator creates grid jobs. A GridJob object is middleware independent
@@ -137,14 +137,14 @@ public class GridJobCreator extends AbstractGridJobCreator {
                                                 jobService,
                                                 description,
                                                 uniqueJobName );
-      if( description instanceof IGridWorkflow
+      if( description instanceof IGridWorkflowDescription
           && id instanceof IGridWorkflowJobID )
       {
         createWorkflowJobStructure( job,
                                     jobFolder,
                                     ( IGridWorkflowJobID )id,
                                     jobService,
-                                    ( IGridWorkflow )description );
+                                    ( IGridWorkflowDescription )description );
       }
       this.canCreate( jobFolder );
       parent.create( this );
@@ -196,13 +196,13 @@ public class GridJobCreator extends AbstractGridJobCreator {
                                            final IFolder jobFolder,
                                            final IGridWorkflowJobID id,
                                            final IGridJobService jobService,
-                                           final IGridWorkflow workflowDescription )
+                                           final IGridWorkflowDescription workflowDescription )
     throws ProblemException
   {
     List<IGridWorkflowJobID> childrenIds = id.getChildrenJobs();
     if( childrenIds != null ) {
       for( IGridWorkflowJobID childId : childrenIds ) {
-        IGridWorkflowJob childJob = findJob( workflowDescription,
+        IGridWorkflowJobDescription childJob = findJob( workflowDescription,
                                              childId.getName() );
         if( childJob != null ) {
           JSDLJobDescription childJobDescription = createChildJobDescription( jobFolder,
@@ -231,11 +231,11 @@ public class GridJobCreator extends AbstractGridJobCreator {
     }
   }
 
-  private IGridWorkflowJob findJob( final IGridWorkflow workflowDescription,
+  private IGridWorkflowJobDescription findJob( final IGridWorkflowDescription workflowDescription,
                                     final String jobName )
   {
-    IGridWorkflowJob job = null;
-    for( IGridWorkflowJob curJob : workflowDescription.getChildrenJobs() ) {
+    IGridWorkflowJobDescription job = null;
+    for( IGridWorkflowJobDescription curJob : workflowDescription.getChildrenJobs() ) {
       if( curJob.getName().equals( jobName ) ) {
         job = curJob;
         break;
@@ -245,7 +245,7 @@ public class GridJobCreator extends AbstractGridJobCreator {
   }
 
   private JSDLJobDescription createChildJobDescription( final IFolder jobFolder,
-                                                        final IGridWorkflowJob childJob ) throws ProblemException
+                                                        final IGridWorkflowJobDescription childJob ) throws ProblemException
   {
     JSDLJobDescription description = null;
     FileInputStream inputStream = null;

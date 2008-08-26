@@ -7,7 +7,8 @@ Bundle-ClassPath: .
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
-Export-Package: eu.geclipse.workflow.impl,
+Export-Package: eu.geclipse.workflow,
+ eu.geclipse.workflow.impl,
  eu.geclipse.workflow.model,
  eu.geclipse.workflow.resources,
  eu.geclipse.workflow.util

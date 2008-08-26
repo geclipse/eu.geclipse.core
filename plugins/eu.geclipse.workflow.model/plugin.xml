@@ -34,7 +34,7 @@
             id="eu.geclipse.workflow.creator"
             name="Grid Workflow">
          <target
-               class="eu.geclipse.core.model.IGridWorkflow"
+               class="eu.geclipse.workflow.IGridWorkflowDescription"
                name="Workflow Model">
          </target>
       </creator>

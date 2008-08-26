@@ -13,20 +13,22 @@
  *    Mathias Stuempert - initial API and implementation
  *****************************************************************************/
 
-package eu.geclipse.core.model;
+package eu.geclipse.workflow;
 
 import java.util.List;
+
+import eu.geclipse.core.model.IGridJobDescription;
 
 /**
  * This is at the moment just a declarative interface for
  * integrating workflows into the Grid model.
  */
-public interface IGridWorkflow
+public interface IGridWorkflowDescription
     extends IGridJobDescription {
   
   /**
    * @return jobs, which are inside this workflow
    */
-  List<IGridWorkflowJob> getChildrenJobs();
+  List<IGridWorkflowJobDescription> getChildrenJobs();
   
 }

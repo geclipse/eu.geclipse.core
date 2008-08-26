@@ -17,17 +17,17 @@ package eu.geclipse.workflow.resources;
 
 import org.eclipse.core.runtime.Path;
 
-import eu.geclipse.core.model.IGridWorkflowJob;
+import eu.geclipse.workflow.IGridWorkflowJobDescription;
 import eu.geclipse.workflow.model.IWorkflowJob;
 
 /**
  * Wrapper to emf implementation
  */
-public class GridWorkflowJob implements IGridWorkflowJob {
+public class GridWorkflowJobDescription implements IGridWorkflowJobDescription {
 
   private IWorkflowJob jobImpl;
 
-  GridWorkflowJob( final IWorkflowJob jobImpl ) {
+  GridWorkflowJobDescription( final IWorkflowJob jobImpl ) {
     super();
     this.jobImpl = jobImpl;
   }

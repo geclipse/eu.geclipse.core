@@ -13,23 +13,25 @@
  *     Mariusz Wojtysiak - initial API and implementation
  *     
  *****************************************************************************/
-package eu.geclipse.core.model;
+package eu.geclipse.workflow;
 
-import org.eclipse.core.runtime.Path;
+import java.util.List;
+
+import eu.geclipse.core.model.IGridJobID;
 
 
 /**
- * Job, which is part of workflow
+ * Job ID for jobs, which are workflow
  */
-public interface IGridWorkflowJob {
+public interface IGridWorkflowJobID extends IGridJobID {
+  /**
+   * @return list of jobs id, which are part of workflow.
+   * May return null, if job has no childs
+   */
+  List<IGridWorkflowJobID> getChildrenJobs();
   
   /**
-   * @return job name
+   * @return name of job returned from middleware
    */
   String getName();
-  
-  /**
-   * @return job description. Now only jsdl content is returned as description.
-   */
-  Path getDescriptionPath();
 }

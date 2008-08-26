@@ -37,11 +37,11 @@ import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridJobDescription;
 import eu.geclipse.core.model.IGridModelEvent;
 import eu.geclipse.core.model.IGridModelListener;
-import eu.geclipse.core.model.IGridWorkflow;
-import eu.geclipse.core.model.IGridWorkflowJob;
 import eu.geclipse.core.model.impl.ResourceGridContainer;
 import eu.geclipse.core.model.impl.ResourceGridElement;
 import eu.geclipse.core.reporting.ProblemException;
+import eu.geclipse.workflow.IGridWorkflowDescription;
+import eu.geclipse.workflow.IGridWorkflowJobDescription;
 import eu.geclipse.workflow.impl.WorkflowImpl;
 import eu.geclipse.workflow.internal.Activator;
 import eu.geclipse.workflow.model.IWorkflowJob;
@@ -51,11 +51,11 @@ import eu.geclipse.workflow.model.IWorkflowNode;
  * Grid element for workflow description
  */
 public class GridWorkflow extends ResourceGridContainer
-implements IGridWorkflow
+implements IGridWorkflowDescription
 {
 
   private WorkflowImpl rootImpl;
-  private List<IGridWorkflowJob> jobs;
+  private List<IGridWorkflowJobDescription> jobs;
   static {
     GridModel.addGridModelListener( createGridModelListener() );
   }
@@ -106,14 +106,14 @@ implements IGridWorkflow
     return null;
   }
 
-  public List<IGridWorkflowJob> getChildrenJobs() {
+  public List<IGridWorkflowJobDescription> getChildrenJobs() {
     if( this.jobs == null ) {
       WorkflowImpl root = getRoot();
       if( root != null ) {
-        this.jobs = new ArrayList<IGridWorkflowJob>();
+        this.jobs = new ArrayList<IGridWorkflowJobDescription>();
         for( IWorkflowNode node : root.getNodes() ) {
           if( node instanceof IWorkflowJob ) {
-            this.jobs.add( new GridWorkflowJob( ( IWorkflowJob )node ) );
+            this.jobs.add( new GridWorkflowJobDescription( ( IWorkflowJob )node ) );
           }
         }
       }
@@ -145,10 +145,10 @@ implements IGridWorkflow
     try {
       resource.load( options );
       this.rootImpl = ( WorkflowImpl )resource.getContents().get( 0 );
-      this.jobs = new ArrayList<IGridWorkflowJob>();
+      this.jobs = new ArrayList<IGridWorkflowJobDescription>();
       for( IWorkflowNode node : this.rootImpl.getNodes() ) {
         if( node instanceof IWorkflowJob ) {
-          this.jobs.add( new GridWorkflowJob( ( IWorkflowJob )node ) );
+          this.jobs.add( new GridWorkflowJobDescription( ( IWorkflowJob )node ) );
         }
       }
     } catch( IOException ioEx ) {
