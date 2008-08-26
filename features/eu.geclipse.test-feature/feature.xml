@@ -25,7 +25,7 @@ project number: FP5-IST-034327  http://www.geclipse.eu/
    </license>
 
    <url>
-      <update label="g-Eclipse (Incubation) Update Site for additional components." url="http://www.geclipse.eu/update-pre/site.xml"/>
+      <update label="g-Eclipse (Incubation) Update Site for additional components." url=""/>
    </url>
 
    <requires>
