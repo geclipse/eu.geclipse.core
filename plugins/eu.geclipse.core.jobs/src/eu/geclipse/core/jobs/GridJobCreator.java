@@ -16,7 +16,9 @@
  *****************************************************************************/
 package eu.geclipse.core.jobs;
 
-import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
@@ -243,19 +245,23 @@ public class GridJobCreator extends AbstractGridJobCreator {
   }
 
   private JSDLJobDescription createChildJobDescription( final IFolder jobFolder,
-                                                        final IGridWorkflowJob childJob )
+                                                        final IGridWorkflowJob childJob ) throws ProblemException
   {
     JSDLJobDescription description = null;
-    ByteArrayInputStream inputStream = new ByteArrayInputStream( childJob.getDescription()
-      .getBytes() );
+    FileInputStream inputStream = null;
+    Path descriptionPath = childJob.getDescriptionPath();
     String tmpJsdlFileName = String.format( "%s.jsdl", childJob.getName() ); //$NON-NLS-1$
     IFile outputFile = jobFolder.getFile( tmpJsdlFileName );
     try {
+      inputStream = new FileInputStream( new File( descriptionPath.toString() ) );
       outputFile.create( inputStream, true, null );
       description = new JSDLJobDescription( outputFile );
     } catch( CoreException exception ) {
       Activator.logException( exception,
                               "Cannot create jsdl job description for child job." ); //$NON-NLS-1$
+    } catch( FileNotFoundException exception ) {
+      String msg = String.format( "Job description file cannot be found %s", descriptionPath.toString() ); //$NON-NLS-1$
+      throw new ProblemException( ICoreProblems.IO_OPERATION_FAILED, msg, exception, Activator.PLUGIN_ID );
     } finally {
       if( inputStream != null ) {
         try {

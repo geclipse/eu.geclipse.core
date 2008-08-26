@@ -15,6 +15,8 @@
  *****************************************************************************/
 package eu.geclipse.workflow.resources;
 
+import org.eclipse.core.runtime.Path;
+
 import eu.geclipse.core.model.IGridWorkflowJob;
 import eu.geclipse.workflow.IWorkflowJob;
 
@@ -33,8 +35,16 @@ public class GridWorkflowJob implements IGridWorkflowJob {
   /* (non-Javadoc)
    * @see eu.geclipse.core.model.IGridWorkflowJob#getDescription()
    */
-  public String getDescription() {
-    return this.jobImpl.getJobDescription();
+  public Path getDescriptionPath() {
+    Path path = null;
+    
+    String pathString = this.jobImpl.getJobDescription();
+    
+    if( pathString != null ) {
+      path = new Path( pathString );
+    }
+    
+    return path;
   }
 
   /* (non-Javadoc)

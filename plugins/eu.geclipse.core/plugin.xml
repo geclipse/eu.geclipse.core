@@ -476,6 +476,10 @@
             description="Folder creation failed"
             id="eu.geclipse.core.problem.io.crateFolderFailed">
       </problem>
+      <problem
+            description="File not found"
+            id="eu.geclipse.core.io.fileNotFound">
+      </problem>
    </extension>
    <extension
          point="eu.geclipse.core.simpleTests">
