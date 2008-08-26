@@ -610,7 +610,7 @@
    
    <extension point="eu.geclipse.core.gridProjectFolder">
       <folder
-            elementClass="eu.geclipse.workflow.IGridWorkflow"
+            elementClass="eu.geclipse.workflow.IGridWorkflowDescription"
             icon="icons/ovr16/workflow_ovr.gif"
             id="eu.geclipse.core.projectfolder.workflows"
             label="Workflows"
