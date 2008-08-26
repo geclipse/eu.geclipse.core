@@ -55,11 +55,6 @@ public class SweepOrderCProvider implements ITreeContentProvider {
     Object[] result = null;
     if( inputElement instanceof SweepType[] ) {
       
-//      SweepType sweep = (SweepType) inputElement;
-//      result = new Object[((AssignmentType[])inputElement).length];
-//      result = ( Object[] )inputElement;
-//      result = new Object[1];
-//      result[0] = sweep;
       result = new Object[((Object[])inputElement).length];
       result = ( Object[] )inputElement;
     } else if (inputElement instanceof SweepType){

@@ -54,9 +54,12 @@ import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
@@ -86,6 +89,8 @@ import eu.geclipse.jsdl.ui.widgets.ParametersDialog;
 public class SweepOrderSection extends JsdlFormPageSection {
 
   TreeViewer viewer;
+  Combo sweepCombo;
+  Text textArea;
   private JobDescriptionType jobDescriptionType;
   private JobDefinitionType jobDefinitionType;
   private List<SweepType> sweepType = new ArrayList<SweepType>();
@@ -93,8 +98,6 @@ public class SweepOrderSection extends JsdlFormPageSection {
   private Shell shell;
   private ParametricJobAdapter adapter;
   private ArrayList<SweepType> inerSweepList;
-  private Combo sweepCombo;
-  private Text textArea;
 
   public SweepOrderSection( final Composite parent,
                             final FormToolkit toolkit,
@@ -140,26 +143,17 @@ public class SweepOrderSection extends JsdlFormPageSection {
     }
   }
 
-  private int calculateEqual() {
-    int result = 0;
-    if( this.inerSweepList != null ) {
-      for( SweepType innerSweep : this.inerSweepList ) {
-        EList list = innerSweep.getAssignment();
-        if( list.size() > result ) {
-          result = list.size();
-        }
-      }
-    }
-    return result;
-  }
-
   private void fillFields() {
     if( this.viewer != null ) {
       this.viewer.setInput( this.sweepType.toArray( new SweepType[ 0 ] ) );
       this.viewer.refresh();
     }
+    refreshSweepCombo();
+  }
+
+  private void refreshSweepCombo() {
     if( this.sweepCombo != null ) {
-      sweepCombo.removeAll();
+      this.sweepCombo.removeAll();
       for( String name : getInerSweepNames() ) {
         this.sweepCombo.add( name );
       }
@@ -175,12 +169,13 @@ public class SweepOrderSection extends JsdlFormPageSection {
                                                                    parent,
                                                                    sectionTitle,
                                                                    sectionDescription,
-                                                                   1 );
+                                                                   2 );
     this.viewer = new TreeViewer( client, SWT.BORDER );
     this.viewer.setContentProvider( new SweepOrderCProvider() );
     this.viewer.setLabelProvider( new SweepOrderLProvider() );
     GridData gData = new GridData( GridData.GRAB_HORIZONTAL );
     gData = new GridData();
+    gData.horizontalSpan = 2;
     gData.horizontalAlignment = GridData.FILL;
     gData.verticalAlignment = GridData.FILL;
     gData.grabExcessHorizontalSpace = true;
@@ -188,26 +183,39 @@ public class SweepOrderSection extends JsdlFormPageSection {
     this.viewer.getTree().setLayoutData( gData );
     this.viewer.addSelectionChangedListener( new ISelectionChangedListener() {
 
-      public void selectionChanged( SelectionChangedEvent event ) {
-        ISelection sel = viewer.getSelection();
+      public void selectionChanged( final SelectionChangedEvent event ) {
+        ISelection sel = SweepOrderSection.this.viewer.getSelection();
         if( sel instanceof StructuredSelection ) {
           StructuredSelection sSel = ( StructuredSelection )sel;
           if( sSel.getFirstElement() instanceof SweepType ) {
             SweepType type = ( SweepType )sSel.getFirstElement();
             int i = 0;
-            for( String item : sweepCombo.getItems() ) {
+            boolean found = false;
+            for( String item : SweepOrderSection.this.sweepCombo.getItems() ) {
               if( item.equals( getNameForSweep( type ) ) ) {
+                found = true;
                 break;
               }
               i++;
             }
-            sweepCombo.select( i );
-            setValuesField( getValuesForParameter( sweepCombo.getItem( i ) ) );
+            if( found ) {
+              SweepOrderSection.this.sweepCombo.select( i );
+              setValuesField( getValuesForParameter( SweepOrderSection.this.sweepCombo.getItem( i ) ) );
+            }
           }
         }
       }
     } );
     this.manager = createMenu();
+    // buttons composite
+    // Composite buttonComp = new Composite( client, SWT.NONE );
+    // buttonComp.setLayout( new GridLayout( 1, true ) );
+    // Button newButton = new Button( buttonComp, SWT.PUSH );
+    // newButton.setText( "New sweep..." );
+    // newButton.setLayoutData( new GridData() );
+    // toolkit.createButton( client, "New sweep...", SWT.PUSH );
+    // values controls
+    toolkit.createLabel( client, "Sweep element" );
     this.sweepCombo = new Combo( client, SWT.NONE | SWT.READ_ONLY );
     gData = new GridData( GridData.FILL_BOTH | GridData.GRAB_HORIZONTAL );
     gData.widthHint = 200;
@@ -215,10 +223,12 @@ public class SweepOrderSection extends JsdlFormPageSection {
     this.sweepCombo.addSelectionListener( new SelectionAdapter() {
 
       @Override
-      public void widgetSelected( SelectionEvent e ) {
-        setValuesField( getValuesForParameter( sweepCombo.getText() ) );
+      public void widgetSelected( final SelectionEvent e ) {
+        setValuesField( getValuesForParameter( SweepOrderSection.this.sweepCombo.getText() ) );
       }
     } );
+    toolkit.createLabel( client,
+                         "Parameter values\n(put each value in new line)" );
     this.textArea = new Text( client, SWT.MULTI
                                       | SWT.WRAP
                                       | SWT.V_SCROLL
@@ -231,16 +241,18 @@ public class SweepOrderSection extends JsdlFormPageSection {
     this.textArea.setLayoutData( gData );
     this.textArea.addKeyListener( new KeyListener() {
 
-      public void keyPressed( KeyEvent e ) {
+      public void keyPressed( final KeyEvent e ) {
         List<String> val = new ArrayList<String>();
-        for( String value : textArea.getText().split( System.getProperty("line.separator") ) ) {
+        for( String value : SweepOrderSection.this.textArea.getText()
+          .split( System.getProperty( "line.separator" ) ) ) //$NON-NLS-1$
+        {
           val.add( value );
         }
-        SweepType sweep = findSweepElement( sweepCombo.getText() );
+        SweepType sweep = findSweepElement( SweepOrderSection.this.sweepCombo.getText() );
         AssignmentType assignment = null;
         for( int j = 0; j < sweep.getAssignment().size(); j++ ) {
           if( ( ( AssignmentType )sweep.getAssignment().get( j ) ).getParameter()
-            .contains( sweepCombo.getText() ) )
+            .contains( SweepOrderSection.this.sweepCombo.getText() ) )
           {
             assignment = ( AssignmentType )sweep.getAssignment().get( j );
             break;
@@ -250,49 +262,27 @@ public class SweepOrderSection extends JsdlFormPageSection {
         contentChanged();
       }
 
-      public void keyReleased( KeyEvent e ) {
-        // TODO Auto-generated method stub
-      }
-    } );
-    this.textArea.addModifyListener( new ModifyListener() {
-
-      public void modifyText( final ModifyEvent e ) {
-        // List<String> val = new ArrayList<String>();
-        // for( String value : textArea.getText().split( "\n" ) ) {
-        // val.add( value );
-        // }
-        // SweepType sweep = findSweepElement( sweepCombo.getText() );
-        // AssignmentType assignment = null;
-        // for( int j = 0; j < sweep.getAssignment().size(); j++ ) {
-        // if( ( ( AssignmentType )sweep.getAssignment().get( j )
-        // ).getParameter()
-        // .contains( sweepCombo.getText() ) )
-        // {
-        // assignment = ( AssignmentType )sweep.getAssignment().get( j );
-        // break;
-        // }
-        // }
-        // setFunctionValues( assignment,
-        // val );
-        // contentChanged();
+      public void keyReleased( final KeyEvent e ) {
+        // do nothing
       }
     } );
   }
 
   void setValuesField( final List<String> values ) {
     if( values != null ) {
-      String multiLinesContent = "";
+      String multiLinesContent = ""; //$NON-NLS-1$
       for( String name : values ) {
-        multiLinesContent = multiLinesContent + "\n" + name;
+        multiLinesContent = multiLinesContent
+                            + System.getProperty( "line.separator" ) + name; //$NON-NLS-1$
       }
-      if( multiLinesContent.startsWith( "\n" ) ) {
+      if( multiLinesContent.startsWith( System.getProperty( "line.separator" ) ) ) { //$NON-NLS-1$
         multiLinesContent = multiLinesContent.trim();
       }
       this.textArea.setText( multiLinesContent );
     }
   }
 
-  private List<String> getValuesForParameter( final String paramName ) {
+  List<String> getValuesForParameter( final String paramName ) {
     List<String> result = new ArrayList<String>();
     SweepType sweep = findSweepElement( paramName );
     if( sweep != null ) {
@@ -317,7 +307,7 @@ public class SweepOrderSection extends JsdlFormPageSection {
     return result;
   }
 
-  private Action createDeleteAction() {
+  Action createDeleteAction() {
     Action action = new Action() {
 
       @Override
@@ -329,7 +319,7 @@ public class SweepOrderSection extends JsdlFormPageSection {
     return action;
   }
 
-  private Action createNewAction() {
+  Action createNewAction() {
     Action action = new Action() {
 
       @Override
@@ -341,7 +331,7 @@ public class SweepOrderSection extends JsdlFormPageSection {
     return action;
   }
 
-  private Action createChangesForEachAction() {
+  Action createChangesForEachAction() {
     Action action = new Action() {
 
       @Override
@@ -409,12 +399,13 @@ public class SweepOrderSection extends JsdlFormPageSection {
       refSweep.getSweep().add( newSweep );
     }
     this.viewer.refresh( true );
+    refreshSweepCombo();
     setInput( this.jobDefinitionType );
     contentChanged();
   }
 
-  private void setFunctionValues( final AssignmentType assignment,
-                                  final List<String> values )
+  void setFunctionValues( final AssignmentType assignment,
+                          final List<String> values )
   {
     // ( ( ValuesType )assignment.getFunctionGroup().getValue( 0 ) ).getValue();
     // ValuesType valType = ((ValuesType)assignment.getFunction());
@@ -430,7 +421,7 @@ public class SweepOrderSection extends JsdlFormPageSection {
     assignment.getFunctionGroup().add( e );
   }
 
-  private Action createIndependentSweepAction() {
+  Action createIndependentSweepAction() {
     Action action = new Action() {
 
       @Override
@@ -442,7 +433,7 @@ public class SweepOrderSection extends JsdlFormPageSection {
     return action;
   }
 
-  private Action createChangesWithSweepAction() {
+  Action createChangesWithSweepAction() {
     Action action = new Action() {
 
       @Override
@@ -454,7 +445,7 @@ public class SweepOrderSection extends JsdlFormPageSection {
     return action;
   }
 
-  private String getNameForSweep( final SweepType type ) {
+  String getNameForSweep( final SweepType type ) {
     String result = null;
     EList list = type.getAssignment();
     for( int i = 0; i < list.size(); i++ ) {
@@ -496,6 +487,7 @@ public class SweepOrderSection extends JsdlFormPageSection {
     }
   }
 
+  // sweep on the same level
   private void performAddChangesWith( final String sweepElement,
                                       final String refElement,
                                       final List<String> values,
@@ -508,6 +500,7 @@ public class SweepOrderSection extends JsdlFormPageSection {
       refSweep.getAssignment().add( newSweep );
     }
     this.viewer.refresh( true );
+    refreshSweepCombo();
     setInput( this.jobDefinitionType );
     contentChanged();
   }
@@ -519,7 +512,7 @@ public class SweepOrderSection extends JsdlFormPageSection {
 
       public void menuAboutToShow( final IMenuManager mManager ) {
         boolean enable = false;
-        if( !viewer.getSelection().isEmpty() ) {
+        if( !SweepOrderSection.this.viewer.getSelection().isEmpty() ) {
           enable = true;
         }
         // Adds a separator
@@ -612,7 +605,7 @@ public class SweepOrderSection extends JsdlFormPageSection {
     }
   }
 
-  private SweepType findSweepElement( final String name ) {
+  SweepType findSweepElement( final String name ) {
     SweepType refSweep = null;
     for( SweepType sweep : this.inerSweepList ) {
       EList list = sweep.getAssignment();
@@ -683,6 +676,7 @@ public class SweepOrderSection extends JsdlFormPageSection {
       }
     }
     this.viewer.refresh( true );
+    refreshSweepCombo();
     setInput( this.jobDefinitionType );
     contentChanged();
   }

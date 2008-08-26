@@ -68,7 +68,6 @@ public class ParametersDialog extends Dialog implements ModifyListener {
     this.mode = mode;
   }
 
-
   @Override
   protected Control createDialogArea( final Composite parent ) {
     Composite mainComp = new Composite( parent, SWT.NONE );
@@ -112,17 +111,26 @@ public class ParametersDialog extends Dialog implements ModifyListener {
       this.refElement.setLayoutData( gData );
       this.refElement.addModifyListener( this );
     }
-    //values area
-    //values label
-    Label valuesLabel = new Label(mainComp, SWT.LEAD);
+    // values area
+    // values label
+    Label valuesLabel = new Label( mainComp, SWT.LEAD );
     valuesLabel.setText( "Sweep values" );
     gData = new GridData();
     valuesLabel.setLayoutData( gData );
-    //values text area
-    this.valuesText = new Text(mainComp, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL);
-    gData = new GridData(GridData.FILL_BOTH | GridData.GRAB_HORIZONTAL | GridData.GRAB_VERTICAL);
+    // values text area
+    this.valuesText = new Text( mainComp, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL );
+    gData = new GridData( GridData.FILL_BOTH
+                          | GridData.GRAB_HORIZONTAL
+                          | GridData.GRAB_VERTICAL );
     gData.heightHint = 30;
+    gData.verticalSpan = 15;
     this.valuesText.setLayoutData( gData );
+    this.valuesText.setToolTipText( "Seperate values with new line." );
+    // hint label
+    Label valuesHint = new Label( mainComp, SWT.LEAD );
+    valuesHint.setText( "(put each value in new line)" );
+    gData = new GridData();
+    valuesHint.setLayoutData( gData );
     return mainComp;
   }
 
@@ -162,9 +170,10 @@ public class ParametersDialog extends Dialog implements ModifyListener {
       }
     }
     this.values = new ArrayList<String>();
-    if (!this.valuesText.getText().equals( "" )){
+    if( !this.valuesText.getText().equals( "" ) ) {
       String wholeValues = this.valuesText.getText();
-      for (String value: wholeValues.split( System.getProperty("line.separator") )){
+      for( String value : wholeValues.split( System.getProperty( "line.separator" ) ) )
+      {
         this.values.add( value );
       }
     }
@@ -178,8 +187,8 @@ public class ParametersDialog extends Dialog implements ModifyListener {
   public String getElementReturn() {
     return this.elementReturn;
   }
-  
-  public List<String> getValuesReturn(){
+
+  public List<String> getValuesReturn() {
     return this.values;
   }
 }

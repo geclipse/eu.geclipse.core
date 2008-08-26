@@ -135,22 +135,22 @@ public class ParametricJobAdapter extends JsdlAdaptersFactory {
             result.add( "/*//jsdl-posix:POSIXApplication/jsdl-posix:Executable" );
           }
           if( posixApp.getInput() != null ) {
-            result.add( "POSIXApplication/Input" );
+            result.add( "/*//jsdl-posix:POSIXApplication/jsdl-posix:Input" );
           }
           if( posixApp.getOutput() != null ) {
-            result.add( "POSIXApplication/Output" );
+            result.add( "/*//jsdl-posix:POSIXApplication/jsdl-posix:Output" );
           }
           if( posixApp.getError() != null ) {
-            result.add( "POSIXApplication/Error" );
+            result.add( "/*//jsdl-posix:POSIXApplication/jsdl-posix:Error" );
           }
           if( posixApp.getEnvironment() != null ) {
             int envCount = posixApp.getEnvironment().size();
             if( envCount > 1 ) {
               for( int j = 0; j < envCount; j++ ) {
-                result.add( "POSIXApplication/Environment[" + ( j + 1 ) + "]" );
+                result.add( "/*//jsdl-posix:POSIXApplication/jsdl-posix:Environment[" + ( j + 1 ) + "]" );
               }
             } else if( envCount == 1 ) {
-              result.add( "POSIXApplication/Environment" );
+              result.add( "/*//jsdl-posix:POSIXApplication/jsdl-posix:Environment" );
             }
           }
         }
