@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials 
  * are made available under the terms of the Eclipse Public License v1.0 
  * which accompanies this distribution, and is available at 
@@ -35,11 +35,10 @@ import org.eclipse.emf.ecore.xmi.impl.XMLMapImpl;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import eu.geclipse.workflow.IWorkflow;
-import eu.geclipse.workflow.IWorkflowFactory;
-import eu.geclipse.workflow.IWorkflowJob;
-import eu.geclipse.workflow.IWorkflowPackage;
-
+import eu.geclipse.workflow.model.IWorkflow;
+import eu.geclipse.workflow.model.IWorkflowFactory;
+import eu.geclipse.workflow.model.IWorkflowJob;
+import eu.geclipse.workflow.model.IWorkflowPackage;
 
 
 /**
