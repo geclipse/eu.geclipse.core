@@ -233,7 +233,7 @@ public class SweepOrderSection extends JsdlFormPageSection {
 
       public void keyPressed( KeyEvent e ) {
         List<String> val = new ArrayList<String>();
-        for( String value : textArea.getText().split( "\n" ) ) {
+        for( String value : textArea.getText().split( System.getProperty("line.separator") ) ) {
           val.add( value );
         }
         SweepType sweep = findSweepElement( sweepCombo.getText() );

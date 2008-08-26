@@ -86,21 +86,6 @@ public class ParametersDialog extends Dialog implements ModifyListener {
     }
     this.element.addModifyListener( this );
     if( mode.equals( EDIT_ELEMENT ) ) {
-      // sweep rules controls
-      // Label rulesLabel = new Label( mainComp, SWT.LEAD );
-      // rulesLabel.setText( "Sweep rule" );
-      // gData = new GridData();
-      // rulesLabel.setLayoutData( gData );
-      // this.sweepRule = new Combo( mainComp, SWT.DROP_DOWN );
-      // gData = new GridData( GridData.FILL_HORIZONTAL );
-      // this.sweepRule.setLayoutData( gData );
-      // for( SweepRule rule : SweepRule.values() ) {
-      // if( !rule.equals( SweepRule.NULL ) ) {
-      // this.sweepRule.add( rule.getAlias() );
-      // }
-      // }
-      // this.sweepRule.addModifyListener( this );
-      // referenced element controls
       Label refLabel = new Label( mainComp, SWT.LEAD );
       refLabel.setText( "Referenced JSDL element" );
       gData = new GridData();
@@ -153,7 +138,6 @@ public class ParametersDialog extends Dialog implements ModifyListener {
       super.getButton( IDialogConstants.OK_ID )
         .setEnabled( !this.element.getText().equals( "" ) );
     } else if( !this.element.getText().equals( "" )
-    // && !this.sweepRule.getText().equals( "" )
                && !this.refElement.getText().equals( "" ) )
     {
       super.getButton( IDialogConstants.OK_ID ).setEnabled( true );
@@ -171,7 +155,6 @@ public class ParametersDialog extends Dialog implements ModifyListener {
     this.elementReturn = this.element.getText();
     if( this.mode.equals( EDIT_ELEMENT ) ) {
       this.refElementReturn = this.refElement.getText();
-      // this.sweepRuleReturn = this.sweepRule.getText();
       if( this.refElementReturn.equals( this.elementReturn ) ) {
         MessageDialog.openError( getShell(),
                                  "Error",
@@ -181,7 +164,7 @@ public class ParametersDialog extends Dialog implements ModifyListener {
     this.values = new ArrayList<String>();
     if (!this.valuesText.getText().equals( "" )){
       String wholeValues = this.valuesText.getText();
-      for (String value: wholeValues.split( "\n" )){
+      for (String value: wholeValues.split( System.getProperty("line.separator") )){
         this.values.add( value );
       }
     }
@@ -199,7 +182,4 @@ public class ParametersDialog extends Dialog implements ModifyListener {
   public List<String> getValuesReturn(){
     return this.values;
   }
-  // public String getSweepRuleReturn() {
-  // return sweepRuleReturn;
-  // }
 }
