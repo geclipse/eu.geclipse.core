@@ -15,16 +15,16 @@
  ******************************************************************************/
 package eu.geclipse.workflow.impl;
 
-import eu.geclipse.workflow.IInputPort;
-import eu.geclipse.workflow.ILink;
-import eu.geclipse.workflow.IOutputPort;
-import eu.geclipse.workflow.IPort;
-import eu.geclipse.workflow.IWorkflow;
-import eu.geclipse.workflow.IWorkflowElement;
-import eu.geclipse.workflow.IWorkflowFactory;
-import eu.geclipse.workflow.IWorkflowJob;
-import eu.geclipse.workflow.IWorkflowNode;
-import eu.geclipse.workflow.IWorkflowPackage;
+import eu.geclipse.workflow.model.IInputPort;
+import eu.geclipse.workflow.model.ILink;
+import eu.geclipse.workflow.model.IOutputPort;
+import eu.geclipse.workflow.model.IPort;
+import eu.geclipse.workflow.model.IWorkflow;
+import eu.geclipse.workflow.model.IWorkflowElement;
+import eu.geclipse.workflow.model.IWorkflowFactory;
+import eu.geclipse.workflow.model.IWorkflowJob;
+import eu.geclipse.workflow.model.IWorkflowNode;
+import eu.geclipse.workflow.model.IWorkflowPackage;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;

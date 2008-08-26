@@ -15,7 +15,7 @@
  ******************************************************************************/
 package eu.geclipse.workflow.ui.edit.commands;
 
-import eu.geclipse.workflow.IWorkflowPackage;
+import eu.geclipse.workflow.model.IWorkflowPackage;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;

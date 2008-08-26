@@ -15,7 +15,6 @@
  ******************************************************************************/
 package eu.geclipse.workflow.impl;
 
-import eu.geclipse.workflow.*;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
@@ -24,7 +23,8 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
-import eu.geclipse.workflow.IWorkflowPackage;
+
+import eu.geclipse.workflow.model.*;
 
 /**
  * <!-- begin-user-doc --> An implementation of the model <b>IWorkflowFactory</b>.

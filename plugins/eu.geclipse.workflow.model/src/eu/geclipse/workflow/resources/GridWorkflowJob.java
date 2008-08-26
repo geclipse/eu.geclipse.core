@@ -18,7 +18,7 @@ package eu.geclipse.workflow.resources;
 import org.eclipse.core.runtime.Path;
 
 import eu.geclipse.core.model.IGridWorkflowJob;
-import eu.geclipse.workflow.IWorkflowJob;
+import eu.geclipse.workflow.model.IWorkflowJob;
 
 /**
  * Wrapper to emf implementation

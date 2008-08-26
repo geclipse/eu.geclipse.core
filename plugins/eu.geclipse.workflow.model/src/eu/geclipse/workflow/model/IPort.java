@@ -13,7 +13,7 @@
  *     RUR (http://acet.rdg.ac.uk/)
  *     - Ashish Thandavan - initial API and implementation
  ******************************************************************************/
-package eu.geclipse.workflow;
+package eu.geclipse.workflow.model;
 
 
 /**

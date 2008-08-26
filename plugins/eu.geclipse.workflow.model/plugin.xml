@@ -22,7 +22,7 @@
   <extension point="org.eclipse.emf.ecore.generated_package">
     <package 
        uri = "http:///eu/geclipse/workflow.ecore" 
-       class = "eu.geclipse.workflow.IWorkflowPackage"
+       class = "eu.geclipse.workflow.model.IWorkflowPackage"
        genModel = "model/workflow.genmodel" /> 
   </extension>
   <extension

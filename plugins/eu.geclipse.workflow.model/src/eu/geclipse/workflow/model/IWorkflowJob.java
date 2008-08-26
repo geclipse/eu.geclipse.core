@@ -13,7 +13,7 @@
  *     RUR (http://acet.rdg.ac.uk/)
  *     - Ashish Thandavan - initial API and implementation
  ******************************************************************************/
-package eu.geclipse.workflow;
+package eu.geclipse.workflow.model;
 
 
 /**
@@ -24,12 +24,12 @@ package eu.geclipse.workflow;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link eu.geclipse.workflow.IWorkflowJob#getJobDescription <em>Job Description</em>}</li>
- *   <li>{@link eu.geclipse.workflow.IWorkflowJob#getJobDescriptionFileName <em>Job Description File Name</em>}</li>
+ *   <li>{@link eu.geclipse.workflow.model.IWorkflowJob#getJobDescription <em>Job Description</em>}</li>
+ *   <li>{@link eu.geclipse.workflow.model.IWorkflowJob#getJobDescriptionFileName <em>Job Description File Name</em>}</li>
  * </ul>
  * </p>
  *
- * @see eu.geclipse.workflow.IWorkflowPackage#getIWorkflowJob()
+ * @see eu.geclipse.workflow.model.IWorkflowPackage#getIWorkflowJob()
  * @model
  * @generated
  */
@@ -45,14 +45,14 @@ public interface IWorkflowJob extends IWorkflowNode
    * <!-- end-user-doc -->
    * @return the value of the '<em>Job Description</em>' attribute.
    * @see #setJobDescription(String)
-   * @see eu.geclipse.workflow.IWorkflowPackage#getIWorkflowJob_JobDescription()
+   * @see eu.geclipse.workflow.model.IWorkflowPackage#getIWorkflowJob_JobDescription()
    * @model required="true"
    * @generated
    */
   String getJobDescription();
 
   /**
-   * Sets the value of the '{@link eu.geclipse.workflow.IWorkflowJob#getJobDescription <em>Job Description</em>}' attribute.
+   * Sets the value of the '{@link eu.geclipse.workflow.model.IWorkflowJob#getJobDescription <em>Job Description</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @param value the new value of the '<em>Job Description</em>' attribute.
@@ -71,14 +71,14 @@ public interface IWorkflowJob extends IWorkflowNode
    * <!-- end-user-doc -->
    * @return the value of the '<em>Job Description File Name</em>' attribute.
    * @see #setJobDescriptionFileName(String)
-   * @see eu.geclipse.workflow.IWorkflowPackage#getIWorkflowJob_JobDescriptionFileName()
+   * @see eu.geclipse.workflow.model.IWorkflowPackage#getIWorkflowJob_JobDescriptionFileName()
    * @model required="true"
    * @generated
    */
   String getJobDescriptionFileName();
 
   /**
-   * Sets the value of the '{@link eu.geclipse.workflow.IWorkflowJob#getJobDescriptionFileName <em>Job Description File Name</em>}' attribute.
+   * Sets the value of the '{@link eu.geclipse.workflow.model.IWorkflowJob#getJobDescriptionFileName <em>Job Description File Name</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @param value the new value of the '<em>Job Description File Name</em>' attribute.

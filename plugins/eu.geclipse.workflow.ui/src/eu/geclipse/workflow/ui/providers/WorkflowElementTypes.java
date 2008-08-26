@@ -29,7 +29,8 @@ import org.eclipse.gmf.runtime.emf.type.core.IElementType;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.swt.graphics.Image;
-import eu.geclipse.workflow.IWorkflowPackage;
+
+import eu.geclipse.workflow.model.IWorkflowPackage;
 import eu.geclipse.workflow.ui.internal.WorkflowDiagramEditorPlugin;
 
 /**

@@ -28,7 +28,7 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gmf.runtime.common.core.command.CommandResult;
 import org.eclipse.gmf.runtime.emf.commands.core.command.AbstractTransactionalCommand;
 
-import eu.geclipse.workflow.IInputPort;
+import eu.geclipse.workflow.model.IInputPort;
 import eu.geclipse.workflow.ui.internal.WorkflowDiagramEditorPlugin;
 import eu.geclipse.workflow.ui.part.Messages;
 

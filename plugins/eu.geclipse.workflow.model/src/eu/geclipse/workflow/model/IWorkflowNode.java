@@ -13,7 +13,7 @@
  *     RUR (http://acet.rdg.ac.uk/)
  *     - Ashish Thandavan - initial API and implementation
  ******************************************************************************/
-package eu.geclipse.workflow;
+package eu.geclipse.workflow.model;
 
 import org.eclipse.emf.common.util.EList;
 
@@ -25,11 +25,11 @@ import org.eclipse.emf.common.util.EList;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link eu.geclipse.workflow.IWorkflowNode#getWorkflow <em>Workflow</em>}</li>
- *   <li>{@link eu.geclipse.workflow.IWorkflowNode#getOutputs <em>Outputs</em>}</li>
- *   <li>{@link eu.geclipse.workflow.IWorkflowNode#getInputs <em>Inputs</em>}</li>
- *   <li>{@link eu.geclipse.workflow.IWorkflowNode#isIsStart <em>Is Start</em>}</li>
- *   <li>{@link eu.geclipse.workflow.IWorkflowNode#isIsFinish <em>Is Finish</em>}</li>
+ *   <li>{@link eu.geclipse.workflow.model.IWorkflowNode#getWorkflow <em>Workflow</em>}</li>
+ *   <li>{@link eu.geclipse.workflow.model.IWorkflowNode#getOutputs <em>Outputs</em>}</li>
+ *   <li>{@link eu.geclipse.workflow.model.IWorkflowNode#getInputs <em>Inputs</em>}</li>
+ *   <li>{@link eu.geclipse.workflow.model.IWorkflowNode#isIsStart <em>Is Start</em>}</li>
+ *   <li>{@link eu.geclipse.workflow.model.IWorkflowNode#isIsFinish <em>Is Finish</em>}</li>
  * </ul>
  * </p>
  *
@@ -41,7 +41,7 @@ public interface IWorkflowNode extends IWorkflowElement
 {
   /**
    * Returns the value of the '<em><b>Workflow</b></em>' container reference.
-   * It is bidirectional and its opposite is '{@link eu.geclipse.workflow.IWorkflow#getNodes <em>Nodes</em>}'.
+   * It is bidirectional and its opposite is '{@link eu.geclipse.workflow.model.IWorkflow#getNodes <em>Nodes</em>}'.
    * <!-- begin-user-doc -->
    * <p>
    * If the meaning of the '<em>Workflow</em>' container reference isn't clear,
@@ -51,14 +51,14 @@ public interface IWorkflowNode extends IWorkflowElement
    * @return the value of the '<em>Workflow</em>' container reference.
    * @see #setWorkflow(IWorkflow)
    * @see eu.geclipse.workflow.WorkflowPackage#getIWorkflowNode_Workflow()
-   * @see eu.geclipse.workflow.IWorkflow#getNodes
+   * @see eu.geclipse.workflow.model.IWorkflow#getNodes
    * @model opposite="nodes" required="true" transient="false"
    * @generated
    */
   IWorkflow getWorkflow();
 
   /**
-   * Sets the value of the '{@link eu.geclipse.workflow.IWorkflowNode#getWorkflow <em>Workflow</em>}' container reference.
+   * Sets the value of the '{@link eu.geclipse.workflow.model.IWorkflowNode#getWorkflow <em>Workflow</em>}' container reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @param value the new value of the '<em>Workflow</em>' container reference.
@@ -69,8 +69,8 @@ public interface IWorkflowNode extends IWorkflowElement
 
   /**
    * Returns the value of the '<em><b>Outputs</b></em>' containment reference list.
-   * The list contents are of type {@link eu.geclipse.workflow.IOutputPort}.
-   * It is bidirectional and its opposite is '{@link eu.geclipse.workflow.IOutputPort#getNode <em>Node</em>}'.
+   * The list contents are of type {@link eu.geclipse.workflow.model.IOutputPort}.
+   * It is bidirectional and its opposite is '{@link eu.geclipse.workflow.model.IOutputPort#getNode <em>Node</em>}'.
    * <!-- begin-user-doc -->
    * <p>
    * If the meaning of the '<em>Outputs</em>' containment reference list isn't clear,
@@ -79,7 +79,7 @@ public interface IWorkflowNode extends IWorkflowElement
    * <!-- end-user-doc -->
    * @return the value of the '<em>Outputs</em>' containment reference list.
    * @see eu.geclipse.workflow.WorkflowPackage#getIWorkflowNode_Outputs()
-   * @see eu.geclipse.workflow.IOutputPort#getNode
+   * @see eu.geclipse.workflow.model.IOutputPort#getNode
    * @model opposite="node" containment="true" required="true"
    * @generated
    */
@@ -87,8 +87,8 @@ public interface IWorkflowNode extends IWorkflowElement
 
   /**
    * Returns the value of the '<em><b>Inputs</b></em>' containment reference list.
-   * The list contents are of type {@link eu.geclipse.workflow.IInputPort}.
-   * It is bidirectional and its opposite is '{@link eu.geclipse.workflow.IInputPort#getNode <em>Node</em>}'.
+   * The list contents are of type {@link eu.geclipse.workflow.model.IInputPort}.
+   * It is bidirectional and its opposite is '{@link eu.geclipse.workflow.model.IInputPort#getNode <em>Node</em>}'.
    * <!-- begin-user-doc -->
    * <p>
    * If the meaning of the '<em>Inputs</em>' containment reference list isn't clear,
@@ -97,7 +97,7 @@ public interface IWorkflowNode extends IWorkflowElement
    * <!-- end-user-doc -->
    * @return the value of the '<em>Inputs</em>' containment reference list.
    * @see eu.geclipse.workflow.WorkflowPackage#getIWorkflowNode_Inputs()
-   * @see eu.geclipse.workflow.IInputPort#getNode
+   * @see eu.geclipse.workflow.model.IInputPort#getNode
    * @model opposite="node" containment="true" required="true"
    * @generated
    */
@@ -121,7 +121,7 @@ public interface IWorkflowNode extends IWorkflowElement
   boolean isIsStart();
 
   /**
-   * Sets the value of the '{@link eu.geclipse.workflow.IWorkflowNode#isIsStart <em>Is Start</em>}' attribute.
+   * Sets the value of the '{@link eu.geclipse.workflow.model.IWorkflowNode#isIsStart <em>Is Start</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @param value the new value of the '<em>Is Start</em>' attribute.
@@ -148,7 +148,7 @@ public interface IWorkflowNode extends IWorkflowElement
   boolean isIsFinish();
 
   /**
-   * Sets the value of the '{@link eu.geclipse.workflow.IWorkflowNode#isIsFinish <em>Is Finish</em>}' attribute.
+   * Sets the value of the '{@link eu.geclipse.workflow.model.IWorkflowNode#isIsFinish <em>Is Finish</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @param value the new value of the '<em>Is Finish</em>' attribute.

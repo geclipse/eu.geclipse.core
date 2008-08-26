@@ -19,8 +19,8 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
-import eu.geclipse.workflow.IWorkflowJob;
-import eu.geclipse.workflow.IWorkflowPackage;
+import eu.geclipse.workflow.model.IWorkflowJob;
+import eu.geclipse.workflow.model.IWorkflowPackage;
 
 /**
  * <!-- begin-user-doc --> An implementation of the model object '<em><b>IWorkflow Job</b></em>'.

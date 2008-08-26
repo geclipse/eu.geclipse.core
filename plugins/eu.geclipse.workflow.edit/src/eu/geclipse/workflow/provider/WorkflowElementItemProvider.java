@@ -15,8 +15,9 @@
  ******************************************************************************/
 package eu.geclipse.workflow.provider;
 
-import eu.geclipse.workflow.IWorkflowElement;
-import eu.geclipse.workflow.IWorkflowPackage;
+import eu.geclipse.workflow.model.IWorkflowElement;
+import eu.geclipse.workflow.model.IWorkflowPackage;
+
 import java.util.Collection;
 import java.util.List;
 import org.eclipse.emf.common.notify.AdapterFactory;
@@ -35,7 +36,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
 
 /**
  * This is the item provider adapter for a
- * {@link eu.geclipse.workflow.IWorkflowElement} object. <!-- begin-user-doc -->
+ * {@link eu.geclipse.workflow.model.IWorkflowElement} object. <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * 
  * @generated

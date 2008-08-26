@@ -22,10 +22,11 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.gmf.runtime.common.core.command.CommandResult;
 import org.eclipse.gmf.runtime.emf.type.core.commands.EditElementCommand;
 import org.eclipse.gmf.runtime.emf.type.core.requests.ReorientRelationshipRequest;
-import eu.geclipse.workflow.IInputPort;
-import eu.geclipse.workflow.ILink;
-import eu.geclipse.workflow.IOutputPort;
-import eu.geclipse.workflow.IWorkflow;
+
+import eu.geclipse.workflow.model.IInputPort;
+import eu.geclipse.workflow.model.ILink;
+import eu.geclipse.workflow.model.IOutputPort;
+import eu.geclipse.workflow.model.IWorkflow;
 import eu.geclipse.workflow.ui.edit.policies.WorkflowBaseItemSemanticEditPolicy;
 import eu.geclipse.workflow.ui.part.Messages;
 

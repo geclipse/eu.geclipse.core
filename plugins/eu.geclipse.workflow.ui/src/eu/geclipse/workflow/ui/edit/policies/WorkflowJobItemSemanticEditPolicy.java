@@ -25,7 +25,8 @@ import org.eclipse.gmf.runtime.emf.type.core.requests.CreateElementRequest;
 import org.eclipse.gmf.runtime.emf.type.core.requests.DestroyElementRequest;
 import org.eclipse.gmf.runtime.notation.Node;
 import org.eclipse.gmf.runtime.notation.View;
-import eu.geclipse.workflow.IWorkflowPackage;
+
+import eu.geclipse.workflow.model.IWorkflowPackage;
 import eu.geclipse.workflow.ui.edit.commands.InputPortCreateCommand;
 import eu.geclipse.workflow.ui.edit.commands.OutputPortCreateCommand;
 import eu.geclipse.workflow.ui.edit.commands.WorkflowJobEditCommand;

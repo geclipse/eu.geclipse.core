@@ -62,8 +62,9 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
-import eu.geclipse.workflow.IWorkflow;
-import eu.geclipse.workflow.IWorkflowFactory;
+
+import eu.geclipse.workflow.model.IWorkflow;
+import eu.geclipse.workflow.model.IWorkflowFactory;
 import eu.geclipse.workflow.ui.edit.parts.WorkflowEditPart;
 import eu.geclipse.workflow.ui.internal.WorkflowDiagramEditorPlugin;
 import eu.geclipse.workflow.ui.part.Messages;

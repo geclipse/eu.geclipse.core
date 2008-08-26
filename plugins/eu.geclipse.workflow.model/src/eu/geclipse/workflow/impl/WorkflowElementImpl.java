@@ -15,9 +15,8 @@
  ******************************************************************************/
 package eu.geclipse.workflow.impl;
 
-import eu.geclipse.workflow.IWorkflowElement;
-import eu.geclipse.workflow.IWorkflowPackage;
-import eu.geclipse.workflow.IWorkflowPackage;
+import eu.geclipse.workflow.model.IWorkflowElement;
+import eu.geclipse.workflow.model.IWorkflowPackage;
 
 import org.eclipse.emf.common.notify.Notification;
 

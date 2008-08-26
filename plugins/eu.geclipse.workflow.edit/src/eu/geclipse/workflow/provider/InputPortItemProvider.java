@@ -15,8 +15,9 @@
  ******************************************************************************/
 package eu.geclipse.workflow.provider;
 
-import eu.geclipse.workflow.IInputPort;
-import eu.geclipse.workflow.IWorkflowPackage;
+import eu.geclipse.workflow.model.IInputPort;
+import eu.geclipse.workflow.model.IWorkflowPackage;
+
 import java.util.Collection;
 import java.util.List;
 import org.eclipse.emf.common.notify.AdapterFactory;
@@ -32,7 +33,7 @@ import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 
 /**
  * This is the item provider adapter for a
- * {@link eu.geclipse.workflow.IInputPort} object. <!-- begin-user-doc --> <!--
+ * {@link eu.geclipse.workflow.model.IInputPort} object. <!-- begin-user-doc --> <!--
  * end-user-doc -->
  * 
  * @generated

@@ -15,8 +15,8 @@
  ******************************************************************************/
 package eu.geclipse.workflow.impl;
 
-import eu.geclipse.workflow.IPort;
-import eu.geclipse.workflow.IWorkflowPackage;
+import eu.geclipse.workflow.model.IPort;
+import eu.geclipse.workflow.model.IWorkflowPackage;
 
 import org.eclipse.emf.ecore.EClass;
 

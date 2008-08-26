@@ -26,7 +26,8 @@ import org.eclipse.gmf.runtime.common.ui.services.parser.IParserProvider;
 import org.eclipse.gmf.runtime.emf.type.core.IElementType;
 import org.eclipse.gmf.runtime.emf.ui.services.parser.ParserHintAdapter;
 import org.eclipse.gmf.runtime.notation.View;
-import eu.geclipse.workflow.IWorkflowPackage;
+
+import eu.geclipse.workflow.model.IWorkflowPackage;
 import eu.geclipse.workflow.ui.edit.parts.WorkflowJobNameEditPart;
 import eu.geclipse.workflow.ui.edit.parts.WorkflowJobDescriptionEditPart;
 import eu.geclipse.workflow.ui.parsers.MessageFormatParser;

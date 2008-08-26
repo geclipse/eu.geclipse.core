@@ -13,7 +13,7 @@
  *     RUR (http://acet.rdg.ac.uk/)
  *     - Ashish Thandavan - initial API and implementation
  ******************************************************************************/
-package eu.geclipse.workflow;
+package eu.geclipse.workflow.model;
 
 
 /**
@@ -24,9 +24,9 @@ package eu.geclipse.workflow;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link eu.geclipse.workflow.ILink#getWorkflow <em>Workflow</em>}</li>
- *   <li>{@link eu.geclipse.workflow.ILink#getTarget <em>Target</em>}</li>
- *   <li>{@link eu.geclipse.workflow.ILink#getSource <em>Source</em>}</li>
+ *   <li>{@link eu.geclipse.workflow.model.ILink#getWorkflow <em>Workflow</em>}</li>
+ *   <li>{@link eu.geclipse.workflow.model.ILink#getTarget <em>Target</em>}</li>
+ *   <li>{@link eu.geclipse.workflow.model.ILink#getSource <em>Source</em>}</li>
  * </ul>
  * </p>
  *
@@ -38,7 +38,7 @@ public interface ILink extends IWorkflowElement
 {
   /**
    * Returns the value of the '<em><b>Workflow</b></em>' container reference.
-   * It is bidirectional and its opposite is '{@link eu.geclipse.workflow.IWorkflow#getLinks <em>Links</em>}'.
+   * It is bidirectional and its opposite is '{@link eu.geclipse.workflow.model.IWorkflow#getLinks <em>Links</em>}'.
    * <!-- begin-user-doc -->
    * <p>
    * If the meaning of the '<em>Workflow</em>' container reference isn't clear,
@@ -48,14 +48,14 @@ public interface ILink extends IWorkflowElement
    * @return the value of the '<em>Workflow</em>' container reference.
    * @see #setWorkflow(IWorkflow)
    * @see eu.geclipse.workflow.WorkflowPackage#getILink_Workflow()
-   * @see eu.geclipse.workflow.IWorkflow#getLinks
+   * @see eu.geclipse.workflow.model.IWorkflow#getLinks
    * @model opposite="links" required="true" transient="false"
    * @generated
    */
   IWorkflow getWorkflow();
 
   /**
-   * Sets the value of the '{@link eu.geclipse.workflow.ILink#getWorkflow <em>Workflow</em>}' container reference.
+   * Sets the value of the '{@link eu.geclipse.workflow.model.ILink#getWorkflow <em>Workflow</em>}' container reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @param value the new value of the '<em>Workflow</em>' container reference.
@@ -66,7 +66,7 @@ public interface ILink extends IWorkflowElement
 
   /**
    * Returns the value of the '<em><b>Target</b></em>' reference.
-   * It is bidirectional and its opposite is '{@link eu.geclipse.workflow.IInputPort#getLinks <em>Links</em>}'.
+   * It is bidirectional and its opposite is '{@link eu.geclipse.workflow.model.IInputPort#getLinks <em>Links</em>}'.
    * <!-- begin-user-doc -->
    * <p>
    * If the meaning of the '<em>Target</em>' reference isn't clear,
@@ -76,14 +76,14 @@ public interface ILink extends IWorkflowElement
    * @return the value of the '<em>Target</em>' reference.
    * @see #setTarget(IInputPort)
    * @see eu.geclipse.workflow.WorkflowPackage#getILink_Target()
-   * @see eu.geclipse.workflow.IInputPort#getLinks
+   * @see eu.geclipse.workflow.model.IInputPort#getLinks
    * @model opposite="links" required="true"
    * @generated
    */
   IInputPort getTarget();
 
   /**
-   * Sets the value of the '{@link eu.geclipse.workflow.ILink#getTarget <em>Target</em>}' reference.
+   * Sets the value of the '{@link eu.geclipse.workflow.model.ILink#getTarget <em>Target</em>}' reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @param value the new value of the '<em>Target</em>' reference.
@@ -94,7 +94,7 @@ public interface ILink extends IWorkflowElement
 
   /**
    * Returns the value of the '<em><b>Source</b></em>' reference.
-   * It is bidirectional and its opposite is '{@link eu.geclipse.workflow.IOutputPort#getLinks <em>Links</em>}'.
+   * It is bidirectional and its opposite is '{@link eu.geclipse.workflow.model.IOutputPort#getLinks <em>Links</em>}'.
    * <!-- begin-user-doc -->
    * <p>
    * If the meaning of the '<em>Source</em>' reference isn't clear,
@@ -104,14 +104,14 @@ public interface ILink extends IWorkflowElement
    * @return the value of the '<em>Source</em>' reference.
    * @see #setSource(IOutputPort)
    * @see eu.geclipse.workflow.WorkflowPackage#getILink_Source()
-   * @see eu.geclipse.workflow.IOutputPort#getLinks
+   * @see eu.geclipse.workflow.model.IOutputPort#getLinks
    * @model opposite="links" required="true"
    * @generated
    */
   IOutputPort getSource();
 
   /**
-   * Sets the value of the '{@link eu.geclipse.workflow.ILink#getSource <em>Source</em>}' reference.
+   * Sets the value of the '{@link eu.geclipse.workflow.model.ILink#getSource <em>Source</em>}' reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @param value the new value of the '<em>Source</em>' reference.

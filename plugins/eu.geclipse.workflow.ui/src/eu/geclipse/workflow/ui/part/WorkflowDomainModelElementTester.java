@@ -18,7 +18,8 @@ package eu.geclipse.workflow.ui.part;
 import org.eclipse.core.expressions.PropertyTester;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
-import eu.geclipse.workflow.IWorkflowPackage;
+
+import eu.geclipse.workflow.model.IWorkflowPackage;
 
 /**
  * @generated

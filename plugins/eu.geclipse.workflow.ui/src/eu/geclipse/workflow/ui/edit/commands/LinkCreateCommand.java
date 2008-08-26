@@ -24,12 +24,13 @@ import org.eclipse.gmf.runtime.common.core.command.CommandResult;
 import org.eclipse.gmf.runtime.emf.type.core.commands.CreateElementCommand;
 import org.eclipse.gmf.runtime.emf.type.core.requests.ConfigureRequest;
 import org.eclipse.gmf.runtime.emf.type.core.requests.CreateRelationshipRequest;
-import eu.geclipse.workflow.IInputPort;
-import eu.geclipse.workflow.ILink;
-import eu.geclipse.workflow.IOutputPort;
-import eu.geclipse.workflow.IWorkflow;
-import eu.geclipse.workflow.IWorkflowFactory;
-import eu.geclipse.workflow.IWorkflowPackage;
+
+import eu.geclipse.workflow.model.IInputPort;
+import eu.geclipse.workflow.model.ILink;
+import eu.geclipse.workflow.model.IOutputPort;
+import eu.geclipse.workflow.model.IWorkflow;
+import eu.geclipse.workflow.model.IWorkflowFactory;
+import eu.geclipse.workflow.model.IWorkflowPackage;
 import eu.geclipse.workflow.ui.edit.policies.WorkflowBaseItemSemanticEditPolicy;
 import eu.geclipse.workflow.ui.part.Messages;
 

@@ -13,7 +13,7 @@
  *     RUR (http://acet.rdg.ac.uk/)
  *     - Ashish Thandavan - initial API and implementation
  ******************************************************************************/
-package eu.geclipse.workflow;
+package eu.geclipse.workflow.model;
 
 import org.eclipse.emf.ecore.EObject;
 
@@ -25,8 +25,8 @@ import org.eclipse.emf.ecore.EObject;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link eu.geclipse.workflow.IWorkflowElement#getName <em>Name</em>}</li>
- *   <li>{@link eu.geclipse.workflow.IWorkflowElement#getId <em>Id</em>}</li>
+ *   <li>{@link eu.geclipse.workflow.model.IWorkflowElement#getName <em>Name</em>}</li>
+ *   <li>{@link eu.geclipse.workflow.model.IWorkflowElement#getId <em>Id</em>}</li>
  * </ul>
  * </p>
  *
@@ -53,7 +53,7 @@ public interface IWorkflowElement extends EObject
   String getName();
 
   /**
-   * Sets the value of the '{@link eu.geclipse.workflow.IWorkflowElement#getName <em>Name</em>}' attribute.
+   * Sets the value of the '{@link eu.geclipse.workflow.model.IWorkflowElement#getName <em>Name</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @param value the new value of the '<em>Name</em>' attribute.
@@ -79,7 +79,7 @@ public interface IWorkflowElement extends EObject
   String getId();
 
   /**
-   * Sets the value of the '{@link eu.geclipse.workflow.IWorkflowElement#getId <em>Id</em>}' attribute.
+   * Sets the value of the '{@link eu.geclipse.workflow.model.IWorkflowElement#getId <em>Id</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @param value the new value of the '<em>Id</em>' attribute.

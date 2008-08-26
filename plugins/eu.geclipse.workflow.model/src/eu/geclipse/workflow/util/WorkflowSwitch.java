@@ -15,13 +15,13 @@
  ******************************************************************************/
 package eu.geclipse.workflow.util;
 
-import eu.geclipse.workflow.*;
 
 import java.util.List;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
-import eu.geclipse.workflow.IWorkflowPackage;
+
+import eu.geclipse.workflow.model.*;
 
 /**
  * <!-- begin-user-doc --> The <b>Switch</b> for the model's inheritance
@@ -31,7 +31,7 @@ import eu.geclipse.workflow.IWorkflowPackage;
  * inheritance hierarchy until a non-null result is returned, which is the
  * result of the switch. <!-- end-user-doc -->
  * 
- * @see eu.geclipse.workflow.IWorkflowPackage
+ * @see eu.geclipse.workflow.model.IWorkflowPackage
  * @generated
  */
 public class WorkflowSwitch<T> {

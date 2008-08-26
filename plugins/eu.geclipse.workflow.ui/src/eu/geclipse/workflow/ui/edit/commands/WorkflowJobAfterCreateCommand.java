@@ -50,7 +50,7 @@ import org.eclipse.gmf.runtime.notation.Node;
 
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.jsdl.JSDLJobDescription;
-import eu.geclipse.workflow.IWorkflowJob;
+import eu.geclipse.workflow.model.IWorkflowJob;
 import eu.geclipse.workflow.ui.edit.parts.WorkflowEditPart;
 import eu.geclipse.workflow.ui.edit.parts.WorkflowJobEditPart;
 import eu.geclipse.workflow.ui.part.Messages;

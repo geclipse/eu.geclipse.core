@@ -42,10 +42,10 @@ import eu.geclipse.core.model.IGridWorkflowJob;
 import eu.geclipse.core.model.impl.ResourceGridContainer;
 import eu.geclipse.core.model.impl.ResourceGridElement;
 import eu.geclipse.core.reporting.ProblemException;
-import eu.geclipse.workflow.IWorkflowJob;
-import eu.geclipse.workflow.IWorkflowNode;
 import eu.geclipse.workflow.impl.WorkflowImpl;
 import eu.geclipse.workflow.internal.Activator;
+import eu.geclipse.workflow.model.IWorkflowJob;
+import eu.geclipse.workflow.model.IWorkflowNode;
 
 /**
  * Grid element for workflow description

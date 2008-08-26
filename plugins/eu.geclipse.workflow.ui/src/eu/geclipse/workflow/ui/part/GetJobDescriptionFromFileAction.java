@@ -46,7 +46,7 @@ import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
 
 import eu.geclipse.core.model.GridModel;
-import eu.geclipse.workflow.IWorkflowJob;
+import eu.geclipse.workflow.model.IWorkflowJob;
 import eu.geclipse.workflow.ui.edit.parts.WorkflowJobEditPart;
 import eu.geclipse.workflow.ui.internal.WorkflowDiagramEditorPlugin;
 

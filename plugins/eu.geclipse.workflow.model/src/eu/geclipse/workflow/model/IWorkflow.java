@@ -13,7 +13,7 @@
  *     RUR (http://acet.rdg.ac.uk/)
  *     - Ashish Thandavan - initial API and implementation
  ******************************************************************************/
-package eu.geclipse.workflow;
+package eu.geclipse.workflow.model;
 
 import org.eclipse.emf.common.util.EList;
 
@@ -25,8 +25,8 @@ import org.eclipse.emf.common.util.EList;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link eu.geclipse.workflow.IWorkflow#getNodes <em>Nodes</em>}</li>
- *   <li>{@link eu.geclipse.workflow.IWorkflow#getLinks <em>Links</em>}</li>
+ *   <li>{@link eu.geclipse.workflow.model.IWorkflow#getNodes <em>Nodes</em>}</li>
+ *   <li>{@link eu.geclipse.workflow.model.IWorkflow#getLinks <em>Links</em>}</li>
  * </ul>
  * </p>
  *
@@ -38,8 +38,8 @@ public interface IWorkflow extends IWorkflowElement
 {
   /**
    * Returns the value of the '<em><b>Nodes</b></em>' containment reference list.
-   * The list contents are of type {@link eu.geclipse.workflow.IWorkflowNode}.
-   * It is bidirectional and its opposite is '{@link eu.geclipse.workflow.IWorkflowNode#getWorkflow <em>Workflow</em>}'.
+   * The list contents are of type {@link eu.geclipse.workflow.model.IWorkflowNode}.
+   * It is bidirectional and its opposite is '{@link eu.geclipse.workflow.model.IWorkflowNode#getWorkflow <em>Workflow</em>}'.
    * <!-- begin-user-doc -->
    * <p>
    * If the meaning of the '<em>Nodes</em>' containment reference list isn't clear,
@@ -48,7 +48,7 @@ public interface IWorkflow extends IWorkflowElement
    * <!-- end-user-doc -->
    * @return the value of the '<em>Nodes</em>' containment reference list.
    * @see eu.geclipse.workflow.WorkflowPackage#getIWorkflow_Nodes()
-   * @see eu.geclipse.workflow.IWorkflowNode#getWorkflow
+   * @see eu.geclipse.workflow.model.IWorkflowNode#getWorkflow
    * @model opposite="workflow" containment="true"
    * @generated
    */
@@ -56,8 +56,8 @@ public interface IWorkflow extends IWorkflowElement
 
   /**
    * Returns the value of the '<em><b>Links</b></em>' containment reference list.
-   * The list contents are of type {@link eu.geclipse.workflow.ILink}.
-   * It is bidirectional and its opposite is '{@link eu.geclipse.workflow.ILink#getWorkflow <em>Workflow</em>}'.
+   * The list contents are of type {@link eu.geclipse.workflow.model.ILink}.
+   * It is bidirectional and its opposite is '{@link eu.geclipse.workflow.model.ILink#getWorkflow <em>Workflow</em>}'.
    * <!-- begin-user-doc -->
    * <p>
    * If the meaning of the '<em>Links</em>' containment reference list isn't clear,
@@ -66,7 +66,7 @@ public interface IWorkflow extends IWorkflowElement
    * <!-- end-user-doc -->
    * @return the value of the '<em>Links</em>' containment reference list.
    * @see eu.geclipse.workflow.WorkflowPackage#getIWorkflow_Links()
-   * @see eu.geclipse.workflow.ILink#getWorkflow
+   * @see eu.geclipse.workflow.model.ILink#getWorkflow
    * @model opposite="workflow" containment="true"
    * @generated
    */

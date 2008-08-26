@@ -15,7 +15,7 @@
  ******************************************************************************/
 package eu.geclipse.workflow.ui.navigator;
 
-import eu.geclipse.workflow.IWorkflowElement;
+import eu.geclipse.workflow.model.IWorkflowElement;
 import eu.geclipse.workflow.ui.edit.parts.InputPortEditPart;
 import eu.geclipse.workflow.ui.edit.parts.LinkEditPart;
 import eu.geclipse.workflow.ui.edit.parts.OutputPortEditPart;

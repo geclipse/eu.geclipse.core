@@ -13,7 +13,7 @@
  *     RUR (http://acet.rdg.ac.uk/)
  *     - Ashish Thandavan - initial API and implementation
  ******************************************************************************/
-package eu.geclipse.workflow;
+package eu.geclipse.workflow.model;
 
 import org.eclipse.emf.common.util.EList;
 
@@ -25,8 +25,8 @@ import org.eclipse.emf.common.util.EList;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link eu.geclipse.workflow.IOutputPort#getNode <em>Node</em>}</li>
- *   <li>{@link eu.geclipse.workflow.IOutputPort#getLinks <em>Links</em>}</li>
+ *   <li>{@link eu.geclipse.workflow.model.IOutputPort#getNode <em>Node</em>}</li>
+ *   <li>{@link eu.geclipse.workflow.model.IOutputPort#getLinks <em>Links</em>}</li>
  * </ul>
  * </p>
  *
@@ -38,20 +38,20 @@ public interface IOutputPort extends IPort
 {
   /**
    * Returns the value of the '<em><b>Node</b></em>' container reference.
-   * It is bidirectional and its opposite is '{@link eu.geclipse.workflow.IWorkflowNode#getOutputs <em>Outputs</em>}'.
+   * It is bidirectional and its opposite is '{@link eu.geclipse.workflow.model.IWorkflowNode#getOutputs <em>Outputs</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the value of the '<em>Node</em>' container reference.
    * @see #setNode(IWorkflowNode)
    * @see eu.geclipse.workflow.WorkflowPackage#getIOutputPort_Node()
-   * @see eu.geclipse.workflow.IWorkflowNode#getOutputs
+   * @see eu.geclipse.workflow.model.IWorkflowNode#getOutputs
    * @model opposite="outputs" required="true" transient="false"
    * @generated
    */
   IWorkflowNode getNode();
 
   /**
-   * Sets the value of the '{@link eu.geclipse.workflow.IOutputPort#getNode <em>Node</em>}' container reference.
+   * Sets the value of the '{@link eu.geclipse.workflow.model.IOutputPort#getNode <em>Node</em>}' container reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @param value the new value of the '<em>Node</em>' container reference.
@@ -62,13 +62,13 @@ public interface IOutputPort extends IPort
 
   /**
    * Returns the value of the '<em><b>Links</b></em>' reference list.
-   * The list contents are of type {@link eu.geclipse.workflow.ILink}.
-   * It is bidirectional and its opposite is '{@link eu.geclipse.workflow.ILink#getSource <em>Source</em>}'.
+   * The list contents are of type {@link eu.geclipse.workflow.model.ILink}.
+   * It is bidirectional and its opposite is '{@link eu.geclipse.workflow.model.ILink#getSource <em>Source</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the value of the '<em>Links</em>' reference list.
    * @see eu.geclipse.workflow.WorkflowPackage#getIOutputPort_Links()
-   * @see eu.geclipse.workflow.ILink#getSource
+   * @see eu.geclipse.workflow.model.ILink#getSource
    * @model opposite="source"
    * @generated
    */

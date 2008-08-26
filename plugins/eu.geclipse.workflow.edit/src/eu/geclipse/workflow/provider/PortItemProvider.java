@@ -15,7 +15,8 @@
  ******************************************************************************/
 package eu.geclipse.workflow.provider;
 
-import eu.geclipse.workflow.IPort;
+import eu.geclipse.workflow.model.IPort;
+
 import java.util.Collection;
 import java.util.List;
 import org.eclipse.emf.common.notify.AdapterFactory;
@@ -29,7 +30,7 @@ import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 
 /**
- * This is the item provider adapter for a {@link eu.geclipse.workflow.IPort}
+ * This is the item provider adapter for a {@link eu.geclipse.workflow.model.IPort}
  * object. <!-- begin-user-doc --> <!-- end-user-doc -->
  * 
  * @generated

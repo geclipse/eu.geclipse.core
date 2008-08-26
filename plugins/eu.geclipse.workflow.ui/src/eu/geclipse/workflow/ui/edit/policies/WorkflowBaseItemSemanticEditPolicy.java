@@ -54,9 +54,9 @@ import org.eclipse.gmf.runtime.emf.type.core.requests.SetRequest;
 import org.eclipse.gmf.runtime.notation.Edge;
 import org.eclipse.gmf.runtime.notation.View;
 
-import eu.geclipse.workflow.IInputPort;
-import eu.geclipse.workflow.IOutputPort;
-import eu.geclipse.workflow.IWorkflow;
+import eu.geclipse.workflow.model.IInputPort;
+import eu.geclipse.workflow.model.IOutputPort;
+import eu.geclipse.workflow.model.IWorkflow;
 import eu.geclipse.workflow.ui.edit.helpers.WorkflowBaseEditHelper;
 import eu.geclipse.workflow.ui.part.WorkflowVisualIDRegistry;
 

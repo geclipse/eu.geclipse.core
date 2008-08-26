@@ -15,11 +15,11 @@
  ******************************************************************************/
 package eu.geclipse.workflow.impl;
 
-import eu.geclipse.workflow.IInputPort;
-import eu.geclipse.workflow.IOutputPort;
-import eu.geclipse.workflow.IWorkflow;
-import eu.geclipse.workflow.IWorkflowNode;
-import eu.geclipse.workflow.IWorkflowPackage;
+import eu.geclipse.workflow.model.IInputPort;
+import eu.geclipse.workflow.model.IOutputPort;
+import eu.geclipse.workflow.model.IWorkflow;
+import eu.geclipse.workflow.model.IWorkflowNode;
+import eu.geclipse.workflow.model.IWorkflowPackage;
 
 import java.util.Collection;
 

@@ -34,7 +34,7 @@ import org.eclipse.gmf.runtime.emf.commands.core.command.AbstractTransactionalCo
 
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.jsdl.JSDLJobDescription;
-import eu.geclipse.workflow.IWorkflowJob;
+import eu.geclipse.workflow.model.IWorkflowJob;
 import eu.geclipse.workflow.ui.part.Messages;
 
 /**

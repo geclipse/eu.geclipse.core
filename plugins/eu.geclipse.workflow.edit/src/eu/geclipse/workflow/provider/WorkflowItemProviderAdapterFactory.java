@@ -83,7 +83,7 @@ public class WorkflowItemProviderAdapterFactory extends WorkflowAdapterFactory
   }
   /**
    * This keeps track of the one adapter used for all
-   * {@link eu.geclipse.workflow.ILink} instances. <!-- begin-user-doc --> <!--
+   * {@link eu.geclipse.workflow.model.ILink} instances. <!-- begin-user-doc --> <!--
    * end-user-doc -->
    * 
    * @generated
@@ -91,7 +91,7 @@ public class WorkflowItemProviderAdapterFactory extends WorkflowAdapterFactory
   protected LinkItemProvider iLinkItemProvider;
 
   /**
-   * This creates an adapter for a {@link eu.geclipse.workflow.ILink}. <!--
+   * This creates an adapter for a {@link eu.geclipse.workflow.model.ILink}. <!--
    * begin-user-doc --> <!-- end-user-doc -->
    * 
    * @generated
@@ -105,7 +105,7 @@ public class WorkflowItemProviderAdapterFactory extends WorkflowAdapterFactory
   }
   /**
    * This keeps track of the one adapter used for all
-   * {@link eu.geclipse.workflow.IInputPort} instances. <!-- begin-user-doc -->
+   * {@link eu.geclipse.workflow.model.IInputPort} instances. <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * 
    * @generated
@@ -113,7 +113,7 @@ public class WorkflowItemProviderAdapterFactory extends WorkflowAdapterFactory
   protected InputPortItemProvider inputPortItemProvider;
 
   /**
-   * This creates an adapter for a {@link eu.geclipse.workflow.IInputPort}.
+   * This creates an adapter for a {@link eu.geclipse.workflow.model.IInputPort}.
    * <!-- begin-user-doc --> <!-- end-user-doc -->
    * 
    * @generated
@@ -127,7 +127,7 @@ public class WorkflowItemProviderAdapterFactory extends WorkflowAdapterFactory
   }
   /**
    * This keeps track of the one adapter used for all
-   * {@link eu.geclipse.workflow.IOutputPort} instances. <!-- begin-user-doc -->
+   * {@link eu.geclipse.workflow.model.IOutputPort} instances. <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * 
    * @generated
@@ -135,7 +135,7 @@ public class WorkflowItemProviderAdapterFactory extends WorkflowAdapterFactory
   protected OutputPortItemProvider outputPortItemProvider;
 
   /**
-   * This creates an adapter for a {@link eu.geclipse.workflow.IOutputPort}.
+   * This creates an adapter for a {@link eu.geclipse.workflow.model.IOutputPort}.
    * <!-- begin-user-doc --> <!-- end-user-doc -->
    * 
    * @generated
@@ -149,7 +149,7 @@ public class WorkflowItemProviderAdapterFactory extends WorkflowAdapterFactory
   }
   /**
    * This keeps track of the one adapter used for all
-   * {@link eu.geclipse.workflow.IWorkflow} instances. <!-- begin-user-doc -->
+   * {@link eu.geclipse.workflow.model.IWorkflow} instances. <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * 
    * @generated
@@ -157,7 +157,7 @@ public class WorkflowItemProviderAdapterFactory extends WorkflowAdapterFactory
   protected WorkflowItemProvider workflowItemProvider;
 
   /**
-   * This creates an adapter for a {@link eu.geclipse.workflow.IWorkflow}. <!--
+   * This creates an adapter for a {@link eu.geclipse.workflow.model.IWorkflow}. <!--
    * begin-user-doc --> <!-- end-user-doc -->
    * 
    * @generated
@@ -171,7 +171,7 @@ public class WorkflowItemProviderAdapterFactory extends WorkflowAdapterFactory
   }
   /**
    * This keeps track of the one adapter used for all
-   * {@link eu.geclipse.workflow.IWorkflowJob} instances. <!-- begin-user-doc
+   * {@link eu.geclipse.workflow.model.IWorkflowJob} instances. <!-- begin-user-doc
    * --> <!-- end-user-doc -->
    * 
    * @generated
@@ -179,7 +179,7 @@ public class WorkflowItemProviderAdapterFactory extends WorkflowAdapterFactory
   protected WorkflowJobItemProvider workflowJobItemProvider;
 
   /**
-   * This creates an adapter for a {@link eu.geclipse.workflow.IWorkflowJob}.
+   * This creates an adapter for a {@link eu.geclipse.workflow.model.IWorkflowJob}.
    * <!-- begin-user-doc --> <!-- end-user-doc -->
    * 
    * @generated
