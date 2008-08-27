@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2007 g-Eclipse consortium 
+ * Copyright (c) 2007-2008 g-Eclipse consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -13,6 +13,7 @@
  *     PSNC - Mariusz Wojtysiak
  *     Nikolaos Tsioutsias
  *****************************************************************************/
+
 package eu.geclipse.ui.properties;
 
 import java.net.URI;
@@ -32,71 +33,62 @@ import eu.geclipse.info.model.GridGlueService;
 import eu.geclipse.info.model.GridGlueStorage;
 
 
-/**
- *
- */
 public class PropertiesFactory implements IPropertiesFactory {
 
   /* (non-Javadoc)
    * @see eu.geclipse.ui.properties.IPropertiesFactory#getPropertySources(java.lang.Object)
    */
-  public List<AbstractPropertySource<?>> getPropertySources( final Object sourceObject )
+  public List< AbstractPropertySource< ? > > getPropertySources( final Object sourceObject )
   {
-    List<AbstractPropertySource<?>> sourcesList = new ArrayList<AbstractPropertySource<?>>();
+    List< AbstractPropertySource< ? > > sourcesList
+      = new ArrayList< AbstractPropertySource< ? > >();
     
-    if( sourceObject instanceof IVirtualOrganization ) {
-      sourcesList.add( new VOPropertySource( ( IVirtualOrganization )sourceObject ) );
+    if ( sourceObject instanceof IVirtualOrganization ) {
+      sourcesList.add( new VOPropertySource( ( IVirtualOrganization ) sourceObject ) );
     }
     
-    if( sourceObject instanceof URI ) {
-      sourcesList.add( new URIPropertySource( ( URI )sourceObject ) );
+    if ( sourceObject instanceof URI ) {
+      sourcesList.add( new URIPropertySource( ( URI ) sourceObject ) );
     }
     
-    if( sourceObject instanceof IGridJobDescription ) {
-      sourcesList.add( new GridJobDescSource( ( IGridJobDescription )sourceObject ) );
+    if ( sourceObject instanceof IGridJobDescription ) {
+      sourcesList.add( new GridJobDescSource( ( IGridJobDescription ) sourceObject ) );
     }
     
-    if( sourceObject instanceof IGridProject ) {
-      sourcesList.add( new GridProjectSource( (IGridProject)sourceObject ) );
+    if ( sourceObject instanceof IGridProject ) {
+      sourcesList.add( new GridProjectSource( ( IGridProject ) sourceObject ) );
     }
     
-    if( sourceObject instanceof IGridConnection ) {
-      sourcesList.add( new ConnectionPropertySource( (IGridConnection) sourceObject ) );
+    if ( sourceObject instanceof IGridConnection ) {
+      sourcesList.add( new ConnectionPropertySource( ( IGridConnection ) sourceObject ) );
     }
     
-    if( sourceObject instanceof IGridJob ) {
+    if ( sourceObject instanceof IGridJob ) {
       sourcesList.add( new GridJobSource( ( IGridJob ) sourceObject ) );
     }
     
-    if( sourceObject instanceof IGridConnectionElement ) {
+    if ( sourceObject instanceof IGridConnectionElement ) {
       sourcesList.add( new GridConnectionElementSource( ( IGridConnectionElement ) sourceObject ) );
     }
     
-    if( sourceObject instanceof IPropertiesProvider ) {
-      sourcesList.add( new PropertiesProviderSource( (IPropertiesProvider) sourceObject ) );
+    if ( sourceObject instanceof IPropertiesProvider ) {
+      sourcesList.add( new PropertiesProviderSource( ( IPropertiesProvider ) sourceObject ) );
     }
     
-    if (sourceObject instanceof GridGlueComputing)
-    {
-      GridGlueComputing gridGlueComputing = (GridGlueComputing)sourceObject;
-      sourcesList.add( new GridGlueComputingSource(gridGlueComputing) );
+    if ( sourceObject instanceof GridGlueComputing ) {
+      sourcesList.add( new GridGlueComputingSource( ( GridGlueComputing ) sourceObject ) );
     }
     
-    if (sourceObject instanceof GridGlueStorage)
-    {
-      GridGlueStorage gridGlueStorage = (GridGlueStorage)sourceObject;
-      sourcesList.add( new GridGlueStorageSource(gridGlueStorage));
+    if ( sourceObject instanceof GridGlueStorage ) {
+      sourcesList.add( new GridGlueStorageSource( ( GridGlueStorage ) sourceObject ) );
     }
     
-    if (sourceObject instanceof GridGlueService)
-    {
-      GridGlueService gridGlueService = (GridGlueService)sourceObject;
-      sourcesList.add( new GridGlueServiceSource(gridGlueService) );
+    if ( sourceObject instanceof GridGlueService ) {
+      sourcesList.add( new GridGlueServiceSource( ( GridGlueService ) sourceObject ) );
     }
     
-    if ( sourceObject instanceof GridApplication)
-    {
-      sourcesList.add( new GridApplicationSource(( GridApplication )sourceObject) );
+    if ( sourceObject instanceof GridApplication ) {
+      sourcesList.add( new GridApplicationSource( ( GridApplication ) sourceObject ) );
     }
     
     return sourcesList;
