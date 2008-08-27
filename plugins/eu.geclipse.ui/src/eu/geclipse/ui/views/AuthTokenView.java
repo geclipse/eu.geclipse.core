@@ -444,6 +444,9 @@ public class AuthTokenView
     createActions();
     createToolbar();
     createContextMenu();
+    
+    // Set as selection provider so that properties get updated
+    getSite().setSelectionProvider( this.tokenList );
  
   }
   
