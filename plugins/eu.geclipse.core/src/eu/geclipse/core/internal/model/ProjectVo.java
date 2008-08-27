@@ -19,6 +19,7 @@ import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.SubMonitor;
 
 import eu.geclipse.core.internal.Activator;
 import eu.geclipse.core.model.IGridApplicationManager;
@@ -274,6 +275,28 @@ public class ProjectVo
     // TODO mathias
   }
   
+  /*
+   * Override the superclass' method to avoid deleting the
+   * resource categories which are child of this ProjectVo.
+   * 
+   * (non-Javadoc)
+   * @see eu.geclipse.core.model.impl.AbstractGridContainer#refresh(org.eclipse.core.runtime.IProgressMonitor)
+   */
+  @Override
+  public void refresh( final IProgressMonitor monitor ) throws ProblemException {
+    
+    IGridElement[] children = getChildren( null );
+    
+    SubMonitor sMonitor = SubMonitor.convert( monitor, "Refreshing VO resources", children.length );
+    
+    for ( IGridElement elem : children ) {
+      if ( elem instanceof IGridContainer ) {
+        ( ( IGridContainer ) elem ).refresh( sMonitor.newChild( 1 ) );
+      }
+    }
+  }
+  
+  // TODO: remove? this method is completely unused
   public void refreshResources( final IGridResourceCategory category,
                                 final IProgressMonitor monitor )
       throws ProblemException {
@@ -328,8 +351,8 @@ public class ProjectVo
     
     IGridContainer parentContainer
       = parentCategory == null
-      ? this
-      : getResourceContainer( parentCategory );
+        ? this
+        : getResourceContainer( parentCategory );
     
     IGridElement child = parentContainer.findChild( name );
     
