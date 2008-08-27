@@ -242,7 +242,7 @@ public class ParametricJobService implements IGridJobService {
       testCancelled( monitor );
       
       jobCreator.canCreate( jobDescription );
-      jobCreator.create( parametricJob, jobID, this, subjobName );
+      jobCreator.create( parametricJob, jobID, this.jobService, subjobName );
       
       jobDescription.getParent().delete( jobDescription );
     }
