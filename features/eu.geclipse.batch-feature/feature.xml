@@ -27,7 +27,7 @@ http://www.geclipse.eu/
    </license>
 
    <url>
-      <update label="g-Eclipse (incubation) main Update Site" url="http://download.eclipse.org/technology/geclipse/updates/1.0milestones/site.xml"/>
+      <update label="g-Eclipse (incubation) main Update Site" url="http://download.eclipse.org/technology/geclipse/updates/1.0/"/>
    </url>
 
    <requires>
