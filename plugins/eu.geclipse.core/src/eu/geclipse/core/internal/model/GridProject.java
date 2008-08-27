@@ -25,10 +25,12 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.core.runtime.preferences.IScopeContext;
+import org.osgi.framework.Bundle;
 import org.osgi.service.prefs.BackingStoreException;
 import org.osgi.service.prefs.Preferences;
 
@@ -142,24 +144,33 @@ public class GridProject
     List< IConfigurationElement > configurationElements
       = extm.getConfigurationElements( Extensions.PROJECT_FOLDER_POINT, Extensions.PROJECT_FOLDER_ELEMENT );
     
-    for ( IConfigurationElement element : configurationElements ) {
+    for( IConfigurationElement element : configurationElements ) {
       
       String id = element.getAttribute( Extensions.PROJECT_FOLDER_ID_ATTRIBUTE );
       String label = folderNode.get( id, null );
       
       if ( label != null ) {
         String className = element.getAttribute( Extensions.PROJECT_FOLDER_ELEMENTCLASS_ATTRIBUTE );
+        String contributor = element.getContributor().getName();
+        Class<?> elementClass = null;
+        Bundle bundle = Platform.getBundle( contributor );    
         try {
-          Class< ? > cls = Class.forName( className );
-          if ( cls.isAssignableFrom( elementType ) ) {
+           elementClass = bundle.loadClass( className );
+        } catch( ClassNotFoundException exception ) {
+          try {
+            elementClass = Class.forName( className );
+          } catch ( ClassNotFoundException cnfExc ) {
+            Activator.logException( cnfExc );
+          }
+        }
+        
+        if( elementClass != null ) {
+          if ( elementClass.isAssignableFrom( elementType ) ) {
             result = getProjectFolder( label );
             break;
           }
-        } catch ( ClassNotFoundException cnfExc ) {
-          Activator.logException( cnfExc );
-        }
-      }
-      
+        }        
+      }      
     }
     
     return result;

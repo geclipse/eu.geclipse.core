@@ -76,6 +76,8 @@ public class GridProjectStructureComposite extends Composite {
   private CheckboxTableViewer viewer;
   
   private Hashtable< String, Class< ? > > creatorTargets;
+  
+  private Hashtable<String, Class<?>> elementClasses; 
 
   public GridProjectStructureComposite( final Composite parent, final int style ) {
     
@@ -314,17 +316,19 @@ public class GridProjectStructureComposite extends Composite {
       
       Class< ? > creatorTarget = this.creatorTargets.get( name );
       
-      TreeItem parentItem = this.rootItem;
-      for ( int i = 0 ; i < checked.length ; i++ ) {
-        try {
-          Class< ? > fcls = Class.forName( ( ( String[] ) checked[i] ) [ 3 ] );
-          if ( fcls.isAssignableFrom( creatorTarget ) ) {
-            parentItem = treeItems[ i ];
-          }
-        } catch ( ClassNotFoundException cnfExc ) {
-          Activator.logException( cnfExc );
-        }
+      TreeItem parentItem = findParentForTarget( checked,
+                                                 treeItems,
+                                                 creatorTarget, true );
+      // IGridWorkflowDescripion extends IGridJobDescription, so both classes fit into the same target.
+      // So first let's check exact target (comparing classes), then use isAssignable() 
+      if( parentItem == null ) {
+        parentItem = findParentForTarget( checked, treeItems, creatorTarget, false );
       }
+      
+      if( parentItem == null ) {
+        parentItem = this.rootItem;
+      }
+      
       TreeItem leafItem = new TreeItem( parentItem, SWT.NONE );
       leafItem.setText( name );
       leafItem.setImage(
@@ -340,6 +344,37 @@ public class GridProjectStructureComposite extends Composite {
       child.setExpanded( true );
     }
     
+  }
+
+  private TreeItem findParentForTarget( final Object[] checked,
+                                        final TreeItem[] treeItems,
+                                        final Class<?> creatorTarget, 
+                                        final boolean equalClass )
+  {
+    TreeItem parentItem = null;
+    for ( int i = 0 ; i < checked.length && parentItem == null; i++ ) {
+      try {
+        String elementClassName = ( ( String[] ) checked[i] ) [ 3 ];
+        Class<?> elementClass = this.elementClasses.get( elementClassName );
+        
+        if( elementClass == null ) {
+          elementClass = Class.forName( elementClassName );
+        }
+        
+        if( equalClass ) {
+          if( elementClass.equals( creatorTarget ) ) {
+            parentItem = treeItems[ i ];
+          }
+        } else {
+          if ( elementClass.isAssignableFrom( creatorTarget ) ) {
+            parentItem = treeItems[ i ];
+          }
+        }
+      } catch ( ClassNotFoundException cnfExc ) {
+        Activator.logException( cnfExc );
+      }
+    }
+    return parentItem;
   }
   
   private void initialize() {
@@ -360,9 +395,10 @@ public class GridProjectStructureComposite extends Composite {
             String name = target.getAttribute( Extensions.GRID_ELEMENT_CREATOR_TARGET_NAME_ATTRIBUTE );
             String className = target.getAttribute( Extensions.GRID_ELEMENT_CREATOR_TARGET_CLASS_ATTRIBUTE );
             String contributor = target.getContributor().getName();
-            Bundle bundle = Platform.getBundle( contributor );
+            Bundle bundle = Platform.getBundle( contributor );            
             if ( bundle != null ) {
-              try {
+              try {              
+                
                 Class< ? > cls = bundle.loadClass( className );
                 if ( ! IGridResource.class.isAssignableFrom( cls )
                     && ! IVirtualOrganization.class.isAssignableFrom( cls ) ) {
@@ -383,6 +419,10 @@ public class GridProjectStructureComposite extends Composite {
   
   private void loadProjectFolders() {
     
+    if( elementClasses == null ) {
+      this.elementClasses = new Hashtable<String, Class<?>>();
+    }
+    
     List< String[] > input = new ArrayList< String[] >();
     List< String[] > checked = new ArrayList< String[] >();
     ExtensionManager extm = new ExtensionManager();
@@ -393,7 +433,18 @@ public class GridProjectStructureComposite extends Composite {
       String id = element.getAttribute( Extensions.PROJECT_FOLDER_ID_ATTRIBUTE );
       String name = element.getAttribute( Extensions.PROJECT_FOLDER_NAME_ATTRIBUTE );
       String label = element.getAttribute( Extensions.PROJECT_FOLDER_LABEL_ATTRIBUTE );
-      String cls = element.getAttribute( Extensions.PROJECT_FOLDER_ELEMENTCLASS_ATTRIBUTE );
+      String cls = element.getAttribute( Extensions.PROJECT_FOLDER_ELEMENTCLASS_ATTRIBUTE );      
+      
+      try {
+        String contributor = element.getContributor().getName();
+        Bundle bundle = Platform.getBundle( contributor );
+        
+        Class<?> elementClass = bundle.loadClass( cls );
+        this.elementClasses.put( cls, elementClass );
+      } catch( ClassNotFoundException exception ) {
+        Activator.logException( exception );
+      }
+      
       boolean preset = Boolean.parseBoolean( element.getAttribute( Extensions.PROJECT_FOLDER_PRESET_ATTRIBUTE ) );
       String[] row = new String[] { name, label, id, cls };
       input.add( row );

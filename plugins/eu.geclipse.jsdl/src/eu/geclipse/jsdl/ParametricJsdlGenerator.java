@@ -265,6 +265,7 @@ public class ParametricJsdlGenerator {
         processAssignments( findAssignments( currentSweep ), assignmentList );
         NodeList childSweeps = findSweeps( sweepItem );
         
+        // TODO mariusz Throw exception when maxIterations is 0 (not values defined)
         int maxIterations = countIterations( assignmentList );
         
         for( int iteration = 0; iteration < maxIterations; iteration++ ) {
