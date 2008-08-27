@@ -63,9 +63,9 @@ import eu.geclipse.workflow.ui.providers.WorkflowElementTypes;
 public class WorkflowJobAfterCreateCommand extends Command {
   
   private IAdaptable adapter;
-  private JSDLJobDescription jsdl;
-  private IWorkflowJob newElement = null;
-  private TransactionalEditingDomain domain;
+  JSDLJobDescription jsdl;
+  IWorkflowJob newElement = null;
+  TransactionalEditingDomain domain;
   protected String[] dirs;
   protected IFileStore wfRootFileStore;
   private WorkflowEditPart diagram;
@@ -79,6 +79,7 @@ public class WorkflowJobAfterCreateCommand extends Command {
     this.diagram = diagram;
   }
 
+  @Override
   public void execute() {
     EObject newVisualElement = ( EObject ) this.adapter.getAdapter( EObject.class );
     Object o = newVisualElement.eCrossReferences().get( 0 );
@@ -98,7 +99,7 @@ public class WorkflowJobAfterCreateCommand extends Command {
              .getRoot()
              .findFilesForLocationURI( jsdlPathUri )[ 0 ];
            String jobDescriptionInJSDL = jsdlSource.getLocation().toString();
-           ResourceSet resourceSet = domain.getResourceSet();
+           ResourceSet resourceSet = WorkflowJobAfterCreateCommand.this.domain.getResourceSet();
            Resource res = resourceSet.getResources().get( 0 );
            org.eclipse.emf.common.util.URI wfRootUri = res.getURI();
            String wfRootPath = wfRootUri.path();
@@ -160,8 +161,8 @@ public class WorkflowJobAfterCreateCommand extends Command {
            } catch ( CoreException ex ) {
              // ignore for now. naughty!
            }
-           newElement.setJobDescription( jobDescriptionInJSDL );
-           newElement.setName( jsdlTarget.getName().substring( 0, jsdlTarget.getName().indexOf( "." + jsdlTarget.getFileExtension() ) ) ); //$NON-NLS-1$
+           WorkflowJobAfterCreateCommand.this.newElement.setJobDescription( jobDescriptionInJSDL );
+           WorkflowJobAfterCreateCommand.this.newElement.setName( jsdlTarget.getName().substring( 0, jsdlTarget.getName().indexOf( "." + jsdlTarget.getFileExtension() ) ) ); //$NON-NLS-1$
            return CommandResult.newOKCommandResult();
          }
        };
@@ -176,21 +177,6 @@ public class WorkflowJobAfterCreateCommand extends Command {
        EditPart part = this.diagram.findEditPart( this.diagram, this.newElement );
        if ( part instanceof WorkflowJobEditPart ) {
          this.newWorkflowJobEditPart = ( WorkflowJobEditPart ) part;
-       }
-       String stdInputUri = ""; //$NON-NLS-1$
-       String stdOutputUri = ""; //$NON-NLS-1$
-       String stdErrorUri = ""; //$NON-NLS-1$
-       stdInputUri = this.jsdl.getStdInputFileName();
-       stdOutputUri = this.jsdl.getStdOutputFileName();
-       stdErrorUri = this.jsdl.getStdErrorFileName();
-       if ( stdInputUri != null ) {
-         cmd.add( createInputPortCommand( stdInputUri ) );
-       }
-       if ( stdOutputUri != null ) {
-         cmd.add( createOutputPortCommand( stdOutputUri ) );
-       }
-       if ( stdErrorUri != null ) {
-         cmd.add( createOutputPortCommand( stdErrorUri ) );
        }
        Map<String, String> m = this.jsdl.getDataStagingInStrings();
        Set<String> s = m.keySet();
@@ -211,7 +197,7 @@ public class WorkflowJobAfterCreateCommand extends Command {
   }
   
 
-  private int findJsdlTarget( IFile jsdlTarget ) {
+  int findJsdlTarget( IFile jsdlTarget ) {
     // search through the .workflow directory for the target name and target[n]
     // names to work out how many exist
     int numTarget = 0;
@@ -243,6 +229,7 @@ public class WorkflowJobAfterCreateCommand extends Command {
     return numTarget;
   }  
   
+  @SuppressWarnings("unchecked")
   private Command createInputPortCommand(String uri) {
     IElementType type = WorkflowElementTypes.IInputPort_2002;
     ViewAndElementDescriptor viewDescriptor = new ViewAndElementDescriptor( new CreateElementRequestAdapter( new CreateElementRequest( type ) ),
@@ -255,6 +242,7 @@ public class WorkflowJobAfterCreateCommand extends Command {
     return cmd;
   }
   
+  @SuppressWarnings("unchecked")
   private Command createOutputPortCommand(String uri) {
     IElementType type = WorkflowElementTypes.IOutputPort_2001;
     ViewAndElementDescriptor viewDescriptor = new ViewAndElementDescriptor( new CreateElementRequestAdapter( new CreateElementRequest( type ) ),
