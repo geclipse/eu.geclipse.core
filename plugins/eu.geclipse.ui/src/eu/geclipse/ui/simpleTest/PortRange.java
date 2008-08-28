@@ -28,13 +28,13 @@ public class PortRange {
   private int start;
   private int finish;
   
-  public PortRange(final int from){
+  public PortRange( final int from ){
     
     this.start = from;
     this.finish = 0;
   }
   
-  public PortRange(final int from, final int to){
+  public PortRange( final int from, final int to ){
     
     this.start = from;
     this.finish = to;

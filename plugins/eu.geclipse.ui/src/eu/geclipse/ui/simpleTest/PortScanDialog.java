@@ -85,21 +85,21 @@ public class PortScanDialog extends AbstractSimpleTestDialog{
   
   protected String ip;
   
-  boolean port21_entered = false;
-  boolean port22_entered = false;
-  boolean port23_entered = false;
-  boolean port25_entered = false;
-  boolean port80_entered = false;
-  
-  StyledText results;
-  
+  protected boolean port21_entered = false;
+  protected boolean port22_entered = false;
+  protected boolean port23_entered = false;
+  protected boolean port25_entered = false;
+  protected boolean port80_entered = false;
+
+  protected ArrayList< PortScanJob > scanJobs = new ArrayList < PortScanJob >();
+
+  protected StyledText results;
   
   private Composite mainComp;
   
   private Composite portComp,  resultsComp, listComp;
   private ArrayList< String > hostNames = new ArrayList< String >();
   
-  private ArrayList< PortScanJob > scanJobs = new ArrayList < PortScanJob >();
   
   private ArrayList<TreeItem> treeItem = new ArrayList<TreeItem>();
   
@@ -114,26 +114,28 @@ public class PortScanDialog extends AbstractSimpleTestDialog{
     super( test, resources, parentShell );
   }
   
+  @Override
   protected void configureShell( final Shell newShell ) {
     super.configureShell( newShell );
     newShell.setMinimumSize( 500, 520 );
     newShell.setText( Messages.getString( "PortScanDialog.dialogTitle" ) ); //$NON-NLS-1$
   }
   
+  @Override
   protected Control createDialogArea( final Composite parent ) {
     
     //get the hostname (ip) from the selected resources
     for ( int i = 0; i < this.resources.size(); ++i ) {
-      ip = this.resources.get( i ).getHostName();
+      this.ip = this.resources.get( i ).getHostName();
       
-      if ( ip != null )
-          this.hostNames.add( ip );
+      if ( this.ip != null )
+          this.hostNames.add( this.ip );
     }
     
 
     
-    list = new ArrayList<PortRange>();
-    portMap = new TreeMap<Integer,Boolean>();
+    this.list = new ArrayList<PortRange>();
+    this.portMap = new TreeMap<Integer,Boolean>();
     
    // setSize(new Point(500, 520));
     //setLayout(new GridLayout());
@@ -159,25 +161,25 @@ public class PortScanDialog extends AbstractSimpleTestDialog{
     listData.widthHint = 150;
     listData.heightHint = 150;
     
-    mainComp = new Composite( parent, SWT.NONE );
-    mainComp.setLayout( new GridLayout( 1, false ) );
+    this.mainComp = new Composite( parent, SWT.NONE );
+    this.mainComp.setLayout( new GridLayout( 1, false ) );
     
-    Group settingsGroup = new Group( mainComp, SWT.NONE );
+    Group settingsGroup = new Group( this.mainComp, SWT.NONE );
     settingsGroup.setLayout( new GridLayout( 2, false ) );
-    settingsGroup.setText( "Port Selection" ); 
+    settingsGroup.setText( Messages.getString("PortScanDialog.selectionGroup" )); //$NON-NLS-1$
     
-    Group resultsGroup = new Group( mainComp, SWT.NONE );
+    Group resultsGroup = new Group( this.mainComp, SWT.NONE );
     resultsGroup.setLayout( new GridLayout( 2, false ) );
-    resultsGroup.setText( "Results" ); 
+    resultsGroup.setText(Messages.getString("PortScanDialog.resultsGroup" )); //$NON-NLS-1$
 
-    portComp = new Composite( settingsGroup, SWT.NONE );
+    this.portComp = new Composite( settingsGroup, SWT.NONE );
     this.portComp.setLayout( new GridLayout( 4, false ) );
     this.wellKnownPortsLbl = new Label( this.portComp, 0 );
     
     //this.wellKnownPortsLbl.setLayoutData(gridData);
     this.portLbl = new Label(this.portComp, 0);
     this.portLbl.setLayoutData(gridData2);
-    this.portLbl.setText("Selected Ports");
+    this.portLbl.setText( Messages.getString("PortScanDialog.selectedPortsLbl" )); //$NON-NLS-1$
 
     this.port21chk = new Button( this.portComp, SWT.CHECK );
    // this.port21chk.setLayoutData(gridData);
@@ -196,52 +198,46 @@ public class PortScanDialog extends AbstractSimpleTestDialog{
     this.port80chk = new Button( this.portComp, SWT.CHECK );
     //this.port80chk.setLayoutData(gridData);
 
-    this.wellKnownPortsLbl.setText("Well-Known Ports");
+    this.wellKnownPortsLbl.setText(Messages.getString("PortScanDialog.wellKnownPortsLbl" )); //$NON-NLS-1$
 
-    this.port21chk.setText("21 - FTP");
-    this.port22chk.setText("22 - SSH");
-    this.port23chk.setText("23 - Telnet");
-    this.port25chk.setText("25 - SMTP");
-    this.port80chk.setText("80 - HTTP");
+    this.port21chk.setText( Messages.getString("PortScanDialog.port21" )); //$NON-NLS-1$
+    this.port22chk.setText( Messages.getString("PortScanDialog.port22" )); //$NON-NLS-1$ 
+    this.port23chk.setText( Messages.getString("PortScanDialog.port23" )); //$NON-NLS-1$ 
+    this.port25chk.setText( Messages.getString("PortScanDialog.port25" )); //$NON-NLS-1$ 
+    this.port80chk.setText( Messages.getString("PortScanDialog.port80" )); //$NON-NLS-1$ 
     
     this.addKnown = new Button( this.portComp, SWT.Activate );
-    this.addKnown.setText("Add Selected");
+    this.addKnown.setText( Messages.getString("PortScanDialog.addSelectedButton" ) ); //$NON-NLS-1$
     //add selected well-known ports to the list
-    addKnown.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
-        public void widgetSelected(final org.eclipse.swt.events.SelectionEvent e) {     
-            
-            if(port21chk.getSelection() && !port21_entered)
-            {
-                port21_entered = true;
-                portList.add(port21chk.getText());
-                list.add(new PortRange(21));
-            }
-            if(port22chk.getSelection()&& !port22_entered)
-            {
-                port22_entered = true;
-                portList.add(port22chk.getText());
-                list.add(new PortRange(22));
-            }
-            if(port23chk.getSelection()&& !port23_entered)
-            {
-                port23_entered = true;
-                portList.add(port23chk.getText());
-                list.add(new PortRange(23));
-            }
-            if(port25chk.getSelection()&& !port25_entered)
-            {
-                port25_entered = true;
-                portList.add(port25chk.getText());
-                list.add(new PortRange(25));
-            }
-            if(port80chk.getSelection()&& !port80_entered)
-            {
-                port80_entered = true;
-                portList.add(port80chk.getText());
-                list.add(new PortRange(80));
-            }
-        
+    this.addKnown.addSelectionListener( new org.eclipse.swt.events.SelectionAdapter() {
+      @Override
+      public void widgetSelected( final org.eclipse.swt.events.SelectionEvent e ) {     
+        if( PortScanDialog.this.port21chk.getSelection() && !PortScanDialog.this.port21_entered ) {
+          PortScanDialog.this.port21_entered = true;
+          PortScanDialog.this.portList.add( PortScanDialog.this.port21chk.getText() );
+          PortScanDialog.this.list.add( new PortRange( 21 ) );
         }
+        if( PortScanDialog.this.port22chk.getSelection() && !PortScanDialog.this.port22_entered ) {
+          PortScanDialog.this.port22_entered = true;
+          PortScanDialog.this.portList.add( PortScanDialog.this.port22chk.getText() );
+          PortScanDialog.this.list.add( new PortRange( 22 ) );
+        }
+        if( PortScanDialog.this.port23chk.getSelection() && !PortScanDialog.this.port23_entered ) {
+          PortScanDialog.this.port23_entered = true;
+          PortScanDialog.this.portList.add( PortScanDialog.this.port23chk.getText() );
+          PortScanDialog.this.list.add( new PortRange( 23 ) );
+        }
+        if( PortScanDialog.this.port25chk.getSelection() && !PortScanDialog.this.port25_entered ) {
+          PortScanDialog.this.port25_entered = true;
+          PortScanDialog.this.portList.add( PortScanDialog.this.port25chk.getText() );
+          PortScanDialog.this.list.add(new PortRange( 25 ) );
+        }
+        if( PortScanDialog.this.port80chk.getSelection() && !PortScanDialog.this.port80_entered ) {
+          PortScanDialog.this.port80_entered = true;
+          PortScanDialog.this.portList.add( PortScanDialog.this.port80chk.getText() );
+          PortScanDialog.this.list.add(new PortRange(80));
+        }
+      }
     });
    // new Label( this.portComp, SWT.NONE ).setLayoutData(gridData); //$NON-NLS-1$
    // gridData.horizontalSpan = 4;
@@ -251,66 +247,67 @@ public class PortScanDialog extends AbstractSimpleTestDialog{
     new Label( this.portComp, SWT.HORIZONTAL );
     //new Label( this.portComp, SWT.HORIZONTAL );
     
-    Button removeButton = new Button(this.portComp,0);
-    removeButton.setText("Remove Port");
+    Button removeButton = new Button( this.portComp, 0 );
+    removeButton.setText( Messages.getString("PortScanDialog.removeButton" ) ); //$NON-NLS-1$ 
     //removeButton.setLayoutData(gridData4);
     //remove selected port(s) from the list
-    removeButton.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
-        public void widgetSelected(final org.eclipse.swt.events.SelectionEvent e) {
-            if(!list.isEmpty() && portList.getFocusIndex()!=-1){
-              if (list.get( portList.getSelectionIndex() ).getFinish()==0 && list.get( portList.getSelectionIndex()).getStart() ==  21)
-                port21_entered = false;
-              else if (list.get( portList.getSelectionIndex()).getFinish()==0 && list.get( portList.getSelectionIndex()).getStart() ==  22)
-                port22_entered = false;
-              else if (list.get( portList.getSelectionIndex()).getFinish()==0 && list.get( portList.getSelectionIndex()).getStart() ==  23)
-                port23_entered = false;
-              else if (list.get( portList.getSelectionIndex()).getFinish()==0 && list.get( portList.getSelectionIndex()).getStart() ==  25)
-                port25_entered = false;
-              else if (list.get( portList.getSelectionIndex()).getFinish()==0 && list.get( portList.getSelectionIndex()).getStart() ==  80)
-                port80_entered = false;  
+    removeButton.addSelectionListener( new org.eclipse.swt.events.SelectionAdapter() {
+      @Override
+      public void widgetSelected( final org.eclipse.swt.events.SelectionEvent e ) {
+        if( !PortScanDialog.this.list.isEmpty() && PortScanDialog.this.portList.getFocusIndex() != -1 ){
+          if ( PortScanDialog.this.list.get( PortScanDialog.this.portList.getSelectionIndex() ).getFinish() == 0 
+               && PortScanDialog.this.list.get( PortScanDialog.this.portList.getSelectionIndex()).getStart() == 21)
+            PortScanDialog.this.port21_entered = false;
+          else if ( PortScanDialog.this.list.get( PortScanDialog.this.portList.getSelectionIndex()).getFinish() == 0 
+                    && PortScanDialog.this.list.get( PortScanDialog.this.portList.getSelectionIndex()).getStart() == 22)
+            PortScanDialog.this.port22_entered = false;
+          else if ( PortScanDialog.this.list.get( PortScanDialog.this.portList.getSelectionIndex()).getFinish() == 0 
+                    && PortScanDialog.this.list.get( PortScanDialog.this.portList.getSelectionIndex()).getStart() == 23)
+            PortScanDialog.this.port23_entered = false;
+          else if ( PortScanDialog.this.list.get( PortScanDialog.this.portList.getSelectionIndex()).getFinish() == 0 
+                    && PortScanDialog.this.list.get( PortScanDialog.this.portList.getSelectionIndex()).getStart() == 25)
+            PortScanDialog.this.port25_entered = false;
+          else if ( PortScanDialog.this.list.get( PortScanDialog.this.portList.getSelectionIndex()).getFinish() == 0 
+                    && PortScanDialog.this.list.get( PortScanDialog.this.portList.getSelectionIndex()).getStart() == 80)
+            PortScanDialog.this.port80_entered = false;  
               
-                list.remove(portList.getSelectionIndex());
-                portList.remove(portList.getSelectionIndex());
-            }
-            
+          PortScanDialog.this.list.remove( PortScanDialog.this.portList.getSelectionIndex() );
+          PortScanDialog.this.portList.remove( PortScanDialog.this.portList.getSelectionIndex() );
         }
+      }
     });
     
     Button removeAll = new Button(this.portComp,0);
-    removeAll.setText("Remove All");
+    removeAll.setText( Messages.getString("PortScanDialog.removeAllButton" )); //$NON-NLS-1$ 
     
     removeAll.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
-        public void widgetSelected(final org.eclipse.swt.events.SelectionEvent e) {
-            if(!list.isEmpty()){
-
-                port21_entered = false;
-                port22_entered = false;
-                port23_entered = false;
-                port25_entered = false;
-                port80_entered = false;  
+      @Override
+      public void widgetSelected( final org.eclipse.swt.events.SelectionEvent e ) {
+        if( !PortScanDialog.this.list.isEmpty() ){
+          PortScanDialog.this.port21_entered = false;
+          PortScanDialog.this.port22_entered = false;
+          PortScanDialog.this.port23_entered = false;
+          PortScanDialog.this.port25_entered = false;
+          PortScanDialog.this.port80_entered = false;  
               
-                list.clear();
-
-                portList.removeAll();
-
-                
-            }
-            
+          PortScanDialog.this.list.clear();
+          PortScanDialog.this.portList.removeAll();
         }
+      }
     });
     
-    listComp = new Composite( settingsGroup, SWT.NONE );
+    this.listComp = new Composite( settingsGroup, SWT.NONE );
     this.listComp.setLayout( new GridLayout( 4, false ) );
     
     this.rangeLbl = new Label( this.listComp, 0 );
-    this.rangeLbl.setText("Add a range of ports");
+    this.rangeLbl.setText( Messages.getString("PortScanDialog.rangeLbl" )); //$NON-NLS-1$ 
     this.rangeLbl.setLayoutData(gridData3);
     
     this.from = new Spinner( this.listComp, SWT.LEFT | SWT.SINGLE | SWT.BORDER );
     this.from.setValues(1, 1, 65535, 0, 1, 65535);
     
     this.dashlbl = new Label( this.listComp, 0 );
-    this.dashlbl.setText("-");
+    this.dashlbl.setText( "-" ); //$NON-NLS-1$
 
     //this.dashlbl.setLayoutData(gridData3);
     
@@ -318,91 +315,90 @@ public class PortScanDialog extends AbstractSimpleTestDialog{
     this.to.setValues(65535, 1, 65535, 0, 1, 65535);
     
     this.addRange= new Button( this.listComp, SWT.Activate );
-    this.addRange.setText("Add Range");
+    this.addRange.setText( Messages.getString("PortScanDialog.addRangeButton" )); //$NON-NLS-1$ 
     this.dashlbl = new Label( this.listComp, SWT.HORIZONTAL );
     //add range of ports to the list
-    addRange.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
-        public void widgetSelected(final org.eclipse.swt.events.SelectionEvent e) {
-
-            String toBeAdded="";
-            boolean toExit = false;
+    this.addRange.addSelectionListener( new org.eclipse.swt.events.SelectionAdapter() {
+      @Override
+      public void widgetSelected( final org.eclipse.swt.events.SelectionEvent e ) {
+        String toBeAdded = ""; //$NON-NLS-1$
+        boolean toExit = false;
             
-            int fromInt=0, toInt=0;
-            try{
-                fromInt = from.getSelection();
-                toInt = to.getSelection();
-            }catch(NumberFormatException ex){
-              toExit = true;
-            }
+        int fromInt = 0, toInt = 0;
+        try{
+          fromInt = PortScanDialog.this.from.getSelection();
+          toInt = PortScanDialog.this.to.getSelection();
+        }catch(NumberFormatException ex){
+          toExit = true;
+        }
             
-            if(fromInt > toInt || fromInt<=0 || toInt<=0 || fromInt > 65535 || toInt > 65535){
-              toExit = true;
-            }
+        if( fromInt > toInt || fromInt <= 0 || toInt <= 0 || fromInt > 65535 || toInt > 65535 ){
+          toExit = true;
+        }
             
-            if(!toExit){
+        if( !toExit ){
+          toBeAdded = PortScanDialog.this.from.getSelection() 
+                      + " - " + PortScanDialog.this.to.getSelection(); //$NON-NLS-1$
+          if( PortScanDialog.this.portList.getItemCount() == 0 ){
+            PortScanDialog.this.portList.add( toBeAdded );
             
-           toBeAdded = from.getSelection() + " - " + to.getSelection();
-            if(portList.getItemCount()==0){
-            portList.add(toBeAdded);
-            
-            list.add( new PortRange(from.getSelection(), to.getSelection() ) );
+            PortScanDialog.this.list.add( new PortRange( 
+                                 PortScanDialog.this.from.getSelection(), PortScanDialog.this.to.getSelection() ) );
             
             toExit = true;
-            }
-            }
-            
-            else{
-              return;
-            }
-            
-            int count=0;
-            for(int i=0; i<portList.getItemCount(); i++){
-                if(portList.getItem(i).compareTo(toBeAdded) == 0){
-                    count++;
-                }
-            }
-            if(count==0){
-                
-                portList.add(toBeAdded);
-                list.add( new PortRange(from.getSelection(), to.getSelection() ) );
-
-            }
-            
+          }
         }
+        else{
+          return;
+        }
+            
+        int count = 0;
+        for( int i = 0; i < PortScanDialog.this.portList.getItemCount(); i++ ){
+          if( PortScanDialog.this.portList.getItem( i ).compareTo( toBeAdded ) == 0 ){
+            count++;
+          }
+        }
+        if( count == 0 ){
+          PortScanDialog.this.portList.add( toBeAdded );
+          PortScanDialog.this.list.add( new PortRange( 
+                  PortScanDialog.this.from.getSelection(), PortScanDialog.this.to.getSelection() ) );
+        }
+      }
     });
 
     this.specificLbl = new Label( this.listComp, 0 );
-    this.specificLbl.setText("Add specific Port");
+    this.specificLbl.setText( Messages.getString("PortScanDialog.addSpecificLbl" )); //$NON-NLS-1$ 
     this.specificLbl.setLayoutData(gridData3);
     
     this.specificTxt = new Spinner( this.listComp, SWT.LEFT | SWT.SINGLE | SWT.BORDER );
     this.specificTxt.setLayoutData(gridData5);
     this.specificTxt.setValues(1, 1, 65535, 0, 1, 65535);
     this.addSpecific = new Button(this.listComp, SWT.Activate);
-    this.addSpecific.setText("Add Port");
+    this.addSpecific.setText( Messages.getString("PortScanDialog.addPortButton" )); //$NON-NLS-1$ 
     
     
     //add the specific port to the list
-    addSpecific.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
-        public void widgetSelected(final org.eclipse.swt.events.SelectionEvent e) {
-            int portInt=0;
-            int counter = 0;
+    this.addSpecific.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
+      @Override
+      public void widgetSelected(final org.eclipse.swt.events.SelectionEvent e) {
+        int portInt=0;
+        int counter = 0;
 
-            portInt = specificTxt.getSelection();
+        portInt = PortScanDialog.this.specificTxt.getSelection();
       
-            for(int i=0; i<list.size(); i++){
-              if(list.get(i).getStart()==portInt && list.get(i).getFinish()==0){
-                counter++;
-              }
-            }
-
-            if(counter>0){
-                return;
-            }
-            list.add( new PortRange(portInt, 0 ) );
-            portList.add(""+portInt);
-
+        for( int i = 0; i < PortScanDialog.this.list.size(); i++ ){
+          if( PortScanDialog.this.list.get( i ).getStart() == portInt 
+              && PortScanDialog.this.list.get( i ).getFinish() == 0 ){
+            counter++;
+          }
         }
+
+        if( counter > 0 ){
+          return;
+        }
+        PortScanDialog.this.list.add( new PortRange( portInt, 0 ) );
+        PortScanDialog.this.portList.add( "" + portInt ); //$NON-NLS-1$
+      }
     });
     
     new Label( this.listComp, SWT.HORIZONTAL );
@@ -426,29 +422,29 @@ public class PortScanDialog extends AbstractSimpleTestDialog{
     tabFolder.setLayoutData(resultsData);
     
     TabItem itemTree = new TabItem ( tabFolder, SWT.NULL );
-    itemTree.setText ( "Results List" );
+    itemTree.setText ( Messages.getString("PortScanDialog.resultsList" )); //$NON-NLS-1$ 
     
     Tree tree = new Tree(tabFolder, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
     tree.setHeaderVisible(true);
     tree.setLayoutData(resultsData);
     
-    TreeColumn hostColumn = new TreeColumn(tree, SWT.LEFT);
-    hostColumn.setText("Host");
-    hostColumn.setWidth(200);
-    TreeColumn statusColumn = new TreeColumn(tree, SWT.CENTER);
-    statusColumn.setText("Status");
-    statusColumn.setWidth(70);
+    TreeColumn hostColumn = new TreeColumn( tree, SWT.LEFT );
+    hostColumn.setText( Messages.getString("PortScanDialog.hostColumn" )); //$NON-NLS-1$ 
+    hostColumn.setWidth( 200 );
+    TreeColumn statusColumn = new TreeColumn( tree, SWT.CENTER );
+    statusColumn.setText( Messages.getString( "PortScanDialog.statusColumn" ) ); //$NON-NLS-1$ 
+    statusColumn.setWidth( 70 );
     
-    for( int i = 0; i<hostNames.size(); i++ ){
-         treeItem.add(new TreeItem(tree,SWT.NONE));
-         treeItem.get(i).setText(new String[]{hostNames.get(i), "N/A"});
+    for( int i = 0; i < this.hostNames.size(); i++ ){
+      this.treeItem.add( new TreeItem( tree,SWT.NONE ) );
+      this.treeItem.get( i ).setText( new String[]{ this.hostNames.get( i ), "N/A" } );
     }
 
     itemTree.setControl(tree);
     
     
     TabItem itemResults = new TabItem ( tabFolder, SWT.NULL );
-    itemResults.setText ( "Log File" );
+    itemResults.setText ( Messages.getString("PortScanDialog.logItem" )); //$NON-NLS-1$ 
 
     this.results = new StyledText(tabFolder, SWT.H_SCROLL | SWT.V_SCROLL);
     this.results.setLayoutData(resultsData);
@@ -457,118 +453,99 @@ public class PortScanDialog extends AbstractSimpleTestDialog{
     
     
     this.scan = new Button(this.resultsComp, SWT.Activate);
-    this.scan.setText("Scan");
+    this.scan.setText( Messages.getString("PortScanDialog.scanButton" )); //$NON-NLS-1$ 
     //this.scan.setLayoutData(GridData.HORIZONTAL_ALIGN_CENTER);
     this.stop = new Button(this.resultsComp, 1<<9);
-    this.stop.setText("Stop");
+    this.stop.setText( Messages.getString("PortScanDialog.stopButton" )); //$NON-NLS-1$ 
     
     //stop the running job
-    stop.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
-        public void widgetSelected(final org.eclipse.swt.events.SelectionEvent e) {
-
-  
-        for(int i = 0; i<scanJobs.size(); i++){
-            if(scanJobs.get(i)!=null){
-                scanJobs.get(i).cancel();
-            }
+    this.stop.addSelectionListener( new org.eclipse.swt.events.SelectionAdapter() {
+      @Override
+      public void widgetSelected( final org.eclipse.swt.events.SelectionEvent e ) {
+        for( int i = 0; i < PortScanDialog.this.scanJobs.size(); i++ ){
+          if( PortScanDialog.this.scanJobs.get( i ) != null ){
+            PortScanDialog.this.scanJobs.get( i ).cancel();
+          }
         }
-        if(scanJobs.size()>0)
-            results.append("Scanning Stopped.\n\n");  
-        
-        scanJobs.clear();
-
-        }
+        if( PortScanDialog.this.scanJobs.size() > 0 )
+          PortScanDialog.this.results.append( "Scanning Stopped.\n\n" );  
+        PortScanDialog.this.scanJobs.clear();
+      }
     });     
     
     //calls the portScan() method to initiate the job for Port Scan
-    scan.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
-        public void widgetSelected(final org.eclipse.swt.events. SelectionEvent e) {
-          
-            // Make sure the potential current pings are done
-            boolean done = true;
-            for ( PortScanJob portJob : scanJobs ) {
-              if ( null == portJob.getResult() )
-                done = false;
-            }
-            // At least one of the prev. jobs haven't finished yet
-            if ( done ){
-                generatePortList();
-                portScan();
-            }
-
+    this.scan.addSelectionListener( new org.eclipse.swt.events.SelectionAdapter() {
+      @Override
+      public void widgetSelected( final org.eclipse.swt.events. SelectionEvent e ) {
+        // Make sure the potential current port scans are done
+        boolean done = true;
+        for ( PortScanJob portJob : PortScanDialog.this.scanJobs ) {
+          if ( null == portJob.getResult() )
+            done = false;
         }
+        // At least one of the prev. jobs haven't finished yet
+        if ( done ){
+          PortScanDialog.this.scan.setEnabled( false );
+          generatePortList();
+          portScan();
+        }
+            
+        PortScanDialog.this.scan.setEnabled( true );
+      }
     });
     
-    return mainComp;
+    return this.mainComp;
   }
 
-  //initiates the job to Port Scan the selected host
-protected void portScan() {
-
+  /**
+   * 
+   * Initiates the job to Port Scan the selected host
+   */
+  protected void portScan() {
     InetAddress ia = null;
 
-    results.setText("");
-    this.results.append("Scanning the following hosts:\n");
+    this.results.setText( "" ); //$NON-NLS-1$
+    this.results.append( "Scanning the following hosts:\n" );
     
-    for ( int i=0; i<this.hostNames.size(); i++ ) {
-        try {
-            
-            ia = InetAddress.getByName(this.hostNames.get(i));
+    for ( int i = 0; i < this.hostNames.size(); i++ ) {
+      try {
+        ia = InetAddress.getByName( this.hostNames.get( i ) );
 
-            if(ia != null){
-                this.results.append(this.hostNames.get(i) + "\n");
-                this.treeItem.get(i).removeAll();
-                job = new PortScanJob(ia,portMap,results, this.treeItem.get(i));
-                job.schedule();
-            
-                scanJobs.add(job);
-            }
-            else{
-            ///
-            }
-        } catch (UnknownHostException e) {
-            results.append( "Cannot connect to " + this.hostNames.get(i) );
-           // return;
-        }
-    }
-    
-    this.results.append("\n");
-}
+        if( ia != null ){
+          this.results.append( this.hostNames.get( i ) + "\n" ); //$NON-NLS-1$
+          this.treeItem.get( i ).removeAll();
+          this.job = new PortScanJob( ia, this.portMap, this.results, this.treeItem.get( i ) );
 
-protected void generatePortList() {
-    for(int i=0; i<list.size(); i++){
-        if(list.get(i).getFinish()==0){
-            portMap.put(list.get(i).getStart(), false);
+          this.job.schedule();
+            
+          this.scanJobs.add( this.job );
         }
         else{
-            for(int j=list.get(i).getStart(); j<=list.get(i).getFinish(); j++){
-                portMap.put(j, false);
-            }
+          ///
         }
+      } catch ( UnknownHostException e ) {
+        this.results.append( "Cannot connect to " + this.hostNames.get( i ) );
+      }
     }
     
-}
+    this.results.append( "\n" ); //$NON-NLS-1$
+  }
 
-protected void printPortList() {
-    
-    //results.append(portMap.keySet().toString()+"\n");
-    //for(int i=0; i<portMap.size(); i++){
-        //results.append(portMap.get(key).toString()+"\n");
-    //}
-    
-}
-
-protected void cancelPressed() {
-  super.cancelPressed();
-  if(job!=null)
-    job.cancel();
-}
-
-protected void okPressed() {
-  super.okPressed();
-  if(job!=null)
-    job.cancel();
-}
-
+  /**
+   * Generates the list of ports to scan.
+   * 
+   */
+  protected void generatePortList() {
+    for( int i = 0; i < this.list.size(); i++ ){
+      if( this.list.get( i ).getFinish() == 0 ){
+        this.portMap.put( this.list.get( i ).getStart(), false );
+      }
+      else{
+        for( int j = this.list.get( i ).getStart(); j <= this.list.get( i ).getFinish(); j++ ){
+          this.portMap.put( j, false );
+        }
+      }
+    }
+  }
 
 }

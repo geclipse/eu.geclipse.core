@@ -33,7 +33,7 @@ public class DNSLookUpJob extends Job {
 
   protected Display display;
   
-  private Table table;
+  protected Table table;
  
   private String[][] itemStrings;
  

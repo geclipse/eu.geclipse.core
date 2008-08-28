@@ -21,11 +21,8 @@ import java.util.List;
 
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
@@ -54,8 +51,8 @@ public class DNSLookUpDialog extends AbstractSimpleTestDialog  {
 //  protected TableViewer tableList;
   
   protected String[][] itemStrings;
-  protected Button lookUpButton;
-  protected Button stopButton;
+ // protected Button lookUpButton;
+ // protected Button stopButton;
   protected DNSLookUpJob lookUpJob;
   private ArrayList< String > hostNames = new ArrayList< String >();
   
@@ -171,49 +168,13 @@ public class DNSLookUpDialog extends AbstractSimpleTestDialog  {
 
     this.tableOutPut.setItemCount( this.hostNames.size() );
     this.lookUpJob = new DNSLookUpJob( this.tableOutPut, this.itemStrings );
-    
-    Composite outControls = new Composite( outPutGroup, SWT.NONE );
-    GridLayout gLayout = new GridLayout( 1, false );
-    gLayout.marginHeight = 0;
-    gLayout.marginWidth = 0;
-    outControls.setLayout( gLayout );
-    gData = new GridData( GridData.VERTICAL_ALIGN_BEGINNING );
-    outControls.setLayoutData( gData );    
-    
-    this.lookUpButton = new Button( outControls, SWT.PUSH );
-    this.lookUpButton.setText( Messages.getString( "DNSLookUpDialog.lookUpButton" ) ); //$NON-NLS-1$
-    this.lookUpButton.setToolTipText( Messages.getString( "DNSLookUpDialog.lookUpButtonToolTip" ) ); //$NON-NLS-1$
-    gData = new GridData( GridData.FILL_HORIZONTAL );
-    gData.verticalAlignment = GridData.BEGINNING;
-    this.lookUpButton.setLayoutData( gData );
 
-    this.stopButton = new Button( outControls, SWT.PUSH );
-    this.stopButton.setText( Messages.getString( "DNSLookUpDialog.stopButton" ) ); //$NON-NLS-1$
-    this.stopButton.setToolTipText( Messages.getString( "DNSLookUpDialog.stopButtonToolTip" ) ); //$NON-NLS-1$
-    gData = new GridData( GridData.FILL_HORIZONTAL );
-    gData.verticalAlignment = GridData.BEGINNING;
-    this.stopButton.setLayoutData( gData );
-    this.stopButton.setEnabled( false );
-    
-    this.lookUpButton.addSelectionListener( new SelectionAdapter() {
-      @Override
-      public void widgetSelected( final SelectionEvent e) {
-
-        if ( Job.NONE == DNSLookUpDialog.this.lookUpJob.getState()  ) {
-          DNSLookUpDialog.this.lookUpJob.schedule(); 
-          DNSLookUpDialog.this.stopButton.setEnabled( true );
-        }
+    if ( Job.NONE == DNSLookUpDialog.this.lookUpJob.getState()  ) {
+        DNSLookUpDialog.this.lookUpJob.schedule(); 
+        //DNSLookUpDialog.this.stopButton.setEnabled( true );
       }
-    });
     
-    this.stopButton.addSelectionListener( new SelectionAdapter() {
-      @Override
-      public void widgetSelected( final SelectionEvent e) {
-        DNSLookUpDialog.this.lookUpJob.cancel();
-      }
-    });
-
-    parent.getShell().setDefaultButton( this.lookUpButton );
+    //parent.getShell().setDefaultButton( this.lookUpButton );
     
     
     return mainComp;
