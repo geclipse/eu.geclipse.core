@@ -88,14 +88,26 @@ public abstract class AbstractVirtualOrganization
   public IGridResource[] getAvailableResources( final IGridResourceCategory category,
                                                 final boolean exclusive,
                                                 final IProgressMonitor monitor )
-      throws ProblemException {
-    
+    throws ProblemException
+  {
     IGridResource[] resources = null;
-    IGridInfoService infoService = getInfoService();
-    if ( infoService != null ) {
-      resources = infoService.fetchResources( this, this, category, false, null, monitor );
+    if( category.equals( GridResourceCategoryFactory.getCategory( GridResourceCategoryFactory.ID_JOB_SERVICES ) ) )
+    {
+      resources = getJobSubmissionServices( monitor );
+    } else if( category.equals( GridResourceCategoryFactory.getCategory( GridResourceCategoryFactory.ID_SERVICES ) ) )
+    {
+      resources = getServices( monitor );
+    } else {
+      IGridInfoService infoService = getInfoService();
+      if( infoService != null ) {
+        resources = infoService.fetchResources( this,
+                                                this,
+                                                category,
+                                                false,
+                                                null,
+                                                monitor );
+      }
     }
-    
     return resources;
   }
   

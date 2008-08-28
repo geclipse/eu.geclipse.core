@@ -111,10 +111,7 @@ public class ProjectVo
     IGridResource[] result = null;
     IVirtualOrganization vo = getSlave();
     if ( vo != null ) {
-      IGridInfoService infoService = vo.getInfoService();
-      if ( infoService != null ) {
-        result = infoService.fetchResources( this, vo, category, false, null, monitor );
-      }
+      result=vo.getAvailableResources( category, exclusive, monitor );
     }
     return result;
   }
