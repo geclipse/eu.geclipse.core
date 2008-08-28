@@ -17,7 +17,9 @@
 package eu.geclipse.jsdl.ui.internal.pages.sections;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
@@ -85,6 +87,7 @@ import eu.geclipse.jsdl.ui.internal.pages.FormSectionFactory;
 import eu.geclipse.jsdl.ui.providers.parameters.SweepOrderCProvider;
 import eu.geclipse.jsdl.ui.providers.parameters.SweepOrderLProvider;
 import eu.geclipse.jsdl.ui.widgets.ParametersDialog;
+import eu.geclipse.jsdl.ui.widgets.SweepDeleteDialog;
 
 public class SweepOrderSection extends JsdlFormPageSection {
 
@@ -98,6 +101,11 @@ public class SweepOrderSection extends JsdlFormPageSection {
   private Shell shell;
   private ParametricJobAdapter adapter;
   private ArrayList<SweepType> inerSweepList;
+  private Button newButton;
+  private Button independentButton;
+  private Button sameLevelButton;
+  private Button innerButton;
+  private Button deleteButton;
 
   public SweepOrderSection( final Composite parent,
                             final FormToolkit toolkit,
@@ -170,15 +178,20 @@ public class SweepOrderSection extends JsdlFormPageSection {
                                                                    sectionTitle,
                                                                    sectionDescription,
                                                                    2 );
-    this.viewer = new TreeViewer( client, SWT.BORDER );
+    Composite treeComp = toolkit.createComposite( client );
+    GridData gData = new GridData( GridData.FILL_BOTH );
+    gData.horizontalSpan = 2;
+    treeComp.setLayoutData( gData );
+    treeComp.setLayout( new GridLayout( 2, false ) );
+    this.viewer = new TreeViewer( treeComp, SWT.BORDER );
     this.viewer.setContentProvider( new SweepOrderCProvider() );
     this.viewer.setLabelProvider( new SweepOrderLProvider() );
-    GridData gData = new GridData( GridData.GRAB_HORIZONTAL );
+    gData = new GridData( GridData.GRAB_HORIZONTAL );
     gData = new GridData();
-    gData.horizontalSpan = 2;
     gData.horizontalAlignment = GridData.FILL;
     gData.verticalAlignment = GridData.FILL;
     gData.grabExcessHorizontalSpace = true;
+    gData.verticalSpan = 6;
     gData.heightHint = 300;
     this.viewer.getTree().setLayoutData( gData );
     this.viewer.addSelectionChangedListener( new ISelectionChangedListener() {
@@ -204,16 +217,34 @@ public class SweepOrderSection extends JsdlFormPageSection {
             }
           }
         }
+        updateTreeButtons();
       }
     } );
     this.manager = createMenu();
     // buttons composite
-    // Composite buttonComp = new Composite( client, SWT.NONE );
-    // buttonComp.setLayout( new GridLayout( 1, true ) );
-    // Button newButton = new Button( buttonComp, SWT.PUSH );
-    // newButton.setText( "New sweep..." );
-    // newButton.setLayoutData( new GridData() );
-    // toolkit.createButton( client, "New sweep...", SWT.PUSH );
+    Composite buttonComp = toolkit.createComposite( treeComp );
+    buttonComp.setLayout( new GridLayout( 1, true ) );
+    this.newButton = toolkit.createButton( buttonComp, "New sweep...", SWT.PUSH );
+    this.newButton.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ) );
+    this.independentButton = toolkit.createButton( buttonComp,
+                                                   "Independent sweep...",
+                                                   SWT.PUSH );
+    gData = new GridData( GridData.FILL_HORIZONTAL );
+    gData.verticalIndent = 15;
+    this.independentButton.setLayoutData( gData );
+    this.sameLevelButton = toolkit.createButton( buttonComp,
+                                                 "Sweep on the same level...",
+                                                 SWT.PUSH );
+    this.sameLevelButton.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ) );
+    this.innerButton = toolkit.createButton( buttonComp,
+                                             "Inner sweep...",
+                                             SWT.PUSH );
+    this.innerButton.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ) );
+    this.deleteButton = toolkit.createButton( buttonComp, "Delete", SWT.PUSH );
+    gData = new GridData( GridData.FILL_HORIZONTAL );
+    gData.verticalIndent = 15;
+    this.deleteButton.setLayoutData( gData );
+    updateTreeButtons();
     // values controls
     toolkit.createLabel( client, "Sweep element" );
     this.sweepCombo = new Combo( client, SWT.NONE | SWT.READ_ONLY );
@@ -266,6 +297,79 @@ public class SweepOrderSection extends JsdlFormPageSection {
         // do nothing
       }
     } );
+    updateTreeButtons();
+    addButtonsListeners();
+  }
+
+  private void addButtonsListeners() {
+    this.newButton.addSelectionListener( new SelectionAdapter() {
+
+      /*
+       * (non-Javadoc)
+       * 
+       * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+       */
+      @Override
+      public void widgetSelected( final SelectionEvent e ) {
+        addNew();
+      }
+    } );
+    this.independentButton.addSelectionListener( new SelectionAdapter() {
+
+      /*
+       * (non-Javadoc)
+       * 
+       * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+       */
+      @Override
+      public void widgetSelected( final SelectionEvent e ) {
+        addIndependent();
+      }
+    } );
+    this.sameLevelButton.addSelectionListener( new SelectionAdapter() {
+
+      /*
+       * (non-Javadoc)
+       * 
+       * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+       */
+      @Override
+      public void widgetSelected( final SelectionEvent e ) {
+        addChangesWith();
+      }
+    } );
+    this.innerButton.addSelectionListener( new SelectionAdapter() {
+
+      /*
+       * (non-Javadoc)
+       * 
+       * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+       */
+      @Override
+      public void widgetSelected( final SelectionEvent e ) {
+        addChangesForEachChange();
+      }
+    } );
+    this.deleteButton.addSelectionListener( new SelectionAdapter() {
+
+      /*
+       * (non-Javadoc)
+       * 
+       * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+       */
+      @Override
+      public void widgetSelected( final SelectionEvent e ) {
+        removeSelected();
+      }
+    } );
+  }
+
+  void updateTreeButtons() {
+    boolean enable = !this.viewer.getSelection().isEmpty();
+    this.independentButton.setEnabled( enable );
+    this.sameLevelButton.setEnabled( enable );
+    this.innerButton.setEnabled( enable );
+    this.deleteButton.setEnabled( enable );
   }
 
   void setValuesField( final List<String> values ) {
@@ -542,10 +646,58 @@ public class SweepOrderSection extends JsdlFormPageSection {
     return mManager;
   }
 
+  // usuwać po parameterach assignmentu a nie sweepy!!!
   protected void removeSelected() {
     ISelection sel = this.viewer.getSelection();
     if( sel instanceof StructuredSelection ) {
+      Map<String, AssignmentType> paramsToRemove = new HashMap<String, AssignmentType>();
       StructuredSelection sSel = ( StructuredSelection )sel;
+      // for( Object object : sSel.toList() ) {
+      // if( object instanceof SweepType ) {
+      // SweepType sweep = ( SweepType )object;
+      // EList<AssignmentType> assignments = sweep.getAssignment();
+      // for( int i = 0; i < assignments.size(); i++ ) {
+      // EList<String> params = assignments.get( i ).getParameter();
+      // for( int j = 0; j < params.size(); j++ ) {
+      // paramsToRemove.put( params.get( j ), assignments.get( i ) );
+      // }
+      // }
+      // }
+      // }
+      // List<String> userDecision = new ArrayList<String>();
+      // for( String a : paramsToRemove.keySet() ) {
+      // userDecision.add( a );
+      // }
+      // if( paramsToRemove.size() > 1 ) {
+      // SweepDeleteDialog dialog = new SweepDeleteDialog( this.shell,
+      // userDecision );
+      // if( dialog.open() == Dialog.OK ) {
+      // }
+      // }
+      // // removing
+      // for( String param : userDecision ) {
+      // AssignmentType assignmentToRemove = paramsToRemove.get( param );
+      // if( assignmentToRemove.eContainer() instanceof SweepType ) {
+      // SweepType sweepContainer = ( SweepType
+      // )assignmentToRemove.eContainer();
+      // if( assignmentToRemove.getParameter().size() == 1 ) {
+      // if( sweepContainer.getAssignment().size() == 1 ) {
+      // EcoreUtil.remove( sweepContainer );
+      // setInput( this.jobDefinitionType );
+      // } else {
+      // EcoreUtil.remove( assignmentToRemove );
+      // setInput( this.jobDefinitionType );
+      // }
+      // } else {
+      // assignmentToRemove.getParameter().remove( param );
+      // setInput( this.jobDefinitionType );
+      // }
+      // }
+      // // this.viewer.remove( );
+      // this.viewer.refresh();
+      // contentChanged();
+      // }
+      // old
       for( Object obj : sSel.toList() ) {
         if( obj instanceof SweepType ) {
           SweepType type = ( SweepType )obj;
@@ -560,6 +712,7 @@ public class SweepOrderSection extends JsdlFormPageSection {
           contentChanged();
         }
       }
+      // old
     }
   }
 
