@@ -24,7 +24,10 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IWorkbenchSite;
 import org.eclipse.ui.actions.SelectionListenerAction;
 
+import eu.geclipse.core.model.IGridComputing;
 import eu.geclipse.core.model.IGridResource;
+import eu.geclipse.core.model.IGridService;
+import eu.geclipse.core.model.IGridStorage;
 import eu.geclipse.core.simpleTest.ISimpleTest;
 import eu.geclipse.core.simpleTest.ISimpleTestDescription;
 import eu.geclipse.ui.ISimpleTestUIFactory;
@@ -90,7 +93,9 @@ public class SimpleTestAction extends SelectionListenerAction {
   protected boolean isResourcePhysical( final Object element ) {
     boolean ret = false;
     
-    if ( element instanceof eu.geclipse.core.model.IGridResource ) {
+    if ( element instanceof IGridService 
+         || element instanceof IGridComputing 
+         || element instanceof IGridStorage ) {
       ret = ( ( eu.geclipse.core.model.IGridResource ) element ).isVirtual();
     }
     
