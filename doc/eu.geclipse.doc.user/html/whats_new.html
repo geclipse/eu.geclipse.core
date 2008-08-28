@@ -1,126 +1,246 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<head>
-<meta
-  http-equiv="Content-Type"
-  content="text/html; charset=US-ASCII">
-<META
-  HTTP-EQUIV="Content-Style-Type"
-  CONTENT="text/css">
-<LINK
-  REL="STYLESHEET"
-  HREF="PLUGINS_ROOT/eu.geclipse.doc.user/book.css"
-  CHARSET="ISO-8859-1"
-  TYPE="text/css">
-<title>g-Eclipse - What's new</title>
-</head>
-<body BGCOLOR="#ffffff">
-<h1>What's new in g-Eclipse</h1>
-<ul>
-  <li><b>g-Eclipse 1.0 M9</b>
-  <ul>
-    <li>Initial support for Access Control management, allowing to display the
-        permissions of GRIA data stagers (changing them is not yet enabled)</li>
-    <li>... and of course a lot of bug fixes</li>
-  </ul>
-  <li><b>g-Eclipse 1.0 M8</b>
-  <ul>
-    <li>It is now possible to associate a keystore with a GRIA VO, allowing seamless
-        access to different servers from different projects</li>
-    <li>It is now possible to associate an access ID with an AmazonWS VO, allowing the
-        use of different accounts at the same time</li>
-    <li>One may choose any kind of file accessible by g-Eclipse as a source in the jsdl
-        for GRIA jobs: local files, GRIA data stagers, gridFTP, SRM, LFC, etc.</li>
-    <li>The workflow component in g-Eclipse has a number of improvements:
-      <ul>
-        <li>Each Workflow is now stored in a dedicated folder which holds the .workflow
-            file as well as the JSDL files corresponding to each Workflow Job
-            (Note: the <strong>.workflow</strong> extension is still explicitly
-            required when creating the workflow)</li>
-        <li>To associate a Workflow Job with a JSDL file, one can either select the
-            action via a right-click context menu on the Workflow Job or simply drag
-            and drop a JSDL file from the Grid Projects View onto the Workflow Job in question</li>
-        <li>The JSDL file associated with any Workflow Job can be opened and edited in
-            the JSDL Editor via the Workflow Job context menu, directly from the
-            graphical workflow editor</li>
-      </ul></li>
-    <li>The trace view was added, allowing to analyse communication traces of MPI programs.
-        Currently it supports:
-      <ul>
-        <li>Reading traces in the NOPE trace file format</li>
-        <li>Displaying traces in a lamport and in a physical clock view</li>
-        <li>Setting breakpoints in traces and using them for debugging in MPI programs</li>
-        <li>Displaying simple trace statistics</li>
-      </ul></li>
-    <li>... and, as always, a lot of bug fixes!</li>
-  </ul>
-
-  <li><b>g-Eclipse 1.0 M7</b>
-  <ul>
-  	<li>First implementation of parametric jobs (sweep extension of jsdl): it is possible to submit
-  	    such parametric jobs both to gLite and GRIA</li>
-  	<li>GRIA data stagers are now represented as files</li>
-  	<li>It is possible to open Output Data Stagers for GRIA jobs</li>
-  	<li>As source for the input stager in GRIA jobs a GRIA stager can now also be specified</li>
-  	<li>Online help now also contains Concepts from the middleware's point of view</li>
-  	<li>... and of course a lot of bug fixes</li>
-  </ul>
-
-  <li><b>g-Eclipse 1.0 M6</b>
-  <ul>
-  	<li>First implementation of LFC filesystem is ready. Both reading and writing is possible</li>
-  	<li>It is possible to query gLite Logging&Bookkeping information from the Job Details view</li>
-  	<li>Improved Job Submission process: now you need less clicks to submit a job</li>
-  	<li>Field Jsdl in Job Details view for GRIA job is opened in jsdl editor</li>
-  	<li>It is possible to specify port in Certificate test</li>
-  	<li>Two resource simple tests, ping and dns lookup, are implemented</li>
-    <li>... and of course a lot of bug fixes</li>
-  </ul>
-  <li><b>g-Eclipse 1.0 M5</b>
-  <ul>
-  	<li>Possibility to choose the job name and target folder when submitting a job</li>
-  	<li>Deleting a job from the local workspace gives the user the possibility of also removing it from the Grid</li>
-  	<li>GRIA job submission can now deal directly with local input files</li>
-  	<li>Job Details view shows now GRIA specific information</li>
-    <li>Improved GRIA Site Administrator editor</li>
-    <li>Test framework for grid resources with two implemented tests: certificate lifetime and gLite version</li>
-    <li>New GUI for the Batch System editor</li>
-    <li>... and of course a lot of bug fixes</li>
-  </ul>
-  <li><b>g-Eclipse 1.0 M4</b>
-  This release is thought to be a maintenance release containing mainly quality work.
-  <ul>
-    <li>Already submitted jobs can now be resubmitted in case of failure</li>
-  	<li>UI enhancements and improvements</li>
-    <li>Code cleanup</li>
-    <li>User documentation improvements</li>
-    <li>Cheatsheets fixed and improved</li>
-    <li>... and of course a lot of bug fixes</li>
-  </ul></li>
-  <li><b>g-Eclipse 1.0 M3</b>
-  <ul>
-    <li>First support for Amazon's S3</li>
-    <li>All components use now the new problem reporting mechanism, allowing a very user-friendly problem notification and solving</li>
-    <li>... and of course a lot of bug fixes</li>
-  </ul></li>
-  <li><b>g-Eclipse 1.0 M2</b>
-  <ul>
-    <li>First support for the GRIA middleware</li>
-    <li>New import functionality for VOMS VOs</li>
-    <li>... and of course a lot of bug fixes</li>
-  </ul>
-  <li><b>Previously available features</b>
-  <ul>
-    <li>Create a job description using a simple wizard or the JSDL editor</li>
-    <li>Submit your job to a gLite resource from the Eclipse workbench</li>
-    <li>Create connections from your local machine to remote storage resources on the Grid and copy files between them</li>
-    <li>Easily manage your authentication tokens in the corresponding view</li>
-    <li>View your available Grid resources reported by the information system</li>
-    <li>Access your remote Grid resources from within the Eclipse workbench in a Shell-like way</li>
-    <li>... and much more</li>
-  </ul></li>
-
-  
-</ul>
-</body>
-</html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+        <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+        <LINK REL="STYLESHEET" HREF="PLUGINS_ROOT/eu.geclipse.doc.user/book.css" CHARSET="ISO-8859-1" TYPE="text/css">
+        <title>g-Eclipse - What's new</title>
+    </head>
+    <body BGCOLOR="#ffffff">
+        <h1>What's new in g-Eclipse</h1>
+        <ul>
+            <li>
+                <b>g-Eclipse 1.0 M9</b>
+                <ul>
+                    <li>
+                        This is the first g-Eclipse release based on Ganymede.
+                    </li>
+                    <li>
+                        Initial support for Access Control management, allowing to display the
+                        permissions of GRIA data stagers (changing them is not yet enabled)
+                    </li>
+                    <li>
+                        g-Eclipse has now UI support for parametric jobs (parameters sweep in JSDL files). Brand new "Parameters" page is available in JSDL editor.
+                    </li>
+                    <li>
+                        Job submission with inner sweep (nested loops of parametric jobs) for gLite as well as for GRIA was added.
+                    </li>
+                    <li>
+                        ... and of course a lot of bug fixes
+                    </li>
+                </ul>
+                <li>
+                    <b>g-Eclipse 1.0 M8</b>
+                    <ul>
+                        <li>
+                            It is now possible to associate a keystore with a GRIA VO, allowing seamless
+                            access to different servers from different projects
+                        </li>
+                        <li>
+                            It is now possible to associate an access ID with an AmazonWS VO, allowing the
+                            use of different accounts at the same time
+                        </li>
+                        <li>
+                            One may choose any kind of file accessible by g-Eclipse as a source in the jsdl
+                            for GRIA jobs: local files, GRIA data stagers, gridFTP, SRM, LFC, etc.
+                        </li>
+                        <li>
+                            The workflow component in g-Eclipse has a number of improvements:
+                            <ul>
+                                <li>
+                                    Each Workflow is now stored in a dedicated folder which holds the .workflow 
+                                    file as well as the JSDL files corresponding to each Workflow Job  
+                                    (Note: the <strong>.workflow</strong>
+                                    extension is still explicitly
+                                    required when creating the workflow)
+                                </li>
+                                <li>
+                                    To associate a Workflow Job with a JSDL file, one can either select the
+                                    action via a right-click context menu on the Workflow Job or simply drag
+                                    and drop a JSDL file from the Grid Projects View onto the Workflow Job in question
+                                </li>
+                                <li>
+                                    The JSDL file associated with any Workflow Job can be opened and edited in
+                                    the JSDL Editor via the Workflow Job context menu, directly from the
+                                    graphical workflow editor
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            The trace view was added, allowing to analyse communication traces of MPI programs.
+                            Currently it supports:
+                            <ul>
+                                <li>
+                                    Reading traces in the NOPE trace file format
+                                </li>
+                                <li>
+                                    Displaying traces in a lamport and in a physical clock view
+                                </li>
+                                <li>
+                                    Setting breakpoints in traces and using them for debugging in MPI programs
+                                </li>
+                                <li>
+                                    Displaying simple trace statistics
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            ... and, as always, a lot of bug fixes!
+                        </li>
+                    </ul>
+                    <li>
+                        <b>g-Eclipse 1.0 M7</b>
+                        <ul>
+                            <li>
+                                First implementation of parametric jobs (sweep extension of jsdl): it is possible to submit
+                                such parametric jobs both to gLite and GRIA
+                            </li>
+                            <li>
+                                GRIA data stagers are now represented as files
+                            </li>
+                            <li>
+                                It is possible to open Output Data Stagers for GRIA jobs
+                            </li>
+                            <li>
+                                As source for the input stager in GRIA jobs a GRIA stager can now also be specified
+                            </li>
+                            <li>
+                                Online help now also contains Concepts from the middleware's point of view
+                            </li>
+                            <li>
+                                ... and of course a lot of bug fixes
+                            </li>
+                        </ul>
+                        <li>
+                            <b>g-Eclipse 1.0 M6</b>
+                            <ul>
+                                <li>
+                                    First implementation of LFC filesystem is ready. Both reading and writing is possible
+                                </li>
+                                <li>
+                                    It is possible to query gLite Logging&Bookkeping information from the Job Details view
+                                </li>
+                                <li>
+                                    Improved Job Submission process: now you need less clicks to submit a job
+                                </li>
+                                <li>
+                                    Field Jsdl in Job Details view for GRIA job is opened in jsdl editor
+                                </li>
+                                <li>
+                                    It is possible to specify port in Certificate test
+                                </li>
+                                <li>
+                                    Two resource simple tests, ping and dns lookup, are implemented
+                                </li>
+                                <li>
+                                    ... and of course a lot of bug fixes
+                                </li>
+                            </ul>
+                            <li>
+                                <b>g-Eclipse 1.0 M5</b>
+                                <ul>
+                                    <li>
+                                        Possibility to choose the job name and target folder when submitting a job
+                                    </li>
+                                    <li>
+                                        Deleting a job from the local workspace gives the user the possibility of also removing it from the Grid
+                                    </li>
+                                    <li>
+                                        GRIA job submission can now deal directly with local input files
+                                    </li>
+                                    <li>
+                                        Job Details view shows now GRIA specific information
+                                    </li>
+                                    <li>
+                                        Improved GRIA Site Administrator editor
+                                    </li>
+                                    <li>
+                                        Test framework for grid resources with two implemented tests: certificate lifetime and gLite version
+                                    </li>
+                                    <li>
+                                        New GUI for the Batch System editor
+                                    </li>
+                                    <li>
+                                        ... and of course a lot of bug fixes
+                                    </li>
+                                </ul>
+                                <li>
+                                    <b>g-Eclipse 1.0 M4</b>
+                                    This release is thought to be a maintenance release containing mainly quality work.
+                                    <ul>
+                                        <li>
+                                            Already submitted jobs can now be resubmitted in case of failure
+                                        </li>
+                                        <li>
+                                            UI enhancements and improvements
+                                        </li>
+                                        <li>
+                                            Code cleanup
+                                        </li>
+                                        <li>
+                                            User documentation improvements
+                                        </li>
+                                        <li>
+                                            Cheatsheets fixed and improved
+                                        </li>
+                                        <li>
+                                            ... and of course a lot of bug fixes
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <b>g-Eclipse 1.0 M3</b>
+                                    <ul>
+                                        <li>
+                                            First support for Amazon's S3
+                                        </li>
+                                        <li>
+                                            All components use now the new problem reporting mechanism, allowing a very user-friendly problem notification and solving
+                                        </li>
+                                        <li>
+                                            ... and of course a lot of bug fixes
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                <b>g-Eclipse 1.0 M2</b>
+                                <ul>
+                                    <li>
+                                        First support for the GRIA middleware
+                                    </li>
+                                    <li>
+                                        New import functionality for VOMS VOs
+                                    </li>
+                                    <li>
+                                        ... and of course a lot of bug fixes
+                                    </li>
+                                </ul>
+                                <li>
+                                    <b>Previously available features</b>
+                                    <ul>
+                                        <li>
+                                            Create a job description using a simple wizard or the JSDL editor
+                                        </li>
+                                        <li>
+                                            Submit your job to a gLite resource from the Eclipse workbench
+                                        </li>
+                                        <li>
+                                            Create connections from your local machine to remote storage resources on the Grid and copy files between them
+                                        </li>
+                                        <li>
+                                            Easily manage your authentication tokens in the corresponding view
+                                        </li>
+                                        <li>
+                                            View your available Grid resources reported by the information system
+                                        </li>
+                                        <li>
+                                            Access your remote Grid resources from within the Eclipse workbench in a Shell-like way
+                                        </li>
+                                        <li>
+                                            ... and much more
+                                        </li>
+                                    </ul>
+                                </li>
+                                </ul>
+                            </body>
+                            </html>
