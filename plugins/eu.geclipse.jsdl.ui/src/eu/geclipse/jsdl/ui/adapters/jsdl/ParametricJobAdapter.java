@@ -75,10 +75,10 @@ public class ParametricJobAdapter extends JsdlAdaptersFactory {
     JobIdentificationType jobIdentification = this.jobDescriptionType.getJobIdentification();
     if( jobIdentification != null ) {
       if( jobIdentification.getJobName() != null ) {
-        result.add( "JobName" );
+        result.add( "/*//jsdl:JobName" );
       }
       if( jobIdentification.getDescription() != null ) {
-        result.add( "JobIdentification/Description" );
+        result.add( "/*//jsdl:JobIdentification/jsdl:Description" );
       }
       if( jobIdentification.getJobAnnotation() != null ) {
         // this element is deprecated and may be removed in future versions of
@@ -86,20 +86,20 @@ public class ParametricJobAdapter extends JsdlAdaptersFactory {
         int annotationsCount = jobIdentification.getJobAnnotation().size();
         if( annotationsCount > 1 ) {
           for( int i = 0; i < annotationsCount; i++ ) {
-            result.add( "JobAnnotation[" + ( i + 1 ) + "]" );
+            result.add( "/*//jsdl:JobAnnotation[" + ( i + 1 ) + "]" );
           }
         } else if( annotationsCount == 1 ) {
-          result.add( "JobAnnotation" );
+          result.add( "/*//jsdl:JobAnnotation" );
         }
       }
       if( jobIdentification.getJobProject() != null ) {
         int projectCount = jobIdentification.getJobProject().size();
         if( projectCount > 1 ) {
           for( int i = 0; i < projectCount; i++ ) {
-            result.add( "JobProject[" + ( i + 1 ) + "]" );
+            result.add( "/*//jsdl:JobProject[" + ( i + 1 ) + "]" );
           }
         } else if( projectCount == 1 ) {
-          result.add( "JobProject" );
+          result.add( "/*//jsdl:JobProject" );
         }
       }
     }
@@ -107,13 +107,13 @@ public class ParametricJobAdapter extends JsdlAdaptersFactory {
     ApplicationType application = this.jobDescriptionType.getApplication();
     if( application != null ) {
       if( application.getApplicationName() != null ) {
-        result.add( "ApplicationName" );
+        result.add( "/*//jsdl:ApplicationName" );
       }
       if( application.getApplicationVersion() != null ) {
-        result.add( "ApplicationVersion" );
+        result.add( "/*//jsdl:ApplicationVersion" );
       }
       if( application.getDescription() != null ) {
-        result.add( "Application/Description" );
+        result.add( "/*//jsdl:Application/jsdl:Description" );
       }
       // check for POSIX
       FeatureMap map = application.getAny();
@@ -125,7 +125,9 @@ public class ParametricJobAdapter extends JsdlAdaptersFactory {
             int argumentsCount = posixApp.getArgument().size();
             if( argumentsCount > 1 ) {
               for( int j = 0; j < argumentsCount; j++ ) {
-                result.add( "/*//jsdl-posix:POSIXApplication/jsdl-posix:Argument[" + ( j + 1 ) + "]" );
+                result.add( "/*//jsdl-posix:POSIXApplication/jsdl-posix:Argument["
+                            + ( j + 1 )
+                            + "]" );
               }
             } else if( argumentsCount == 1 ) {
               result.add( "/*//jsdl-posix:POSIXApplication/jsdl-posix:Argument" );
@@ -147,7 +149,9 @@ public class ParametricJobAdapter extends JsdlAdaptersFactory {
             int envCount = posixApp.getEnvironment().size();
             if( envCount > 1 ) {
               for( int j = 0; j < envCount; j++ ) {
-                result.add( "/*//jsdl-posix:POSIXApplication/jsdl-posix:Environment[" + ( j + 1 ) + "]" );
+                result.add( "/*//jsdl-posix:POSIXApplication/jsdl-posix:Environment["
+                            + ( j + 1 )
+                            + "]" );
               }
             } else if( envCount == 1 ) {
               result.add( "/*//jsdl-posix:POSIXApplication/jsdl-posix:Environment" );
@@ -161,13 +165,57 @@ public class ParametricJobAdapter extends JsdlAdaptersFactory {
     if( dataStagingList != null ) {
       int dataStagingCount = dataStagingList.size();
       if( dataStagingCount > 1 ) {
+        int i = 1;
         for( DataStagingType dataStaging : dataStagingList ) {
-        } 
-      } else if (dataStagingCount == 1){
+          result.addAll( parseDataStagingElement( dataStaging,
+                                                  "/*//jsdl:DataStaging["
+                                                      + i
+                                                      + "]" ) );
+          i++;
+        }
+      } else if( dataStagingCount == 1 ) {
         DataStagingType data = dataStagingList.get( 0 );
+        result.addAll( parseDataStagingElement( data, "/*//jsdl:DataStaging" ) );
       }
     }
     // Resources element
+    return result;
+  }
+
+  private List<String> parseDataStagingElement( final DataStagingType dataStaging,
+                                                final String baseString )
+  {
+    List<String> result = new ArrayList<String>();
+    if( dataStaging.getFileName() != null
+        && !dataStaging.getFileName().equals( "" ) )
+    {
+      result.add( baseString + "/jsdl:FileName" );
+    }
+    if( dataStaging.getFilesystemName() != null
+        && !dataStaging.getFilesystemName().equals( "" ) )
+    {
+      result.add( baseString + "/jsdl:FilesystemName" );
+    }
+    if( dataStaging.isSetCreationFlag() ) {
+      result.add( baseString + "/jsdl:CreationFlag" );
+    }
+    if( dataStaging.isSetDeleteOnTermination() ) {
+      result.add( baseString + "/jsdl:DeleteOnTermination" );
+    }
+    if( dataStaging.getSource() != null ) {
+      if( dataStaging.getSource().getURI() != null
+          && !dataStaging.getSource().getURI().equals( "" ) )
+      {
+        result.add( baseString + "/jsdl:Source/jsdl:URI" );
+      }
+    }
+    if( dataStaging.getTarget() != null ) {
+      if( dataStaging.getTarget().getURI() != null
+          && !dataStaging.getTarget().getURI().equals( "" ) )
+      {
+        result.add( baseString + "/jsdl:Target/jsdl:URI" );
+      }
+    }
     return result;
   }
 }
