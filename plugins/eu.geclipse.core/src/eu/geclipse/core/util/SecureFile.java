@@ -131,7 +131,7 @@ public class SecureFile extends File {
     Process proc = null;
     try {
       proc = rt.exec( cmd, env );
-    } catch (Exception ex) {
+    } catch ( Exception ex ) {
       String msg =   SECURE_PERMISSIONS_FAILED
                    + "Exception running chmod"; //$NON-NLS-1$
       IStatus status = new Status( IStatus.WARNING, 
