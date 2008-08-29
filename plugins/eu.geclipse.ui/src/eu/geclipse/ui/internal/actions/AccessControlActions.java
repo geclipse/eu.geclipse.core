@@ -56,7 +56,9 @@ public class AccessControlActions extends ActionGroup {
     
     super.fillContextMenu( mgr );
     
-    if ( this.permissionsAction.isEnabled() ) {
+    boolean empty = super.getContext().getSelection().isEmpty();
+    
+    if ( ! empty && this.permissionsAction.isEnabled() ) {
       mgr.appendToGroup( ICommonMenuConstants.GROUP_OPEN, this.permissionsAction );
     }
   }
