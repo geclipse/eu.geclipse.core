@@ -592,7 +592,7 @@
          commandId="eu.geclipse.workflow.ui.openJSDLEditor"
          contextId="eu.geclipse.workflow.ui.diagramContext"
          schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-         sequence="M1+J"/>
+         sequence="M1+O"/>
    </extension>
 
    <extension point="org.eclipse.gmf.runtime.diagram.ui.paletteProviders">
