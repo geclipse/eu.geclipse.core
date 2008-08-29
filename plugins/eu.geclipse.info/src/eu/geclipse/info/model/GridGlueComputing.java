@@ -30,6 +30,7 @@ import eu.geclipse.core.model.IGridComputing;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridInfoService;
+import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.model.IGridResource;
 import eu.geclipse.core.model.IGridResourceCategory;
 import eu.geclipse.core.model.IVirtualOrganization;
@@ -159,7 +160,7 @@ public class GridGlueComputing
     
     IStatus status = Status.OK_STATUS;
     
-    IVirtualOrganization vo = getProject().getVO();
+    IVirtualOrganization vo = getVO();
     IGridInfoService infoService = vo.getInfoService();
     
     IGridResourceCategory category
@@ -174,11 +175,36 @@ public class GridGlueComputing
     } else {
       addElement( new ContainerMarker( this,
           ContainerMarker.MarkerType.INFO,
-          "No matching elements found" ) ); //$NON-NLS-1$
+          "No matching elements found" ) );
     }
       
     return status;
     
+  }
+  
+  /**
+   * Helper method to get the VO in which this CE is located,
+   * without assuming a fixed grid tree structure.
+   * 
+   * @return the {@link IVirtualOrganization} this CE belongs to.
+   */
+  private IVirtualOrganization getVO() {
+    IVirtualOrganization result = null;
+    IGridProject project = getProject();
+    if ( project != null ) {
+      result = project.getVO();
+    } else {
+      // Go up in the hierarchy until we find the VO
+      IGridContainer container = getParent();
+      while ( container != null ) {
+        if ( container instanceof IVirtualOrganization ) {
+          result = ( IVirtualOrganization ) container;
+          break;
+        }
+        container = container.getParent();
+      }
+    }
+    return result;
   }
 
 }
