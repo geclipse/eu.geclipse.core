@@ -111,7 +111,13 @@ public class ProjectVo
     IGridResource[] result = null;
     IVirtualOrganization vo = getSlave();
     if ( vo != null ) {
-      result=vo.getAvailableResources( category, exclusive, monitor );
+      // TODO find an alternative way, caused bugs #245533, #245673, #245674
+      //      but solved #245099
+//      result = vo.getAvailableResources( category, exclusive, monitor );
+      IGridInfoService infoService = vo.getInfoService();
+      if ( infoService != null ) {
+        result = infoService.fetchResources( this, vo, category, false, null, monitor );
+      }
     }
     return result;
   }
