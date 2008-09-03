@@ -23,7 +23,7 @@ Require-Bundle: org.eclipse.compare,
  eu.geclipse.core.reporting,
  eu.geclipse.info,
  eu.geclipse.jsdl
-Eclipse-LazyStart: true
+Bundle-ActivationPolicy: lazy
 Export-Package: eu.geclipse.ui,
  eu.geclipse.ui.adapters,
  eu.geclipse.ui.cheatsheets,
