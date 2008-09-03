@@ -16,7 +16,9 @@
 
 package eu.geclipse.core.model;
 
+import java.net.URI;
 import java.util.Date;
+import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -88,5 +90,18 @@ public interface IGridJob
    * @return A <code>Date</code> object with the submission time.
    */
   public Date getSubmissionTime();
-
+  
+  /**
+   * Scan folder "Input Files" in submitted job and return list of input files
+   * @return list of URI points to input files used by job
+   * @throws ProblemException
+   */
+  public List<URI> getInputStagers() throws ProblemException;
+  
+  /**
+   * Scan folder "Output Files" in submitted job and return list of output files
+   * @return list of URI points to output files produced by job
+   * @throws ProblemException
+   */
+  public List<URI> getOutputStagers() throws ProblemException;
 }

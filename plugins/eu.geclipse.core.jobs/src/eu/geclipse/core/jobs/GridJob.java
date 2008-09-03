@@ -941,20 +941,19 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
     } catch( CoreException exception ) {
       if( exception instanceof ProblemException ) {
         throw ( ProblemException )exception;
-      } else {
-        throw new ProblemException( "eu.geclipse.core.jobs.problem.getStagersFailed",
-                                    exception,
-                                    Activator.PLUGIN_ID );
-      }
+      } 
+      throw new ProblemException( "eu.geclipse.core.jobs.problem.getStagersFailed", //$NON-NLS-1$
+                                  exception,
+                                  Activator.PLUGIN_ID );
     }
     return results;
   }
   
-  private List<URI> getInputStagers() throws ProblemException {
+  public List<URI> getInputStagers() throws ProblemException {
     return getStagers( FOLDERNAME_INPUT_FILES );    
   }
   
-  private List<URI> getOutputStagers() throws ProblemException {
+  public List<URI> getOutputStagers() throws ProblemException {
     return getStagers( FOLDERNAME_OUTPUT_FILES );    
   }
   
