@@ -20,6 +20,7 @@ import java.util.Hashtable;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.jobs.Job;
@@ -27,7 +28,6 @@ import org.eclipse.core.runtime.jobs.Job;
 import eu.geclipse.core.internal.Activator;
 import eu.geclipse.core.internal.model.JobManager;
 import eu.geclipse.core.model.IGridJob;
-import eu.geclipse.core.model.IGridJobID;
 import eu.geclipse.core.model.IGridJobStatus;
 import eu.geclipse.core.model.IGridJobStatusListener;
 
@@ -40,18 +40,20 @@ import eu.geclipse.core.model.IGridJobStatusListener;
  *
  */
 public class JobStatusUpdater extends Job {
-
   /**
    * Hashtable that hold information about registered listeners and the statuses for
    * which listener should be notified
    * @seeIGridJobStatusListener
    */
-  Hashtable<IGridJobStatusListener, Integer> listeners=new Hashtable<IGridJobStatusListener, Integer>();
-//  static Hashtable<String, JobStatusUpdater> updaters = new Hashtable<String, JobStatusUpdater>();
+  private Hashtable<IGridJobStatusListener, Integer> listeners=new Hashtable<IGridJobStatusListener, Integer>();
+  private IGridJob job = null;
+  private IGridJobStatus lastStatus=null;
   
-  IGridJobID jobID = null;
-  IGridJob job = null;
-  IGridJobStatus lastStatus=null;
+  /**
+   * Flag set to <code>true</code>, when {@link IGridJob} is removed, so
+   * {@link JobStatusUpdater} should stop to check current job status
+   */
+  private boolean jobRemoved;
   
   /**
    * Constructor
@@ -73,51 +75,69 @@ public class JobStatusUpdater extends Job {
   @Override
   protected IStatus run( final IProgressMonitor monitor ) {
     SubMonitor subMonitor = SubMonitor.convert( monitor );
-      if( Preferences.getUpdateJobsStatus() ) {
-        int oldType = -1;
-        if( this.lastStatus != null ) {
-          oldType = this.lastStatus.getType();
+    testCancelled( subMonitor );
+    if( Preferences.getUpdateJobsStatus() ) {
+      int oldType = -1;
+      if( this.lastStatus != null ) {
+        oldType = this.lastStatus.getType();
+      }
+      int newType = IGridJobStatus.UNKNOWN;
+      IGridJobStatus newStatus = null;
+      try {
+        if( this.job != null ) {
+          testCancelled( subMonitor );
+          this.job.updateJobStatus( subMonitor );
+          newStatus = this.job.getJobStatus();
         }
-        int newType = IGridJobStatus.UNKNOWN;
-        IGridJobStatus newStatus = null;
-        try {
-          if( this.job != null ) {
-            this.job.updateJobStatus( subMonitor );
-            newStatus = this.job.getJobStatus();
-          }
-          if( newStatus != null ) {
-            newType = newStatus.getType();
-            this.lastStatus = newStatus;
-          }
-          if( oldType != newType ){
-            for( Enumeration<IGridJobStatusListener> e = this.listeners.keys(); e.hasMoreElements(); )
-            {
-              IGridJobStatusListener listener = e.nextElement();
-              int trigger = this.listeners.get( listener ).intValue();
-              if( ( newType & trigger ) > 0 ) {
-                listener.statusChanged( this.job );
-                listener.statusUpdated( this.job );
-              }
-            }
-          } else {
-            for( Enumeration<IGridJobStatusListener> e = this.listeners.keys(); e.hasMoreElements(); )
-            {
-              IGridJobStatusListener listener = e.nextElement();
+        if( newStatus != null ) {
+          newType = newStatus.getType();
+          this.lastStatus = newStatus;
+        }
+        if( oldType != newType ) {
+          for( Enumeration<IGridJobStatusListener> e = this.listeners.keys(); e.hasMoreElements(); )
+          {
+            testCancelled( subMonitor );
+            IGridJobStatusListener listener = e.nextElement();
+            int trigger = this.listeners.get( listener ).intValue();
+            if( ( newType & trigger ) > 0 ) {
+              listener.statusChanged( this.job );
               listener.statusUpdated( this.job );
             }
           }
-        } catch( RuntimeException e ) {
-          Activator.logException( e );
-        }
-        if( newStatus != null && newStatus.canChange() ) {
-          int updatePeriod = Preferences.getUpdateJobsPeriod();
-          schedule( updatePeriod );
         } else {
-          JobManager.getManager().removeUpdater( this );
+          for( Enumeration<IGridJobStatusListener> e = this.listeners.keys(); e.hasMoreElements(); )
+          {
+            testCancelled( subMonitor );
+            IGridJobStatusListener listener = e.nextElement();
+            listener.statusUpdated( this.job );
+          }
         }
+      } catch( RuntimeException e ) {
+        Activator.logException( e );
       }
+      if( !this.jobRemoved
+          && !monitor.isCanceled()
+          && newStatus != null
+          && newStatus.canChange() )
+      {
+        int updatePeriod = Preferences.getUpdateJobsPeriod();
+        schedule( updatePeriod );
+      } else {
+        JobManager.getManager().removeJobStatusUpdater( this.job,
+                                                        false,
+                                                        monitor );
+      }
+    }
     return Status.OK_STATUS;
   }
+
+  private void testCancelled( final SubMonitor subMonitor ) {
+    if( subMonitor.isCanceled() ) {
+      throw new OperationCanceledException();
+    }
+    
+  }
+
 
   /**
    * Used when job status was updated outside of the updater.
@@ -164,6 +184,16 @@ public class JobStatusUpdater extends Job {
    */
   public void removeJobStatusListener( final IGridJobStatusListener listener ) {
     this.listeners.remove( listener );
+  }
+
+  /**
+   * Mark {@link IGridJob} connected with this updater as removed, what means
+   * that this updater should stop to schedule itself.<br/> Note, that this is
+   * not the same as cancelled, because cancel interupt only currect updating,
+   * so next updating will be scheduled
+   */
+  public void setRemoved() {
+    this.jobRemoved = true;
   }
 
 }

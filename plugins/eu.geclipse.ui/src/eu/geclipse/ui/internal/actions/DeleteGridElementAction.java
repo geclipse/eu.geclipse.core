@@ -228,10 +228,10 @@ public class DeleteGridElementAction extends SelectionListenerAction {
 
   
  
-  private class DeleteJobsJob extends Job {    
-    private List<IGridJob> selectedJobs;
-    private ConfirmChoice userChoice;
+  private class DeleteJobsJob extends Job {
     boolean forceDeleteLocal = false;
+    private List<IGridJob> selectedJobs;
+    private ConfirmChoice userChoice;    
 
     /**
      * @param selectedJobs
@@ -266,7 +266,8 @@ public class DeleteGridElementAction extends SelectionListenerAction {
             addSolutionOnlyLocalDel( exception );
             ProblemDialog.openProblem( DeleteGridElementAction.this.shell,
                                        Messages.getString("DeleteGridElementAction.deleteProblemTitle"), //$NON-NLS-1$
-                                       String.format( Messages.getString("DeleteGridElementAction.problemDescription"), job.getJobName() ), //$NON-NLS-1$
+                                       String.format( Messages.getString("DeleteGridElementAction.problemDescription"),  //$NON-NLS-1$
+                                                      job != null ? job.getJobName() : "unknown" ), //$NON-NLS-1$
                                        exception );
             break;
           }      
@@ -282,7 +283,10 @@ public class DeleteGridElementAction extends SelectionListenerAction {
       throws ProblemException
     {
       monitor.setTaskName( String.format( Messages.getString("DeleteGridElementAction.taskNameDeleting"), job.getJobName() ) ); //$NON-NLS-1$
-      monitor.setWorkRemaining( this.userChoice == ConfirmChoice.deleteFromGrid ? 2 : 1 );
+      monitor.setWorkRemaining( this.userChoice == ConfirmChoice.deleteFromGrid ? 3 : 2 );
+      
+      stopJobStatusUpdater( job, monitor.newChild( 1 ) );
+      
       if( this.userChoice == ConfirmChoice.deleteFromGrid ) {
         try {
           job.deleteJob( monitor.newChild( 1 ) );
@@ -306,6 +310,12 @@ public class DeleteGridElementAction extends SelectionListenerAction {
       }
     }
     
+    private void stopJobStatusUpdater( final IGridJob job, final SubMonitor monitor ) {
+      monitor.subTask( Messages.getString("DeleteGridElementAction.taskStoppingUpdater") ); //$NON-NLS-1$
+      GridModel.getJobManager().removeJobStatusUpdater( job, true, monitor );      
+    }
+
+
     private void testCancel( final IProgressMonitor monitor ) {
       if( monitor.isCanceled() ) {
         throw new OperationCanceledException();

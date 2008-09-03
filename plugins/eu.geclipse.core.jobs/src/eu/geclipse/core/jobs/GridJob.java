@@ -23,6 +23,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.text.DateFormat;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -40,6 +41,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubMonitor;
@@ -55,6 +57,8 @@ import eu.geclipse.core.ICoreProblems;
 import eu.geclipse.core.filesystem.GEclipseURI;
 import eu.geclipse.core.jobs.internal.Activator;
 import eu.geclipse.core.model.GridModel;
+import eu.geclipse.core.model.IGridConnectionElement;
+import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridElementCreator;
 import eu.geclipse.core.model.IGridElementManager;
@@ -63,6 +67,7 @@ import eu.geclipse.core.model.IGridJobDescription;
 import eu.geclipse.core.model.IGridJobID;
 import eu.geclipse.core.model.IGridJobService;
 import eu.geclipse.core.model.IGridJobStatus;
+import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.core.model.impl.ResourceGridContainer;
 import eu.geclipse.core.model.impl.ResourceGridElement;
@@ -360,13 +365,19 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
     SubMonitor subMonitor = SubMonitor.convert( progressMonitor );
     IGridJobStatus newJobStatus = null;
     try {
+      testCancelled( progressMonitor );
       IGridJobService service = getJobService();
       if( service != null && this.jobID.getJobID() != GridJobID.UNKNOWN ) {
-        newJobStatus = service.getJobStatus( this.jobID,
-                                             getProject().getVO(),
-                                             subMonitor );
+        IGridProject project = getProject();
+        
+        if( project != null ) {
+          newJobStatus = service.getJobStatus( this.jobID,
+                                               project.getVO(),
+                                               subMonitor );
+        }
+        testCancelled( subMonitor );
       }
-      if( newJobStatus != null && newJobStatus instanceof GridJobStatus ) {
+      if( newJobStatus != null && newJobStatus instanceof GridJobStatus && !subMonitor.isCanceled() ) {
         this.jobStatus = ( GridJobStatus )newJobStatus;
         writeJobStatus( this.jobStatusFile );
       }
@@ -375,6 +386,12 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
     }
     // jobStatus = new GridJobStatus( jobID );
     return this.jobStatus;
+  }
+
+  private void testCancelled( final IProgressMonitor progressMonitor ) {
+    if( progressMonitor.isCanceled() ) {
+      throw new OperationCanceledException();
+    }
   }
 
   @Override
@@ -588,7 +605,11 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
       if( _jobStatusFile.exists() ) {
         _jobStatusFile.setContents( baos, true, true, null );
       } else {
-        _jobStatusFile.create( baos, true, null );
+        // if job is deleted, then status updater is stopped later and it's possible that we are trying to store status for deleted job.
+        // In that case just ignore creation of status file
+        if( _jobStatusFile.getParent().exists() ) {
+          _jobStatusFile.create( baos, true, null );
+        }
       }
     } catch( CoreException cExc ) {
       throw new ProblemException( ICoreProblems.MODEL_ELEMENT_CREATE_FAILED,
@@ -900,4 +921,41 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
       monitor.done();
     }
   }
+  
+  private List<URI> getStagers( final String stagersFolderName )
+    throws ProblemException
+  {
+    List<URI> results = new ArrayList<URI>();
+    IGridElement element = findChild( stagersFolderName );
+    try {
+      if( element instanceof IGridContainer ) {
+        IGridContainer folder = ( IGridContainer )element;
+        IGridElement[] childrenElements = folder.getChildren( null );
+        for( IGridElement gridElement : childrenElements ) {
+          if( gridElement instanceof IGridConnectionElement ) {
+            IGridConnectionElement connectionElement = ( IGridConnectionElement )gridElement;
+            results.add( connectionElement.getURI() );
+          }
+        }
+      }
+    } catch( CoreException exception ) {
+      if( exception instanceof ProblemException ) {
+        throw ( ProblemException )exception;
+      } else {
+        throw new ProblemException( "eu.geclipse.core.jobs.problem.getStagersFailed",
+                                    exception,
+                                    Activator.PLUGIN_ID );
+      }
+    }
+    return results;
+  }
+  
+  private List<URI> getInputStagers() throws ProblemException {
+    return getStagers( FOLDERNAME_INPUT_FILES );    
+  }
+  
+  private List<URI> getOutputStagers() throws ProblemException {
+    return getStagers( FOLDERNAME_OUTPUT_FILES );    
+  }
+  
 }

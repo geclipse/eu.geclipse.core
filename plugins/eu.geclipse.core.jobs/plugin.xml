@@ -44,6 +44,10 @@
             description="Cannot delete temporary folder for generated jsdl"
             id="eu.geclipse.core.jobs.problem.cleanupSubmissionFailed">
       </problem>
+      <problem
+            description="Cannot obtain list of input/output stagers"
+            id="eu.geclipse.core.jobs.problem.getStagersFailed">
+      </problem>
    </extension>
 
 </plugin>

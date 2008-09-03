@@ -18,13 +18,15 @@ package eu.geclipse.core.internal.model;
 
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.jobs.Job;
 
 import eu.geclipse.core.JobStatusUpdater;
@@ -222,10 +224,27 @@ public class JobManager extends AbstractGridElementManager
    * 
    * @param updater
    */
-  public void removeUpdater( final JobStatusUpdater updater ) {
-    Collection<JobStatusUpdater> values = this.updaters.values();
-    while( values.remove( updater ) ) {
-      JobScheduler.getJobScheduler().clearUpdater ( updater );
+  public void removeJobStatusUpdater( final IGridJob job, final boolean waitForUpdater, final IProgressMonitor monitor ) {
+    SubMonitor subMonitor = SubMonitor.convert( monitor );
+    JobStatusUpdater updater = this.updaters.get( job.getID() );
+    if( updater != null ) {
+      JobScheduler.getJobScheduler().clearUpdater( updater );
+      
+      // cancel updater
+      updater.setRemoved();
+      updater.cancel();      
+      if( waitForUpdater ) {
+        while( updater.getState() == Job.RUNNING ) {
+          if( subMonitor.isCanceled() ) {
+            throw new OperationCanceledException();
+          }
+          try {
+            Thread.sleep( 1000 );
+          } catch( InterruptedException e ) {
+            // empty block
+          }
+        }
+      }
     }
   }
 
@@ -308,25 +327,11 @@ public class JobManager extends AbstractGridElementManager
       IGridElement[] removedElements = event.getElements();
       for( IGridElement elem : removedElements ) {
         if( elem instanceof IGridJob ) {
-          IGridJob job = ( IGridJob )elem;
-          JobStatusUpdater updater = this.updaters.remove( job.getID() );
-          // check if updater is currently running and wait until it finishes
-          if ( updater != null ) {
-            while( updater.getState() == Job.RUNNING ) {
-              try {
-                Thread.sleep( 1000 );
-              } catch( InterruptedException e ) {
-                // empty block
-              }
-            }
-            // cancel updater
-            updater.cancel();
-            // remove updater from updaters list
-            this.removeUpdater( updater );
+            IGridJob job = ( IGridJob )elem;
+            removeJobStatusUpdater( job, true, null );          
           }
         }
-      }
-    }
+      }    
   }
   
   public void jobStatusChanged ( final IGridJob job ) {

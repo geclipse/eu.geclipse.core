@@ -18,6 +18,8 @@ package eu.geclipse.core.model;
 
 import java.util.ArrayList;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+
 /**
  * A job manager is able to manage {@link IGridJob}.
  */
@@ -58,4 +60,12 @@ public interface IGridJobManager
    * @param job
    */
   public void jobStatusUpdated( IGridJob job );
+  
+  /**
+   * Cancel current operation in job status updater and remove it from job scheduler
+   * @param job the job, for which updater will be removed
+   * @param waitForUpdater <code>true</code> if this metchod should wait to moment, when job updater finish current operation
+   * @param monitor optionally monitor, which is checked during waiting for finishing updater
+   */
+  public void removeJobStatusUpdater( final IGridJob job, final boolean waitForUpdater, final IProgressMonitor monitor );
 }
