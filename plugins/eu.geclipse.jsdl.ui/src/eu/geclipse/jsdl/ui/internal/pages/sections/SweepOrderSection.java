@@ -652,67 +652,81 @@ public class SweepOrderSection extends JsdlFormPageSection {
     if( sel instanceof StructuredSelection ) {
       Map<String, AssignmentType> paramsToRemove = new HashMap<String, AssignmentType>();
       StructuredSelection sSel = ( StructuredSelection )sel;
-      // for( Object object : sSel.toList() ) {
-      // if( object instanceof SweepType ) {
-      // SweepType sweep = ( SweepType )object;
-      // EList<AssignmentType> assignments = sweep.getAssignment();
-      // for( int i = 0; i < assignments.size(); i++ ) {
-      // EList<String> params = assignments.get( i ).getParameter();
-      // for( int j = 0; j < params.size(); j++ ) {
-      // paramsToRemove.put( params.get( j ), assignments.get( i ) );
-      // }
-      // }
-      // }
-      // }
-      // List<String> userDecision = new ArrayList<String>();
-      // for( String a : paramsToRemove.keySet() ) {
-      // userDecision.add( a );
-      // }
-      // if( paramsToRemove.size() > 1 ) {
-      // SweepDeleteDialog dialog = new SweepDeleteDialog( this.shell,
-      // userDecision );
-      // if( dialog.open() == Dialog.OK ) {
-      // }
-      // }
-      // // removing
-      // for( String param : userDecision ) {
-      // AssignmentType assignmentToRemove = paramsToRemove.get( param );
-      // if( assignmentToRemove.eContainer() instanceof SweepType ) {
-      // SweepType sweepContainer = ( SweepType
-      // )assignmentToRemove.eContainer();
-      // if( assignmentToRemove.getParameter().size() == 1 ) {
-      // if( sweepContainer.getAssignment().size() == 1 ) {
-      // EcoreUtil.remove( sweepContainer );
+      for( Object object : sSel.toList() ) {
+        if( object instanceof SweepType ) {
+          SweepType sweep = ( SweepType )object;
+          EList<AssignmentType> assignments = sweep.getAssignment();
+          for( int i = 0; i < assignments.size(); i++ ) {
+            EList<String> params = assignments.get( i ).getParameter();
+            for( int j = 0; j < params.size(); j++ ) {
+              paramsToRemove.put( params.get( j ), assignments.get( i ) );
+            }
+          }
+        }
+      }
+      List<String> userDecision = new ArrayList<String>();
+      boolean remove = true;
+      if( paramsToRemove.size() > 1 ) {
+        for( String a : paramsToRemove.keySet() ) {
+          userDecision.add( a );
+        }
+        SweepDeleteDialog dialog = new SweepDeleteDialog( this.shell,
+                                                          userDecision );
+        if( dialog.open() == Dialog.OK ) {
+          // removing
+          userDecision = dialog.getElementsToRemove();
+        } else {
+          remove = false;
+        }
+      } else if( paramsToRemove.size() == 1 ) {
+        userDecision = new ArrayList<String>();
+        for( String param : paramsToRemove.keySet() ) {
+          userDecision.add( param );
+        }
+      }
+      if( paramsToRemove.size() > 0 && remove ) {
+        for( String param : userDecision ) {
+          performRemove( paramsToRemove.get( param ), param );
+        }
+        this.viewer.refresh();
+        contentChanged();
+      }
+      // old
+      // for( Object obj : sSel.toList() ) {
+      // if( obj instanceof SweepType ) {
+      // SweepType type = ( SweepType )obj;
+      // if( type.eContainer() instanceof SweepType ) {
+      // EcoreUtil.remove( type );
+      // } else if( type.eContainer() instanceof JobDefinitionType ) {
+      // EcoreUtil.remove( type );
       // setInput( this.jobDefinitionType );
-      // } else {
-      // EcoreUtil.remove( assignmentToRemove );
-      // setInput( this.jobDefinitionType );
       // }
-      // } else {
-      // assignmentToRemove.getParameter().remove( param );
-      // setInput( this.jobDefinitionType );
-      // }
-      // }
-      // // this.viewer.remove( );
+      // this.viewer.remove( obj );
       // this.viewer.refresh();
       // contentChanged();
       // }
+      // }
       // old
-      for( Object obj : sSel.toList() ) {
-        if( obj instanceof SweepType ) {
-          SweepType type = ( SweepType )obj;
-          if( type.eContainer() instanceof SweepType ) {
-            EcoreUtil.remove( type );
-          } else if( type.eContainer() instanceof JobDefinitionType ) {
-            EcoreUtil.remove( type );
-            setInput( this.jobDefinitionType );
-          }
-          this.viewer.remove( obj );
-          this.viewer.refresh();
-          contentChanged();
+    }
+  }
+
+  private void performRemove( final AssignmentType assignment,
+                              final String assignmentParam )
+  {
+    if( assignment.eContainer() instanceof SweepType ) {
+      SweepType sweepContainer = ( SweepType )assignment.eContainer();
+      if( assignment.getParameter().size() == 1 ) {
+        if( sweepContainer.getAssignment().size() == 1 ) {
+          EcoreUtil.remove( sweepContainer );
+          setInput( this.jobDefinitionType );
+        } else {
+          EcoreUtil.remove( assignment );
+          setInput( this.jobDefinitionType );
         }
+      } else {
+        assignment.getParameter().remove( assignmentParam );
+        setInput( this.jobDefinitionType );
       }
-      // old
     }
   }
 

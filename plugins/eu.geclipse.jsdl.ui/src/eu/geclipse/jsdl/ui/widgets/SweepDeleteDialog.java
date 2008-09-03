@@ -16,9 +16,11 @@
  *****************************************************************************/
 package eu.geclipse.jsdl.ui.widgets;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
@@ -29,6 +31,7 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
@@ -41,6 +44,9 @@ public class SweepDeleteDialog extends Dialog {
   private TableViewer viewer;
   private List<String> input;
   private List<String> outputReturn;
+  private Button deleteAllButton;
+  private Button deleteSelectedButton;
+  private Button cancelButton;
 
   public SweepDeleteDialog( final Shell parentShell, final List<String> input )
   {
@@ -61,10 +67,18 @@ public class SweepDeleteDialog extends Dialog {
     Label description = new Label( mainComp, SWT.LEAD );
     gData.horizontalSpan = 2;
     description.setLayoutData( gData );
-    description.setText( "There is more than one sweep at this level. Which one do you want to remove?" );
+    description.setText( "There is more than one sweep on this level." );
+    Label descr1 = new Label( mainComp, SWT.LEAD );
+    descr1.setText( "Which one do you want to remove?" );
     gData = new GridData();
     gData.horizontalSpan = 2;
-    this.viewer = new TableViewer( mainComp );
+    descr1.setLayoutData( gData );
+    gData = new GridData( GridData.FILL_BOTH
+                          | GridData.GRAB_HORIZONTAL
+                          | GridData.GRAB_VERTICAL );
+    gData.horizontalSpan = 2;
+    gData.heightHint = 100;
+    this.viewer = new TableViewer( mainComp, SWT.V_SCROLL | SWT.BORDER | SWT.MULTI);
     this.viewer.setLabelProvider( new LabelProvider() );
     this.viewer.setContentProvider( new cProvider() );
     this.viewer.setInput( this.input );
@@ -72,14 +86,60 @@ public class SweepDeleteDialog extends Dialog {
     return mainComp;
   }
 
+  /*
+   * (non-Javadoc)
+   * 
+   * @see org.eclipse.jface.dialogs.Dialog#buttonPressed(int)
+   */
   @Override
-  protected void okPressed() {
+  protected void buttonPressed( final int buttonId ) {
+    if( buttonId == IDialogConstants.SELECT_ALL_ID ) {
+      this.outputReturn = this.input;
+      okPressed();
+    } else if( buttonId == IDialogConstants.PROCEED_ID ) {
+      this.outputReturn = getSelection();
+      okPressed();
+    } else if( buttonId == IDialogConstants.CANCEL_ID ) {
+      cancelPressed();
+    }
+  }
+
+  private List<String> getSelection() {
+    List<String> result = new ArrayList<String>();
     ISelection sel = this.viewer.getSelection();
     if( sel instanceof StructuredSelection ) {
       StructuredSelection sSel = ( StructuredSelection )sel;
-      this.outputReturn = sSel.toList();
+      result = sSel.toList();
     }
-    super.okPressed();
+    return result;
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see org.eclipse.jface.dialogs.Dialog#createButtonBar(org.eclipse.swt.widgets.Composite)
+   */
+  @Override
+  protected Control createButtonBar( final Composite parent ) {
+    Composite buttonsComp = new Composite( parent, SWT.NONE );
+    buttonsComp.setLayout( new GridLayout( 0, true ) );
+    GridData gData = new GridData( GridData.FILL_BOTH );
+    gData.verticalIndent = 10;
+    gData.horizontalAlignment = SWT.END;
+    buttonsComp.setLayoutData( gData );
+    createButton( buttonsComp,
+                  IDialogConstants.SELECT_ALL_ID,
+                  "Delete all",
+                  true );
+    createButton( buttonsComp,
+                  IDialogConstants.PROCEED_ID,
+                  "Delete selected",
+                  false );
+    createButton( buttonsComp,
+                  IDialogConstants.CANCEL_ID,
+                  IDialogConstants.CANCEL_LABEL,
+                  false );
+    return buttonsComp;
   }
 
   public List<String> getElementsToRemove() {
@@ -99,7 +159,7 @@ public class SweepDeleteDialog extends Dialog {
       // do nothing
     }
 
-    public void inputChanged( final Viewer viewer,
+    public void inputChanged( final Viewer viewer1,
                               final Object oldInput,
                               final Object newInput )
     {
