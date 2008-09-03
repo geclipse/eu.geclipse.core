@@ -73,8 +73,12 @@ public interface ICoreProblems {
     = "eu.geclipse.core.problem.io.unspecified"; //$NON-NLS-1$
   
   // Jobs
+  public static final String JOB_DESCRIPTION_INVALID
+    = "eu.geclipse.core.problem.job.invalidJobDescription"; //$NON-NLS-1$
   public static final String JOB_SUBMISSION_FAILED
     = "eu.geclipse.core.problem.job.submissionFailed"; //$NON-NLS-1$
+
+  
   
   // Model
   public static final String MODEL_CONTAINER_CAN_NOT_CONTAIN
