@@ -19,16 +19,4 @@ package eu.geclipse.ui.visualisation.preferences;
  */
 public class PreferenceConstants {
 
-  /**
-   *
-   */
-  public static final String P_RENDERING_OPTION = "sitePreference"; //$NON-NLS-1$
-  /**
-   *
-   */
-  public static final String P_CREATE_NEW_PROJECT_OPTION = "createNewProjectPreference"; //$NON-NLS-1$
-  /**
-   *
-   */
-  public static final String P_USING_TEMPLATE_OPTION = "usingTemplatePreference"; //$NON-NLS-1$
 }

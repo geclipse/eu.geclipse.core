@@ -14,9 +14,7 @@
  ******************************************************************************/
 package eu.geclipse.ui.visualisation.preferences;
 
-import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
-import org.eclipse.jface.preference.RadioGroupFieldEditor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
@@ -49,25 +47,12 @@ public class VisualisationPreferencePage extends FieldEditorPreferencePage
    */
   @Override
   public void createFieldEditors() {
-    addField( new RadioGroupFieldEditor( PreferenceConstants.P_RENDERING_OPTION,
-                                         Messages.getString( "VisPreferencePage.renderingOption" ), //$NON-NLS-1$
-                                         1,
-                                         new String[][]{
-                                           {
-                                             "&Local", "local"}, //$NON-NLS-1$ //$NON-NLS-2$
-                                           {
-                                             "&Remote", "remote"}}, //$NON-NLS-1$ //$NON-NLS-2$
-                                         getFieldEditorParent(),
-                                         true ) );
-    addField( new BooleanFieldEditor( PreferenceConstants.P_CREATE_NEW_PROJECT_OPTION,
-                                      Messages.getString( "VisPreferencePage.createNewProjectBoolean" ), //$NON-NLS-1$
-                                      getFieldEditorParent() ) );
   }
 
   /* (non-Javadoc)
    * @see org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
    */
-  public void init( IWorkbench workbench ) {
+  public void init( final IWorkbench workbench ) {
     //noop
   }
 }
