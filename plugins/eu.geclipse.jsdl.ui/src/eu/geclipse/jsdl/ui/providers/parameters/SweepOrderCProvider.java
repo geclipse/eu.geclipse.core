@@ -28,7 +28,7 @@ public class SweepOrderCProvider implements ITreeContentProvider {
     if( parentElement instanceof SweepType ) {
       SweepType sweep = ( SweepType )parentElement;
       if( sweep.getSweep() != null && sweep.getSweep().size() != 0 ) {
-        result = new Object[ sweep.getAssignment().size() ];
+        result = new Object[ sweep.getSweep().size() ];
         result = sweep.getSweep().toArray( result );
       }
     }
