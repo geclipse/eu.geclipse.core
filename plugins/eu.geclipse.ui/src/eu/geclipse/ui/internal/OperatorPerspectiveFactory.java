@@ -43,8 +43,7 @@ public class OperatorPerspectiveFactory implements IPerspectiveFactory {
 
     IFolderLayout rightFolder
       = layout.createFolder( "right", IPageLayout.RIGHT,   //$NON-NLS-1$
-                             0.5f, 
-                             eu.geclipse.ui.internal.Activator.ID_TERMINAL_VIEW );
+                             0.5f, editorArea );
     rightFolder.addView( eu.geclipse.ui.internal.Activator.ID_TERMINAL_VIEW );
     rightFolder.addView( IPageLayout.ID_OUTLINE );
 
@@ -58,7 +57,6 @@ public class OperatorPerspectiveFactory implements IPerspectiveFactory {
     bottomFolder.addView( "eu.geclipse.batch.ui.views.BatchJobView" ); //$NON-NLS-1$
     bottomFolder.addView( eu.geclipse.ui.internal.Activator.ID_AUTH_VIEW );
 
-    bottomFolder.addPlaceholder( IPageLayout.ID_PROP_SHEET );
     bottomFolder.addPlaceholder( IPageLayout.ID_PROBLEM_VIEW );
     bottomFolder.addPlaceholder( NewSearchUI.SEARCH_VIEW_ID );
     bottomFolder.addPlaceholder( IPageLayout.ID_BOOKMARKS );
