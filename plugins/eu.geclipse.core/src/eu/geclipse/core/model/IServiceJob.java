@@ -1,18 +1,11 @@
 /******************************************************************************
- * Copyright (c) 2007 - 2008 g-Eclipse consortium 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- * Initial development of the original code was made for
- * project g-Eclipse founded by European Union
- * project number: FP6-IST-034327  http://www.geclipse.eu/
- *
- * Contributor(s):
- *     PSNC: 
- *      - Katarzyna Bylec (katis@man.poznan.pl)
- *      - Szymon Mueller     
+ * Copyright (c) 2007 - 2008 g-Eclipse consortium All rights reserved. This
+ * program and the accompanying materials are made available under the terms of
+ * the Eclipse Public License v1.0 which accompanies this distribution, and is
+ * available at http://www.eclipse.org/legal/epl-v10.html Initial development of
+ * the original code was made for project g-Eclipse founded by European Union
+ * project number: FP6-IST-034327 http://www.geclipse.eu/ Contributor(s): PSNC:
+ * - Katarzyna Bylec (katis@man.poznan.pl) - Szymon Mueller
  *****************************************************************************/
 package eu.geclipse.core.model;
 
@@ -35,12 +28,12 @@ public interface IServiceJob extends IGridElement, IManageable {
    * simplicity - constructors without parameters.
    * 
    * @param initInputData object with information to initialize new (and most
-   *            likely empty) instance of class
+   *          likely empty) instance of class
    */
   public void internalInit( final IFile initInputData );
 
   public void init();
-  
+
   /**
    * Method to access all single tests that are run as a one IGridTest
    * implementation.
@@ -74,8 +67,8 @@ public interface IServiceJob extends IGridElement, IManageable {
    * @return String that is representation of single test result
    */
   public IServiceJobResult getSingleTestResult( final String testName,
-                                              final String resourceName,
-                                              final Date date );
+                                                final String resourceName,
+                                                final Date date );
 
   /**
    * Short user friendly description of this test (the whole structural test).
@@ -154,12 +147,12 @@ public interface IServiceJob extends IGridElement, IManageable {
 
   /**
    * This method should be called each time when test was run and new results
-   * are available. Calling this method results in serialization of new results -
-   * they are written to test's GTDL file - this is how exemplary implementation
-   * available in test framework works.
+   * are available. Calling this method results in serialization of new results
+   * - they are written to test's GTDL file - this is how exemplary
+   * implementation available in test framework works.
    * 
    * @param newResults list of new results that should be added to set of
-   *            results maintained by this test's class
+   *          results maintained by this test's class
    */
   public void addTestResult( final List<IServiceJobResult> newResults );
 
@@ -172,7 +165,38 @@ public interface IServiceJob extends IGridElement, IManageable {
    * @return input stream for result's data
    */
   public InputStream getInputStreamForResult( final IServiceJobResult result );
-  
+
   public int getColumnWidth( final String singleTestName );
 
+  /**
+   * This method is to obtain information whether service job implementation
+   * needs to display job submission wizard to the user when it is being run.
+   * Job submission wizard gives access to information which job submission
+   * service to use (see {@link IServiceJob#getSubmissionService()} method).
+   * 
+   * @return <code>true</code> if this service job needs information to which
+   *         submission service submit its jobs, <code>false</code> otherwise
+   */
+  public boolean needsSubmissionWizard();
+
+  /**
+   * Method to set the submission service for use when job-based service jobs
+   * are submitted.
+   * 
+   * @param submissionService
+   */
+  public void setSubmissionService( final IGridJobService submissionService );
+
+  /**
+   * Gives access to information to which submission service service's jobs
+   * should be submitted. This information should be set by class that runs
+   * service job (see also {@link IServiceJob#needsSubmissionWizard()}).
+   * 
+   * @return reference to submission service to which this service job should
+   *         submit its jobs or <code>null</code> in case this information
+   *         wasn't set yet, or when service job implementation did not declare
+   *         that this information is needed (see
+   *         {@link IServiceJob#needsSubmissionWizard()}).
+   */
+  public IGridJobService getSubmissionService();
 }

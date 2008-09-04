@@ -43,6 +43,7 @@ import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridElementManager;
+import eu.geclipse.core.model.IGridJobService;
 import eu.geclipse.core.model.IServiceJob;
 import eu.geclipse.core.model.IServiceJobResult;
 import eu.geclipse.core.model.impl.AbstractGridElement;
@@ -58,6 +59,7 @@ public abstract class AbstractServiceJob extends AbstractGridElement
   implements IServiceJob
 {
 
+  protected IGridJobService submissionService;
   protected String testInputData;
   protected String name;
   protected List<IServiceJobResult> results = new ArrayList<IServiceJobResult>();
@@ -302,4 +304,18 @@ public abstract class AbstractServiceJob extends AbstractGridElement
   public int getColumnWidth( final String singleTestName ) {
     return 200;
   }
+
+  public IGridJobService getSubmissionService() {
+    return this.submissionService;
+  }
+
+  public boolean needsSubmissionWizard() {
+    return false;
+  }
+
+  public void setSubmissionService( final IGridJobService submissionService ) {
+    this.submissionService = submissionService;
+  }
+  
+  
 }
