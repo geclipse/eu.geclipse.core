@@ -268,24 +268,48 @@ public class SelectionTransferDropAdapter
    */
   protected int computeDropOperations( final IGridContainer target,
                                        final IGridElement element ) {
+    
     int result = DND.DROP_COPY | DND.DROP_MOVE | DND.DROP_DEFAULT;
+    
     if ( ( target == element )
         || ( target == element.getParent() )
         || !target.canContain( element )
         || isGridJob( target ) ) {
       result = DND.DROP_NONE;
-    } else if ( ! isLocal( target ) || ! isLocal( element ) ) {
-      if ( ! isLocal( target ) && ! isLocal( element ) ) {
-        IGridElement targetParent = findLastRemoteElement( target );
-        IGridElement elementParent = findLastRemoteElement( element );
-        if ( targetParent != elementParent ) {
-          result = DND.DROP_COPY;
-        }
-      } else {
-        result = DND.DROP_COPY;
-      }
     }
+    
+    else {
+      
+      boolean tLocal = isLocal( target );
+      boolean eLocal = isLocal( element );
+      
+      if ( !tLocal || !eLocal ) { // remote -> local || local -> remote || remote -> remote 
+
+        if ( !tLocal && !eLocal ) { // remote -> remote
+          IGridElement tParent = findLastRemoteElement( target );
+          IGridElement eParent = findLastRemoteElement( element );
+          if ( tParent != eParent ) { // different connections
+            result = DND.DROP_COPY;
+          } // else result = default
+        }
+        
+        else { // remote -> local || local -> remote
+          if ( !eLocal ) { // remote -> local
+            IGridElement eParent = findLastRemoteElement( element );
+            if ( eParent != element ) { // not a connection root
+              result = DND.DROP_COPY;
+            } // else result = default
+          } else { // local -> remote
+            result = DND.DROP_COPY;
+          }
+        }
+        
+      }
+      
+    }
+    
     return result;
+    
   }
   
   /**

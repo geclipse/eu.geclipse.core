@@ -26,6 +26,7 @@ import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileInfo;
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
@@ -534,12 +535,18 @@ public class GridElementTransferOperation
       
       try {
       
+        IGridConnection connection = ( IGridConnection ) element;
         URI uri = ( ( IGridConnection ) element ).getConnectionFileStore().toURI();
         IResource sResource = element.getResource();
         IContainer tFolder = ( IContainer ) target.getResource();
-        IFolder folder = tFolder.getFolder( new Path( sResource.getName() ) );      
         
-        folder.createLink( uri, IResource.NONE, new SubProgressMonitor( monitor, 5 ) );
+        if ( connection.isFolder() ) {
+          IFolder folder = tFolder.getFolder( new Path( sResource.getName() ) );      
+          folder.createLink( uri, IResource.NONE, new SubProgressMonitor( monitor, 5 ) );
+        } else {
+          IFile file = tFolder.getFile( new Path( sResource.getName() ) );
+          file.createLink( uri, IResource.NONE, new SubProgressMonitor( monitor, 5 ) );
+        }
         
         if ( this.move ) {
           sResource.delete( IResource.NONE, new SubProgressMonitor( monitor, 5 ) );
