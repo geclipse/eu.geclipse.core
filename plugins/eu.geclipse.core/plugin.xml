@@ -215,6 +215,10 @@
             id="eu.geclipse.core.problem.io.corruptedFile">
       </problem>
       <problem
+            description="File not found"
+            id="eu.geclipse.core.problem.io.fileNotFound">
+      </problem>
+      <problem
             description="A file or folder operation failed"
             id="eu.geclipse.core.problem.io.operationFailed">
       </problem>
@@ -475,10 +479,6 @@
       <problem
             description="Folder creation failed"
             id="eu.geclipse.core.problem.io.crateFolderFailed">
-      </problem>
-      <problem
-            description="File not found"
-            id="eu.geclipse.core.io.fileNotFound">
       </problem>
    </extension>
    <extension
