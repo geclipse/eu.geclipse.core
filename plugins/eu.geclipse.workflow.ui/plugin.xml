@@ -134,6 +134,22 @@
           </action>
       </objectContribution>                    
    </extension>
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            adaptable="false"
+            id="eu.geclipse.workflow.ui.CalculateJobDependencies"
+            objectClass="org.eclipse.gmf.runtime.diagram.ui.editparts.DiagramEditPart">
+         <action
+               class="eu.geclipse.workflow.ui.part.CalculateJobDependenciesAction"
+               definitionId="eu.geclipse.workflow.ui.calculateJobDependencies"
+               enablesFor="1"
+               id="eu.geclipse.workflow.ui.popup.calculateJobDependencies"
+               label="%calculate.job.dependencies"
+               menubarPath="additions">
+         </action>
+      </objectContribution>
+   </extension>
    
       <extension point="org.eclipse.gmf.runtime.common.ui.services.action.globalActionHandlerProviders">
       <?gmfgen generated="true"?>
@@ -569,6 +585,20 @@
 	     name="%open.jsdl.editor">
       </command>
    </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <category
+            description="%calculate.job.dependencies.desc"
+            id="eu.geclipse.workflow.ui"
+            name="%calculate.job.dependencies">
+      </category>
+      <command
+            categoryId="org.eclipse.ui.category.edit"
+            description="%calculate.job.dependencies.desc"
+            id="eu.geclipse.workflow.ui.calculateJobDependencies"
+            name="%calculate.job.dependencies">
+      </command>
+   </extension>
    
       <extension point="org.eclipse.ui.bindings">
       <?gmfgen generated="true"?>
@@ -616,5 +646,14 @@
             label="Workflows"
             name="Grid Workflow Folder">
       </folder>
+   </extension>
+   <extension
+         point="org.eclipse.ui.bindings">
+      <key
+            commandId="eu.geclipse.workflow.ui.calculateJobDependencies"
+            contextId="eu.geclipse.workflow.ui.diagramContext"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M1+D">
+      </key>
    </extension>
 </plugin>
