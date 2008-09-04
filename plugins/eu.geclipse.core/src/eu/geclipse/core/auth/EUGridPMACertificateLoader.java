@@ -55,6 +55,12 @@ public class EUGridPMACertificateLoader
   private static final String DEFAULT_LOCATION
     = "http://www.eugridpma.org/distribution/igtf/current/accredited/tgz"; //$NON-NLS-1$
   
+  private static final String TGZ_PREFIX
+    = ".tgz"; //$NON-NLS-1$
+  
+  private static final String TAR_GZ_PREFIX
+    = ".tar.gz"; //$NON-NLS-1$
+  
   public ICaCertificate getCertificate( final IPath path )
       throws ProblemException {
     try {
@@ -163,8 +169,8 @@ public class EUGridPMACertificateLoader
       StringBuffer buffer = new StringBuffer();
       while ( ( line = bReader.readLine() ) != null ) {
         if ( local
-            && ( line.toLowerCase().endsWith( ".tar.gz" ) //$NON-NLS-1$
-                || line.toLowerCase().endsWith( ".tgz" ) ) ) {
+            && ( line.toLowerCase().endsWith( TGZ_PREFIX )
+                || line.toLowerCase().endsWith( TAR_GZ_PREFIX ) ) ) {
           result.add( line );
         } else {
           buffer.append( line );
