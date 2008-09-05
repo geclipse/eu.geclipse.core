@@ -15,8 +15,6 @@
 
 package eu.geclipse.aws.s3.internal;
 
-import java.util.Properties;
-
 import org.eclipse.core.net.proxy.IProxyChangeEvent;
 import org.eclipse.core.net.proxy.IProxyChangeListener;
 import org.eclipse.core.net.proxy.IProxyData;
@@ -80,8 +78,8 @@ public class Activator extends Plugin implements IProxyChangeListener {
 
   /*
    * (non-Javadoc)
-   * 
-   * @see org.eclipse.core.runtime.Plugins#start(org.osgi.framework.BundleContext)
+   * @see
+   * org.eclipse.core.runtime.Plugins#start(org.osgi.framework.BundleContext)
    */
   @Override
   public void start( final BundleContext context ) throws Exception {
@@ -97,7 +95,6 @@ public class Activator extends Plugin implements IProxyChangeListener {
 
   /*
    * (non-Javadoc)
-   * 
    * @see org.eclipse.core.runtime.Plugin#stop(org.osgi.framework.BundleContext)
    */
   @Override
@@ -152,8 +149,8 @@ public class Activator extends Plugin implements IProxyChangeListener {
   }
 
   /**
-   * Return the {@link IProxyService} or <code>null</code> if the service is
-   * not available.
+   * Return the {@link IProxyService} or <code>null</code> if the service is not
+   * available.
    * 
    * @return the {@link IProxyService} or <code>null</code>
    */
@@ -161,11 +158,6 @@ public class Activator extends Plugin implements IProxyChangeListener {
     return ( IProxyService )this.tracker.getService();
   }
 
-  /*
-   * (non-Javadoc)
-   * 
-   * @see org.eclipse.core.net.proxy.IProxyChangeListener#proxyInfoChanged(org.eclipse.core.net.proxy.IProxyChangeEvent)
-   */
   public void proxyInfoChanged( final IProxyChangeEvent event ) {
     updateProxySettings();
   }
@@ -186,9 +178,8 @@ public class Activator extends Plugin implements IProxyChangeListener {
       jets3tProperties.setProperty( Activator.HTTP_PROXY_HOST_KEY, host );
       jets3tProperties.setProperty( Activator.HTTP_PROXY_PORT_KEY, port );
     } else {
-      Properties properties = jets3tProperties.getProperties();
-      properties.remove( Activator.HTTP_PROXY_HOST_KEY );
-      properties.remove( Activator.HTTP_PROXY_PORT_KEY );
+      jets3tProperties.clearProperty( Activator.HTTP_PROXY_HOST_KEY );
+      jets3tProperties.clearProperty( Activator.HTTP_PROXY_PORT_KEY );
     }
 
     S3ServiceRegistry.getRegistry().clear();
