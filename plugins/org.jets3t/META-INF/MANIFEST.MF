@@ -2,11 +2,15 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: org.jets3t
-Bundle-Version: 0.6.0.qualifier
+Bundle-Version: 0.6.1.qualifier
 Bundle-Localization: plugin
-Bundle-ClassPath: jets3t-0.6.0.jar
+Bundle-ClassPath: jets3t-0.6.1.jar,
+ .
 Bundle-Vendor: %Bundle-Vendor
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Require-Bundle: org.apache.commons.logging;bundle-version="1.1.1",
+ org.apache.commons.codec;bundle-version="1.3.0",
+ org.apache.commons.httpclient;bundle-version="3.1.0"
 Export-Package: org.apache.commons.httpclient.contrib.proxy,
  org.jets3t.service,
  org.jets3t.service.acl,
@@ -21,6 +25,3 @@ Export-Package: org.apache.commons.httpclient.contrib.proxy,
  org.jets3t.service.utils,
  org.jets3t.service.utils.gatekeeper,
  org.jets3t.service.utils.signedurl
-Require-Bundle: org.apache.commons.logging;bundle-version="1.1.1",
- org.apache.commons.codec;bundle-version="1.3.0",
- org.apache.commons.httpclient;bundle-version="3.1.0"
