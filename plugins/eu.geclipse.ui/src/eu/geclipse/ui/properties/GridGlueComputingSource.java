@@ -39,10 +39,6 @@ public class GridGlueComputingSource
     super( gridGlueComputing );
   }
   
-  public Object getEditableValue() {
-    return this;
-  }
-  
   @Override
   protected Class< ? extends AbstractPropertySource < ? > > getPropertySourceClass() {
     return GridGlueComputingSource.class;

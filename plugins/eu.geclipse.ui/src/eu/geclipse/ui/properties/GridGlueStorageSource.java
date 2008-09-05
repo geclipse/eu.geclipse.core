@@ -22,18 +22,21 @@ import java.util.List;
 import eu.geclipse.info.glue.GlueSEAccessProtocol;
 import eu.geclipse.info.model.GridGlueStorage;
 
+/**
+ * @author tnikos
+ *
+ */
 public class GridGlueStorageSource extends AbstractPropertySource<GridGlueStorage>
 {
   GridGlueStorage gridGlueStorage;
   
+  /**
+   * @param gridGlueStorage a valid GridGlueStorage object
+   */
   public GridGlueStorageSource(final GridGlueStorage gridGlueStorage)
   {
     super(gridGlueStorage);
     this.gridGlueStorage = gridGlueStorage;
-  }
-  
-  public Object getEditableValue() {
-    return this;
   }
   
   @Override

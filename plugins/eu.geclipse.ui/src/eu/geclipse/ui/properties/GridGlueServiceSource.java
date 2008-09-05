@@ -22,17 +22,20 @@ import java.util.List;
 import eu.geclipse.info.model.GridGlueService;
 
 
+/**
+ * @author tnikos
+ *
+ */
 public class GridGlueServiceSource extends AbstractPropertySource<GridGlueService> {
   
   static private List<IProperty<GridGlueService>> staticDescriptors;
   
+  /**
+   * @param gridGlueService a valid GridGlueService object
+   */
   public GridGlueServiceSource(final GridGlueService gridGlueService)
   {
     super(gridGlueService);
-  }
-  
-  public Object getEditableValue() {
-    return this;
   }
   
   @Override
@@ -107,7 +110,7 @@ public class GridGlueServiceSource extends AbstractPropertySource<GridGlueServic
       @Override
       public Object getValue( final GridGlueService gridGlueService )
       {
-        return gridGlueService.getGlueService().isSupported();
+        return Boolean.valueOf( gridGlueService.getGlueService().isSupported() );
       } 
     };
   }

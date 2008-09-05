@@ -11,7 +11,7 @@
  *
  * Contributor(s):
  *     PSNC - Mariusz Wojtysiak
- *     Nikolaos Tsioutsias
+ *     Nikolaos Tsioutsias - University of Cyprus
  *****************************************************************************/
 
 package eu.geclipse.ui.properties;
@@ -24,12 +24,16 @@ import eu.geclipse.core.model.IGridConnection;
 import eu.geclipse.core.model.IGridConnectionElement;
 import eu.geclipse.core.model.IGridJob;
 import eu.geclipse.core.model.IGridJobDescription;
+import eu.geclipse.core.model.IGridJobService;
 import eu.geclipse.core.model.IGridProject;
+import eu.geclipse.core.model.IGridStorage;
 import eu.geclipse.core.model.IPropertiesProvider;
 import eu.geclipse.core.model.IVirtualOrganization;
+import eu.geclipse.core.model.impl.AbstractGridInfoService;
 import eu.geclipse.info.model.GridApplication;
 import eu.geclipse.info.model.GridGlueComputing;
 import eu.geclipse.info.model.GridGlueService;
+import eu.geclipse.info.model.GridGlueServiceApplication;
 import eu.geclipse.info.model.GridGlueStorage;
 
 
@@ -91,6 +95,25 @@ public class PropertiesFactory implements IPropertiesFactory {
       sourcesList.add( new GridApplicationSource( ( GridApplication ) sourceObject ) );
     }
     
+    if ( sourceObject instanceof AbstractGridInfoService)
+    {
+      sourcesList.add( new AbstractGridInfoServiceSource( ( AbstractGridInfoService ) sourceObject ) );
+    }
+    
+    if (sourceObject instanceof IGridJobService)
+    {
+      sourcesList.add( new IGridJobServiceSource( ( IGridJobService ) sourceObject ) );
+    }
+    
+    if (sourceObject instanceof GridGlueServiceApplication)
+    {
+      sourcesList.add( new GridGlueServiceApplicationSource( ( GridGlueServiceApplication )sourceObject ) );
+    }
+    
+    if (sourceObject instanceof IGridStorage)
+    {
+      sourcesList.add( new IGridStorageSource( ( IGridStorage )sourceObject ) );
+    }
     return sourcesList;
   }
 }
