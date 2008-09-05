@@ -21,6 +21,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.resources.IFolder;
@@ -33,6 +34,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.SubMonitor;
+import org.w3c.dom.Document;
 
 import eu.geclipse.core.jobs.internal.Activator;
 import eu.geclipse.core.jobs.internal.ParametricJobID;
@@ -48,7 +50,10 @@ import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.jsdl.JSDLJobDescription;
-import eu.geclipse.jsdl.ParametricJsdlGenerator;
+import eu.geclipse.jsdl.parametric.IParametricJsdlGenerator;
+import eu.geclipse.jsdl.parametric.IParametricJsdlHandler;
+import eu.geclipse.jsdl.parametric.ParametricJsdlGeneratorFactory;
+import eu.geclipse.jsdl.parametric.ParametricJsdlSaver;
 
 
 public class ParametricJobService implements IGridJobService {
@@ -199,16 +204,16 @@ public class ParametricJobService implements IGridJobService {
     
     JSDLJobDescription jsdl = ( JSDLJobDescription )description;
     
-    Assert.isTrue( jsdl.isParametric() );
+    Assert.isTrue( jsdl.isParametric() );    
     
     IGridJob parametricGridJob = createParamJobStructure( jsdl, parent, jobName );
     
-    ParametricJsdlGenerator generator = ParametricJsdlGenerator.getInstance();
+    IParametricJsdlGenerator generator = ParametricJsdlGeneratorFactory.getGenerator();
     IFolder generationTargetfolder = ((IFolder)parametricGridJob.getResource()).getFolder( Messages.getString("ParametricJobService.generatedJsdlFolder") ); //$NON-NLS-1$
-    List<JSDLJobDescription> generatedJsdls = generator.generateJsdls( jsdl, generationTargetfolder );
-    
+    ParametricJsdlSaver saver = new ParametricJsdlSaver( jsdl, generationTargetfolder );
+    generator.generate( jsdl, saver, subMonitor.newChild( 1 ) );
+    List<JSDLJobDescription> generatedJsdls = saver.getGeneratedJsdl();    
     submitGeneratedJsdl( parametricGridJob, generatedJsdls, subMonitor.newChild( 1 ), jobName );
-
     cleanupSubmission( generationTargetfolder );
 
     return new ParametricJobID();
@@ -397,5 +402,69 @@ public class ParametricJobService implements IGridJobService {
   {
     // TODO mariusz Auto-generated method stub
     return null;
+  }
+  
+  // TODO mariusz remove it:
+  private void previewParamJsdl( final JSDLJobDescription parametricJsdl ) {
+    final TreeMap<String,String[]> paramValues = new TreeMap<String, String[]>();    
+    IParametricJsdlHandler handler = new IParametricJsdlHandler() {
+      int maxIterations;
+      int iteration = 0;
+      
+      public void generationFinished() throws ProblemException {
+        // TODO mariusz Auto-generated method stub
+      }
+
+      public void newJsdlGenerated( final Document generatedJsdl,
+                                    final List<Integer> iterationsStack,
+                                    final IProgressMonitor monitor )
+        throws ProblemException
+      {
+        iteration++;
+      }
+
+      public void paramSubstituted( final String paramName,
+                                    final String newValue,
+                                    final IProgressMonitor newParam )
+        throws ProblemException
+      {
+        String[] values = paramValues.get( paramName );
+        
+        if( values == null ) {
+          values = new String[maxIterations];
+          paramValues.put( paramName, values );
+        }
+
+        values[iteration] = newValue;
+      }
+
+      public void generationStarted( final int generatedJsdl )
+        throws ProblemException
+      {
+        maxIterations = generatedJsdl;
+        
+      }};
+
+      IParametricJsdlGenerator generator = ParametricJsdlGeneratorFactory.getGenerator();
+      generator.generate( parametricJsdl, handler, null );      
+      
+      System.out.println("--------------------------------------------");//TODO mariusz
+      
+      if( !paramValues.isEmpty() ) {
+        int iterations = paramValues.firstEntry().getValue().length;
+      for( int iteration = 0; iteration < iterations; iteration++  ) {       
+        for( String paramName : paramValues.keySet() ) {
+          String value = "";
+          String[] values = paramValues.get( paramName );
+          
+          if( iteration < values.length 
+              && values[ iteration ] != null ) {
+            value = values[ iteration ];
+          }
+          System.out.print( String.format( "%20s", value ) );//TODO mariusz
+        }
+        System.out.println( "\n" );//TODO mariusz
+      }
+      }
   }
 }

@@ -13,21 +13,16 @@
  *     Mariusz Wojtysiak - initial API and implementation
  *     
  *****************************************************************************/
-package eu.geclipse.jsdl;
+package eu.geclipse.jsdl.parametric.internal;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
 import javax.xml.XMLConstants;
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
@@ -37,161 +32,29 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
-import org.eclipse.core.resources.IContainer;
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.Assert;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.SubMonitor;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import eu.geclipse.core.model.GridModel;
-import eu.geclipse.core.model.IGridElement;
-import eu.geclipse.core.model.IGridPreferences;
 import eu.geclipse.core.reporting.ProblemException;
+import eu.geclipse.jsdl.JSDLJobDescription;
 import eu.geclipse.jsdl.internal.Activator;
-import eu.geclipse.jsdl.internal.ParametricAssignment;
+import eu.geclipse.jsdl.parametric.IParametricJsdlGenerator;
+import eu.geclipse.jsdl.parametric.IParametricJsdlHandler;
 
 
 /**
- * This class gets parametric jsdl and generate a bunch of non-parametric jsdl
+ * This class gets parametric JSDL and generate a bunch of non-parametric jsdl
  */
-public class ParametricJsdlGenerator {
-  private static ParametricJsdlGenerator generator;
+public class ParametricJsdlGenerator implements IParametricJsdlGenerator {
   private XPath xpathEngine;
   private XPathExpression xPathSweeps;
   private XPathExpression xPathAssignment;
   private XPathExpression xPathValues;
   private XPathExpression xPathParameters;
-  
-  private static class GenerationParams {
-    JSDLJobDescription parametricJsdl;
-    
-    /**
-     * Contains current values of iterations  during generation.
-     * List have to be used because sweeps can be nested
-     */
-    List<Integer> iterationsStack;  // contains current values of iteration numbers during generation
-    
-    // TODO mariusz probably baseJsdl member can be removed
-    Document baseJsdl;  // original jsdl without sweep nodes    
-    IFolder targetFolder;
-    List<JSDLJobDescription> generatedJsdlList;
-
-    GenerationParams( final JSDLJobDescription parametricJsdl, final Document baseJsdl, final IFolder targetFolder, final List<JSDLJobDescription> generatedJsdlList ) {
-      this.parametricJsdl = parametricJsdl;
-      this.baseJsdl = baseJsdl;
-      this.targetFolder = targetFolder;
-      this.generatedJsdlList = generatedJsdlList;
-      this.iterationsStack = new ArrayList<Integer>();
-    }
-  }
-  
-  /**
-   * @return add instantion of generation
-   */
-  public static ParametricJsdlGenerator getInstance() {
-    if( generator == null ) {
-      generator = new ParametricJsdlGenerator();
-    }
-    return generator;
-  }
-  
-  /**
-   * Generate individual jsdl using parametric job extension. Generated jsld have no sweep extension
-   * @param parametricJsdl
-   * @param targetFolder
-   * @return list of generated jsdl
-   */
-  public List<JSDLJobDescription> generateJsdls( final JSDLJobDescription parametricJsdl,
-                             final IFolder targetFolder )
-  {
-    List<JSDLJobDescription> generatedJsdlList = new ArrayList<JSDLJobDescription>();
-    
-    // TODO mariusz handle progress monitor
-    try {
-       
-      Document parametricXml = parametricJsdl.getXml();
-      Document baseJsdl = removeSweepNodes( parametricXml );
-      GenerationParams generationParams = new GenerationParams( parametricJsdl, baseJsdl,
-                                                                targetFolder, generatedJsdlList );
-      deleteTargetFolder( targetFolder );
-      createTargetFolder( targetFolder );
-      NodeList sweeps = findSweeps( parametricXml.getDocumentElement() );
-      processSweeps( sweeps, baseJsdl, generationParams );
-    } catch ( ProblemException exc ) {
-      // TODO mariusz 
-      Activator.logException( exc );
-    }
-    
-    return generatedJsdlList;
-  }
-  
-  private void deleteTargetFolder( final IFolder targetFolder ) {
-    if ( targetFolder.exists() ) {
-      // TODO mariusz add progress monitor
-      try {
-        targetFolder.delete( true, null );
-      } catch ( CoreException exception ) {
-        // TODO mariusz Auto-generated catch block
-        Activator.logException( exception );
-      }
-    }
-    
-  }
-
-  private void createTargetFolder( final IFolder targetFolder ) {
-    List<IFolder> parentList = new ArrayList<IFolder>();
-    IContainer container = targetFolder;
-        
-    while ( container instanceof IFolder ) {
-      parentList.add( (IFolder)container );
-      container = container.getParent();
-    }
-    
-    ListIterator<IFolder> iterator = parentList.listIterator( parentList.size() );
-    
-    while ( iterator.hasPrevious() ) {
-      IFolder folder = iterator.previous();
-      
-      if ( !folder.exists() ) {
-        try {
-          folder.create( true, true, null );
-        } catch ( CoreException exception ) {
-          // TODO mariusz Auto-generated catch block
-          Activator.logException( exception );
-        }
-      }      
-    }
-  }
-
-  /**
-   * @param parametricJsdl
-   * @return temporary folder, in which jsdl can be generated
-   */
-  public IFolder getDefaultTargetFolder( final JSDLJobDescription parametricJsdl ) {
-    IFolder targetFolder = null;
-    try {
-      IGridPreferences hiddenProject = GridModel.getPreferences();
-      IFolder temporaryFolder = hiddenProject.getTemporaryFolder();
-      String name = parametricJsdl.getName();
-      
-      targetFolder = temporaryFolder.getFolder( name );
-      
-    } catch ( ProblemException exception ) {
-      // TODO mariusz Auto-generated catch block
-      Activator.logException( exception );
-    } catch ( CoreException exception ) {
-      // TODO mariusz Auto-generated catch block
-      Activator.logException( exception );
-    }
-    
-    return targetFolder;    
-  }
 
   private NodeList findSweeps( final Node node ) throws ProblemException
   {
@@ -251,10 +114,10 @@ public class ParametricJsdlGenerator {
     }   
   }
 
-  private void processSweeps( final NodeList sweeps, final Document processedJsdl, final GenerationParams generationParams ) throws ProblemException {
+  private void processSweeps( final NodeList sweeps, final IGenerationContext generationContext, final List<Integer> iterationsStack, final SubMonitor monitor ) throws ProblemException {
     List<ParametricAssignment> assignmentList = new ArrayList<ParametricAssignment>();
-    
-    generationParams.iterationsStack.add( new Integer( 0 ) );
+
+    iterationsStack.add( new Integer( 0 ) );
     
     for( int index = 0; index < sweeps.getLength(); index++ ) {      
       Node sweepItem = sweeps.item( index );
@@ -269,24 +132,25 @@ public class ParametricJsdlGenerator {
         int maxIterations = countIterations( assignmentList );
         
         for( int iteration = 0; iteration < maxIterations; iteration++ ) {
+          IGenerationContext newContext = generationContext.clone();
           // we will modify copy of jsdl
-          Document currentJsdl = ( Document )processedJsdl.cloneNode( true );
-          subtituteParams( assignmentList, iteration, currentJsdl );
+//          Document currentJsdl = ( Document )processedJsdl.cloneNode( true );
+          subtituteParameters( assignmentList, iteration, newContext, monitor );          
           
           if( childSweeps.getLength() > 0 ) {
-            processSweeps( childSweeps, currentJsdl, generationParams );
+            processSweeps( childSweeps, newContext, iterationsStack, monitor );
           } else {
-            saveJsdl( currentJsdl, generationParams );
+            newContext.storeGeneratedJsdl( iterationsStack, monitor );
           }
           
-          increaseCurrentIteration( generationParams.iterationsStack );
+          increaseCurrentIteration( iterationsStack );
         }
         
         
       } // TODO mariusz throw exc: expected sweep with children
     }
     
-    generationParams.iterationsStack.remove( generationParams.iterationsStack.size() - 1 );
+    iterationsStack.remove( iterationsStack.size() - 1 );
   }
 
   private void increaseCurrentIteration( final List<Integer> iterationsStack ) {
@@ -295,68 +159,12 @@ public class ParametricJsdlGenerator {
     iterationsStack.set( lastIndex, Integer.valueOf( iteration.intValue() + 1 ) );    
   }
 
-  private void saveJsdl( final Document currentJsdl,
-                         final GenerationParams generationParams )
-  {
-    try {
-      String filename = getJsdlFileName( generationParams );
-      
-      IFile file = generationParams.targetFolder.getFile( filename );
-      
-      DOMSource source = new DOMSource( currentJsdl );
-
-      ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-      Transformer transformer = TransformerFactory.newInstance().newTransformer();
-      transformer.transform( source, new StreamResult( outputStream ) );      
-      outputStream.close();
-
-      file.create( new ByteArrayInputStream( outputStream.toByteArray() ),
-                   IResource.REPLACE,
-                   null );
-      
-      IGridElement gridElement = GridModel.getRoot().findElement( file );
-      
-      Assert.isNotNull( gridElement );
-      
-      if ( gridElement != null ) {      
-        generationParams.generatedJsdlList.add( (JSDLJobDescription)gridElement );
-      }
-    } catch ( TransformerException exception ) {
-      // TODO mariusz Auto-generated catch block
-      Activator.logException( exception );
-    }
-    catch ( FileNotFoundException exception ) {
-      // TODO mariusz Auto-generated catch block
-      Activator.logException( exception );
-    } catch ( IOException exception ) {
-      // TODO mariusz Auto-generated catch block
-      Activator.logException( exception );
-    } catch ( CoreException exception ) {
-      // TODO mariusz Auto-generated catch block
-      Activator.logException( exception );
-    }
-  }
-
-  private String getJsdlFileName( final GenerationParams generationParams ) {
-    Path jsdlName = new Path( generationParams.parametricJsdl.getName() );
-    StringBuilder builder = new StringBuilder( jsdlName.removeFileExtension().toString() );
-    
-    for( Integer iteration : generationParams.iterationsStack ) {
-      builder.append( String.format( "[%03d]", iteration ) ); //$NON-NLS-1$
-    }
-    
-    builder.append( ".jsdl" ); //$NON-NLS-1$
-    
-    return builder.toString();
-  }
-
-  private void subtituteParams( final List<ParametricAssignment> assignmentList,
-                                final int iteration,
-                                final Document currentJsdl )
-  {
+  private void subtituteParameters( final List<ParametricAssignment> assignmentList,
+                                    final int iteration,
+                                    final IGenerationContext generationContext, final SubMonitor monitor ) throws ProblemException  {
     for( ParametricAssignment assignment : assignmentList ) {
       if( iteration < assignment.getValuesCount() ) {
-        assignment.substituteParams( currentJsdl, iteration );
+        assignment.substituteParameters( iteration, generationContext, monitor );
       }      
     }
   }
@@ -457,6 +265,38 @@ public class ParametricJsdlGenerator {
       public Iterator getPrefixes( final String namespaceURI ) {
         throw new UnsupportedOperationException();
       }};
+  }
+
+  public void generate( final JSDLJobDescription parametricJsdl,
+                        final IParametricJsdlHandler handler, final IProgressMonitor monitor )
+  {
+    // TODO mariusz handle progress monitor
+    SubMonitor subMonitor = SubMonitor.convert( monitor );
+    
+    try {
+      
+      Document parametricXml = parametricJsdl.getXml();
+      Document baseJsdl = removeSweepNodes( parametricXml );
+      IGenerationContext generationContext = new GenerationContext( baseJsdl, handler );
+
+      NodeList sweeps = findSweeps( parametricXml.getDocumentElement() );
+      int generatedJsdl = countGeneratedJsdl( sweeps, subMonitor );
+      
+      handler.generationStarted( generatedJsdl );
+      processSweeps( sweeps, generationContext, new ArrayList<Integer>(), subMonitor );
+      handler.generationFinished();
+    } catch ( ProblemException exc ) {
+      // TODO mariusz 
+      Activator.logException( exc );
+    }    
+  }
+  
+  private int countGeneratedJsdl(final NodeList sweeps, final SubMonitor monitor) throws ProblemException {
+    // TODO mariusz update monitor
+    CounterGenerationContext context = new CounterGenerationContext();
+    
+    processSweeps( sweeps, context, new ArrayList<Integer>(), monitor );
+    return context.getIterations();
   }
 
 

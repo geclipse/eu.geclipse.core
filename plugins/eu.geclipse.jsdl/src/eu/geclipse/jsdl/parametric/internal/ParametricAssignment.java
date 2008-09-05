@@ -13,23 +13,21 @@
  *     Mariusz Wojtysiak - initial API and implementation
  *     
  *****************************************************************************/
-package eu.geclipse.jsdl.internal;
+package eu.geclipse.jsdl.parametric.internal;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 
-import org.w3c.dom.Document;
+import org.eclipse.core.runtime.SubMonitor;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-/**
- *
- */
+import eu.geclipse.core.reporting.ProblemException;
+
 public class ParametricAssignment {
 
   private NodeList parameters;
@@ -75,37 +73,20 @@ public class ParametricAssignment {
 
   /**
    * @param currentJsdl jsdl in which parameter value should be subtituted
-   * @param iteration which value should be subtituted
+   * @param iteration by which value should be subtituted
+   * @param generationContext 
+   * @throws ProblemException 
    */
-  public void substituteParams( final Document currentJsdl, final int iteration )
+  public void substituteParameters( final int iteration, final IGenerationContext generationContext, final SubMonitor monitor ) throws ProblemException
   {
-    try {
       for( int index = 0; index < this.parameters.getLength(); index++ ) {
-        XPathExpression pathExpression = this.xPathExpressions.get( index );
-        NodeList nodeList = ( NodeList )pathExpression.evaluate( currentJsdl,
-                                                                 XPathConstants.NODESET );
+        // TODO mariusz check if value is a Text node
         
-        substituteNodesValues( nodeList, iteration );
+        XPathExpression pathExpression = this.xPathExpressions.get( index );
+        String paramName = this.parameters.item( index ).getTextContent();
+        String stringValue = this.values.item( iteration ).getTextContent();
+        
+        generationContext.setValue( paramName, pathExpression, stringValue, monitor );
       }
-    } catch( XPathExpressionException exception ) {
-      // TODO mariusz Auto-generated catch block
-      exception.printStackTrace();
-    }
-  }
-
-  private void substituteNodesValues( final NodeList nodeList, final int iteration ) {
-    Node node = this.values.item( iteration );
-    
-    // TODO mariusz check if node "value" is text
-    
-    String stringValue = node.getTextContent();
-    
-    for( int index = 0; index < nodeList.getLength(); index++ ) {
-      Node item = nodeList.item( index );
-      
-      // TODO mariusz check if substituted node is text node
-      item.setTextContent( stringValue );
-    }
-    
   }
 }
