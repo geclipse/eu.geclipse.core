@@ -28,7 +28,10 @@ import eu.geclipse.jsdl.model.base.DataStagingType;
 import eu.geclipse.jsdl.model.base.JobDefinitionType;
 import eu.geclipse.jsdl.model.base.JobDescriptionType;
 import eu.geclipse.jsdl.model.base.JobIdentificationType;
+import eu.geclipse.jsdl.model.functions.ValuesType;
 import eu.geclipse.jsdl.model.posix.POSIXApplicationType;
+import eu.geclipse.jsdl.model.sweep.AssignmentType;
+import eu.geclipse.jsdl.model.sweep.SweepType;
 
 public class ParametricJobAdapter extends JsdlAdaptersFactory {
 
@@ -218,4 +221,51 @@ public class ParametricJobAdapter extends JsdlAdaptersFactory {
     }
     return result;
   }
+  
+  public List<String> getValuesForParameter( final String paramName, final List<SweepType> sweepList) {
+    List<String> result = new ArrayList<String>();
+    SweepType sweep = findSweepElement( paramName, sweepList );
+    if( sweep != null ) {
+      AssignmentType assignment = null;
+      for( int j = 0; j < sweep.getAssignment().size(); j++ ) {
+        if( ( ( AssignmentType )sweep.getAssignment().get( j ) ).getParameter()
+          .contains( paramName ) )
+        {
+          assignment = ( AssignmentType )sweep.getAssignment().get( j );
+          break;
+        }
+      }
+      if( assignment != null ) {
+        ValuesType values = ( ValuesType )assignment.getFunction();
+        if( values != null ) {
+          for( int i = 0; i < values.getValue().size(); i++ ) {
+            result.add( ( String )values.getValue().get( i ) );
+          }
+        }
+      }
+    }
+    return result;
+  }
+  
+  public SweepType findSweepElement( final String name, final List<SweepType> sweepList ) {
+    SweepType refSweep = null;
+    for( SweepType sweep : sweepList ) {
+      EList list = sweep.getAssignment();
+      for( int i = 0; i < list.size(); i++ ) {
+        Object el = list.get( i );
+        if( el instanceof AssignmentType ) {
+          AssignmentType assignment = ( AssignmentType )el;
+          EList paramList = assignment.getParameter();
+          for( int j = 0; j < paramList.size(); j++ ) {
+            String name1 = ( String )paramList.get( j );
+            if( name1.equals( name ) ) {
+              refSweep = sweep;
+            }
+          }
+        }
+      }
+    }
+    return refSweep;
+  }
+  
 }

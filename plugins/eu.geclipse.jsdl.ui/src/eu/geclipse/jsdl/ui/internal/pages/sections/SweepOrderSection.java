@@ -36,23 +36,15 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.viewers.CellEditor;
-import org.eclipse.jface.viewers.ColumnViewerEditor;
-import org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy;
-import org.eclipse.jface.viewers.DialogCellEditor;
-import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.jface.viewers.TableViewerEditor;
-import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -60,12 +52,9 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
@@ -75,14 +64,12 @@ import eu.geclipse.jsdl.model.functions.FunctionsFactory;
 import eu.geclipse.jsdl.model.functions.FunctionsPackage;
 import eu.geclipse.jsdl.model.functions.ValuesType;
 import eu.geclipse.jsdl.model.functions.impl.FunctionsPackageImpl;
-import eu.geclipse.jsdl.model.functions.impl.ValuesTypeImpl;
 import eu.geclipse.jsdl.model.sweep.AssignmentType;
 import eu.geclipse.jsdl.model.sweep.SweepFactory;
 import eu.geclipse.jsdl.model.sweep.SweepPackage;
 import eu.geclipse.jsdl.model.sweep.SweepType;
 import eu.geclipse.jsdl.model.sweep.impl.SweepPackageImpl;
 import eu.geclipse.jsdl.ui.adapters.jsdl.ParametricJobAdapter;
-import eu.geclipse.jsdl.ui.internal.SweepRule;
 import eu.geclipse.jsdl.ui.internal.pages.FormSectionFactory;
 import eu.geclipse.jsdl.ui.providers.parameters.SweepOrderCProvider;
 import eu.geclipse.jsdl.ui.providers.parameters.SweepOrderLProvider;
@@ -94,13 +81,12 @@ public class SweepOrderSection extends JsdlFormPageSection {
   TreeViewer viewer;
   Combo sweepCombo;
   Text textArea;
-  private JobDescriptionType jobDescriptionType;
+  ParametricJobAdapter adapter;
+  ArrayList<SweepType> inerSweepList;
   private JobDefinitionType jobDefinitionType;
   private List<SweepType> sweepType = new ArrayList<SweepType>();
   private MenuManager manager;
   private Shell shell;
-  private ParametricJobAdapter adapter;
-  private ArrayList<SweepType> inerSweepList;
   private Button newButton;
   private Button independentButton;
   private Button sameLevelButton;
@@ -123,10 +109,8 @@ public class SweepOrderSection extends JsdlFormPageSection {
       TreeIterator<EObject> iterator = this.jobDefinitionType.eAllContents();
       while( iterator.hasNext() ) {
         EObject testType = iterator.next();
-        if( testType instanceof JobDescriptionType ) {
-          this.jobDescriptionType = ( JobDescriptionType )testType;
-        } else if( testType instanceof SweepType
-                   && !( testType.eContainer() instanceof SweepType ) )
+        if( testType instanceof SweepType
+            && !( testType.eContainer() instanceof SweepType ) )
         {
           SweepType type = ( ( SweepType )testType );
           type.eAdapters().add( this );
@@ -213,7 +197,8 @@ public class SweepOrderSection extends JsdlFormPageSection {
             }
             if( found ) {
               SweepOrderSection.this.sweepCombo.select( i );
-              setValuesField( getValuesForParameter( SweepOrderSection.this.sweepCombo.getItem( i ) ) );
+              setValuesField( SweepOrderSection.this.adapter.getValuesForParameter( SweepOrderSection.this.sweepCombo.getItem( i ),
+                                                                                    SweepOrderSection.this.inerSweepList ) );
             }
           }
         }
@@ -255,7 +240,8 @@ public class SweepOrderSection extends JsdlFormPageSection {
 
       @Override
       public void widgetSelected( final SelectionEvent e ) {
-        setValuesField( getValuesForParameter( SweepOrderSection.this.sweepCombo.getText() ) );
+        setValuesField( SweepOrderSection.this.adapter.getValuesForParameter( SweepOrderSection.this.sweepCombo.getText(),
+                                                                              SweepOrderSection.this.inerSweepList ) );
       }
     } );
     toolkit.createLabel( client,
@@ -279,7 +265,8 @@ public class SweepOrderSection extends JsdlFormPageSection {
         {
           val.add( value );
         }
-        SweepType sweep = findSweepElement( SweepOrderSection.this.sweepCombo.getText() );
+        SweepType sweep = SweepOrderSection.this.adapter.findSweepElement( SweepOrderSection.this.sweepCombo.getText(),
+                                                                           SweepOrderSection.this.inerSweepList );
         AssignmentType assignment = null;
         for( int j = 0; j < sweep.getAssignment().size(); j++ ) {
           if( ( ( AssignmentType )sweep.getAssignment().get( j ) ).getParameter()
@@ -386,31 +373,6 @@ public class SweepOrderSection extends JsdlFormPageSection {
     }
   }
 
-  List<String> getValuesForParameter( final String paramName ) {
-    List<String> result = new ArrayList<String>();
-    SweepType sweep = findSweepElement( paramName );
-    if( sweep != null ) {
-      AssignmentType assignment = null;
-      for( int j = 0; j < sweep.getAssignment().size(); j++ ) {
-        if( ( ( AssignmentType )sweep.getAssignment().get( j ) ).getParameter()
-          .contains( paramName ) )
-        {
-          assignment = ( AssignmentType )sweep.getAssignment().get( j );
-          break;
-        }
-      }
-      if( assignment != null ) {
-        ValuesType values = ( ValuesType )assignment.getFunction();
-        if( values != null ) {
-          for( int i = 0; i < values.getValue().size(); i++ ) {
-            result.add( ( String )values.getValue().get( i ) );
-          }
-        }
-      }
-    }
-    return result;
-  }
-
   Action createDeleteAction() {
     Action action = new Action() {
 
@@ -479,11 +441,10 @@ public class SweepOrderSection extends JsdlFormPageSection {
                                                         getNameForSweep( type ),
                                                         ParametersDialog.EDIT_ELEMENT );
         // dialog.setTitle( "Add inner sweep" );
-        if( dialog.open() == Dialog.OK ) {
+        if( dialog.open() == Window.OK ) {
           performAddChangesForEachChange( dialog.getElementReturn(),
                                           dialog.getRefElementReturn(),
-                                          dialog.getValuesReturn(),
-                                          null );
+                                          dialog.getValuesReturn() );
         }
       }
     }
@@ -491,10 +452,10 @@ public class SweepOrderSection extends JsdlFormPageSection {
 
   private void performAddChangesForEachChange( final String element,
                                                final String refElement,
-                                               final List<String> values,
-                                               final Object object )
+                                               final List<String> values )
   {
-    SweepType refSweep = findSweepElement( refElement );
+    SweepType refSweep = this.adapter.findSweepElement( refElement,
+                                                        this.inerSweepList );
     SweepType newSweep = createNewSweepType( element );
     if( refSweep != null ) {
       AssignmentType assignment = ( AssignmentType )newSweep.getAssignment()
@@ -511,8 +472,6 @@ public class SweepOrderSection extends JsdlFormPageSection {
   void setFunctionValues( final AssignmentType assignment,
                           final List<String> values )
   {
-    // ( ( ValuesType )assignment.getFunctionGroup().getValue( 0 ) ).getValue();
-    // ValuesType valType = ((ValuesType)assignment.getFunction());
     FunctionsPackage pak = FunctionsPackageImpl.eINSTANCE;
     FunctionsFactory factory = pak.getFunctionsFactory();
     ValuesType valuesType = factory.createValuesType();
@@ -584,8 +543,7 @@ public class SweepOrderSection extends JsdlFormPageSection {
         if( dialog.open() == Dialog.OK ) {
           performAddChangesWith( dialog.getElementReturn(),
                                  dialog.getRefElementReturn(),
-                                 dialog.getValuesReturn(),
-                                 null );
+                                 dialog.getValuesReturn() );
         }
       }
     }
@@ -594,10 +552,10 @@ public class SweepOrderSection extends JsdlFormPageSection {
   // sweep on the same level
   private void performAddChangesWith( final String sweepElement,
                                       final String refElement,
-                                      final List<String> values,
-                                      final Object object )
+                                      final List<String> values )
   {
-    SweepType refSweep = findSweepElement( refElement );
+    SweepType refSweep = this.adapter.findSweepElement( refElement,
+                                                        this.inerSweepList );
     AssignmentType newSweep = createNewAssignmentType( sweepElement );
     if( refSweep != null ) {
       setFunctionValues( newSweep, values );
@@ -646,7 +604,6 @@ public class SweepOrderSection extends JsdlFormPageSection {
     return mManager;
   }
 
-  // usuwać po parameterach assignmentu a nie sweepy!!!
   protected void removeSelected() {
     ISelection sel = this.viewer.getSelection();
     if( sel instanceof StructuredSelection ) {
@@ -672,7 +629,7 @@ public class SweepOrderSection extends JsdlFormPageSection {
         }
         SweepDeleteDialog dialog = new SweepDeleteDialog( this.shell,
                                                           userDecision );
-        if( dialog.open() == Dialog.OK ) {
+        if( dialog.open() == Window.OK ) {
           // removing
           userDecision = dialog.getElementsToRemove();
         } else {
@@ -691,22 +648,6 @@ public class SweepOrderSection extends JsdlFormPageSection {
         this.viewer.refresh();
         contentChanged();
       }
-      // old
-      // for( Object obj : sSel.toList() ) {
-      // if( obj instanceof SweepType ) {
-      // SweepType type = ( SweepType )obj;
-      // if( type.eContainer() instanceof SweepType ) {
-      // EcoreUtil.remove( type );
-      // } else if( type.eContainer() instanceof JobDefinitionType ) {
-      // EcoreUtil.remove( type );
-      // setInput( this.jobDefinitionType );
-      // }
-      // this.viewer.remove( obj );
-      // this.viewer.refresh();
-      // contentChanged();
-      // }
-      // }
-      // old
     }
   }
 
@@ -745,11 +686,10 @@ public class SweepOrderSection extends JsdlFormPageSection {
                                                         getNameForSweep( type ),
                                                         ParametersDialog.EDIT_ELEMENT );
         // dialog.setTitle( "Add independent sweep" );
-        if( dialog.open() == Dialog.OK ) {
+        if( dialog.open() == Window.OK ) {
           performAddIndependent( dialog.getElementReturn(),
                                  dialog.getRefElementReturn(),
-                                 dialog.getValuesReturn(),
-                                 null );
+                                 dialog.getValuesReturn() );
         }
       }
     }
@@ -767,30 +707,8 @@ public class SweepOrderSection extends JsdlFormPageSection {
     if( dialog.open() == Dialog.OK ) {
       performAddIndependent( dialog.getElementReturn(),
                              dialog.getRefElementReturn(),
-                             dialog.getValuesReturn(),
-                             null );
+                             dialog.getValuesReturn() );
     }
-  }
-
-  SweepType findSweepElement( final String name ) {
-    SweepType refSweep = null;
-    for( SweepType sweep : this.inerSweepList ) {
-      EList list = sweep.getAssignment();
-      for( int i = 0; i < list.size(); i++ ) {
-        Object el = list.get( i );
-        if( el instanceof AssignmentType ) {
-          AssignmentType assignment = ( AssignmentType )el;
-          EList paramList = assignment.getParameter();
-          for( int j = 0; j < paramList.size(); j++ ) {
-            String name1 = ( String )paramList.get( j );
-            if( name1.equals( name ) ) {
-              refSweep = sweep;
-            }
-          }
-        }
-      }
-    }
-    return refSweep;
   }
 
   private SweepType createNewSweepType( final String parameter ) {
@@ -815,8 +733,7 @@ public class SweepOrderSection extends JsdlFormPageSection {
 
   protected void performAddIndependent( final String sweepElement,
                                         final String refElement,
-                                        final List<String> values,
-                                        final SweepRule sweepRule )
+                                        final List<String> values )
   {
     if( refElement == null ) {
       // there are no sweep elements in JSDL
@@ -829,7 +746,8 @@ public class SweepOrderSection extends JsdlFormPageSection {
       this.jobDefinitionType.getAny().add( e );
     } else {
       // there already is sweep element in JSDL
-      SweepType refSweep = findSweepElement( refElement );
+      SweepType refSweep = this.adapter.findSweepElement( refElement,
+                                                          this.inerSweepList );
       SweepType newSweep = createNewSweepType( sweepElement );
       setFunctionValues( ( AssignmentType )newSweep.getAssignment().get( 0 ),
                          values );
