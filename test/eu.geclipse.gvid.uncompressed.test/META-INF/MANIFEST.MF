@@ -10,7 +10,7 @@ Require-Bundle: org.eclipse.ui,
  org.junit4,
  eu.geclipse.gvid.codec.uncompressed,
  eu.geclipse.gvid
-Eclipse-LazyStart: true
+Bundle-ActivationPolicy: lazy
 Bundle-Vendor: %Bundle-Vendor
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Export-Package: eu.geclipse.gvid.uncompressed
