@@ -453,7 +453,7 @@ public class ParametricJobService implements IGridJobService {
     System.out.println("--------------------------------------------");//TODO mariusz
 
     if ( ! paramValues.isEmpty() ) {
-      int iterations = paramValues.firstEntry().getValue().length;
+      int iterations = paramValues.get( paramValues.firstKey() ).length;
       for ( int iteration = 0; iteration < iterations; iteration++ ) {
         for ( String paramName : paramValues.keySet() ) {
           String value = "";
