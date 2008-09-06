@@ -406,11 +406,13 @@ public class ParametricJobService implements IGridJobService {
   
   // TODO mariusz remove it:
   private void previewParamJsdl( final JSDLJobDescription parametricJsdl ) {
-    final TreeMap<String,String[]> paramValues = new TreeMap<String, String[]>();    
+    
+    final TreeMap< String,String[] > paramValues = new TreeMap< String, String[] >();
+    
     IParametricJsdlHandler handler = new IParametricJsdlHandler() {
       int maxIterations;
       int iteration = 0;
-      
+
       public void generationFinished() throws ProblemException {
         // TODO mariusz Auto-generated method stub
       }
@@ -430,41 +432,41 @@ public class ParametricJobService implements IGridJobService {
       {
         String[] values = paramValues.get( paramName );
         
-        if( values == null ) {
-          values = new String[maxIterations];
+        if ( values == null ) {
+          values = new String[ maxIterations ];
           paramValues.put( paramName, values );
         }
 
-        values[iteration] = newValue;
+        values[ iteration ] = newValue;
       }
 
       public void generationStarted( final int generatedJsdl )
         throws ProblemException
       {
         maxIterations = generatedJsdl;
-        
-      }};
+      }
+    };
 
-      IParametricJsdlGenerator generator = ParametricJsdlGeneratorFactory.getGenerator();
-      generator.generate( parametricJsdl, handler, null );      
-      
-      System.out.println("--------------------------------------------");//TODO mariusz
-      
-      if( !paramValues.isEmpty() ) {
-        int iterations = paramValues.firstEntry().getValue().length;
-      for( int iteration = 0; iteration < iterations; iteration++  ) {       
-        for( String paramName : paramValues.keySet() ) {
+    IParametricJsdlGenerator generator = ParametricJsdlGeneratorFactory.getGenerator();
+    generator.generate( parametricJsdl, handler, null );      
+
+    System.out.println("--------------------------------------------");//TODO mariusz
+
+    if ( ! paramValues.isEmpty() ) {
+      int iterations = paramValues.firstEntry().getValue().length;
+      for ( int iteration = 0; iteration < iterations; iteration++ ) {
+        for ( String paramName : paramValues.keySet() ) {
           String value = "";
           String[] values = paramValues.get( paramName );
-          
-          if( iteration < values.length 
-              && values[ iteration ] != null ) {
+
+          if ( iteration < values.length 
+               && values[ iteration ] != null ) {
             value = values[ iteration ];
           }
-          System.out.print( String.format( "%20s", value ) );//TODO mariusz
+          System.out.print( String.format( "%20s", value ) ); //TODO mariusz
         }
-        System.out.println( "\n" );//TODO mariusz
+        System.out.println( "\n" ); //TODO mariusz
       }
-      }
+    }
   }
 }
