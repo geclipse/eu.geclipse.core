@@ -13,7 +13,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.filebuffers,
  org.eclipse.ui.editors,
  org.eclipse.jface.text
-Eclipse-LazyStart: true
+Bundle-ActivationPolicy: lazy
 Export-Package: eu.geclipse.traceview;
   uses:="eu.geclipse.eventgraph.views.internal,
    org.eclipse.ui.views.properties,

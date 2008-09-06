@@ -15,4 +15,4 @@ Require-Bundle: eu.geclipse.traceview,
  org.eclipse.swt,
  org.eclipse.jface,
  org.eclipse.ui
-Eclipse-LazyStart: true
+Bundle-ActivationPolicy: lazy

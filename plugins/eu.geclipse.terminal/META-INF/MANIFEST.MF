@@ -10,7 +10,7 @@ Require-Bundle: org.eclipse.core.runtime,
  eu.geclipse.core,
  eu.geclipse.ui,
  org.eclipse.jface.text
-Eclipse-LazyStart: true
+Bundle-ActivationPolicy: lazy
 Bundle-Activator: eu.geclipse.terminal.internal.Activator
 Export-Package: eu.geclipse.terminal,
  eu.geclipse.terminal.internal;x-friends:="eu.geclipse.terminal.test"

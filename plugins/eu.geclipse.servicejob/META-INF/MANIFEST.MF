@@ -14,7 +14,7 @@ Require-Bundle: org.eclipse.core.filesystem,
  eu.geclipse.info,
  eu.geclipse.core.jobs,
  eu.geclipse.jsdl
-Eclipse-LazyStart: true
+Bundle-ActivationPolicy: lazy
 Export-Package: eu.geclipse.servicejob.model,
  eu.geclipse.servicejob.model.impl,
  eu.geclipse.servicejob.model.tests.access,

@@ -10,7 +10,7 @@ Require-Bundle: eu.geclipse.traceview,
  org.eclipse.core.runtime,
  org.eclipse.ui.views,
  org.eclipse.core.resources
-Eclipse-LazyStart: true
+Bundle-ActivationPolicy: lazy
 Export-Package: eu.geclipse.traceview.nope,
  eu.geclipse.traceview.nope.tracereader
 Bundle-Vendor: %Bundle-Vendor

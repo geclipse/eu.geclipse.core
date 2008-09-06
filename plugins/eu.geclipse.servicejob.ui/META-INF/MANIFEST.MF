@@ -13,7 +13,7 @@ Require-Bundle: org.eclipse.ui,
  eu.geclipse.core.reporting,
  org.eclipse.core.filesystem,
  eu.geclipse.servicejob
-Eclipse-LazyStart: true
+Bundle-ActivationPolicy: lazy
 Export-Package: eu.geclipse.servicejob.ui.interfaces,
  eu.geclipse.servicejob.ui.wizard
 Bundle-Vendor: g-Eclipse Consortium
