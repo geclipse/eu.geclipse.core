@@ -10,7 +10,7 @@ Bundle-Localization: plugin
 Export-Package: eu.geclipse.workflow.ui.edit.parts, 
  eu.geclipse.workflow.ui.part,
  eu.geclipse.workflow.ui.providers
-Eclipse-LazyStart: true
+Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.filesystem,
