@@ -16,6 +16,6 @@ Require-Bundle: org.eclipse.core.runtime,
  org.apache.commons.httpclient;bundle-version="3.1.0",
  eu.geclipse.aws,
  org.eclipse.core.resources
-Eclipse-LazyStart: true
+Bundle-ActivationPolicy: lazy
 Export-Package: eu.geclipse.aws.s3
 

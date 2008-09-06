@@ -21,7 +21,7 @@ Require-Bundle: com.jcraft.jsch,
  eu.geclipse.batch.model,
  eu.geclipse.info,
  eu.geclipse.ui
-Eclipse-LazyStart: true
+Bundle-ActivationPolicy: lazy
 Export-Package: eu.geclipse.batch.ui.wizards,
  eu.geclipse.batch.ui.editors,
  eu.geclipse.batch.ui
