@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -58,7 +58,8 @@ public interface IAuthenticationTokenDescription {
    * test all available parameters of a token. Parameters that are <code>null</code>
    * within this token are not checked against the other token. All other
    * parameters have to be not zero for the other token and have to be the
-   * same for both tokens.
+   * same for both tokens. Note that this behaviour is not reflexive,
+   * <code>a.matches(b)</code> can be true while <code>b.matches(a)</code> is not.
    * 
    * @param otherToken The token to be checked against this token.
    * @return <code>true</code> if all non-null parameters of this token
