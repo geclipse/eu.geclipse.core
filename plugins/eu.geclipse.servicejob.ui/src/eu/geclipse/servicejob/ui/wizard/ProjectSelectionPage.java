@@ -80,6 +80,9 @@ public class ProjectSelectionPage extends WizardPage {
   {
     this( pageName );
     this.initialProject = selectedProject;
+    if (this.initialProject != null){
+      this.selectedProject = this.initialProject;
+    }
   }
 
   protected void updateButtons() {
