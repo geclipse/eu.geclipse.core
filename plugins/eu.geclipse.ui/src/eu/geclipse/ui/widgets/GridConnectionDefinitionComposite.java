@@ -933,7 +933,7 @@ public class GridConnectionDefinitionComposite extends Composite {
   }
 
   /**
-   * Helper method to test the speficied String if it is empty.
+   * Helper method to test if the specified String is empty.
    *
    * @param s The String to be tested.
    * @return True if the String is <code>null</code> or its length is 0.
