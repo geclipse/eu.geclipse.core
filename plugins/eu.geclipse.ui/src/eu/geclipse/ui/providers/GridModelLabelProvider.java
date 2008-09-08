@@ -23,6 +23,8 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.StyledString;
+import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider.IStyledLabelProvider;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.model.WorkbenchLabelProvider;
 
@@ -45,7 +47,7 @@ import eu.geclipse.ui.internal.Activator;
  * Label provider implementation to be used by any Grid model view.
  */
 public class GridModelLabelProvider
-    extends LabelProvider {
+    extends LabelProvider implements IStyledLabelProvider {
   
   public static final String INFO_MARKER = "icons/obj16/info_obj.gif"; //$NON-NLS-1$
 
@@ -313,4 +315,9 @@ public class GridModelLabelProvider
     return descriptor.createImage();
   }
 
+  public StyledString getStyledText( final Object element ) {
+    String text = getText( element );
+    if (text == null) text = ""; //$NON-NLS-1$
+    return new StyledString( text );
+  }
 }

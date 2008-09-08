@@ -15,11 +15,10 @@
 
 package eu.geclipse.ui.views;
 
-import org.eclipse.jface.viewers.DecoratingLabelProvider;
+import org.eclipse.jface.viewers.DecoratingStyledCellLabelProvider;
 import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.IContentProvider;
 import org.eclipse.jface.viewers.ILabelDecorator;
-import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
@@ -161,9 +160,9 @@ public class GridProjectView
    */
   @Override
   protected IBaseLabelProvider createLabelProvider() {
-    ILabelProvider provider = new GridModelLabelProvider();
+    GridModelLabelProvider provider = new GridModelLabelProvider();
     ILabelDecorator decorator = PlatformUI.getWorkbench().getDecoratorManager().getLabelDecorator();
-    DecoratingLabelProvider result = new DecoratingLabelProvider( provider, decorator );
+    DecoratingStyledCellLabelProvider result = new DecoratingStyledCellLabelProvider( provider, decorator, null );
     return result;
   }
 
