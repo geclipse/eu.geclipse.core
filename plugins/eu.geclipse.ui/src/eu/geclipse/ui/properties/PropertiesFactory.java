@@ -110,7 +110,8 @@ public class PropertiesFactory implements IPropertiesFactory {
       sourcesList.add( new GridGlueServiceApplicationSource( ( GridGlueServiceApplication )sourceObject ) );
     }
     
-    if (sourceObject instanceof IGridStorage)
+    if (sourceObject instanceof IGridStorage
+        && !(sourceObject instanceof GridGlueStorage))
     {
       sourcesList.add( new IGridStorageSource( ( IGridStorage )sourceObject ) );
     }
