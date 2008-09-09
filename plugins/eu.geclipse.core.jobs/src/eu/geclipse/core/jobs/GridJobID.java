@@ -90,7 +90,7 @@ public class GridJobID implements IGridJobID {
   }
 
   protected String getData() {
-    return "<test>XML</test>"; //$NON-NLS-1$
+    return ""; //$NON-NLS-1$
   }
   
   /**
