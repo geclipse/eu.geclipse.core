@@ -135,9 +135,7 @@ public class WorkflowJobAfterCreateCommand extends Command {
                if ( numTarget > 0 ) {
                  String targetNamePart = jsdlTarget.getName().split( "\\." )[ 0 ]; //$NON-NLS-1$
                  String newTargetName = targetNamePart
-                                        + "[" //$NON-NLS-1$
                                         + numTarget
-                                        + "]" //$NON-NLS-1$
                                         + ".jsdl"; //$NON-NLS-1$
                  // make new jsdlTarget
                  numDirs = WorkflowJobAfterCreateCommand.this.dirs.length;
@@ -204,12 +202,11 @@ public class WorkflowJobAfterCreateCommand extends Command {
     while ( jsdlTarget.exists() ) {
       String targetNamePart = jsdlTarget.getName().split( "\\." )[ 0 ]; //$NON-NLS-1$
       String newTargetName = ""; //$NON-NLS-1$
-      if ( targetNamePart.endsWith( "[" + numTarget + "]" ) ) { //$NON-NLS-1$ //$NON-NLS-2$
+      if ( targetNamePart.endsWith( numTarget + "" ) ) { //$NON-NLS-1$
         targetNamePart = targetNamePart.substring( 0,
-                                                   ( targetNamePart.length() - ( "[" //$NON-NLS-1$
-                                                                                 + numTarget + "]" ).length() ) ); //$NON-NLS-1$
+                                                   ( targetNamePart.length() - ( numTarget + "" ).length() ) ); //$NON-NLS-1$
       }
-      newTargetName = targetNamePart + "[" + ++numTarget + "]" + ".jsdl"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+      newTargetName = targetNamePart + ++numTarget + ".jsdl"; //$NON-NLS-1$ 
       // make new jsdlTarget
       int numDirs = this.dirs.length;
       java.net.URI targetUri = null;

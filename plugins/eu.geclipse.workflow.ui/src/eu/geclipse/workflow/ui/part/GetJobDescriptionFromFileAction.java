@@ -129,7 +129,7 @@ public class GetJobDescriptionFromFileAction implements IObjectActionDelegate {
 	    		int numTarget = findJsdlTarget( this.jsdlTarget );
 		        if ( numTarget > 0 ) {
 		          String targetNamePart = this.jsdlTarget.getName().split("\\.")[0]; //$NON-NLS-1$
-		          String newTargetName = targetNamePart + "[" + numTarget + "]" + ".jsdl";  //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
+		          String newTargetName = targetNamePart + numTarget + ".jsdl";  //$NON-NLS-1$
 		          // make new jsdlTarget
 		          targetUri = this.wfRootFileStore.getChild(this.dirs[3]).getChild(this.dirs[4]).getChild( newTargetName ).toURI();    	
 			      this.jsdlTarget = ResourcesPlugin.getWorkspace().getRoot().findFilesForLocationURI( targetUri )[0];        		          		          		       
@@ -152,10 +152,10 @@ public class GetJobDescriptionFromFileAction implements IObjectActionDelegate {
 	  while(jsdlTargetToFind.exists()) {
           String targetNamePart = jsdlTargetToFind.getName().split("\\.")[0]; //$NON-NLS-1$
           String newTargetName = ""; //$NON-NLS-1$
-          if (targetNamePart.endsWith("[" + numTarget + "]")) { //$NON-NLS-1$ //$NON-NLS-2$
-        	  targetNamePart = targetNamePart.substring(0, (targetNamePart.length() - ("[" + numTarget + "]").length()));        	    //$NON-NLS-1$//$NON-NLS-2$
+          if (targetNamePart.endsWith(numTarget + "")) { //$NON-NLS-1$
+        	  targetNamePart = targetNamePart.substring(0, (targetNamePart.length() - (numTarget + "").length()));        	    //$NON-NLS-1$
           }
-          newTargetName = targetNamePart + "[" + ++numTarget + "]" + ".jsdl";          //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+          newTargetName = targetNamePart + ++numTarget + ".jsdl";          //$NON-NLS-1$
 		  java.net.URI targetUri = this.wfRootFileStore.getChild(this.dirs[3]).getChild(this.dirs[4]).getChild( newTargetName ).toURI();    	
 		  jsdlTargetToFind = ResourcesPlugin.getWorkspace().getRoot().findFilesForLocationURI( targetUri )[0];		  
 	  }
