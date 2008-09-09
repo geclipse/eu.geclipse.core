@@ -45,6 +45,7 @@ public class GridJobDetailsFactory implements IJobDetailsFactory {
     details.add( createExecArgs( sectionManager ) );
     details.add( createInput( sectionManager ) );
     details.add( createOutput( sectionManager ) );
+    details.add( createDescription( sectionManager ) );
     return details;
   }
 
@@ -212,4 +213,22 @@ public class GridJobDetailsFactory implements IJobDetailsFactory {
       }
     };
   }
+  
+  private IJobDetail createDescription( final JobDetailSectionsManager sectionManager )
+  {
+    return new JobTextDetail( sectionManager.getSectionApplication(),
+                              Messages.GridJobDetailsFactory_description )
+    {
+
+      @Override
+      protected String getValue( final IGridJob gridJob ) {
+        String value = null;
+        if( gridJob.getJobDescription() != null ) {
+          value = gridJob.getJobDescription().getDescription();
+        }
+        return value;
+      }
+    };
+  }
+
 }

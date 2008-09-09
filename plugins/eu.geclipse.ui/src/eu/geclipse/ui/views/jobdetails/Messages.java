@@ -26,6 +26,7 @@ public class Messages extends NLS {
    * 
    */
   public static String GridJobDetailsFactory_arguments;
+  public static String GridJobDetailsFactory_description;
   /**
    * 
    */
