@@ -42,6 +42,7 @@ public class CounterGenerationContext implements IGenerationContext {
                         final String value,
                         final SubMonitor subMonitor ) throws ProblemException
   {
+    // empty implementation
   }
 
   /*
@@ -54,7 +55,7 @@ public class CounterGenerationContext implements IGenerationContext {
                                   final SubMonitor subMonitor )
     throws ProblemException
   {
-    iterations++;
+    this.iterations++;
   }
 
   @Override
@@ -62,7 +63,10 @@ public class CounterGenerationContext implements IGenerationContext {
     return this;
   }
   
+  /**
+   * @return how many jsdl will be generated for this parametric jsdl
+   */
   public int getIterations() {
-    return iterations;
+    return this.iterations;
   }
 }

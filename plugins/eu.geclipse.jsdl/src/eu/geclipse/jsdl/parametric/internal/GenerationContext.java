@@ -36,6 +36,10 @@ public class GenerationContext implements IGenerationContext {
   private IParametricJsdlHandler handler;  
   private Document currentJsdl;
 
+  /**
+   * @param baseJsdl JSDL in which we will change parameter values
+   * @param handler
+   */
   public GenerationContext( final Document baseJsdl, final IParametricJsdlHandler handler ) {        
     this.handler = handler;
     this.currentJsdl = baseJsdl;
@@ -43,7 +47,7 @@ public class GenerationContext implements IGenerationContext {
 
   @Override
   public IGenerationContext clone() {
-    return new GenerationContext( ( Document )currentJsdl.cloneNode( true ), handler );
+    return new GenerationContext( ( Document )this.currentJsdl.cloneNode( true ), this.handler );
   }
 
   /* (non-Javadoc)
@@ -51,7 +55,7 @@ public class GenerationContext implements IGenerationContext {
    */
   public void setValue( final String paramName, final XPathExpression paramXPath, final String value, final SubMonitor subMonitor ) throws ProblemException {
     try {
-      NodeList nodeList = ( NodeList )paramXPath.evaluate( currentJsdl,
+      NodeList nodeList = ( NodeList )paramXPath.evaluate( this.currentJsdl,
                                                                XPathConstants.NODESET );
       
       for( int index = 0; index < nodeList.getLength(); index++ ) {
@@ -62,7 +66,7 @@ public class GenerationContext implements IGenerationContext {
       }      
       
       // TODO mariusz check if paramName.toString() return correct xPath query
-      handler.paramSubstituted( paramName, value, subMonitor );
+      this.handler.paramSubstituted( paramName, value, subMonitor );
     } catch( XPathExpressionException exception ) {
       // TODO mariusz Auto-generated catch block
       exception.printStackTrace();
@@ -71,7 +75,7 @@ public class GenerationContext implements IGenerationContext {
   }
 
   public void storeGeneratedJsdl( final List<Integer> iterationsStack, final SubMonitor subMonitor ) throws ProblemException {
-    this.handler.newJsdlGenerated( currentJsdl, iterationsStack, subMonitor );
+    this.handler.newJsdlGenerated( this.currentJsdl, iterationsStack, subMonitor );
   }
   
 }

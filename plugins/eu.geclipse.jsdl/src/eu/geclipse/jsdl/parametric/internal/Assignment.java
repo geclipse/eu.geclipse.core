@@ -16,6 +16,7 @@
 package eu.geclipse.jsdl.parametric.internal;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.xml.xpath.XPath;
@@ -28,23 +29,23 @@ import org.w3c.dom.NodeList;
 
 import eu.geclipse.core.reporting.ProblemException;
 
-public class ParametricAssignment {
+class Assignment {
 
-  private NodeList parameters;
-  private NodeList values;
+  private NodeList parameters;  
   private List<XPathExpression> xPathExpressions;
+  private IFunction function;
 
   /**
    * @param xpathEngine 
-   * @param parameters
-   * @param values
+   * @param parameters which values will be substituted
+   * @param function which describes values for parameters over iterations
    */
-  public ParametricAssignment( final XPath xpathEngine,
+  public Assignment( final XPath xpathEngine,
                                final NodeList parameters,
-                               final NodeList values )
+                               final IFunction function )
   {
     this.parameters = parameters;
-    this.values = values;
+    this.function = function;
     initXpathExpressions( xpathEngine );
   }
 
@@ -65,28 +66,28 @@ public class ParametricAssignment {
   }
 
   /**
-   * @return number of iterations, which should be done in this assignment
-   */
-  public int getValuesCount() {
-    return this.values.getLength();
-  }
-
-  /**
    * @param currentJsdl jsdl in which parameter value should be subtituted
-   * @param iteration by which value should be subtituted
+   * @param functionIterator iterator, which return next value from function associated with with assignment
    * @param generationContext 
+   * @param monitor progress monitor
    * @throws ProblemException 
    */
-  public void substituteParameters( final int iteration, final IGenerationContext generationContext, final SubMonitor monitor ) throws ProblemException
+  public void setParamValue( final Iterator<String> functionIterator,
+                             final IGenerationContext generationContext,
+                             final SubMonitor monitor ) throws ProblemException
   {
-      for( int index = 0; index < this.parameters.getLength(); index++ ) {
-        // TODO mariusz check if value is a Text node
-        
-        XPathExpression pathExpression = this.xPathExpressions.get( index );
-        String paramName = this.parameters.item( index ).getTextContent();
-        String stringValue = this.values.item( iteration ).getTextContent();
-        
-        generationContext.setValue( paramName, pathExpression, stringValue, monitor );
-      }
+    String value = functionIterator.next();
+
+    for( int index = 0; index < this.parameters.getLength(); index++ ) {
+      // TODO mariusz check if value is a Text node
+      // TODO mariusz check progress monitor
+      XPathExpression pathExpression = this.xPathExpressions.get( index );
+      String paramName = this.parameters.item( index ).getTextContent();
+      generationContext.setValue( paramName, pathExpression, value, monitor );
+    }
+  }
+  
+  public IFunction getFunction() {
+    return this.function;
   }
 }

@@ -55,6 +55,7 @@ public class ParametricJsdlGenerator implements IParametricJsdlGenerator {
   private XPathExpression xPathAssignment;
   private XPathExpression xPathValues;
   private XPathExpression xPathParameters;
+  private XPathExpression xPathLoops;
 
   private NodeList findSweeps( final Node node ) throws ProblemException
   {
@@ -115,7 +116,7 @@ public class ParametricJsdlGenerator implements IParametricJsdlGenerator {
   }
 
   private void processSweeps( final NodeList sweeps, final IGenerationContext generationContext, final List<Integer> iterationsStack, final SubMonitor monitor ) throws ProblemException {
-    List<ParametricAssignment> assignmentList = new ArrayList<ParametricAssignment>();
+    List<Assignment> assignmentList = new ArrayList<Assignment>();
 
     iterationsStack.add( new Integer( 0 ) );
     
@@ -128,14 +129,13 @@ public class ParametricJsdlGenerator implements IParametricJsdlGenerator {
         processAssignments( findAssignments( currentSweep ), assignmentList );
         NodeList childSweeps = findSweeps( sweepItem );
         
-        // TODO mariusz Throw exception when maxIterations is 0 (not values defined)
-        int maxIterations = countIterations( assignmentList );
+        // TODO mariusz Throw exception when maxIterations is 0 (not values defined)        
+        List<Iterator<String>> iterators = getIterators( assignmentList );
         
-        for( int iteration = 0; iteration < maxIterations; iteration++ ) {
+        while( hasNext( iterators ) ) {
           IGenerationContext newContext = generationContext.clone();
           // we will modify copy of jsdl
-//          Document currentJsdl = ( Document )processedJsdl.cloneNode( true );
-          subtituteParameters( assignmentList, iteration, newContext, monitor );          
+          setParamsValue( assignmentList, iterators, newContext, monitor );   
           
           if( childSweeps.getLength() > 0 ) {
             processSweeps( childSweeps, newContext, iterationsStack, monitor );
@@ -153,35 +153,50 @@ public class ParametricJsdlGenerator implements IParametricJsdlGenerator {
     iterationsStack.remove( iterationsStack.size() - 1 );
   }
 
+  private boolean hasNext( final List<Iterator<String>> iterators ) {
+    boolean hasNext = false;
+    
+    for( Iterator<String> iterator : iterators ) {
+      if( iterator.hasNext() ) {
+        hasNext = true;
+        break;
+      }      
+    }
+
+    return hasNext;
+  }
+
+  private List<Iterator<String>> getIterators( final List<Assignment> assignmentList )
+  {
+    List<Iterator<String>> iterators = new ArrayList<Iterator<String>>( assignmentList.size() );
+    
+    for( Assignment assignment : assignmentList ) {
+      iterators.add( assignment.getFunction().iterator() );
+    }
+    
+    return iterators;    
+  }
+
   private void increaseCurrentIteration( final List<Integer> iterationsStack ) {
     int lastIndex = iterationsStack.size() - 1;
     Integer iteration = iterationsStack.get( lastIndex );
     iterationsStack.set( lastIndex, Integer.valueOf( iteration.intValue() + 1 ) );    
   }
 
-  private void subtituteParameters( final List<ParametricAssignment> assignmentList,
-                                    final int iteration,
+  private void setParamsValue( final List<Assignment> assignmentList,
+                                    final List<Iterator<String>> functionIterators,
                                     final IGenerationContext generationContext, final SubMonitor monitor ) throws ProblemException  {
-    for( ParametricAssignment assignment : assignmentList ) {
-      if( iteration < assignment.getValuesCount() ) {
-        assignment.substituteParameters( iteration, generationContext, monitor );
-      }      
+    Iterator<Iterator<String>> fIterator = functionIterators.iterator();
+    Iterator<Assignment> aIterator = assignmentList.iterator();
+    while( fIterator.hasNext() && aIterator.hasNext() ) {
+      Assignment assignment = aIterator.next();
+      Iterator<String> functionIterator = fIterator.next();
+      assignment.setParamValue( functionIterator, generationContext, monitor );
     }
-  }
-
-
-  private int countIterations( final List<ParametricAssignment> assignmentList ) {
-    int maxValuesCount = 0;
-    for( ParametricAssignment parametricAssignment : assignmentList ) {
-      if( maxValuesCount < parametricAssignment.getValuesCount() ) {
-        maxValuesCount = parametricAssignment.getValuesCount();
-      }
-    }
-    return maxValuesCount;
   }
 
   private void processAssignments( final NodeList assignmentsList,
-                                   final List<ParametricAssignment> assignmentList ) throws ProblemException
+                                   final List<Assignment> assignmentList ) throws ProblemException
   {
     for( int index = 0; index < assignmentsList.getLength(); index++ ) {
       Node item = assignmentsList.item( index );
@@ -189,13 +204,38 @@ public class ParametricJsdlGenerator implements IParametricJsdlGenerator {
       if( item instanceof Element ) {
         Element assignment = ( Element )item;
         
-        NodeList values = findValues( assignment );
         NodeList parameters = findParameters( assignment );
+        NodeList values = findValues( assignment );
+        NodeList loops = findLoops( assignment );
         
-        assignmentList.add( new ParametricAssignment( getXPathEngine(), parameters, values ) );
+        // TODO mariusz check: values and loops cannot be defined both
+        
+        IFunction function = null;
+        
+        if( values.getLength() > 0 ) {
+          function = new FunctionValues( values );
+        } else if( loops.getLength() > 0 ) {
+          function = new FunctionIntegerLoop( loops, getXPathEngine() );
+        }
+        
+        assignmentList.add( new Assignment( getXPathEngine(), parameters, function ) );
                 
       } // TODO mariusz throw exception: children expected
     }    
+  }
+
+  private NodeList findLoops( final Element assignment ) throws ProblemException {
+    try {
+      if( this.xPathLoops == null ) {
+          this.xPathLoops = getXPathEngine().compile( "./sweepfunc:Loop" ); //$NON-NLS-1$
+      }
+      
+      return (NodeList)this.xPathLoops.evaluate( assignment, XPathConstants.NODESET );      
+      
+    } catch( XPathExpressionException exception ) {
+      throw new ProblemException( "eu.geclipse.jsdl.problem.createXPathQueryFailed", exception, Activator.PLUGIN_ID ); //$NON-NLS-1$
+
+    }   
   }
 
   private Document removeSweepNodes( final Document parametricJsdlDocument ) {
