@@ -22,7 +22,8 @@ Require-Bundle: org.eclipse.compare,
  eu.geclipse.core.jobs,
  eu.geclipse.core.reporting,
  eu.geclipse.info,
- eu.geclipse.jsdl
+ eu.geclipse.jsdl,
+ eu.geclipse.workflow.model
 Bundle-ActivationPolicy: lazy
 Export-Package: eu.geclipse.ui,
  eu.geclipse.ui.adapters,

@@ -12,6 +12,7 @@
  * Contributor(s):
  *     PSNC - Mariusz Wojtysiak
  *     Nikolaos Tsioutsias - University of Cyprus
+ *     David Johnson - University of Reading, UK
  *****************************************************************************/
 
 package eu.geclipse.ui.properties;
@@ -35,6 +36,7 @@ import eu.geclipse.info.model.GridGlueComputing;
 import eu.geclipse.info.model.GridGlueService;
 import eu.geclipse.info.model.GridGlueServiceApplication;
 import eu.geclipse.info.model.GridGlueStorage;
+import eu.geclipse.workflow.IGridWorkflowDescription;
 
 
 public class PropertiesFactory implements IPropertiesFactory {
@@ -55,8 +57,12 @@ public class PropertiesFactory implements IPropertiesFactory {
       sourcesList.add( new URIPropertySource( ( URI ) sourceObject ) );
     }
     
-    if ( sourceObject instanceof IGridJobDescription ) {
+    if ( ( sourceObject instanceof IGridJobDescription ) && !( sourceObject instanceof IGridWorkflowDescription ) ) {
       sourcesList.add( new GridJobDescSource( ( IGridJobDescription ) sourceObject ) );
+    }
+    
+    if (sourceObject instanceof IGridWorkflowDescription) {
+      sourcesList.add( new GridWorkflowDescSource ( (IGridWorkflowDescription) sourceObject ) );
     }
     
     if ( sourceObject instanceof IGridProject ) {
