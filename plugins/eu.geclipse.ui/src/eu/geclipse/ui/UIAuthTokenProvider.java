@@ -73,6 +73,8 @@ public class UIAuthTokenProvider extends CheatSheetListener implements IAuthToke
      * The token that was found or created.
      */
     IAuthenticationToken token;
+
+    private CoreAuthTokenProvider cProvider;
     
     /**
      * Construct a new Runner used to find a token for the specified
@@ -80,27 +82,17 @@ public class UIAuthTokenProvider extends CheatSheetListener implements IAuthToke
      * 
      * @param request The {@link AuthTokenRequest} for
      * which to find an {@link IAuthenticationToken}.
+     * @param cProvider 
      */
-    public Runner( final AuthTokenRequest request ) {
+    public Runner( final AuthTokenRequest request, final CoreAuthTokenProvider cProvider ) {
       this.request = request;
+      this.cProvider = cProvider;
     }
     
     /* (non-Javadoc)
      * @see java.lang.Runnable#run()
      */
-    public void run() {
-      
-      Throwable t = null;
-      this.token = null;
-      CoreAuthTokenProvider cProvider = new CoreAuthTokenProvider();
-      
-      try {
-        this.token = cProvider.requestToken( this.request );
-      } catch ( Exception e ) {
-        t = e;
-      }
-      
-      if ( ( this.token == null ) && ( t == null ) ) {
+    public void run() {      
         
         // No token could be found, so create one
         
@@ -120,39 +112,9 @@ public class UIAuthTokenProvider extends CheatSheetListener implements IAuthToke
           IAuthenticationTokenDescription description = this.request.getDescription();
           String tokenWizardId = description.getWizardId();
           if ( showNewTokenWizard( tokenWizardId, false, description ) ) {
-            this.token = cProvider.requestToken( this.request );
+            this.token = this.cProvider.requestToken( this.request );
           }
-        }
-        
-      }
-      
-      if( this.token != null ) {
-        // Check if the token is both valid and active
-        try {
-          if( !this.token.isValid() ) {
-            validateToken( this.token );
-          }
-          if( !this.token.isActive() ) {
-            activateToken( this.token );
-          }
-        } catch( InvocationTargetException itExc ) {
-          t = itExc.getCause();
-          if( t == null ) {
-            t = itExc;
-          }
-        } catch( InterruptedException intExc ) {
-          t = intExc;
-        }
-      }
-      
-      if ( t != null ) {
-        ProblemDialog.openProblem( UIAuthTokenProvider.this.shell,
-                                   Messages.getString("UIAuthTokenProvider.token_activation_error_title"), //$NON-NLS-1$
-                                   Messages.getString("UIAuthTokenProvider.token_activation_error_message"), //$NON-NLS-1$
-                                   t );
-        this.token = null;
-      }
-      
+        }      
     }
     
   }
@@ -237,9 +199,49 @@ public class UIAuthTokenProvider extends CheatSheetListener implements IAuthToke
    *         or null if no such token could be found or created.
    */
   public IAuthenticationToken requestToken( final AuthTokenRequest request ) {
-    Runner runner = new Runner( request );
-    this.display.syncExec( runner );
-    return runner.token;
+    IAuthenticationToken token = null;
+    Throwable t = null;    
+    CoreAuthTokenProvider cProvider = new CoreAuthTokenProvider();
+    
+    try {
+      token = cProvider.requestToken( request );
+    } catch ( Exception e ) {
+      t = e;
+    }
+    
+    if ( ( token == null ) && ( t == null ) ) {
+      Runner runner = new Runner( request, cProvider );
+      runInUIThread( runner );
+      token = runner.token;
+    }
+    
+    if( token != null ) {
+      // Check if the token is both valid and active
+      try {
+        if( !token.isValid() ) {
+          validateToken( token );
+        }
+        if( !token.isActive() ) {
+          activateToken( token );
+        }
+      } catch( InvocationTargetException itExc ) {
+        t = itExc.getCause();
+        if( t == null ) {
+          t = itExc;
+        }
+      } catch( InterruptedException intExc ) {
+        t = intExc;
+      }
+    }
+    
+    if ( t != null ) {
+      ProblemDialog.openProblem( UIAuthTokenProvider.this.shell,
+                                 Messages.getString("UIAuthTokenProvider.token_activation_error_title"), //$NON-NLS-1$
+                                 Messages.getString("UIAuthTokenProvider.token_activation_error_message"), //$NON-NLS-1$
+                                 t );      
+    }
+    
+    return token;    
   }
   
   /**
@@ -249,6 +251,7 @@ public class UIAuthTokenProvider extends CheatSheetListener implements IAuthToke
    * the type of the he wants to create.
    * 
    * @param tokenWizardId The ID of the token type that should be created or null.
+   * @param forceWizardId 
    * @param description Token description passed to the token specific wizard pages in
    * order to allow initialisation for a predefined token type.
    * @return True if the token dialog was closed with status {@link Window#OK}.
@@ -307,19 +310,38 @@ public class UIAuthTokenProvider extends CheatSheetListener implements IAuthToke
   protected void validateToken( final IAuthenticationToken token )
     throws InvocationTargetException, InterruptedException
   {
-    ProgressMonitorDialog progMon = new ProgressMonitorDialog( this.shell );
-    progMon.run( false, false, new IRunnableWithProgress() {
+    final Exception[] exc = new Exception[1]; 
+    Runnable runnable = new Runnable() {
 
-      public void run( final IProgressMonitor monitor )
-        throws InvocationTargetException, InterruptedException
-      {
+      public void run() {
+        ProgressMonitorDialog progMon = new ProgressMonitorDialog( UIAuthTokenProvider.this.shell );
         try {
-          token.validate( monitor );
-        } catch( AuthenticationException authExc ) {
-          throw new InvocationTargetException( authExc );
-        }
+          progMon.run( false, false, new IRunnableWithProgress() {
+
+            public void run( final IProgressMonitor monitor )
+              throws InvocationTargetException, InterruptedException
+            {
+              try {
+                token.validate( monitor );
+              } catch( AuthenticationException authExc ) {
+                throw new InvocationTargetException( authExc );
+              }
+            }
+          } );
+        } catch( InvocationTargetException exception ) {
+          exc[0] = exception;
+        } catch( InterruptedException exception ) {
+          exc[0] = exception;
+        }        
+      }};
+      
+      runInUIThread( runnable );
+      
+      if( exc[0] instanceof InvocationTargetException ) {
+        throw (InvocationTargetException)exc[0];
+      } else if( exc[0] instanceof InterruptedException ) {
+        throw (InterruptedException)exc[0];
       }
-    } );
   }
 
   /**
@@ -335,19 +357,37 @@ public class UIAuthTokenProvider extends CheatSheetListener implements IAuthToke
   protected void activateToken( final IAuthenticationToken token )
     throws InvocationTargetException, InterruptedException
   {
-    ProgressMonitorDialog progMon = new ProgressMonitorDialog( this.shell );
-    progMon.run( false, false, new IRunnableWithProgress() {
+    final Exception[] exc = new Exception[1];
+    
+    Runnable uiRunnable = new Runnable() {
 
-      public void run( final IProgressMonitor monitor )
-        throws InvocationTargetException, InterruptedException
-      {
+      public void run() {
+        ProgressMonitorDialog progMon = new ProgressMonitorDialog( UIAuthTokenProvider.this.shell );
         try {
-          token.setActive( true, monitor );
-        } catch( AuthenticationException authExc ) {
-          throw new InvocationTargetException( authExc );
+          progMon.run( false, false, new IRunnableWithProgress() {
+
+            public void run( final IProgressMonitor monitor ) throws InvocationTargetException          
+            {
+              try {
+                token.setActive( true, monitor );
+              } catch( AuthenticationException authExc ) {
+                throw new InvocationTargetException( authExc );
+              }
+            }
+          } );
+        } catch( InvocationTargetException exception ) {
+          exc[0] = exception;
+        } catch( InterruptedException exception ) {
+          exc[0] = exception;
         }
-      }
-    } );
+      }};
+      
+    runInUIThread( uiRunnable );
+    if( exc[0] instanceof InvocationTargetException ) {
+      throw (InvocationTargetException)exc[0];
+    } else if( exc[0] instanceof InterruptedException ) {
+      throw (InterruptedException)exc[0];
+    }
   }
 
   /* (non-Javadoc)
@@ -359,5 +399,15 @@ public class UIAuthTokenProvider extends CheatSheetListener implements IAuthToke
     if ( cheatSheetManager.getData( "startingPageName" ) == null ) { //$NON-NLS-1$
       cheatSheetManager.setData( "startingPageName", "none" ); //$NON-NLS-1$ //$NON-NLS-2$
     }
+  }
+  
+  /**
+   * Method calling {@link Runnable#run()} in UI thread. In the future this
+   * method will have deadlock detection
+   * 
+   * @param runnable
+   */
+  private void runInUIThread( final Runnable runnable ) {
+    this.display.syncExec( runnable );
   }
 }

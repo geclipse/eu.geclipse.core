@@ -459,14 +459,19 @@ public class AuthTokenView
     manager.removeListener( this );
   }
   
-  public void contentChanged( final ISecurityManager manager ) {
-    AuthTokenView.this.tokenList.refresh();
-    AuthenticationTokenManager innerManager = AuthenticationTokenManager.getManager();
-    IAuthenticationToken innerDefaultToken = innerManager.getDefaultToken();
-    if ( innerDefaultToken != null ) {
-      AuthTokenView.this.tokenList.setCheckedElements( new Object[] { innerDefaultToken } );
-    }
-    updateActions();
+  public void contentChanged( final ISecurityManager manager ) { 
+    Runnable runnable = new Runnable() {
+      public void run() {
+        AuthTokenView.this.tokenList.refresh();
+        AuthenticationTokenManager innerManager = AuthenticationTokenManager.getManager();
+        IAuthenticationToken innerDefaultToken = innerManager.getDefaultToken();
+        if ( innerDefaultToken != null ) {
+          AuthTokenView.this.tokenList.setCheckedElements( new Object[] { innerDefaultToken } );
+        }
+        updateActions();        
+      }};
+      
+      getViewSite().getShell().getDisplay().syncExec( runnable );
   }
 
   /* (non-Javadoc)
