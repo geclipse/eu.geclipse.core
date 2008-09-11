@@ -22,8 +22,10 @@ import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 
+import eu.geclipse.jsdl.JSDLJobDescription;
 import eu.geclipse.jsdl.model.base.JobDefinitionType;
 import eu.geclipse.jsdl.ui.adapters.jsdl.ParametricJobAdapter;
+import eu.geclipse.jsdl.ui.internal.pages.sections.SweepIterationsSection;
 import eu.geclipse.jsdl.ui.internal.pages.sections.SweepOrderSection;
 import eu.geclipse.jsdl.ui.internal.pages.sections.SweepValuesSection;
 
@@ -35,9 +37,12 @@ public class NewParametricPage extends JsdlFormPage {
   private SweepOrderSection sweepOrderSection;
   private ParametricJobAdapter adapter;
   private SweepValuesSection sweepValuesSection;
+  private SweepIterationsSection sweepIterationsSection;
+  private JSDLJobDescription jsdlJobDescription;
 
   public NewParametricPage( final FormEditor editor ) {
     super( editor, PAGE_ID, Messages.getString( "ParametersPage_PageTitle" ) ); //$NON-NLS-1$
+    
   }
 
   @Override
@@ -59,14 +64,18 @@ public class NewParametricPage extends JsdlFormPage {
     this.sweepOrderSection = new SweepOrderSection( this.body,
                                                     toolkit,
                                                     this.adapter );
-    sweepOrderSection.setInput( jobDefinitionType );
-    sweepOrderSection.addListener( this );
+    this.sweepOrderSection.setInput( this.jobDefinitionType );
+    this.sweepOrderSection.addListener( this );
+    this.sweepIterationsSection = new SweepIterationsSection(this.body, toolkit, this.adapter);
+    this.sweepIterationsSection.setInput( this.jobDefinitionType, this.jsdlJobDescription );
+    this.sweepIterationsSection.addListener( this );
 //    this.sweepValuesSection = new SweepValuesSection( this.body, toolkit, adapter);
 //    this.sweepValuesSection.setInput(jobDefinitionType);
   }
 
   public void setPageContent( final JobDefinitionType jobDefinitionRoot,
-                              final boolean refreshStatus )
+                              final boolean refreshStatus,
+                              final JSDLJobDescription jsdlJobDescription)
   {
     this.adapter = new ParametricJobAdapter( jobDefinitionRoot );
     if( refreshStatus ) {
@@ -74,5 +83,6 @@ public class NewParametricPage extends JsdlFormPage {
       this.jobDefinitionType = jobDefinitionRoot;
     }
     this.jobDefinitionType = jobDefinitionRoot;
+    this.jsdlJobDescription = jsdlJobDescription;
   }
 }
