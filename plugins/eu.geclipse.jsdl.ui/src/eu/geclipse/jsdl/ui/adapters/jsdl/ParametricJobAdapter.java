@@ -33,6 +33,7 @@ import eu.geclipse.jsdl.model.base.DataStagingType;
 import eu.geclipse.jsdl.model.base.JobDefinitionType;
 import eu.geclipse.jsdl.model.base.JobDescriptionType;
 import eu.geclipse.jsdl.model.base.JobIdentificationType;
+import eu.geclipse.jsdl.model.base.ResourcesType;
 import eu.geclipse.jsdl.model.functions.LoopType;
 import eu.geclipse.jsdl.model.functions.ValuesType;
 import eu.geclipse.jsdl.model.posix.POSIXApplicationType;
@@ -189,6 +190,45 @@ public class ParametricJobAdapter extends JsdlAdaptersFactory {
       }
     }
     // Resources element
+    if( this.jobDescriptionType.getResources() != null ) {
+      result.addAll( parseResources( this.jobDescriptionType.getResources() ));
+    }
+    return result;
+  }
+
+  private List<String> parseResources( final ResourcesType resources ) {
+    List<String> result = new ArrayList<String>();
+    String baseString = "/*//jsdl:Resources/";
+    if( resources.getCandidateHosts() != null ) {
+      String baseCandidate = baseString + "jsdl:CandidateHosts/";
+      if( resources.getCandidateHosts().getHostName().size() > 1 ) {
+        int i = 1;
+        for( Object host : resources.getCandidateHosts().getHostName() ) {
+          result.add( baseCandidate + "jsdl:HostName[" + i + "]" );
+          i++;
+        }
+      } else {
+        result.add( baseCandidate + "jsdl:HostName" );
+      }
+    }
+    if (resources.isSetExclusiveExecution()){
+      result.add( baseString + "jsdl:ExclusiveExecution" );
+    }
+    if (resources.getOperatingSystem() != null){
+      String baseOS = baseString + "jsdl:OperatingSystem/";
+      if(resources.getOperatingSystem().getOperatingSystemType() != null){
+        result.add( baseOS + "jsdl:OperatingSystemType/jsdl:OperatingStystemName" );
+      }
+      if (resources.getOperatingSystem().getOperatingSystemVersion() != null){
+        result.add( baseOS + "jsdl:OperatingSystemVersion" );
+      }
+      if (resources.getOperatingSystem().getDescription() != null){
+        result.add( baseOS + "jsdl:Description" );
+      }
+      if (resources.getCPUArchitecture() != null){
+        result.add(baseString + "jsdl:CPUArchitecture/jsdl:CPUArchitectureName");
+      }
+    }
     return result;
   }
 
@@ -253,7 +293,6 @@ public class ParametricJobAdapter extends JsdlAdaptersFactory {
             }
           }
         }
-        
         Iterator iterator = assignment.getFunctionGroup().iterator();
         while( iterator.hasNext() ) {
           Object obj = iterator.next();
@@ -284,7 +323,7 @@ public class ParametricJobAdapter extends JsdlAdaptersFactory {
   {
     SweepType refSweep = null;
     for( SweepType sweep : sweepList ) {
-   int k=0;
+      int k = 0;
       EList list = sweep.getAssignment();
       for( int i = 0; i < list.size(); i++ ) {
         Object el = list.get( i );
