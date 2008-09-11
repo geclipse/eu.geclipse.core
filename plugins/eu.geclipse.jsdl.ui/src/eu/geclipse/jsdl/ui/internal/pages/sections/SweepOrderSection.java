@@ -16,8 +16,10 @@
  *****************************************************************************/
 package eu.geclipse.jsdl.ui.internal.pages.sections;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -25,6 +27,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.impl.EStructuralFeatureImpl.ContainmentUpdatingFeatureMapEntry;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.ExtendedMetaData;
 import org.eclipse.emf.ecore.util.FeatureMapUtil;
@@ -59,9 +62,9 @@ import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import eu.geclipse.jsdl.model.base.JobDefinitionType;
-import eu.geclipse.jsdl.model.base.JobDescriptionType;
 import eu.geclipse.jsdl.model.functions.FunctionsFactory;
 import eu.geclipse.jsdl.model.functions.FunctionsPackage;
+import eu.geclipse.jsdl.model.functions.LoopType;
 import eu.geclipse.jsdl.model.functions.ValuesType;
 import eu.geclipse.jsdl.model.functions.impl.FunctionsPackageImpl;
 import eu.geclipse.jsdl.model.sweep.AssignmentType;
@@ -75,6 +78,7 @@ import eu.geclipse.jsdl.ui.providers.parameters.SweepOrderCProvider;
 import eu.geclipse.jsdl.ui.providers.parameters.SweepOrderLProvider;
 import eu.geclipse.jsdl.ui.widgets.ParametersDialog;
 import eu.geclipse.jsdl.ui.widgets.SweepDeleteDialog;
+import eu.geclipse.jsdl.ui.widgets.SweepFunctionDialog;
 
 public class SweepOrderSection extends JsdlFormPageSection {
 
@@ -92,7 +96,15 @@ public class SweepOrderSection extends JsdlFormPageSection {
   private Button sameLevelButton;
   private Button innerButton;
   private Button deleteButton;
+  private Button addFunctionButton;
 
+  /**
+   * Constructor.
+   * 
+   * @param parent parent composite of this section
+   * @param toolkit forms toolkit to use
+   * @param adapter adapter handling operations on parametric part of JSDL
+   */
   public SweepOrderSection( final Composite parent,
                             final FormToolkit toolkit,
                             final ParametricJobAdapter adapter )
@@ -161,10 +173,10 @@ public class SweepOrderSection extends JsdlFormPageSection {
                                                                    parent,
                                                                    sectionTitle,
                                                                    sectionDescription,
-                                                                   2 );
+                                                                   3 );
     Composite treeComp = toolkit.createComposite( client );
     GridData gData = new GridData( GridData.FILL_BOTH );
-    gData.horizontalSpan = 2;
+    gData.horizontalSpan = 3;
     treeComp.setLayoutData( gData );
     treeComp.setLayout( new GridLayout( 2, false ) );
     this.viewer = new TreeViewer( treeComp, SWT.BORDER );
@@ -202,7 +214,7 @@ public class SweepOrderSection extends JsdlFormPageSection {
             }
           }
         }
-        updateTreeButtons();
+        updateButtons();
       }
     } );
     this.manager = createMenu();
@@ -229,12 +241,13 @@ public class SweepOrderSection extends JsdlFormPageSection {
     gData = new GridData( GridData.FILL_HORIZONTAL );
     gData.verticalIndent = 15;
     this.deleteButton.setLayoutData( gData );
-    updateTreeButtons();
+    updateButtons();
     // values controls
     toolkit.createLabel( client, "Sweep element" );
     this.sweepCombo = new Combo( client, SWT.NONE | SWT.READ_ONLY );
     gData = new GridData( GridData.FILL_BOTH | GridData.GRAB_HORIZONTAL );
     gData.widthHint = 200;
+    gData.horizontalSpan = 2;
     this.sweepCombo.setLayoutData( gData );
     this.sweepCombo.addSelectionListener( new SelectionAdapter() {
 
@@ -242,6 +255,7 @@ public class SweepOrderSection extends JsdlFormPageSection {
       public void widgetSelected( final SelectionEvent e ) {
         setValuesField( SweepOrderSection.this.adapter.getValuesForParameter( SweepOrderSection.this.sweepCombo.getText(),
                                                                               SweepOrderSection.this.inerSweepList ) );
+        updateButtons();
       }
     } );
     toolkit.createLabel( client,
@@ -268,15 +282,18 @@ public class SweepOrderSection extends JsdlFormPageSection {
         SweepType sweep = SweepOrderSection.this.adapter.findSweepElement( SweepOrderSection.this.sweepCombo.getText(),
                                                                            SweepOrderSection.this.inerSweepList );
         AssignmentType assignment = null;
-        for( int j = 0; j < sweep.getAssignment().size(); j++ ) {
-          if( ( ( AssignmentType )sweep.getAssignment().get( j ) ).getParameter()
-            .contains( SweepOrderSection.this.sweepCombo.getText() ) )
-          {
-            assignment = ( AssignmentType )sweep.getAssignment().get( j );
-            break;
+        if( sweep != null && sweep.getAssignment() != null ) {
+          for( int j = 0; j < sweep.getAssignment().size(); j++ ) {
+            if( ( ( AssignmentType )sweep.getAssignment().get( j ) ).getParameter()
+              .contains( SweepOrderSection.this.sweepCombo.getText() ) )
+            {
+              assignment = ( AssignmentType )sweep.getAssignment().get( j );
+              break;
+            }
           }
         }
         setFunctionValues( assignment, val );
+        updateButtons();
         contentChanged();
       }
 
@@ -284,8 +301,64 @@ public class SweepOrderSection extends JsdlFormPageSection {
         // do nothing
       }
     } );
-    updateTreeButtons();
+    // buttons values composite
+    Composite buttonValComp = toolkit.createComposite( client );
+    buttonValComp.setLayout( new GridLayout( 1, true ) );
+    this.addFunctionButton = toolkit.createButton( buttonValComp,
+                                                   "Add function...",
+                                                   SWT.PUSH );
+    gData = new GridData();
+    addFunctionButton.addSelectionListener( new SelectionAdapter() {
+
+      @Override
+      public void widgetSelected( final SelectionEvent e ) {
+        SweepFunctionDialog dialog = new SweepFunctionDialog( SweepOrderSection.this.shell );
+        if( dialog.open() == Window.OK ) {
+          List<BigInteger> exceptions = new ArrayList<BigInteger>();
+          if( dialog.getExceptionsReturn() != null ) {
+            for( String exc : dialog.getExceptionsReturn() ) {
+              exceptions.add( new BigInteger( exc ) );
+            }
+          }
+          appendTextToTextArea( SweepOrderSection.this.adapter.createLOOPString( new BigInteger( dialog.getStartReturn() ),
+                                                                                 new BigInteger( dialog.getEndReturn() ),
+                                                                                 new BigInteger( dialog.getStepReturn() ),
+                                                                                 exceptions ) );
+          updateButtons();
+        }
+      }
+    } );
+    addFunctionButton.setLayoutData( gData );
+    updateButtons();
     addButtonsListeners();
+  }
+
+  protected void appendTextToTextArea( final String string ) {
+    String newText = this.textArea.getText();
+    newText = newText.trim() + System.getProperty( "line.separator" ) + string;
+    this.textArea.setText( newText.trim() );
+    List<String> val = new ArrayList<String>();
+    for( String value : SweepOrderSection.this.textArea.getText()
+      .split( System.getProperty( "line.separator" ) ) ) //$NON-NLS-1$
+    {
+      val.add( value );
+    }
+    SweepType sweep = SweepOrderSection.this.adapter.findSweepElement( sweepCombo.getText(),
+                                                                       inerSweepList );
+    AssignmentType assignment = null;
+    if( sweep.getAssignment() != null ) {
+      for( int j = 0; j < sweep.getAssignment().size(); j++ ) {
+        if( ( ( AssignmentType )sweep.getAssignment().get( j ) ).getParameter()
+          .contains( SweepOrderSection.this.sweepCombo.getText() ) )
+        {
+          assignment = ( AssignmentType )sweep.getAssignment().get( j );
+          break;
+        }
+      }
+    }
+    setFunctionValues( assignment, val );
+    updateButtons();
+    contentChanged();
   }
 
   private void addButtonsListeners() {
@@ -293,8 +366,9 @@ public class SweepOrderSection extends JsdlFormPageSection {
 
       /*
        * (non-Javadoc)
-       * 
-       * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+       * @see
+       * org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.
+       * swt.events.SelectionEvent)
        */
       @Override
       public void widgetSelected( final SelectionEvent e ) {
@@ -305,8 +379,9 @@ public class SweepOrderSection extends JsdlFormPageSection {
 
       /*
        * (non-Javadoc)
-       * 
-       * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+       * @see
+       * org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.
+       * swt.events.SelectionEvent)
        */
       @Override
       public void widgetSelected( final SelectionEvent e ) {
@@ -317,8 +392,9 @@ public class SweepOrderSection extends JsdlFormPageSection {
 
       /*
        * (non-Javadoc)
-       * 
-       * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+       * @see
+       * org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.
+       * swt.events.SelectionEvent)
        */
       @Override
       public void widgetSelected( final SelectionEvent e ) {
@@ -329,8 +405,9 @@ public class SweepOrderSection extends JsdlFormPageSection {
 
       /*
        * (non-Javadoc)
-       * 
-       * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+       * @see
+       * org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.
+       * swt.events.SelectionEvent)
        */
       @Override
       public void widgetSelected( final SelectionEvent e ) {
@@ -341,8 +418,9 @@ public class SweepOrderSection extends JsdlFormPageSection {
 
       /*
        * (non-Javadoc)
-       * 
-       * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+       * @see
+       * org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.
+       * swt.events.SelectionEvent)
        */
       @Override
       public void widgetSelected( final SelectionEvent e ) {
@@ -351,12 +429,18 @@ public class SweepOrderSection extends JsdlFormPageSection {
     } );
   }
 
-  void updateTreeButtons() {
+  void updateButtons() {
     boolean enable = !this.viewer.getSelection().isEmpty();
     this.independentButton.setEnabled( enable );
     this.sameLevelButton.setEnabled( enable );
     this.innerButton.setEnabled( enable );
     this.deleteButton.setEnabled( enable );
+    if( this.addFunctionButton != null ) {
+      this.addFunctionButton.setEnabled( !this.sweepCombo.getText().equals( "" )
+                                         && this.textArea.getText()
+                                           .trim()
+                                           .equals( "" ) );
+    }
   }
 
   void setValuesField( final List<String> values ) {
@@ -370,6 +454,7 @@ public class SweepOrderSection extends JsdlFormPageSection {
         multiLinesContent = multiLinesContent.trim();
       }
       this.textArea.setText( multiLinesContent );
+      updateButtons();
     }
   }
 
@@ -472,16 +557,59 @@ public class SweepOrderSection extends JsdlFormPageSection {
   void setFunctionValues( final AssignmentType assignment,
                           final List<String> values )
   {
-    FunctionsPackage pak = FunctionsPackageImpl.eINSTANCE;
-    FunctionsFactory factory = pak.getFunctionsFactory();
-    ValuesType valuesType = factory.createValuesType();
+    List<String> loops = new ArrayList<String>();
     for( String value : values ) {
-      valuesType.getValue().add( value );
+      if( value.startsWith( "LOOP" ) ) {
+        loops.add( value );
+      }
     }
-    EClass eClass = ExtendedMetaData.INSTANCE.getDocumentRoot( pak );
-    Entry e = FeatureMapUtil.createEntry( eClass.getEStructuralFeature( "values" ), //$NON-NLS-1$
-                                          valuesType );
-    assignment.getFunctionGroup().add( e );
+    values.removeAll( loops );
+    boolean valuesAreEmpty = true;
+    if( values.size() > 0 ) {
+      FunctionsPackage pak = FunctionsPackageImpl.eINSTANCE;
+      FunctionsFactory factory = pak.getFunctionsFactory();
+      ValuesType valuesType = factory.createValuesType();
+      for( String value : values ) {
+        if( !value.equals( "" ) ) {
+          valuesAreEmpty = false;
+          valuesType.getValue().add( value );
+        }
+      }
+      // if( !valuesAreEmpty ) {
+      EClass eClass = ExtendedMetaData.INSTANCE.getDocumentRoot( pak );
+      Entry e = FeatureMapUtil.createEntry( eClass.getEStructuralFeature( "values" ), //$NON-NLS-1$
+                                            valuesType );
+      assignment.getFunctionGroup().add( e );
+      // } else {
+      // assignment.getFunctionGroup().get( 0 ).
+      // }
+    }
+    if( loops.size() > 0 ) {
+      FunctionsPackage pak = FunctionsPackageImpl.eINSTANCE;
+      FunctionsFactory factory = pak.getFunctionsFactory();
+      for( String loopExp : loops ) {
+        LoopType loopType = factory.createLoopType();
+        loopType.setStart( this.adapter.parseLOOPStringForStart( loopExp ) );
+        loopType.setEnd( this.adapter.parseLOOPStringForEnd( loopExp ) );
+        loopType.setStep( this.adapter.parseLOOPStringForStep( loopExp ) );
+        EClass eClass = ExtendedMetaData.INSTANCE.getDocumentRoot( pak );
+        Entry e = FeatureMapUtil.createEntry( eClass.getEStructuralFeature( "loop" ), //$NON-NLS-1$
+                                              loopType );
+        assignment.getFunctionGroup().add( e );
+        // loopType.getException().add( e );
+      }
+    } else {
+      Iterator iterator = assignment.getFunctionGroup().iterator();
+      while( iterator.hasNext() ) {
+        Object obj = iterator.next();
+        if( obj instanceof ContainmentUpdatingFeatureMapEntry ) {
+          ContainmentUpdatingFeatureMapEntry loopF = ( ContainmentUpdatingFeatureMapEntry )obj;
+          if( loopF.getValue() instanceof LoopType ) {
+            assignment.getFunctionGroup().remove( obj );
+          }
+        }
+      }
+    }
   }
 
   Action createIndependentSweepAction() {

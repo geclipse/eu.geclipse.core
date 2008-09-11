@@ -16,10 +16,15 @@
  *****************************************************************************/
 package eu.geclipse.jsdl.ui.adapters.jsdl;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.impl.EStructuralFeatureImpl;
+import org.eclipse.emf.ecore.impl.EStructuralFeatureImpl.ContainmentUpdatingFeatureMapEntry;
 import org.eclipse.emf.ecore.util.FeatureMap;
 import org.eclipse.emf.ecore.util.FeatureMap.Entry;
 
@@ -28,6 +33,7 @@ import eu.geclipse.jsdl.model.base.DataStagingType;
 import eu.geclipse.jsdl.model.base.JobDefinitionType;
 import eu.geclipse.jsdl.model.base.JobDescriptionType;
 import eu.geclipse.jsdl.model.base.JobIdentificationType;
+import eu.geclipse.jsdl.model.functions.LoopType;
 import eu.geclipse.jsdl.model.functions.ValuesType;
 import eu.geclipse.jsdl.model.posix.POSIXApplicationType;
 import eu.geclipse.jsdl.model.sweep.AssignmentType;
@@ -42,7 +48,8 @@ public class ParametricJobAdapter extends JsdlAdaptersFactory {
   /**
    * Constructs a new <code> {@link DataStageTypeAdapter} </code>
    * 
-   * @param jobDefinitionRoot . The root element of a JSDL document ({@link JobDefinitionType}).
+   * @param jobDefinitionRoot . The root element of a JSDL document (
+   *          {@link JobDefinitionType}).
    */
   public ParametricJobAdapter( final JobDefinitionType jobDefinitionRoot ) {
     getTypeForAdapter( jobDefinitionRoot );
@@ -221,8 +228,10 @@ public class ParametricJobAdapter extends JsdlAdaptersFactory {
     }
     return result;
   }
-  
-  public List<String> getValuesForParameter( final String paramName, final List<SweepType> sweepList) {
+
+  public List<String> getValuesForParameter( final String paramName,
+                                             final List<SweepType> sweepList )
+  {
     List<String> result = new ArrayList<String>();
     SweepType sweep = findSweepElement( paramName, sweepList );
     if( sweep != null ) {
@@ -236,20 +245,46 @@ public class ParametricJobAdapter extends JsdlAdaptersFactory {
         }
       }
       if( assignment != null ) {
-        ValuesType values = ( ValuesType )assignment.getFunction();
-        if( values != null ) {
-          for( int i = 0; i < values.getValue().size(); i++ ) {
-            result.add( ( String )values.getValue().get( i ) );
+        if( assignment.getFunction() instanceof ValuesType ) {
+          ValuesType values = ( ValuesType )assignment.getFunction();
+          if( values != null ) {
+            for( int i = 0; i < values.getValue().size(); i++ ) {
+              result.add( ( String )values.getValue().get( i ) );
+            }
+          }
+        }
+        
+        Iterator iterator = assignment.getFunctionGroup().iterator();
+        while( iterator.hasNext() ) {
+          Object obj = iterator.next();
+          if( obj instanceof ContainmentUpdatingFeatureMapEntry ) {
+            ContainmentUpdatingFeatureMapEntry loopF = ( ContainmentUpdatingFeatureMapEntry )obj;
+            if( loopF.getValue() instanceof LoopType ) {
+              LoopType loop = ( LoopType )loopF.getValue();
+              List<BigInteger> list = new ArrayList<BigInteger>();
+              for( BigInteger exc : ( BigInteger[] )loop.getException()
+                .toArray( new BigInteger[ 0 ] ) )
+              {
+                list.add( exc );
+              }
+              result.add( createLOOPString( loop.getStart(),
+                                            loop.getEnd(),
+                                            loop.getStep(),
+                                            list ) );
+            }
           }
         }
       }
     }
     return result;
   }
-  
-  public SweepType findSweepElement( final String name, final List<SweepType> sweepList ) {
+
+  public SweepType findSweepElement( final String name,
+                                     final List<SweepType> sweepList )
+  {
     SweepType refSweep = null;
     for( SweepType sweep : sweepList ) {
+   int k=0;
       EList list = sweep.getAssignment();
       for( int i = 0; i < list.size(); i++ ) {
         Object el = list.get( i );
@@ -267,5 +302,66 @@ public class ParametricJobAdapter extends JsdlAdaptersFactory {
     }
     return refSweep;
   }
-  
+
+  /**
+   * Method to create user-friendly string representation of loop function for
+   * given values.
+   * 
+   * @param start start value of the loop
+   * @param end end value of the loop
+   * @param step step value for the loop
+   * @param exceptionsValues list of values, which should be excluded from
+   *          generated loop values
+   * @return string which should be presented to user (e.g. in editor). It has
+   *         the following structure: "LOOP( start = startValue, end = endValue,
+   *         step = stepValue) \ { exception1, exception2, ... }"
+   */
+  public String createLOOPString( final BigInteger startValue,
+                                  final BigInteger endValue,
+                                  final BigInteger stepValue,
+                                  final List<BigInteger> exceptionsValues )
+  {
+    String result = "LOOP";
+    result = result + "( start = " + startValue.toString() + "; ";
+    result = result + "end = " + endValue.toString() + "; ";
+    result = result + "step = " + stepValue.toString() + " )";
+    if( exceptionsValues != null & exceptionsValues.size() > 0 ) {
+      result = result + " \\ { ";
+      for( BigInteger exc : exceptionsValues ) {
+        result = result + exc.toString() + "; ";
+      }
+      result = result.substring( 0, result.length() - 2 );
+      result = result + " }";
+    }
+    parseLOOPStringForEnd( result );
+    parseLOOPStringForStep( result );
+    return result;
+  }
+
+  public BigInteger parseLOOPStringForStart( final String loopString ) {
+    BigInteger result = null;
+    String[] splited = loopString.split( "start\\s*=\\s*" );
+    if( splited.length > 1 ) {
+      result = new BigInteger( splited[ 1 ].split( "\\s*;" )[ 0 ] );
+    }
+    return result;
+  }
+
+  public BigInteger parseLOOPStringForEnd( final String loopString ) {
+    BigInteger result = null;
+    String[] splited = loopString.split( "end\\s*=\\s*" );
+    if( splited.length > 1 ) {
+      result = new BigInteger( splited[ 1 ].split( "\\s*;" )[ 0 ] );
+    }
+    return result;
+  }
+
+  public BigInteger parseLOOPStringForStep( final String loopString ) {
+    BigInteger result = null;
+    String[] splited = loopString.split( "step\\s*=\\s*" );
+    if( splited.length > 1 ) {
+      result = new BigInteger( splited[ 1 ].split( "\\s*\\)" )[ 0 ] );
+    }
+    return result;
+  }
 }
