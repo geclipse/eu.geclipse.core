@@ -28,9 +28,12 @@ import org.eclipse.emf.ecore.util.FeatureMap.Entry;
 
 import eu.geclipse.jsdl.model.base.ApplicationType;
 import eu.geclipse.jsdl.model.base.DataStagingType;
+import eu.geclipse.jsdl.model.base.ExactType;
 import eu.geclipse.jsdl.model.base.JobDefinitionType;
 import eu.geclipse.jsdl.model.base.JobDescriptionType;
 import eu.geclipse.jsdl.model.base.JobIdentificationType;
+import eu.geclipse.jsdl.model.base.RangeType;
+import eu.geclipse.jsdl.model.base.RangeValueType;
 import eu.geclipse.jsdl.model.base.ResourcesType;
 import eu.geclipse.jsdl.model.functions.LoopType;
 import eu.geclipse.jsdl.model.functions.ValuesType;
@@ -189,7 +192,7 @@ public class ParametricJobAdapter extends JsdlAdaptersFactory {
     }
     // Resources element
     if( this.jobDescriptionType.getResources() != null ) {
-      result.addAll( parseResources( this.jobDescriptionType.getResources() ));
+      result.addAll( parseResources( this.jobDescriptionType.getResources() ) );
     }
     return result;
   }
@@ -209,22 +212,143 @@ public class ParametricJobAdapter extends JsdlAdaptersFactory {
         result.add( baseCandidate + "jsdl:HostName" );
       }
     }
-    if (resources.isSetExclusiveExecution()){
+//    if (resources.getFileSystem() != null){
+//      String baseFileSystem = baseString + "jsdl:CandidateHosts/";
+//      if( resources.getCandidateHosts().getHostName().size() > 1 ) {
+//        int i = 1;
+//        for( Object host : resources.getCandidateHosts().getHostName() ) {
+//          result.add( baseCandidate + "jsdl:HostName[" + i + "]" );
+//          i++;
+//        }
+//      } else {
+//        result.add( baseCandidate + "jsdl:HostName" );
+//      }
+//    }
+    if( resources.isSetExclusiveExecution() ) {
       result.add( baseString + "jsdl:ExclusiveExecution" );
     }
-    if (resources.getOperatingSystem() != null){
+    if( resources.getOperatingSystem() != null ) {
       String baseOS = baseString + "jsdl:OperatingSystem/";
-      if(resources.getOperatingSystem().getOperatingSystemType() != null){
-        result.add( baseOS + "jsdl:OperatingSystemType/jsdl:OperatingStystemName" );
+      if( resources.getOperatingSystem().getOperatingSystemType() != null ) {
+        result.add( baseOS
+                    + "jsdl:OperatingSystemType/jsdl:OperatingStystemName" );
       }
-      if (resources.getOperatingSystem().getOperatingSystemVersion() != null){
+      if( resources.getOperatingSystem().getOperatingSystemVersion() != null ) {
         result.add( baseOS + "jsdl:OperatingSystemVersion" );
       }
-      if (resources.getOperatingSystem().getDescription() != null){
+      if( resources.getOperatingSystem().getDescription() != null ) {
         result.add( baseOS + "jsdl:Description" );
       }
-      if (resources.getCPUArchitecture() != null){
-        result.add(baseString + "jsdl:CPUArchitecture/jsdl:CPUArchitectureName");
+      if( resources.getCPUArchitecture() != null ) {
+        result.add( baseString
+                    + "jsdl:CPUArchitecture/jsdl:CPUArchitectureName" );
+      }
+    }
+    result.addAll( parseRangeValueType( resources.getIndividualCPUSpeed(),
+                                        baseString + "jsdl:IndividualCPUSpeed/" ) );
+    result.addAll( parseRangeValueType( resources.getIndividualCPUTime(),
+                                        baseString + "jsdl:IndividualCPUTime/" ) );
+    result.addAll( parseRangeValueType( resources.getIndividualCPUCount(),
+                                        baseString + "jsdl:IndividualCPUCount/" ) );
+    result.addAll( parseRangeValueType( resources.getIndividualNetworkBandwidth(),
+                                        baseString
+                                            + "jsdl:IndividualNetworkBandwidth/" ) );
+    result.addAll( parseRangeValueType( resources.getIndividualPhysicalMemory(),
+                                        baseString
+                                            + "jsdl:IndividualPhysicalMemory/" ) );
+    result.addAll( parseRangeValueType( resources.getIndividualVirtualMemory(),
+                                        baseString
+                                            + "jsdl:IndividualVirtualMemory/" ) );
+    result.addAll( parseRangeValueType( resources.getIndividualCPUTime(),
+                                        baseString + "jsdl:IndividualCPUTime/" ) );
+    result.addAll( parseRangeValueType( resources.getIndividualDiskSpace(),
+                                        baseString
+                                            + "jsdl:IndividualDiskSpace/" ) );
+    result.addAll( parseRangeValueType( resources.getTotalCPUTime(),
+                                        baseString + "jsdl:TotalCPUTime/" ) );
+    result.addAll( parseRangeValueType( resources.getTotalCPUCount(),
+                                        baseString + "jsdl:TotalCPUCount/" ) );
+    result.addAll( parseRangeValueType( resources.getTotalPhysicalMemory(),
+                                        baseString
+                                            + "jsdl:TotalPhysicalMemory/" ) );
+    result.addAll( parseRangeValueType( resources.getTotalVirtualMemory(),
+                                        baseString + "jsdl:TotalVirtualMemory/" ) );
+    result.addAll( parseRangeValueType( resources.getTotalDiskSpace(),
+                                        baseString + "jsdl:TotalDiskSpace/" ) );
+    result.addAll( parseRangeValueType( resources.getTotalResourceCount(),
+                                        baseString + "jsdl:TotalResourceCount/" ) );
+    return result;
+  }
+  
+  
+
+  private List<String> parseRangeValueType( final RangeValueType rangeType,
+                                            final String baseString )
+  {
+    List<String> result = new ArrayList<String>();
+    if( rangeType != null ) {
+      if( rangeType.getUpperBound() != null ) {
+        result.add( baseString + "jsdl:UpperBoundedRange" );
+        if( rangeType.getUpperBound().isSetExclusiveBound() ) {
+          result.add( baseString + "jsdl:UpperBoundedRange@exclusiveBound" );
+        }
+      }
+      if( rangeType.getLowerBound() != null ) {
+        result.add( baseString + "jsdl:UpperLowerRange" );
+        if( rangeType.getLowerBound().isSetExclusiveBound() ) {
+          result.add( baseString + "jsdl:UpperLowerRange@exclusiveBound" );
+        }
+      }
+      if( rangeType.getExact() != null ) {
+        if( rangeType.getExact().size() > 1 ) {
+          int i = 1;
+          for( Object obj : rangeType.getExact() ) {
+            String baseExact = baseString + "jsdl:Exact[" + i + "]";
+            result.add( baseExact );
+            if( ( ( ExactType )obj ).isSetEpsilon() ) {
+              result.add( baseExact + "@epsilon" );
+            }
+            i++;
+          }
+        } else {
+          result.add( baseString + "jsdl:Exact" );
+          if( ( ( ExactType )rangeType.getExact().get( 0 ) ).isSetEpsilon() ) {
+            result.add( baseString + "jsdl:Exact@epsilon" );
+          }
+        }
+      }
+      if( rangeType.getRange() != null ) {
+        if( rangeType.getRange().size() > 1 ) {
+          int i = 1;
+          for( Object obj : rangeType.getRange() ) {
+            result.addAll( parseRangeType( ( RangeType )obj, baseString
+                                                             + "jsdl:Range["
+                                                             + i
+                                                             + "]/" ) );
+          }
+        } else {
+          result.addAll( parseRangeType( ( RangeType )rangeType.getRange()
+            .get( 0 ), baseString + "jsdl:Range/" ) );
+        }
+      }
+    }
+    return result;
+  }
+
+  private List<String> parseRangeType( final RangeType range,
+                                       final String baseString )
+  {
+    List<String> result = new ArrayList<String>();
+    if( range.getLowerBound() != null ) {
+      result.add( baseString + "jsdl:LowerBound" );
+      if( range.getLowerBound().isSetExclusiveBound() ) {
+        result.add( baseString + "jsdl:LowerBound@ExclusiveBound" );
+      }
+    }
+    if( range.getUpperBound() != null ) {
+      result.add( baseString + "jsdl:UpperBound" );
+      if( range.getUpperBound().isSetExclusiveBound() ) {
+        result.add( baseString + "jsdl:UpperBound@ExclusiveBound" );
       }
     }
     return result;
