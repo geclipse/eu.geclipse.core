@@ -151,11 +151,17 @@ public class SweepIterationsSection extends JsdlFormPageSection {
     this.viewer.setLabelProvider( this.labelProvider );
     this.viewer.setContentProvider( new IterationsCProvider() );
     this.table.setHeaderVisible( true );
-    for( String name : getColumnNamesForTable().values() ) {
-      TableColumn column = new TableColumn( this.table, SWT.NONE );
-      column.setText( name );
-      column.setWidth( 100 );
+    Map<Integer, String> map = getColumnNamesForTable();
+    for (int i = 0; i < map.size(); i++){
+      TableColumn column = new TableColumn(this.table, SWT.NONE);
+      column.setText( map.get( Integer.valueOf( i ) ) );
+      column.setWidth( 120 );
     }
+//    for( String name : getColumnNamesForTable().values() ) {
+//      TableColumn column = new TableColumn( this.table, SWT.NONE );
+//      column.setText( name );
+//      column.setWidth( 100 );
+//    }
     this.client.layout();
   }
 
