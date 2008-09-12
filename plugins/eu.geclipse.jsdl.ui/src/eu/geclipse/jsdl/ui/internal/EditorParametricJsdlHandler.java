@@ -66,12 +66,12 @@ public class EditorParametricJsdlHandler implements IParametricJsdlHandler {
     this.valuesMap.remove( this.placeHolder );
     if( this.tempMaxParams < this.maxParams ) {
       Properties currentProperties = this.valuesMap.get( currentIterationID );
-      for( String param : this.valuesMap.get( this.maxParamsId )
-        .stringPropertyNames() )
+      for( Object param : this.valuesMap.get( this.maxParamsId )
+        .keySet() )
       {
-        if( !currentProperties.containsKey( param ) ) {
-          currentProperties.put( param, this.valuesMap.get( this.maxParamsId )
-            .get( param ) );
+        if( !currentProperties.containsKey( (String)param ) ) {
+          currentProperties.put( (String)param, this.valuesMap.get( this.maxParamsId )
+            .get( (String)param ) );
         }
       }
     } else {

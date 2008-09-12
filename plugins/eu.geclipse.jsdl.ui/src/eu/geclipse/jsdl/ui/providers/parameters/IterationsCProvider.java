@@ -33,10 +33,10 @@ public class IterationsCProvider implements IStructuredContentProvider {
         result[ i ][ 0 ] = new Properties();
         result[ i ][ 0 ].put( "Iteration", iterationId );
         int j = 1;
-        for( String paramName : map.get( iterationId ).stringPropertyNames() ) {
+        for( Object paramName : map.get( iterationId ).keySet() ) {
           result[ i ][ j ] = new Properties();
           result[ i ][ j ].put( paramName, map.get( iterationId )
-            .getProperty( paramName ) );
+            .getProperty( (String)paramName ) );
           j++;
         }
         i++;
