@@ -196,32 +196,78 @@ public class ParametricJobService implements IGridJobService {
                                final SubMonitor monitor, final IGridContainer parent, final String jobName )
     throws ProblemException
   {
+    IGridJobID jobId = null;
     SubMonitor subMonitor = SubMonitor.convert( monitor );
-    subMonitor.setWorkRemaining( 2 );
-    subMonitor.subTask( Messages.getString("ParametricJobService.taskNameGeneratingJsdl") ); //$NON-NLS-1$
     
     Assert.isTrue( description instanceof JSDLJobDescription );
     
     JSDLJobDescription jsdl = ( JSDLJobDescription )description;
     
-    Assert.isTrue( jsdl.isParametric() );    
-    
-    IGridJob parametricGridJob = createParamJobStructure( jsdl, parent, jobName );
-    
-    IParametricJsdlGenerator generator = ParametricJsdlGeneratorFactory.getGenerator();
-    IFolder generationTargetfolder = ((IFolder)parametricGridJob.getResource()).getFolder( Messages.getString("ParametricJobService.generatedJsdlFolder") ); //$NON-NLS-1$
-    ParametricJsdlSaver saver = new ParametricJsdlSaver( jsdl, generationTargetfolder );
-    generator.generate( jsdl, saver, subMonitor.newChild( 1 ) );
-    List<JSDLJobDescription> generatedJsdls = saver.getGeneratedJsdl();    
-    submitGeneratedJsdl( parametricGridJob, generatedJsdls, subMonitor.newChild( 1 ), jobName );
-    cleanupSubmission( generationTargetfolder );
+    if( isResumedSubmition( jsdl ) ) {
+      jobId = resumeSubmission( jsdl, subMonitor );
+    } else {
+      Assert.isTrue( jsdl.isParametric() );      
+      subMonitor.setWorkRemaining( 10 );
+      subMonitor.subTask( Messages.getString("ParametricJobService.taskNameGeneratingJsdl") ); //$NON-NLS-1$
+      IGridJob parametricGridJob = createParamJobStructure( jsdl, parent, jobName );
+      IParametricJsdlGenerator generator = ParametricJsdlGeneratorFactory.getGenerator();
+      IFolder generationTargetfolder = ((IFolder)parametricGridJob.getResource()).getFolder( Messages.getString("ParametricJobService.generatedJsdlFolder") ); //$NON-NLS-1$
+      ParametricJsdlSaver saver = new ParametricJsdlSaver( jsdl, generationTargetfolder );
+      generator.generate( jsdl, saver, subMonitor.newChild( 1 ) );
+      List<JSDLJobDescription> generatedJsdls = saver.getGeneratedJsdl();    
+      submitGeneratedJsdl( parametricGridJob, generatedJsdls, subMonitor.newChild( 9 ), jobName );
+      cleanupSubmission( generationTargetfolder );
+      jobId = new ParametricJobID();
+    }
 
-    return new ParametricJobID();
+    return jobId;
+  } 
+
+  private IGridJobID resumeSubmission( final JSDLJobDescription jsdl, final SubMonitor monitor ) throws ProblemException {    
+    GridJob parentJob = findParentParamJob( jsdl );
+    Assert.isNotNull( parentJob );
+    IFolder targetFolder = ( IFolder )parentJob.getResource();
+    List<JSDLJobDescription> jsdlList = new ArrayList<JSDLJobDescription>( 1 );
+    jsdlList.add( jsdl );
+    submitGeneratedJsdl( parentJob, jsdlList, monitor, parentJob.getJobName() );
+    cleanupSubmission( ( IFolder )jsdl.getResource().getParent() );
+        
+    return parentJob.getID();
+  }
+
+  private boolean isResumedSubmition( final JSDLJobDescription jsdl ) {
+    return findParentParamJob( jsdl ) != null;
+  }
+
+  private GridJob findParentParamJob( final JSDLJobDescription jsdl ) {
+    GridJob paramJob = null;    
+    
+    if( !jsdl.isParametric() ) {
+      IGridContainer parent = jsdl.getParent();
+      
+      while( parent != null ) {
+        if( parent instanceof GridJob ) {
+          GridJob parentJob = ( GridJob )parent;
+          IGridJobDescription parentDescription = parentJob.getJobDescription();
+          if( parentDescription instanceof JSDLJobDescription
+              && (( JSDLJobDescription )parentDescription).isParametric() ) {
+            paramJob = parentJob;            
+          }
+          break;
+        }
+        parent = parent.getParent();
+      }
+    }
+
+    
+    return paramJob;
   }
 
   private void cleanupSubmission( final IFolder generationTargetfolder ) throws ProblemException {
     try {
-      generationTargetfolder.delete( true, null );
+      if( generationTargetfolder.members().length == 0 ) {
+        generationTargetfolder.delete( true, null );
+      }
     } catch ( CoreException exception ) {
       throw new ProblemException( "eu.geclipse.core.jobs.problem.cleanupSubmissionFailed", exception, Activator.PLUGIN_ID ); //$NON-NLS-1$
     }    
@@ -249,7 +295,12 @@ public class ParametricJobService implements IGridJobService {
       jobCreator.canCreate( jobDescription );
       jobCreator.create( parametricJob, jobID, this.jobService, subjobName );
       
-      jobDescription.getParent().delete( jobDescription );
+      try {
+        jobDescription.getResource().delete( true, monitor.newChild( 0 ) );
+      } catch( CoreException exception ) {
+        // TODO mariusz Auto-generated catch block
+        exception.printStackTrace();
+      }      
     }
     
     return submittedJobs;

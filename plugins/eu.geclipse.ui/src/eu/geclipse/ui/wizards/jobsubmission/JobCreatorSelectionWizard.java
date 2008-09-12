@@ -44,6 +44,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 
+import eu.geclipse.core.jobs.GridJob;
 import eu.geclipse.core.jobs.GridJobCreator;
 import eu.geclipse.core.jobs.ParametricJobService;
 import eu.geclipse.core.model.GridModel;
@@ -307,8 +308,7 @@ public class JobCreatorSelectionWizard extends Wizard {
           
           // TODO mariusz check if middleware may handle parametric jobs itself
           
-          if( description instanceof JSDLJobDescription
-              && ((JSDLJobDescription)description).isParametric() ) {            
+          if( isParametric( description ) ) {      
             ParametricJobService paramService = new ParametricJobService( this.service );
             paramService.submitJob( description, betterMonitor.newChild( 1 ), parent, namesIterator.next() );
           } else {
@@ -338,6 +338,33 @@ public class JobCreatorSelectionWizard extends Wizard {
         closeWizard();
       }
       return Status.OK_STATUS;
+    }
+
+    private boolean isParametric( final IGridJobDescription description ) {
+      boolean parametric = false;
+      if( description instanceof JSDLJobDescription ) {
+        JSDLJobDescription jsdl = ( JSDLJobDescription )description;
+        if( jsdl.isParametric() ) {
+          parametric = true;
+        } else {
+          // check if parent is parametric job
+          IGridContainer parent = jsdl.getParent();
+          
+          while( parent != null ) {
+            if( parent instanceof GridJob ) {
+              GridJob parentJob = ( GridJob )parent;
+              IGridJobDescription parentDescription = parentJob.getJobDescription();
+              if( parentDescription instanceof JSDLJobDescription ) {
+                parametric = ( ( JSDLJobDescription )parentDescription ).isParametric();
+              }              
+              break;
+            }
+            parent = parent.getParent();
+          }
+        }
+      }
+      
+      return parametric;
     }
 
     private IGridContainer buildTargetFolder( final IGridJobDescription description,

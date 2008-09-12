@@ -121,8 +121,8 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
     this.jobInfoFile = jobFolder.getFile( JOBINFO_FILENAME );
     this.jobName = getName();
     readJobID();
-    readJobInfo( jobFolder );
-    readChildrenJobs();
+    readJobInfo( jobFolder );    
+    readChildren();    
     setJobFolderProperties( jobFolder );
     if( this.jobDescriptionFile != null ) {
       readJobDescription();
@@ -134,8 +134,6 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
                                     + jobFolder.getName() );
       }
     }
-    addStagingFolder( jobFolder, FOLDERNAME_INPUT_FILES );
-    addStagingFolder( jobFolder, FOLDERNAME_OUTPUT_FILES );
   }
 
   /**
@@ -802,20 +800,6 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
     return element;
   }
 
-  private void addStagingFolder( final IFolder jobFolder,
-                                 final String folderName )
-  {
-    IFolder folder = jobFolder.getFolder( folderName );
-    if( folder.exists() ) {
-      try {
-        createModelElement( folder );
-      } catch( ProblemException exception ) {
-        Activator.logException( exception,
-                                String.format( Messages.getString( "GridJob.errAddFolder" ), folderName ) ); //$NON-NLS-1$
-      }
-    }
-  }
-
   /*
    * (non-Javadoc)
    * 
@@ -854,18 +838,17 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
     return formatter;
   }
 
-  private void readChildrenJobs() {
+  private void readChildren() {
     IFolder jobFolder = ( IFolder )this.getResource();
     try {
       for( IResource child : jobFolder.members( true ) ) {
-        if( child instanceof IFolder
-            && child.getName().endsWith( JOBFILE_EXTENSION ) )
+        if( child instanceof IFolder )
         {
           createModelElement( child );
         }
       }
     } catch( CoreException exception ) {
-      Activator.logException( exception, "Cannot read children jobs." ); //$NON-NLS-1$
+      Activator.logException( exception, "Cannot read children." ); //$NON-NLS-1$
     }
   }
 
