@@ -66,6 +66,7 @@ public class BatchUpdate {
   private List<BatchResource> removedResources = new ArrayList<BatchResource>();
   private boolean firstTime;
   private ProgressDialog initProgress;
+  private int xCE=0;
   private int maxX = 0;
   private int maxY = 0;
   private int count = 0;
@@ -75,6 +76,7 @@ public class BatchUpdate {
   private int job_exclusiveN = 0;
   private int busyN = 0;
   private int downN = 0;
+  private int addNewQueue =89;
   private BatchEditor editor;
   private int[] queue_dim = { // queue_dim[0] keeps the first x coordinate of
                               // the fist child
@@ -276,7 +278,8 @@ public class BatchUpdate {
     List<BatchResource> newReses = null;
     List<IBatchJobInfo> jobis = null;
     Dimension dimCE;
-    Point pointCE, pointWN, pointQ;
+    Point pointCE;
+    Point  pointWN, pointQ;
     Dimension dimBox_queue = null;
     Dimension dimBox_nodes = null;
     Point pointBox_queue, pointBox_nodes;
@@ -391,6 +394,7 @@ public class BatchUpdate {
         queuei = queueis.get( i );
         queue = this.updateQueue( queuei, jobis );
         // checking if some of the queues have changed their state
+        
         if( queuei.getState().toString().equals( "enabled" ) ) //$NON-NLS-1$ 
         {
           newenabledQ++;
@@ -404,7 +408,9 @@ public class BatchUpdate {
         if( ( this.EnableQ != newenabledQ || this.DisabledQ != newdisabledQ )
             && i == queueis.size() - 1 )
         {
+        
           changeQ = true;
+          
           this.EnableQ = newenabledQ;
           this.DisabledQ = newdisabledQ;
         }
@@ -421,6 +427,7 @@ public class BatchUpdate {
             this.queue_dim[ 0 ] = loc_x;
           if( i % this.nMaxElements == 0 && i > 0 ) {
             loc_y = loc_y + 70;
+            this.addNewQueue =this.addNewQueue +70;
             loc_x = this.queue_dim[ 0 ];
             this.queue_dim[ 2 ] = loc_y;
             j = 0;
@@ -445,7 +452,7 @@ public class BatchUpdate {
       }
       boolean values = true;
       // Sorting because at least one node changed its state
-      if( changeQ && this.editor.queueByName != 1 ) {
+       if( changeQ && this.editor.queueByName != 1 ) {
         this.editor.queueByState = 2;
         this.editor.sortedQ = 2;
         // this.Sort( this.editor.sortedQ, this.Qlist, this.box_queue, true );
@@ -453,11 +460,11 @@ public class BatchUpdate {
         values = false;
       }
       // case of add a new queue
-      if( !this.firstTime ) {
+       if( !this.firstTime ) {
         try {
           if( add ) {
             
-           addQueue(values,dimBox_queue );
+           addQueue(values,dimBox_queue,pointCE,pointBox_nodes );
           }
         } catch( Exception Z ) {
           // No code needed 
@@ -502,6 +509,7 @@ public class BatchUpdate {
     }
     int X = this.queue_dim[ 0 ];
     int Y = this.queue_dim[ 2 ] + 200;//
+    this.xCE = X;
     if( null == this.computingElement ) // Create the ce
     {
       if( this.firstTime )
@@ -565,8 +573,10 @@ public class BatchUpdate {
       this.computingElement.setNumWNs( 0 );
     if( this.jobManager.getJobCount() != this.computingElement.getNumJobs() )
       this.computingElement.setNumJobs( this.jobManager.getJobCount() );
+
     if( !this.removedResources.isEmpty() ) {
       for( BatchResource resource : this.removedResources ) {
+    
         this.box_queue.removeChildren( this.Qlist );
         this.Qlist.remove( resource );
         if( resource instanceof WorkerNode ) {
@@ -590,20 +600,23 @@ public class BatchUpdate {
     }
   }
   
-  private void addQueue(final boolean values,final Dimension dimBox_queue)
+  private void addQueue(final boolean values,final Dimension dimBox_queue,final
+                        Point pointCE,final Point pointBoxnodes)
   {
       this.box_queue.removeChildren( this.Qlist );
       this.diagram.removeChild( this.box_queue );
       this.box_queue.addChildren( this.Qlist );
-    //  this.box_queue.setIsDimentionChanged( true );
       boolean newsize = false;
-    
       if( ( this.count ) % ( this.nMaxElements ) == 1 ) {
-      this.maxY = this.maxY + 160;
       this.count = 0;
-      Dimension dimBox_new = new Dimension( this.maxX, this.maxY );
+      Dimension dimBox_new = new Dimension( this.maxX,  this.addNewQueue );
       this.box_queue.setSize( dimBox_new );
       this.diagram.addChild( this.box_queue );
+      int temp = this.addNewQueue+100;
+      pointCE.setLocation( this.xCE+205,temp );
+      this.computingElement.setLocation( pointCE );
+      pointBoxnodes.setLocation( this.xCE, temp+150 );
+      this.box_nodes.setLocation( pointBoxnodes );
       newsize = true;
       }
       if( !newsize ) {
