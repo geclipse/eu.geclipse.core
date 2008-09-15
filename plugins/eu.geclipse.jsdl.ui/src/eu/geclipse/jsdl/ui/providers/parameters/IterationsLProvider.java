@@ -25,7 +25,8 @@ public class IterationsLProvider implements ITableLabelProvider {
 
   private Map<Integer, String> columnsMap;
 
-  public void setColumnIndexMap( Map<Integer, String> columnsMap ) {
+  
+  public void setColumnIndexMap( final Map<Integer, String> columnsMap ) {
     this.columnsMap = columnsMap;
   }
 
@@ -34,7 +35,7 @@ public class IterationsLProvider implements ITableLabelProvider {
   }
 
   public String getColumnText( final Object element, final int columnIndex ) {
-    String result = "";
+    String result = ""; //$NON-NLS-1$
     String columnName = this.columnsMap.get( new Integer( columnIndex ) );
     if( element instanceof Properties[] ) {
       Properties[] array = ( Properties[] )element;
