@@ -78,6 +78,7 @@ public class ParametersDialog extends Dialog implements ModifyListener {
     elemLabel.setText( "Sweeped element" );
     elemLabel.setLayoutData( gData );
     this.element = new Combo( mainComp, SWT.DROP_DOWN );
+    this.element.setVisibleItemCount( 16 );
     gData = new GridData( GridData.FILL_HORIZONTAL );
     this.element.setLayoutData( gData );
     for( String val : this.parameters ) {
@@ -90,6 +91,7 @@ public class ParametersDialog extends Dialog implements ModifyListener {
       gData = new GridData();
       refLabel.setLayoutData( gData );
       this.refElement = new Combo( mainComp, SWT.DROP_DOWN );
+      this.refElement.setVisibleItemCount( 16 );
       int selIndex = -1;
       for( String val : this.refElements ) {
         this.refElement.add( val );
