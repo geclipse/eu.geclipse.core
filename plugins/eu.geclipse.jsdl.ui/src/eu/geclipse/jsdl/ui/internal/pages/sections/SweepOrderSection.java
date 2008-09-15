@@ -62,6 +62,7 @@ import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import eu.geclipse.jsdl.model.base.JobDefinitionType;
+import eu.geclipse.jsdl.model.functions.ExceptionType;
 import eu.geclipse.jsdl.model.functions.FunctionsFactory;
 import eu.geclipse.jsdl.model.functions.FunctionsPackage;
 import eu.geclipse.jsdl.model.functions.LoopType;
@@ -305,10 +306,10 @@ public class SweepOrderSection extends JsdlFormPageSection {
     Composite buttonValComp = toolkit.createComposite( client );
     buttonValComp.setLayout( new GridLayout( 1, true ) );
     this.addFunctionButton = toolkit.createButton( buttonValComp,
-                                                   "Add function...",
+                                                   "Define loop...",
                                                    SWT.PUSH );
     gData = new GridData();
-    addFunctionButton.addSelectionListener( new SelectionAdapter() {
+    this.addFunctionButton.addSelectionListener( new SelectionAdapter() {
 
       @Override
       public void widgetSelected( final SelectionEvent e ) {
@@ -592,6 +593,10 @@ public class SweepOrderSection extends JsdlFormPageSection {
         loopType.setStart( this.adapter.parseLOOPStringForStart( loopExp ) );
         loopType.setEnd( this.adapter.parseLOOPStringForEnd( loopExp ) );
         loopType.setStep( this.adapter.parseLOOPStringForStep( loopExp ) );
+        for( ExceptionType exc : this.adapter.parseLOOPStringForExceptions( loopExp ) )
+        {
+          loopType.getException().add( exc );
+        }
         EClass eClass = ExtendedMetaData.INSTANCE.getDocumentRoot( pak );
         Entry e = FeatureMapUtil.createEntry( eClass.getEStructuralFeature( "loop" ), //$NON-NLS-1$
                                               loopType );

@@ -35,8 +35,12 @@ import eu.geclipse.jsdl.model.base.JobIdentificationType;
 import eu.geclipse.jsdl.model.base.RangeType;
 import eu.geclipse.jsdl.model.base.RangeValueType;
 import eu.geclipse.jsdl.model.base.ResourcesType;
+import eu.geclipse.jsdl.model.functions.ExceptionType;
+import eu.geclipse.jsdl.model.functions.FunctionsFactory;
+import eu.geclipse.jsdl.model.functions.FunctionsPackage;
 import eu.geclipse.jsdl.model.functions.LoopType;
 import eu.geclipse.jsdl.model.functions.ValuesType;
+import eu.geclipse.jsdl.model.functions.impl.FunctionsPackageImpl;
 import eu.geclipse.jsdl.model.posix.POSIXApplicationType;
 import eu.geclipse.jsdl.model.sweep.AssignmentType;
 import eu.geclipse.jsdl.model.sweep.SweepType;
@@ -212,18 +216,18 @@ public class ParametricJobAdapter extends JsdlAdaptersFactory {
         result.add( baseCandidate + "jsdl:HostName" );
       }
     }
-//    if (resources.getFileSystem() != null){
-//      String baseFileSystem = baseString + "jsdl:CandidateHosts/";
-//      if( resources.getCandidateHosts().getHostName().size() > 1 ) {
-//        int i = 1;
-//        for( Object host : resources.getCandidateHosts().getHostName() ) {
-//          result.add( baseCandidate + "jsdl:HostName[" + i + "]" );
-//          i++;
-//        }
-//      } else {
-//        result.add( baseCandidate + "jsdl:HostName" );
-//      }
-//    }
+    // if (resources.getFileSystem() != null){
+    // String baseFileSystem = baseString + "jsdl:CandidateHosts/";
+    // if( resources.getCandidateHosts().getHostName().size() > 1 ) {
+    // int i = 1;
+    // for( Object host : resources.getCandidateHosts().getHostName() ) {
+    // result.add( baseCandidate + "jsdl:HostName[" + i + "]" );
+    // i++;
+    // }
+    // } else {
+    // result.add( baseCandidate + "jsdl:HostName" );
+    // }
+    // }
     if( resources.isSetExclusiveExecution() ) {
       result.add( baseString + "jsdl:ExclusiveExecution" );
     }
@@ -279,8 +283,6 @@ public class ParametricJobAdapter extends JsdlAdaptersFactory {
                                         baseString + "jsdl:TotalResourceCount/" ) );
     return result;
   }
-  
-  
 
   private List<String> parseRangeValueType( final RangeValueType rangeType,
                                             final String baseString )
@@ -423,10 +425,10 @@ public class ParametricJobAdapter extends JsdlAdaptersFactory {
             if( loopF.getValue() instanceof LoopType ) {
               LoopType loop = ( LoopType )loopF.getValue();
               List<BigInteger> list = new ArrayList<BigInteger>();
-              for( BigInteger exc : ( BigInteger[] )loop.getException()
-                .toArray( new BigInteger[ 0 ] ) )
+              for( ExceptionType exc : ( ExceptionType[] )loop.getException()
+                .toArray( new ExceptionType[ 0 ] ) )
               {
-                list.add( exc );
+                list.add( exc.getValue() );
               }
               result.add( createLOOPString( loop.getStart(),
                                             loop.getEnd(),
@@ -522,6 +524,30 @@ public class ParametricJobAdapter extends JsdlAdaptersFactory {
     String[] splited = loopString.split( "step\\s*=\\s*" );
     if( splited.length > 1 ) {
       result = new BigInteger( splited[ 1 ].split( "\\s*\\)" )[ 0 ] );
+    }
+    return result;
+  }
+
+  public List<ExceptionType> parseLOOPStringForExceptions( final String loopString )
+  {
+    List<ExceptionType> result = new ArrayList<ExceptionType>();
+    FunctionsPackage pak = FunctionsPackageImpl.eINSTANCE;
+    FunctionsFactory factory = pak.getFunctionsFactory();
+    String[] splited = loopString.split( "\\s*\\\\\\s*\\{\\s*" );
+    if( splited.length > 1 ) {
+      splited = splited[ 1 ].split( "\\s*;\\s*" );
+      for( String split : splited ) {
+        try {
+          if( split.endsWith( " }" ) ) {
+            split = split.split( "\\s*\\}" )[ 0 ];
+          }
+          ExceptionType exc = factory.createExceptionType();
+          exc.setValue( new BigInteger( split ) );
+          result.add( exc );
+        } catch( NumberFormatException nubmerExc ) {
+          // ignore
+        }
+      }
     }
     return result;
   }
