@@ -27,7 +27,6 @@ import eu.geclipse.aws.vo.AWSVoCreator;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridElementCreator;
-import eu.geclipse.core.model.IStorableElementCreator;
 import eu.geclipse.core.model.impl.AbstractGridElementCreator;
 import eu.geclipse.core.reporting.ProblemException;
 
@@ -38,7 +37,7 @@ import eu.geclipse.core.reporting.ProblemException;
  * @author Moritz Post
  */
 public class S3AWSServiceCreator extends AbstractGridElementCreator
-  implements IAWSServiceCreator, IStorableElementCreator
+  implements IAWSServiceCreator
 {
 
   /** The creators extension ID. */

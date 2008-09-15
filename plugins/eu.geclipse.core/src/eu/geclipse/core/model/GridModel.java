@@ -185,53 +185,6 @@ public class GridModel {
   }
   
   /**
-   * Get all element creators that implement the
-   * {@link IStorableElementCreator} interface. Note that this method
-   * only searches the extended creators and not the standard creators.
-   * 
-   * @return A list containing all currently registered element creators
-   * that implement the {@link IStorableElementCreator} interface.
-   * @see #getElementCreators()
-   */
-  public static List< IStorableElementCreator > getStorableElementCreators() {
-    List< IStorableElementCreator > jobCreators
-      = new ArrayList< IStorableElementCreator >();
-    List< IGridElementCreator > elementCreators
-      = getElementCreators();
-    for ( IGridElementCreator creator : elementCreators ) {
-      if ( creator instanceof IStorableElementCreator ) {
-        jobCreators.add( ( IStorableElementCreator ) creator ); 
-      }
-    }
-    return jobCreators;
-  }
-  
-  /**
-   * Get an {@link IStorableElementCreator} that is able to create
-   * an element from the specified file store. Searches the list returned
-   * by {@link #getStorableElementCreators}.
-   * 
-   * @param fileStore The {@link IFileStore} from which to create
-   * an element.
-   * @return A creator that is able to create an element from the
-   * specified file store or <code>null</code> if no such creator
-   * could be found.
-   * @see #getStorableElementCreators()
-   */
-  public static IStorableElementCreator getStorableElementCreator( final IFileStore fileStore ) {
-    IStorableElementCreator result = null;
-    List<IStorableElementCreator> creators
-      = getStorableElementCreators();
-    for ( IStorableElementCreator creator : creators ) {
-      if ( creator.canCreate( fileStore ) ) {
-        result = creator;
-        break;
-      }
-    }
-    return result;
-  }
-  
-  /**
    * Get a list of all element creators that implement the
    * {@link IGridJobCreator} interface. Note that this method
    * only searches the extended creators and not the standard creators.

@@ -36,7 +36,7 @@ import eu.geclipse.core.reporting.ProblemException;
  * Grid element creator for the {@link GenericVirtualOrganization}.
  */
 public class GenericVoCreator
-    implements IStorableElementCreator, ICreatorSourceMatcher {
+    implements IGridElementCreator, ICreatorSourceMatcher {
   
   /**
    * The creators extension ID.

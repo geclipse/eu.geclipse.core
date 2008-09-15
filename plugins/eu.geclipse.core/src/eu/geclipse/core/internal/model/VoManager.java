@@ -142,13 +142,6 @@ public class VoManager
       } catch ( ProblemException pExc ) {
         Activator.logException( pExc );
       }
-      /*
-      IStorableElementCreator creator
-        = GridModel.getStorableElementCreator( childStore );
-      if ( creator != null ) {
-        create( creator );
-      }
-      */
     }
     
     String defaultVoName = Preferences.getDefaultVoName();
