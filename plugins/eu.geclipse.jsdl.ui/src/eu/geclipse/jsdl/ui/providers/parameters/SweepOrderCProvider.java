@@ -21,8 +21,13 @@ import org.eclipse.jface.viewers.Viewer;
 
 import eu.geclipse.jsdl.model.sweep.SweepType;
 
+/**
+ * Content provider for SweepOrderSection. Provides hierarchical
+ * presentation of sweep loops with parameters' names as a tree nodes.
+ */
 public class SweepOrderCProvider implements ITreeContentProvider {
 
+  @SuppressWarnings("unchecked")
   public Object[] getChildren( final Object parentElement ) {
     Object[] result = null;
     if( parentElement instanceof SweepType ) {
@@ -54,20 +59,18 @@ public class SweepOrderCProvider implements ITreeContentProvider {
   public Object[] getElements( final Object inputElement ) {
     Object[] result = null;
     if( inputElement instanceof SweepType[] ) {
-      
-      result = new Object[((Object[])inputElement).length];
+      result = new Object[ ( ( Object[] )inputElement ).length ];
       result = ( Object[] )inputElement;
-    } else if (inputElement instanceof SweepType){
-      SweepType sweep = (SweepType) inputElement;
-      result = new Object[1];
-      result[0] = sweep;
-//      ??
+    } else if( inputElement instanceof SweepType ) {
+      SweepType sweep = ( SweepType )inputElement;
+      result = new Object[ 1 ];
+      result[ 0 ] = sweep;
     }
     return result;
   }
 
   public void dispose() {
-    // TODO Auto-generated method stub
+    // empty implementation
   }
 
   public void inputChanged( final Viewer viewer,
