@@ -10,7 +10,7 @@
             name="Service Job Creator">
          <source
                class="org.eclipse.core.resources.IFile"
-               pattern="*.gtdl">
+               pattern=".*\.gtdl">
          </source>
          <target
                class="eu.geclipse.core.model.IServiceJob"
