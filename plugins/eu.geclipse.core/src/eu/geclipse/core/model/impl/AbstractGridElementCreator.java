@@ -15,7 +15,10 @@
 
 package eu.geclipse.core.model.impl;
 
+import eu.geclipse.core.model.IGridContainer;
+import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridElementCreator;
+import eu.geclipse.core.reporting.ProblemException;
 
 /**
  * Abstract implementation of the {@link IGridElementCreator}
@@ -42,6 +45,10 @@ public abstract class AbstractGridElementCreator
       setObject( fromObject );
     }
     return result;
+  }
+  
+  public IGridElement create( final IGridContainer parent, final Object source ) throws ProblemException {
+    return canCreate( source ) ? create( parent ) : null;
   }
 
   /* (non-Javadoc)

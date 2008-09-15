@@ -26,6 +26,7 @@ import eu.geclipse.core.Preferences;
 import eu.geclipse.core.internal.Activator;
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridElement;
+import eu.geclipse.core.model.IGridElementCreator;
 import eu.geclipse.core.model.IStorableElement;
 import eu.geclipse.core.model.IStorableElementCreator;
 import eu.geclipse.core.model.IVirtualOrganization;
@@ -130,12 +131,24 @@ public class VoManager
                                   Activator.PLUGIN_ID );
     }
     
+    ElementCreatorRegistry registry = ElementCreatorRegistry.getRegistry();
     for ( IFileStore childStore : childStores ) {
+      try {
+        IGridElementCreator creator = registry.getCreator( childStore, IVirtualOrganization.class );
+        if ( creator != null ) {
+          creator.canCreate( childStore ); // Temporary workaround
+          create( creator );
+        }
+      } catch ( ProblemException pExc ) {
+        Activator.logException( pExc );
+      }
+      /*
       IStorableElementCreator creator
         = GridModel.getStorableElementCreator( childStore );
       if ( creator != null ) {
         create( creator );
       }
+      */
     }
     
     String defaultVoName = Preferences.getDefaultVoName();

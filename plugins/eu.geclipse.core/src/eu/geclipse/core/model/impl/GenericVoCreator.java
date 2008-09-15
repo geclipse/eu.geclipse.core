@@ -23,6 +23,7 @@ import org.eclipse.core.filesystem.IFileInfo;
 import org.eclipse.core.filesystem.IFileStore;
 
 import eu.geclipse.core.ICoreProblems;
+import eu.geclipse.core.model.ICreatorSourceMatcher;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridElementCreator;
@@ -35,7 +36,7 @@ import eu.geclipse.core.reporting.ProblemException;
  * Grid element creator for the {@link GenericVirtualOrganization}.
  */
 public class GenericVoCreator
-    implements IStorableElementCreator {
+    implements IStorableElementCreator, ICreatorSourceMatcher {
   
   /**
    * The creators extension ID.
@@ -103,7 +104,15 @@ public class GenericVoCreator
   }
 
   public boolean canCreate( final Object fromObject ) {
-    return false;
+    
+    boolean result = false;
+    
+    if ( fromObject instanceof IFileStore ) {
+      result = canCreate( ( IFileStore ) fromObject );
+    }
+    
+    return result;
+    
   }
   
   public boolean canCreate( final IFileStore fromFileStore ) {
@@ -125,6 +134,10 @@ public class GenericVoCreator
       vo = new GenericVirtualOrganization( fileStore );
     }
     return vo;
+  }
+  
+  public IGridElement create( final IGridContainer parent, final Object source ) throws ProblemException {
+    return canCreate( source ) ? create( parent ) : null;
   }
   
   public String getExtensionID() {

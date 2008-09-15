@@ -85,7 +85,8 @@
             name="Generic VO"
             wizard="eu.geclipse.ui.wizards.GenericVoWizard">
          <source
-               class="org.eclipse.core.filesystem.IFileStore">
+               class="org.eclipse.core.filesystem.IFileStore"
+               matcher="eu.geclipse.core.model.impl.GenericVoCreator">
          </source>
          <target
                class="eu.geclipse.core.model.impl.GenericVirtualOrganization"

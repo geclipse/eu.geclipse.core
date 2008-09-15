@@ -79,6 +79,8 @@ public interface IGridElementCreator {
    */
   public IGridElement create( final IGridContainer parent ) throws ProblemException;
   
+  public IGridElement create( final IGridContainer parent, final Object source ) throws ProblemException;
+  
   /**
    * Get the argument of the last successful call of any of the
    * <code>canCreate(...)</code> methods. A successful call is a

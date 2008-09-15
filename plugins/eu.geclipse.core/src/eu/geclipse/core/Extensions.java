@@ -254,6 +254,13 @@ public class Extensions {
     = "default"; //$NON-NLS-1$
   
   /**
+   * The ID of the matcher attribute of the source configuration element
+   * contained in the Grid element creator extension point.
+   */
+  public static final String GRID_ELEMENT_CREATOR_SOURCE_MATCHER_ATTRIBUTE
+    = "matcher"; //$NON-NLS-1$
+  
+  /**
    * The ID of the target configuration element
    * contained in the Grid element creator extension point.
    */
