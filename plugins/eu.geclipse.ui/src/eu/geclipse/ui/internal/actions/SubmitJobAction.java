@@ -16,6 +16,7 @@
 package eu.geclipse.ui.internal.actions;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -25,9 +26,11 @@ import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.IWorkbenchSite;
 import org.eclipse.ui.actions.SelectionListenerAction;
 
-import eu.geclipse.core.model.IGridJob;
+import eu.geclipse.core.model.IGridContainer;
+import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridJobDescription;
 import eu.geclipse.core.model.IGridProject;
+import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.ui.wizards.jobsubmission.JobCreatorSelectionWizard;
 
 /**
@@ -80,17 +83,19 @@ public class SubmitJobAction extends SelectionListenerAction {
       Iterator<?> iter = selection.iterator();
       while( iter.hasNext() && enabled ) {
         Object element = iter.next();
-        IGridJobDescription jobDescription = getJobDescription( element );
-        enabled &= ( jobDescription != null );
-        if( jobDescription != null ) {
+        List<IGridJobDescription> descriptions = getJobDescriptions( element );        
+        if( descriptions != null 
+            && !descriptions.isEmpty() ) {
           if( project == null ) {
-            project = jobDescription.getProject();
+            project = descriptions.get( 0 ).getProject();
           }
-          if(project!=jobDescription.getProject()){
+          if(project != descriptions.get( 0 ).getProject()){
             //job description from different projects cannot be submitted together
             return false;
           }
-          this.jobDescriptions.add( jobDescription );
+          this.jobDescriptions.addAll( descriptions );
+        } else {
+          enabled = false;
         }
       }
     }
@@ -99,16 +104,43 @@ public class SubmitJobAction extends SelectionListenerAction {
     
   }
 
-private IGridJobDescription getJobDescription( final Object element ) {
-    IGridJobDescription description = null;
+  private List<IGridJobDescription> getJobDescriptions( final Object element ) {
+    List<IGridJobDescription> descriptions = null;
     if( element instanceof IGridJobDescription ) {
-      description = ( IGridJobDescription )element;
-    } else if( element instanceof IGridJob ) {
-      IGridJob job = ( IGridJob )element;
-      description = job.getJobDescription();
-    } else if ( element instanceof IAdaptable ) {
-      description = ( IGridJobDescription ) ( ( IAdaptable ) element ).getAdapter( IGridJobDescription.class );
+      descriptions = Collections.singletonList( ( IGridJobDescription )element );
+    } else if( element instanceof IGridContainer ) {
+      IGridContainer container = ( IGridContainer )element;
+      descriptions = getDescriptionsFromContainer( container );      
+    } 
+    
+    if( descriptions == null
+        && element instanceof IAdaptable ) {
+      IGridJobDescription jsdl = ( IGridJobDescription )( ( IAdaptable )element ).getAdapter( IGridJobDescription.class );
+      if( jsdl != null ) {
+        descriptions = Collections.singletonList( jsdl );
+      }
     }
-    return description;
+    return descriptions;
+  }
+
+  private List<IGridJobDescription> getDescriptionsFromContainer( final IGridContainer container )
+  {
+    List<IGridJobDescription> descriptions = null;
+    if( container.isLocal() ) {
+      try {
+        for( IGridElement gridElement : container.getChildren( null ) ) {
+          if( gridElement instanceof IGridJobDescription ) {
+            if( descriptions == null ) {
+              descriptions = new ArrayList<IGridJobDescription>();
+            }
+            descriptions.add( ( IGridJobDescription )gridElement );
+          }
+        }
+      } catch( ProblemException exception ) {
+        // TODO mariusz Auto-generated catch block
+        exception.printStackTrace();
+      }
+    }
+    return descriptions;
   }
 }

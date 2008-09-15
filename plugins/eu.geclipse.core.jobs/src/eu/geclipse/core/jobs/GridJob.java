@@ -122,7 +122,7 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
     this.jobName = getName();
     readJobID();
     readJobInfo( jobFolder );    
-    readChildren();    
+    readChildren();
     setJobFolderProperties( jobFolder );
     if( this.jobDescriptionFile != null ) {
       readJobDescription();

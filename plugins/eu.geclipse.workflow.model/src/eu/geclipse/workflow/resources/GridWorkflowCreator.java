@@ -32,7 +32,7 @@ public class GridWorkflowCreator extends AbstractGridElementCreator {
   private static final String FILE_EXTENSION = "workflow"; //$NON-NLS-1$
 
   public boolean canCreate( final Class<? extends IGridElement> elementType ) {
-    return IGridWorkflowDescription.class.isAssignableFrom( elementType );
+    return elementType.isAssignableFrom( IGridWorkflowDescription.class );
   }
 
   public IGridElement create( final IGridContainer parent )
