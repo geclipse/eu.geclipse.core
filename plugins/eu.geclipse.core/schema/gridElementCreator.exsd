@@ -1,16 +1,21 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
-<schema targetNamespace="eu.geclipse.core">
+<schema targetNamespace="eu.geclipse.core" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
-      <appInfo>
+      <appinfo>
          <meta.schema plugin="eu.geclipse.core" id="gridElementCreator" name="Grid Element Creator"/>
-      </appInfo>
+      </appinfo>
       <documentation>
          This extension point is the entry point into the g-Eclipse model. It defines element creators that are able to create Grid model elements from arbitrary &lt;code&gt;Object&lt;/code&gt;s like &lt;code&gt;IResource&lt;/code&gt;s or &lt;code&gt;URI&lt;/code&gt;s. These element creators are used to both create elements and to insert them into the model hierarchy.
       </documentation>
    </annotation>
 
    <element name="extension">
+      <annotation>
+         <appinfo>
+            <meta.element />
+         </appinfo>
+      </annotation>
       <complexType>
          <sequence>
             <element ref="creator" minOccurs="1" maxOccurs="unbounded"/>
@@ -34,9 +39,9 @@
                <documentation>
                   
                </documentation>
-               <appInfo>
+               <appinfo>
                   <meta.attribute translatable="true"/>
-               </appInfo>
+               </appinfo>
             </annotation>
          </attribute>
       </complexType>
@@ -60,9 +65,9 @@
                <documentation>
                   A name of the creator that may be used to represent the creator in the UI, e.g. in wizard pages.
                </documentation>
-               <appInfo>
+               <appinfo>
                   <meta.attribute translatable="true"/>
-               </appInfo>
+               </appinfo>
             </annotation>
          </attribute>
          <attribute name="class" type="string" use="required">
@@ -70,9 +75,9 @@
                <documentation>
                   Implementation of the &lt;code&gt;eu.geclipse.core.model.IGridElementCreator&lt;/code&gt; interface that is used to create Grid elements and to insert them into the Grid model hierarchy.
                </documentation>
-               <appInfo>
+               <appinfo>
                   <meta.attribute kind="java" basedOn="eu.geclipse.core.model.IGridElementCreator"/>
-               </appInfo>
+               </appinfo>
             </annotation>
          </attribute>
          <attribute name="wizard" type="string">
@@ -88,7 +93,7 @@
    <element name="source">
       <annotation>
          <documentation>
-            Specifies the source of the creator. The source of a creator is an arbitrary class (inheriting from &lt;code&gt;java.lang.Object&lt;/code&gt; from which a Grid element can be created.
+            Specifies the source of the creator. The source of a creator is an arbitrary class (inheriting from &lt;code&gt;java.lang.Object&lt;/code&gt; from which a Grid element can be created. Furthermore an optional pattern can be defined that will be matched against toString() of the source. As last step a matcher may be defined that may have a final look at the specified object. Only if all defined matching rules hold for the specified source object it is assumed that this creator potentially can create an IGridElement from the source object.
          </documentation>
       </annotation>
       <complexType>
@@ -97,9 +102,9 @@
                <documentation>
                   An arbitrary &lt;code&gt;java.lang.Object&lt;/code&gt; from which this creator can create a Grid element.
                </documentation>
-               <appInfo>
+               <appinfo>
                   <meta.attribute kind="java" basedOn="java.lang.Object:"/>
-               </appInfo>
+               </appinfo>
             </annotation>
          </attribute>
          <attribute name="pattern" type="string">
@@ -114,6 +119,16 @@
                <documentation>
                   A boolean element determining if this is the default source for the element creator. There should either be no default source or exactly one default source. Specifying more than one default sources may result in undetermined behaviour. If this is the default resource the pattern attribute may be interpreted as default value, e.g. for a URI source.
                </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="matcher" type="string">
+            <annotation>
+               <documentation>
+                  This implementation of eu.geclipse.core.model.ICreatorSourceMatcher is used to match the source object against the element creator. A matcher is defined in addition to the class and pattern attributes. Only if both class and pattern do already match the object the matcher is also invoked. Only if all matching methods succeed this creator is assumed to be appropriate to create an element from the source.
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java" basedOn=":eu.geclipse.core.model.ICreatorSourceMatcher"/>
+               </appinfo>
             </annotation>
          </attribute>
       </complexType>
@@ -138,27 +153,27 @@
                <documentation>
                   A &lt;code&gt;eu.geclipse.core.model.IGridElement&lt;/code&gt; that denotes the types of elements that are created by an element creator.
                </documentation>
-               <appInfo>
+               <appinfo>
                   <meta.attribute kind="java" basedOn=":eu.geclipse.core.model.IGridElement"/>
-               </appInfo>
+               </appinfo>
             </annotation>
          </attribute>
       </complexType>
    </element>
 
    <annotation>
-      <appInfo>
+      <appinfo>
          <meta.section type="since"/>
-      </appInfo>
+      </appinfo>
       <documentation>
          0.5
       </documentation>
    </annotation>
 
    <annotation>
-      <appInfo>
+      <appinfo>
          <meta.section type="examples"/>
-      </appInfo>
+      </appinfo>
       <documentation>
          &lt;pre&gt;
 &lt;extension point=&quot;eu.geclipse.core.gridElementCreator&quot;&gt;
@@ -179,27 +194,27 @@
    </annotation>
 
    <annotation>
-      <appInfo>
+      <appinfo>
          <meta.section type="apiInfo"/>
-      </appInfo>
+      </appinfo>
       <documentation>
          See the &lt;code&gt;eu.geclipse.core.model.IGridElementCreator&lt;/code&gt; interface.
       </documentation>
    </annotation>
 
    <annotation>
-      <appInfo>
+      <appinfo>
          <meta.section type="implementation"/>
-      </appInfo>
+      </appinfo>
       <documentation>
          A core implementation of this extension point is for instance used for the Generic Virtual Organization.
       </documentation>
    </annotation>
 
    <annotation>
-      <appInfo>
+      <appinfo>
          <meta.section type="copyright"/>
-      </appInfo>
+      </appinfo>
       <documentation>
          Copyright (c) 2006, 2007 g-Eclipse Consortium
 &lt;br&gt;&lt;br&gt;
