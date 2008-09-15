@@ -169,7 +169,7 @@ public class SweepFunctionDialog extends Dialog implements ModifyListener {
         try {
           new BigInteger( val );
         } catch( NumberFormatException exc ) {
-          if( !val.equals( "-" ) ) {
+          if( !val.equals( "-" ) && !(val.equals( "" ))) {
             event.doit = false;
             break;
           }
