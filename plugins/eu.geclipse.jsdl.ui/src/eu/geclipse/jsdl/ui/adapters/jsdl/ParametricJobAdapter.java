@@ -22,8 +22,11 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.EStructuralFeatureImpl.ContainmentUpdatingFeatureMapEntry;
+import org.eclipse.emf.ecore.util.ExtendedMetaData;
 import org.eclipse.emf.ecore.util.FeatureMap;
+import org.eclipse.emf.ecore.util.FeatureMapUtil;
 import org.eclipse.emf.ecore.util.FeatureMap.Entry;
 
 import eu.geclipse.jsdl.model.base.ApplicationType;
@@ -43,7 +46,10 @@ import eu.geclipse.jsdl.model.functions.ValuesType;
 import eu.geclipse.jsdl.model.functions.impl.FunctionsPackageImpl;
 import eu.geclipse.jsdl.model.posix.POSIXApplicationType;
 import eu.geclipse.jsdl.model.sweep.AssignmentType;
+import eu.geclipse.jsdl.model.sweep.SweepFactory;
+import eu.geclipse.jsdl.model.sweep.SweepPackage;
 import eu.geclipse.jsdl.model.sweep.SweepType;
+import eu.geclipse.jsdl.model.sweep.impl.SweepPackageImpl;
 
 public class ParametricJobAdapter extends JsdlAdaptersFactory {
 
@@ -549,6 +555,89 @@ public class ParametricJobAdapter extends JsdlAdaptersFactory {
         }
       }
     }
+    return result;
+  }
+
+  private void setEnumValues( final AssignmentType assignment,
+                              final List<String> values )
+  {
+    if( values != null && values.size() > 0 ) {
+      FunctionsPackage pak = FunctionsPackageImpl.eINSTANCE;
+      FunctionsFactory factory = pak.getFunctionsFactory();
+      ValuesType valuesType = factory.createValuesType();
+      for( String value : values ) {
+        if( !value.equals( "" ) ) {
+          valuesType.getValue().add( value );
+        }
+      }
+      EClass eClass = ExtendedMetaData.INSTANCE.getDocumentRoot( pak );
+      Entry e = FeatureMapUtil.createEntry( eClass.getEStructuralFeature( "values" ), //$NON-NLS-1$
+                                            valuesType );
+      assignment.getFunctionGroup().add( e );
+    } else {
+      assignment.getFunctionGroup().clear();
+    }
+  }
+
+  private void setLoop( final AssignmentType assignment,
+                        final List<String> values )
+  {
+    if( values != null && values.size() > 0 ) {
+      FunctionsPackage pak = FunctionsPackageImpl.eINSTANCE;
+      FunctionsFactory factory = pak.getFunctionsFactory();
+      for( String loopExp : values ) {
+        LoopType loopType = factory.createLoopType();
+        loopType.setStart( parseLOOPStringForStart( loopExp ) );
+        loopType.setEnd( parseLOOPStringForEnd( loopExp ) );
+        loopType.setStep( parseLOOPStringForStep( loopExp ) );
+        for( ExceptionType exc : parseLOOPStringForExceptions( loopExp ) ) {
+          loopType.getException().add( exc );
+        }
+        EClass eClass = ExtendedMetaData.INSTANCE.getDocumentRoot( pak );
+        Entry e = FeatureMapUtil.createEntry( eClass.getEStructuralFeature( "loop" ), //$NON-NLS-1$
+                                              loopType );
+        assignment.getFunctionGroup().add( e );
+      }
+    } else {
+      assignment.getFunctionGroup().clear();
+    }
+  }
+
+  public void setFunctionValues( final AssignmentType assignment,
+                                 final List<String> values )
+  {
+    List<String> loops = new ArrayList<String>();
+    for( String value : values ) {
+      if( value.startsWith( "LOOP" ) ) {
+        loops.add( value );
+      }
+    }
+    values.removeAll( loops );
+    assignment.getFunctionGroup().clear();
+    if( values.size() > 0 ) {
+      setEnumValues( assignment, values );
+    } else {
+      setLoop( assignment, loops );
+    }
+  }
+
+  public SweepType createNewSweepType( final String parameter ) {
+    SweepType result = null;
+    SweepPackage pak = SweepPackageImpl.eINSTANCE;
+    SweepFactory factory = pak.getSweepFactory();
+    result = factory.createSweepType();
+    AssignmentType assignment = factory.createAssignmentType();
+    assignment.getParameter().add( parameter );
+    result.getAssignment().add( assignment );
+    return result;
+  }
+
+  public AssignmentType createNewAssignmentType( final String parameter ) {
+    AssignmentType result = null;
+    SweepPackage pak = SweepPackageImpl.eINSTANCE;
+    SweepFactory factory = pak.getSweepFactory();
+    result = factory.createAssignmentType();
+    result.getParameter().add( parameter );
     return result;
   }
 }

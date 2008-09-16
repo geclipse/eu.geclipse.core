@@ -48,6 +48,8 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -148,6 +150,7 @@ public class SweepOrderSection extends JsdlFormPageSection {
     }
   }
 
+  // setting input to SWT widgets
   private void fillFields() {
     if( this.viewer != null ) {
       this.viewer.setInput( this.sweepType.toArray( new SweepType[ 0 ] ) );
@@ -167,6 +170,7 @@ public class SweepOrderSection extends JsdlFormPageSection {
 
   private void createSection( final Composite parent, final FormToolkit toolkit )
   {
+    // general form settings
     this.shell = parent.getShell();
     String sectionTitle = "Sweep order";
     String sectionDescription = "Specify the order of parameters sweep and their dependency from each other";
@@ -175,6 +179,7 @@ public class SweepOrderSection extends JsdlFormPageSection {
                                                                    sectionTitle,
                                                                    sectionDescription,
                                                                    3 );
+    // sweep order tree
     Composite treeComp = toolkit.createComposite( client );
     GridData gData = new GridData( GridData.FILL_BOTH );
     gData.horizontalSpan = 3;
@@ -213,13 +218,16 @@ public class SweepOrderSection extends JsdlFormPageSection {
               setValuesField( SweepOrderSection.this.adapter.getValuesForParameter( SweepOrderSection.this.sweepCombo.getItem( i ),
                                                                                     SweepOrderSection.this.inerSweepList ) );
             }
+          } else if( sSel.isEmpty() ) {
+            SweepOrderSection.this.sweepCombo.deselectAll();
+            setValuesField( null );
           }
         }
         updateButtons();
       }
     } );
     this.manager = createMenu();
-    // buttons composite
+    // tree buttons composite
     Composite buttonComp = toolkit.createComposite( treeComp );
     buttonComp.setLayout( new GridLayout( 1, true ) );
     this.newButton = toolkit.createButton( buttonComp, "New sweep...", SWT.PUSH );
@@ -274,6 +282,10 @@ public class SweepOrderSection extends JsdlFormPageSection {
     this.textArea.addKeyListener( new KeyListener() {
 
       public void keyPressed( final KeyEvent e ) {
+        // do nothing
+      }
+
+      public void keyReleased( final KeyEvent e ) {
         List<String> val = new ArrayList<String>();
         for( String value : SweepOrderSection.this.textArea.getText()
           .split( System.getProperty( "line.separator" ) ) ) //$NON-NLS-1$
@@ -293,16 +305,12 @@ public class SweepOrderSection extends JsdlFormPageSection {
             }
           }
         }
-        setFunctionValues( assignment, val );
-        updateButtons();
+        SweepOrderSection.this.adapter.setFunctionValues( assignment, val );
         contentChanged();
-      }
-
-      public void keyReleased( final KeyEvent e ) {
-        // do nothing
+        updateButtons();
       }
     } );
-    // buttons values composite
+    // values buttons composite
     Composite buttonValComp = toolkit.createComposite( client );
     buttonValComp.setLayout( new GridLayout( 1, true ) );
     this.addFunctionButton = toolkit.createButton( buttonValComp,
@@ -329,7 +337,7 @@ public class SweepOrderSection extends JsdlFormPageSection {
         }
       }
     } );
-    addFunctionButton.setLayoutData( gData );
+    this.addFunctionButton.setLayoutData( gData );
     updateButtons();
     addButtonsListeners();
   }
@@ -357,7 +365,7 @@ public class SweepOrderSection extends JsdlFormPageSection {
         }
       }
     }
-    setFunctionValues( assignment, val );
+    this.adapter.setFunctionValues( assignment, val );
     updateButtons();
     contentChanged();
   }
@@ -456,6 +464,9 @@ public class SweepOrderSection extends JsdlFormPageSection {
       }
       this.textArea.setText( multiLinesContent );
       updateButtons();
+    } else {
+      this.textArea.setText( "" );
+      updateButtons();
     }
   }
 
@@ -542,79 +553,17 @@ public class SweepOrderSection extends JsdlFormPageSection {
   {
     SweepType refSweep = this.adapter.findSweepElement( refElement,
                                                         this.inerSweepList );
-    SweepType newSweep = createNewSweepType( element );
+    SweepType newSweep = this.adapter.createNewSweepType( element );
     if( refSweep != null ) {
       AssignmentType assignment = ( AssignmentType )newSweep.getAssignment()
         .get( 0 );
-      setFunctionValues( assignment, values );
+      this.adapter.setFunctionValues( assignment, values );
       refSweep.getSweep().add( newSweep );
     }
     this.viewer.refresh( true );
     refreshSweepCombo();
     setInput( this.jobDefinitionType );
     contentChanged();
-  }
-
-  void setFunctionValues( final AssignmentType assignment,
-                          final List<String> values )
-  {
-    List<String> loops = new ArrayList<String>();
-    for( String value : values ) {
-      if( value.startsWith( "LOOP" ) ) {
-        loops.add( value );
-      }
-    }
-    values.removeAll( loops );
-    boolean valuesAreEmpty = true;
-    if( values.size() > 0 ) {
-      FunctionsPackage pak = FunctionsPackageImpl.eINSTANCE;
-      FunctionsFactory factory = pak.getFunctionsFactory();
-      ValuesType valuesType = factory.createValuesType();
-      for( String value : values ) {
-        if( !value.equals( "" ) ) {
-          valuesAreEmpty = false;
-          valuesType.getValue().add( value );
-        }
-      }
-      // if( !valuesAreEmpty ) {
-      EClass eClass = ExtendedMetaData.INSTANCE.getDocumentRoot( pak );
-      Entry e = FeatureMapUtil.createEntry( eClass.getEStructuralFeature( "values" ), //$NON-NLS-1$
-                                            valuesType );
-      assignment.getFunctionGroup().add( e );
-      // } else {
-      // assignment.getFunctionGroup().get( 0 ).
-      // }
-    }
-    if( loops.size() > 0 ) {
-      FunctionsPackage pak = FunctionsPackageImpl.eINSTANCE;
-      FunctionsFactory factory = pak.getFunctionsFactory();
-      for( String loopExp : loops ) {
-        LoopType loopType = factory.createLoopType();
-        loopType.setStart( this.adapter.parseLOOPStringForStart( loopExp ) );
-        loopType.setEnd( this.adapter.parseLOOPStringForEnd( loopExp ) );
-        loopType.setStep( this.adapter.parseLOOPStringForStep( loopExp ) );
-        for( ExceptionType exc : this.adapter.parseLOOPStringForExceptions( loopExp ) )
-        {
-          loopType.getException().add( exc );
-        }
-        EClass eClass = ExtendedMetaData.INSTANCE.getDocumentRoot( pak );
-        Entry e = FeatureMapUtil.createEntry( eClass.getEStructuralFeature( "loop" ), //$NON-NLS-1$
-                                              loopType );
-        assignment.getFunctionGroup().add( e );
-        // loopType.getException().add( e );
-      }
-    } else {
-      Iterator iterator = assignment.getFunctionGroup().iterator();
-      while( iterator.hasNext() ) {
-        Object obj = iterator.next();
-        if( obj instanceof ContainmentUpdatingFeatureMapEntry ) {
-          ContainmentUpdatingFeatureMapEntry loopF = ( ContainmentUpdatingFeatureMapEntry )obj;
-          if( loopF.getValue() instanceof LoopType ) {
-            assignment.getFunctionGroup().remove( obj );
-          }
-        }
-      }
-    }
   }
 
   Action createIndependentSweepAction() {
@@ -689,9 +638,9 @@ public class SweepOrderSection extends JsdlFormPageSection {
   {
     SweepType refSweep = this.adapter.findSweepElement( refElement,
                                                         this.inerSweepList );
-    AssignmentType newSweep = createNewAssignmentType( sweepElement );
+    AssignmentType newSweep = this.adapter.createNewAssignmentType( sweepElement );
     if( refSweep != null ) {
-      setFunctionValues( newSweep, values );
+      this.adapter.setFunctionValues( newSweep, values );
       refSweep.getAssignment().add( newSweep );
     }
     this.viewer.refresh( true );
@@ -844,35 +793,16 @@ public class SweepOrderSection extends JsdlFormPageSection {
     }
   }
 
-  private SweepType createNewSweepType( final String parameter ) {
-    SweepType result = null;
-    SweepPackage pak = SweepPackageImpl.eINSTANCE;
-    SweepFactory factory = pak.getSweepFactory();
-    result = factory.createSweepType();
-    AssignmentType assignment = factory.createAssignmentType();
-    assignment.getParameter().add( parameter );
-    result.getAssignment().add( assignment );
-    return result;
-  }
-
-  private AssignmentType createNewAssignmentType( final String parameter ) {
-    AssignmentType result = null;
-    SweepPackage pak = SweepPackageImpl.eINSTANCE;
-    SweepFactory factory = pak.getSweepFactory();
-    result = factory.createAssignmentType();
-    result.getParameter().add( parameter );
-    return result;
-  }
-
   protected void performAddIndependent( final String sweepElement,
                                         final String refElement,
                                         final List<String> values )
   {
     if( refElement == null ) {
       // there are no sweep elements in JSDL
-      SweepType newSweep = createNewSweepType( sweepElement );
-      setFunctionValues( ( AssignmentType )newSweep.getAssignment().get( 0 ),
-                         values );
+      SweepType newSweep = this.adapter.createNewSweepType( sweepElement );
+      this.adapter.setFunctionValues( ( AssignmentType )newSweep.getAssignment()
+                                        .get( 0 ),
+                                      values );
       EClass eClass = ExtendedMetaData.INSTANCE.getDocumentRoot( SweepPackageImpl.eINSTANCE );
       Entry e = FeatureMapUtil.createEntry( eClass.getEStructuralFeature( "sweep" ), //$NON-NLS-1$
                                             newSweep );
@@ -881,9 +811,10 @@ public class SweepOrderSection extends JsdlFormPageSection {
       // there already is sweep element in JSDL
       SweepType refSweep = this.adapter.findSweepElement( refElement,
                                                           this.inerSweepList );
-      SweepType newSweep = createNewSweepType( sweepElement );
-      setFunctionValues( ( AssignmentType )newSweep.getAssignment().get( 0 ),
-                         values );
+      SweepType newSweep = this.adapter.createNewSweepType( sweepElement );
+      this.adapter.setFunctionValues( ( AssignmentType )newSweep.getAssignment()
+                                        .get( 0 ),
+                                      values );
       if( refSweep.eContainer() instanceof JobDefinitionType ) {
         EClass eClass = ExtendedMetaData.INSTANCE.getDocumentRoot( SweepPackageImpl.eINSTANCE );
         Entry e = FeatureMapUtil.createEntry( eClass.getEStructuralFeature( "sweep" ), //$NON-NLS-1$
