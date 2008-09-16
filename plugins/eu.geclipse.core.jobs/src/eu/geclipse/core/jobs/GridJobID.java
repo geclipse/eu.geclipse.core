@@ -29,14 +29,24 @@ public class GridJobID implements IGridJobID {
   final static String XML_ATTRIBUTE_CLASS = "class"; //$NON-NLS-1$
   final static private String XML_NAMENODE = "Name"; //$NON-NLS-1$
   final static private String XML_DATANODE = "Data"; //$NON-NLS-1$
-  protected String jobID = UNKNOWN;
-  private GridJob job;  // warning! May be null if GridJob wasn't created for submitted job
+  final static private String XML_VONODE = "VO"; //$NON-NLS-1$
+  private String jobID = UNKNOWN;
+  private String VO = UNKNOWN;
+  private GridJob job;  
 
   /**
    * Empty constructor for JobId created in past g-Eclipse sessions
    */
   public GridJobID() {
     // default constructor
+  }
+
+  /**
+   * Empty constructor for JobId created in past g-Eclipse sessions
+   */
+  public GridJobID(String _jobID, String _VO) {
+    this.jobID=_jobID;
+    this.VO=_VO;
   }
 
   /**
@@ -57,6 +67,11 @@ public class GridJobID implements IGridJobID {
         this.jobID = node.getTextContent();
         if( this.jobID != null )
           this.jobID = this.jobID.trim();
+      }
+      if( XML_VONODE.equals( node.getNodeName() ) ) {
+        this.VO = node.getTextContent();
+        if( this.VO != null )
+          this.VO = this.VO.trim();
       }
       if( XML_DATANODE.equals( node.getNodeName() ) ) {
         setData( node.getTextContent() );
@@ -82,7 +97,9 @@ public class GridJobID implements IGridJobID {
            + this.getClass().getName()
            + "\"><Name>"              //$NON-NLS-1$
            + this.jobID
-           + "</Name><Data><![CDATA[" //$NON-NLS-1$
+           + "</Name><VO>"
+           + this.VO
+           + "</VO><Data><![CDATA[" //$NON-NLS-1$
            + getData()
            + "]]></Data></"           //$NON-NLS-1$
            + XML_ROOT
@@ -106,5 +123,9 @@ public class GridJobID implements IGridJobID {
    */
   public GridJob getJob() {
     return this.job;
+  }
+
+  public String getVO() {
+    return this.VO;
   }
 }
