@@ -21,21 +21,11 @@ import eu.geclipse.core.reporting.ProblemException;
 /**
  * Base interface for all classes that implement functionality for
  * creating specific implementations of the {@link IGridElement}
- * interface. Element creates contain mainly two types of methods, the
- * <code>canCreate(...)</code> methods and the <code>create(...)</code>
- * methods. Therefore an element creator can be asked if it is
- * potentially able to create an element and if so it can be asked to
- * really try to create the element. It is not necessarily true that the
- * creator can create an element if it returns true when asked if it can.
- * It may also the case that there occurs an error during the creation
- * of the element even if it should in principal be possible to create
- * an element.
- * 
- * If any of the <code>canCreate(...)</code> methods is called with an
- * argument this argument is stored if the method returns true until
- * another <code>canCreate(...)</code> method is called with an argument
- * and returns true. This stored argument can be retrieved with the
- * {@link #getObject()} method.
+ * interface. Element creators and their capabilities to create elements from
+ * a source object are specified with the eu.geclipse.core.gridElementCreator
+ * extension point. Normally an element creator needs a source object from
+ * which it creates a corresponding grid model element. This source object has
+ * to be set with {@link #setSource(Object)}.
  */
 public interface IGridElementCreator {
   
@@ -49,6 +39,8 @@ public interface IGridElementCreator {
    * @param elementType The type of the element that should be created.
    * @return True if this element creator is potentially able to
    * create an element of the specified type. 
+   * @Deprecated This method is deprecated in favour of the extended definition
+   * of the eu.geclipse.core.gridElementCreator extension point.
    */
   public boolean canCreate( final Class< ? extends IGridElement > elementType );
   
@@ -59,26 +51,37 @@ public interface IGridElementCreator {
    * <code>canCreate(...)</code> methods. This object can 
    * afterwards retrieved with the {@link #getObject()} method.
    * 
-   * @param fromObject The object from which to create an element.
+   * @param source The object from which to create an element.
    * @return True if this creator is potentially able to
-   * create elements from the specified object. 
+   * create elements from the specified object.
+   * @Deprecated This method is deprecated in favour of the extended definition
+   * of the eu.geclipse.core.gridElementCreator extension point.
    */
-  public boolean canCreate( final Object fromObject );
+  public boolean canCreate( final Object source );
   
   /**
    * Create an element and set it to be a child of the specified
    * {@link IGridContainer}. The element is created from the
-   * object that is returned by the {@link #getObject()} method.
-   * If the creation fails a {@link ProblemException} will be
-   * thrown.
+   * object that is was specified in a former call to
+   * {@link #setSource(Object)}. If the creation fails a
+   * {@link ProblemException} will be thrown.
    * 
    * @param parent The parent of the newly created element.
    * @return The newly created element.
-   * @throws ProblemException If any problem occurs while the
-   * new element is created.
+   * @throws ProblemException If any problem occurs while the new element is
+   * created. For instance of a source object is needed to create the element
+   * but was not defined before an Exception is thrown.
    */
   public IGridElement create( final IGridContainer parent ) throws ProblemException;
   
+  /**
+   * Shortcut method for creating an element from the specified source object.
+   * @param parent The parent of the newly created element.
+   * @param source The object from which to create the element.
+   * @return The newly created element.
+   * @throws ProblemException If any problem occurs while the new element is
+   * created.
+   */
   public IGridElement create( final IGridContainer parent, final Object source ) throws ProblemException;
   
   /**
@@ -92,7 +95,27 @@ public interface IGridElementCreator {
    * the argument was <code>null</code> itself. This method is
    * used by {@link #create(IGridContainer)} to get the object from
    * which to create the new element.
+   * @Deprecated This method is deprecated in favour of the extended definition
+   * of the eu.geclipse.core.gridElementCreator extension point.
    */
   public Object getObject();
+  
+  /**
+   * Get the source object that was formerly specified with
+   * {@link #setSource(Object)}.
+   * 
+   * @return Get the object from which this creator will try to create a grid
+   * model element if {@link #create(IGridContainer)} is called.
+   */
+  public Object getSource();
+  
+  /**
+   * Set the source object to be used by this creator to create a grid model
+   * element from.
+   *  
+   * @param source The object from which this creator will try to create a grid
+   * model element if {@link #create(IGridContainer)} is called.
+   */
+  public void setSource( final Object source );
   
 }

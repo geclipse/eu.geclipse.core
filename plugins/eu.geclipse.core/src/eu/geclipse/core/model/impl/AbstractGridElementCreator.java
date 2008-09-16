@@ -22,10 +22,7 @@ import eu.geclipse.core.reporting.ProblemException;
 
 /**
  * Abstract implementation of the {@link IGridElementCreator}
- * interface. This implementation mainly delegates the
- * {@link #canCreate(Object)} method to an internal one and
- * sets the internal object to the argument if the internal
- * implementation returned true.
+ * interface.
  */
 public abstract class AbstractGridElementCreator
     implements IGridElementCreator {
@@ -34,7 +31,7 @@ public abstract class AbstractGridElementCreator
    * The agument of the last successful call to any of the
    * <code>canCreate(...)</code> methods.
    */
-  private Object internalObject;
+  private Object internalSource;
   
   /* (non-Javadoc)
    * @see eu.geclipse.core.model.IGridElementCreator#canCreate(java.lang.Object)
@@ -47,15 +44,33 @@ public abstract class AbstractGridElementCreator
     return result;
   }
   
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IGridElementCreator#create(eu.geclipse.core.model.IGridContainer, java.lang.Object)
+   */
   public IGridElement create( final IGridContainer parent, final Object source ) throws ProblemException {
-    return canCreate( source ) ? create( parent ) : null;
+    setSource( source );
+    return create( parent );
   }
 
   /* (non-Javadoc)
    * @see eu.geclipse.core.model.IGridElementCreator#getObject()
    */
   public Object getObject() {
-    return this.internalObject;
+    return getSource();
+  }
+  
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IGridElementCreator#getSource()
+   */
+  public Object getSource() {
+    return this.internalSource;
+  }
+  
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IGridElementCreator#setSource(java.lang.Object)
+   */
+  public void setSource( final Object source ) {
+    this.internalSource = source;
   }
   
   /**
@@ -63,9 +78,10 @@ public abstract class AbstractGridElementCreator
    * elements from.
    * 
    * @param object The new internal object.
+   * @Deprecated This method is deprecated in favour of the setSource-method.
    */
   protected void setObject( final Object object ) {
-    this.internalObject = object;
+    this.internalSource = object;
   }
   
   /**
@@ -80,6 +96,8 @@ public abstract class AbstractGridElementCreator
    * created.
    * @return True if this creator is potentially able to create an
    * element from the specified object.
+   * @Deprecated This method is deprecated in favour of the extended definition
+   * of the eu.geclipse.core.gridElementCreator extension point.
    */
   protected abstract boolean internalCanCreate( final Object fromObject );
   

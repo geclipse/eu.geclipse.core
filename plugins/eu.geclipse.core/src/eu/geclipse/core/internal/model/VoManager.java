@@ -24,11 +24,9 @@ import org.eclipse.core.runtime.CoreException;
 import eu.geclipse.core.ICoreProblems;
 import eu.geclipse.core.Preferences;
 import eu.geclipse.core.internal.Activator;
-import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridElementCreator;
 import eu.geclipse.core.model.IStorableElement;
-import eu.geclipse.core.model.IStorableElementCreator;
 import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.core.model.IVoManager;
 import eu.geclipse.core.reporting.ProblemException;
@@ -136,7 +134,7 @@ public class VoManager
       try {
         IGridElementCreator creator = registry.getCreator( childStore, IVirtualOrganization.class );
         if ( creator != null ) {
-          creator.canCreate( childStore ); // Temporary workaround
+          creator.setSource( childStore );
           create( creator );
         }
       } catch ( ProblemException pExc ) {

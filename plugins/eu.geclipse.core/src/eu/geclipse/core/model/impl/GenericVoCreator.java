@@ -28,7 +28,6 @@ import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridElementCreator;
 import eu.geclipse.core.model.IGridService;
-import eu.geclipse.core.model.IStorableElementCreator;
 import eu.geclipse.core.reporting.ProblemException;
 
 
@@ -36,17 +35,13 @@ import eu.geclipse.core.reporting.ProblemException;
  * Grid element creator for the {@link GenericVirtualOrganization}.
  */
 public class GenericVoCreator
-    implements IGridElementCreator, ICreatorSourceMatcher {
+    extends AbstractGridElementCreator
+    implements ICreatorSourceMatcher {
   
   /**
    * The creators extension ID.
    */
   private static final String EXTENSION_ID = "eu.geclipse.core.genericVoCreator"; //$NON-NLS-1$
-  
-  /**
-   * The object from which to create the VO.
-   */
-  private Object object;
   
   private String voName;
   
@@ -103,51 +98,37 @@ public class GenericVoCreator
     return elementType.isAssignableFrom( GenericVirtualOrganization.class );
   }
 
-  public boolean canCreate( final Object fromObject ) {
+  @Override
+  protected boolean internalCanCreate( final Object fromObject ) {
     
     boolean result = false;
     
     if ( fromObject instanceof IFileStore ) {
-      result = canCreate( ( IFileStore ) fromObject );
+      IFileStore propertiesStore = ( ( IFileStore ) fromObject ).getChild( GenericVoProperties.NAME );
+      IFileInfo propertiesInfo = propertiesStore.fetchInfo();
+      result = propertiesInfo.exists();
     }
     
     return result;
     
   }
   
-  public boolean canCreate( final IFileStore fromFileStore ) {
-    IFileStore propertiesStore = fromFileStore.getChild( GenericVoProperties.NAME );
-    IFileInfo propertiesInfo = propertiesStore.fetchInfo();
-    boolean result = propertiesInfo.exists();
-    if ( result ) {
-      this.object = fromFileStore;
-    }
-    return result;
-  }
-
   public IGridElement create( final IGridContainer parent ) throws ProblemException {
     GenericVirtualOrganization vo = null;
-    if ( this.object == null ) {
+    Object source = getSource();
+    if ( source == null ) {
       vo = new GenericVirtualOrganization( this );
-    } else if ( this.object instanceof IFileStore ) {
-      IFileStore fileStore = ( IFileStore ) this.object;
+    } else if ( source instanceof IFileStore ) {
+      IFileStore fileStore = ( IFileStore ) source;
       vo = new GenericVirtualOrganization( fileStore );
     }
     return vo;
-  }
-  
-  public IGridElement create( final IGridContainer parent, final Object source ) throws ProblemException {
-    return canCreate( source ) ? create( parent ) : null;
   }
   
   public String getExtensionID() {
     return EXTENSION_ID;
   }
 
-  public Object getObject() {
-    return this.object;
-  }
-  
   /**
    * Get the VO's name.
    * 
