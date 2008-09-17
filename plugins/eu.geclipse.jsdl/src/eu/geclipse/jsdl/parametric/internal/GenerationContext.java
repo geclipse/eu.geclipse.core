@@ -15,8 +15,11 @@
  *****************************************************************************/
 package eu.geclipse.jsdl.parametric.internal;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
@@ -28,27 +31,37 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import eu.geclipse.core.reporting.ProblemException;
+import eu.geclipse.jsdl.JSDLJobDescription;
+import eu.geclipse.jsdl.parametric.IGeneratedJsdl;
 import eu.geclipse.jsdl.parametric.IParametricJsdlHandler;
 
 /**
  * This context replaces values in DOM Document containing jsdl and pass serialization to handler  
  */
-public class GenerationContext implements IGenerationContext {
+public class GenerationContext implements IGenerationContext, IGeneratedJsdl {
+  private JSDLJobDescription parametricJsdl;
   private IParametricJsdlHandler handler;
-  private Document currentJsdl;  
+  private Document currentJsdl;
+  private String currentJsdlName;
+  private Map<String,XPathExpression> xpathMap;
+  private XPath xpathEngine;
 
   /**
    * @param baseJsdl JSDL in which we will change parameter values
    * @param handler
    */
-  public GenerationContext( final Document baseJsdl, final IParametricJsdlHandler handler ) {        
+  public GenerationContext( final JSDLJobDescription parametricJsdl, final Document baseJsdl, final IParametricJsdlHandler handler, final XPath xpathEngine ) {        
     this.handler = handler;
-    this.currentJsdl = baseJsdl;    
+    this.currentJsdl = baseJsdl;
+    this.parametricJsdl = parametricJsdl;
+    this.xpathEngine = xpathEngine;
   }  
 
   @Override
   public IGenerationContext clone() {
-    return new GenerationContext( ( Document )this.currentJsdl.cloneNode( true ), this.handler );
+    GenerationContext newContext = new GenerationContext( this.parametricJsdl, ( Document )this.currentJsdl.cloneNode( true ), this.handler, this.xpathEngine );
+    newContext.xpathMap = this.xpathMap;    
+    return newContext;
   }
 
   /* (non-Javadoc)
@@ -61,7 +74,7 @@ public class GenerationContext implements IGenerationContext {
       
       for( int index = 0; index < nodeList.getLength(); index++ ) {
         Node item = nodeList.item( index );
-        
+
         // TODO mariusz check if substituted node is text node
         item.setTextContent( value );
       }
@@ -78,7 +91,16 @@ public class GenerationContext implements IGenerationContext {
   }
 
   public void storeGeneratedJsdl( final List<Integer> iterationsStack, final SubMonitor subMonitor ) throws ProblemException {
-    this.handler.newJsdlGenerated( this.currentJsdl, iterationsStack, subMonitor );
+    currentJsdlName = createIterationName( iterationsStack );
+    this.handler.newJsdlGenerated( this, subMonitor );
+  }
+  
+  private String createIterationName( final List<Integer> iterationsStack ) {
+    StringBuilder builder = new StringBuilder();
+    for( Integer iteration : iterationsStack ) {
+      builder.append( String.format( "[%03d]", iteration ) ); //$NON-NLS-1$
+    }    
+    return builder.toString();
   }
  
   private void updateJsdlDescription( final String paramName, final String value ) {
@@ -120,5 +142,45 @@ public class GenerationContext implements IGenerationContext {
     return element;
   }
 
+  public Document getDocument() {
+    return this.currentJsdl;
+  }
+
+  public String getIterationName() {
+    return this.currentJsdlName;
+  }
+
+  public String getParamValue( final String paramName ) throws ProblemException {
+    String value = null;
+    Map<String, XPathExpression> map = getXpathMap();
+    XPathExpression xpath = map.get( paramName );
+    
+    if( xpath == null ) {
+      try {
+        xpath = this.xpathEngine.compile( paramName );
+        map.put( paramName, xpath );
+      } catch( XPathExpressionException exception ) {
+        // TODO mariusz Auto-generated catch block
+        exception.printStackTrace();
+      }
+    }
+
+    try {
+      value = xpath.evaluate( this.currentJsdl );
+    } catch( XPathExpressionException exception ) {
+      // TODO mariusz Auto-generated catch block
+      exception.printStackTrace();
+    }
+    
+    return value;
+  }
+  
+  private Map<String, XPathExpression> getXpathMap() {
+    if( xpathMap == null ) {
+      xpathMap = new HashMap<String,XPathExpression>();
+    }
+    return xpathMap;    
+  }  
+  
 
 }

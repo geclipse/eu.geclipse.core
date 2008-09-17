@@ -37,7 +37,6 @@ import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
-import org.w3c.dom.Document;
 
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridElement;
@@ -68,10 +67,10 @@ public class ParametricJsdlSaver implements IParametricJsdlHandler {
   /* (non-Javadoc)
    * @see eu.geclipse.jsdl.parametric.IParametricJsdlHandler#newJsdlGenerated(org.w3c.dom.Document, java.util.List)
    */
-  public void newJsdlGenerated( final Document generatedJsdl,
-                                final List<Integer> iterationsStack, final IProgressMonitor monitor )
+  public void newJsdlGenerated( final IGeneratedJsdl generatedJsdl,
+                                final IProgressMonitor monitor )
   {
-    saveJsdl( generatedJsdl, iterationsStack );
+    saveJsdl( generatedJsdl );
   }
 
   /* (non-Javadoc)
@@ -81,14 +80,13 @@ public class ParametricJsdlSaver implements IParametricJsdlHandler {
     // TODO mariusz Auto-generated method stub
   }
   
-  private void saveJsdl( final Document generatedJsdl, final List<Integer> iterationsStack )
+  private void saveJsdl( final IGeneratedJsdl generatedJsdl )
   {
-    try {
-      String filename = getJsdlFileName( iterationsStack );
+    try {   
       
-      IFile file = this.targetFolder.getFile( filename );
+      IFile file = this.targetFolder.getFile( getFileName( generatedJsdl ) );
       
-      DOMSource source = new DOMSource( generatedJsdl );
+      DOMSource source = new DOMSource( generatedJsdl.getDocument() );
 
       ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
       Transformer transformer = TransformerFactory.newInstance().newTransformer();
@@ -122,14 +120,8 @@ public class ParametricJsdlSaver implements IParametricJsdlHandler {
     }
   }
 
-  private String getJsdlFileName( final List<Integer> iterationsStack ) {
-    Path jsdlName = new Path( this.parametricJsdl.getName() );
-    StringBuilder builder = new StringBuilder( jsdlName.removeFileExtension().toString() );
-    for( Integer iteration : iterationsStack ) {
-      builder.append( String.format( "[%03d]", iteration ) ); //$NON-NLS-1$
-    }
-    builder.append( ".jsdl" ); //$NON-NLS-1$
-    return builder.toString();
+  private String getFileName( final IGeneratedJsdl generatedJsdl ) {
+    return String.format( "%s%s.jsdl", new Path( this.parametricJsdl.getName() ).lastSegment(), generatedJsdl.getIterationName() );     //$NON-NLS-1$
   }
 
   public void generationFinished() throws ProblemException {
@@ -137,7 +129,7 @@ public class ParametricJsdlSaver implements IParametricJsdlHandler {
     
   }
 
-  public void generationStarted( final int generatedJsdl ) throws ProblemException {
+  public void generationStarted( final int generatedJsdl, final List<String> paramNames ) throws ProblemException {
     this.generatedJsdlList = new ArrayList<JSDLJobDescription>();
     
     deleteTargetFolder();
@@ -188,6 +180,5 @@ public class ParametricJsdlSaver implements IParametricJsdlHandler {
   public List<JSDLJobDescription> getGeneratedJsdl() {
     return this.generatedJsdlList;
   }
-
 
 }

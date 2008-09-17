@@ -15,14 +15,11 @@
 package eu.geclipse.jsdl.ui.internal.pages.sections;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.Properties;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.emf.common.util.EList;
@@ -50,7 +47,6 @@ import eu.geclipse.jsdl.parametric.ParametricJsdlGeneratorFactory;
 import eu.geclipse.jsdl.ui.adapters.jsdl.ParametricJobAdapter;
 import eu.geclipse.jsdl.ui.internal.EditorParametricJsdlHandler;
 import eu.geclipse.jsdl.ui.internal.pages.FormSectionFactory;
-import eu.geclipse.jsdl.ui.providers.parameters.IterationsCProvider;
 import eu.geclipse.jsdl.ui.providers.parameters.IterationsLProvider;
 
 /**
@@ -113,12 +109,14 @@ public class SweepIterationsSection extends JsdlFormPageSection {
         // TODO Auto-generated method stub
       }
     } );
-    renewTableViewer();
+    renewTableViewer( new EditorParametricJsdlHandler( this ) );    // dummy handler
   }
 
   protected void updateTable() {
-    renewTableViewer();
-    this.viewer.setInput( null );
+    final EditorParametricJsdlHandler handler = new EditorParametricJsdlHandler( this );
+    renewTableViewer( handler );
+    this.viewer.setInput( handler );
+    this.viewer.setContentProvider( handler );
     final JSDLJobDescription jsdl = this.jsdlJobDescription;
     final SweepIterationsSection section = this;
     Job job = new Job( "Generating sweep for iterations" ) {
@@ -127,8 +125,8 @@ public class SweepIterationsSection extends JsdlFormPageSection {
       protected IStatus run( final IProgressMonitor monitor ) {
         IParametricJsdlGenerator generator = ParametricJsdlGeneratorFactory.getGenerator();
         generator.generate( jsdl,
-                            new EditorParametricJsdlHandler( section ),
-                            new NullProgressMonitor() );
+                            handler,
+                            monitor );
         return Status.OK_STATUS;
       }
     };
@@ -136,8 +134,16 @@ public class SweepIterationsSection extends JsdlFormPageSection {
     job.schedule();
   }
 
-  private void renewTableViewer() {
-    if( this.viewer != null ) {
+  private void renewTableViewer(final EditorParametricJsdlHandler handler) {
+    List<Integer> widths = Collections.EMPTY_LIST;
+    
+    if( this.viewer != null ) {      
+      TableColumn[] columns = this.viewer.getTable().getColumns();
+      widths = new ArrayList<Integer>( columns.length );
+      for( TableColumn column : columns ) {
+        widths.add( Integer.valueOf( column.getWidth() ) );
+      }
+      
       this.viewer.getTable().dispose();
     }
     this.viewer = null;
@@ -147,15 +153,17 @@ public class SweepIterationsSection extends JsdlFormPageSection {
     this.table = this.viewer.getTable();
     this.table.setLayoutData( tableData );
     this.labelProvider = new IterationsLProvider();
-    this.labelProvider.setColumnIndexMap( getColumnNamesForTable() );
+    this.labelProvider.setColumnNames( getColumnNamesForTable() );
     this.viewer.setLabelProvider( this.labelProvider );
-    this.viewer.setContentProvider( new IterationsCProvider() );
+    this.viewer.setContentProvider( handler );
     this.table.setHeaderVisible( true );
-    Map<Integer, String> map = getColumnNamesForTable();
-    for( int i = 0; i < map.size(); i++ ) {
+    List<String> columnNames = getColumnNamesForTable();
+    int colIndex = 0;
+    for( String name : columnNames ) {
       TableColumn column = new TableColumn( this.table, SWT.NONE );
-      column.setText( map.get( Integer.valueOf( i ) ) );
-      column.setWidth( 120 );
+      column.setText( name );
+      column.setWidth( colIndex < widths.size() ? widths.get( colIndex ).intValue() : 120 );
+      colIndex++;
     }
     this.client.layout();
   }
@@ -170,34 +178,31 @@ public class SweepIterationsSection extends JsdlFormPageSection {
     this.jsdlJobDescription = jsdlJobDescription;
   }
 
-  public void iterationGenerated( final Map<String, Properties> map ) {
+  public void iterationGenerated( final List<String> newRow ) {
     final TableViewer viewerF = this.viewer;
-    final Map<String, Properties> mapF = map;
     PlatformUI.getWorkbench().getDisplay().syncExec( new Runnable() {
 
       public void run() {
-        // TODO Auto-generated method stub
-        viewerF.setInput( mapF );
-        viewerF.refresh( true );
+        viewerF.refresh( false );
       }
     } );
   }
 
-  private Map<Integer, String> getColumnNamesForTable() {
-    Map<Integer, String> columnsMap = new HashMap<Integer, String>();
-    int index = 0;
-    columnsMap.put( Integer.valueOf( index ), "Iteration" );
-    index++;
+  private List<String> getColumnNamesForTable() {
+    List<String> columnNames = new ArrayList<String>();
+    
+    columnNames.add( "Iteration" );
+    
     for( String paramName : getInerSweepNames( getInnerList() ) ) {
-      columnsMap.put( Integer.valueOf( index ), paramName );
-      index++;
+      columnNames.add( paramName );
     }
-    return columnsMap;
+    
+    return columnNames;
   }
 
   @Override
   protected void contentChanged() {
-    this.labelProvider.setColumnIndexMap( getColumnNamesForTable() );
+    this.labelProvider.setColumnNames( getColumnNamesForTable() );
     super.contentChanged();
   }
 
@@ -249,5 +254,9 @@ public class SweepIterationsSection extends JsdlFormPageSection {
       }
     }
     return result;
+  }
+  
+  public IterationsLProvider getLabelProvider() {
+    return this.labelProvider;
   }
 }

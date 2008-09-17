@@ -15,10 +15,10 @@
  *****************************************************************************/
 package eu.geclipse.jsdl.parametric;
 
+
 import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.w3c.dom.Document;
 
 import eu.geclipse.core.reporting.ProblemException;
 
@@ -36,9 +36,10 @@ public interface IParametricJsdlHandler {
    * 
    * @param generatedJsdls number of JSDLs, which will be generated (number of
    *          iterations)
+   * @param paramNames TODO mariusz
    * @throws ProblemException
    */
-  void generationStarted( int generatedJsdls ) throws ProblemException;
+  void generationStarted( int generatedJsdls, List<String> paramNames ) throws ProblemException;
 
   /**
    * Called after last JSDL was generated
@@ -65,15 +66,9 @@ public interface IParametricJsdlHandler {
    * ready. Now you can store it on disk, show for user, submit etc
    * 
    * @param generatedJsdl new instance of jsdl
-   * @param iterationsStack list of integer numbers describing, for which sweep
-   *          iteration this jsdl was generated. E.g. If parametric jsdl
-   *          contains nested sweeps (second sweep inside first), then this list
-   *          will contain 2 Integer objects: first counting outer sweep
-   *          iterations and the second for inner sweep iterations
    * @param monitor progress monitor
    * @throws ProblemException 
    */
-  void newJsdlGenerated( Document generatedJsdl,
-                         List<Integer> iterationsStack,
+  void newJsdlGenerated( IGeneratedJsdl generatedJsdl,
                          IProgressMonitor monitor ) throws ProblemException;
 }

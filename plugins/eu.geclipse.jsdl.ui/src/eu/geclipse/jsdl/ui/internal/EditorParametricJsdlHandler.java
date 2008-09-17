@@ -14,80 +14,55 @@
  *****************************************************************************/
 package eu.geclipse.jsdl.ui.internal;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.TreeMap;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.ui.PlatformUI;
-import org.w3c.dom.Document;
+import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.jface.viewers.Viewer;
 
 import eu.geclipse.core.reporting.ProblemException;
+import eu.geclipse.jsdl.parametric.IGeneratedJsdl;
 import eu.geclipse.jsdl.parametric.IParametricJsdlHandler;
 import eu.geclipse.jsdl.ui.internal.pages.sections.SweepIterationsSection;
 
-public class EditorParametricJsdlHandler implements IParametricJsdlHandler {
-
-  Map<String, Properties> valuesMap = new TreeMap<String, Properties>();
-  // private int maxIterations;
-  // private int currentIterationNo = 0;
-  private String placeHolder = "sth";
+public class EditorParametricJsdlHandler implements IParametricJsdlHandler, IStructuredContentProvider {
+  private List<List<String>> content = Collections.EMPTY_LIST;
   private SweepIterationsSection section;
-  private int maxParams = 0;
-  private String maxParamsId;
-  private int tempMaxParams = 0;
 
   public EditorParametricJsdlHandler( final SweepIterationsSection section ) {
-    this.section = section;
+    this.section = section;    
   }
 
   public void generationFinished() throws ProblemException {
   }
 
-  public void generationStarted( final int generatedJsdls )
+  public void generationStarted( final int generatedJsdls, final List<String> paramNames )
     throws ProblemException
   {
-    // this.maxIterations = generatedJsdls;
+    content = new ArrayList<List<String>>( generatedJsdls );
   }
 
-  public void newJsdlGenerated( final Document generatedJsdl,
-                                final List<Integer> iterationsStack,
+  public void newJsdlGenerated( final IGeneratedJsdl generatedJsdl,
                                 final IProgressMonitor monitor )
     throws ProblemException
   {
-    String currentIterationID = "";
-    for( Integer itId : iterationsStack ) {
-      currentIterationID = currentIterationID + "[" + itId.toString() + "]";
-    }
-    this.valuesMap.put( currentIterationID,
-                        this.valuesMap.get( this.placeHolder ) );
-    this.valuesMap.remove( this.placeHolder );
-    if( this.tempMaxParams < this.maxParams ) {
-      Properties currentProperties = this.valuesMap.get( currentIterationID );
-      for( Object param : this.valuesMap.get( this.maxParamsId )
-        .keySet() )
-      {
-        if( !currentProperties.containsKey( (String)param ) ) {
-          currentProperties.put( (String)param, this.valuesMap.get( this.maxParamsId )
-            .get( (String)param ) );
-        }
-      }
-    } else {
-      this.maxParams = this.tempMaxParams;
-      this.maxParamsId = currentIterationID;
-    }
-    PlatformUI.getWorkbench().getDisplay().syncExec( new Runnable(){
-
-      public void run() {
-        EditorParametricJsdlHandler.this.section.iterationGenerated( EditorParametricJsdlHandler.this.valuesMap );
-      }
-      
-    });
+    List<String> columnNames = this.section.getLabelProvider().getColumnNames();
+    List<String> values = null;
     
-    this.section.iterationGenerated( this.valuesMap );
-    this.tempMaxParams = 0;
+    for( String paramName : columnNames ) {
+      if( values == null ) {
+        // first column is iteration
+        values = new ArrayList<String>( columnNames.size() );
+        values.add( generatedJsdl.getIterationName() );
+      } else {
+        values.add( generatedJsdl.getParamValue( paramName ) );
+      }
+    }
+    
+    this.content.add( values );
+    this.section.iterationGenerated( values );
   }
 
   public void paramSubstituted( final String paramName,
@@ -95,14 +70,17 @@ public class EditorParametricJsdlHandler implements IParametricJsdlHandler {
                                 final IProgressMonitor monitor )
     throws ProblemException
   {
-    this.tempMaxParams++;
-    if( this.valuesMap.get( this.placeHolder ) == null ) {
-      this.valuesMap.put( this.placeHolder, new Properties() );
-    }
-    if( newValue == null ) {
-      this.valuesMap.get( this.placeHolder ).put( paramName, "NULL" );
-    } else {
-      this.valuesMap.get( this.placeHolder ).put( paramName, newValue );
-    }
+  }
+
+  public Object[] getElements( final Object inputElement ) {
+    return this.content.toArray();
+  }
+
+  public void dispose() {
+  }
+
+  public void inputChanged( final Viewer viewer, final Object oldInput, final Object newInput ) {
+    // TODO mariusz Auto-generated method stub
+    
   }
 }

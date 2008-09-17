@@ -15,7 +15,10 @@
  *****************************************************************************/
 package eu.geclipse.jsdl.parametric.internal;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import javax.xml.xpath.XPathExpression;
 
@@ -29,6 +32,7 @@ import eu.geclipse.core.reporting.ProblemException;
  */
 public class CounterGenerationContext implements IGenerationContext {
   private int iterations = 0;
+  private Set<String> parameters = new TreeSet<String>();
 
   /*
    * (non-Javadoc)
@@ -42,7 +46,7 @@ public class CounterGenerationContext implements IGenerationContext {
                         final String value,
                         final SubMonitor subMonitor ) throws ProblemException
   {
-    // empty implementation
+    this.parameters.add( paramName );
   }
 
   /*
@@ -68,5 +72,11 @@ public class CounterGenerationContext implements IGenerationContext {
    */
   public int getIterations() {
     return this.iterations;
+  }
+  
+  public List<String> getParameters() {
+    List<String> list = new ArrayList<String>( this.parameters.size() );
+    list.addAll( this.parameters );
+    return list;
   }
 }

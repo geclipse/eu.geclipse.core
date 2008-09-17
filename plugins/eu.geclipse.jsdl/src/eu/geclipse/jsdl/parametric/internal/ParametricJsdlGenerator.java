@@ -33,6 +33,7 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.SubMonitor;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -115,12 +116,12 @@ public class ParametricJsdlGenerator implements IParametricJsdlGenerator {
     }   
   }
 
-  private void processSweeps( final NodeList sweeps, final IGenerationContext generationContext, final List<Integer> iterationsStack, final SubMonitor monitor ) throws ProblemException {
-    List<Assignment> assignmentList = new ArrayList<Assignment>();
+  private void processSweeps( final NodeList sweeps, final IGenerationContext generationContext, final List<Integer> iterationsStack, final SubMonitor monitor ) throws ProblemException {    
 
     iterationsStack.add( new Integer( 0 ) );
     
-    for( int index = 0; index < sweeps.getLength(); index++ ) {      
+    for( int index = 0; index < sweeps.getLength(); index++ ) {
+      List<Assignment> assignmentList = new ArrayList<Assignment>();
       Node sweepItem = sweeps.item( index );
       
       if( sweepItem instanceof Element ) {
@@ -133,20 +134,20 @@ public class ParametricJsdlGenerator implements IParametricJsdlGenerator {
         List<Iterator<String>> iterators = getIterators( assignmentList );
         
         while( hasNext( iterators ) ) {
+          testCancelled( monitor );
           IGenerationContext newContext = generationContext.clone();
           // we will modify copy of jsdl
           setParamsValue( assignmentList, iterators, newContext, monitor );   
           
           if( childSweeps.getLength() > 0 ) {
             processSweeps( childSweeps, newContext, iterationsStack, monitor );
-          } else {
+          } else {            
             newContext.storeGeneratedJsdl( iterationsStack, monitor );
+            monitor.worked( 1 );
           }
           
           increaseCurrentIteration( iterationsStack );
-        }
-        
-        
+        }        
       } // TODO mariusz throw exc: expected sweep with children
     }
     
@@ -189,6 +190,7 @@ public class ParametricJsdlGenerator implements IParametricJsdlGenerator {
     Iterator<Iterator<String>> fIterator = functionIterators.iterator();
     Iterator<Assignment> aIterator = assignmentList.iterator();
     while( fIterator.hasNext() && aIterator.hasNext() ) {
+      testCancelled( monitor );
       Assignment assignment = aIterator.next();
       Iterator<String> functionIterator = fIterator.next();
       assignment.setParamValue( functionIterator, generationContext, monitor );
@@ -314,15 +316,19 @@ public class ParametricJsdlGenerator implements IParametricJsdlGenerator {
     SubMonitor subMonitor = SubMonitor.convert( monitor );
     
     try {
-      
       Document parametricXml = parametricJsdl.getXml();
       Document baseJsdl = removeSweepNodes( parametricXml );
-      IGenerationContext generationContext = new GenerationContext( baseJsdl, handler );
+      IGenerationContext generationContext = new GenerationContext( parametricJsdl, baseJsdl, handler, getXPathEngine() );
 
       NodeList sweeps = findSweeps( parametricXml.getDocumentElement() );
-      int generatedJsdl = countGeneratedJsdl( sweeps, subMonitor );
       
-      handler.generationStarted( generatedJsdl );
+      // first generation only for validation and gathering information
+      CounterGenerationContext counter = new CounterGenerationContext();      
+      processSweeps( sweeps, counter, new ArrayList<Integer>(), subMonitor.newChild( 0 ) );    
+      handler.generationStarted( counter.getIterations(), counter.getParameters() );
+      
+      subMonitor.subTask( "Generating JSDLs" );
+      subMonitor.setWorkRemaining( counter.getIterations() );
       processSweeps( sweeps, generationContext, new ArrayList<Integer>(), subMonitor );
       handler.generationFinished();
     } catch ( ProblemException exc ) {
@@ -330,14 +336,11 @@ public class ParametricJsdlGenerator implements IParametricJsdlGenerator {
       Activator.logException( exc );
     }    
   }
-  
-  private int countGeneratedJsdl(final NodeList sweeps, final SubMonitor monitor) throws ProblemException {
-    // TODO mariusz update monitor
-    CounterGenerationContext context = new CounterGenerationContext();
-    
-    processSweeps( sweeps, context, new ArrayList<Integer>(), monitor );
-    return context.getIterations();
-  }
 
+  private void testCancelled( final IProgressMonitor monitor ) {
+    if( monitor.isCanceled() ) {
+      throw new OperationCanceledException();
+    }
+  }
 
 }

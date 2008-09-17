@@ -14,38 +14,32 @@
  *****************************************************************************/
 package eu.geclipse.jsdl.ui.providers.parameters;
 
-import java.util.Map;
-import java.util.Properties;
+import java.util.List;
 
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.swt.graphics.Image;
 
 public class IterationsLProvider implements ITableLabelProvider {
-
-  private Map<Integer, String> columnsMap;
-
+  private List<String> columns;
   
-  public void setColumnIndexMap( final Map<Integer, String> columnsMap ) {
-    this.columnsMap = columnsMap;
+  public void setColumnNames( final List<String> newColumns ) {
+    this.columns = newColumns;
   }
 
   public Image getColumnImage( final Object element, final int columnIndex ) {
     return null;
   }
 
+  @SuppressWarnings("unchecked")
   public String getColumnText( final Object element, final int columnIndex ) {
     String result = ""; //$NON-NLS-1$
-    String columnName = this.columnsMap.get( new Integer( columnIndex ) );
-    if( element instanceof Properties[] ) {
-      Properties[] array = ( Properties[] )element;
-      for( Properties currentProperty : array ) {
-        if( currentProperty.getProperty( columnName ) != null ) {
-          result = currentProperty.getProperty( columnName );
-          break;
-        }
-      }
+    
+    if( element instanceof List ) {
+      List<String> contentValues = ( List<String> )element;
+      result = contentValues.get( columnIndex );
     }
+    
     return result;
   }
 
@@ -65,5 +59,9 @@ public class IterationsLProvider implements ITableLabelProvider {
 
   public void removeListener( final ILabelProviderListener listener ) {
     // empty implementation
+  }
+  
+  public List<String> getColumnNames() {
+    return this.columns;
   }
 }
