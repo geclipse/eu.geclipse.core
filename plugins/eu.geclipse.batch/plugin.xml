@@ -15,6 +15,10 @@
                class="eu.geclipse.batch.BatchConnectionInfo"
                name="Batch Service Description">
          </target>
+         <source
+               class="org.eclipse.core.resources.IFile"
+               pattern=".*\.batch">
+         </source>
       </creator>
       <creator
             class="eu.geclipse.batch.BatchQueueDescriptionCreator"
@@ -24,6 +28,10 @@
                class="eu.geclipse.batch.BatchQueueDescriptionCreator"
                name="Batch Queue Configuration Description">
          </target>
+         <source
+               class="org.eclipse.core.resources.IFile"
+               pattern=".*\.qdl">
+         </source>
       </creator>
    </extension>
    <extension

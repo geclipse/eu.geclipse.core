@@ -30,6 +30,7 @@ import org.eclipse.core.runtime.IPath;
 import eu.geclipse.core.filesystem.internal.Activator;
 import eu.geclipse.core.filesystem.internal.filesystem.ConnectionElement;
 import eu.geclipse.core.filesystem.internal.filesystem.ConnectionRoot;
+import eu.geclipse.core.model.ICreatorSourceMatcher;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.impl.AbstractGridElementCreator;
@@ -41,7 +42,8 @@ import eu.geclipse.core.reporting.ProblemException;
  * root mounts for file systems and element mounts for child nodes.
  */
 public class FileSystemCreator
-    extends AbstractGridElementCreator {
+    extends AbstractGridElementCreator
+    implements ICreatorSourceMatcher {
 
   /* (non-Javadoc)
    * @see eu.geclipse.core.model.IGridElementCreator#canCreate(java.lang.Class)

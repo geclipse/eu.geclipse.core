@@ -11,13 +11,14 @@
             class="eu.geclipse.core.jobs.GridJobCreator"
             id="eu.geclipse.core.jobs.gridJobCreator"
             name="Grid Job Creator">
+         <source
+               class="org.eclipse.core.resources.IFolder"
+               matcher="eu.geclipse.core.jobs.GridJobCreator">
+         </source>
          <target
                class="eu.geclipse.core.jobs.GridJob"
                name="Grid Job">
          </target>
-         <source
-               class="org.eclipse.core.resources.IFolder">
-         </source>
       </creator>
       <creator
             class="eu.geclipse.core.jobs.internal.ParametricJobServiceCreator"

@@ -33,6 +33,10 @@
             class="eu.geclipse.workflow.resources.GridWorkflowCreator"
             id="eu.geclipse.workflow.creator"
             name="Grid Workflow">
+         <source
+               class="org.eclipse.core.resources.IFolder"
+               pattern=".*\.workflow">
+         </source>
          <target
                class="eu.geclipse.workflow.IGridWorkflowDescription"
                name="Workflow Model">

@@ -281,8 +281,8 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
 
   private IGridJobService createJobService( final IGridJobID jobId ) {
     IGridJobService service = null;
-    IGridElementCreator creator = GridModel.getElementCreator( jobId,
-                                                               IGridJobService.class );
+    IGridElementCreator creator
+      = GridModel.getCreatorRegistry().getCreator( jobId, IGridJobService.class );
     if( creator != null ) {
       try {
         IVirtualOrganization vo = getProject().getVO();
@@ -599,8 +599,8 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
 
   private void readJobDescription() {
     try {
-      IGridElementCreator elementCreator = GridModel.getElementCreator( this.jobDescriptionFile,
-                                                                        IGridJobDescription.class );
+      IGridElementCreator elementCreator
+        = GridModel.getCreatorRegistry().getCreator( this.jobDescriptionFile, IGridJobDescription.class );
       if( elementCreator != null ) {
         IGridElement description = elementCreator.create( this );
         this.jobDescription = ( IGridJobDescription )description;

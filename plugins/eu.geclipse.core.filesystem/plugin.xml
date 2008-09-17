@@ -17,7 +17,8 @@
             id="eu.geclipse.core.filesystem.creator"
             name="File System">
          <source
-               class="org.eclipse.core.resources.IResource">
+               class="org.eclipse.core.resources.IResource"
+               matcher="eu.geclipse.core.filesystem.FileSystemCreator">
          </source>
          <target
                class="eu.geclipse.core.model.IGridConnection"

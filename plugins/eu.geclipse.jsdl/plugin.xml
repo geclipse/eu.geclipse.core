@@ -10,7 +10,8 @@
             id="eu.geclipse.jsdl.creator"
             name="JSDL - Job Submission Description Language (OGF Standard)">
          <source
-               class="org.eclipse.core.resources.IFile">
+               class="org.eclipse.core.resources.IFile"
+               pattern=".*\.jsdl">
          </source>
          <target
                class="eu.geclipse.jsdl.JSDLJobDescription"

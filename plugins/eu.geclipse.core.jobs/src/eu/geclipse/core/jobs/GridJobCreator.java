@@ -32,6 +32,7 @@ import org.eclipse.core.runtime.Path;
 import eu.geclipse.core.ICoreProblems;
 import eu.geclipse.core.jobs.internal.Activator;
 import eu.geclipse.core.model.GridModel;
+import eu.geclipse.core.model.ICreatorSourceMatcher;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridJob;
@@ -50,7 +51,9 @@ import eu.geclipse.workflow.IGridWorkflowJobID;
  * and contains a GridJobID, IGridJobDescription and GridJobStatus. These last
  * three components can be middleware dependent.
  */
-public class GridJobCreator extends AbstractGridJobCreator {
+public class GridJobCreator
+    extends AbstractGridJobCreator
+    implements ICreatorSourceMatcher {
 
   /*
    * (non-Javadoc)

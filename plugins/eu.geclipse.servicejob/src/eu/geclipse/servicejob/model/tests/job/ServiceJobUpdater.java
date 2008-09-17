@@ -70,8 +70,7 @@ public class ServiceJobUpdater extends Job {
     List<IGridJobID> jobIDsToDelete = new ArrayList<IGridJobID>();
     for( IGridJobID jobID : this.jobIDs ) {
       if( this.jobIDs.contains( jobID ) ) {
-        IGridElementCreator srvCreator = GridModel.getElementCreator( jobID,
-                                                                      IGridJobService.class );
+        IGridElementCreator srvCreator = GridModel.getCreatorRegistry().getCreator( jobID, IGridJobService.class );
         if( srvCreator != null ) {
           try {
             IGridJobService jobService = ( IGridJobService )srvCreator.create( null );
