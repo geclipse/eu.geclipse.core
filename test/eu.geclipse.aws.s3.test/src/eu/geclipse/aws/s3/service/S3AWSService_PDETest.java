@@ -80,7 +80,7 @@ public class S3AWSService_PDETest {
   public void testS3AWSServiceS3AWSServiceCreatorAWSVirtualOrganization()
     throws ProblemException
   {
-    List<IGridElementCreator> voCreators = GridModel.getElementCreators();
+    List<IGridElementCreator> voCreators = GridModel.getCreatorRegistry().getCreators();
 
     S3AWSServiceCreator S3AWSServiceCreator = null;
     for( IGridElementCreator gridElementCreator : voCreators ) {

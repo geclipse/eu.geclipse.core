@@ -23,7 +23,6 @@ import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.runtime.CoreException;
 
-import eu.geclipse.core.Extensions;
 import eu.geclipse.core.internal.Activator;
 import eu.geclipse.core.internal.model.GridRoot;
 import eu.geclipse.core.internal.model.LocalFile;
@@ -58,9 +57,10 @@ public class GridElementLifecycleManager
    * @see GridModel#getStandardCreators()
    */
   public static IGridElementCreator findCreator( final IResource resource ) {
+    //System.out.print( "Searching for creator for " + resource.getFullPath() + " ... " );
     IGridElementCreator result = null;
     List< IGridElementCreator > creators
-      = Extensions.getRegisteredElementCreators();
+      = GridModel.getCreatorRegistry().getCreators();
     for ( IGridElementCreator creator : creators ) {
       if ( creator.canCreate( resource ) ) {
         result = creator;
@@ -68,8 +68,10 @@ public class GridElementLifecycleManager
       }
     }
     if ( result == null ) {
+      //System.out.print( "Searching standard creators ... " );
       result = findStandardCreator( resource );
     }
+    //System.out.println( "Found " + ( result == null ? "none" : result.getClass() ) );
     return result;
   }
   

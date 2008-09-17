@@ -22,6 +22,7 @@ import org.eclipse.core.filesystem.IFileStore;
 
 import eu.geclipse.core.Extensions;
 import eu.geclipse.core.internal.model.ConnectionManager;
+import eu.geclipse.core.internal.model.ElementCreatorRegistry;
 import eu.geclipse.core.internal.model.GridProjectCreator;
 import eu.geclipse.core.internal.model.GridRoot;
 import eu.geclipse.core.internal.model.ServiceJobManager;
@@ -57,6 +58,16 @@ public class GridModel {
    */
   public static IConnectionManager getConnectionManager() {
     return ConnectionManager.getManager();
+  }
+  
+  /**
+   * Get the element creator registry that holds a list of all registered
+   * grid element creators.
+   * 
+   * @return The model's element creator registry.
+   */
+  public static IElementCreatorRegistry getCreatorRegistry() {
+    return ElementCreatorRegistry.getRegistry();
   }
   
   /**
@@ -125,6 +136,9 @@ public class GridModel {
    * @param elementType The type of the element to be created.
    * @return An appropriate element creator or <code>null</code> if no
    * such creator is currently registered.
+   * @Deprecated This method is deprecated.
+   * {@link IElementCreatorRegistry#getCreator(Object, Class)} should be used
+   * instead. 
    */
   public static IGridElementCreator getElementCreator(
       final Object fromObject,
@@ -134,7 +148,7 @@ public class GridModel {
     
     List< IGridElementCreator > creators
       = elementType == null
-      ? getElementCreators()
+      ? getCreatorRegistry().getCreators()
       : getElementCreators( elementType );
     for ( IGridElementCreator creator : creators ) {
       if ( creator.canCreate( fromObject ) ) {
@@ -145,18 +159,6 @@ public class GridModel {
     
     return result;
     
-  }
-  
-  /**
-   * Get a list of all element creators that are defined as extensions
-   * of the <code>eu.geclipse.core.gridElementCreator</code> extension
-   * point.
-   * 
-   * @return All externally defined element creators.
-   * @see Extensions#getRegisteredElementCreators()
-   */
-  public static List< IGridElementCreator > getElementCreators() {
-    return Extensions.getRegisteredElementCreators();
   }
   
   /**
@@ -175,7 +177,7 @@ public class GridModel {
     List< IGridElementCreator > resultList
       = new ArrayList< IGridElementCreator >();
     List<IGridElementCreator> creators
-      = getElementCreators();
+      = getCreatorRegistry().getCreators();
     for ( IGridElementCreator creator : creators ) {
       if ( creator.canCreate( elementType ) ) {
         resultList.add( creator );
@@ -196,7 +198,7 @@ public class GridModel {
     List< IGridJobCreator > jobCreators
       = new ArrayList< IGridJobCreator >();
     List< IGridElementCreator > elementCreators
-      = getElementCreators();
+      = getCreatorRegistry().getCreators();
     for ( IGridElementCreator creator : elementCreators ) {
       if ( creator instanceof IGridJobCreator ) {
         jobCreators.add( ( IGridJobCreator ) creator ); 

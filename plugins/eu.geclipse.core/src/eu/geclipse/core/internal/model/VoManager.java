@@ -24,6 +24,8 @@ import org.eclipse.core.runtime.CoreException;
 import eu.geclipse.core.ICoreProblems;
 import eu.geclipse.core.Preferences;
 import eu.geclipse.core.internal.Activator;
+import eu.geclipse.core.model.GridModel;
+import eu.geclipse.core.model.IElementCreatorRegistry;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridElementCreator;
 import eu.geclipse.core.model.IStorableElement;
@@ -129,12 +131,11 @@ public class VoManager
                                   Activator.PLUGIN_ID );
     }
     
-    ElementCreatorRegistry registry = ElementCreatorRegistry.getRegistry();
+    IElementCreatorRegistry registry = GridModel.getCreatorRegistry();
     for ( IFileStore childStore : childStores ) {
       try {
         IGridElementCreator creator = registry.getCreator( childStore, IVirtualOrganization.class );
         if ( creator != null ) {
-          creator.setSource( childStore );
           create( creator );
         }
       } catch ( ProblemException pExc ) {

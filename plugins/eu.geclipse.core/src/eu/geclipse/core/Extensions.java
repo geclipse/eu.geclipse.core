@@ -485,29 +485,6 @@ public class Extensions {
   }
   
   /**
-   * Get a list of all currently registered Grid element creators.
-   * 
-   * @return A list containing instances of all currently registered
-   * extensions of the Grid element creator configuration elements.
-   */
-  public static List<IGridElementCreator> getRegisteredElementCreators() {
-    if( elementCreators == null ) {
-      List<IGridElementCreator> resultList = new ArrayList<IGridElementCreator>();
-      ExtensionManager manager = new ExtensionManager();
-      List<Object> objectList = manager.getExecutableExtensions( GRID_ELEMENT_CREATOR_POINT,
-                                                                 GRID_ELEMENT_CREATOR_ELEMENT,
-                                                                 GRID_ELEMENT_CREATOR_EXECUTABLE );
-      for( Object o : objectList ) {
-        if( o instanceof IGridElementCreator ) {
-          resultList.add( ( IGridElementCreator )o );
-        }
-      }
-      elementCreators = resultList;
-    }
-    return elementCreators;
-  }
-  
-  /**
    * Get all registered extensions of the grid element creator extension point that are
    * able to create a grid element of the specified target type from the specified
    * source type.

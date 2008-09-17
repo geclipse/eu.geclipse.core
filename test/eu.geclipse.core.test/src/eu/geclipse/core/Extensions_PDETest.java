@@ -68,18 +68,4 @@ public class Extensions_PDETest {
     // PasswordManager.registerPassword( keyFile.getPath(), "gamma" ); //$NON-NLS-1$
   }
 
-  /** test method {@link Extensions#getRegisteredElementCreators()}
-   * 
-   *
-   */
-  
-  @Test
-  public void testGetRegisteredElementCreators()
-  {
-    List<IGridElementCreator> elementcreators;
-    elementcreators = Extensions.getRegisteredElementCreators();
-    //Assert.assertEquals( new Integer( 8 ),new Integer( elementcreators.size() ));
-    Assert.assertNotNull( elementcreators );
-   }
-
 }

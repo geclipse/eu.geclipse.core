@@ -47,7 +47,7 @@ public class S3ServiceTestUtil {
    *         creator class could not be found
    */
   public static S3AWSServiceCreator getS3AWSServiceCreator() {
-    List<IGridElementCreator> voCreators = GridModel.getElementCreators();
+    List<IGridElementCreator> voCreators = GridModel.getCreatorRegistry().getCreators();
 
     S3AWSServiceCreator S3AWSServiceCreator = null;
     for( IGridElementCreator gridElementCreator : voCreators ) {

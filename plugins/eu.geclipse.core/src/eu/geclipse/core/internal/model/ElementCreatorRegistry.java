@@ -13,11 +13,13 @@ import org.eclipse.core.runtime.Platform;
 import eu.geclipse.core.ExtensionManager;
 import eu.geclipse.core.Extensions;
 import eu.geclipse.core.internal.Activator;
+import eu.geclipse.core.model.IElementCreatorRegistry;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridElementCreator;
 import eu.geclipse.core.reporting.ProblemException;
 
-public class ElementCreatorRegistry implements IRegistryEventListener {
+public class ElementCreatorRegistry
+    implements IElementCreatorRegistry, IRegistryEventListener {
   
   private static ElementCreatorRegistry singleton;
   
@@ -59,7 +61,31 @@ public class ElementCreatorRegistry implements IRegistryEventListener {
     
     List< ElementCreatorReference > references = findReferences( source, target );
     if ( ! references.isEmpty() ) {
-      result = references.get( 0 ).getElementCreator();
+      for ( ElementCreatorReference reference : references ) {
+        result = reference.getElementCreator();
+        if ( result != null ) {
+          result.setSource( source );
+          break;
+        }
+      }
+    }
+    
+    return result;
+    
+  }
+  
+  public List< IGridElementCreator > getCreators() {
+    
+    List< IGridElementCreator > result = new ArrayList< IGridElementCreator >();
+    
+    List< ElementCreatorReference > references = findReferences( null, null );
+    if ( references != null ) {
+      for ( ElementCreatorReference reference : references ) {
+        IGridElementCreator creator = reference.getElementCreator();
+        if ( creator != null ) {
+          result.add( creator );
+        }
+      }
     }
     
     return result;
@@ -100,19 +126,19 @@ public class ElementCreatorRegistry implements IRegistryEventListener {
   
   private List< ElementCreatorReference > findReferences( final Object source,
                                                           final Class< ? extends IGridElement > target ) {
-    
+    System.out.print( "ElementCreatorRegistry#findReference( " + ( source == null ? "null" : source.getClass() ) + ", " + ( target == null ? "null" : target ) + " )" );
     List< ElementCreatorReference > result = new ArrayList< ElementCreatorReference >();
     
     for ( ElementCreatorReference reference : Collections.synchronizedCollection( this.creators ) ) {
       try {
         if ( reference.checkSource( source ) && reference.checkTarget( target ) ) {
           result.add( reference );
-          break;
         }
       } catch ( ProblemException pExc ) {
         Activator.logException( pExc );
       }
     }
+    System.out.println( result.getClass() );
     
     return result;
     
