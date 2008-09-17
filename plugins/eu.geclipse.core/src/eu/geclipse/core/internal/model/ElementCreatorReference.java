@@ -91,14 +91,24 @@ public class ElementCreatorReference {
     
     public boolean matches( final Object source ) {
       
-      boolean result = this.sourceClass.isAssignableFrom( source.getClass() );
+      boolean result = false;
       
-      if ( result && ( this.sourcePattern != null ) ) {
-        result = this.sourcePattern.matcher( source.toString() ).matches();
+      if ( source instanceof Class< ? > ) {
+        result = this.sourceClass.isAssignableFrom( ( Class< ? > ) source );
       }
       
-      if ( result && ( this.sourceMatcher != null ) ) {
-        result = this.sourceMatcher.canCreate( source );
+      else { 
+      
+        result = this.sourceClass.isAssignableFrom( source.getClass() );
+      
+        if ( result && ( this.sourcePattern != null ) ) {
+          result = this.sourcePattern.matcher( source.toString() ).matches();
+        }
+        
+        if ( result && ( this.sourceMatcher != null ) ) {
+          result = this.sourceMatcher.canCreate( source );
+        }
+        
       }
       
       return result;

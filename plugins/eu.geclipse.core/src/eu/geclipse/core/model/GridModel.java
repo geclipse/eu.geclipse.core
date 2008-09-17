@@ -38,13 +38,6 @@ import eu.geclipse.core.reporting.ProblemException;
 public class GridModel {
   
   /**
-   * A list containing the standard creators.
-   * This list is created statically and on the fly when
-   * {@link #getStandardCreators()} is called.
-   */
-  //private static List< IGridElementCreator > standardCreators;
-  
-  /**
    * Get the manager that is dedicated to the management of
    * {@link IGridConnection}s.
    * 
@@ -99,61 +92,6 @@ public class GridModel {
    */
   public static IGridRoot getRoot() {
     return GridRoot.getInstance();
-  }
-  
-  /**
-   * Get a list of all know standard creators, i.e. {@link IGridElementCreator}s
-   * that are not specified as extensions of the
-   * <code>eu.geclipse.core.gridElementCreator</code> extension point but that
-   * belong to the core functionality to create elements. Examples for such
-   * creators are the {@link GridProjectCreator} or the
-   * {@link LocalResourceCreator}.
-   *  
-   * @return A list containing all know standard implementations of the
-   * {@link IGridElementCreator} interface.
-   */
-  /*public static List< IGridElementCreator > getStandardCreators() {
-    if ( standardCreators == null ) {
-      standardCreators = new ArrayList< IGridElementCreator >();
-      synchronized ( standardCreators ) {
-        standardCreators.add( new GridProjectCreator() );
-        standardCreators.add( new LocalResourceCreator() );
-      }
-    }
-    return standardCreators;
-  }*/
-  
-  /**
-   * Get an {@link IGridElementCreator} that is able to create
-   * an element of the specified type from the specified object.
-   * 
-   * @param fromObject The object from which to create the element. 
-   * @param elementType The type of the element to be created.
-   * @return An appropriate element creator or <code>null</code> if no
-   * such creator is currently registered.
-   * @Deprecated This method is deprecated.
-   * {@link IElementCreatorRegistry#getCreator(Object, Class)} should be used
-   * instead. 
-   */
-  public static IGridElementCreator getElementCreator(
-      final Object fromObject,
-      final Class< ? extends IGridElement > elementType ) {
-    
-    IGridElementCreator result = null;
-    
-    List< IGridElementCreator > creators
-      = elementType == null
-      ? getCreatorRegistry().getCreators()
-      : getElementCreators( elementType );
-    for ( IGridElementCreator creator : creators ) {
-      if ( creator.canCreate( fromObject ) ) {
-        result = creator;
-        break;
-      }
-    }
-    
-    return result;
-    
   }
   
   /**

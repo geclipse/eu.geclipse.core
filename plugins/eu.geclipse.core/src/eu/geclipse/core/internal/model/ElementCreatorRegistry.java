@@ -37,21 +37,9 @@ public class ElementCreatorRegistry
     return singleton;
   }
   
-  public void added( final IExtension[] extensions ) {
-    for ( IExtension extension : extensions ) {
-      IConfigurationElement[] elements
-        = extension.getConfigurationElements();
-      for ( IConfigurationElement element : elements ) {
-        ElementCreatorReference creator = findReference( element );
-        if ( creator == null ) {
-          this.creators.add( new ElementCreatorReference( element ) );
-        }
-      }
-    }
-  }
-
-  public void added( final IExtensionPoint[] extensionPoints ) {
-    // We do not listen to extension points but only to extensions 
+  public IGridElementCreator getCreator( final Class< ? extends Object > source,
+                                         final Class< ? extends IGridElement > target ) {
+    return getCreator( ( Object ) source, target );
   }
   
   public IGridElementCreator getCreator( final Object source,
@@ -60,12 +48,43 @@ public class ElementCreatorRegistry
     IGridElementCreator result = null;
     
     List< ElementCreatorReference > references = findReferences( source, target );
+    
     if ( ! references.isEmpty() ) {
       for ( ElementCreatorReference reference : references ) {
         result = reference.getElementCreator();
         if ( result != null ) {
-          result.setSource( source );
+          if ( ! ( source instanceof Class< ? > ) ) {
+            result.setSource( source );
+          }
           break;
+        }
+      }
+    }
+    
+    return result;
+    
+  }
+  
+  public List< IGridElementCreator > getCreators( final Class< ? extends Object > source,
+                                                  final Class< ? extends IGridElement > target ) {
+    return getCreators( ( Object ) source, target );
+  }
+  
+  public List< IGridElementCreator > getCreators( final Object source,
+                                                  final Class< ? extends IGridElement > target ) {
+    
+    List< IGridElementCreator > result = new ArrayList< IGridElementCreator >();
+    
+    List< ElementCreatorReference > references = findReferences( source, target );
+    
+    if ( ! references.isEmpty() ) {
+      for ( ElementCreatorReference reference : references ) {
+        IGridElementCreator creator = reference.getElementCreator();
+        if ( creator != null ) {
+          if ( ! ( source instanceof Class< ? > ) ) {
+            creator.setSource( source );
+          }
+          result.add( creator );
         }
       }
     }
@@ -90,6 +109,23 @@ public class ElementCreatorRegistry
     
     return result;
     
+  }
+  
+  public void added( final IExtension[] extensions ) {
+    for ( IExtension extension : extensions ) {
+      IConfigurationElement[] elements
+        = extension.getConfigurationElements();
+      for ( IConfigurationElement element : elements ) {
+        ElementCreatorReference creator = findReference( element );
+        if ( creator == null ) {
+          this.creators.add( new ElementCreatorReference( element ) );
+        }
+      }
+    }
+  }
+
+  public void added( final IExtensionPoint[] extensionPoints ) {
+    // We do not listen to extension points but only to extensions 
   }
 
   public void removed( final IExtension[] extensions ) {
@@ -126,7 +162,6 @@ public class ElementCreatorRegistry
   
   private List< ElementCreatorReference > findReferences( final Object source,
                                                           final Class< ? extends IGridElement > target ) {
-    //System.out.print( "ElementCreatorRegistry#findReference( " + ( source == null ? "null" : source.getClass() ) + ", " + ( target == null ? "null" : target ) + " )" );
     
     List< ElementCreatorReference > result = new ArrayList< ElementCreatorReference >();
     
@@ -139,8 +174,6 @@ public class ElementCreatorRegistry
         Activator.logException( pExc );
       }
     }
-    
-    //System.out.println( result.getClass() );
     
     return result;
     
