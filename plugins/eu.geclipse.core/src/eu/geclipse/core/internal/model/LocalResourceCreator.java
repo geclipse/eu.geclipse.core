@@ -17,7 +17,9 @@ package eu.geclipse.core.internal.model;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
 
+import eu.geclipse.core.internal.Activator;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.impl.AbstractGridElementCreator;
@@ -42,14 +44,34 @@ public class LocalResourceCreator
    * @see eu.geclipse.core.model.IGridElementCreator#create(eu.geclipse.core.model.IGridContainer)
    */
   public IGridElement create( final IGridContainer parent ) throws ProblemException {
+    
     IGridElement result = null;
-    Object obj = getObject();
-    if ( isFile( obj ) ) {
-      result = new LocalFile( ( IFile ) obj );
-    } else if ( isFolder( obj ) ) {
-      result = new LocalFolder( ( IFolder ) obj );
+    
+    Object source = getSource();
+    
+    if ( source instanceof IProject ) {
+      IProject project = ( IProject ) source;
+      if ( project.getName().equals( HiddenProject.NAME ) ) {
+        try {
+          result = HiddenProject.getInstance( project );
+        } catch ( ProblemException pExc ) {
+          Activator.logException( pExc );
+        }
+      } else {
+        result = new GridProject( project );
+      }
     }
+    
+    else if ( source instanceof IFile ) {
+      result = new LocalFile( ( IFile ) source );
+    }
+    
+    else if ( source instanceof IFolder ) {
+      result = new LocalFolder( ( IFolder ) source );
+    }
+    
     return result;
+    
   }
   
   /* (non-Javadoc)
@@ -57,29 +79,7 @@ public class LocalResourceCreator
    */
   @Override
   protected boolean internalCanCreate( final Object fromObject ) {
-    return isFile( fromObject ) || isFolder( fromObject );
-  }
-  
-  /**
-   * Determines if the specified object is an instanceof an
-   * {@link IFile}.
-   * 
-   * @param object The object to be tested.
-   * @return True if the object is an {@link IFile}.
-   */
-  private boolean isFile( final Object object ) {
-    return ( object instanceof IFile );
-  }
-  
-  /**
-   * Determines if the specified object is an instanceof an
-   * {@link IFolder}.
-   * 
-   * @param object The object to be tested.
-   * @return True if the object is an {@link IFolder}.
-   */
-  private boolean isFolder( final Object object ) {
-    return ( object instanceof IFolder );
+    return ( fromObject instanceof IFile ) || ( fromObject instanceof IFolder );
   }
   
 }

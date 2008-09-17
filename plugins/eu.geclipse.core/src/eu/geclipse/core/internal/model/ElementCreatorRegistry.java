@@ -127,6 +127,7 @@ public class ElementCreatorRegistry
   private List< ElementCreatorReference > findReferences( final Object source,
                                                           final Class< ? extends IGridElement > target ) {
     //System.out.print( "ElementCreatorRegistry#findReference( " + ( source == null ? "null" : source.getClass() ) + ", " + ( target == null ? "null" : target ) + " )" );
+    
     List< ElementCreatorReference > result = new ArrayList< ElementCreatorReference >();
     
     for ( ElementCreatorReference reference : Collections.synchronizedCollection( this.creators ) ) {
@@ -138,7 +139,8 @@ public class ElementCreatorRegistry
         Activator.logException( pExc );
       }
     }
-    System.out.println( result.getClass() );
+    
+    //System.out.println( result.getClass() );
     
     return result;
     

@@ -58,14 +58,4 @@ public class GridElementLifecycleManager_PDETest {
                        contains( "GridProjectCreator" ) ); //$NON-NLS-1$
   }
 
-  /**
-   * tests the method {@link GridElementLifecycleManager#
-   * findStandardCreator(org.eclipse.core.resources.IResource)}
-   */
-  @Test
-  public void testFindStandardCreator() {
-    Assert.assertNotNull( GridElementLifecycleManager.findStandardCreator( project ) );
-    Assert.assertTrue( GridElementLifecycleManager.findStandardCreator( project ).toString().
-                       contains( "GridProjectCreator" ) ); //$NON-NLS-1$
-  }
 }

@@ -18,17 +18,12 @@ package eu.geclipse.core.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.filesystem.IFileStore;
-
-import eu.geclipse.core.Extensions;
 import eu.geclipse.core.internal.model.ConnectionManager;
 import eu.geclipse.core.internal.model.ElementCreatorRegistry;
-import eu.geclipse.core.internal.model.GridProjectCreator;
 import eu.geclipse.core.internal.model.GridRoot;
-import eu.geclipse.core.internal.model.ServiceJobManager;
 import eu.geclipse.core.internal.model.HiddenProject;
 import eu.geclipse.core.internal.model.JobManager;
-import eu.geclipse.core.internal.model.LocalResourceCreator;
+import eu.geclipse.core.internal.model.ServiceJobManager;
 import eu.geclipse.core.internal.model.VoManager;
 import eu.geclipse.core.internal.model.notify.GridNotificationService;
 import eu.geclipse.core.reporting.ProblemException;
@@ -47,7 +42,7 @@ public class GridModel {
    * This list is created statically and on the fly when
    * {@link #getStandardCreators()} is called.
    */
-  private static List< IGridElementCreator > standardCreators;
+  //private static List< IGridElementCreator > standardCreators;
   
   /**
    * Get the manager that is dedicated to the management of
@@ -117,7 +112,7 @@ public class GridModel {
    * @return A list containing all know standard implementations of the
    * {@link IGridElementCreator} interface.
    */
-  public static List< IGridElementCreator > getStandardCreators() {
+  /*public static List< IGridElementCreator > getStandardCreators() {
     if ( standardCreators == null ) {
       standardCreators = new ArrayList< IGridElementCreator >();
       synchronized ( standardCreators ) {
@@ -126,7 +121,7 @@ public class GridModel {
       }
     }
     return standardCreators;
-  }
+  }*/
   
   /**
    * Get an {@link IGridElementCreator} that is able to create

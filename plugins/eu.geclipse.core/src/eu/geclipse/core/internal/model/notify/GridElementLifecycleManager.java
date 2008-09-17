@@ -26,6 +26,7 @@ import org.eclipse.core.runtime.CoreException;
 import eu.geclipse.core.internal.Activator;
 import eu.geclipse.core.internal.model.GridRoot;
 import eu.geclipse.core.internal.model.LocalFile;
+import eu.geclipse.core.internal.model.LocalResourceCreator;
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
@@ -57,22 +58,29 @@ public class GridElementLifecycleManager
    * @see GridModel#getStandardCreators()
    */
   public static IGridElementCreator findCreator( final IResource resource ) {
+    
     //System.out.print( "Searching for creator for " + resource.getFullPath() + " ... " );
+    
     IGridElementCreator result = null;
-    List< IGridElementCreator > creators
-      = GridModel.getCreatorRegistry().getCreators();
+    List< IGridElementCreator > creators = GridModel.getCreatorRegistry().getCreators();
+    
     for ( IGridElementCreator creator : creators ) {
       if ( creator.canCreate( resource ) ) {
         result = creator;
         break;
       }
     }
+    
     if ( result == null ) {
-      //System.out.print( "Searching standard creators ... " );
-      result = findStandardCreator( resource );
+      result = new LocalResourceCreator();
     }
+    
+    result.setSource( resource );
+
     //System.out.println( "Found " + ( result == null ? "none" : result.getClass() ) );
+    
     return result;
+    
   }
   
   /**
@@ -84,7 +92,7 @@ public class GridElementLifecycleManager
    * creator could be found.
    * @see GridModel#getStandardCreators()
    */
-  public static IGridElementCreator findStandardCreator( final IResource resource ) {
+  /*public static IGridElementCreator findStandardCreator( final IResource resource ) {
     IGridElementCreator result = null;
     List< IGridElementCreator > standardCreators
       = GridModel.getStandardCreators();
@@ -95,7 +103,7 @@ public class GridElementLifecycleManager
       }
     }
     return result;
-  }
+  }*/
 
   public boolean visit( final IResourceDelta delta )
       throws CoreException {
