@@ -15,8 +15,6 @@
 
 package eu.geclipse.core.internal.model.notify;
 
-import java.util.List;
-
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceDelta;
@@ -61,7 +59,9 @@ public class GridElementLifecycleManager
     
     //System.out.print( "Searching for creator for " + resource.getFullPath() + " ... " );
     
-    IGridElementCreator result = null;
+    IGridElementCreator result = GridModel.getCreatorRegistry().getCreator( resource, null );
+    
+    /*IGridElementCreator result = null;
     List< IGridElementCreator > creators = GridModel.getCreatorRegistry().getCreators();
     
     for ( IGridElementCreator creator : creators ) {
@@ -69,7 +69,7 @@ public class GridElementLifecycleManager
         result = creator;
         break;
       }
-    }
+    }*/
     
     if ( result == null ) {
       result = new LocalResourceCreator();
