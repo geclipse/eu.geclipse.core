@@ -384,8 +384,7 @@ public class GridProjectStructureComposite extends Composite {
       this.creatorTargets = new Hashtable< String, Class< ? > >();
     
       ExtensionManager extm = new ExtensionManager();
-      List< IConfigurationElement > creators
-        = extm.getConfigurationElements( Extensions.GRID_ELEMENT_CREATOR_POINT, Extensions.GRID_ELEMENT_CREATOR_ELEMENT );
+      List< IConfigurationElement > creators = GridModel.getCreatorRegistry().getConfigurations();
       
       for ( IConfigurationElement creator : creators ) {
         IConfigurationElement[] targets

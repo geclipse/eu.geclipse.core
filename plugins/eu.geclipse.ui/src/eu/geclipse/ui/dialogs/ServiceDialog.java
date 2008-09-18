@@ -20,6 +20,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 
 import eu.geclipse.core.Extensions;
+import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridService;
 import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.widgets.StoredCombo;
@@ -112,7 +113,7 @@ public class ServiceDialog
   private void initServiceTypeCombo() {
     
     List< IConfigurationElement > elements
-      = Extensions.getRegisteredElementCreatorConfigurations( URI.class, IGridService.class );
+      = GridModel.getCreatorRegistry().getConfigurations( URI.class, IGridService.class );
     this.configs = new Hashtable< String, IConfigurationElement >();
     
     for ( IConfigurationElement element : elements ) {

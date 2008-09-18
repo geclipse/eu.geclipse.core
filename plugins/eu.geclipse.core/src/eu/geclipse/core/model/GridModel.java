@@ -15,9 +15,6 @@
 
 package eu.geclipse.core.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import eu.geclipse.core.internal.model.ConnectionManager;
 import eu.geclipse.core.internal.model.ElementCreatorRegistry;
 import eu.geclipse.core.internal.model.GridRoot;
@@ -95,74 +92,6 @@ public class GridModel {
   }
   
   /**
-   * Get a list of all element creators that are able to create
-   * {@link IGridElement}s of the specified type. Note that this method
-   * only searches the extended creators and not the standard creators.
-   * 
-   * @param elementType The type of the element that should be
-   * created.
-   * @return A list containing all currently registered
-   * {@link IGridElementCreator}s that are able to create elements
-   * of the specified type.
-   * @see #getElementCreators()
-   */
-  public static List< IGridElementCreator > getElementCreators( final Class< ? extends IGridElement > elementType ) {
-    List< IGridElementCreator > resultList
-      = new ArrayList< IGridElementCreator >();
-    List<IGridElementCreator> creators
-      = getCreatorRegistry().getCreators();
-    for ( IGridElementCreator creator : creators ) {
-      if ( creator.canCreate( elementType ) ) {
-        resultList.add( creator );
-      }
-    }
-    return resultList;
-  }
-  
-  /**
-   * Get a list of all element creators that implement the
-   * {@link IGridJobCreator} interface. Note that this method
-   * only searches the extended creators and not the standard creators.
-   * 
-   * @return All currently registered job creators.
-   * @see #getElementCreators()
-   */
-  public static List< IGridJobCreator > getJobCreators() {
-    List< IGridJobCreator > jobCreators
-      = new ArrayList< IGridJobCreator >();
-    List< IGridElementCreator > elementCreators
-      = getCreatorRegistry().getCreators();
-    for ( IGridElementCreator creator : elementCreators ) {
-      if ( creator instanceof IGridJobCreator ) {
-        jobCreators.add( ( IGridJobCreator ) creator ); 
-      }
-    }
-    return jobCreators;
-  }
-  
-  /**
-   * Get a list of all job creators that are able to create a job from
-   * the specified {@link IGridJobDescription}. Searches the list returned
-   * by {@link #getJobCreators()}.
-   * 
-   * @param description The job description from which to create a job.
-   * @return All currently registered job managers that are able to create
-   * a job from the specified description.
-   * @see #getJobCreators()
-   */
-  public static List< IGridJobCreator > getJobCreators( final IGridJobDescription description ) {
-    List< IGridJobCreator > resultList
-      = new ArrayList< IGridJobCreator >();
-    List<IGridJobCreator> creators = getJobCreators();
-    for ( IGridJobCreator creator : creators ) {
-      if ( creator.canCreate( description ) ) {
-        resultList.add( creator );
-      }
-    }
-    return resultList;
-  }
-  
-  /**
    * Get the grid preferences.
    * 
    * @return An instance of {@link IGridPreferences}.
@@ -173,18 +102,6 @@ public class GridModel {
     return HiddenProject.getInstance();
   }
 
-  /**
-   * Get all element creators that are able to create
-   * {@link IVirtualOrganization}s.
-   *  
-   * @return A list of all {@link IGridElementCreator}s that
-   * are able to create virtual organizations.
-   * @see #getElementCreators(Class)
-   */
-  public static List< IGridElementCreator > getVoCreators() {
-    return getElementCreators( IVirtualOrganization.class );
-  }
-  
   /**
    * Get the manager that is dedicated to the management of
    * {@link IVirtualOrganization}s.

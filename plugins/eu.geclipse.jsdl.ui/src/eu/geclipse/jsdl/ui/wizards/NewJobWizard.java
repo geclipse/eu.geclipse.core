@@ -612,8 +612,8 @@ public class NewJobWizard extends Wizard
     }
 
     private void initTypeCombo( final Combo combo ) {
-      List<IConfigurationElement> elements = Extensions.getRegisteredElementCreatorConfigurations( JSDLJobDescription.class,
-                                                                                                   IGridJobDescription.class );
+      List<IConfigurationElement> elements
+        = GridModel.getCreatorRegistry().getConfigurations( JSDLJobDescription.class, IGridJobDescription.class );
       List<String> names = new ArrayList<String>();
       for( IConfigurationElement element : elements ) {
         try {

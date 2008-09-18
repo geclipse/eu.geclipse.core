@@ -39,6 +39,7 @@ import org.osgi.framework.Bundle;
 import eu.geclipse.core.Extensions;
 import eu.geclipse.core.ICoreProblems;
 import eu.geclipse.core.internal.Activator;
+import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridElementCreator;
@@ -95,7 +96,7 @@ public class GenericVoProperties
     
     IFileStore fileStore = getFileStore();
     List< IConfigurationElement > elements
-      = Extensions.getRegisteredElementCreatorConfigurations( URI.class, IGridService.class );
+      = GridModel.getCreatorRegistry().getConfigurations( URI.class, IGridService.class );
     
     try {
       

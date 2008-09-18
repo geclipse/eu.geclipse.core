@@ -46,6 +46,8 @@ public class AWSVoTestUtil {
    *         could not be found
    */
   public static AWSVoCreator getAwsVoCreator() {
+    return ( AWSVoCreator ) GridModel.getCreatorRegistry().getCreator( null, AWSVirtualOrganization.class );
+    /*
     List<IGridElementCreator> voCreators = GridModel.getVoCreators();
 
     AWSVoCreator awsVoCreator = null;
@@ -59,6 +61,7 @@ public class AWSVoTestUtil {
       awsVoCreator.setAwsAccessId( AWSVoTestUtil.AWS_ACCESS_ID );
     }
     return awsVoCreator;
+    */
   }
 
   /**

@@ -433,7 +433,7 @@ public class ConnectionElement
       IResource resource = source.getResource();
       
       List< IConfigurationElement > elements
-        = Extensions.getRegisteredElementCreatorConfigurations( resource.getClass(), target );
+        = GridModel.getCreatorRegistry().getConfigurations( resource.getClass(), target );
       
       if ( elements != null ) {
         for ( IConfigurationElement element : elements ) {

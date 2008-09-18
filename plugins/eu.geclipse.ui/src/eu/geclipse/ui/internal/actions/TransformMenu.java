@@ -14,6 +14,7 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.ui.actions.CompoundContributionItem;
 
 import eu.geclipse.core.Extensions;
+import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridElementCreator;
 import eu.geclipse.core.model.IGridJobDescription;
 import eu.geclipse.ui.internal.Activator;
@@ -96,7 +97,7 @@ public class TransformMenu
     
     if ( sourceType != null ) {
       List< IConfigurationElement > configs
-        = Extensions.getRegisteredElementCreatorConfigurations( sourceType, IGridJobDescription.class );
+        = GridModel.getCreatorRegistry().getConfigurations( sourceType, IGridJobDescription.class );
       if ( ( configs != null ) && ( configs.size() > 0 ) ) {
         IGridJobDescription[] array = descriptions.toArray( new IGridJobDescription[ descriptions.size() ] );
         for ( IConfigurationElement element : configs ) {
