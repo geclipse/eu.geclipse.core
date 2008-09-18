@@ -18,10 +18,15 @@ package eu.geclipse.workflow.ui.part;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gmf.runtime.diagram.ui.requests.CreateConnectionViewAndElementRequest;
 import org.eclipse.gmf.runtime.emf.type.core.IElementType;
 import org.eclipse.gmf.runtime.emf.type.core.IHintedType;
+import org.eclipse.gmf.runtime.emf.type.core.commands.DestroyElementCommand;
+import org.eclipse.gmf.runtime.emf.type.core.requests.DestroyElementRequest;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -29,6 +34,7 @@ import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
 
 import eu.geclipse.workflow.model.IInputPort;
+import eu.geclipse.workflow.model.ILink;
 import eu.geclipse.workflow.model.IOutputPort;
 import eu.geclipse.workflow.model.IWorkflowJob;
 import eu.geclipse.workflow.ui.edit.parts.InputPortEditPart;
@@ -65,7 +71,7 @@ public class CalculateJobDependenciesAction  implements IObjectActionDelegate {
     // iterate through all job parts
     for (Iterator<WorkflowJobEditPart> i1 = jobParts.iterator(); i1.hasNext();) {
       WorkflowJobEditPart jobPart1 = i1.next();
-      IWorkflowJob job1 = (IWorkflowJob)jobPart1.resolveSemanticElement();
+      IWorkflowJob job1 = (IWorkflowJob)jobPart1.resolveSemanticElement();    
       
       // match with all job parts
       for (Iterator<WorkflowJobEditPart> i2 = jobParts.iterator(); i2.hasNext();) {
@@ -76,7 +82,22 @@ public class CalculateJobDependenciesAction  implements IObjectActionDelegate {
         List<IInputPort> inputs = job1.getInputs();
         List<IOutputPort> outputs = job2.getOutputs();
         for (Iterator<IInputPort> iterInputs = inputs.iterator(); iterInputs.hasNext(); ) {
-          IInputPort inputPort = iterInputs.next();
+          IInputPort inputPort = iterInputs.next();  
+          
+          // clear existing links
+          // TODO FIX: Only creates one link. WhY????????
+//          EList<ILink> inputPortLinks = inputPort.getLinks();
+//          for (Iterator<ILink> iterInputLinks = inputPortLinks.iterator(); iterInputLinks.hasNext();) {
+//            DestroyElementRequest linkDestroyReq = new DestroyElementRequest(job1, true);
+//            DestroyElementCommand linkDestroyCmd = linkDestroyReq.getBasicDestroyCommand();
+//            try {
+//              linkDestroyCmd.execute( new NullProgressMonitor(), null ); // exception is thrown, but not reported - NullPointerException here
+//            } catch( ExecutionException e ) {
+//              // TODO Auto-generated catch block
+//              e.printStackTrace();
+//            }
+//          }
+          
           for (Iterator<IOutputPort> iterOutputs = outputs.iterator(); iterOutputs.hasNext(); ) {
             IOutputPort outputPort = iterOutputs.next();
             if (inputPort.getName().equals( outputPort.getName() )) {

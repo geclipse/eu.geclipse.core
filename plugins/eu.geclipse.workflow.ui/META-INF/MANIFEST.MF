@@ -29,4 +29,5 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.gmf.runtime.diagram.ui.providers,
  org.eclipse.gmf.runtime.diagram.ui.providers.ide,
  org.eclipse.gmf.runtime.diagram.ui.render,
- eu.geclipse.jsdl
+ eu.geclipse.jsdl,
+ eu.geclipse.jsdl.ui

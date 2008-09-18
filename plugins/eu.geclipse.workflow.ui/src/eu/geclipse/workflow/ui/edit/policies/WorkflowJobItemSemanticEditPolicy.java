@@ -75,7 +75,7 @@ public class WorkflowJobItemSemanticEditPolicy extends WorkflowBaseItemSemanticE
    * @generated
    */
   @Override
-  protected Command getDestroyElementCommand( DestroyElementRequest req ) {
+  public Command getDestroyElementCommand( DestroyElementRequest req ) {
     CompoundCommand cc = getDestroyEdgesCommand();
     addDestroyChildNodesCommand( cc );
     addDestroyShortcutsCommand( cc );

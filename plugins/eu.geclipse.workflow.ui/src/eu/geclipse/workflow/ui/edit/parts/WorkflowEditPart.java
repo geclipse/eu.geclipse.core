@@ -33,11 +33,12 @@ public class WorkflowEditPart extends DiagramEditPart {
 
   public static final int VISUAL_ID = 79;
 
+
   /**
    * Default constructor.
    */
   public WorkflowEditPart( View view ) {
-    super( view );
+    super( view );   
   }
 
   /**

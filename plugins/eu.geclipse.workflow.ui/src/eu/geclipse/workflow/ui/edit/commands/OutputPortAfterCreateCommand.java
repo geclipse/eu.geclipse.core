@@ -19,9 +19,7 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.operations.OperationHistoryFactory;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.gef.commands.Command;
@@ -29,7 +27,6 @@ import org.eclipse.gmf.runtime.common.core.command.CommandResult;
 import org.eclipse.gmf.runtime.emf.commands.core.command.AbstractTransactionalCommand;
 
 import eu.geclipse.workflow.model.IOutputPort;
-import eu.geclipse.workflow.ui.internal.WorkflowDiagramEditorPlugin;
 import eu.geclipse.workflow.ui.part.Messages;
 
 /**
@@ -40,44 +37,44 @@ import eu.geclipse.workflow.ui.part.Messages;
 public class OutputPortAfterCreateCommand extends Command {
   
   private IAdaptable adapter;
-  private String uri;
+  String uri;
   private TransactionalEditingDomain domain;
-  private IOutputPort newPort;
+  IOutputPort newPort;
 
+  /**
+   * @param adapter Adapter to get model element from visual part
+   * @param uri URI to add to port
+   * @param domain Transactional editing domain
+   */
   public OutputPortAfterCreateCommand(IAdaptable adapter, String uri, TransactionalEditingDomain domain) {
     this.adapter = adapter;
     this.uri = uri;
     this.domain = domain;
   }
   
+  @Override
   public void execute() {
-    EObject newVisualElement = (EObject)adapter.getAdapter(EObject.class);
+    EObject newVisualElement = (EObject)this.adapter.getAdapter(EObject.class);
     Object o = newVisualElement.eCrossReferences().get( 0 );
     if (o instanceof IOutputPort) {
-      newPort = ( IOutputPort )o;
-      IStatus status = Status.OK_STATUS;
-      AbstractTransactionalCommand command = new AbstractTransactionalCommand( domain,
+      this.newPort = ( IOutputPort )o;
+      AbstractTransactionalCommand command = new AbstractTransactionalCommand( this.domain,
                                                                                Messages.getString( "OutputPortAfterCreateCommand.settingPortUri" ), //$NON-NLS-1$
                                                                                null )
       {
-        IStatus status = Status.OK_STATUS;
         @Override
         protected CommandResult doExecuteWithResult( IProgressMonitor monitor,
                                                      IAdaptable info )
         {
-          newPort.setName( OutputPortAfterCreateCommand.this.uri );
+          OutputPortAfterCreateCommand.this.newPort.setName( OutputPortAfterCreateCommand.this.uri );
           return CommandResult.newOKCommandResult();
         }
       };
       try {
         OperationHistoryFactory.getOperationHistory()
           .execute( command, new NullProgressMonitor(), null );
-      } catch( ExecutionException eE ) {
-        status = new Status( IStatus.ERROR,
-                             WorkflowDiagramEditorPlugin.ID,
-                             IStatus.OK,
-                             Messages.getString( "OutputPortAfterCreateCommand.errorSettingPortUri" ), //$NON-NLS-1$
-                             eE ); 
+      } catch( ExecutionException eE ) { 
+        // TODO implement problem reporting        
       }
     }
   }
