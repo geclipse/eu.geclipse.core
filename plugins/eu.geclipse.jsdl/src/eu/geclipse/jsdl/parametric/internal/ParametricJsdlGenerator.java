@@ -26,11 +26,6 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpression;
-import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -45,75 +40,19 @@ import eu.geclipse.jsdl.JSDLJobDescription;
 import eu.geclipse.jsdl.internal.Activator;
 import eu.geclipse.jsdl.parametric.IParametricJsdlGenerator;
 import eu.geclipse.jsdl.parametric.IParametricJsdlHandler;
+import eu.geclipse.jsdl.xpath.XPathDocument;
 
 
 /**
  * This class gets parametric JSDL and generate a bunch of non-parametric jsdl
  */
 public class ParametricJsdlGenerator implements IParametricJsdlGenerator {
-  private XPath xpathEngine;
-  private XPathExpression xPathSweeps;
-  private XPathExpression xPathAssignment;
-  private XPathExpression xPathValues;
-  private XPathExpression xPathParameters;
-  private XPathExpression xPathLoops;
+  private XPathDocument xpath;
+  private JSDLJobDescription parametricJsdl;
 
-  private NodeList findSweeps( final Node node ) throws ProblemException
-  {
-    try {
-      if( this.xPathSweeps == null ) {
-          this.xPathSweeps = getXPathEngine().compile( "./sweep:Sweep" ); //$NON-NLS-1$
-      }
-      
-      return (NodeList)this.xPathSweeps.evaluate( node, XPathConstants.NODESET );      
-      
-    } catch( XPathExpressionException exception ) {
-      throw new ProblemException( "eu.geclipse.jsdl.problem.createXPathQueryFailed", exception, Activator.PLUGIN_ID ); //$NON-NLS-1$
-
-    }   
-  }
-  
-  private NodeList findAssignments( final Element sweepElement ) throws ProblemException
-  {
-    try {
-      if( this.xPathAssignment == null ) {
-        this.xPathAssignment = getXPathEngine().compile( "./sweep:Assignment" ); //$NON-NLS-1$
-      }
-      
-      return (NodeList)this.xPathAssignment.evaluate( sweepElement, XPathConstants.NODESET );      
-      
-    } catch( XPathExpressionException exception ) {
-      throw new ProblemException( "eu.geclipse.jsdl.problem.createXPathQueryFailed", exception, Activator.PLUGIN_ID ); //$NON-NLS-1$
-
-    }   
-  }
-  
-  private NodeList findValues( final Element assignmentElement ) throws ProblemException
-  {
-    try {
-      if( this.xPathValues == null ) {
-        this.xPathValues = getXPathEngine().compile( "./sweepfunc:Values/sweepfunc:Value" ); //$NON-NLS-1$
-      }
-      
-      return (NodeList)this.xPathValues.evaluate( assignmentElement, XPathConstants.NODESET );      
-      
-    } catch( XPathExpressionException exception ) {
-      throw new ProblemException( "eu.geclipse.jsdl.problem.createXPathQueryFailed", exception, Activator.PLUGIN_ID ); //$NON-NLS-1$
-    }   
-  }  
-  
-  private NodeList findParameters( final Element assignmentElement ) throws ProblemException
-  {
-    try {
-      if( this.xPathParameters == null ) {
-        this.xPathParameters = getXPathEngine().compile( "./sweep:Parameter" ); //$NON-NLS-1$
-      }
-      
-      return (NodeList)this.xPathParameters.evaluate( assignmentElement, XPathConstants.NODESET );      
-      
-    } catch( XPathExpressionException exception ) {
-      throw new ProblemException( "eu.geclipse.jsdl.problem.createXPathQueryFailed", exception, Activator.PLUGIN_ID ); //$NON-NLS-1$
-    }   
+  public ParametricJsdlGenerator( final JSDLJobDescription parametricJsdl ) {
+    this.parametricJsdl = parametricJsdl;
+    this.xpath = new XPathDocument( parametricJsdl.getXml() );
   }
 
   private void processSweeps( final NodeList sweeps, final IGenerationContext generationContext, final List<Integer> iterationsStack, final SubMonitor monitor ) throws ProblemException {    
@@ -127,8 +66,8 @@ public class ParametricJsdlGenerator implements IParametricJsdlGenerator {
       if( sweepItem instanceof Element ) {
         Element currentSweep = ( Element )sweepItem;
         
-        processAssignments( findAssignments( currentSweep ), assignmentList );
-        NodeList childSweeps = findSweeps( sweepItem );
+        processAssignments( this.xpath.getNodes( currentSweep, "./sweep:Assignment" ), assignmentList );
+        NodeList childSweeps = this.xpath.getNodes( currentSweep, "./sweep:Sweep" );
         
         // TODO mariusz Throw exception when maxIterations is 0 (not values defined)        
         List<Iterator<String>> iterators = getIterators( assignmentList );
@@ -206,9 +145,9 @@ public class ParametricJsdlGenerator implements IParametricJsdlGenerator {
       if( item instanceof Element ) {
         Element assignment = ( Element )item;
         
-        NodeList parameters = findParameters( assignment );
-        NodeList values = findValues( assignment );
-        NodeList loops = findLoops( assignment );
+        NodeList parameters = this.xpath.getNodes( assignment, "./sweep:Parameter" );
+        NodeList values = this.xpath.getNodes( assignment, "./sweepfunc:Values/sweepfunc:Value" );
+        NodeList loops = this.xpath.getNodes( assignment, "./sweepfunc:Loop" );
         
         // TODO mariusz check: values and loops cannot be defined both
         
@@ -217,27 +156,13 @@ public class ParametricJsdlGenerator implements IParametricJsdlGenerator {
         if( values.getLength() > 0 ) {
           function = new FunctionValues( values );
         } else if( loops.getLength() > 0 ) {
-          function = new FunctionIntegerLoop( loops, getXPathEngine() );
+          function = new FunctionIntegerLoop( loops, this.xpath );
         }
         
-        assignmentList.add( new Assignment( getXPathEngine(), parameters, function ) );
+        assignmentList.add( new Assignment( this.xpath, parameters, function ) );
                 
       } // TODO mariusz throw exception: children expected
     }    
-  }
-
-  private NodeList findLoops( final Element assignment ) throws ProblemException {
-    try {
-      if( this.xPathLoops == null ) {
-          this.xPathLoops = getXPathEngine().compile( "./sweepfunc:Loop" ); //$NON-NLS-1$
-      }
-      
-      return (NodeList)this.xPathLoops.evaluate( assignment, XPathConstants.NODESET );      
-      
-    } catch( XPathExpressionException exception ) {
-      throw new ProblemException( "eu.geclipse.jsdl.problem.createXPathQueryFailed", exception, Activator.PLUGIN_ID ); //$NON-NLS-1$
-
-    }   
   }
 
   private Document removeSweepNodes( final Document parametricJsdlDocument ) {
@@ -263,16 +188,6 @@ public class ParametricJsdlGenerator implements IParametricJsdlGenerator {
     }
     
   }
-
-  
-  private XPath getXPathEngine() {
-    if( this.xpathEngine == null ) {
-      this.xpathEngine = XPathFactory.newInstance().newXPath();
-      this.xpathEngine.setNamespaceContext( getNamespaceContext() );
-    }
-    return this.xpathEngine;    
-  }
-  
   
   private NamespaceContext getNamespaceContext() {
     
@@ -309,18 +224,18 @@ public class ParametricJsdlGenerator implements IParametricJsdlGenerator {
       }};
   }
 
-  public void generate( final JSDLJobDescription parametricJsdl,
-                        final IParametricJsdlHandler handler, final IProgressMonitor monitor )
+  public void generate( final IParametricJsdlHandler handler,
+                        final IProgressMonitor monitor )
   {
     // TODO mariusz handle progress monitor
     SubMonitor subMonitor = SubMonitor.convert( monitor );
     
     try {
-      Document parametricXml = parametricJsdl.getXml();
+      Document parametricXml = this.parametricJsdl.getXml();
       Document baseJsdl = removeSweepNodes( parametricXml );
-      IGenerationContext generationContext = new GenerationContext( parametricJsdl, baseJsdl, handler, getXPathEngine() );
+      IGenerationContext generationContext = new GenerationContext( this.parametricJsdl, baseJsdl, handler, this.xpath );
 
-      NodeList sweeps = findSweeps( parametricXml.getDocumentElement() );
+      NodeList sweeps = this.xpath.getNodes( parametricXml.getDocumentElement(), "./sweep:Sweep" );
       
       // first generation only for validation and gathering information
       CounterGenerationContext counter = new CounterGenerationContext();      

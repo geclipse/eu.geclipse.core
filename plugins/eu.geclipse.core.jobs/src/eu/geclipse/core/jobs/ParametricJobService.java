@@ -207,10 +207,10 @@ public class ParametricJobService implements IGridJobService {
       subMonitor.setWorkRemaining( 10 );
       subMonitor.subTask( Messages.getString("ParametricJobService.taskNameGeneratingJsdl") ); //$NON-NLS-1$
       IGridJob parametricGridJob = createParamJobStructure( jsdl, parent, jobName );
-      IParametricJsdlGenerator generator = ParametricJsdlGeneratorFactory.getGenerator();
+      IParametricJsdlGenerator generator = ParametricJsdlGeneratorFactory.getGenerator( jsdl );
       IFolder generationTargetfolder = ((IFolder)parametricGridJob.getResource()).getFolder( Messages.getString("ParametricJobService.generatedJsdlFolder") ); //$NON-NLS-1$
       ParametricJsdlSaver saver = new ParametricJsdlSaver( jsdl, generationTargetfolder );
-      generator.generate( jsdl, saver, subMonitor.newChild( 1 ) );
+      generator.generate( saver, subMonitor.newChild( 1 ) );
       List<JSDLJobDescription> generatedJsdls = saver.getGeneratedJsdl();    
       submitGeneratedJsdl( parametricGridJob, generatedJsdls, subMonitor.newChild( 9 ), jobName );
       cleanupSubmission( generationTargetfolder );

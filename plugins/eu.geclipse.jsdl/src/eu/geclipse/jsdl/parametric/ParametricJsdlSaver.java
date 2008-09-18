@@ -85,8 +85,7 @@ public class ParametricJsdlSaver implements IParametricJsdlHandler {
     try {   
       
       IFile file = this.targetFolder.getFile( getFileName( generatedJsdl ) );
-      
-      DOMSource source = new DOMSource( generatedJsdl.getDocument() );
+      DOMSource source = new DOMSource( generatedJsdl.getDocument() );      
 
       ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
       Transformer transformer = TransformerFactory.newInstance().newTransformer();

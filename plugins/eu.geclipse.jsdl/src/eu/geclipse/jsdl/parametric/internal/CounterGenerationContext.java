@@ -20,8 +20,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-import javax.xml.xpath.XPathExpression;
-
 import org.eclipse.core.runtime.SubMonitor;
 
 import eu.geclipse.core.reporting.ProblemException;
@@ -42,7 +40,7 @@ public class CounterGenerationContext implements IGenerationContext {
    * org.eclipse.core.runtime.SubMonitor)
    */
   public void setValue( final String paramName,
-                        final XPathExpression paramXPath,
+                        final String xpathQuery,
                         final String value,
                         final SubMonitor subMonitor ) throws ProblemException
   {

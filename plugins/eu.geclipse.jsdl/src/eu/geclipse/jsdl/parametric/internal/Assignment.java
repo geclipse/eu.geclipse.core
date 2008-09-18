@@ -19,50 +19,42 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathExpression;
-import javax.xml.xpath.XPathExpressionException;
-
 import org.eclipse.core.runtime.SubMonitor;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import eu.geclipse.core.reporting.ProblemException;
+import eu.geclipse.jsdl.xpath.XPathDocument;
 
 class Assignment {
 
   private NodeList parameters;  
-  private List<XPathExpression> xPathExpressions;
+  private List<String> xPathQueries;
   private IFunction function;
 
   /**
-   * @param xpathEngine 
+   * @param pathDocument 
    * @param parameters which values will be substituted
    * @param function which describes values for parameters over iterations
    */
-  public Assignment( final XPath xpathEngine,
+  public Assignment( final XPathDocument pathDocument,
                                final NodeList parameters,
                                final IFunction function )
   {
     this.parameters = parameters;
     this.function = function;
-    initXpathExpressions( xpathEngine );
+    initXpathExpressions( pathDocument );
   }
 
-  private void initXpathExpressions( final XPath xpathEngine ) {
-    this.xPathExpressions = new ArrayList<XPathExpression>( this.parameters.getLength() );
-    try {
+  private void initXpathExpressions( final XPathDocument pathDocument ) {
+    this.xPathQueries = new ArrayList<String>( this.parameters.getLength() );
       for( int index = 0; index < this.parameters.getLength(); index++ ) {
         Node item = this.parameters.item( index );
         String textContent = item.getTextContent();
         // TODO mariusz check if text content != null
         // TODO mariusz check: should has no children
-        this.xPathExpressions.add( xpathEngine.compile( textContent ) );
-      }
-    } catch( XPathExpressionException exception ) {
-      // TODO mariusz Auto-generated catch block
-      exception.printStackTrace();
-    }
+        this.xPathQueries.add( textContent );
+      }   
   }
 
   /**
@@ -81,9 +73,9 @@ class Assignment {
     for( int index = 0; index < this.parameters.getLength(); index++ ) {
       // TODO mariusz check if value is a Text node
       // TODO mariusz check progress monitor
-      XPathExpression pathExpression = this.xPathExpressions.get( index );
+      String xpathQuery = this.xPathQueries.get( index );
       String paramName = this.parameters.item( index ).getTextContent();
-      generationContext.setValue( paramName, pathExpression, value, monitor );
+      generationContext.setValue( paramName, xpathQuery, value, monitor );
     }
   }
   

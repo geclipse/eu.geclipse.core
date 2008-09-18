@@ -20,13 +20,6 @@ class FunctionValues implements IFunction {
     return this.values.getLength();
   }
 
-  /* (non-Javadoc)
-   * @see eu.geclipse.jsdl.parametric.internal.IFunction#getValue(int)
-   */
-  public String getValue( final int iteration ) {
-    return this.values.item( iteration ).getTextContent();
-  }
-  
   public Iterator<String> iterator() {
     return new ValuesIterator();
   }

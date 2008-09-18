@@ -2,8 +2,6 @@ package eu.geclipse.jsdl.parametric.internal;
 
 import java.util.List;
 
-import javax.xml.xpath.XPathExpression;
-
 import org.eclipse.core.runtime.SubMonitor;
 import org.w3c.dom.Document;
 
@@ -25,7 +23,7 @@ interface IGenerationContext {
    * @throws ProblemException
    */
   public abstract void setValue( final String paramName,
-                                 final XPathExpression paramXPath,
+                                 final String xpathQuery,
                                  final String value,
                                  final SubMonitor subMonitor )
     throws ProblemException;

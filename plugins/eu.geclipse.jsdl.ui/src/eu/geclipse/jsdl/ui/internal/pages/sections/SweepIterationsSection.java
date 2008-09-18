@@ -123,9 +123,8 @@ public class SweepIterationsSection extends JsdlFormPageSection {
 
       @Override
       protected IStatus run( final IProgressMonitor monitor ) {
-        IParametricJsdlGenerator generator = ParametricJsdlGeneratorFactory.getGenerator();
-        generator.generate( jsdl,
-                            handler,
+        IParametricJsdlGenerator generator = ParametricJsdlGeneratorFactory.getGenerator( jsdl );
+        generator.generate( handler,
                             monitor );
         return Status.OK_STATUS;
       }

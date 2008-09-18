@@ -15,6 +15,7 @@
  *****************************************************************************/
 package eu.geclipse.jsdl.parametric;
 
+import eu.geclipse.jsdl.JSDLJobDescription;
 import eu.geclipse.jsdl.parametric.internal.ParametricJsdlGenerator;
 
 
@@ -22,14 +23,9 @@ import eu.geclipse.jsdl.parametric.internal.ParametricJsdlGenerator;
  *
  */
 public class ParametricJsdlGeneratorFactory {
-  static private ParametricJsdlGenerator generator;
   
-  static public IParametricJsdlGenerator getGenerator() {
-    if( generator == null ) {
-      generator = new ParametricJsdlGenerator();      
-    }
-    
-    return generator;
+  static public IParametricJsdlGenerator getGenerator( final JSDLJobDescription parametricJsdl ) {
+    return new ParametricJsdlGenerator( parametricJsdl );
   }
   
 }

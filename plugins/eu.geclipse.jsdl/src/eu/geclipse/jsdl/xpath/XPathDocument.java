@@ -1,0 +1,148 @@
+package eu.geclipse.jsdl.xpath;
+
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
+import javax.xml.XMLConstants;
+import javax.xml.namespace.NamespaceContext;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import eu.geclipse.core.ICoreProblems;
+import eu.geclipse.core.reporting.ProblemException;
+import eu.geclipse.jsdl.internal.Activator;
+
+/**
+ * Class simplifying querying of XML {@link Document} using XPath language.
+ * Handle such things like namespaces, caching compiled expressions etc.
+ */
+public class XPathDocument {  
+  private static XPath xpathEngine;
+  private Document document;
+  private Map<String,XPathExpression> expressionsMap;
+  
+  /**
+   * @param document on which XPath queries will be run
+   */
+  public XPathDocument( final Document document ) {
+    super();
+    this.document = document;
+    expressionsMap = new HashMap<String,XPathExpression>();
+  }
+
+  /**
+   * Get nodes selected by giving XPath
+   * @param parentNode XML node, from which query will be executed.
+   * @param xpathQuery
+   * @return nodes selected by query
+   * @throws ProblemException
+   */
+  public NodeList getNodes( final Node parentNode, final String xpathQuery ) throws ProblemException {
+    try {
+      NodeList nodes = ( NodeList )getExpression( xpathQuery ).evaluate( parentNode, XPathConstants.NODESET );
+      return nodes;
+    } catch( XPathExpressionException exception ) {
+      // TODO mariusz throw better exception
+      exception.printStackTrace();
+      throw new ProblemException( ICoreProblems.IO_UNSPECIFIED_PROBLEM, exception, Activator.PLUGIN_ID );
+    }
+  }
+  
+  /**
+   * Makes the same as {@link XPathDocument#getNodes(Node, String)} starting from document root
+   * @param xpathQuery
+   * @return nodes selected by query
+   * @throws ProblemException
+   */
+  public NodeList getNodes( final String xpathQuery ) throws ProblemException {
+    return getNodes( this.document.getDocumentElement(), xpathQuery );
+  }
+  
+  /**
+   * Get String value from node selected by query.
+   * @param parentNode
+   * @param xpathQuery
+   * @return text value from selected node 
+   * @throws ProblemException
+   */
+  public String getValue( final Node parentNode, final String xpathQuery ) throws ProblemException {
+    try {
+      return getExpression( xpathQuery ).evaluate( parentNode );
+    } catch( XPathExpressionException exception ) {
+      // TODO mariusz throw better exception
+      exception.printStackTrace();
+      throw new ProblemException( ICoreProblems.IO_UNSPECIFIED_PROBLEM, exception, Activator.PLUGIN_ID );
+    }
+    
+  }
+  
+
+  private XPath getXPathEngine() {
+    if( xpathEngine == null ) {
+      xpathEngine = XPathFactory.newInstance().newXPath();
+      xpathEngine.setNamespaceContext( getNamespaceContext() );
+    }
+    return xpathEngine;    
+  }
+  
+  private XPathExpression getExpression( final String xpathQuery ) throws ProblemException {
+    XPathExpression expression = this.expressionsMap.get( xpathQuery );
+    
+    if( expression == null ) {
+      try {
+        expression = getXPathEngine().compile( xpathQuery );
+        this.expressionsMap.put( xpathQuery, expression );
+      } catch( XPathExpressionException exception ) {
+        throw new ProblemException( "eu.geclipse.jsdl.problem.createXPathQueryFailed", exception, Activator.PLUGIN_ID ); //$NON-NLS-1$
+      }      
+    }    
+    
+    return expression;
+  }
+  
+  private NamespaceContext getNamespaceContext() {
+    
+    return new NamespaceContext() {
+// TODO mariusz parse source jsdl document add here all prefixes and namespaces (user may use these prefixes)
+
+      public String getNamespaceURI( final String prefix ) {
+        String namespace = XMLConstants.NULL_NS_URI;
+        if ("jsdl".equals(prefix)) {  //$NON-NLS-1$
+          namespace = "http://schemas.ggf.org/jsdl/2005/11/jsdl"; //$NON-NLS-1$
+        }
+        else if( "jsdl-posix".equals( prefix ) ) { //$NON-NLS-1$
+          namespace = "http://schemas.ggf.org/jsdl/2005/11/jsdl-posix"; //$NON-NLS-1$
+        }
+        else if( "sweep".equals( prefix ) ) {  //$NON-NLS-1$
+          namespace = "http://schemas.ogf.org/jsdl/2007/01/jsdl-sweep" ; //$NON-NLS-1$
+        }
+        else if( "sweepfunc".equals( prefix ) ) { //$NON-NLS-1$
+          namespace = "http://schemas.ogf.org/jsdl/2007/01/jsdl-sweep/functions" ; //$NON-NLS-1$
+        }
+        else if ("xml".equals(prefix)) { //$NON-NLS-1$
+          namespace = XMLConstants.XML_NS_URI;
+        }        
+        return namespace;
+      }
+
+      public String getPrefix( final String namespaceURI ) {
+        throw new UnsupportedOperationException();
+      }
+
+      @SuppressWarnings("unchecked")
+      public Iterator getPrefixes( final String namespaceURI ) {
+        throw new UnsupportedOperationException();
+      }};
+  }
+  
+  
+  
+}

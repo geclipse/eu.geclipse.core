@@ -15,14 +15,7 @@
  *****************************************************************************/
 package eu.geclipse.jsdl.parametric.internal;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpression;
-import javax.xml.xpath.XPathExpressionException;
 
 import org.eclipse.core.runtime.SubMonitor;
 import org.w3c.dom.Document;
@@ -34,6 +27,7 @@ import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.jsdl.JSDLJobDescription;
 import eu.geclipse.jsdl.parametric.IGeneratedJsdl;
 import eu.geclipse.jsdl.parametric.IParametricJsdlHandler;
+import eu.geclipse.jsdl.xpath.XPathDocument;
 
 /**
  * This context replaces values in DOM Document containing jsdl and pass serialization to handler  
@@ -42,36 +36,32 @@ public class GenerationContext implements IGenerationContext, IGeneratedJsdl {
   private JSDLJobDescription parametricJsdl;
   private IParametricJsdlHandler handler;
   private Document currentJsdl;
-  private String currentJsdlName;
-  private Map<String,XPathExpression> xpathMap;
-  private XPath xpathEngine;
+  private String currentJsdlName;  
+  private XPathDocument xpath;
 
   /**
    * @param baseJsdl JSDL in which we will change parameter values
    * @param handler
    */
-  public GenerationContext( final JSDLJobDescription parametricJsdl, final Document baseJsdl, final IParametricJsdlHandler handler, final XPath xpathEngine ) {        
+  public GenerationContext( final JSDLJobDescription parametricJsdl, final Document baseJsdl, final IParametricJsdlHandler handler, final XPathDocument xpathDocument ) {        
     this.handler = handler;
     this.currentJsdl = baseJsdl;
     this.parametricJsdl = parametricJsdl;
-    this.xpathEngine = xpathEngine;
+    this.xpath = xpathDocument;
   }  
 
   @Override
   public IGenerationContext clone() {
-    GenerationContext newContext = new GenerationContext( this.parametricJsdl, ( Document )this.currentJsdl.cloneNode( true ), this.handler, this.xpathEngine );
-    newContext.xpathMap = this.xpathMap;    
+    GenerationContext newContext = new GenerationContext( this.parametricJsdl, ( Document )this.currentJsdl.cloneNode( true ), this.handler, this.xpath );
     return newContext;
   }
 
   /* (non-Javadoc)
    * @see eu.geclipse.jsdl.parametric.IGenerationContext#setValue(java.lang.String, javax.xml.xpath.XPathExpression, java.lang.String, org.eclipse.core.runtime.SubMonitor)
    */
-  public void setValue( final String paramName, final XPathExpression paramXPath, final String value, final SubMonitor subMonitor ) throws ProblemException {
-    try {
-      NodeList nodeList = ( NodeList )paramXPath.evaluate( this.currentJsdl,
-                                                               XPathConstants.NODESET );
-      
+  public void setValue( final String paramName, final String xpathQuery, final String value, final SubMonitor subMonitor ) throws ProblemException {
+      NodeList nodeList = this.xpath.getNodes( this.currentJsdl, xpathQuery );
+
       for( int index = 0; index < nodeList.getLength(); index++ ) {
         Node item = nodeList.item( index );
 
@@ -82,11 +72,7 @@ public class GenerationContext implements IGenerationContext, IGeneratedJsdl {
       updateJsdlDescription( paramName, value );
       
       // TODO mariusz check if paramName.toString() return correct xPath query
-      this.handler.paramSubstituted( paramName, value, subMonitor );
-    } catch( XPathExpressionException exception ) {
-      // TODO mariusz Auto-generated catch block
-      exception.printStackTrace();
-    }
+      this.handler.paramSubstituted( paramName, value, subMonitor );    
     
   }
 
@@ -103,10 +89,15 @@ public class GenerationContext implements IGenerationContext, IGeneratedJsdl {
     return builder.toString();
   }
  
-  private void updateJsdlDescription( final String paramName, final String value ) {
-    Element jobDescription = getElement( this.currentJsdl.getDocumentElement(), "jsdl:JobDescription" );   //$NON-NLS-1$
-    Element jobIdentification = getElement( jobDescription, "jsdl:JobIdentification" ); //$NON-NLS-1$
-    Element description = getElement( jobIdentification, "jsdl:Description" ); //$NON-NLS-1$    
+  private void updateJsdlDescription( final String paramName, final String value ) throws ProblemException {
+    NodeList nodes = this.xpath.getNodes( this.currentJsdl.getDocumentElement(), "jsdl:JobDescription/jsdl:JobIdentification/jsdl:Description" );
+    Element description = null;
+    if( nodes == null 
+        || nodes.getLength() == 0 ) {
+      description = createXmlElement( this.currentJsdl.getDocumentElement(), "jsdl:JobDescription/jsdl:JobIdentification/jsdl:Description" );
+    } else {
+      description = ( Element )nodes.item( 0 );
+    }
     description.setTextContent( getDescriptionString( description.getTextContent(), paramName, value ) );
   }
   
@@ -151,36 +142,33 @@ public class GenerationContext implements IGenerationContext, IGeneratedJsdl {
   }
 
   public String getParamValue( final String paramName ) throws ProblemException {
-    String value = null;
-    Map<String, XPathExpression> map = getXpathMap();
-    XPathExpression xpath = map.get( paramName );
-    
-    if( xpath == null ) {
-      try {
-        xpath = this.xpathEngine.compile( paramName );
-        map.put( paramName, xpath );
-      } catch( XPathExpressionException exception ) {
-        // TODO mariusz Auto-generated catch block
-        exception.printStackTrace();
-      }
-    }
-
-    try {
-      value = xpath.evaluate( this.currentJsdl );
-    } catch( XPathExpressionException exception ) {
-      // TODO mariusz Auto-generated catch block
-      exception.printStackTrace();
-    }
-    
-    return value;
+    return this.xpath.getValue( this.currentJsdl, paramName );
   }
   
-  private Map<String, XPathExpression> getXpathMap() {
-    if( xpathMap == null ) {
-      xpathMap = new HashMap<String,XPathExpression>();
+  private Element createXmlElement( final Element parent, final String pathString ) throws ProblemException {
+    Element element = parent;
+
+    String namespaceURI = parent.getNamespaceURI();    
+    
+    for( String currentNodeName : pathString.split( "/" ) ) {
+      NodeList nodes = this.xpath.getNodes( element, "./" + currentNodeName );
+      if( nodes == null 
+          || nodes.getLength() == 0 ) {
+        int namespaceIndex = currentNodeName.indexOf( ":" ); //$NON-NLS-1$
+        if( namespaceIndex > -1
+            && namespaceIndex + 1 < currentNodeName.length() ) {
+          currentNodeName = currentNodeName.substring( namespaceIndex + 1 );
+        }
+        Element newElement = this.currentJsdl.createElementNS( "http://schemas.ggf.org/jsdl/2005/11/jsdl", currentNodeName );
+        element.appendChild( newElement );
+        element = newElement;
+      } else {
+        element = ( Element )nodes.item( 0 );
+      }
     }
-    return xpathMap;    
-  }  
+    
+    return element;
+  }
   
 
 }

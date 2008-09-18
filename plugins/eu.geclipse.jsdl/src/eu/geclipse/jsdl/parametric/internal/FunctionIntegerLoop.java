@@ -4,32 +4,26 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpression;
-import javax.xml.xpath.XPathExpressionException;
-
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import eu.geclipse.core.reporting.ProblemException;
-import eu.geclipse.jsdl.internal.Activator;
+import eu.geclipse.jsdl.xpath.XPathDocument;
 
 
 /**
  * Function, which can assign next integer values to parameter over the loop.
  * This function accept also exceptions.
  */
-class FunctionIntegerLoop implements IFunction {
-  static private XPathExpression xPathException;
+class FunctionIntegerLoop implements IFunction {  
   int start;
   int end;
   int step;
   Set<Integer> exceptions;
 
-  FunctionIntegerLoop( final NodeList nodes, final XPath xpathEngine ) throws ProblemException {
+  FunctionIntegerLoop( final NodeList nodes, final XPathDocument xpath ) throws ProblemException {
     // TODO mariusz check: exactly one loop should be defined
     // TODO mariusz check: step cannot be zero
     
@@ -39,7 +33,7 @@ class FunctionIntegerLoop implements IFunction {
       this.end = getIntAttribute( item, "sweepfunc:end", true, 0 ); //$NON-NLS-1$
       this.step = getIntAttribute( item, "sweepfunc:step", false, 1 ); //$NON-NLS-1$
       
-      this.exceptions = readExceptions( item, xpathEngine );
+      this.exceptions = readExceptions( item, xpath );
     }
     
     // TODO mariusz read exceptions
@@ -47,10 +41,6 @@ class FunctionIntegerLoop implements IFunction {
 
   public int getIterations() {
     return (int)Math.floor( ( this.end - this.start + 1 ) / this.step ) - this.exceptions.size();
-  }
-
-  public String getValue( final int iteration ) {
-    return Integer.toString( this.start + iteration * this.step );
   }
   
   private int getIntAttribute( final Node item, final String attrName, final boolean mandatory, final int defaultValue ) {
@@ -73,33 +63,19 @@ class FunctionIntegerLoop implements IFunction {
   }
 
   private Set<Integer> readExceptions( final Node loopNode,
-                                       final XPath xpathEngine )
+                                       final XPathDocument xpath )
     throws ProblemException
   {
     Set<Integer> exceptionsSet = new HashSet<Integer>();
     if( loopNode instanceof Element ) {
       Element loopElement = ( Element )loopNode;
-      NodeList nodeList = findExceptions( loopElement, xpathEngine );
+      NodeList nodeList = xpath.getNodes( loopElement, "./sweepfunc:Exception" );
       for( int index = 0; index < nodeList.getLength(); index++ ) {
         Node exceptionNode = nodeList.item( index );
         exceptionsSet.add( Integer.valueOf( getIntAttribute( exceptionNode, "sweepfunc:value", false, 0 ) ) ); //$NON-NLS-1$
       }
     }
     return exceptionsSet;
-  }
-
-  private NodeList findExceptions( final Element sweepElement, final XPath xpathEngine ) throws ProblemException
-  {
-    try {
-      if( FunctionIntegerLoop.xPathException == null ) {
-        FunctionIntegerLoop.xPathException = xpathEngine.compile( "./sweepfunc:Exception" ); //$NON-NLS-1$
-      }
-      
-      return (NodeList)FunctionIntegerLoop.xPathException.evaluate( sweepElement, XPathConstants.NODESET );      
-      
-    } catch( XPathExpressionException exception ) {
-      throw new ProblemException( "eu.geclipse.jsdl.problem.createXPathQueryFailed", exception, Activator.PLUGIN_ID ); //$NON-NLS-1$
-    }   
   }
   
   public Iterator<String> iterator() {
