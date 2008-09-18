@@ -54,7 +54,7 @@ public class ServiceJobCreator extends AbstractFileElementCreator {
     throws ProblemException
   {
     IServiceJob result = null;
-    IFile file = ( IFile )getObject();
+    IFile file = ( IFile )getSource();
     try {
       String plugIn = GTDLParser.getPluginId( file.getRawLocation().toFile() );
       result = Extensions.getTestInstance( plugIn );

@@ -51,7 +51,7 @@ public class ParametricJobServiceCreator extends AbstractGridElementCreator {
     throws ProblemException
   {
     IGridElement result = null;
-    Object object = getObject();
+    Object object = getSource();
     if( object instanceof ParametricJobID ) {
       result = new ParametricJobService( ( ParametricJobID )object );
     }

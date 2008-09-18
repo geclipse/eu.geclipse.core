@@ -60,7 +60,7 @@ public class FileSystemCreator
       throws ProblemException {
     
     IGridElement result = null;
-    IResource resource = ( IResource ) getObject();
+    IResource resource = ( IResource ) getSource();
     
     if ( isFileSystemLink( resource )
         && !isJobFile( resource ) ) {

@@ -72,7 +72,7 @@ public class GridJobCreator
   public IGridElement create( final IGridContainer parent )
     throws ProblemException
   {
-    IResource resource = ( IResource )getObject();
+    IResource resource = ( IResource )getSource();
     if( resource == null ) {
       throw new ProblemException( ICoreProblems.MODEL_ELEMENT_CREATE_FAILED,
                                   Activator.PLUGIN_ID );

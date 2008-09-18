@@ -85,22 +85,6 @@ public interface IGridElementCreator {
   public IGridElement create( final IGridContainer parent, final Object source ) throws ProblemException;
   
   /**
-   * Get the argument of the last successful call of any of the
-   * <code>canCreate(...)</code> methods. A successful call is a
-   * call that returned <code>true</code>.
-   * 
-   * @return The argument of the last successful call of a
-   * <code>canCreate(...)</code> method. This may be
-   * <code>null</code> if no such method was called before or if
-   * the argument was <code>null</code> itself. This method is
-   * used by {@link #create(IGridContainer)} to get the object from
-   * which to create the new element.
-   * @Deprecated This method is deprecated in favour of the extended definition
-   * of the eu.geclipse.core.gridElementCreator extension point.
-   */
-  public Object getObject();
-  
-  /**
    * Get the source object that was formerly specified with
    * {@link #setSource(Object)}.
    * 

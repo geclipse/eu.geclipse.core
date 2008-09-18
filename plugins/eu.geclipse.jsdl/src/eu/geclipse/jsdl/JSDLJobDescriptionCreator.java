@@ -45,7 +45,7 @@ public class JSDLJobDescriptionCreator
    */
   public IGridElement create( final IGridContainer parent ) throws ProblemException {
     IGridElement result = null;
-    IFile file = ( IFile ) getObject();
+    IFile file = ( IFile ) getSource();
     if ( file != null ) {
       result = new JSDLJobDescription( file );
     }

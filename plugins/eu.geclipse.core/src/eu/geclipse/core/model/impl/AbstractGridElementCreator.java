@@ -39,7 +39,7 @@ public abstract class AbstractGridElementCreator
   public boolean canCreate( final Object fromObject ) {
     boolean result = internalCanCreate( fromObject );
     if ( result ) {
-      setObject( fromObject );
+      setSource( fromObject );
     }
     return result;
   }
@@ -50,13 +50,6 @@ public abstract class AbstractGridElementCreator
   public IGridElement create( final IGridContainer parent, final Object source ) throws ProblemException {
     setSource( source );
     return create( parent );
-  }
-
-  /* (non-Javadoc)
-   * @see eu.geclipse.core.model.IGridElementCreator#getObject()
-   */
-  public Object getObject() {
-    return getSource();
   }
   
   /* (non-Javadoc)
@@ -71,17 +64,6 @@ public abstract class AbstractGridElementCreator
    */
   public void setSource( final Object source ) {
     this.internalSource = source;
-  }
-  
-  /**
-   * Set the internal object that will afterwards be used to create
-   * elements from.
-   * 
-   * @param object The new internal object.
-   * @Deprecated This method is deprecated in favour of the setSource-method.
-   */
-  protected void setObject( final Object object ) {
-    this.internalSource = object;
   }
   
   /**

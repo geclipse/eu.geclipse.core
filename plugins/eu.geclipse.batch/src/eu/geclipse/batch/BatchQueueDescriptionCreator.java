@@ -52,7 +52,7 @@ public class BatchQueueDescriptionCreator extends AbstractFileElementCreator {
   public IGridElement create( final IGridContainer parent ) throws ProblemException
   {
     IGridElement result = null;
-    IFile file = ( IFile ) getObject();
+    IFile file = ( IFile ) getSource();
     if ( file != null ) {
       result = new BatchQueueDescription( file );
     }

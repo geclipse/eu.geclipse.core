@@ -38,7 +38,7 @@ public class GridWorkflowCreator extends AbstractGridElementCreator {
   public IGridElement create( final IGridContainer parent )
     throws ProblemException
   {
-    IFolder folder = ( IFolder )getObject();
+    IFolder folder = ( IFolder )getSource();
     GridWorkflow workflow = new GridWorkflow( folder );
     return workflow;
   }
