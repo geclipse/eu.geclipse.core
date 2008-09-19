@@ -22,7 +22,6 @@ import java.util.List;
 import org.eclipse.core.filesystem.IFileInfo;
 import org.eclipse.core.filesystem.IFileStore;
 
-import eu.geclipse.core.ICoreProblems;
 import eu.geclipse.core.model.ICreatorSourceMatcher;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
@@ -52,19 +51,10 @@ public class GenericVoCreator
     = new ArrayList< IGridService >();
   
   public void createService( final IGridElementCreator creator,
-                              final URI fromURI )
+                             final URI fromURI )
       throws ProblemException {
-    
-    if ( ! creator.canCreate( IGridService.class ) ) {
-      throw new ProblemException( ICoreProblems.MODEL_ELEMENT_CREATE_FAILED, "Cannot create a service from the specified creator" );
-    }
-    
-    if ( ! creator.canCreate( fromURI ) ) {
-      throw new ProblemException( ICoreProblems.MODEL_ELEMENT_CREATE_FAILED, "Cannot create a service from the specified URI" );
-    }
-    
+    creator.setSource( fromURI );
     this.serviceCreators.add( creator );
-    
   }
   
   public void maintainService( final IGridService service ) {
@@ -94,17 +84,12 @@ public class GenericVoCreator
 
   }
 
-  public boolean canCreate( final Class<? extends IGridElement> elementType ) {
-    return elementType.isAssignableFrom( GenericVirtualOrganization.class );
-  }
-
-  @Override
-  protected boolean internalCanCreate( final Object fromObject ) {
+  public boolean canCreate( final Object source ) {
     
     boolean result = false;
     
-    if ( fromObject instanceof IFileStore ) {
-      IFileStore propertiesStore = ( ( IFileStore ) fromObject ).getChild( GenericVoProperties.NAME );
+    if ( source instanceof IFileStore ) {
+      IFileStore propertiesStore = ( ( IFileStore ) source ).getChild( GenericVoProperties.NAME );
       IFileInfo propertiesInfo = propertiesStore.fetchInfo();
       result = propertiesInfo.exists();
     }

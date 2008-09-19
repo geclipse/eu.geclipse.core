@@ -17,7 +17,6 @@ package eu.geclipse.core.model;
 
 import eu.geclipse.core.reporting.ProblemException;
 
-
 /**
  * Base interface for all classes that implement functionality for
  * creating specific implementations of the {@link IGridElement}
@@ -30,52 +29,23 @@ import eu.geclipse.core.reporting.ProblemException;
 public interface IGridElementCreator {
   
   /**
-   * Ask this creator if it is able to create elements of the
-   * specified type. If this methods returns true the element type
-   * will be remembered until another call of any of the
-   * <code>canCreate(...)</code> methods. This element type can 
-   * afterwards retrieved with the {@link #getObject()} method.
-   * 
-   * @param elementType The type of the element that should be created.
-   * @return True if this element creator is potentially able to
-   * create an element of the specified type. 
-   * @Deprecated This method is deprecated in favour of the extended definition
-   * of the eu.geclipse.core.gridElementCreator extension point.
-   */
-  public boolean canCreate( final Class< ? extends IGridElement > elementType );
-  
-  /**
-   * Ask this creator if it is able to create elements from the
-   * specified object. If this methods returns true the object
-   * will be remembered until another call of any of the
-   * <code>canCreate(...)</code> methods. This object can 
-   * afterwards retrieved with the {@link #getObject()} method.
-   * 
-   * @param source The object from which to create an element.
-   * @return True if this creator is potentially able to
-   * create elements from the specified object.
-   * @Deprecated This method is deprecated in favour of the extended definition
-   * of the eu.geclipse.core.gridElementCreator extension point.
-   */
-  public boolean canCreate( final Object source );
-  
-  /**
    * Create an element and set it to be a child of the specified
    * {@link IGridContainer}. The element is created from the
-   * object that is was specified in a former call to
+   * object that was specified in a former call to
    * {@link #setSource(Object)}. If the creation fails a
    * {@link ProblemException} will be thrown.
    * 
    * @param parent The parent of the newly created element.
    * @return The newly created element.
    * @throws ProblemException If any problem occurs while the new element is
-   * created. For instance of a source object is needed to create the element
-   * but was not defined before an Exception is thrown.
+   * created. For instance if a source object is needed to create the element
+   * but was not defined before.
    */
   public IGridElement create( final IGridContainer parent ) throws ProblemException;
   
   /**
    * Shortcut method for creating an element from the specified source object.
+   * 
    * @param parent The parent of the newly created element.
    * @param source The object from which to create the element.
    * @return The newly created element.

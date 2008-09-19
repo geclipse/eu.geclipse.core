@@ -193,8 +193,9 @@ public class NewJobWizard extends Wizard
       setInitialModel( jsdlJobDescription );
       jsdlJobDescription.save( this.file );
     }
-    if( translate && creator.canCreate( jsdlJobDescription ) ) {
+    if ( translate ) {
       try {
+        creator.setSource( jsdlJobDescription );
         IGridElement newElement = creator.create( jsdlJobDescription.getParent() );
         this.file = ( IFile )newElement.getResource();
       } catch( ProblemException pExc ) {

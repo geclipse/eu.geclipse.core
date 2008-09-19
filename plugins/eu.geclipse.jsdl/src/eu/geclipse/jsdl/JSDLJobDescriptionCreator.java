@@ -19,8 +19,7 @@ import org.eclipse.core.resources.IFile;
 
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
-import eu.geclipse.core.model.IGridJobDescription;
-import eu.geclipse.core.model.impl.AbstractFileElementCreator;
+import eu.geclipse.core.model.impl.AbstractGridElementCreator;
 import eu.geclipse.core.reporting.ProblemException;
 
 
@@ -29,16 +28,7 @@ import eu.geclipse.core.reporting.ProblemException;
  * {@link JSDLJobDescription}s from files with file extension ".jsdl". 
  */
 public class JSDLJobDescriptionCreator
-    extends AbstractFileElementCreator {
-
-  private static final String JSDL_FILE_EXT = "jsdl"; //$NON-NLS-1$
-
-  /* (non-Javadoc)
-   * @see eu.geclipse.core.model.IGridElementCreator#canCreate(java.lang.Class)
-   */
-  public boolean canCreate( final Class< ? extends IGridElement > elementType ) {
-    return IGridJobDescription.class.isAssignableFrom( elementType );
-  }
+    extends AbstractGridElementCreator {
   
   /* (non-Javadoc)
    * @see eu.geclipse.core.model.IGridElementCreator#create(eu.geclipse.core.model.IGridContainer)
@@ -50,14 +40,6 @@ public class JSDLJobDescriptionCreator
       result = new JSDLJobDescription( file );
     }
     return result;
-  }
-  
-  /* (non-Javadoc)
-   * @see eu.geclipse.core.model.impl.AbstractFileElementCreator#internalCanCreate(java.lang.String)
-   */
-  @Override
-  protected boolean internalCanCreate( final String fileExtension ) {
-    return JSDL_FILE_EXT.equalsIgnoreCase( fileExtension );
   }
   
 }

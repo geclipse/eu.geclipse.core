@@ -33,14 +33,6 @@ public class LocalResourceCreator
     extends AbstractGridElementCreator {
 
   /* (non-Javadoc)
-   * @see eu.geclipse.core.model.IGridElementCreator#canCreate(java.lang.Class)
-   */
-  public boolean canCreate( final Class<? extends IGridElement> elementType ) {
-    return LocalFile.class.isAssignableFrom( elementType )
-      || LocalFolder.class.isAssignableFrom( elementType );
-  }
-
-  /* (non-Javadoc)
    * @see eu.geclipse.core.model.IGridElementCreator#create(eu.geclipse.core.model.IGridContainer)
    */
   public IGridElement create( final IGridContainer parent ) throws ProblemException {
@@ -72,14 +64,6 @@ public class LocalResourceCreator
     
     return result;
     
-  }
-  
-  /* (non-Javadoc)
-   * @see eu.geclipse.core.model.impl.AbstractGridElementCreator#internalCanCreate(java.lang.Object)
-   */
-  @Override
-  protected boolean internalCanCreate( final Object fromObject ) {
-    return ( fromObject instanceof IFile ) || ( fromObject instanceof IFolder );
   }
   
 }

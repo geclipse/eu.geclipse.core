@@ -28,21 +28,9 @@ public abstract class AbstractGridElementCreator
     implements IGridElementCreator {
   
   /**
-   * The agument of the last successful call to any of the
-   * <code>canCreate(...)</code> methods.
+   * The source object for the element creation.
    */
   private Object internalSource;
-  
-  /* (non-Javadoc)
-   * @see eu.geclipse.core.model.IGridElementCreator#canCreate(java.lang.Object)
-   */
-  public boolean canCreate( final Object fromObject ) {
-    boolean result = internalCanCreate( fromObject );
-    if ( result ) {
-      setSource( fromObject );
-    }
-    return result;
-  }
   
   /* (non-Javadoc)
    * @see eu.geclipse.core.model.IGridElementCreator#create(eu.geclipse.core.model.IGridContainer, java.lang.Object)
@@ -65,22 +53,5 @@ public abstract class AbstractGridElementCreator
   public void setSource( final Object source ) {
     this.internalSource = source;
   }
-  
-  /**
-   * Internal method to determine if this creator is potentially 
-   * able to create elements from the specified object. This method
-   * is called from {@link #canCreate(Object)} and has not to care
-   * about storing the passed object since this is handled by the
-   * {@link #canCreate(Object)} method. Therefore this method
-   * may never be called directly.
-   * 
-   * @param fromObject The object from which the element should be
-   * created.
-   * @return True if this creator is potentially able to create an
-   * element from the specified object.
-   * @Deprecated This method is deprecated in favour of the extended definition
-   * of the eu.geclipse.core.gridElementCreator extension point.
-   */
-  protected abstract boolean internalCanCreate( final Object fromObject );
   
 }

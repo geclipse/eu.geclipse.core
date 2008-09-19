@@ -26,25 +26,6 @@ public class ParametricJobServiceCreator extends AbstractGridElementCreator {
   /*
    * (non-Javadoc)
    * 
-   * @see eu.geclipse.core.model.impl.AbstractGridElementCreator#internalCanCreate(java.lang.Object)
-   */
-  @Override
-  protected boolean internalCanCreate( final Object fromObject ) {
-    return fromObject instanceof ParametricJobID;
-  }
-
-  /*
-   * (non-Javadoc)
-   * 
-   * @see eu.geclipse.core.model.IGridElementCreator#canCreate(java.lang.Class)
-   */
-  public boolean canCreate( final Class<? extends IGridElement> elementType ) {
-    return elementType.isAssignableFrom( ParametricJobService.class );
-  }
-
-  /*
-   * (non-Javadoc)
-   * 
    * @see eu.geclipse.core.model.IGridElementCreator#create(eu.geclipse.core.model.IGridContainer)
    */
   public IGridElement create( final IGridContainer parent )

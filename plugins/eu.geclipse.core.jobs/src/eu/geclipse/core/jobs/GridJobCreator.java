@@ -58,15 +58,6 @@ public class GridJobCreator
   /*
    * (non-Javadoc)
    * 
-   * @see eu.geclipse.core.model.IGridElementCreator#canCreate(java.lang.Class)
-   */
-  public boolean canCreate( final Class<? extends IGridElement> elementType ) {
-    return IGridJob.class.isAssignableFrom( elementType );
-  }
-
-  /*
-   * (non-Javadoc)
-   * 
    * @see eu.geclipse.core.model.IGridElementCreator#create(eu.geclipse.core.model.IGridContainer)
    */
   public IGridElement create( final IGridContainer parent )
@@ -75,6 +66,7 @@ public class GridJobCreator
     IResource resource = ( IResource )getSource();
     if( resource == null ) {
       throw new ProblemException( ICoreProblems.MODEL_ELEMENT_CREATE_FAILED,
+                                  "Source object is null.",
                                   Activator.PLUGIN_ID );
     }
     if( !( resource instanceof IFolder ) ) {
@@ -98,15 +90,9 @@ public class GridJobCreator
     // || description instanceof IGridWorkflow);
   }
 
-  /*
-   * (non-Javadoc)
-   * 
-   * @see eu.geclipse.core.model.impl.AbstractGridElementCreator#internalCanCreate(java.lang.Object)
-   */
-  @Override
-  protected boolean internalCanCreate( final Object object ) {
-    return object instanceof IFolder
-                                    ? GridJob.canCreate( ( IFolder )object )
+  public boolean canCreate( final Object source ) {
+    return source instanceof IFolder
+                                    ? GridJob.canCreate( ( IFolder )source )
                                     : false;
   }
 
@@ -149,7 +135,7 @@ public class GridJobCreator
                                     jobService,
                                     ( IGridWorkflowDescription )description );
       }
-      this.canCreate( jobFolder );
+      setSource( jobFolder );
       parent.create( this );
       IGridElement jobElement = GridModel.getRoot().findElement( jobFolder );
       // TODO mariusz check, why findElement() returns null for workflows

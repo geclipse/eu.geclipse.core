@@ -46,14 +46,6 @@ public class FileSystemCreator
     implements ICreatorSourceMatcher {
 
   /* (non-Javadoc)
-   * @see eu.geclipse.core.model.IGridElementCreator#canCreate(java.lang.Class)
-   */
-  public boolean canCreate( final Class<? extends IGridElement> elementType ) {
-    // TODO Auto-generated method stub
-    return false;
-  }
-
-  /* (non-Javadoc)
    * @see eu.geclipse.core.model.IGridElementCreator#create(eu.geclipse.core.model.IGridContainer)
    */
   public IGridElement create( final IGridContainer parent )
@@ -134,16 +126,12 @@ public class FileSystemCreator
     
   }
   
-  /* (non-Javadoc)
-   * @see eu.geclipse.core.model.impl.AbstractGridElementCreator#internalCanCreate(java.lang.Object)
-   */
-  @Override
-  protected boolean internalCanCreate( final Object fromObject ) {
+  public boolean canCreate( final Object source ) {
     
     boolean result = false;
     
-    if ( fromObject instanceof IResource ) {
-      result = isFileSystemElement( ( IResource ) fromObject );
+    if ( source instanceof IResource ) {
+      result = isFileSystemElement( ( IResource ) source );
     }
     
     return result;

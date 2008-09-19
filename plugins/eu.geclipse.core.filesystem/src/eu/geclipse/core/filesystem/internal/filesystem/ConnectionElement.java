@@ -116,13 +116,11 @@ public class ConnectionElement
     IResource res = getResource();
     
     for ( IGridElementCreator adapter : elementAdapters ) {
-      if ( adapter.canCreate( res ) ) {
-        try {
-          result = adapter.create( getParent() );
-          break;
-        } catch ( ProblemException pExc ) {
-          // Just ignore and have a try with the next creator
-        }
+      try {
+        adapter.setSource( res );
+        result = adapter.create( getParent() );
+      } catch ( ProblemException pExc ) {
+        // Just ignore and have a try with the next creator
       }
     }
     
@@ -426,28 +424,10 @@ public class ConnectionElement
       result = adapters.get( target );
     }
     
-    
     if ( result == null ) {
       
-      result = new ArrayList< IGridElementCreator >();
       IResource resource = source.getResource();
-      
-      List< IConfigurationElement > elements
-        = GridModel.getCreatorRegistry().getConfigurations( resource.getClass(), target );
-      
-      if ( elements != null ) {
-        for ( IConfigurationElement element : elements ) {
-          try {
-            IGridElementCreator creator
-              = ( IGridElementCreator ) element.createExecutableExtension( Extensions.GRID_ELEMENT_CREATOR_EXECUTABLE );
-            if ( creator.canCreate( resource ) ) {
-              result.add( creator );
-            }
-          } catch ( Throwable exc ) {
-            // Do nothing, just catch and ignore this creator for being as failsafe as possible
-          }
-        }
-      }
+      result = GridModel.getCreatorRegistry().getCreators( resource.getClass(), target );
       
       if ( ! result.isEmpty() ) {
         if ( adapters == null ) {

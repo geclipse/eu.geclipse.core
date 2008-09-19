@@ -111,26 +111,17 @@ public class TransformAction extends Action {
     
     IStatus result = Status.OK_STATUS;
     
-    if ( creator.canCreate( input ) ) {
-    
-      IGridContainer parent = input.getParent();
-      
-      try {
-        creator.create( parent );
-      } catch ( ProblemException pExc ) {
-        result = new Status(
-            IStatus.ERROR,
-            Activator.PLUGIN_ID,
-            String.format( "Transformation failed for %s", input.getName() ),
-            pExc
-        );
-      }
-    
-    } else {
+    creator.setSource( input );
+    IGridContainer parent = input.getParent();
+
+    try {
+      creator.create( parent );
+    } catch ( ProblemException pExc ) {
       result = new Status(
-          IStatus.ERROR,
-          Activator.PLUGIN_ID,
-          String.format( "Wrong creator for %s", input.getName() )
+                          IStatus.ERROR,
+                          Activator.PLUGIN_ID,
+                          String.format( "Transformation failed for %s", input.getName() ),
+                          pExc
       );
     }
     

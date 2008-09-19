@@ -37,7 +37,7 @@ import eu.geclipse.core.reporting.ProblemException;
 /**
  * The <code>GridElementLifecycleManager</code> is an implementation
  * of {@link IResourceDeltaVisitor} that is used to visit resources
- * deltas comming from resource change events. This class handles
+ * deltas coming from resource change events. This class handles
  * the creation and deletion of Grid model elements and therefore
  * keeps the Grid model in sync with the resource tree.
  */
@@ -57,19 +57,7 @@ public class GridElementLifecycleManager
    */
   public static IGridElementCreator findCreator( final IResource resource ) {
     
-    //System.out.print( "Searching for creator for " + resource.getFullPath() + " ... " );
-    
     IGridElementCreator result = GridModel.getCreatorRegistry().getCreator( resource, null );
-    
-    /*IGridElementCreator result = null;
-    List< IGridElementCreator > creators = GridModel.getCreatorRegistry().getCreators();
-    
-    for ( IGridElementCreator creator : creators ) {
-      if ( creator.canCreate( resource ) ) {
-        result = creator;
-        break;
-      }
-    }*/
     
     if ( result == null ) {
       result = new LocalResourceCreator();
@@ -77,33 +65,9 @@ public class GridElementLifecycleManager
     
     result.setSource( resource );
 
-    //System.out.println( "Found " + ( result == null ? "none" : result.getClass() ) );
-    
     return result;
     
   }
-  
-  /**
-   * Find an element creator for the specified {@link IResource}.
-   * Searches only the standard creators.
-   * 
-   * @param resource The resource for which to find a creator.
-   * @return The creator or <code>null</code> if no such
-   * creator could be found.
-   * @see GridModel#getStandardCreators()
-   */
-  /*public static IGridElementCreator findStandardCreator( final IResource resource ) {
-    IGridElementCreator result = null;
-    List< IGridElementCreator > standardCreators
-      = GridModel.getStandardCreators();
-    for ( IGridElementCreator creator : standardCreators ) {
-      if ( creator.canCreate( resource ) ) {
-        result = creator;
-        break;
-      }
-    }
-    return result;
-  }*/
 
   public boolean visit( final IResourceDelta delta )
       throws CoreException {

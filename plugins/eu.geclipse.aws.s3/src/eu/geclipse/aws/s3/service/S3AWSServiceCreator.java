@@ -15,9 +15,6 @@
 
 package eu.geclipse.aws.s3.service;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
 import org.eclipse.core.filesystem.IFileInfo;
 import org.eclipse.core.filesystem.IFileStore;
 
@@ -55,23 +52,6 @@ public class S3AWSServiceCreator extends AbstractGridElementCreator
   /** The name of the service which this {@link IGridElementCreator} can create. */
   private String serviceName;
 
-  @Override
-  public boolean internalCanCreate( final Object fromObject ) {
-    if( fromObject instanceof String ) {
-      try {
-        new URL( ( String )fromObject );
-        return true;
-      } catch( MalformedURLException e ) {
-        // nothing to do
-      }
-    }
-    return false;
-  }
-
-  public boolean canCreate( final Class<? extends IGridElement> elementType ) {
-    return elementType.isAssignableFrom( S3AWSService.class );
-  }
-
   public IGridElement create( final IGridContainer parent )
     throws ProblemException
   {
@@ -85,19 +65,6 @@ public class S3AWSServiceCreator extends AbstractGridElementCreator
       }
     }
     return s3awsService;
-  }
-
-  public boolean canCreate( final IFileStore fromFileStore ) {
-    if( fromFileStore != null ) {
-      IFileStore propertiesStore = fromFileStore.getChild( S3ServiceProperties.STORAGE_NAME );
-      IFileInfo propertiesInfo = propertiesStore.fetchInfo();
-      boolean result = propertiesInfo.exists();
-      if( result ) {
-        this.s3AWSServiceCreatorFileStore = fromFileStore;
-        return true;
-      }
-    }
-    return false;
   }
 
   public String getExtensionID() {

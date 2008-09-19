@@ -20,7 +20,7 @@ import org.eclipse.core.resources.IFile;
 
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
-import eu.geclipse.core.model.impl.AbstractFileElementCreator;
+import eu.geclipse.core.model.impl.AbstractGridElementCreator;
 import eu.geclipse.core.reporting.ProblemException;
 
 
@@ -28,23 +28,7 @@ import eu.geclipse.core.reporting.ProblemException;
  * Creator for batch service connection descriptions. Creates
  * {@link BatchQueueDescription}s from files with file extension ".qdl". 
  */
-public class BatchQueueDescriptionCreator extends AbstractFileElementCreator {
-
-  /* (non-Javadoc)
-   * @see eu.geclipse.core.model.impl.AbstractFileElementCreator#internalCanCreate(java.lang.String)
-   */
-  @Override
-  protected boolean internalCanCreate( final String fileExtension ) {
-    return "qdl".equalsIgnoreCase( fileExtension ); //$NON-NLS-1$
-  }
-
-  /* (non-Javadoc)
-   * @see eu.geclipse.core.model.IGridElementCreator#canCreate(java.lang.Class)
-   */
-  public boolean canCreate( final Class<? extends IGridElement> elementType ) {
-    return IGridBatchQueueDescription.class.isAssignableFrom( elementType );
-    
-  }
+public class BatchQueueDescriptionCreator extends AbstractGridElementCreator {
 
   /* (non-Javadoc)
    * @see eu.geclipse.core.model.IGridElementCreator#create(eu.geclipse.core.model.IGridContainer)
