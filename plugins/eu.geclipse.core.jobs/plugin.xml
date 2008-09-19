@@ -28,7 +28,7 @@
                class="eu.geclipse.core.jobs.internal.ParametricJobID">
          </source>
          <target
-               class="eu.geclipse.core.jobs.internal.ParametricJobServiceCreator"
+               class="eu.geclipse.core.jobs.ParametricJobService"
                name="Parametric Job Service">
          </target>
       </creator>
