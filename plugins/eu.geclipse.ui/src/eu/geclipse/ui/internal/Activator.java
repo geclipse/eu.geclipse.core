@@ -28,6 +28,7 @@ import org.osgi.framework.BundleContext;
 
 import eu.geclipse.ui.internal.actions.UpdateJobStatusAction;
 import eu.geclipse.ui.internal.preference.PerspectivePreferencePage;
+import eu.geclipse.ui.internal.transfer.TransferResumer;
 import eu.geclipse.ui.properties.PropertiesAdapterFactory;
 
 
@@ -204,6 +205,8 @@ public class Activator extends AbstractUIPlugin {
     super.start( context );
     PropertiesAdapterFactory.register();
     setPreferencesDefaults();
+    TransferResumer resumer = new TransferResumer( "Transfer resume" );
+    resumer.schedule( 25000 );
   }
   
   private void setPreferencesDefaults() {
@@ -242,7 +245,9 @@ public class Activator extends AbstractUIPlugin {
    */
   public static void logException( final Throwable exc ) {
     String message = exc.getLocalizedMessage();
-    if ( message == null ) message = exc.getClass().getName();
+    if ( message == null ) {
+      message = exc.getClass().getName();
+    }
     IStatus status = new Status( IStatus.ERROR,
                                  PLUGIN_ID,
                                  IStatus.OK,

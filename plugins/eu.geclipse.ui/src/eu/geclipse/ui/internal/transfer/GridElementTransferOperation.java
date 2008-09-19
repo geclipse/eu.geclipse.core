@@ -15,9 +15,6 @@
 
 package eu.geclipse.ui.internal.transfer;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.URI;
 import java.text.DateFormat;
 import java.util.Date;
@@ -45,8 +42,9 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 
-import eu.geclipse.core.filesystem.GEclipseFileSystem;
 import eu.geclipse.core.filesystem.GEclipseURI;
+import eu.geclipse.core.filesystem.TransferManager;
+import eu.geclipse.core.filesystem.TransferOperation;
 import eu.geclipse.core.model.IGridConnection;
 import eu.geclipse.core.model.IGridConnectionElement;
 import eu.geclipse.core.model.IGridContainer;
@@ -90,6 +88,11 @@ public class GridElementTransferOperation
   private IGridElement[] elements;
   
   /**
+   * TransferOperation
+   */
+  private TransferOperation transferOperation;
+  
+  /**
    * Determines if this is a copy or a move operation. 
    */
   private boolean move;
@@ -109,10 +112,20 @@ public class GridElementTransferOperation
   public GridElementTransferOperation( final IGridElement[] elements,
                                        final IGridContainer target,
                                        final boolean move ) {
-    super( Messages.getString("GridElementTransferOperation.transfer_name") ); //$NON-NLS-1$
+    super( Messages.getString( "GridElementTransferOperation.transfer_name" ) ); //$NON-NLS-1$
     this.globalTarget = target;
     this.elements = elements;
     this.move = move;
+  }
+  
+  /**
+   * Create a new grid element transfer operation for file stores.
+   * 
+   * @param transferOperation transfer operation with information about transfer
+   */
+  public GridElementTransferOperation( final TransferOperation transferOperation ) {
+    super( Messages.getString( "GridElementTransferOperation.transfer_name" ) ); //$NON-NLS-1$
+    this.transferOperation = transferOperation;
   }
   
   /**
@@ -139,51 +152,74 @@ public class GridElementTransferOperation
                                           IStatus.OK,
                                           Messages.getString("GridElementTransferOperation.op_status"), //$NON-NLS-1$
                                           null );
-      
-    localMonitor.beginTask( Messages.getString("GridElementTransferOperation.transfering_element_progress"), this.elements.length + 1 ); //$NON-NLS-1$
 
-    for ( int i = 0 ; i < this.elements.length ; i++ ) {
-      
-      localMonitor.subTask( this.elements[i].getName() );
-      
-      IProgressMonitor subMonitor = new SubProgressMonitor( localMonitor, 1 );
-      IStatus tempStatus = transferElement( this.elements[i], this.globalTarget, subMonitor );
-      
-      if ( !tempStatus.isOK() ) {
-        status.merge( tempStatus );
+    if( this.transferOperation != null ) {
+      //Transfer file stores
+      localMonitor.beginTask( Messages.getString("GridElementTransferOperation.transfering_element_progress"), 1 ); //$NON-NLS-1$
+      TransferParams data = new TransferParams( this.transferOperation.getSource(),
+                                                null, 
+                                                this.transferOperation.getDestination(),
+                                                this.transferOperation.getDestination().
+                                                  getChild( this.transferOperation.getSource().getName() ), 
+                                                  localMonitor );
+      try {
+        checkExistingTarget( data );
+      } catch( ProblemException exc ) {
+        String msg = String.format( Messages.getString( "GridElementTransferOperation.errCannotCopyFile" ), //$NON-NLS-1$
+                                    this.transferOperation.getSource().getName() );
+        data.status = new Status( IStatus.ERROR, Activator.PLUGIN_ID, msg, exc );
       }
-      
       if ( localMonitor.isCanceled() ) {
         throw new OperationCanceledException();
       }
-      
-      if ( this.move ) {
-        IGridContainer parent = this.elements[i].getParent();
-        boolean refresh = true;
-        for ( int j = i+1 ; j < this.elements.length ; j++ ) {
-          if ( this.elements[j].getParent().equals( parent ) ) {
-            refresh = false;
-            break;
-          }
-        }
-        if ( refresh ) {
-          try {
-            // TODO mathias progress monitoring
-            parent.refresh( null );
-          } catch ( ProblemException pExc ) {
-            status.merge( pExc.getStatus() );
-          }
-        }
+      if( data.status.isOK() ) {
+        TransferManager.getManager().resumeTransfer( this.transferOperation, localMonitor );
       }
-      
-    }
+    } else {
+      //Transfer grid elements
+      localMonitor.beginTask( Messages.getString("GridElementTransferOperation.transfering_element_progress"), this.elements.length + 1 ); //$NON-NLS-1$
+      for ( int i = 0 ; i < this.elements.length ; i++ ) {
+        
+        localMonitor.subTask( this.elements[i].getName() );
+        
+        IProgressMonitor subMonitor = new SubProgressMonitor( localMonitor, 1 );
+        IStatus tempStatus = transferElement( this.elements[i], this.globalTarget, subMonitor );
+        
+        if ( !tempStatus.isOK() ) {
+          status.merge( tempStatus );
+        }
+        
+        if ( localMonitor.isCanceled() ) {
+          throw new OperationCanceledException();
+        }
+        
+        if ( this.move ) {
+          IGridContainer parent = this.elements[i].getParent();
+          boolean refresh = true;
+          for ( int j = i+1 ; j < this.elements.length ; j++ ) {
+            if ( this.elements[j].getParent().equals( parent ) ) {
+              refresh = false;
+              break;
+            }
+          }
+          if ( refresh ) {
+            try {
+              // TODO mathias progress monitoring
+              parent.refresh( null );
+            } catch ( ProblemException pExc ) {
+              status.merge( pExc.getStatus() );
+            }
+          }
+        }
+        
+      }
     
-    try {
-      this.globalTarget.refresh( new SubProgressMonitor( localMonitor, 1 ) );
-    } catch ( ProblemException pExc ) {
-      status.merge( pExc.getStatus() );
+      try {
+        this.globalTarget.refresh( new SubProgressMonitor( localMonitor, 1 ) );
+      } catch ( ProblemException pExc ) {
+        status.merge( pExc.getStatus() );
+      }
     }
-   
     return status;    
   }
   
@@ -201,107 +237,20 @@ public class GridElementTransferOperation
                         final IFileStore to,
                         final IProgressMonitor monitor ) {
     
-    IStatus status = Status.OK_STATUS;
-    IFileInfo fromInfo = from.fetchInfo();
-    
-    if ( fromInfo.isDirectory() ) {
-      status = copyDirectory( from, to, monitor );
-    } else {
-      status = copyFile( from, to, monitor );
-    }
-    
-    return status;
-    
-  }
-  
-  /**
-   * Copies this specified directory file store and its children recursively to the
-   * destination file store.
-   * 
-   * @param from The source of the transfer.
-   * @param to The target of the transfer.
-   * @param monitor A progress monitor used to track the transfer.
-   * @return A status object tracking errors of the transfer.
-   */
-  private IStatus copyDirectory( final IFileStore from,
-                                 final IFileStore to,
-                                 final IProgressMonitor monitor ) {
-    
-    // Prepare operation
-    IStatus status = Status.OK_STATUS;
-    monitor.beginTask( Messages.getString("GridElementTransferOperation.copying_progress") + from.getName(), 10 ); //$NON-NLS-1$
-    
+    TransferParams data = new TransferParams( from, null, to, to.getChild( from.getName() ), monitor );
     try {
-      
-      IFileStore[] children = null;
-      try {
-        GEclipseFileSystem.assureFileStoreIsActive( from );
-        children = from.childStores( EFS.NONE, new SubProgressMonitor( monitor, 1 ) );
-      } catch( CoreException cExc ) {
-        status = new Status( IStatus.ERROR,
-                             Activator.PLUGIN_ID,
-                             IStatus.OK,
-                             Messages.getString("GridElementTransferOperation.fetching_children_error") + from.getName(), //$NON-NLS-1$
-                             cExc );
-      }
-      
-      if ( status.isOK() && ( children != null ) ) {
-        
-        IFileStore newTo = to.getChild( from.getName() );
-        IFileInfo newToInfo = newTo.fetchInfo();
-        boolean mkdir = !newToInfo.exists();
-      
-        SubProgressMonitor subMonitor = new SubProgressMonitor( monitor, 9 );
-        subMonitor.beginTask( Messages.getString("GridElementTransferOperation.copying_progress") //$NON-NLS-1$
-                              + from.getName(),
-                              mkdir ? children.length + 1 : children.length );
-      
-        if ( mkdir ) {
-          try {
-            newTo.mkdir( EFS.NONE, new SubProgressMonitor( subMonitor, 1 ) );
-          } catch( CoreException cExc ) {
-            status = new Status( IStatus.ERROR,
-                                 Activator.PLUGIN_ID,
-                                 IStatus.OK,
-                                 Messages.getString("GridElementTransferOperation.create_dir_error") + newTo.getName(), //$NON-NLS-1$
-                                 cExc );
-          }
-        }
-      
-        if ( status.isOK() ) {
-        
-          MultiStatus mStatus
-            = new MultiStatus( Activator.PLUGIN_ID,
-                               IStatus.OK,
-                               Messages.getString("GridElementTransferOperation.copying_members_status") //$NON-NLS-1$
-                                 + from.getName(),
-                               null );
-          
-          for ( IFileStore child : children ) {
-            
-            IStatus tempStatus = copy( child, newTo, new SubProgressMonitor( subMonitor, 1) );
-            
-            if ( !tempStatus.isOK() ) {
-              mStatus.merge( tempStatus );
-            }
-            
-            if ( subMonitor.isCanceled() ) break;
-            
-          }
-          
-          if ( !mStatus.isOK() ) {
-            status = mStatus;
-          }
-        
-        }
-        
-      }
-      
-    } finally {
-      monitor.done();
+      checkExistingTarget( data );
+    } catch( ProblemException exc ) {
+      String msg = String.format( Messages.getString( "GridElementTransferOperation.errCannotCopyFile" ), from.getName() ); //$NON-NLS-1$
+      data.status = new Status( IStatus.ERROR, Activator.PLUGIN_ID, msg, exc );
     }
-    
-    return status;
+    if ( monitor.isCanceled() ) {
+      throw new OperationCanceledException();
+    }
+    if( data.status.isOK() ) {
+      TransferManager.getManager().doTransfer( from, to, this.move, monitor );
+    }
+    return data.status;
     
   }
   
@@ -326,178 +275,6 @@ public class GridElementTransferOperation
       this.sourceFileInfo = sourceFileInfo;
       this.monitor = monitor;
     }
-  }
-  
-  /**
-   * Copy the content of the specified file store to the destination file store.
-   * The source may be a file or a directory. The source has to be a file.
-   * 
-   * @param from The source of the transfer.
-   * @param to The target of the transfer.
-   * @param monitor A progress monitor used to track the transfer.
-   * @return A status object tracking errors of the transfer.
-   */
-  private IStatus copyFile( final IFileStore from,
-                            final IFileStore to,
-                            final IProgressMonitor monitor ) {
-    
-    TransferParams data = new TransferParams( from, null, to, to.getChild( from.getName() ), monitor );
-
-    // Prepare copy operation
-    monitor.beginTask( Messages.getString("GridElementTransferOperation.copying_progress") + from.getName(), 100 ); //$NON-NLS-1$
-    monitor.setTaskName( Messages.getString("GridElementTransferOperation.copying_progress") + from.getName() ); //$NON-NLS-1$
-    InputStream inStream = null;
-    OutputStream outStream = null;    
-    
-    // Put in try-catch-clause to ensure that monitor.done() is called and streams are closed
-    try {
-      
-      // Fetch file info
-      data.sourceFileInfo = from.fetchInfo();
-      long length = data.sourceFileInfo.getLength();            
-      
-      checkExistingTarget( data );
-      
-      // Open input stream
-      if ( data.status.isOK() ) {
-        try {
-          inStream = from.openInputStream( EFS.NONE, new SubProgressMonitor( monitor, 8 ) );
-        } catch( CoreException cExc ) {
-          data.status = new Status( IStatus.ERROR,
-                               Activator.PLUGIN_ID,
-                               IStatus.OK,
-                               String.format( Messages.getString("GridElementTransferOperation.unable_to_open_istream"), from.getName() ), //$NON-NLS-1$
-                               cExc );
-        }
-      }
-      
-      // Open output stream
-      if ( data.status.isOK() ) {
-        try {
-          outStream = data.targetFile.openOutputStream( EFS.NONE, new SubProgressMonitor( monitor, 8 ) );
-        } catch( CoreException cExc ) {
-          data.status = new Status( IStatus.ERROR,
-                               Activator.PLUGIN_ID,
-                               IStatus.OK,
-                               String.format( Messages.getString("GridElementTransferOperation.unable_to_open_ostream"), data.targetFile.getName() ), //$NON-NLS-1$
-                               cExc );
-        }
-      }
-      
-      // Prepare copy operation
-      if ( data.status.isOK() && ( inStream != null ) && ( outStream != null ) ) {
-        
-        byte[] buffer = new byte[ 1024 * 1024 ];
-        Integer totalKb = Integer.valueOf( (int) Math.ceil((double)length/1024) ) ;
-        
-        SubProgressMonitor subMonitor = new SubProgressMonitor( monitor, 84 );
-        subMonitor.beginTask( Messages.getString("GridElementTransferOperation.copying_progress") + from.getName(), (int)length ); //$NON-NLS-1$
-        subMonitor.subTask( Messages.getString("GridElementTransferOperation.copying_progress") + from.getName() ); //$NON-NLS-1$
-        
-        // Copy the data
-        long byteCounter = 0;
-        while ( !subMonitor.isCanceled() && data.status.isOK() ) {
-          
-          int bytesRead = -1;
-          
-          // Read data from source
-          try {
-            bytesRead = inStream.read( buffer );
-          } catch( IOException ioExc ) {
-            data.status = new Status( IStatus.ERROR,
-                                 Activator.PLUGIN_ID,
-                                 IStatus.OK,
-                                 String.format( Messages.getString("GridElementTransferOperation.reading_error"), from.getName() ), //$NON-NLS-1$
-                                 ioExc );
-          }
-          
-          // Check if there is still data available
-          if ( bytesRead == -1 ) {
-            break;
-          }
-
-          // Write data to target
-          try {
-            outStream.write( buffer, 0, bytesRead );
-          } catch( IOException ioExc ) {
-            data.status = new Status( IStatus.ERROR,
-                                 Activator.PLUGIN_ID,
-                                 IStatus.OK,
-                                 String.format( Messages.getString("GridElementTransferOperation.writing_error"), data.targetFile.getName() ), //$NON-NLS-1$
-                                 ioExc );
-          }
-          
-          byteCounter += bytesRead;
-          subMonitor.worked( bytesRead );
-          subMonitor.subTask( String.format( Messages.getString("GridElementTransferOperation.transfer_progress_format"),  //$NON-NLS-1$
-                                             data.sourceFileInfo.getName(),
-                                             Integer.valueOf( (int)(100.* byteCounter / length ) ),
-                                             Integer.valueOf( (int)(byteCounter/1024) ),
-                                             totalKb ) );
-          
-        }
-        
-        subMonitor.done();
-        
-      }
-      
-    } catch( ProblemException e ) {
-      String msg = String.format( Messages.getString("GridElementTransferOperation.errCannotCopyFile"), from.getName() ); //$NON-NLS-1$
-      data.status = new Status( IStatus.ERROR, Activator.PLUGIN_ID, msg, e );
-    } finally {
-      
-      monitor.subTask( Messages.getString("GridElementTransferOperation.closing_streams") ); //$NON-NLS-1$
-      
-      // Close output stream
-      if ( outStream != null ) {
-        try {
-          outStream.close();
-        } catch ( IOException ioExc ) {
-          // just ignore this
-        }
-      }
-      
-      // Close input stream
-      if ( inStream != null ) {
-        try {
-          inStream.close();
-        } catch( IOException e ) {
-          // just ignore this
-        }
-      }
-      
-      monitor.done();
-      
-    }
-
-    return data.status;
-        
-  }
-
-  /**
-   * Deletes the specified file store.
-   * 
-   * @param store The file store to be deleted.
-   * @param monitor A progress monitor used to track the transfer.
-   * @return A status object tracking errors of the deletion.
-   */
-  private IStatus delete( final IFileStore store,
-                          final IProgressMonitor monitor ) {
-    
-    IStatus status = Status.OK_STATUS;
-    
-    try {
-      store.delete( EFS.NONE, monitor );
-    } catch( CoreException cExc ) {
-      status = new Status( IStatus.ERROR,
-                           Activator.PLUGIN_ID,
-                           IStatus.OK,
-                           Messages.getString("GridElementTransferOperation.deletion_error") + store.getName(), //$NON-NLS-1$
-                           cExc );
-    }
-    
-    return status;
-    
   }
   
   private IStatus transferElement( final IGridElement element,
@@ -598,15 +375,11 @@ public class GridElementTransferOperation
           
           // Copy operation
           IProgressMonitor subMonitor = new SubProgressMonitor( monitor, this.move ? 9 : 10 );
-          status = copy( inStore, outStore, subMonitor );
-          
           if ( monitor.isCanceled() ) {
             throw new OperationCanceledException();
           }
-          
-          if ( status.isOK() && this.move ) {
-            status = delete( inStore, new SubProgressMonitor( monitor, 1 ) );
-          }
+          status = copy( inStore, outStore, subMonitor );
+            
           /*
           if ( status.isOK() ) {
             startRefresh( target );
@@ -701,7 +474,7 @@ public class GridElementTransferOperation
                                         formatURI( data.targetFile.toURI() ),
                                         formatDate( targetInfo.getLastModified() ), 
                                         formatURI( data.sourceFile.toURI() ),
-                                        formatDate( data.sourceFileInfo.getLastModified() )
+                                        ""
                                         );        
         
         MessageDialog dialog = new MessageDialog( shell,

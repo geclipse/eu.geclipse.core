@@ -41,6 +41,9 @@
          <reference
                referenceID="eu.geclipse.core.filesystem.solution.improveAccessRights">
          </reference>
+         <reference
+               referenceID="eu.geclipse.core.solution.auth.checkCaCertificates">
+         </reference>
       </problem>
       <solution
             description="Use higher access rights"
