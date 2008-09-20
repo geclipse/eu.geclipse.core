@@ -303,42 +303,50 @@ public class WorkflowJobEditPart extends ShapeNodeEditPart {
       
       IWorkflowJob job = ( IWorkflowJob )this.resolveSemanticElement();
       String filename = job.getJobDescription();
-      if ( (!"".equals( filename ))) {//||(filename != null)
-        // if something is present in job description property
-        URI fileNameURI = URIUtil.toURI( filename );
-        IFile[] file = ResourcesPlugin.getWorkspace().getRoot().findFilesForLocationURI( fileNameURI ); 
-        try {
-          if( (file.length != 0) && file[ 0 ].exists() ) {
-            IDE.openEditor( WorkflowDiagramEditorPlugin.getDefault()
-              .getWorkbench()
-              .getActiveWorkbenchWindow()
-              .getActivePage(), file[ 0 ], true );
-          } else {
-              // need to handle if file does not exist with problem exception
+      if ( filename!=null ){
+        if ( (!"".equals( filename )) ) { //$NON-NLS-1$
+          // if something is present in job description property
+          URI fileNameURI = URIUtil.toURI( filename );
+          IFile[] file = ResourcesPlugin.getWorkspace().getRoot().findFilesForLocationURI( fileNameURI ); 
+          try {
+            if( (file.length != 0) && file[ 0 ].exists() ) {
+              IDE.openEditor( WorkflowDiagramEditorPlugin.getDefault()
+                .getWorkbench()
+                .getActiveWorkbenchWindow()
+                .getActivePage(), file[ 0 ], true );
+            } else {
+                // need to handle if file does not exist with problem exception
+            }
+          } catch( PartInitException partInitException ) {
+            WorkflowDiagramEditorPlugin.logException( partInitException );
           }
-        } catch( PartInitException partInitException ) {
-          WorkflowDiagramEditorPlugin.logException( partInitException );
+        } else {
+          createNewJobWizard();
         }
       } else {
-        // if there is no entry in job description property, fire up NewJobWizard
-        NewJobWizard newJobWizard = new NewJobWizard();       
-        // this bit find the root directory of the workflow
-        TransactionalEditingDomain domain = this.getEditingDomain();
-        ResourceSet resourceSet = domain.getResourceSet();
-        Resource res = resourceSet.getResources().get( 0 );
-        org.eclipse.emf.common.util.URI wfRootUri = res.getURI(); 
-        String wfRootPath = wfRootUri.path();
-        String[] dirs = wfRootPath.split( "/" ); //$NON-NLS-1$
-        String projectName = dirs[2];
-        IFileStore wfRootFileStore = GridModel.getRoot().getFileStore().getChild( projectName ).getChild( "Workflows" ); //$NON-NLS-1$
-        newJobWizard.init( PlatformUI.getWorkbench(), new StructuredSelection(wfRootFileStore) );        
-        WizardDialog wizard = new WizardDialog(PlatformUI.getWorkbench().getDisplay().getActiveShell(), newJobWizard);
-        wizard.create();
-        wizard.open();
+        createNewJobWizard();
       }
       
     }
     super.performRequest( request );
+  }
+  
+  private void createNewJobWizard() {
+    // if there is no entry in job description property, fire up NewJobWizard
+    NewJobWizard newJobWizard = new NewJobWizard();       
+    // this bit find the root directory of the workflow
+    TransactionalEditingDomain domain = this.getEditingDomain();
+    ResourceSet resourceSet = domain.getResourceSet();
+    Resource res = resourceSet.getResources().get( 0 );
+    org.eclipse.emf.common.util.URI wfRootUri = res.getURI(); 
+    String wfRootPath = wfRootUri.path();
+    String[] dirs = wfRootPath.split( "/" ); //$NON-NLS-1$
+    String projectName = dirs[2];
+    IFileStore wfRootFileStore = GridModel.getRoot().getFileStore().getChild( projectName ).getChild( "Workflows" ); //$NON-NLS-1$
+    newJobWizard.init( PlatformUI.getWorkbench(), new StructuredSelection(wfRootFileStore) );        
+    WizardDialog wizard = new WizardDialog(PlatformUI.getWorkbench().getDisplay().getActiveShell(), newJobWizard);
+    wizard.create();
+    wizard.open();
   }
 
   /**
