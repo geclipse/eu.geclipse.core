@@ -32,7 +32,7 @@ import org.eclipse.ui.part.ViewPart;
 
 import eu.geclipse.core.IBidirectionalConnection;
 import eu.geclipse.gvid.IGVidView;
-import eu.geclipse.ui.views.IVisualisationPage;
+import eu.geclipse.ui.visualisation.IVisualisationWindow;
 
 /**
  * View for displaying the output of remote visualisation applications.
@@ -157,7 +157,7 @@ public class GVidView extends ViewPart implements IGVidView {
     }
   }
 
-  public IVisualisationPage addGVidPage( final IBidirectionalConnection connection ) throws IOException {
+  public IVisualisationWindow addGVidPage( final IBidirectionalConnection connection ) throws IOException {
     CTabItem cTabItem = new CTabItem( this.cTabFolder, SWT.CLOSE );
     final GVidPage page = new GVidPage( this.cTabFolder, SWT.NONE, cTabItem );
     page.startClient( connection );

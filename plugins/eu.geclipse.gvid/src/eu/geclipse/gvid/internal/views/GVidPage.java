@@ -32,14 +32,14 @@ import eu.geclipse.core.IBidirectionalConnection;
 import eu.geclipse.gvid.IGVidStatsListener;
 import eu.geclipse.gvid.internal.GVidClient;
 import eu.geclipse.gvid.internal.GVidStatsEvent;
-import eu.geclipse.ui.views.IVisualisationPage;
+import eu.geclipse.ui.visualisation.IVisualisationWindow;
 
-class GVidPage extends Composite implements IGVidStatsListener, IVisualisationPage {
-  Label statsLabel;
+class GVidPage extends Composite implements IGVidStatsListener, IVisualisationWindow {
+  private final Frame awtFrame;
+  IBidirectionalConnection connection;
   GVidClient gvidClient;
   Thread gvidThread;
-  IBidirectionalConnection connection;
-  private final Frame awtFrame;
+  Label statsLabel;
   private Composite SWT_AWT_container;
   private final CTabItem tabItem;
 
@@ -48,6 +48,20 @@ class GVidPage extends Composite implements IGVidStatsListener, IVisualisationPa
     this.tabItem = cTabItem;
     initialize();
     this.awtFrame = SWT_AWT.new_Frame( this.SWT_AWT_container );
+  }
+
+  public String getTabName() {
+    return this.tabItem.getText();
+  }
+
+  public Composite getVisComp() {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public void init( final Composite parent, final int style ) {
+    // TODO Auto-generated method stub
+
   }
 
   private void initialize() {
@@ -77,6 +91,14 @@ class GVidPage extends Composite implements IGVidStatsListener, IVisualisationPa
     this.SWT_AWT_container.setLayoutData(gridData1);
   }
 
+  public boolean isRemoteSite() {
+    return true;
+  }
+
+  public void setTabName( final String name ) {
+    this.tabItem.setText( name );
+  }
+
   void startClient( final IBidirectionalConnection conn ) throws IOException {
     this.connection = conn;
     this.gvidClient = new GVidClient( this.connection.getInputStream(),
@@ -87,23 +109,6 @@ class GVidPage extends Composite implements IGVidStatsListener, IVisualisationPa
     this.gvidThread = new Thread( this.gvidClient,
                                   "GVid client thread" ); //$NON-NLS-1$
     this.gvidThread.start();
-  }
-
-  /* (non-Javadoc)
-   * @see eu.geclipse.ui.views.IVisualisationPage#stopClient()
-   */
-  public void stopClient() {
-    if( this.gvidClient != null ) {
-      this.gvidClient.stop();
-      try {
-        this.gvidThread.join();
-      } catch( InterruptedException exception ) {
-        // ignore
-      }
-    }
-    if( this.connection != null ) {
-      this.connection.close();
-    }
   }
 
   public void statsUpdated( final GVidStatsEvent event ) {
@@ -119,11 +124,20 @@ class GVidPage extends Composite implements IGVidStatsListener, IVisualisationPa
     } );
   }
 
-  public String getTabName() {
-    return this.tabItem.getText();
-  }
-
-  public void setTabName( final String name ) {
-    this.tabItem.setText( name );
+  /* (non-Javadoc)
+   * @see eu.geclipse.ui.views.IVisualisationWindow#stopClient()
+   */
+  public void stopClient() {
+    if( this.gvidClient != null ) {
+      this.gvidClient.stop();
+      try {
+        this.gvidThread.join();
+      } catch( InterruptedException exception ) {
+        // ignore
+      }
+    }
+    if( this.connection != null ) {
+      this.connection.close();
+    }
   }
 }  //  @jve:decl-index=0:visual-constraint="10,10"

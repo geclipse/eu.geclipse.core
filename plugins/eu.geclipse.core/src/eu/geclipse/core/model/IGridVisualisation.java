@@ -29,11 +29,21 @@ public interface IGridVisualisation extends IGridContainer {
   String getDescription();
 
   /**
+   * @return
+   */
+  String getResourceFileNameExtension();
+
+  /**
+   * @param fileExtention
+   *
+   */
+  void render( String fileExtention );
+
+  /**
    * @throws ProblemException
    */
   void validate() throws ProblemException;
 
-  void render();
 
 
 }
