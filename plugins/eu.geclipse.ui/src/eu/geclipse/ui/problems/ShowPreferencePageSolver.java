@@ -15,8 +15,12 @@
 
 package eu.geclipse.ui.problems;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.jface.preference.PreferenceDialog;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -52,13 +56,41 @@ public class ShowPreferencePageSolver
    * @see eu.geclipse.core.reporting.ISolver#solve()
    */
   public void solve() {
+    
     PreferenceDialog dialog
       = PreferencesUtil.createPreferenceDialogOn( getShell(),
                                                   this.preferencePageID,
                                                   null,
                                                   null );
-    dialog.getShell().forceActive();
+    
+    Shell dialogShell = dialog.getShell();
+    Shell currentShell = dialogShell.getDisplay().getActiveShell();
+    Shell parentShell = currentShell;
+    
+    // Create the chain of shells to be closed for making the preference
+    // dialog the top level component
+    List< Shell > toClose = new ArrayList< Shell >();
+    while ( ( parentShell != null ) && ( parentShell != dialogShell ) ) {
+      toClose.add( parentShell );
+      Composite parent = parentShell.getParent();
+      if ( parent instanceof Shell ) {
+        parentShell = ( Shell ) parent;
+      } else {
+        parentShell = null;
+      }
+    }
+    
+    // If the preference dialog is part of the chain close
+    // all shells "above" the dialog
+    if ( parentShell == dialogShell ) {
+      for ( Shell shell : toClose ) {
+        shell.close();
+      }
+    }
+    
+    dialogShell.forceActive();
     dialog.open();
+    
   }
   
   private Shell getShell() {
