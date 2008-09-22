@@ -36,23 +36,27 @@ import eu.geclipse.ui.views.VisualisationView;
  */
 public class RenderVTKPipelineAction extends SelectionListenerAction {
 
-  private IWorkbenchSite site;
-
   private ArrayList< IGridVisualisation > vis;
+
+  private IWorkbenchSite workbenchSite;
+
+  /**
+   * @param workbenchSite
+   */
+  public RenderVTKPipelineAction( final IWorkbenchPartSite site ) {
+    super ( Messages.getString( "RenderVTKPipelineAction.title" ) ); //$NON-NLS-1$
+    this.workbenchSite = site;
+  }
 
   protected RenderVTKPipelineAction( final String text ) {
     super( text );
     // TODO Auto-generated constructor stub
   }
 
-  /**
-   * @param site
-   */
-  public RenderVTKPipelineAction( final IWorkbenchPartSite site ) {
-    super ( Messages.getString( "RenderVTKPipelineAction.title" ) ); //$NON-NLS-1$
-    this.site = site;
-  }
 
+  protected boolean isVisualizable( final Object element ) {
+    return element instanceof eu.geclipse.core.model.IGridVisualisation;
+  }
 
   /* (non-Javadoc)
    * @see org.eclipse.jface.action.Action#run()
@@ -60,12 +64,12 @@ public class RenderVTKPipelineAction extends SelectionListenerAction {
   @Override
   public void run() {
     Object element = getStructuredSelection().getFirstElement();
-    if( ( element != null ) ) {
+    if( element != null ) {
       try {
         ( ( IGridVisualisation )element ).validate();
-        IViewPart view = this.site.getPage().showView( "eu.geclipse.ui.views.visualisationview" ); //$NON-NLS-1$
-        ( ( VisualisationView )view ).setPipeline( ( IGridVisualisation )element );
-        ( ( VisualisationView )view ).render();
+        IViewPart view = this.workbenchSite.getPage().showView( "eu.geclipse.ui.views.visualisationview" ); //$NON-NLS-1$
+        ( ( VisualisationView )view ).setVisResource( ( IGridVisualisation )element );
+        ( ( VisualisationView )view ).render( ( ( IGridVisualisation )element).getResourceFileNameExtension() );
         view.setFocus();
       } catch( PartInitException pie ) {
         ProblemDialog.openProblem( null,
@@ -99,9 +103,5 @@ public class RenderVTKPipelineAction extends SelectionListenerAction {
       }
     }
     return enabled && !this.vis.isEmpty();
-  }
-
-  protected boolean isVisualizable( final Object element ) {
-    return element instanceof eu.geclipse.core.model.IGridVisualisation;
   }
 }

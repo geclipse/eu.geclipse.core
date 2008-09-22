@@ -42,51 +42,12 @@ import eu.geclipse.ui.internal.Activator;
  */
 public class VisualisationView extends ViewPart {
 
-  protected boolean newTabOn = false;
-  IAction checkBtnAction = null;
-  private CTabFolder cTabFolder;
-  private IGridVisualisation visPipeline = null;
   private final int allowedNumOfTabs = 5;
 //  private final VisViewDropDownAction fileDropDownAction = null;
-
-  /* (non-Javadoc)
-   * @see org.eclipse.ui.part.WorkbenchPart#createPartControl(org.eclipse.swt.widgets.Composite)
-   */
-  @Override
-  public void createPartControl( final Composite parent ) {
-
-    GridData gridData = new GridData();
-    gridData.horizontalAlignment = GridData.FILL;
-    gridData.grabExcessHorizontalSpace = true;
-    gridData.grabExcessVerticalSpace = true;
-    gridData.verticalAlignment = GridData.FILL;
-    this.cTabFolder = new CTabFolder( parent, SWT.FLAT | SWT.BOTTOM );
-    this.cTabFolder.setLayoutData( gridData );
-    this.cTabFolder.addFocusListener( new FocusAdapter() {
-
-      @Override
-      public void focusGained( final FocusEvent event ) {
-        CTabFolder folder = ( CTabFolder )event.widget;
-        CTabItem item = folder.getSelection();
-        if( ( item != null ) && ( item.getControl() != null ) ) {
-          item.getControl().setFocus();
-        }
-      }
-    } );
-    this.cTabFolder.addCTabFolder2Listener( new CTabFolder2Adapter() {
-      @Override
-      public void close( final CTabFolderEvent event ) {
-        ((IVisualisationPage)((CTabItem)event.item).getControl()).stopClient();
-      }
-    } );
-
-//    this.fileDropDownAction =
-//      new VisViewDropDownAction( getSite().getWorkbenchWindow() );
-//    hookContextMenu();
-//    contributeToActionBars();
-    createActions();
-    createToolBar();
-  }
+  IAction checkBtnAction = null;
+  private CTabFolder cTabFolder;
+  protected boolean newTabOn = false;
+  private IGridVisualisation visResource = null;
 
   private void createActions() {
 
@@ -125,53 +86,129 @@ public class VisualisationView extends ViewPart {
 
   }
 
+  /* (non-Javadoc)
+   * @see org.eclipse.ui.part.WorkbenchPart#createPartControl(org.eclipse.swt.widgets.Composite)
+   */
+  @Override
+  public void createPartControl( final Composite parent ) {
+
+    GridData gridData = new GridData();
+    gridData.horizontalAlignment = GridData.FILL;
+    gridData.grabExcessHorizontalSpace = true;
+    gridData.grabExcessVerticalSpace = true;
+    gridData.verticalAlignment = GridData.FILL;
+    this.cTabFolder = new CTabFolder( parent, SWT.FLAT | SWT.BOTTOM );
+    this.cTabFolder.setLayoutData( gridData );
+    this.cTabFolder.addFocusListener( new FocusAdapter() {
+
+      @Override
+      public void focusGained( final FocusEvent event ) {
+        CTabFolder folder = ( CTabFolder )event.widget;
+        CTabItem item = folder.getSelection();
+        if( item != null && item.getControl() != null ) {
+          item.getControl().setFocus();
+        }
+      }
+    } );
+    this.cTabFolder.addCTabFolder2Listener( new CTabFolder2Adapter() {
+      @Override
+      public void close( final CTabFolderEvent event ) {
+        //the following throws exception now that the classes implementing
+        //the IVisualisatioWindow interface have been changed to fit the
+        //vis extension implementation, but it didn't work anyway - the remote
+        //kept running on the remote host so this has to be handled differently
+//        ((IVisualisationWindow)((CTabItem)event.item).getControl()).stopClient();
+      }
+    } );
+
+//    this.fileDropDownAction =
+//      new VisViewDropDownAction( getSite().getWorkbenchWindow() );
+//    hookContextMenu();
+//    contributeToActionBars();
+    createActions();
+    createToolBar();
+  }
+
+//  private void createActions() {
+//
+//    ImageRegistry imgReg = Activator.getDefault().getImageRegistry();
+//    Image image = imgReg.get( "toggleTabBtn" ); //$NON-NLS-1$
+//    ImageDescriptor toggleTabBtnImage = ImageDescriptor.createFromImage( image );
+//
+//    this.checkBtnAction =
+//        new org.eclipse.jface.action.Action(
+//                   Messages.getString( "VisualisationView.switchToUpdatesIntoTheSameTab" ), //$NON-NLS-1$
+//                   IAction.AS_CHECK_BOX ) {
+//
+//        @Override
+//        public boolean isChecked() {
+//          return VisualisationView.this.newTabOn;
+//        }
+//
+//        @Override
+//        public void run() {
+//          if ( !VisualisationView.this.checkBtnAction.isChecked() ) {
+//            VisualisationView.this.newTabOn = true;
+//            VisualisationView.this.checkBtnAction
+//            .setToolTipText( Messages.getString( "VisualisationView.switchToNewTabWhenUpdating" ) );
+//            VisualisationView.this.checkBtnAction.setChecked( false );
+//          }
+//          else {
+//            VisualisationView.this.newTabOn = false;
+//            VisualisationView.this.checkBtnAction
+//            .setToolTipText( Messages.getString( "VisualisationView.switchToUpdatesIntoTheSameTab" ) );
+//            VisualisationView.this.checkBtnAction.setChecked( true );
+//          }
+//        }
+//      };
+//    this.checkBtnAction.setToolTipText( Messages.getString("VisualisationView.switchToUpdatesIntoTheSameTab") );
+//    this.checkBtnAction.setImageDescriptor( toggleTabBtnImage );
+//
+//  }
+
   private void createToolBar() {
     IToolBarManager mgr = getViewSite().getActionBars().getToolBarManager();
     mgr.add( this.checkBtnAction );
   }
 
 
-//  @SuppressWarnings("unused")
-//  private void contributeToActionBars() {
-//    IActionBars bars = getViewSite().getActionBars();
-//    fillLocalToolBar( bars.getToolBarManager() );
-//  }
-//
-//  @SuppressWarnings("unused")
-//  private void fillLocalToolBar( final IToolBarManager manager ) {
-//    if( this.fileDropDownAction != null ) {
-//      manager.add( this.fileDropDownAction );
-//    }
-//  }
-//
-//  @SuppressWarnings("unused")
-//  private void hookContextMenu() {
-//    MenuManager menuMgr = new MenuManager( "#PopupMenu" ); //$NON-NLS-1$
-//    menuMgr.setRemoveAllWhenShown( true );
-//    menuMgr.addMenuListener( new IMenuListener() {
-//
-//      public void menuAboutToShow( final IMenuManager manager ) {
-//        VisualisationView.this.fillContextMenu( manager );
-//      }
-//    } );
-//  }
+  //  @SuppressWarnings("unused")
+  //  private void contributeToActionBars() {
+  //    IActionBars bars = getViewSite().getActionBars();
+  //    fillLocalToolBar( bars.getToolBarManager() );
+  //  }
+  //
+  //  @SuppressWarnings("unused")
+  //  private void fillLocalToolBar( final IToolBarManager manager ) {
+  //    if( this.fileDropDownAction != null ) {
+  //      manager.add( this.fileDropDownAction );
+  //    }
+  //  }
+  //
+  //  @SuppressWarnings("unused")
+  //  private void hookContextMenu() {
+  //    MenuManager menuMgr = new MenuManager( "#PopupMenu" );
+  //    menuMgr.setRemoveAllWhenShown( true );
+  //    menuMgr.addMenuListener( new IMenuListener() {
+  //
+  //      public void menuAboutToShow( final IMenuManager manager ) {
+  //        VisualisationView.this.fillContextMenu( manager );
+  //      }
+  //    } );
+  //  }
 
-//  void fillContextMenu( final IMenuManager manager ) {
-//    if( this.fileDropDownAction != null ) {
-//      manager.add( this.fileDropDownAction );
-//    }
-//    manager.add( new Separator( IWorkbenchActionConstants.MB_ADDITIONS ) );
-//  }
-
+  //  void fillContextMenu( final IMenuManager manager ) {
+  //    if( this.fileDropDownAction != null ) {
+  //      manager.add( this.fileDropDownAction );
+  //    }
+  //    manager.add( new Separator( IWorkbenchActionConstants.MB_ADDITIONS ) );
+  //  }
 
   /**
-   * Passing the focus request to the viewer's control.
+   * @return folder of tabs
    */
-  @Override
-  public void setFocus() {
-    if( this.cTabFolder != null ) {
-      this.cTabFolder.setFocus();
-    }
+  public CTabFolder getCTabFolder() {
+    return this.cTabFolder;
   }
 
   /**
@@ -209,28 +246,35 @@ public class VisualisationView extends ViewPart {
   }
 
   /**
-   * @return folder of tabs
+   * Sets the right window composite for the visualisation view and
+   * invokes the rendering process for the given resource.
+   * @param resFileNameExt
+   *
    */
-  public CTabFolder getCTabFolder() {
-    return this.cTabFolder;
-  }
+  public void render( final String resFileNameExt) {
 
-  /**
-   * @param pipeline
-   */
-  public void setPipeline( final IGridVisualisation pipeline ) {
-      this.visPipeline = pipeline;
-  }
-
-  /**
-   * Invokes the rendering process as described by the preset vtkPipeline.
-   */
-  public void render() {
-
-    if ( this.visPipeline == null ) {
+    if ( this.visResource == null ) {
       return;
     }
 
-    this.visPipeline.render();
+    this.visResource.render( resFileNameExt );//send the extension instead of the array
   }
+
+  /**
+   * Passing the focus request to the viewer's control.
+   */
+  @Override
+  public void setFocus() {
+    if( this.cTabFolder != null ) {
+      this.cTabFolder.setFocus();
+    }
+  }
+
+  /**
+   * @param resource
+   */
+  public void setVisResource( final IGridVisualisation resource ) {
+      this.visResource = resource;
+  }
+
 }

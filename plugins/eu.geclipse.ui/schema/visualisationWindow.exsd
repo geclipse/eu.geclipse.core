@@ -1,0 +1,140 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Schema file written by PDE -->
+<schema targetNamespace="eu.geclipse.ui" xmlns="http://www.w3.org/2001/XMLSchema">
+<annotation>
+      <appinfo>
+         <meta.schema plugin="eu.geclipse.ui" id="visualisationWindow" name="Visualisation Window"/>
+      </appinfo>
+      <documentation>
+         Implementing this extension will add a custom defined visualisation support to g-Eclipse. The visualisation window showing the rendered images will be placed within the Visualisation View Part of g-Eclipse.
+      </documentation>
+   </annotation>
+
+   <element name="extension">
+      <annotation>
+         <appinfo>
+            <meta.element />
+         </appinfo>
+      </annotation>
+      <complexType>
+         <sequence>
+            <element ref="window" minOccurs="1" maxOccurs="unbounded"/>
+         </sequence>
+         <attribute name="point" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="id" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute translatable="true"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="window">
+      <complexType>
+         <attribute name="name" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="id" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="class" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java" basedOn=":eu.geclipse.ui.visualisation.IVisualisationWindow"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="remote" type="boolean" use="required">
+            <annotation>
+               <documentation>
+                  Set to true, signifies that the rendering will take place on a remote machine. If false, signifies that the rendering will be done locally.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="fileExt" type="string" use="required">
+            <annotation>
+               <documentation>
+                  The file extension of the resource that this visualisation window knows how to deal with.
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="since"/>
+      </appinfo>
+      <documentation>
+         [Enter the first release in which this extension point appears.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="examples"/>
+      </appinfo>
+      <documentation>
+         &lt;pre&gt;
+&lt;extension point=&quot;eu.geclipse.ui.visualisationWindow&quot;&gt;
+  &lt;page
+    class=&quot;eu.geclipse.vtk.ui.GVidVisWindow&quot;
+    id=&quot;eu.geclipse.vtk.ui.gvidviswindow&quot;
+    name=&quot;Remote Visualisation&quot;
+    remote=true
+    fileExt=&quot;vtkpipeline&quot;&gt;
+  &lt;/page&gt;
+&lt;/extension&gt;
+&lt;/pre&gt;
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="apiinfo"/>
+      </appinfo>
+      <documentation>
+         [Enter API information here.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="implementation"/>
+      </appinfo>
+      <documentation>
+         [Enter information about supplied implementation of this extension point.]
+      </documentation>
+   </annotation>
+
+
+</schema>
