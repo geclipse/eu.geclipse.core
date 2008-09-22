@@ -29,6 +29,8 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.gmf.runtime.emf.commands.core.command.AbstractTransactionalCommand;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
@@ -39,6 +41,7 @@ import org.eclipse.ui.IWorkbenchPart;
 
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.jsdl.JSDLJobDescription;
+import eu.geclipse.workflow.model.IWorkflowJob;
 import eu.geclipse.workflow.ui.edit.commands.CopyJobDescToWorkflowCommand;
 import eu.geclipse.workflow.ui.edit.commands.UpdateJobPortsCommand;
 import eu.geclipse.workflow.ui.edit.parts.WorkflowJobEditPart;
@@ -98,18 +101,31 @@ public class GetJobDescriptionFromFileAction implements IObjectActionDelegate {
     	  filePathUri = URIUtil.toURI(filePath);
           IFile jsdlFile = ResourcesPlugin.getWorkspace()
           .getRoot()
-          .findFilesForLocationURI( filePathUri )[ 0 ];    	  
-    	 JSDLJobDescription jsdl = new JSDLJobDescription(jsdlFile); 
-  	    AbstractTransactionalCommand copyCommand = new CopyJobDescToWorkflowCommand(this.mySelectedElement.resolveSemanticElement(), jsdl);
-        AbstractTransactionalCommand updatePortsCommand = new UpdateJobPortsCommand(GetJobDescriptionFromFileAction.this.mySelectedElement, jsdl);  	    
-        try {
-          OperationHistoryFactory.getOperationHistory()
-          .execute( copyCommand, new NullProgressMonitor(), null );  	    
-          OperationHistoryFactory.getOperationHistory()
-          .execute( updatePortsCommand, new NullProgressMonitor(), null );
-  	    } catch( ExecutionException eE ) {
-  	      eE.printStackTrace();
-  	    }
+          .findFilesForLocationURI( filePathUri )[ 0 ];
+          IWorkflowJob selectedJob = (IWorkflowJob)this.mySelectedElement.resolveSemanticElement();
+          if (!(selectedJob.getName()==null && selectedJob.getJobDescription()==null)) {
+            MessageDialog confirmDialog = new MessageDialog( null,
+                 Messages.getString("WorkflowJobDragDropEditPolicy_confirmationTitle"), //$NON-NLS-1$
+                 null,
+                 Messages.getString( "WorkflowJobDragDropEditPolicy_userPrompt" ), //$NON-NLS-1$
+                 true ? MessageDialog.QUESTION : MessageDialog.WARNING ,
+                 new String[] { IDialogConstants.YES_LABEL, IDialogConstants.NO_LABEL },
+                 0 );
+            int confirmResult = confirmDialog.open();
+            if (confirmResult==0) {
+          	JSDLJobDescription jsdl = new JSDLJobDescription(jsdlFile); 
+          	  AbstractTransactionalCommand copyCommand = new CopyJobDescToWorkflowCommand(this.mySelectedElement.resolveSemanticElement(), jsdl);
+              AbstractTransactionalCommand updatePortsCommand = new UpdateJobPortsCommand(GetJobDescriptionFromFileAction.this.mySelectedElement, jsdl);  	    
+              try {
+                OperationHistoryFactory.getOperationHistory()
+                .execute( copyCommand, new NullProgressMonitor(), null );  	    
+                OperationHistoryFactory.getOperationHistory()
+                .execute( updatePortsCommand, new NullProgressMonitor(), null );
+        	    } catch( ExecutionException eE ) {
+        	      eE.printStackTrace();
+        	    }
+            }
+          }
       }
     }
   }
