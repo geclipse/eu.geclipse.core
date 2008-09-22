@@ -130,17 +130,18 @@ public class WorkflowJobEditPart extends ShapeNodeEditPart {
         delta.accept( visitor );
         
         // if a JSDL within the an open .workflow workflow has changed, scan through the
-        // workflow and re-sync it??
+        // workflow and re-sync it
         EObject o = WorkflowJobEditPart.this.resolveSemanticElement();
         if (o instanceof IWorkflowJob) {
+          IWorkflowJob job = ( IWorkflowJob )o;
+          
           Collection<IResource> changed = visitor.getChangedResources();
           for (Iterator<IResource> i = changed.iterator(); i.hasNext();) {
             IResource res = i.next();
             String loc = res.getLocation().toString();
-            String jobDesc = ( ( IWorkflowJob )o ).getJobDescription();
+            String jobDesc = job.getJobDescription();
             
             if (loc.equals( jobDesc )) { 
-              // do a JSDLDropCommand??
               java.net.URI jsdlPathUri = URIUtil.toURI( jobDesc );
               IFile jsdlFile = ResourcesPlugin.getWorkspace()
               .getRoot()
@@ -156,23 +157,20 @@ public class WorkflowJobEditPart extends ShapeNodeEditPart {
               }
             }
           }
-        } 
-        
-        // if a JSDL within an open .workflow workflow has been removed, remove it from 
-        // the job part property
-        EObject o1 = WorkflowJobEditPart.this.resolveSemanticElement();
-        if (o1 instanceof IWorkflowJob) {
+                    
+          // if a JSDL within an open .workflow workflow has been removed, remove it from 
+          // the job part property
           Collection<IResource> removed = visitor.getRemovedResources();
           for (Iterator<IResource> i = removed.iterator(); i.hasNext();) {
             IResource res = i.next();
             String loc = res.getLocation().toString();
-            String jobDesc = ( ( IWorkflowJob )o1 ).getJobDescription();
+            String jobDesc = job.getJobDescription();
             if (loc.equals( jobDesc )) { 
-              ( ( IWorkflowJob )o1 ).setJobDescription( "" );               //$NON-NLS-1$
+              job.setJobDescription( "" );               //$NON-NLS-1$
             }
-          }          
-        }
-        
+          }               
+          
+        }              
       } catch (CoreException exception ) {
         //Activator.logException( exception );
       }
