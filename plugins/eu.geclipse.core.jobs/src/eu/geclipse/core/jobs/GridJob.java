@@ -78,18 +78,20 @@ import eu.geclipse.jsdl.JSDLJobDescription;
  * Class representing submitted job.
  */
 public class GridJob extends ResourceGridContainer implements IGridJob {
-
-  final static private String FOLDER_PROPERTIES_QUALIFIER = "eu.geclipse.core.jobs.GridJob"; //$NON-NLS-1$
-  final static private String FOLDER_PROPERTY_JOBID_CLASS = "JobID.class"; //$NON-NLS-1$
   /**
    * Name for folder containing input files for job
    */
   public static final String FOLDERNAME_INPUT_FILES = Messages.getString( "GridJob.FolderInputFiles" ); //$NON-NLS-1$
+
   /**
    * Name for folder containing output files for job
    */
   public static final String FOLDERNAME_OUTPUT_FILES = Messages.getString( "GridJob.FolderOutputFiles" ); //$NON-NLS-1$
+  
   static String JOBFILE_EXTENSION = ".job"; //$NON-NLS-1$
+
+  final static private String FOLDER_PROPERTIES_QUALIFIER = "eu.geclipse.core.jobs.GridJob"; //$NON-NLS-1$
+  final static private String FOLDER_PROPERTY_JOBID_CLASS = "JobID.class"; //$NON-NLS-1$
   final static private String JOBID_FILENAME = ".jobID"; //$NON-NLS-1$
   final static private String JOBINFO_FILENAME = ".jobInfo"; //$NON-NLS-1$
   final static private String JOBINFO_JOBDESCRIPTION_XMLNODENAME = "JobDescriptionFileName"; //$NON-NLS-1$
@@ -98,6 +100,42 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
   final static private String JOBINFO_XMLNODENAME = "JobInfo"; //$NON-NLS-1$
   final static private String JOBSTATUS_FILENAME = ".jobStatus"; //$NON-NLS-1$
   final static private String XML_CHARSET = "ISO-8859-1"; //$NON-NLS-1$
+  private IGridJobDescription jobDescription = null;
+  private IFile jobDescriptionFile = null;
+  private GridJobID jobID = null;
+  private IFile jobIdFile = null;
+  private IFile jobInfoFile = null;
+  private String jobName;
+  private IGridJobService jobService; // don't use it directly! Use getJobService()
+  private GridJobStatus jobStatus = null;
+  private IFile jobStatusFile = null;
+  private Date submissionTime;
+  
+  /**
+   * @param jobFolder
+   */
+  public GridJob( final IFolder jobFolder ) {
+    super( jobFolder );
+    this.jobStatusFile = jobFolder.getFile( JOBSTATUS_FILENAME );
+    this.jobIdFile = jobFolder.getFile( JOBID_FILENAME );
+    this.jobInfoFile = jobFolder.getFile( JOBINFO_FILENAME );
+    this.jobName = getName();
+    readJobID();
+    setJobFolderProperties( jobFolder );
+    readJobInfo( jobFolder );
+    readChildren();    
+    if( this.jobDescriptionFile != null ) {
+      readJobDescription();
+      try {
+        addElement( this.jobDescription );
+      } catch( ProblemException e ) {
+        Activator.logException( e,
+                                Messages.getString( "GridJob.errLoadJobDescription" ) //$NON-NLS-1$
+                                    + jobFolder.getName() );
+      }
+    }
+  }
+  
   /**
    * Check if a job can be created from this folder. Currently it checks only if
    * directory contains job info file.
@@ -155,46 +193,6 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
                                              + jobFolder.getName() ) );
     }
     return jobIdClass;
-  }
-  private IGridJobDescription jobDescription = null;
-  private IFile jobDescriptionFile = null;
-  private GridJobID jobID = null;
-  private IFile jobIdFile = null;
-  private IFile jobInfoFile = null;
-  // getJobService() instead
-                                      // this.jobService!
-  private String jobName;
-                                      private IGridJobService jobService; // Don't use it directly. Always use
-
-  private GridJobStatus jobStatus = null;
-
-  private IFile jobStatusFile = null;
-
-  private Date submissionTime;
-
-  /**
-   * @param jobFolder
-   */
-  public GridJob( final IFolder jobFolder ) {
-    super( jobFolder );
-    this.jobStatusFile = jobFolder.getFile( JOBSTATUS_FILENAME );
-    this.jobIdFile = jobFolder.getFile( JOBID_FILENAME );
-    this.jobInfoFile = jobFolder.getFile( JOBINFO_FILENAME );
-    this.jobName = getName();
-    readJobID();
-    readJobInfo( jobFolder );    
-    readChildren();
-    setJobFolderProperties( jobFolder );
-    if( this.jobDescriptionFile != null ) {
-      readJobDescription();
-      try {
-        addElement( this.jobDescription );
-      } catch( ProblemException e ) {
-        Activator.logException( e,
-                                Messages.getString( "GridJob.errLoadJobDescription" ) //$NON-NLS-1$
-                                    + jobFolder.getName() );
-      }
-    }
   }
 
   private void addStagingFolder( final IFolder jobFolder,
