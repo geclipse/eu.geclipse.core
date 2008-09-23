@@ -68,7 +68,7 @@ public class GenerationContext implements IGenerationContext, IGeneratedJsdl {
     NodeList nodeList = this.xpath.getNodes( this.currentJsdl, xpathQuery );
     for( int index = 0; index < nodeList.getLength(); index++ ) {
       Node item = nodeList.item( index );
-      item.setNodeValue( value );
+      item.setTextContent( value );      
     }
     updateJsdlDescription( xpathQuery, value );
   }
