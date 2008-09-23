@@ -17,7 +17,6 @@
 package eu.geclipse.core.filesystem.internal.filesystem;
 
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
@@ -29,7 +28,6 @@ import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -103,6 +101,18 @@ public class ConnectionElement
   @Override
   public boolean canContain( final IGridElement element ) {
     return isFolder(); // && ( element instanceof IGridConnectionElement );
+  }
+  
+  @Override
+  public void dispose() {
+    try {
+      IFileStore fileStore = getConnectionFileStore();
+      FileStoreRegistry registry = FileStoreRegistry.getInstance();
+      registry.removeStore( fileStore );
+    } catch ( CoreException cExc ) {
+      Activator.logException( cExc );
+    }
+    super.dispose();
   }
   
   /* (non-Javadoc)
