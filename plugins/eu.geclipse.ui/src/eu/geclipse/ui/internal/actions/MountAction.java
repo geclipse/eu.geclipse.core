@@ -1,6 +1,7 @@
 package eu.geclipse.ui.internal.actions;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +20,7 @@ import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubMonitor;
+import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -31,6 +33,7 @@ import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridConnection;
 import eu.geclipse.core.model.IGridConnectionElement;
 import eu.geclipse.core.model.IGridContainer;
+import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridPreferences;
 import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.model.IMountable;
@@ -235,13 +238,21 @@ public class MountAction extends Action {
     try {
     
       sMonitor.subTask( "Preparing resources" );
-      GEclipseURI geclURI = new GEclipseURI( uri );
+      String projectName = path.segment( 0 );
+      String voName = null;
+      IGridElement[] children = GridModel.getRoot().getChildren( new SubProgressMonitor( monitor, 1 ) );
+      for( IGridElement child: children ) {
+        if( child.getName().equals( projectName ) && child instanceof IGridProject ) {
+          voName = ((IGridProject)child).getVO().getName();
+        }
+      }
+      URI newUri = processURI( voName, uri ); 
+      GEclipseURI geclURI = new GEclipseURI( newUri );
       boolean isDirectory = isDirectory( geclURI );
       sMonitor.worked( 4 );
       if ( sMonitor.isCanceled() ) {
         throw new OperationCanceledException();
       }
-      
       sMonitor.subTask( "Creating connection" );
       if ( isDirectory ) {
         IFolder folder = ResourcesPlugin.getWorkspace().getRoot().getFolder( path );
@@ -255,6 +266,31 @@ public class MountAction extends Action {
       sMonitor.done();
     }
     
+  }
+  
+  private static URI processURI( final String voName,
+                          final URI uri ) {
+    
+    URI result = uri;
+    if ( voName != null && uri != null ) {
+      //Default file store should not be processed
+      if( !uri.getScheme().equals( "file" ) ) {
+        try {
+          String schemeSpecificPart = uri.getSchemeSpecificPart();
+          if( schemeSpecificPart.contains( "?" ) ) {
+            schemeSpecificPart += "&vo=" + voName;
+          } else {
+            schemeSpecificPart += "?vo=" + voName;
+            
+          }
+          result = new URI( uri.getScheme(), schemeSpecificPart, uri.getFragment() );
+        } catch( URISyntaxException e ) {
+           //TODO Auto-generated catch block
+          Activator.logException( e );
+        }
+      }
+    }
+    return result;
   }
   
   private boolean checkExists( final IPath target ) {
