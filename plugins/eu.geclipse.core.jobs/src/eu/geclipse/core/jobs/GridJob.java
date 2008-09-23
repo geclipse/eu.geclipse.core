@@ -781,30 +781,16 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
                                     final IFolder jobFolder )
     throws ProblemException
   {
-    IFile sourceDescriptionFile = null;
-    if( description.getResource() instanceof IFolder ) {
-      IFolder sourceDescriptionFolder = ( IFolder )description.getResource();
-      sourceDescriptionFile = sourceDescriptionFolder.getFile( sourceDescriptionFolder.getName() );
-    } else {
-      sourceDescriptionFile = ( IFile )description.getResource();
-    }
-    // create job description file
-    this.jobDescriptionFile = jobFolder.getFile( sourceDescriptionFile.getName() );
+    IResource jsdlResource = description.getResource();
+    this.jobDescriptionFile = jobFolder.getFile( jsdlResource.getName() );
     try {
-      InputStream is = sourceDescriptionFile.getContents( true );
-      this.jobDescriptionFile.create( is, true, null );
-      is.close();
-    } catch( CoreException cExc ) {
+      jsdlResource.copy( this.jobDescriptionFile.getFullPath(), true, null );
+    } catch( CoreException exception ) {
       throw new ProblemException( ICoreProblems.MODEL_ELEMENT_CREATE_FAILED,
                                   "Problem while creating job description file", //$NON-NLS-1$
-                                  cExc,
+                                  exception,
                                   Activator.PLUGIN_ID );
-    } catch( IOException ioExc ) {
-      throw new ProblemException( ICoreProblems.MODEL_ELEMENT_CREATE_FAILED,
-                                  "Problem while creating job description file", //$NON-NLS-1$
-                                  ioExc,
-                                  Activator.PLUGIN_ID );
-    }
+    }    
   }
   
   /**
