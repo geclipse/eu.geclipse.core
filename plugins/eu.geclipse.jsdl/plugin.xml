@@ -25,6 +25,26 @@
             description="Cannot create XPath query"
             id="eu.geclipse.jsdl.problem.createXPathQueryFailed">
       </problem>
+      <problem
+            description="Sweep extension in JSDL has wrong syntax"
+            id="eu.geclipse.jsdl.problem.sweepExtensionSyntaxError">
+      </problem>
+      <problem
+            description="Cannot save generated JSDL"
+            id="eu.geclipse.jsdl.problem.saveGeneratedJsdlFailed">
+      </problem>
+      <problem
+            description="Cannot delete existing forlder"
+            id="eu.geclipse.jsdl.problem.deleteExistingFolderFailed">
+      </problem>
+      <problem
+            description="Cannot create folder"
+            id="eu.geclipse.jsdl.problem.createFolderFailed">
+      </problem>
+      <problem
+            description="Cannot query nodes in XML document"
+            id="eu.geclipse.jsdl.problem.getXpathNodesFailed">
+      </problem>
    </extension>
 
 </plugin>

@@ -40,10 +40,12 @@ public class GenerationContext implements IGenerationContext, IGeneratedJsdl {
   private XPathDocument xpath;
 
   /**
+   * @param parametricJsdl 
    * @param baseJsdl JSDL in which we will change parameter values
    * @param handler
+   * @param xpathDocument 
    */
-  public GenerationContext( final JSDLJobDescription parametricJsdl, final Document baseJsdl, final IParametricJsdlHandler handler, final XPathDocument xpathDocument ) {        
+  GenerationContext( final JSDLJobDescription parametricJsdl, final Document baseJsdl, final IParametricJsdlHandler handler, final XPathDocument xpathDocument ) {        
     this.handler = handler;
     this.currentJsdl = baseJsdl;
     this.parametricJsdl = parametricJsdl;
@@ -59,25 +61,20 @@ public class GenerationContext implements IGenerationContext, IGeneratedJsdl {
   /* (non-Javadoc)
    * @see eu.geclipse.jsdl.parametric.IGenerationContext#setValue(java.lang.String, javax.xml.xpath.XPathExpression, java.lang.String, org.eclipse.core.runtime.SubMonitor)
    */
-  public void setValue( final String paramName, final String xpathQuery, final String value, final SubMonitor subMonitor ) throws ProblemException {
-      NodeList nodeList = this.xpath.getNodes( this.currentJsdl, xpathQuery );
-
-      for( int index = 0; index < nodeList.getLength(); index++ ) {
-        Node item = nodeList.item( index );
-
-        // TODO mariusz check if substituted node is text node
-        item.setTextContent( value );
-      }
-      
-      updateJsdlDescription( paramName, value );
-      
-      // TODO mariusz check if paramName.toString() return correct xPath query
-      this.handler.paramSubstituted( paramName, value, subMonitor );    
-    
+  public void setValue( final String xpathQuery,
+                        final String value,
+                        final SubMonitor subMonitor ) throws ProblemException
+  {
+    NodeList nodeList = this.xpath.getNodes( this.currentJsdl, xpathQuery );
+    for( int index = 0; index < nodeList.getLength(); index++ ) {
+      Node item = nodeList.item( index );
+      item.setNodeValue( value );
+    }
+    updateJsdlDescription( xpathQuery, value );
   }
 
   public void storeGeneratedJsdl( final List<Integer> iterationsStack, final SubMonitor subMonitor ) throws ProblemException {
-    currentJsdlName = createIterationName( iterationsStack );
+    this.currentJsdlName = createIterationName( iterationsStack );
     this.handler.newJsdlGenerated( this, subMonitor );
   }
   
@@ -90,11 +87,11 @@ public class GenerationContext implements IGenerationContext, IGeneratedJsdl {
   }
  
   private void updateJsdlDescription( final String paramName, final String value ) throws ProblemException {
-    NodeList nodes = this.xpath.getNodes( this.currentJsdl.getDocumentElement(), "jsdl:JobDescription/jsdl:JobIdentification/jsdl:Description" );
+    NodeList nodes = this.xpath.getNodes( this.currentJsdl.getDocumentElement(), "jsdl:JobDescription/jsdl:JobIdentification/jsdl:Description" ); //$NON-NLS-1$
     Element description = null;
     if( nodes == null 
         || nodes.getLength() == 0 ) {
-      description = createXmlElement( this.currentJsdl.getDocumentElement(), "jsdl:JobDescription/jsdl:JobIdentification/jsdl:Description" );
+      description = createXmlElement( this.currentJsdl.getDocumentElement(), "jsdl:JobDescription/jsdl:JobIdentification/jsdl:Description" ); //$NON-NLS-1$
     } else {
       description = ( Element )nodes.item( 0 );
     }
@@ -105,32 +102,6 @@ public class GenerationContext implements IGenerationContext, IGeneratedJsdl {
     int begin = paramName.lastIndexOf( "/" ) + 1; //$NON-NLS-1$
     String newEntry = String.format( "%s=%s", paramName.substring( begin ), value ); //$NON-NLS-1$
     return currentDescription == null || currentDescription.length() == 0 ? newEntry : currentDescription + "\n" + newEntry; //$NON-NLS-1$
-  }
-
-  /**
-   * Get element with given name, which is direct child of parent. If element doesn't exists, then create new one.
-   * @param parent
-   * @param childName
-   * @return
-   */
-  private Element getElement( final Element parent, final String childName ) {
-    Element element = null;    
-    NodeList nodes = parent.getChildNodes();
-    
-    for( int index = 0; index < nodes.getLength(); index++ ) {
-      Node child = nodes.item( index );
-      
-      if( child.getNodeName().equals( childName ) ) {
-        element = ( Element )child;
-      }
-    }
-    
-    if( element == null ) {
-      element = this.currentJsdl.createElement( childName );
-      parent.appendChild( element );
-    }
-    
-    return element;
   }
 
   public Document getDocument() {
@@ -146,12 +117,10 @@ public class GenerationContext implements IGenerationContext, IGeneratedJsdl {
   }
   
   private Element createXmlElement( final Element parent, final String pathString ) throws ProblemException {
-    Element element = parent;
-
-    String namespaceURI = parent.getNamespaceURI();    
+    Element element = parent;    
     
-    for( String currentNodeName : pathString.split( "/" ) ) {
-      NodeList nodes = this.xpath.getNodes( element, "./" + currentNodeName );
+    for( String currentNodeName : pathString.split( "/" ) ) { //$NON-NLS-1$
+      NodeList nodes = this.xpath.getNodes( element, "./" + currentNodeName ); //$NON-NLS-1$
       if( nodes == null 
           || nodes.getLength() == 0 ) {
         int namespaceIndex = currentNodeName.indexOf( ":" ); //$NON-NLS-1$
@@ -159,7 +128,7 @@ public class GenerationContext implements IGenerationContext, IGeneratedJsdl {
             && namespaceIndex + 1 < currentNodeName.length() ) {
           currentNodeName = currentNodeName.substring( namespaceIndex + 1 );
         }
-        Element newElement = this.currentJsdl.createElementNS( "http://schemas.ggf.org/jsdl/2005/11/jsdl", currentNodeName );
+        Element newElement = this.currentJsdl.createElementNS( "http://schemas.ggf.org/jsdl/2005/11/jsdl", currentNodeName ); //$NON-NLS-1$
         element.appendChild( newElement );
         element = newElement;
       } else {

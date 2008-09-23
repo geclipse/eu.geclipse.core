@@ -39,12 +39,11 @@ public class CounterGenerationContext implements IGenerationContext {
    * javax.xml.xpath.XPathExpression, java.lang.String,
    * org.eclipse.core.runtime.SubMonitor)
    */
-  public void setValue( final String paramName,
-                        final String xpathQuery,
+  public void setValue( final String xpathQuery,
                         final String value,
                         final SubMonitor subMonitor ) throws ProblemException
   {
-    this.parameters.add( paramName );
+    this.parameters.add( xpathQuery );
   }
 
   /*
@@ -72,7 +71,7 @@ public class CounterGenerationContext implements IGenerationContext {
     return this.iterations;
   }
   
-  public List<String> getParameters() {
+  List<String> getParameters() {
     List<String> list = new ArrayList<String>( this.parameters.size() );
     list.addAll( this.parameters );
     return list;

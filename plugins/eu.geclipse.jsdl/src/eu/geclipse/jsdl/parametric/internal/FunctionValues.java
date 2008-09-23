@@ -12,13 +12,6 @@ class FunctionValues implements IFunction {
     super();
     this.values = values;
   }
-  
-  /* (non-Javadoc)
-   * @see eu.geclipse.jsdl.parametric.internal.IFunction#getIterations()
-   */
-  public int getIterations() {
-    return this.values.getLength();
-  }
 
   public Iterator<String> iterator() {
     return new ValuesIterator();

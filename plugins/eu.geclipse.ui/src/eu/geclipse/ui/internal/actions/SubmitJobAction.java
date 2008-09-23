@@ -31,6 +31,7 @@ import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridJobDescription;
 import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.reporting.ProblemException;
+import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.wizards.jobsubmission.JobCreatorSelectionWizard;
 
 /**
@@ -137,8 +138,7 @@ public class SubmitJobAction extends SelectionListenerAction {
           }
         }
       } catch( ProblemException exception ) {
-        // TODO mariusz Auto-generated catch block
-        exception.printStackTrace();
+        Activator.logException( exception );
       }
     }
     return descriptions;

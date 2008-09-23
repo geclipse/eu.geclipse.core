@@ -15,15 +15,14 @@ interface IGenerationContext {
 
   /**
    * Substitute text of nodes described by paramName with new value
-   * @param paramName String representation of XPath query
-   * @param paramXPath XPath expression, which selects XML nodes, which
-   *          text Value should be substituted
+   * @param xpathQuery query selecting XML nodes, to which new value should be set
    * @param value new value for parameter
    * @param subMonitor
+   * @param paramXPath XPath expression, which selects XML nodes, which
+   *          text Value should be substituted
    * @throws ProblemException
    */
-  public abstract void setValue( final String paramName,
-                                 final String xpathQuery,
+  public abstract void setValue( final String xpathQuery,
                                  final String value,
                                  final SubMonitor subMonitor )
     throws ProblemException;

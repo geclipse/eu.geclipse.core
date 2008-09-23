@@ -306,8 +306,6 @@ public class JobCreatorSelectionWizard extends Wizard {
                                                      this.destinationFolder );
           IGridJobID jobId = null;
           
-          // TODO mariusz check if middleware may handle parametric jobs itself
-          
           if( isParametric( description ) ) {      
             ParametricJobService paramService = new ParametricJobService( this.service );
             paramService.submitJob( description, betterMonitor.newChild( 1 ), parent, namesIterator.next() );

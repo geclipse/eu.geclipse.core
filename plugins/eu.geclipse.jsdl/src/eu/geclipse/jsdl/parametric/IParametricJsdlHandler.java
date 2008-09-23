@@ -36,7 +36,7 @@ public interface IParametricJsdlHandler {
    * 
    * @param generatedJsdls number of JSDLs, which will be generated (number of
    *          iterations)
-   * @param paramNames TODO mariusz
+   * @param paramNames list of XPath queries selecting nodes, which values will be replaced during generation
    * @throws ProblemException
    */
   void generationStarted( int generatedJsdls, List<String> paramNames ) throws ProblemException;
@@ -47,19 +47,6 @@ public interface IParametricJsdlHandler {
    * @throws ProblemException
    */
   void generationFinished() throws ProblemException;
-
-  /**
-   * Called, when parameter value was changed in currently generating JSDL
-   * 
-   * @param paramName XPath query selecting nodes, which values are substituted
-   *          in JSDL
-   * @param newValue value set for node selected by XPath
-   * @param monitor progress monitor
-   * @throws ProblemException
-   */
-  void paramSubstituted( String paramName,
-                         String newValue,
-                         IProgressMonitor monitor ) throws ProblemException;
 
   /**
    * Called, when all parameters were substituted and new generated jsdl is

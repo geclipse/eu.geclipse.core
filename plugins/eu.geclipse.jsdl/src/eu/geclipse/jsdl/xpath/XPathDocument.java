@@ -16,7 +16,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import eu.geclipse.core.ICoreProblems;
 import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.jsdl.internal.Activator;
 
@@ -35,7 +34,7 @@ public class XPathDocument {
   public XPathDocument( final Document document ) {
     super();
     this.document = document;
-    expressionsMap = new HashMap<String,XPathExpression>();
+    this.expressionsMap = new HashMap<String,XPathExpression>();
   }
 
   /**
@@ -50,9 +49,7 @@ public class XPathDocument {
       NodeList nodes = ( NodeList )getExpression( xpathQuery ).evaluate( parentNode, XPathConstants.NODESET );
       return nodes;
     } catch( XPathExpressionException exception ) {
-      // TODO mariusz throw better exception
-      exception.printStackTrace();
-      throw new ProblemException( ICoreProblems.IO_UNSPECIFIED_PROBLEM, exception, Activator.PLUGIN_ID );
+      throw new ProblemException( "eu.geclipse.jsdl.problem.getXpathNodesFailed", exception, Activator.PLUGIN_ID ); //$NON-NLS-1$
     }
   }
   
@@ -77,9 +74,7 @@ public class XPathDocument {
     try {
       return getExpression( xpathQuery ).evaluate( parentNode );
     } catch( XPathExpressionException exception ) {
-      // TODO mariusz throw better exception
-      exception.printStackTrace();
-      throw new ProblemException( ICoreProblems.IO_UNSPECIFIED_PROBLEM, exception, Activator.PLUGIN_ID );
+      throw new ProblemException( "eu.geclipse.jsdl.problem.getXpathNodesFailed", exception, Activator.PLUGIN_ID ); //$NON-NLS-1$
     }
     
   }

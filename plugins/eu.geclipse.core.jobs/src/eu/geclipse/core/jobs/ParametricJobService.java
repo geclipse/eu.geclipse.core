@@ -53,6 +53,9 @@ import eu.geclipse.jsdl.parametric.ParametricJsdlGeneratorFactory;
 import eu.geclipse.jsdl.parametric.ParametricJsdlSaver;
 
 
+/**
+ * Job service, which handles parametric jobs. Can: submit parametric JSDL, update param job status, delete job
+ */
 public class ParametricJobService implements IGridJobService {
   private IGridJobService jobService;   // this service is valid only for job submission and may be null. Other methods delegates call to children of parametric job
   private GridJob job; // parametric job, to which children all calls will be delegated 
@@ -222,8 +225,7 @@ public class ParametricJobService implements IGridJobService {
 
   private IGridJobID resumeSubmission( final JSDLJobDescription jsdl, final SubMonitor monitor ) throws ProblemException {    
     GridJob parentJob = findParentParamJob( jsdl );
-    Assert.isNotNull( parentJob );
-    IFolder targetFolder = ( IFolder )parentJob.getResource();
+    Assert.isNotNull( parentJob );    
     List<JSDLJobDescription> jsdlList = new ArrayList<JSDLJobDescription>( 1 );
     jsdlList.add( jsdl );
     submitGeneratedJsdl( parentJob, jsdlList, monitor, parentJob.getJobName() );
@@ -295,8 +297,7 @@ public class ParametricJobService implements IGridJobService {
       try {
         jobDescription.getResource().delete( true, monitor.newChild( 0 ) );
       } catch( CoreException exception ) {
-        // TODO mariusz Auto-generated catch block
-        exception.printStackTrace();
+        throw new ProblemException( "eu.geclipse.core.jobs.problem.deleteGeneratedJsdlFailed", exception, Activator.PLUGIN_ID ); //$NON-NLS-1$
       }      
     }
     
@@ -421,8 +422,8 @@ public class ParametricJobService implements IGridJobService {
                                final IProgressMonitor monitor )
     throws ProblemException
   {
-    // TODO mariusz operation not supported - add exception
-    return null;
+    String msg = "ParametricJobService can submit only parametric JSDLs"; //$NON-NLS-1$
+    throw new ProblemException( "eu.geclipse.core.jobs.problem.unsupportedOperation", msg, Activator.PLUGIN_ID ); //$NON-NLS-1$
   }
 
   public IGridJobID submitJob( final IGridJobDescription description,
@@ -430,8 +431,8 @@ public class ParametricJobService implements IGridJobService {
                                final IProgressMonitor monitor )
     throws ProblemException
   {
-    // TODO mariusz operation not supported - add exception
-    return null;
+    String msg = "ParametricJobService can submit only parametric JSDLs"; //$NON-NLS-1$
+    throw new ProblemException( "eu.geclipse.core.jobs.problem.unsupportedOperation", msg, Activator.PLUGIN_ID ); //$NON-NLS-1$
   }
 
   public Map<String, URI> getInputFiles( final IGridJobID jobId,
@@ -439,7 +440,6 @@ public class ParametricJobService implements IGridJobService {
                                          final IVirtualOrganization vo )
     throws ProblemException
   {
-    // TODO mariusz Auto-generated method stub
     return null;
   }
 
@@ -448,7 +448,6 @@ public class ParametricJobService implements IGridJobService {
                                           final IVirtualOrganization vo )
     throws ProblemException
   {
-    // TODO mariusz Auto-generated method stub
     return null;
   }
   

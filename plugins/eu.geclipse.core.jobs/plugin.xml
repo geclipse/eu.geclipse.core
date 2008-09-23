@@ -49,6 +49,14 @@
             description="Cannot obtain list of input/output stagers"
             id="eu.geclipse.core.jobs.problem.getStagersFailed">
       </problem>
+      <problem
+            description="Cannot delete jsdl from Job Description Queue"
+            id="eu.geclipse.core.jobs.problem.deleteGeneratedJsdlFailed">
+      </problem>
+      <problem
+            description="Unsupported operation"
+            id="eu.geclipse.core.jobs.problem.unsupportedOperation">
+      </problem>
    </extension>
 
 </plugin>

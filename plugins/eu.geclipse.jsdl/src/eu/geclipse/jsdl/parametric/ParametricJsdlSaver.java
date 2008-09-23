@@ -68,19 +68,12 @@ public class ParametricJsdlSaver implements IParametricJsdlHandler {
    * @see eu.geclipse.jsdl.parametric.IParametricJsdlHandler#newJsdlGenerated(org.w3c.dom.Document, java.util.List)
    */
   public void newJsdlGenerated( final IGeneratedJsdl generatedJsdl,
-                                final IProgressMonitor monitor )
+                                final IProgressMonitor monitor ) throws ProblemException
   {
     saveJsdl( generatedJsdl );
   }
-
-  /* (non-Javadoc)
-   * @see eu.geclipse.jsdl.parametric.IParametricJsdlHandler#paramSubstituted(java.lang.String, java.lang.String)
-   */
-  public void paramSubstituted( final String paramName, final String newValue, final IProgressMonitor newParam ) {
-    // TODO mariusz Auto-generated method stub
-  }
   
-  private void saveJsdl( final IGeneratedJsdl generatedJsdl )
+  private void saveJsdl( final IGeneratedJsdl generatedJsdl ) throws ProblemException
   {
     try {   
       
@@ -104,18 +97,14 @@ public class ParametricJsdlSaver implements IParametricJsdlHandler {
         this.generatedJsdlList.add( (JSDLJobDescription)gridElement );
       }
     } catch ( TransformerException exception ) {
-      // TODO mariusz Auto-generated catch block
-      Activator.logException( exception );
+      throw new ProblemException( "eu.geclipse.jsdl.problem.saveGeneratedJsdlFailed", exception, Activator.PLUGIN_ID ); //$NON-NLS-1$
     }
     catch ( FileNotFoundException exception ) {
-      // TODO mariusz Auto-generated catch block
-      Activator.logException( exception );
+      throw new ProblemException( "eu.geclipse.jsdl.problem.saveGeneratedJsdlFailed", exception, Activator.PLUGIN_ID ); //$NON-NLS-1$
     } catch ( IOException exception ) {
-      // TODO mariusz Auto-generated catch block
-      Activator.logException( exception );
+      throw new ProblemException( "eu.geclipse.jsdl.problem.saveGeneratedJsdlFailed", exception, Activator.PLUGIN_ID ); //$NON-NLS-1$
     } catch ( CoreException exception ) {
-      // TODO mariusz Auto-generated catch block
-      Activator.logException( exception );
+      throw new ProblemException( "eu.geclipse.jsdl.problem.saveGeneratedJsdlFailed", exception, Activator.PLUGIN_ID ); //$NON-NLS-1$
     }
   }
 
@@ -124,8 +113,7 @@ public class ParametricJsdlSaver implements IParametricJsdlHandler {
   }
 
   public void generationFinished() throws ProblemException {
-    // TODO mariusz Auto-generated method stub
-    
+    // empty implementation
   }
 
   public void generationStarted( final int generatedJsdl, final List<String> paramNames ) throws ProblemException {
@@ -135,20 +123,19 @@ public class ParametricJsdlSaver implements IParametricJsdlHandler {
     createTargetFolder();      
   }
   
-  private void deleteTargetFolder() {
+  private void deleteTargetFolder() throws ProblemException {
     if ( this.targetFolder.exists() ) {
-      // TODO mariusz add progress monitor
       try {
         this.targetFolder.delete( true, null );
       } catch ( CoreException exception ) {
-        // TODO mariusz Auto-generated catch block
-        Activator.logException( exception );
+        String msg = String.format( Messages.ParametricJsdlSaver_deleteExistingFolderFailed, this.targetFolder.getLocation().toString() );
+        throw new ProblemException( "eu.geclipse.jsdl.problem.deleteExistingFolderFailed", msg, exception, Activator.PLUGIN_ID ); //$NON-NLS-1$
       }
     }
     
   }
 
-  private void createTargetFolder() {
+  private void createTargetFolder() throws ProblemException {
     List<IFolder> parentList = new ArrayList<IFolder>();
     IContainer container = this.targetFolder;
         
@@ -166,8 +153,8 @@ public class ParametricJsdlSaver implements IParametricJsdlHandler {
         try {
           folder.create( true, true, null );
         } catch ( CoreException exception ) {
-          // TODO mariusz Auto-generated catch block
-          Activator.logException( exception );
+          String msg = String.format( Messages.ParametricJsdlSaver_createFolderFailed, folder.getLocation().toString() );
+          throw new ProblemException( "eu.geclipse.jsdl.problem.createFolderFailed", msg, exception, Activator.PLUGIN_ID ); //$NON-NLS-1$
         }
       }      
     }

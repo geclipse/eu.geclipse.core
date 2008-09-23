@@ -15,17 +15,9 @@
  *****************************************************************************/
 package eu.geclipse.jsdl.parametric.internal;
 
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-import javax.xml.XMLConstants;
-import javax.xml.namespace.NamespaceContext;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -50,13 +42,15 @@ public class ParametricJsdlGenerator implements IParametricJsdlGenerator {
   private XPathDocument xpath;
   private JSDLJobDescription parametricJsdl;
 
+  /**
+   * @param parametricJsdl
+   */
   public ParametricJsdlGenerator( final JSDLJobDescription parametricJsdl ) {
     this.parametricJsdl = parametricJsdl;
     this.xpath = new XPathDocument( parametricJsdl.getXml() );
   }
 
   private void processSweeps( final NodeList sweeps, final IGenerationContext generationContext, final List<Integer> iterationsStack, final SubMonitor monitor ) throws ProblemException {    
-
     iterationsStack.add( new Integer( 0 ) );
     
     for( int index = 0; index < sweeps.getLength(); index++ ) {
@@ -66,16 +60,14 @@ public class ParametricJsdlGenerator implements IParametricJsdlGenerator {
       if( sweepItem instanceof Element ) {
         Element currentSweep = ( Element )sweepItem;
         
-        processAssignments( this.xpath.getNodes( currentSweep, "./sweep:Assignment" ), assignmentList );
-        NodeList childSweeps = this.xpath.getNodes( currentSweep, "./sweep:Sweep" );
-        
-        // TODO mariusz Throw exception when maxIterations is 0 (not values defined)        
+        processAssignments( this.xpath.getNodes( currentSweep, "./sweep:Assignment" ), assignmentList, monitor ); //$NON-NLS-1$
+        NodeList childSweeps = this.xpath.getNodes( currentSweep, "./sweep:Sweep" ); //$NON-NLS-1$
         List<Iterator<String>> iterators = getIterators( assignmentList );
         
         while( hasNext( iterators ) ) {
           testCancelled( monitor );
-          IGenerationContext newContext = generationContext.clone();
           // we will modify copy of jsdl
+          IGenerationContext newContext = generationContext.clone();
           setParamsValue( assignmentList, iterators, newContext, monitor );   
           
           if( childSweeps.getLength() > 0 ) {
@@ -87,7 +79,10 @@ public class ParametricJsdlGenerator implements IParametricJsdlGenerator {
           
           increaseCurrentIteration( iterationsStack );
         }        
-      } // TODO mariusz throw exc: expected sweep with children
+      } else {
+        String msg = String.format( Messages.ParametricJsdlGenerator_errSweepShouldBeElement );
+        throw new ProblemException( "eu.geclipse.jsdl.problem.sweepExtensionSyntaxError", msg, Activator.PLUGIN_ID ); //$NON-NLS-1$
+      }
     }
     
     iterationsStack.remove( iterationsStack.size() - 1 );
@@ -137,20 +132,25 @@ public class ParametricJsdlGenerator implements IParametricJsdlGenerator {
   }
 
   private void processAssignments( final NodeList assignmentsList,
-                                   final List<Assignment> assignmentList ) throws ProblemException
+                                   final List<Assignment> assignmentList, final SubMonitor monitor ) throws ProblemException
   {
     for( int index = 0; index < assignmentsList.getLength(); index++ ) {
+      testCancelled( monitor );
       Node item = assignmentsList.item( index );
       
       if( item instanceof Element ) {
         Element assignment = ( Element )item;
         
-        NodeList parameters = this.xpath.getNodes( assignment, "./sweep:Parameter" );
-        NodeList values = this.xpath.getNodes( assignment, "./sweepfunc:Values/sweepfunc:Value" );
-        NodeList loops = this.xpath.getNodes( assignment, "./sweepfunc:Loop" );
-        
-        // TODO mariusz check: values and loops cannot be defined both
-        
+        NodeList parameters = this.xpath.getNodes( assignment, "./sweep:Parameter" ); //$NON-NLS-1$
+        NodeList values = this.xpath.getNodes( assignment, "./sweepfunc:Values/sweepfunc:Value" ); //$NON-NLS-1$
+        NodeList loops = this.xpath.getNodes( assignment, "./sweepfunc:Loop" ); //$NON-NLS-1$
+
+        if( values.getLength() > 0
+            && loops.getLength() > 0 ) {
+          String msg = Messages.ParametricJsdlGenerator_errTwoFunctionsDefined;
+          throw new ProblemException( "eu.geclipse.jsdl.problem.sweepExtensionSyntaxError", msg, Activator.PLUGIN_ID );  //$NON-NLS-1$
+        }
+
         IFunction function = null;
         
         if( values.getLength() > 0 ) {
@@ -161,8 +161,16 @@ public class ParametricJsdlGenerator implements IParametricJsdlGenerator {
         
         assignmentList.add( new Assignment( this.xpath, parameters, function ) );
                 
-      } // TODO mariusz throw exception: children expected
-    }    
+      }else {
+        String msg = Messages.ParametricJsdlGenerator_errAssignmentShouldBeElement;
+        throw new ProblemException( "eu.geclipse.jsdl.problem.sweepExtensionSyntaxError", msg, Activator.PLUGIN_ID ); //$NON-NLS-1$
+      }
+    }
+    
+    if( assignmentList.isEmpty() ) {      
+      String msg = Messages.ParametricJsdlGenerator_errSweepShouldContainAssignment;
+      throw new ProblemException( "eu.geclipse.jsdl.problem.sweepExtensionSyntaxError", msg, Activator.PLUGIN_ID );       //$NON-NLS-1$
+    }
   }
 
   private Document removeSweepNodes( final Document parametricJsdlDocument ) {
@@ -174,82 +182,27 @@ public class ParametricJsdlGenerator implements IParametricJsdlGenerator {
     }
     return changedDocument;
   }
-
-  // TODO mariusz remove that method:
-  private void printXml( final Document document ) {
-    try {
-    document.normalizeDocument();    
-    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-    Transformer transformer = TransformerFactory.newInstance().newTransformer();
-    transformer.transform( new DOMSource( document ), new StreamResult( outputStream ) );
-    System.out.println( outputStream.toString() );
-    } catch ( Exception e) {
-      Activator.logException( e );
-    }
-    
-  }
   
-  private NamespaceContext getNamespaceContext() {
-    
-    return new NamespaceContext() {
-// TODO mariusz parse source jsdl document add here all prefixes and namespaces (user may use these prefixes)
-
-      public String getNamespaceURI( final String prefix ) {
-        String namespace = XMLConstants.NULL_NS_URI;
-        if ("jsdl".equals(prefix)) {  //$NON-NLS-1$
-          namespace = "http://schemas.ggf.org/jsdl/2005/11/jsdl"; //$NON-NLS-1$
-        }
-        else if( "jsdl-posix".equals( prefix ) ) { //$NON-NLS-1$
-          namespace = "http://schemas.ggf.org/jsdl/2005/11/jsdl-posix"; //$NON-NLS-1$
-        }
-        else if( "sweep".equals( prefix ) ) {  //$NON-NLS-1$
-          namespace = "http://schemas.ogf.org/jsdl/2007/01/jsdl-sweep" ; //$NON-NLS-1$
-        }
-        else if( "sweepfunc".equals( prefix ) ) { //$NON-NLS-1$
-          namespace = "http://schemas.ogf.org/jsdl/2007/01/jsdl-sweep/functions" ; //$NON-NLS-1$
-        }
-        else if ("xml".equals(prefix)) { //$NON-NLS-1$
-          namespace = XMLConstants.XML_NS_URI;
-        }        
-        return namespace;
-      }
-
-      public String getPrefix( final String namespaceURI ) {
-        throw new UnsupportedOperationException();
-      }
-
-      @SuppressWarnings("unchecked")
-      public Iterator getPrefixes( final String namespaceURI ) {
-        throw new UnsupportedOperationException();
-      }};
-  }
-
   public void generate( final IParametricJsdlHandler handler,
-                        final IProgressMonitor monitor )
+                        final IProgressMonitor monitor ) throws ProblemException
   {
-    // TODO mariusz handle progress monitor
     SubMonitor subMonitor = SubMonitor.convert( monitor );
     
-    try {
-      Document parametricXml = this.parametricJsdl.getXml();
-      Document baseJsdl = removeSweepNodes( parametricXml );
-      IGenerationContext generationContext = new GenerationContext( this.parametricJsdl, baseJsdl, handler, this.xpath );
+    Document parametricXml = this.parametricJsdl.getXml();
+    Document baseJsdl = removeSweepNodes( parametricXml );
+    IGenerationContext generationContext = new GenerationContext( this.parametricJsdl, baseJsdl, handler, this.xpath );
 
-      NodeList sweeps = this.xpath.getNodes( parametricXml.getDocumentElement(), "./sweep:Sweep" );
-      
-      // first generation only for validation and gathering information
-      CounterGenerationContext counter = new CounterGenerationContext();      
-      processSweeps( sweeps, counter, new ArrayList<Integer>(), subMonitor.newChild( 0 ) );    
-      handler.generationStarted( counter.getIterations(), counter.getParameters() );
-      
-      subMonitor.subTask( "Generating JSDLs" );
-      subMonitor.setWorkRemaining( counter.getIterations() );
-      processSweeps( sweeps, generationContext, new ArrayList<Integer>(), subMonitor );
-      handler.generationFinished();
-    } catch ( ProblemException exc ) {
-      // TODO mariusz 
-      Activator.logException( exc );
-    }    
+    NodeList sweeps = this.xpath.getNodes( parametricXml.getDocumentElement(), "./sweep:Sweep" ); //$NON-NLS-1$
+    
+    // first generation only for validation and gathering information
+    CounterGenerationContext counter = new CounterGenerationContext();      
+    processSweeps( sweeps, counter, new ArrayList<Integer>(), subMonitor.newChild( 0 ) );    
+    handler.generationStarted( counter.getIterations(), counter.getParameters() );
+    
+    subMonitor.subTask( Messages.ParametricJsdlGenerator_taskGeneratingJsdl );
+    subMonitor.setWorkRemaining( counter.getIterations() );
+    processSweeps( sweeps, generationContext, new ArrayList<Integer>(), subMonitor );
+    handler.generationFinished();
   }
 
   private void testCancelled( final IProgressMonitor monitor ) {

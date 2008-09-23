@@ -38,6 +38,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Hyperlink;
 import org.eclipse.ui.forms.widgets.TableWrapData;
 
+import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.jsdl.JSDLJobDescription;
 import eu.geclipse.jsdl.model.base.JobDefinitionType;
 import eu.geclipse.jsdl.model.sweep.AssignmentType;
@@ -48,6 +49,7 @@ import eu.geclipse.jsdl.ui.adapters.jsdl.ParametricJobAdapter;
 import eu.geclipse.jsdl.ui.internal.EditorParametricJsdlHandler;
 import eu.geclipse.jsdl.ui.internal.pages.FormSectionFactory;
 import eu.geclipse.jsdl.ui.providers.parameters.IterationsLProvider;
+import eu.geclipse.ui.dialogs.ProblemDialog;
 
 /**
  * Section of "Parameters" page in JSDL multi-page editor. This section displays
@@ -124,8 +126,19 @@ public class SweepIterationsSection extends JsdlFormPageSection {
       @Override
       protected IStatus run( final IProgressMonitor monitor ) {
         IParametricJsdlGenerator generator = ParametricJsdlGeneratorFactory.getGenerator( jsdl );
-        generator.generate( handler,
-                            monitor );
+        try {
+          generator.generate( handler,
+                              monitor );
+        } catch( ProblemException exception ) {
+          final ProblemException pexc = exception;
+          final Shell fShell = shell; 
+          fShell.getDisplay().asyncExec( new Runnable() {
+
+            public void run() {
+              ProblemDialog.openProblem( fShell, "JSDLs preview", "Generation JSDLs for preview failed", pexc );
+            }} );
+
+        }
         return Status.OK_STATUS;
       }
     };
@@ -134,7 +147,7 @@ public class SweepIterationsSection extends JsdlFormPageSection {
   }
 
   private void renewTableViewer(final EditorParametricJsdlHandler handler) {
-    List<Integer> widths = Collections.EMPTY_LIST;
+    List<Integer> widths = Collections.emptyList();
     
     if( this.viewer != null ) {      
       TableColumn[] columns = this.viewer.getTable().getColumns();

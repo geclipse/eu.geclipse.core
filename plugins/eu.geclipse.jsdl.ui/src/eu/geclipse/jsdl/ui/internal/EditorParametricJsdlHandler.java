@@ -27,21 +27,28 @@ import eu.geclipse.jsdl.parametric.IGeneratedJsdl;
 import eu.geclipse.jsdl.parametric.IParametricJsdlHandler;
 import eu.geclipse.jsdl.ui.internal.pages.sections.SweepIterationsSection;
 
+/**
+ *
+ */
 public class EditorParametricJsdlHandler implements IParametricJsdlHandler, IStructuredContentProvider {
-  private List<List<String>> content = Collections.EMPTY_LIST;
+  private List<List<String>> content = Collections.emptyList();
   private SweepIterationsSection section;
 
+  /**
+   * @param section
+   */
   public EditorParametricJsdlHandler( final SweepIterationsSection section ) {
     this.section = section;    
   }
 
   public void generationFinished() throws ProblemException {
+    // empty implementation
   }
 
   public void generationStarted( final int generatedJsdls, final List<String> paramNames )
     throws ProblemException
   {
-    content = new ArrayList<List<String>>( generatedJsdls );
+    this.content = new ArrayList<List<String>>( generatedJsdls );
   }
 
   public void newJsdlGenerated( final IGeneratedJsdl generatedJsdl,
@@ -65,22 +72,15 @@ public class EditorParametricJsdlHandler implements IParametricJsdlHandler, IStr
     this.section.iterationGenerated( values );
   }
 
-  public void paramSubstituted( final String paramName,
-                                final String newValue,
-                                final IProgressMonitor monitor )
-    throws ProblemException
-  {
-  }
-
   public Object[] getElements( final Object inputElement ) {
     return this.content.toArray();
   }
 
   public void dispose() {
+    // empty implementation
   }
 
   public void inputChanged( final Viewer viewer, final Object oldInput, final Object newInput ) {
-    // TODO mariusz Auto-generated method stub
-    
+    // empty implementation
   }
 }

@@ -24,11 +24,10 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import eu.geclipse.core.reporting.ProblemException;
+import eu.geclipse.jsdl.internal.Activator;
 import eu.geclipse.jsdl.xpath.XPathDocument;
 
 class Assignment {
-
-  private NodeList parameters;  
   private List<String> xPathQueries;
   private IFunction function;
 
@@ -36,23 +35,32 @@ class Assignment {
    * @param pathDocument 
    * @param parameters which values will be substituted
    * @param function which describes values for parameters over iterations
+   * @throws ProblemException 
    */
   public Assignment( final XPathDocument pathDocument,
                                final NodeList parameters,
-                               final IFunction function )
-  {
-    this.parameters = parameters;
+                               final IFunction function ) throws ProblemException
+  {    
     this.function = function;
-    initXpathExpressions( pathDocument );
+    initXpathExpressions( parameters );
+    
+    if( function == null ) {      
+        String msg = String.format( Messages.Assignment_errParameterWithoutFunction, this.xPathQueries.isEmpty() ? "" : this.xPathQueries.get( 0 ) ); //$NON-NLS-1$
+        throw new ProblemException( "eu.geclipse.jsdl.problem.sweepExtensionSyntaxError", msg, Activator.PLUGIN_ID );                  //$NON-NLS-1$
+    }
   }
 
-  private void initXpathExpressions( final XPathDocument pathDocument ) {
-    this.xPathQueries = new ArrayList<String>( this.parameters.getLength() );
-      for( int index = 0; index < this.parameters.getLength(); index++ ) {
-        Node item = this.parameters.item( index );
+  private void initXpathExpressions( final NodeList parameters ) throws ProblemException {
+    this.xPathQueries = new ArrayList<String>( parameters.getLength() );
+      for( int index = 0; index < parameters.getLength(); index++ ) {
+        Node item = parameters.item( index );
         String textContent = item.getTextContent();
-        // TODO mariusz check if text content != null
-        // TODO mariusz check: should has no children
+        
+        if( textContent == null
+            || textContent.length() == 0 ) {
+          String msg = Messages.Assignment_errParameterEmpty;
+          throw new ProblemException( "eu.geclipse.jsdl.problem.sweepExtensionSyntaxError", msg, Activator.PLUGIN_ID ); //$NON-NLS-1$
+        }
         this.xPathQueries.add( textContent );
       }   
   }
@@ -69,13 +77,8 @@ class Assignment {
                              final SubMonitor monitor ) throws ProblemException
   {
     String value = functionIterator.next();
-
-    for( int index = 0; index < this.parameters.getLength(); index++ ) {
-      // TODO mariusz check if value is a Text node
-      // TODO mariusz check progress monitor
-      String xpathQuery = this.xPathQueries.get( index );
-      String paramName = this.parameters.item( index ).getTextContent();
-      generationContext.setValue( paramName, xpathQuery, value, monitor );
+    for( String xpathQuery : this.xPathQueries ) {
+      generationContext.setValue( xpathQuery, value, monitor );
     }
   }
   
