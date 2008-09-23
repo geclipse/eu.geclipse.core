@@ -747,7 +747,7 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
     SubMonitor subMonitor = SubMonitor.convert( progressMonitor );
     IGridJobStatus newJobStatus = null;
     try {
-      testCancelled( progressMonitor );
+      testCancelled( subMonitor );
       IGridJobService service = getJobService();
       if( service != null && this.jobID.getJobID() != GridJobID.UNKNOWN ) {
         IGridProject project = getProject();
