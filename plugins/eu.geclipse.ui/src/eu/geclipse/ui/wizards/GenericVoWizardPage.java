@@ -28,6 +28,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
+import eu.geclipse.core.model.GridModel;
+import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.core.model.impl.GenericVirtualOrganization;
 import eu.geclipse.core.model.impl.GenericVoCreator;
 import eu.geclipse.ui.internal.Activator;
@@ -87,6 +89,9 @@ public class GenericVoWizardPage
     String name = this.nameText.getText();
     if ( ( name == null ) || ( name.length() == 0 ) ) {
       result = new Status( IStatus.ERROR, Activator.PLUGIN_ID, "You have to specify a valid VO name" );
+    } else if ( ( this.initialVo == null )
+        && ( GridModel.getVoManager().findChild( name ) != null ) ) {
+      result = new Status( IStatus.ERROR, Activator.PLUGIN_ID, "A VO with the same name already exists" );
     } else {
       creator.setVoName( name );
     }
