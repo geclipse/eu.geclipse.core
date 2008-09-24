@@ -22,6 +22,7 @@ import org.eclipse.swt.graphics.Image;
 import eu.geclipse.traceview.IProcess;
 import eu.geclipse.traceview.ITrace;
 import eu.geclipse.traceview.statistics.Activator;
+import eu.geclipse.traceview.statistics.Messages;
 
 /**
  * Statistic provider
@@ -32,27 +33,23 @@ public class FunctionDistributionCombined implements IStatistics {
   Hashtable<String, Double> functions;
 
   public String getName() {
-    return "Function Distribution";
+    return Messages.getString( "FunctionDistributionCombined.Name" ); //$NON-NLS-1$
+  }
+
+  public String getDescription() {
+    return Messages.getString( "FunctionDistributionCombined.Description" ); //$NON-NLS-1$
+  }
+
+  public String getTitle() {
+    return getName();
+  }
+
+  public Image getImage() {
+    return Activator.getImageDescriptor( "icons/obj16/distribution.gif" ).createImage(); //$NON-NLS-1$
   }
 
   public void setTrace( final ITrace trace ) {
     this.trace = trace;
-  }
-
-  public String getDescription() {
-    return "Distribution of the called functions.";
-  }
-
-  public String xAxis() {
-    return "1"; //$NON-NLS-1$
-  }
-
-  public String yAxis() {
-    return "category"; //$NON-NLS-1$
-  }
-
-  public String zAxis() {
-    return null;
   }
 
   public void initialize() {
@@ -71,6 +68,18 @@ public class FunctionDistributionCombined implements IStatistics {
     }
   }
 
+  public String xAxis() {
+    return "1"; //$NON-NLS-1$
+  }
+
+  public String yAxis() {
+    return "category"; //$NON-NLS-1$
+  }
+
+  public String zAxis() {
+    return null;
+  }
+
   public Object getXSeries() {
     String[] result = this.functions.keySet().toArray( new String[ 0 ] );
     return result;
@@ -79,7 +88,6 @@ public class FunctionDistributionCombined implements IStatistics {
   public Object getYSeries() {
     Double[] values = this.functions.values().toArray( new Double[ 0 ] );
     double[] dValues = new double[ values.length ];
-    // TODO better way
     for( int i = 0; i < values.length; i++ ) {
       dValues[ i ] = values[ i ].doubleValue();
     }
@@ -87,16 +95,6 @@ public class FunctionDistributionCombined implements IStatistics {
   }
 
   public Object getZSeries() {
-    // TODO Auto-generated method stub
     return null;
-  }
-
-  public String getTitle() {
-    return getName();
-  }
-  
-  public Image getImage() {
-    // TODO dispose
-    return Activator.getImageDescriptor( "icons/obj16/distribution.gif" ).createImage(); //$NON-NLS-1$
   }
 }

@@ -29,9 +29,48 @@ public abstract class AbstractChartBuilder {
   protected String xTitle = emptyString;
   protected String yTitle = emptyString;
 
+  /**
+   * Returns the Name of the Chart
+   * 
+   * @return name
+   */
   public abstract String getName();
 
   /**
+   * Returns the icon for the chart
+   * 
+   * @return image
+   */
+  public abstract Image getImage();
+
+  /**
+   * Returns the built chart
+   * 
+   * @return Chart
+   */
+  public Chart getChart() {
+    return this.chart;
+  }
+
+  /**
+   * Returns the minimum with to display the chart correctly
+   * 
+   * @return minimum width
+   */
+  public abstract int minWidth();
+
+  /**
+   * Returns the minimum height to display the chart correctly
+   * 
+   * @return minimum height
+   */
+  public abstract int minHeight();
+
+  protected abstract void createChart();
+
+  /**
+   * Sets the title of the chart
+   * 
    * @param title
    */
   public void setTitle( final String title ) {
@@ -57,20 +96,6 @@ public abstract class AbstractChartBuilder {
   }
 
   /**
-   * Build the Chart
-   */
-  public void build() {
-    createChart();
-    buildPlot();
-    buildLegend();
-    buildTitle();
-    buildXAxis();
-    buildYAxis();
-    buildXSeries();
-    buildYSeries();
-  }
-
-  /**
    * Set the X Series
    * 
    * @param object - an array of values
@@ -91,7 +116,19 @@ public abstract class AbstractChartBuilder {
    */
   public abstract void setZSeries( final Object object );
 
-  protected abstract void createChart();
+  /**
+   * Build the Chart
+   */
+  public void build() {
+    createChart();
+    buildPlot();
+    buildLegend();
+    buildTitle();
+    buildXAxis();
+    buildYAxis();
+    buildXSeries();
+    buildYSeries();
+  }
 
   protected void buildPlot() {
     // empty
@@ -121,19 +158,4 @@ public abstract class AbstractChartBuilder {
     this.chart.getTitle().getLabel().getCaption().setValue( this.chartTitle );
     this.chart.getTitle().getLabel().getCaption().getFont().setSize( 16 );
   }
-
-  public abstract int minWidth();
-
-  public abstract int minHeight();
-
-  /**
-   * Returns the built chart
-   * 
-   * @return Chart
-   */
-  public Chart getChart() {
-    return this.chart;
-  }
-  
-  public abstract Image getImage();
 }

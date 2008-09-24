@@ -35,9 +35,10 @@ import org.eclipse.birt.chart.model.type.impl.PieSeriesImpl;
 import org.eclipse.swt.graphics.Image;
 
 import eu.geclipse.traceview.statistics.Activator;
+import eu.geclipse.traceview.statistics.Messages;
 
 /**
- * Pie Chart Builder
+ * Multiple Pie Chart Builder
  */
 public class MultiplePieChartBuilder extends AbstractChartBuilder {
 
@@ -48,7 +49,29 @@ public class MultiplePieChartBuilder extends AbstractChartBuilder {
 
   @Override
   public String getName() {
-    return "Multiple Pie Chart";
+    return Messages.getString( "MultiplePieChartBuilder.Name" ); //$NON-NLS-1$
+  }
+
+  @Override
+  public Image getImage() {
+    return image;
+  }
+
+  @Override
+  public int minHeight() {
+    return 80 * this.ySeries[ 0 ].length;
+  }
+
+  @Override
+  public int minWidth() {
+    return 400;
+  }
+
+  @Override
+  protected void createChart() {
+    this.chart = ChartWithoutAxesImpl.create();
+    this.chart.setDimension( ChartDimension.TWO_DIMENSIONAL_LITERAL );
+    this.chart.setGridColumnCount( 2 );
   }
 
   @Override
@@ -70,13 +93,6 @@ public class MultiplePieChartBuilder extends AbstractChartBuilder {
     if( object instanceof String[] ) {
       this.zSeries = ( String[] )object;
     }
-  }
-
-  @Override
-  protected void createChart() {
-    this.chart = ChartWithoutAxesImpl.create();
-    this.chart.setDimension( ChartDimension.TWO_DIMENSIONAL_LITERAL );
-    this.chart.setGridColumnCount( 2 );
   }
 
   @Override
@@ -126,26 +142,9 @@ public class MultiplePieChartBuilder extends AbstractChartBuilder {
       if( this.xSeries != null ) {
         pieSeries.setSeriesIdentifier( this.xSeries[ i ] );
       } else {
-        pieSeries.setSeriesIdentifier( i );
+        pieSeries.setSeriesIdentifier( Integer.valueOf( i ) );
       }
-      // pieSeries.setSeriesIdentifier( //S )
       seriesDefinitionY.getSeries().add( pieSeries );
     }
-  }
-
-  @Override
-  public int minHeight() {
-    return 80 * this.ySeries[ 0 ].length;
-  }
-
-  @Override
-  public int minWidth() {
-    // TODO Auto-generated method stub
-    return 400;
-  }
-
-  @Override
-  public Image getImage() {
-    return image;
   }
 }

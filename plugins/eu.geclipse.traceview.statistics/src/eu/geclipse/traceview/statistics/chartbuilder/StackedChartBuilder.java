@@ -40,12 +40,13 @@ import org.eclipse.birt.chart.model.type.impl.BarSeriesImpl;
 import org.eclipse.swt.graphics.Image;
 
 import eu.geclipse.traceview.statistics.Activator;
+import eu.geclipse.traceview.statistics.Messages;
 
 /**
- * 
+ * Stacked Bar Chart Builder
  */
 public class StackedChartBuilder extends AbstractChartBuilder {
-  
+
   private static Image image = Activator.getImageDescriptor( "icons/obj16/stackedbarchart.gif" ).createImage(); //$NON-NLS-1$
   protected Axis xAxis = null;
   protected Axis yAxis = null;
@@ -56,7 +57,29 @@ public class StackedChartBuilder extends AbstractChartBuilder {
 
   @Override
   public String getName() {
-    return "Stacked Chart";
+    return Messages.getString( "StackedChartBuilder.Name" ); //$NON-NLS-1$
+  }
+
+  @Override
+  public Image getImage() {
+    return image;
+  }
+
+  @Override
+  public int minHeight() {
+    return 100;
+  }
+
+  @Override
+  public int minWidth() {
+    return 20 * this.ySeries[ 0 ].length;
+  }
+
+  @Override
+  protected void createChart() {
+    this.chart = ChartWithAxesImpl.create();
+    this.chart.setDimension( ChartDimension.TWO_DIMENSIONAL_LITERAL );
+    ( ( ChartWithAxes )this.chart ).setUnitSpacing( 30 );
   }
 
   @Override
@@ -78,13 +101,6 @@ public class StackedChartBuilder extends AbstractChartBuilder {
     if( object instanceof String[] ) {
       this.zSeries = ( String[] )object;
     }
-  }
-
-  @Override
-  protected void createChart() {
-    this.chart = ChartWithAxesImpl.create();
-    this.chart.setDimension( ChartDimension.TWO_DIMENSIONAL_LITERAL );
-    ( ( ChartWithAxes )this.chart ).setUnitSpacing( 30 );
   }
 
   @Override
@@ -150,20 +166,5 @@ public class StackedChartBuilder extends AbstractChartBuilder {
       ySeriesDefinition.getSeries().add( barSeries );
     }
     this.yAxis.getSeriesDefinitions().add( ySeriesDefinition );
-  }
-
-  @Override
-  public int minHeight() {
-    return 100;
-  }
-
-  @Override
-  public int minWidth() {
-    return 20*this.ySeries[0].length;
-  }
-  
-  @Override
-  public Image getImage() {
-    return image;
   }
 }

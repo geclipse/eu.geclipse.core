@@ -30,7 +30,6 @@ public class StatisticsVisualisationLabelProvider implements ILabelProvider {
 
   /*
    * (non-Javadoc)
-   * 
    * @see org.eclipse.jface.viewers.ILabelProvider#getImage(java.lang.Object)
    */
   public Image getImage( final Object element ) {
@@ -50,7 +49,6 @@ public class StatisticsVisualisationLabelProvider implements ILabelProvider {
 
   /*
    * (non-Javadoc)
-   * 
    * @see org.eclipse.jface.viewers.ILabelProvider#getText(java.lang.Object)
    */
   public String getText( final Object element ) {
@@ -64,17 +62,15 @@ public class StatisticsVisualisationLabelProvider implements ILabelProvider {
         AbstractChartBuilder statistics = ( AbstractChartBuilder )treeNode.getValue();
         result = statistics.getName();
       }
-      // else if (treeNode.getValue() instanceof String){
-      //        
-      // }
     }
     return result;
   }
 
   /*
    * (non-Javadoc)
-   * 
-   * @see org.eclipse.jface.viewers.IBaseLabelProvider#addListener(org.eclipse.jface.viewers.ILabelProviderListener)
+   * @see
+   * org.eclipse.jface.viewers.IBaseLabelProvider#addListener(org.eclipse.jface
+   * .viewers.ILabelProviderListener)
    */
   public void addListener( final ILabelProviderListener listener ) {
     // empty
@@ -82,8 +78,9 @@ public class StatisticsVisualisationLabelProvider implements ILabelProvider {
 
   /*
    * (non-Javadoc)
-   * 
-   * @see org.eclipse.jface.viewers.IBaseLabelProvider#removeListener(org.eclipse.jface.viewers.ILabelProviderListener)
+   * @see
+   * org.eclipse.jface.viewers.IBaseLabelProvider#removeListener(org.eclipse
+   * .jface.viewers.ILabelProviderListener)
    */
   public void removeListener( final ILabelProviderListener listener ) {
     // empty
@@ -91,9 +88,9 @@ public class StatisticsVisualisationLabelProvider implements ILabelProvider {
 
   /*
    * (non-Javadoc)
-   * 
-   * @see org.eclipse.jface.viewers.IBaseLabelProvider#isLabelProperty(java.lang.Object,
-   *      java.lang.String)
+   * @see
+   * org.eclipse.jface.viewers.IBaseLabelProvider#isLabelProperty(java.lang.
+   * Object, java.lang.String)
    */
   public boolean isLabelProperty( final Object element, final String property )
   {
@@ -102,7 +99,6 @@ public class StatisticsVisualisationLabelProvider implements ILabelProvider {
 
   /*
    * (non-Javadoc)
-   * 
    * @see org.eclipse.jface.viewers.IBaseLabelProvider#dispose()
    */
   public void dispose() {

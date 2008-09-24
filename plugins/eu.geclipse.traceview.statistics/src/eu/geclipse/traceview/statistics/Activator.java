@@ -33,8 +33,9 @@ public class Activator extends AbstractUIPlugin {
 
   /*
    * (non-Javadoc)
-   *
-   * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
+   * @see
+   * org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext
+   * )
    */
   @Override
   public void start( final BundleContext context ) throws Exception {
@@ -44,8 +45,9 @@ public class Activator extends AbstractUIPlugin {
 
   /*
    * (non-Javadoc)
-   *
-   * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
+   * @see
+   * org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext
+   * )
    */
   @Override
   public void stop( final BundleContext context ) throws Exception {
@@ -55,7 +57,7 @@ public class Activator extends AbstractUIPlugin {
 
   /**
    * Returns the shared instance
-   *
+   * 
    * @return the shared instance
    */
   public static Activator getDefault() {
@@ -65,7 +67,7 @@ public class Activator extends AbstractUIPlugin {
   /**
    * Returns an image descriptor for the image file at the given plug-in
    * relative path
-   *
+   * 
    * @param path the path
    * @return the image descriptor
    */
@@ -75,12 +77,13 @@ public class Activator extends AbstractUIPlugin {
 
   /**
    * Logs an exception.
-   *
+   * 
    * @param exception the exception.
    */
   public static void logException( final Exception exception ) {
     String message = exception.getLocalizedMessage();
-    if ( message == null ) message = exception.getClass().getName();
+    if( message == null )
+      message = exception.getClass().getName();
     IStatus status = new Status( IStatus.ERROR,
                                  PLUGIN_ID,
                                  IStatus.OK,

@@ -15,10 +15,6 @@
 	</extension>
 	<extension point="eu.geclipse.traceview.statistics.Statistics">
 		<StatisticsClass
-			class="eu.geclipse.traceview.statistics.providers.FunctionDistributionIndividual"
-			id="eu.geclipse.traceview.statistics.FunctionDistributionIndividual">
-		</StatisticsClass>
-		<StatisticsClass
 			class="eu.geclipse.traceview.statistics.providers.IndividualTimeConsumption"
 			id="eu.geclipse.traceview.statistics.IndividualTimeConsumption">
 		</StatisticsClass>
@@ -50,13 +46,5 @@
         z="category">
   </VisualisationClass>
 	</extension>
- <extension
-       point="eu.geclipse.traceview.statistics.Category">
-    <Category
-          id="eu.geclipse.traceview.statistics.Category.one"
-          name="abc">
-    </Category>
-    
- </extension>
 
 </plugin>

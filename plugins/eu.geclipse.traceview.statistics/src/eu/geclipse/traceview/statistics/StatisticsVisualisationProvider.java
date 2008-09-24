@@ -34,18 +34,14 @@ public class StatisticsVisualisationProvider implements ITraceVisProvider {
                                          final IViewSite viewSite,
                                          final ITrace trace )
   {
-    return new StatisticsVisualisation( parent,
-                                        style,
-                                        viewSite,
-                                        ( IPhysicalTrace )trace );
+    return new StatisticsVisualisation( parent, style, viewSite, trace );
   }
 
   public boolean supports( final ITrace trace ) {
     return trace instanceof IPhysicalTrace;
   }
-  
-  public Image getImage() {   
-    // TODO dispose somewhere!!!
+
+  public Image getImage() {
     return Activator.getImageDescriptor( "icons/obj16/statistics.gif" ).createImage(); //$NON-NLS-1$
   }
 }

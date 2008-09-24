@@ -20,34 +20,35 @@ import org.eclipse.swt.graphics.Image;
 import eu.geclipse.traceview.IPhysicalEvent;
 import eu.geclipse.traceview.ITrace;
 import eu.geclipse.traceview.statistics.Activator;
+import eu.geclipse.traceview.statistics.Messages;
 
+/**
+ * Returns the time consumption of communication and calculation for each
+ * process of a parallel application
+ */
 public class IndividualTimeConsumption implements IStatistics {
 
   private ITrace trace;
   private double[][] y = null;
 
-  public void setTrace( final ITrace trace ) {
-    this.trace = trace;
-  }
-
   public String getName() {
-    return "Time Consumption";
+    return Messages.getString( "IndividualTimeConsumption.Name" ); //$NON-NLS-1$
   }
 
   public String getDescription() {
-    return "Time consumption of communication and calculation.";
+    return Messages.getString( "IndividualTimeConsumption.Description" ); //$NON-NLS-1$
   }
 
-  public String xAxis() {
-    return "1";
+  public String getTitle() {
+    return getName();
   }
 
-  public String yAxis() {
-    return "2";
+  public Image getImage() {
+    return Activator.getImageDescriptor( "icons/obj16/clock.gif" ).createImage(); //$NON-NLS-1$
   }
 
-  public String zAxis() {
-    return "category";
+  public void setTrace( final ITrace trace ) {
+    this.trace = trace;
   }
 
   public void initialize() {
@@ -87,6 +88,18 @@ public class IndividualTimeConsumption implements IStatistics {
     }
   }
 
+  public String xAxis() {
+    return "1"; //$NON-NLS-1$
+  }
+
+  public String yAxis() {
+    return "2"; //$NON-NLS-1$
+  }
+
+  public String zAxis() {
+    return "category"; //$NON-NLS-1$
+  }
+
   public Object getXSeries() {
     return null;
   }
@@ -97,17 +110,8 @@ public class IndividualTimeConsumption implements IStatistics {
 
   public Object getZSeries() {
     String[] names = {
-      "calculation", "communication"
+      Messages.getString( "IndividualTimeConsumption.Calculation" ), Messages.getString( "IndividualTimeConsumption.Communication" ) //$NON-NLS-1$ //$NON-NLS-2$
     };
     return names;
-  }
-
-  public String getTitle() {
-    return getName();
-  }
-
-  public Image getImage() {
-    // TODO dispose
-    return Activator.getImageDescriptor( "icons/obj16/clock.gif" ).createImage(); //$NON-NLS-1$
   }
 }
