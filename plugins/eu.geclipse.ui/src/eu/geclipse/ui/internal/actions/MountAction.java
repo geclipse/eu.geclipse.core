@@ -37,6 +37,7 @@ import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridPreferences;
 import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.model.IMountable;
+import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.core.model.IMountable.MountPoint;
 import eu.geclipse.core.model.IMountable.MountPointID;
 import eu.geclipse.ui.dialogs.ProblemDialog;
@@ -239,13 +240,10 @@ public class MountAction extends Action {
     
       sMonitor.subTask( "Preparing resources" );
       String projectName = path.segment( 0 );
-      String voName = null;
-      IGridElement[] children = GridModel.getRoot().getChildren( new SubProgressMonitor( monitor, 1 ) );
-      for( IGridElement child: children ) {
-        if( child.getName().equals( projectName ) && child instanceof IGridProject ) {
-          voName = ((IGridProject)child).getVO().getName();
-        }
-      }
+      IGridProject project = ( IGridProject ) GridModel.getRoot().findChild( projectName );
+      IVirtualOrganization vo = project.getVO();
+      String voName = vo != null ? vo.getName() : null;
+      
       URI newUri = processURI( voName, uri ); 
       GEclipseURI geclURI = new GEclipseURI( newUri );
       boolean isDirectory = isDirectory( geclURI );
