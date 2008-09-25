@@ -35,6 +35,7 @@ import org.eclipse.ui.actions.WorkspaceModifyOperation;
 import eu.geclipse.workflow.ui.editor.WorkflowDiagramEditorUtil;
 import eu.geclipse.workflow.ui.internal.WorkflowDiagramEditorPlugin;
 import eu.geclipse.workflow.ui.part.Messages;
+import eu.geclipse.workflow.ui.wizards.NewWorkflowCreationWizardPage;
 
 /**
  * @generated
@@ -52,7 +53,7 @@ public class WorkflowCreationWizard extends Wizard implements INewWizard {
   /**
    * @generated
    */
-  protected WorkflowCreationWizardPage diagramModelFilePage;
+  protected NewWorkflowCreationWizardPage diagramModelFilePage;
   /**
    * @generated
    */
@@ -116,9 +117,12 @@ public class WorkflowCreationWizard extends Wizard implements INewWizard {
    */
   @Override
   public void addPages() {
-    this.diagramModelFilePage = new WorkflowCreationWizardPage( Messages.getString( "WorkflowCreationWizard_PageName" ), //$NON-NLS-1$
+/*    this.diagramModelFilePage = new WorkflowCreationWizardPage( Messages.getString( "WorkflowCreationWizard_PageName" ), //$NON-NLS-1$
                                                                 getSelection(),
                                                                 "workflow" ); //$NON-NLS-1$
+*/    
+    this.diagramModelFilePage = new NewWorkflowCreationWizardPage( Messages.getString( "WorkflowCreationWizard_PageName" ), //$NON-NLS-1$
+                                                                getSelection() ); //$NON-NLS-1$
     this.diagramModelFilePage.setTitle( Messages.getString( "WorkflowCreationWizard_Title" ) ); //$NON-NLS-1$
     this.diagramModelFilePage.setDescription( Messages.getString( "WorkflowCreationWizard_Description" ) ); //$NON-NLS-1$
     addPage( this.diagramModelFilePage );
