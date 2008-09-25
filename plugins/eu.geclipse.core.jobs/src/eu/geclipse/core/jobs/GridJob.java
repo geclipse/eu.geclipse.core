@@ -72,7 +72,6 @@ import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.core.model.impl.ResourceGridContainer;
 import eu.geclipse.core.model.impl.ResourceGridElement;
 import eu.geclipse.core.reporting.ProblemException;
-import eu.geclipse.jsdl.JSDLJobDescription;
 
 /**
  * Class representing submitted job.
@@ -325,34 +324,30 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
 
   private void createStagingFolders( final IFolder jobFolder )
   {
-    if( this.jobDescription instanceof JSDLJobDescription ) {
-      IGridJobService service = getJobService();
-
-      try {
-        Map<String, URI> inputFilesMap = service.getInputFiles( getID(),
+    IGridJobService service = getJobService();
+    try {
+      Map<String, URI> inputFilesMap = service.getInputFiles( getID(),
+                                                              getJobDescription(),
+                                                              getProject().getVO() );
+      if( inputFilesMap != null && inputFilesMap.size() > 0 ) {
+        createStagingFilesFolder( jobFolder,
+                                  FOLDERNAME_INPUT_FILES,
+                                  inputFilesMap );
+      }
+    } catch( CoreException exception ) {
+      Activator.logException( exception );
+    }
+    try {
+      Map<String, URI> outputFilesMap = service.getOutputFiles( getID(),
                                                                 getJobDescription(),
                                                                 getProject().getVO() );
-        if( inputFilesMap != null && inputFilesMap.size() > 0 ) {
-          createStagingFilesFolder( jobFolder,
-                                    FOLDERNAME_INPUT_FILES,
-                                    inputFilesMap );
-        }
-      } catch( CoreException exception ) {
-        Activator.logException( exception );
+      if( outputFilesMap != null && outputFilesMap.size() > 0 ) {
+        createStagingFilesFolder( jobFolder,
+                                  FOLDERNAME_OUTPUT_FILES,
+                                  outputFilesMap );
       }
-      
-      try {
-        Map<String, URI> outputFilesMap = service.getOutputFiles( getID(),
-                                                                getJobDescription(),
-                                                                getProject().getVO() );
-        if( outputFilesMap != null && outputFilesMap.size() > 0 ) {
-          createStagingFilesFolder( jobFolder,
-                                    FOLDERNAME_OUTPUT_FILES,
-                                    outputFilesMap );
-        }
-      } catch( CoreException exception ) {
-        Activator.logException( exception );
-      }
+    } catch( CoreException exception ) {
+      Activator.logException( exception );
     }
   }
 
