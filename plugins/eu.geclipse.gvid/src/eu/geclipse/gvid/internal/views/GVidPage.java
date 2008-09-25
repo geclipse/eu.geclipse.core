@@ -64,6 +64,11 @@ class GVidPage extends Composite implements IGVidStatsListener, IVisualisationWi
 
   }
 
+  public void init( final Composite parent, final int style, final CTabItem item ) {
+    // TODO Auto-generated method stub
+
+  }
+
   private void initialize() {
     GridLayout gridLayout = new GridLayout();
     gridLayout.horizontalSpacing = 0;
