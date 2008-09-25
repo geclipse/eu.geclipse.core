@@ -598,5 +598,4 @@ public class GEclipseFileStore
     
     return result;
   }
-
 }

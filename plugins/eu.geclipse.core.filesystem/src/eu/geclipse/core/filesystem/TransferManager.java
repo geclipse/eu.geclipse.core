@@ -24,6 +24,7 @@ import org.eclipse.core.filesystem.IFileInfo;
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
@@ -31,6 +32,7 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
 
+import eu.geclipse.core.ExtensionManager;
 import eu.geclipse.core.filesystem.internal.Activator;
 import eu.geclipse.core.filesystem.internal.filesystem.GEclipseFileStore;
 import eu.geclipse.core.model.ITransferManager;
@@ -41,6 +43,11 @@ import eu.geclipse.core.model.ITransferService;
  */
 public class TransferManager implements ITransferManager {
   
+  private static final int INF = 10;
+  private static final int HIGH = 1;
+  private static final int MID = 2;
+  private static final int LOW = 3;
+
   private static TransferManager singleton;
   
   int counter = 1;
@@ -92,12 +99,25 @@ public class TransferManager implements ITransferManager {
     return status;
   }
 
-  public boolean doTransfer( final IFileStore source,
-                             final IFileStore destination,
+  public boolean doTransfer( final IFileStore sourceGecl,
+                             final IFileStore destinationGecl,
                              final boolean moveFlag,
                              final IProgressMonitor monitor )
   {
     boolean status = false;
+    IFileStore source;
+    IFileStore destination;
+    
+    if ( sourceGecl instanceof GEclipseFileStore ) {
+      source = ((GEclipseFileStore) sourceGecl).getSlave();
+    } else {
+      source = sourceGecl;
+    }
+    if ( destinationGecl instanceof GEclipseFileStore ) {
+      destination = ((GEclipseFileStore) destinationGecl).getSlave();
+    } else {
+      destination = destinationGecl;
+    }
     ITransferService service = findService( source.toURI().getScheme(),
                                             destination.toURI().getScheme() );
     Integer transferId = getNextKey();
@@ -137,7 +157,29 @@ public class TransferManager implements ITransferManager {
                                         final String scheme2 )
   {
     ITransferService operation = null;
+    ExtensionManager manager = new ExtensionManager();
+    List<IConfigurationElement> transfers = manager.getConfigurationElements( "eu.geclipse.core.filesystem.transferService",
+                                                                              "transfer" );
+    int priority = TransferManager.INF;
+    
+    for ( IConfigurationElement provider: transfers ) {
+      if ( provider.getAttribute( "source" ).equalsIgnoreCase( scheme1 ) 
+          && provider.getAttribute( "target" ).equalsIgnoreCase( scheme2 ) 
+          && Integer.valueOf( provider.getAttribute( "priority" ) ).intValue() < priority ) {
+        
+        try {
+          operation = (ITransferService) provider.createExecutableExtension( "class" );
+          priority = Integer.valueOf( provider.getAttribute( "priority" ) ).intValue();
+        } catch( CoreException e ) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        }
+      }
+      
+    }
+    transfers.isEmpty();
     // TODO search extensions for operation with highest priority
+    // FIXME tutaj
     if( operation == null ) {
       operation = new DefaultTransferService();
     }
