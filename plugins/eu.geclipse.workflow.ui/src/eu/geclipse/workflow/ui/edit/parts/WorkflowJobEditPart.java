@@ -67,6 +67,7 @@ import eu.geclipse.core.model.GridModel;
 import eu.geclipse.jsdl.JSDLJobDescription;
 import eu.geclipse.jsdl.ui.wizards.NewJobWizard;
 import eu.geclipse.workflow.model.IWorkflowJob;
+import eu.geclipse.workflow.ui.edit.commands.ClearJobDescPropertyCommand;
 import eu.geclipse.workflow.ui.edit.commands.UpdateJobPortsCommand;
 import eu.geclipse.workflow.ui.edit.policies.WorkflowJobCanonicalEditPolicy;
 import eu.geclipse.workflow.ui.edit.policies.WorkflowJobDragDropEditPolicy;
@@ -166,7 +167,14 @@ public class WorkflowJobEditPart extends ShapeNodeEditPart {
             String loc = res.getLocation().toString();
             String jobDesc = job.getJobDescription();
             if (loc.equals( jobDesc )) { 
-              job.setJobDescription( "" );               //$NON-NLS-1$
+              AbstractTransactionalCommand clearJobDescCmd = new ClearJobDescPropertyCommand( job );
+              try {
+                OperationHistoryFactory.getOperationHistory()
+                .execute( clearJobDescCmd, new NullProgressMonitor(), null );
+              } catch( ExecutionException e ) {
+                // TODO Auto-generated catch block, add problem reporting
+                e.printStackTrace();
+              }
             }
           }               
           
