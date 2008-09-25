@@ -11,7 +11,8 @@
  *
  * Contributor(s):
  *     Mariusz Wojtysiak - initial API and implementation
- *     
+ *     David Johnson (UoR) - added support for deleting JSDLs linked to 
+ *                           workflows
  *****************************************************************************/
 package eu.geclipse.ui.internal.actions;
 
@@ -24,6 +25,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubMonitor;
@@ -33,6 +35,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -44,13 +47,17 @@ import org.eclipse.ui.actions.DeleteResourceAction;
 import org.eclipse.ui.actions.SelectionListenerAction;
 
 import eu.geclipse.core.model.GridModel;
+import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridJob;
+import eu.geclipse.core.model.IGridJobDescription;
 import eu.geclipse.core.reporting.IProblem;
 import eu.geclipse.core.reporting.ISolution;
 import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.ui.dialogs.ProblemDialog;
 import eu.geclipse.ui.internal.Activator;
+import eu.geclipse.workflow.IGridWorkflowDescription;
+import eu.geclipse.workflow.IGridWorkflowJobDescription;
 
 
 /**
@@ -80,22 +87,26 @@ public class DeleteGridElementAction extends SelectionListenerAction {
   @Override
   public void run() {
     List<IGridJob> selectedJobs = new ArrayList<IGridJob>( getSelectedResources().size() );
+    List<IGridJobDescription> selectedWorkflowJobDescriptions = new ArrayList<IGridJobDescription>( getSelectedResources().size() );
     List<IResource> selectedResources = new ArrayList<IResource>( getSelectedResources().size() );
-    dispatchSelectedElements( selectedJobs, selectedResources );
+    dispatchSelectedElements( selectedJobs, selectedWorkflowJobDescriptions, selectedResources );
       if( !selectedJobs.isEmpty() ) {
         deleteJobs( selectedJobs );
       }
       if( !selectedResources.isEmpty() ) {
         deleteOtherResources( selectedResources );
-      }    
+      }  
+      if (!selectedWorkflowJobDescriptions.isEmpty()) {
+        deleteWorkflowJobDescriptions( selectedWorkflowJobDescriptions );
+      }  
   }
   
   @Override
   protected boolean updateSelection( final IStructuredSelection selection ) {
     return ! getSelectedResources().isEmpty();
   }
-
-  private void dispatchSelectedElements( final List<IGridJob> selectedJobs, final List<IResource> otherSelectedResources ) {   
+  
+  private void dispatchSelectedElements( final List<IGridJob> selectedJobs, final List<IGridJobDescription> selectedWorkflowJobDescriptions, final List<IResource> otherSelectedResources ) {   
     for( Object obj : getSelectedResources() ) {
       if( obj instanceof IResource ) {
         IResource resource = (IResource)obj;
@@ -103,6 +114,29 @@ public class DeleteGridElementAction extends SelectionListenerAction {
         
         if( element instanceof IGridJob ) {
           selectedJobs.add( (IGridJob)element );
+        } else 
+        if (element instanceof IGridJobDescription ) {
+          // find out if the parent resource is a workflow
+          IGridContainer parent = element.getParent();
+          if (parent instanceof IGridWorkflowDescription) {
+            boolean inWorkflow = false;
+            List<IGridWorkflowJobDescription> childrenJobs = ( ( IGridWorkflowDescription )parent ).getChildrenJobs();
+            for (Iterator<IGridWorkflowJobDescription> i = childrenJobs.iterator(); i.hasNext();) {
+              IGridWorkflowJobDescription child = i.next();
+              String childUri = child.getDescriptionPath().toString();
+              String fullPath = element.getResource().getLocation().toString();
+              if ( childUri.equals( fullPath ) ) {
+                inWorkflow = true;
+              }
+            }   
+            if (inWorkflow) {
+              selectedWorkflowJobDescriptions.add( ( IGridJobDescription )element );
+            } else {
+              otherSelectedResources.add( resource );
+            }
+          } else {
+            otherSelectedResources.add( resource );
+          }
         } else {
           otherSelectedResources.add( resource );
         }
@@ -112,8 +146,47 @@ public class DeleteGridElementAction extends SelectionListenerAction {
   
   private void deleteOtherResources( final List<IResource> selectedResources ) {
     this.eclipseAction.selectionChanged( new StructuredSelection( selectedResources ) );
-    this.eclipseAction.run();
-    
+    this.eclipseAction.run();    
+  }
+  
+  /*
+   * At the moment it only works if workflow is not dirty (i.e. workflow must be saved for
+   * it to behave correctly). There is not yet any Problem reporting or Progress monitoring.
+   */
+  private void deleteWorkflowJobDescriptions( final List<IGridJobDescription> selectedJobDescriptions ) {
+    MessageDialog dialog = null;
+    String dialogMessage = ""; //$NON-NLS-1$
+    if (selectedJobDescriptions.size()==1) {
+      IGridJobDescription selectedJobDesc = selectedJobDescriptions.get( 0 );
+      String jsdl = selectedJobDesc.getResource().getName();
+      dialogMessage = String.format( Messages.getString( "DeleteGridElementAction.confirmJobDescDeleteOne" ), jsdl); //$NON-NLS-1$
+    } else {      
+      String jsdlList = ""; //$NON-NLS-1$
+      for (Iterator<IGridJobDescription> i = selectedJobDescriptions.iterator(); i.hasNext();) {
+        jsdlList = jsdlList + " " + i.next().getResource().getName(); //$NON-NLS-1$
+      }
+      dialogMessage = String.format(Messages.getString( "DeleteGridElementAction.confirmJobDescDeleteMany" ), jsdlList); //$NON-NLS-1$
+    }
+    dialog = new MessageDialog(DeleteGridElementAction.this.shell, 
+                               Messages.getString("DeleteGridElementAction.confirmationTitle"), //$NON-NLS-1$
+                               null,
+                               dialogMessage,
+                               MessageDialog.WARNING,
+                               new String[] { IDialogConstants.YES_LABEL, IDialogConstants.NO_LABEL },
+                               0 );
+
+    if ( dialog.open() == Window.OK ) {
+      try {
+        for (Iterator<IGridJobDescription> i1 = selectedJobDescriptions.iterator(); i1.hasNext();) {
+          IResource r = i1.next().getResource();
+          r.delete( true, new NullProgressMonitor() ); // TODO add a proper progress monitor to use           
+        }
+        
+      } catch( CoreException e ) {
+        // TODO Auto-generated catch block, add proper problem reporting
+        e.printStackTrace();
+      }
+    }
   }
   
   private enum ConfirmChoice {
@@ -132,7 +205,7 @@ public class DeleteGridElementAction extends SelectionListenerAction {
   }
 
   private void deleteJobs( final List<IGridJob> selectedJobs ) {
-    ConfirmChoice choice = confirmDelete( selectedJobs );
+    ConfirmChoice choice = confirmDeleteJobs( selectedJobs );
     
     if( choice != ConfirmChoice.cancel ) {
       DeleteJobsJob job = new DeleteJobsJob( selectedJobs, choice );
@@ -142,7 +215,7 @@ public class DeleteGridElementAction extends SelectionListenerAction {
     }
   }
 
-  private ConfirmChoice confirmDelete( final List<IGridJob> selectedJobs ) {
+  private ConfirmChoice confirmDeleteJobs( final List<IGridJob> selectedJobs ) {
     ConfirmChoice choice = ConfirmChoice.cancel;
     String question = null, warning = null;
     
@@ -169,7 +242,7 @@ public class DeleteGridElementAction extends SelectionListenerAction {
       msg += "\n\n" + warning; //$NON-NLS-1$
     }
     
-    ConfirmDialog dialog = new ConfirmDialog( msg, warning == null ? MessageDialog.QUESTION : MessageDialog.WARNING );
+    ConfirmDeleteJobsDialog dialog = new ConfirmDeleteJobsDialog( msg, warning == null ? MessageDialog.QUESTION : MessageDialog.WARNING );
     
     if( dialog.open() == 0 ) {
       if( dialog.isDeleteFromGrid() ) {
@@ -182,11 +255,11 @@ public class DeleteGridElementAction extends SelectionListenerAction {
     return choice;
   }
   
-  private class ConfirmDialog extends MessageDialog {
+  private class ConfirmDeleteJobsDialog extends MessageDialog {
     private Button deleteFromGridCheckbox;
     private boolean deleteFromGrid;
 
-    ConfirmDialog( final String dialogMessage,
+    ConfirmDeleteJobsDialog( final String dialogMessage,
                           final int dialogImageType                          
                            )
     {
