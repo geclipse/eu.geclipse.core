@@ -96,7 +96,9 @@ public class Problem implements IProblem {
     if ( this.reasons == null ) {
       this.reasons = new ArrayList< String >();
     }
-    this.reasons.add( reason );
+    if ( ! this.reasons.contains( reason ) ) {
+      this.reasons.add( reason );
+    }
   }
 
   /* (non-Javadoc)
@@ -275,6 +277,29 @@ public class Problem implements IProblem {
     }
     
     return result;
+    
+  }
+  
+  public void merge( final IProblem problem ) {
+    
+    String desc = problem.getDescription();
+    if ( desc != null ) {
+      addReason( desc );
+    }
+    
+    String[] reas = problem.getReasons();
+    if ( reas != null ) {
+      for ( String r : reas ) {
+        addReason( r );
+      }
+    }
+    
+    ISolution[] sols = problem.getSolutions();
+    if ( sols != null ) {
+      for ( ISolution sol : sols ) {
+        addSolution( sol );
+      }
+    }
     
   }
 

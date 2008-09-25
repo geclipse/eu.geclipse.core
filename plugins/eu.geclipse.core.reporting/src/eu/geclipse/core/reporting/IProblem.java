@@ -142,5 +142,15 @@ public interface IProblem {
    * @return True if the problem contains at least one solution.
    */
   public boolean hasSolutions();
+  
+  /**
+   * Merge the specified problem with this problem. Both the description and
+   * the reasons of the specified problem are added as reasons to this problem
+   * if they are not already existent. Additionally the solutions are added to
+   * this problem.
+   * 
+   * @param problem The problem to incorporate into this problem.
+   */
+  public void merge( final IProblem problem );
 
 }

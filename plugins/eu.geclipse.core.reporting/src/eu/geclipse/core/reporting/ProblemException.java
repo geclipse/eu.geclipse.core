@@ -123,7 +123,7 @@ public class ProblemException extends CoreException {
    * passed to {@link CoreException#CoreException(IStatus)}.
    */
   public ProblemException( final IStatus status ) {
-    super(status);
+    super( status );
   }
   
   /**
