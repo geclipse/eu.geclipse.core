@@ -404,11 +404,9 @@
       <solution
             description="You may have to install the JCE unrestricted policy files in your Java installation"
             id="eu.geclipse.core.solution.auth.jceUnrestrictedPolicyFile">
-         <urlTag>
-            <url
-                  value="http://www.bouncycastle.org/documentation.html">
-            </url>
-         </urlTag>
+         <helpTag
+               pagePath="/eu.geclipse.doc.user/html/known_issues.html">
+         </helpTag>
       </solution>
       <solution
             description="Download the file(s) again"
