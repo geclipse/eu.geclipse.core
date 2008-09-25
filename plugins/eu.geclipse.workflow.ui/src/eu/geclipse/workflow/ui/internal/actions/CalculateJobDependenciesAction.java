@@ -13,7 +13,7 @@
  *     RUR (http://acet.rdg.ac.uk/)
  *     - David Johnson - initial API and implementation
  ******************************************************************************/
-package eu.geclipse.workflow.ui.part;
+package eu.geclipse.workflow.ui.internal.actions;
 
 import java.util.Iterator;
 import java.util.List;

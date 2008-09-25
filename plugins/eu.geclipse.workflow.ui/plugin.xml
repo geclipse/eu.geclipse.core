@@ -78,7 +78,7 @@
             id="eu.geclipse.workflow.ui.LoadResource"
             objectClass="eu.geclipse.workflow.ui.edit.parts.WorkflowEditPart">
          <action
-               class="eu.geclipse.workflow.ui.part.WorkflowLoadResourceAction"
+               class="eu.geclipse.workflow.ui.internal.actions.WorkflowLoadResourceAction"
                enablesFor="1"
                id="eu.geclipse.workflow.ui.LoadResourceAction"
                label="%loadResourceActionLabel"
@@ -95,7 +95,7 @@
             objectClass="org.eclipse.core.resources.IFile">
          <action
                label="%initDiagramActionLabel"
-               class="eu.geclipse.workflow.ui.part.WorkflowInitDiagramFileAction"
+               class="eu.geclipse.workflow.ui.internal.actions.WorkflowInitDiagramFileAction"
                menubarPath="additions"
                enablesFor="1"
                id="eu.geclipse.workflow.ui.InitDiagramAction">
@@ -109,7 +109,7 @@
             id="eu.geclipse.workflow.ui.AddJobDescriptionfromJSDL"
             objectClass="org.eclipse.gmf.runtime.diagram.ui.editparts.ShapeNodeEditPart">
          <action 
-               class="eu.geclipse.workflow.ui.part.GetJobDescriptionFromFileAction"
+               class="eu.geclipse.workflow.ui.internal.actions.GetJobDescriptionFromFileAction"
                definitionId="eu.geclipse.workflow.ui.addJobDescription"
                enablesFor="1"
                id="eu.geclipse.workflow.ui.popup.addJobDescriptionActionID"
@@ -141,7 +141,7 @@
             id="eu.geclipse.workflow.ui.CalculateJobDependencies"
             objectClass="org.eclipse.gmf.runtime.diagram.ui.editparts.DiagramEditPart">
          <action
-               class="eu.geclipse.workflow.ui.part.CalculateJobDependenciesAction"
+               class="eu.geclipse.workflow.ui.internal.actions.CalculateJobDependenciesAction"
                definitionId="eu.geclipse.workflow.ui.calculateJobDependencies"
                enablesFor="1"
                id="eu.geclipse.workflow.ui.popup.calculateJobDependencies"

@@ -14,7 +14,7 @@
  *     - Ashish Thandavan - initial API and implementation
  *     - David Johnson
  ******************************************************************************/
-package eu.geclipse.workflow.ui.part;
+package eu.geclipse.workflow.ui.internal.actions;
 
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.operations.OperationHistoryFactory;
@@ -45,10 +45,10 @@ import eu.geclipse.workflow.model.IWorkflowJob;
 import eu.geclipse.workflow.ui.edit.commands.CopyJobDescToWorkflowCommand;
 import eu.geclipse.workflow.ui.edit.commands.UpdateJobPortsCommand;
 import eu.geclipse.workflow.ui.edit.parts.WorkflowJobEditPart;
+import eu.geclipse.workflow.ui.part.Messages;
 
 /**
  * @author athandava
- *
  */
 public class GetJobDescriptionFromFileAction implements IObjectActionDelegate {
 
@@ -56,7 +56,6 @@ public class GetJobDescriptionFromFileAction implements IObjectActionDelegate {
    * The WorkflowJobEditPart that has been selected.
    */
   protected WorkflowJobEditPart mySelectedElement;
-  
   /**
    * 
    */
@@ -64,7 +63,6 @@ public class GetJobDescriptionFromFileAction implements IObjectActionDelegate {
   String jobDescriptionInJSDL = null;
   private IFileStore wfRootFileStore = null;
   private String[] dirs = null;
-
   protected IFile jsdlTarget;
 
   public void setActivePart( IAction action, IWorkbenchPart targetPart ) {
@@ -77,9 +75,8 @@ public class GetJobDescriptionFromFileAction implements IObjectActionDelegate {
    */
   public void run( IAction action ) {
     FileDialog dialog = new FileDialog( this.myShell, SWT.OPEN );
-	String[] exts = { "*.jsdl" }; //$NON-NLS-1$
-	dialog.setFilterExtensions(exts);
-	
+    String[] exts = {"*.jsdl"}; //$NON-NLS-1$
+    dialog.setFilterExtensions( exts );
     // this bit find the root directory of the workflow
     TransactionalEditingDomain domain = this.mySelectedElement.getEditingDomain();
     ResourceSet resourceSet = domain.getResourceSet();
@@ -87,45 +84,53 @@ public class GetJobDescriptionFromFileAction implements IObjectActionDelegate {
     URI wfRootUri = res.getURI();
     String wfRootPath = wfRootUri.path();
     this.dirs = wfRootPath.split( "/" ); //$NON-NLS-1$
-    String projectName = this.dirs[2];
-    this.wfRootFileStore = GridModel.getRoot().getFileStore().getChild( projectName );
-	
-	dialog.setFilterPath( this.wfRootFileStore.toString() );
-
-    if ( dialog.open() != null ) { 
+    String projectName = this.dirs[ 2 ];
+    this.wfRootFileStore = GridModel.getRoot()
+      .getFileStore()
+      .getChild( projectName );
+    dialog.setFilterPath( this.wfRootFileStore.toString() );
+    if( dialog.open() != null ) {
       String result = dialog.getFileName();
       if( ( result != null ) && ( result.length() > 0 ) ) {
-    	  String filePath = dialog.getFilterPath() + "/" + result; //$NON-NLS-1$
-    	  //filePath = filePath.replace(' ', '+');
-    	  java.net.URI filePathUri = null;
-    	  filePathUri = URIUtil.toURI(filePath);
-          IFile jsdlFile = ResourcesPlugin.getWorkspace()
+        String filePath = dialog.getFilterPath() + "/" + result; //$NON-NLS-1$
+        // filePath = filePath.replace(' ', '+');
+        java.net.URI filePathUri = null;
+        filePathUri = URIUtil.toURI( filePath );
+        IFile jsdlFile = ResourcesPlugin.getWorkspace()
           .getRoot()
           .findFilesForLocationURI( filePathUri )[ 0 ];
-          IWorkflowJob selectedJob = (IWorkflowJob)this.mySelectedElement.resolveSemanticElement();
-          if (!(selectedJob.getName()==null && selectedJob.getJobDescription()==null)) {
-            MessageDialog confirmDialog = new MessageDialog( null,
-                 Messages.getString("WorkflowJobDragDropEditPolicy_confirmationTitle"), //$NON-NLS-1$
-                 null,
-                 Messages.getString( "WorkflowJobDragDropEditPolicy_userPrompt" ), //$NON-NLS-1$
-                 true ? MessageDialog.QUESTION : MessageDialog.WARNING ,
-                 new String[] { IDialogConstants.YES_LABEL, IDialogConstants.NO_LABEL },
-                 0 );
-            int confirmResult = confirmDialog.open();
-            if (confirmResult==0) {
-          	JSDLJobDescription jsdl = new JSDLJobDescription(jsdlFile); 
-          	  AbstractTransactionalCommand copyCommand = new CopyJobDescToWorkflowCommand(this.mySelectedElement.resolveSemanticElement(), jsdl);
-              AbstractTransactionalCommand updatePortsCommand = new UpdateJobPortsCommand(GetJobDescriptionFromFileAction.this.mySelectedElement, jsdl);  	    
-              try {
-                OperationHistoryFactory.getOperationHistory()
-                .execute( copyCommand, new NullProgressMonitor(), null );  	    
-                OperationHistoryFactory.getOperationHistory()
+        IWorkflowJob selectedJob = ( IWorkflowJob )this.mySelectedElement.resolveSemanticElement();
+        if( !( selectedJob.getName() == null && selectedJob.getJobDescription() == null ) )
+        {
+          MessageDialog confirmDialog = new MessageDialog( null,
+                                                           Messages.getString( "WorkflowJobDragDropEditPolicy_confirmationTitle" ), //$NON-NLS-1$
+                                                           null,
+                                                           Messages.getString( "WorkflowJobDragDropEditPolicy_userPrompt" ), //$NON-NLS-1$
+                                                           true
+                                                               ? MessageDialog.QUESTION
+                                                               : MessageDialog.WARNING,
+                                                           new String[]{
+                                                             IDialogConstants.YES_LABEL,
+                                                             IDialogConstants.NO_LABEL
+                                                           },
+                                                           0 );
+          int confirmResult = confirmDialog.open();
+          if( confirmResult == 0 ) {
+            JSDLJobDescription jsdl = new JSDLJobDescription( jsdlFile );
+            AbstractTransactionalCommand copyCommand = new CopyJobDescToWorkflowCommand( this.mySelectedElement.resolveSemanticElement(),
+                                                                                         jsdl );
+            AbstractTransactionalCommand updatePortsCommand = new UpdateJobPortsCommand( GetJobDescriptionFromFileAction.this.mySelectedElement,
+                                                                                         jsdl );
+            try {
+              OperationHistoryFactory.getOperationHistory()
+                .execute( copyCommand, new NullProgressMonitor(), null );
+              OperationHistoryFactory.getOperationHistory()
                 .execute( updatePortsCommand, new NullProgressMonitor(), null );
-        	    } catch( ExecutionException eE ) {
-        	      eE.printStackTrace();
-        	    }
+            } catch( ExecutionException eE ) {
+              eE.printStackTrace();
             }
           }
+        }
       }
     }
   }
@@ -146,5 +151,4 @@ public class GetJobDescriptionFromFileAction implements IObjectActionDelegate {
   private boolean isEnabled() {
     return this.mySelectedElement != null;
   }
-  
 }

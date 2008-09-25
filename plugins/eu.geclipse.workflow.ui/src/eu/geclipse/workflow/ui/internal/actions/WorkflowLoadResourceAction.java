@@ -13,7 +13,7 @@
  *     RUR (http://acet.rdg.ac.uk/)
  *     - Ashish Thandavan - initial API and implementation
  ******************************************************************************/
-package eu.geclipse.workflow.ui.part;
+package eu.geclipse.workflow.ui.internal.actions;
 
 import org.eclipse.emf.edit.ui.action.LoadResourceAction.LoadResourceDialog;
 import org.eclipse.jface.action.IAction;

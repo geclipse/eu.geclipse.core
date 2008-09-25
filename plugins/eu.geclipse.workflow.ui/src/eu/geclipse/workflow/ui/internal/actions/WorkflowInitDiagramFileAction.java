@@ -13,7 +13,7 @@
  *     RUR (http://acet.rdg.ac.uk/)
  *     - Ashish Thandavan - initial API and implementation
  ******************************************************************************/
-package eu.geclipse.workflow.ui.part;
+package eu.geclipse.workflow.ui.internal.actions;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.common.util.URI;
@@ -37,6 +37,7 @@ import eu.geclipse.ui.dialogs.ProblemDialog;
 import eu.geclipse.workflow.ui.edit.parts.WorkflowEditPart;
 import eu.geclipse.workflow.ui.editor.WorkflowDiagramEditorUtil;
 import eu.geclipse.workflow.ui.internal.WorkflowDiagramEditorPlugin;
+import eu.geclipse.workflow.ui.part.Messages;
 import eu.geclipse.workflow.ui.wizards.WorkflowNewDiagramFileWizard;
 
 /**
