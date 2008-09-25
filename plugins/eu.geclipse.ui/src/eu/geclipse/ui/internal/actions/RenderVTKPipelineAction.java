@@ -41,7 +41,7 @@ public class RenderVTKPipelineAction extends SelectionListenerAction {
   private IWorkbenchSite workbenchSite;
 
   /**
-   * @param workbenchSite
+   * @param site
    */
   public RenderVTKPipelineAction( final IWorkbenchPartSite site ) {
     super ( Messages.getString( "RenderVTKPipelineAction.title" ) ); //$NON-NLS-1$
