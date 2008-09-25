@@ -35,11 +35,11 @@ import eu.geclipse.gvid.internal.GVidStatsEvent;
 import eu.geclipse.ui.visualisation.IVisualisationWindow;
 
 class GVidPage extends Composite implements IGVidStatsListener, IVisualisationWindow {
-  private final Frame awtFrame;
   IBidirectionalConnection connection;
   GVidClient gvidClient;
   Thread gvidThread;
   Label statsLabel;
+  private final Frame awtFrame;
   private Composite SWT_AWT_container;
   private final CTabItem tabItem;
 
@@ -60,11 +60,6 @@ class GVidPage extends Composite implements IGVidStatsListener, IVisualisationWi
   }
 
   public void init( final Composite parent, final int style ) {
-    // TODO Auto-generated method stub
-
-  }
-
-  public void init( final Composite parent, final int style, final CTabItem item ) {
     // TODO Auto-generated method stub
 
   }
