@@ -28,7 +28,7 @@ import eu.geclipse.jsdl.ui.wizards.NewJobWizard;
 
 /**
  * Class that is a {@link IWizardNode} holding itself as a Wizard. This Wizard
- * is a basic (allways present) part of {@link NewJobWizard}
+ * is a basic (always present) part of {@link NewJobWizard}
  */
 public class BasicWizardPart extends Wizard implements IWizardNode {
 
@@ -53,9 +53,8 @@ public class BasicWizardPart extends Wizard implements IWizardNode {
   }
 
   @Override
-  public boolean performFinish()
-  {
-    return this.parentWizard.performFinish();
+  public boolean performFinish() {
+    return true;
   }
 
   public Point getExtent() {
@@ -72,8 +71,7 @@ public class BasicWizardPart extends Wizard implements IWizardNode {
   }
 
   @Override
-  public void addPages()
-  {
+  public void addPages() {
     for( WizardPage page : this.internalPages ) {
       addPage( page );
     }
