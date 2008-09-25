@@ -90,6 +90,8 @@
           label="Data Staging Page">
       </topic>
       <topic href="html/concepts/jobmanagement/editorpages/resources.html" label="Resources Page"></topic>
+      <topic href="html/concepts/jobmanagement/editorpages/sweep.html" label="Parameters Sweep Page">
+      </topic>
     </topic>
     <topic
       label="Submitting a Job"
