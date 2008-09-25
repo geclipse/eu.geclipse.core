@@ -17,7 +17,9 @@ package eu.geclipse.ui.internal.transfer;
 
 import java.net.URI;
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileInfo;
@@ -40,6 +42,8 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
 import eu.geclipse.core.filesystem.GEclipseURI;
@@ -49,7 +53,9 @@ import eu.geclipse.core.model.IGridConnection;
 import eu.geclipse.core.model.IGridConnectionElement;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
+import eu.geclipse.core.reporting.IProblem;
 import eu.geclipse.core.reporting.ProblemException;
+import eu.geclipse.ui.dialogs.ProblemDialog;
 import eu.geclipse.ui.internal.Activator;
 
 
@@ -220,9 +226,63 @@ public class GridElementTransferOperation
         status.merge( pExc.getStatus() );
       }
     }
-    return status;    
+    
+    if( status.getSeverity() != IStatus.OK ) {
+      showProblemDialog( status );
+    }
+    return Status.OK_STATUS;    // always return OK, because we displays our own ProblemDialog 
   }
   
+  private void showProblemDialog( final MultiStatus status ) {
+    IWorkbench workbench = PlatformUI.getWorkbench();
+    IWorkbenchWindow window = workbench.getActiveWorkbenchWindow();
+    if( window == null ) {
+      IWorkbenchWindow[] windows = workbench.getWorkbenchWindows();
+      if( windows.length > 0 ) {
+        window = windows[ 0 ];
+      }
+    }
+    if( window != null ) {
+      final Shell shell = window.getShell();
+      shell.getDisplay().syncExec( new Runnable() {
+
+        public void run() {
+          ProblemDialog.openProblem( shell,
+                                     Messages.getString("GridElementTransferOperation.problemDialogTitle"), //$NON-NLS-1$
+                                     status.getChildren().length == 1 ? Messages.getString("GridElementTransferOperation.msgElementCannotBeCopied") : Messages.getString("GridElementTransferOperation.msgElementsCannotBeCopied"), //$NON-NLS-1$ //$NON-NLS-2$
+                                     createProblemException( status ) );
+        }
+      } );
+    }
+  }
+  
+  ProblemException createProblemException( final MultiStatus multiStatus )
+  {
+    ProblemException problemException = null;
+    List<IStatus> failedStatuses = new ArrayList<IStatus>();
+    for( IStatus childStatus : multiStatus.getChildren() ) {
+      if( childStatus.getSeverity() != IStatus.OK ) {
+        failedStatuses.add( childStatus );
+      }
+    }
+    Throwable firstException = failedStatuses.size() > 0
+                                                        ? failedStatuses.get( 0 )
+                                                          .getException()
+                                                        : null;
+    problemException = new ProblemException( "eu.geclipse.ui.problem.tranfserOperationFailed", //$NON-NLS-1$
+                                             firstException,
+                                             Activator.PLUGIN_ID );
+    IProblem problem = problemException.getProblem();
+    for( IStatus status : failedStatuses ) {
+      String msg = status.getMessage();
+      if( !msg.equals( status.getException().getMessage() ) ) {
+        msg = msg + "\n" + status.getException().getMessage(); //$NON-NLS-1$
+      }
+      problem.addReason( msg );
+    }
+    return problemException;
+  }
+
   /**
    * Copy the specified file store to the destination file store.
    * The source may be a file or a directory. Directories will be copied
@@ -474,7 +534,7 @@ public class GridElementTransferOperation
                                         formatURI( data.targetFile.toURI() ),
                                         formatDate( targetInfo.getLastModified() ), 
                                         formatURI( data.sourceFile.toURI() ),
-                                        ""
+                                        "" //$NON-NLS-1$
                                         );        
         
         MessageDialog dialog = new MessageDialog( shell,

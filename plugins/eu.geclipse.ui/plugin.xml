@@ -328,6 +328,10 @@
             description="Selected source and target is the same. File cannot overwrite itself."
             id="eu.geclipse.ui.problem.fileCannotOverwriteItself">
       </problem>
+      <problem
+            description="Transfer operation failed"
+            id="eu.geclipse.ui.problem.tranfserOperationFailed">
+      </problem>
    </extension>
    <extension
          point="eu.geclipse.ui.efs">
