@@ -402,7 +402,7 @@
          </preferenceTag>
       </solution>
       <solution
-            description="You may have to install the JCE unrestricted policy files in your Java installation"
+            description="Install the JCE unrestricted policy files in your Java installation"
             id="eu.geclipse.core.solution.auth.jceUnrestrictedPolicyFile">
          <helpTag
                pagePath="/eu.geclipse.doc.user/html/known_issues.html">
