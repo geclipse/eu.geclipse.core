@@ -126,5 +126,11 @@ public interface ICoreProblems {
     = "eu.geclipse.core.problem.tar.unsupportedEntryType"; //$NON-NLS-1$
   public static final String TAR_WRONG_HEADER_SIZE
     = "eu.geclipse.core.problem.tar.wrongHeaderSize"; //$NON-NLS-1$
+  
+  // VO
+  public static final String VO_IMPORT_INCOMPLETE
+    = "eu.geclipse.core.problem.vo.importIncomplete"; //$NON-NLS-1$
+  public static final String VO_IMPORT_FAILED
+    = "eu.geclipse.core.problem.vo.importFailed"; //$NON-NLS-1$
 
 }

@@ -39,13 +39,13 @@ public interface IVoLoader {
    * @param name The name of the VO.
    * @param monitor A {@link IProgressMonitor} that is used to
    * indicate the progress of the import operation.
-   * @return An {@link IStatus} that may give hints if the creation of
-   * the VO was successful and if the import process may only be partially
-   * successful.
+   * @throws ProblemException If the import process either failed or was
+   * incomplete.
    */
-  public IStatus createVo( final URI uri,
+  public void createVo( final URI uri,
                            final String name,
-                           final IProgressMonitor monitor );
+                           final IProgressMonitor monitor )
+      throws ProblemException;
   
   /**
    * Get a list of VO names that are found at the specified

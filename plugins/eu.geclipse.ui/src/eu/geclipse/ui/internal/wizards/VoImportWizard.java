@@ -21,17 +21,16 @@ import java.net.URI;
 import java.net.URL;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.MultiStatus;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
-import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardPage;
 
+import eu.geclipse.core.ICoreProblems;
 import eu.geclipse.core.model.IVoLoader;
+import eu.geclipse.core.reporting.IProblem;
+import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.ui.dialogs.ProblemDialog;
 import eu.geclipse.ui.internal.Activator;
 
@@ -56,7 +55,7 @@ public class VoImportWizard extends Wizard {
     
     private String[] vos;
     
-    private IStatus result;
+    private ProblemException error;
     
     VoImportOperation( final IVoLoader loader,
                               final URI location,
@@ -71,30 +70,30 @@ public class VoImportWizard extends Wizard {
      * 
      * @return The merged status of all nested import operations.
      */
-    public IStatus getStatus() {
-      return this.result;
+    public ProblemException getError() {
+      return this.error;
     }
 
     public void run( final IProgressMonitor monitor )
         throws InvocationTargetException, InterruptedException {
       
       monitor.beginTask( Messages.getString("VoImportWizard.loading_progress"), this.vos.length ); //$NON-NLS-1$
-      MultiStatus mStatus = null;
+      this.error = null;
       
       for ( String certID : this.vos ) {
         SubProgressMonitor subMonitor = new SubProgressMonitor( monitor, 1 );
-        IStatus status = loader.createVo( this.location, certID, subMonitor );
-        if ( ! status.isOK() ) {
-          if ( mStatus == null ) {
-            mStatus = new MultiStatus( Activator.PLUGIN_ID, 0, Messages.getString("VoImportWizard.import_problem"), null ); //$NON-NLS-1$
+        try {
+          this.loader.createVo( this.location, certID, subMonitor );
+        } catch ( ProblemException pExc ) {
+          if ( this.error == null ) {
+            this.error = pExc;
+          } else {
+            this.error.getProblem().merge( pExc.getProblem() );
           }
-          mStatus.merge( status );
         }
       }
       
       monitor.done();
-      
-      this.result = mStatus == null ? Status.OK_STATUS : mStatus;
       
     }
     
@@ -164,14 +163,14 @@ public class VoImportWizard extends Wizard {
       result = false;
     }
     
-    IStatus status = op.getStatus();
+    ProblemException error = op.getError();
     
-    if ( ! status.isOK() ) {
-      ErrorDialog.openError(
+    if ( error != null ) {
+      ProblemDialog.openProblem(
           getShell(),
           Messages.getString("VoImportWizard.error_dialog_title"), //$NON-NLS-1$
           Messages.getString("VoImportWizard.error_dialog_text"), //$NON-NLS-1$
-          status );   
+          error );   
     }
     
     return result;

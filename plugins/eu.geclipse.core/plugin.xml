@@ -479,6 +479,14 @@
             description="Folder creation failed"
             id="eu.geclipse.core.problem.io.crateFolderFailed">
       </problem>
+      <problem
+            description="The VO import was incomplete for one or more VOs"
+            id="eu.geclipse.core.problem.vo.importIncomplete">
+      </problem>
+      <problem
+            description="The VO import failed for one or more VOs"
+            id="eu.geclipse.core.problem.vo.importFailed">
+      </problem>
    </extension>
    <extension
          point="eu.geclipse.core.simpleTests">

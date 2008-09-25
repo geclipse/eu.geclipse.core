@@ -140,8 +140,9 @@ public class ProblemDialog extends ErrorDialog {
                                                    | GridData.VERTICAL_ALIGN_BEGINNING) );
     }
 
-    Composite composite = new Composite( parent, SWT.NONE );
+    Composite composite = new Composite( parent, SWT.BORDER );
     composite.setLayoutData( new GridData( GridData.GRAB_HORIZONTAL
+                                           | GridData.GRAB_VERTICAL
                                            | GridData.HORIZONTAL_ALIGN_FILL
                                            | GridData.VERTICAL_ALIGN_BEGINNING ) );
     composite.setLayout( new PackLayout( SWT.VERTICAL ) );
