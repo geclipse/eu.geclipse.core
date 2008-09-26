@@ -27,6 +27,7 @@ import eu.geclipse.core.model.IGridJobID;
 import eu.geclipse.core.model.IGridJobService;
 import eu.geclipse.core.model.IGridJobStatus;
 import eu.geclipse.core.model.IServiceJobStatusListener;
+import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.servicejob.Activator;
 import eu.geclipse.servicejob.model.ServiceJobStates;
@@ -74,8 +75,11 @@ public class ServiceJobUpdater extends Job {
         if( srvCreator != null ) {
           try {
             IGridJobService jobService = ( IGridJobService )srvCreator.create( null );
-            // TODO szymon !!! pass correct VO instead of null
-            IGridJobStatus newStatus = jobService.getJobStatus( jobID, null, monitor );
+            IVirtualOrganization vo = null;
+            if( this.test != null && this.test.getProject() != null ) {
+              vo = this.test.getProject().getVO();
+            }
+            IGridJobStatus newStatus = jobService.getJobStatus( jobID, vo, monitor );
             lastRefreshTime = newStatus.getLastUpdateTime();
             if( newStatus.canChange() ) {
               this.test.setJobResult( jobID,
@@ -84,11 +88,12 @@ public class ServiceJobUpdater extends Job {
                                       ServiceJobStates.RUNNING.getAlias() );
             } else {
               jobIDsToDelete.add( jobID );
-              //TODO maybe change to some sort of FINISHED result enum ?
               this.test.setJobResult( jobID,
                                       lastRefreshTime,
                                       Messages.getString("JobTestUpdater.finished_status"), //$NON-NLS-1$
-                                      ServiceJobStates.OK.getAlias() );
+                                      newStatus.isSuccessful()?
+                                         ServiceJobStates.OK.getAlias():
+                                         ServiceJobStates.WARNING.getAlias());
               this.test.computeJobResult( jobID, newStatus );
             }
           } catch( ProblemException exc ) {
