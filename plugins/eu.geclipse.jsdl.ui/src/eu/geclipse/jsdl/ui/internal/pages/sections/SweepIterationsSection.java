@@ -111,7 +111,8 @@ public class SweepIterationsSection extends JsdlFormPageSection {
         // TODO Auto-generated method stub
       }
     } );
-    renewTableViewer( new EditorParametricJsdlHandler( this ) );    // dummy handler
+    renewTableViewer( new EditorParametricJsdlHandler( this ) ); // dummy
+    // handler
   }
 
   protected void updateTable() {
@@ -127,17 +128,19 @@ public class SweepIterationsSection extends JsdlFormPageSection {
       protected IStatus run( final IProgressMonitor monitor ) {
         IParametricJsdlGenerator generator = ParametricJsdlGeneratorFactory.getGenerator( jsdl );
         try {
-          generator.generate( handler,
-                              monitor );
+          generator.generate( handler, monitor );
         } catch( ProblemException exception ) {
           final ProblemException pexc = exception;
-          final Shell fShell = shell; 
+          final Shell fShell = shell;
           fShell.getDisplay().asyncExec( new Runnable() {
 
             public void run() {
-              ProblemDialog.openProblem( fShell, "JSDLs preview", "Generation JSDLs for preview failed", pexc );
-            }} );
-
+              ProblemDialog.openProblem( fShell,
+                                         "JSDLs preview",
+                                         "Generation JSDLs for preview failed",
+                                         pexc );
+            }
+          } );
         }
         return Status.OK_STATUS;
       }
@@ -146,16 +149,16 @@ public class SweepIterationsSection extends JsdlFormPageSection {
     job.schedule();
   }
 
-  private void renewTableViewer(final EditorParametricJsdlHandler handler) {
+  private void renewTableViewer( final EditorParametricJsdlHandler handler ) {
     List<Integer> widths = Collections.emptyList();
-    
-    if( this.viewer != null ) {      
+    if( this.viewer != null ) {
       TableColumn[] columns = this.viewer.getTable().getColumns();
-      widths = new ArrayList<Integer>( columns.length );
-      for( TableColumn column : columns ) {
-        widths.add( Integer.valueOf( column.getWidth() ) );
+      if( columns.length > 1 ) {
+        widths = new ArrayList<Integer>( columns.length );
+        for( TableColumn column : columns ) {
+          widths.add( Integer.valueOf( column.getWidth() ) );
+        }
       }
-      
       this.viewer.getTable().dispose();
     }
     this.viewer = null;
@@ -174,20 +177,23 @@ public class SweepIterationsSection extends JsdlFormPageSection {
     for( String name : columnNames ) {
       TableColumn column = new TableColumn( this.table, SWT.NONE );
       column.setText( name );
-      column.setWidth( colIndex < widths.size() ? widths.get( colIndex ).intValue() : 120 );
+      column.setWidth( colIndex < widths.size()
+                                               ? widths.get( colIndex )
+                                                 .intValue()
+                                               : 90 );
       colIndex++;
     }
     this.client.layout();
   }
 
   public void setInput( final JobDefinitionType jobDefinition,
-                        final JSDLJobDescription jsdlJobDescription )
+                        final JSDLJobDescription jsdlJobDescr )
   {
     this.adapterRefreshed = true;
     if( null != jobDefinition ) {
       this.jobDefinitionType = jobDefinition;
     }
-    this.jsdlJobDescription = jsdlJobDescription;
+    this.jsdlJobDescription = jsdlJobDescr;
   }
 
   public void iterationGenerated( final List<String> newRow ) {
@@ -202,13 +208,10 @@ public class SweepIterationsSection extends JsdlFormPageSection {
 
   private List<String> getColumnNamesForTable() {
     List<String> columnNames = new ArrayList<String>();
-    
     columnNames.add( "Iteration" );
-    
     for( String paramName : getInerSweepNames( getInnerList() ) ) {
       columnNames.add( paramName );
     }
-    
     return columnNames;
   }
 
@@ -267,7 +270,7 @@ public class SweepIterationsSection extends JsdlFormPageSection {
     }
     return result;
   }
-  
+
   public IterationsLProvider getLabelProvider() {
     return this.labelProvider;
   }
