@@ -62,9 +62,30 @@ limited functionality.
 </li>
 
 <li><h4>Workflow Component:</h4>
-The '.workflow' extension has to be typed in for the Workflow to be created and opened for editing in the
-Workflow Editor. JSDL files can be dragged and dropped directly onto existing workflow jobs to associate
-them with your workflow; drag and drop of JSDL files directly onto the workflow editor is not yet supported.
+There are some known synchronisation issues when performing actions on the
+workflow subjobs, folders, job-descriptions, etc. from different sides:
+  <ul>
+  <li>
+  Adding and removing data-staging in workflow JSDLs have any changes
+  reflected in the graphical workflow job's ports, however this behaviour is
+  does not happen in reverse, i.e., changes in workflow ports (added or
+  removed) are not reflected by changes in the related JSDL's data-staging
+  information.
+  </li>
+  <li>
+  Updating a workflow JSDL will cause existing links between jobs to be
+  broken. However, they can easily be re-connected again through using the
+  'Calculate Job Dependencies' action.
+  </li>
+  <li>
+  Renaming of workflow JSDLs that are linked to a graphical workflow job
+  will cause the graphical job's reference to the JSDL file to be removed.
+  </li>
+  <li>
+  Renaming the .workflow folder or enclosed .workflow file will cause errors
+  if both folder and file are of different names.
+  </li>
+  </ul>
 </li>
 </ul>
 

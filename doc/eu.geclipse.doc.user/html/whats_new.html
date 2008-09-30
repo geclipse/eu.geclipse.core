@@ -10,10 +10,68 @@
         <h1>What's new in g-Eclipse</h1>
         <ul>
             <li>
+                <b>g-Eclipse 1.0 M10</b>
+                <ul>
+                    <li>
+                        g-Eclipse has now data-transfer resuming functionality, detecting
+                        and restarting incomplete file transfers
+                    </li>
+                    <li>
+                        GridFTP now supports third-party transfers, copying files directly
+                        between the source and destination hosts if these are different from
+                        the local machine.
+                    </li>
+                    <li>
+                        Support for gLite CREAM Computing Elements
+                    </li>
+                    <li>
+                        Support is now added for benchmarks. Benchmarks are created and run
+                        as operator's jobs, and their results can be browsed using the new
+                        Benchmark View. Currently only one benchmark is provided (flops) but
+                        another one shall be implemented soon.
+                    </li>
+                    <li>
+                        The visualisation component underwent a number of changes, allowing
+                        some developer-oriented improvements:
+                        <ul>
+                            <li>
+                                Developers can add templates for creating custom VTK
+                                visualisation pipelines
+                            </li>
+                            <li>
+                                Developers can reuse the g-Eclipse Visualisation View
+                                for their own visualisation framework implementation
+                                that is not tied to VTK
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        The workflow components have several improvements:
+                        <ul>
+                            <li>
+                                The workflow editor can auto-connect output ports to input
+                                ports based on the data-staging URI, via a new context
+                                menu action, 'Calculate Job Dependencies' (shortcut 'ctrl-D')
+                            </li>
+                            <li>
+                                Updating data-staging in a workflow JSDL will update workflow job ports
+                            </li>
+                            <li>
+                                A number of UI enhancements including better error checking
+                                and an improved New Workflow wizard
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        ... and of course many bug fixes
+                    </li>
+                </ul>
+            </li>
+            <li>
                 <b>g-Eclipse 1.0 M9</b>
                 <ul>
                     <li>
-                        This is the first g-Eclipse release based on Ganymede/Eclipse 3.4.
+                        This is the first g-Eclipse release based on Ganymede/Eclipse 3.4
                     </li>
                     <li>
                         Initial support for Access Control management, allowing to display the
@@ -21,11 +79,11 @@
                     </li>
                     <li>
                         g-Eclipse has now UI support for parametric jobs (parameters sweep in JSDL
-                        files). A brand new "Parameters" page is available in the JSDL editor.
+                        files). A brand new "Parameters" page is available in the JSDL editor
                     </li>
                     <li>
                         Job submission with inner sweep (nested loops of parametric jobs) for gLite
-                        as well as for GRIA was added.
+                        as well as for GRIA was added
                     </li>
                     <li>
                         ... and of course a lot of bug fixes
@@ -54,7 +112,7 @@
                                 Each Workflow is now stored in a dedicated folder which holds the .workflow 
                                 file as well as the JSDL files corresponding to each Workflow Job
                                 (Note: the <strong>.workflow</strong> extension is still explicitly
-                                required when creating the workflow).
+                                required when creating the workflow)
                             </li>
                             <li>
                                 To associate a Workflow Job with a JSDL file, one can either select the
