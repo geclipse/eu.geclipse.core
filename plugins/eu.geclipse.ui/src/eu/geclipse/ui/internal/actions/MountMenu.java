@@ -7,6 +7,7 @@ import java.util.List;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IContributionItem;
+import org.eclipse.jface.action.IContributionManager;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -42,18 +43,12 @@ public class MountMenu
     this.mountAs = mountAs;
     checkVisible( StructuredSelection.EMPTY, this.mergedIDs );
   }
-
+  
   @Override
-  protected IContributionItem[] getContributionItems() {
-    IContributionItem[] result = new IContributionItem[ 0 ];
-    if ( ! this.mergedIDs.isEmpty() ) {
-      result = new IContributionItem[ this.mergedIDs.size() ];
-      for ( int i = 0 ; i < this.mergedIDs.size() ; i++ ) {
-        IAction action = getAction( this.mergedIDs.get( i ) );
-        result[ i ] = new ActionContributionItem( action );
-      }
+  public void setParent( final IContributionManager parent ) {
+    if ( parent != null ) {
+      super.setParent( parent );
     }
-    return result;
   }
 
   public void selectionChanged( final SelectionChangedEvent event ) {
@@ -82,6 +77,19 @@ public class MountMenu
     
     checkVisible( sSelection, this.mergedIDs );
     
+  }
+  
+  @Override
+  protected IContributionItem[] getContributionItems() {
+    IContributionItem[] result = new IContributionItem[ 0 ];
+    if ( ! this.mergedIDs.isEmpty() ) {
+      result = new IContributionItem[ this.mergedIDs.size() ];
+      for ( int i = 0 ; i < this.mergedIDs.size() ; i++ ) {
+        IAction action = getAction( this.mergedIDs.get( i ) );
+        result[ i ] = new ActionContributionItem( action );
+      }
+    }
+    return result;
   }
   
   private List< MountPointID > getMergedIDs( final List< IMountable > mounts ) {
