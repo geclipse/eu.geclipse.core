@@ -79,6 +79,15 @@ public interface IGridContainer extends IGridElement {
   public void delete( final IGridElement child ) throws ProblemException;
   
   /**
+   * Delete all children from this container. Subsequent model notifications
+   * are cached and delivered in one bunch.
+   * 
+   * @throws ProblemException If a problem occurs during the deletion.
+   * @see #delete(IGridElement)
+   */
+  public void deleteAll() throws ProblemException;
+  
+  /**
    * Search for a child with the specified name and return it.
    * Returns <code>null</code> if no such element was found.
    * 

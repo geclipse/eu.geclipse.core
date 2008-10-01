@@ -211,7 +211,11 @@ public class GridModelContentProvider
       IGridContainer container = ( IGridContainer ) element;
       this.progressNodes.remove( container );
       container.setDirty();
-      container.dispose();
+      try {
+        container.deleteAll();
+      } catch( ProblemException pExc ) {
+        Activator.logException( pExc );
+      }
     }
   }
 

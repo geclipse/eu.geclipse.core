@@ -374,7 +374,7 @@ public abstract class AbstractGridContainer
    * Remove all children from this container and call their
    * {@link #dispose()} methods.
    */
-  protected void deleteAll() {
+  public void deleteAll() {
     if ( ( this.children != null ) && !this.children.isEmpty() ) {
       for ( IGridElement child : this.children ) {
         unregisterFromManager( child );

@@ -114,6 +114,22 @@ public abstract class AbstractGridElementManager
       child.dispose();
     }
   }
+  
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IGridContainer#deleteAll()
+   */
+  public void deleteAll() {
+    if ( ( this.elements != null ) && !this.elements.isEmpty() ) {
+      Collection< IGridElement > values = this.elements.values();
+      for ( IGridElement element : values ) {
+        element.dispose();
+      }
+      IGridElement[] elementArray
+        = values.toArray( new IGridElement[ this.elements.size() ] );
+      fireGridModelEvent( IGridModelEvent.ELEMENTS_REMOVED, elementArray );
+      this.elements.clear();
+    }
+  }
 
   /* (non-Javadoc)
    * @see eu.geclipse.core.model.IGridContainer#findChild(java.lang.String)
@@ -339,6 +355,22 @@ public abstract class AbstractGridElementManager
       fireGridModelEvent( event );
     }
     return removed;
+  }
+  
+  /**
+   * Issue a new {@link GridModelEvent} of the specified type for the specified
+   * elements and distribute it to all registered listener.
+   * 
+   * @param type The event's type.
+   * @param elementArray The elements.
+   * @see #fireGridModelEvent(IGridModelEvent)
+   */
+  protected void fireGridModelEvent( final int type,
+                                     final IGridElement[] elementArray ) {
+    if ( ( elementArray != null ) && ( elementArray.length > 0 ) ) {
+      IGridModelEvent event = new GridModelEvent( type, this, elementArray );
+      fireGridModelEvent( event );
+    }
   }
   
   /**
