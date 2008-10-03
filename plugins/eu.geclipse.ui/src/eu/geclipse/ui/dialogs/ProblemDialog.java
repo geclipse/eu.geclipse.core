@@ -353,9 +353,8 @@ public class ProblemDialog extends ErrorDialog {
 
     if ( this.exc != null ) {
       resultList.add( new LogExceptionSolution( this.exc ) );
+      resultList.add( new ReportProblemSolution( this.exc ) );
     }
-
-    resultList.add( new ReportProblemSolution( this.exc ) );
     
     return resultList.toArray( new ISolution[ resultList.size() ] );
     
