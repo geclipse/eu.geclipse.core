@@ -48,7 +48,7 @@ import org.eclipse.ui.PlatformUI;
 
 import eu.geclipse.core.filesystem.GEclipseURI;
 import eu.geclipse.core.filesystem.TransferManager;
-import eu.geclipse.core.filesystem.TransferOperation;
+import eu.geclipse.core.filesystem.TransferInformation;
 import eu.geclipse.core.model.IGridConnection;
 import eu.geclipse.core.model.IGridConnectionElement;
 import eu.geclipse.core.model.IGridContainer;
@@ -96,7 +96,7 @@ public class GridElementTransferOperation
   /**
    * TransferOperation
    */
-  private TransferOperation transferOperation;
+  private TransferInformation transferOperation;
   
   /**
    * Determines if this is a copy or a move operation. 
@@ -129,7 +129,7 @@ public class GridElementTransferOperation
    * 
    * @param transferOperation transfer operation with information about transfer
    */
-  public GridElementTransferOperation( final TransferOperation transferOperation ) {
+  public GridElementTransferOperation( final TransferInformation transferOperation ) {
     super( Messages.getString( "GridElementTransferOperation.transfer_name" ) ); //$NON-NLS-1$
     this.transferOperation = transferOperation;
   }
@@ -160,14 +160,15 @@ public class GridElementTransferOperation
                                           null );
 
     if( this.transferOperation != null ) {
-      //Transfer file stores
+      //Resume file stores
       localMonitor.beginTask( Messages.getString("GridElementTransferOperation.transfering_element_progress"), 1 ); //$NON-NLS-1$
       TransferParams data = new TransferParams( this.transferOperation.getSource(),
-                                                null, 
+                                                null,
                                                 this.transferOperation.getDestination(),
-                                                this.transferOperation.getDestination().
-                                                  getChild( this.transferOperation.getSource().getName() ), 
-                                                  localMonitor );
+                                                this.transferOperation.getDestination()
+                                                  .getChild( this.transferOperation.getSource()
+                                                    .getName() ),
+                                                localMonitor );
       try {
         checkExistingTarget( data );
       } catch( ProblemException exc ) {
@@ -221,7 +222,10 @@ public class GridElementTransferOperation
       }
     
       try {
-        this.globalTarget.refresh( new SubProgressMonitor( localMonitor, 1 ) );
+        if( this.globalTarget.getResource() instanceof IContainer ) {
+          //Refresh only if target is a container
+          this.globalTarget.refresh( new SubProgressMonitor( localMonitor, 1 ) );
+        }
       } catch ( ProblemException pExc ) {
         status.merge( pExc.getStatus() );
       }
@@ -308,7 +312,10 @@ public class GridElementTransferOperation
       throw new OperationCanceledException();
     }
     if( data.status.isOK() ) {
-      TransferManager.getManager().doTransfer( from, to, this.move, monitor );
+      TransferManager.getManager().startTransfer( from, 
+                                                  to,
+                                                  this.move, 
+                                                  monitor );
     }
     return data.status;
     

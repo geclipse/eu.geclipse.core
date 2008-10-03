@@ -25,7 +25,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 
 import eu.geclipse.core.filesystem.TransferManager;
-import eu.geclipse.core.filesystem.TransferOperation;
+import eu.geclipse.core.filesystem.TransferInformation;
 
 
 /**
@@ -49,10 +49,10 @@ public class TransferResumer extends Job {
     class Runner implements Runnable {
       int exitCode;
       private final Display display;
-      private final List<TransferOperation> operations;
-      private List<TransferOperation> operationsToResume;
+      private final List<TransferInformation> operations;
+      private List<TransferInformation> operationsToResume;
       
-      Runner( final Display display, final List<TransferOperation> operations ) {
+      Runner( final Display display, final List<TransferInformation> operations ) {
         this.display = display;
         this.operations = operations;
       }
@@ -70,25 +70,25 @@ public class TransferResumer extends Job {
         this.operationsToResume = dialog.getOperationsToResume();
       }      
       
-      public List<TransferOperation> getOperationsToResume() {
+      public List<TransferInformation> getOperationsToResume() {
         return this.operationsToResume;
       }
     }
     
     IStatus status = Status.OK_STATUS;
     TransferManager trManager = TransferManager.getManager();
-    List<TransferOperation> pendingTransfers = trManager.getPendingTransfers();
+    List<TransferInformation> pendingTransfers = trManager.getPendingTransfers();
     
     //show dialog with list of pending transfers
     if( pendingTransfers.size() > 0 ) {
       Display display = PlatformUI.getWorkbench().getDisplay();
       Runner runner = new Runner( display, pendingTransfers );
       display.syncExec( runner );
-      List<TransferOperation> operationsToResume = runner.getOperationsToResume();
+      List<TransferInformation> operationsToResume = runner.getOperationsToResume();
       switch( runner.exitCode ) {
         case 0:
           //YES
-          for( TransferOperation op: pendingTransfers ) {
+          for( TransferInformation op: pendingTransfers ) {
             if( operationsToResume.contains( op ) ) {
               GridElementTransferOperation gridElementTransferOp = new GridElementTransferOperation( op );
               gridElementTransferOp.setUser( true );
@@ -100,9 +100,15 @@ public class TransferResumer extends Job {
           break;
         case 1:
           //CANCEL
-//          for( TransferOperation op: pendingTransfers ) {
-//            manager.unregisterTransfer( op.getId() );
-//          }
+          //Do not remove informations about the transfer from the repository
+          break;
+        case 3:
+          //NO
+          for( TransferInformation op: pendingTransfers ) {
+            trManager.unregisterTransfer( op.getId() );
+          }
+          break;
+        default:
           break;
       }
     }

@@ -19,7 +19,8 @@ import java.util.List;
 
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.IconAndMessageDialog;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
 import org.eclipse.jface.viewers.ICheckStateListener;
@@ -31,7 +32,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
@@ -40,31 +40,33 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 
 import eu.geclipse.core.filesystem.GEclipseURI;
-import eu.geclipse.core.filesystem.TransferOperation;
+import eu.geclipse.core.filesystem.TransferInformation;
 
 /**
  * Dialog for transfer resuming.
  *
  */
-public class TransferResumeDialog extends Dialog {
+public class TransferResumeDialog extends IconAndMessageDialog {
 
-  List<TransferOperation> operationsToResume = new ArrayList<TransferOperation>();
+  List<TransferInformation> operationsToResume = new ArrayList<TransferInformation>();
   
-  private List<TransferOperation> operations;
+  private List<TransferInformation> operations;
   private CheckboxTableViewer tableViewer;
 
   protected TransferResumeDialog( final Shell parentShell,
-                                  final List<TransferOperation> operations )
+                                  final List<TransferInformation> operations )
   {
     super( parentShell );
     setShellStyle( SWT.TITLE
-//                   | SWT.CLOSE
                    | SWT.BORDER
                    | SWT.RESIZE
                    | SWT.MIN
                    | SWT.MAX
                    | SWT.YES );
     this.operations = operations;
+    this.message = "Following transfers were not completed. "
+    + "Select transfers you want to resume and press Resume. "
+    + "All transfers which were not selected to resume will be abandoned";
   }
 
   @Override
@@ -75,16 +77,23 @@ public class TransferResumeDialog extends Dialog {
 
   @Override
   protected Control createDialogArea( final Composite parent ) {
-    Composite composite = ( Composite )super.createDialogArea( parent );
+    Composite mainComp = new Composite( parent, SWT.NONE );
+    mainComp.setLayout( new GridLayout( 1, false ) );
+    mainComp.setLayoutData( new GridData( GridData.FILL_BOTH ) );
+    
+    Composite msgComp = new Composite( mainComp, SWT.BORDER );
+    msgComp.setLayout( new GridLayout( 2, false ) );
+    msgComp.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true, true ) );
+    createMessageArea(msgComp);
+    
+//    Composite composite = ( Composite )super.createDialogArea( parent );
+    Composite composite = ( Composite )super.createDialogArea( mainComp );
     composite.setLayout( new GridLayout( 1, false ) );
     composite.setLayoutData( new GridData( GridData.FILL_BOTH ) );
-    // Composite panel = new Composite( composite, SWT.NONE );
-    // this.initializeDialogUnits( composite );
     Group group = new Group( composite, SWT.SHADOW_OUT );
     group.setLayout( new GridLayout( 1, false ) );
     group.setText( "Pending transfers" );
     GridData gData = new GridData( GridData.FILL_HORIZONTAL );
-    gData.horizontalSpan = 2;
     gData.grabExcessHorizontalSpace = true;
     gData.heightHint = 150;
     gData.verticalIndent = 20;
@@ -117,11 +126,11 @@ public class TransferResumeDialog extends Dialog {
     this.tableViewer.setLabelProvider( new TransferLabelProvider() );
     if( this.operations != null && this.operations.size() > 0 ) {
       this.tableViewer.setInput( this.operations );
-      for( TransferOperation op: this.operations ) {
+      for( TransferInformation op: this.operations ) {
         this.operationsToResume.add( op );
       }
     } else {
-      System.out.println( "null operations" );
+      //No operations to show
     }
     this.tableViewer.setAllChecked( true );
     this.tableViewer.addCheckStateListener( new ICheckStateListener() {
@@ -129,33 +138,54 @@ public class TransferResumeDialog extends Dialog {
       public void checkStateChanged( final CheckStateChangedEvent event ) {
         if( event.getChecked() ) {
           Object obj = event.getElement();
-          if( obj instanceof TransferOperation ) {
-            TransferResumeDialog.this.operationsToResume.add( ( TransferOperation )obj );
+          if( obj instanceof TransferInformation ) {
+            TransferResumeDialog.this.operationsToResume.add( ( TransferInformation )obj );
           }
         } else {
           Object obj = event.getElement();
-          if( obj instanceof TransferOperation ) {
+          if( obj instanceof TransferInformation ) {
             TransferResumeDialog.this.operationsToResume.remove( obj );
           }
         }
       }
     } );
-    Button checkbox = new Button( composite, SWT.CHECK );
-    checkbox.setText( "Disable transfer resuming (this can be changed in preferences)" );
     return composite;
   }
+  
+  @Override
+  protected void createButtonsForButtonBar(final Composite parent) {
+    // create OK and Cancel buttons by default
+    createButton(parent, IDialogConstants.OK_ID, "Resume selected",
+            true);
+    createButton(parent, IDialogConstants.NO_ID, "Abandon all transfers", false );
+    createButton(parent, IDialogConstants.CANCEL_ID,
+            IDialogConstants.CANCEL_LABEL, false);
+  }
+  
+  @Override
+  protected void buttonPressed(final int buttonId) {
+    super.buttonPressed( buttonId );
+    if( IDialogConstants.NO_ID == buttonId ) {
+      noPressed();
+    }
+  }
+  
+  private void noPressed(){
+    setReturnCode( IDialogConstants.NO_ID );
+    close();
+  }
 
-  public List<TransferOperation> getOperationsToResume() {
+  public List<TransferInformation> getOperationsToResume() {
     return this.operationsToResume;
   }
   class TransferContentProvider implements IStructuredContentProvider {
 
     public Object[] getElements( final Object inputElement ) {
-      List<TransferOperation> result = new ArrayList<TransferOperation>();
+      List<TransferInformation> result = new ArrayList<TransferInformation>();
       if( inputElement instanceof List ) {
         for( Object obj : ( List )inputElement ) {
-          if( obj instanceof TransferOperation ) {
-            result.add( ( TransferOperation )obj );
+          if( obj instanceof TransferInformation ) {
+            result.add( ( TransferInformation )obj );
           }
         }
       }
@@ -182,8 +212,8 @@ public class TransferResumeDialog extends Dialog {
 
     public String getColumnText( final Object element, final int columnIndex ) {
       String columnText = ""; //$NON-NLS-1$
-      if( element instanceof TransferOperation ) {
-        TransferOperation operation = ( TransferOperation )element;
+      if( element instanceof TransferInformation ) {
+        TransferInformation operation = ( TransferInformation )element;
         String source = "";
         String name = "";
         String destination = "";
@@ -246,5 +276,9 @@ public class TransferResumeDialog extends Dialog {
     public void removeListener( final ILabelProviderListener listener ) {
       // TODO Auto-generated method stub
     }
+  }
+  @Override
+  protected Image getImage() {
+    return getInfoImage();
   }
 }
