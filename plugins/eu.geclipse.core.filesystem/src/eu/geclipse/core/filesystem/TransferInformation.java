@@ -16,11 +16,13 @@ package eu.geclipse.core.filesystem;
 
 import org.eclipse.core.filesystem.IFileStore;
 
+import eu.geclipse.core.model.ITransferInformation;
+
 /**
  * Simple bean class representing transfer operation between two file stores.
  *
  */
-public class TransferOperation {
+public class TransferInformation implements ITransferInformation {
   
   private IFileStore source;
   private IFileStore destination;
@@ -37,11 +39,12 @@ public class TransferOperation {
    * @param data transfer-specific data
    * @param size size of the transfered file info associated with the file store
    */
-  public TransferOperation( final Integer id,
-                            final IFileStore source,
-                            final IFileStore destination,
-                            final String data,
-                            final long size ) {
+  public TransferInformation( final Integer id,
+                              final IFileStore source,
+                              final IFileStore destination,
+                              final String data,
+                              final long size )
+  {
     this.id = id;
     this.source = source;
     this.destination = destination;
@@ -78,18 +81,34 @@ public class TransferOperation {
     return this.source;
   }
   
+  /**
+   * Setter of the transfer ID. This is only local information.
+   * @param id identification number to be set
+   */
   public void setId( final Integer id ) {
     this.id =id;
   }
 
+  /**
+   * Setter for the transfer-specific data.
+   * @param data
+   */
   public void setData( final String data ) {
     this.data = data;
   }
 
+  /**
+   * Setter of the destination file store of this transfer.
+   * @param destination
+   */
   public void setDestination( final IFileStore destination ) {
     this.destination = destination;
   }
 
+  /**
+   * Setter of the source file store of this transfer.
+   * @param source
+   */
   public void setSource( final IFileStore source ) {
     this.source = source;
   }
@@ -98,6 +117,10 @@ public class TransferOperation {
     return this.size;
   }
   
+  /**
+   * Setter of the size of this transfer
+   * @param size of the transferred file, or 0 if transfer object is a folder.
+   */
   public void setSize( final long size ) {
     this.size = size;
   }

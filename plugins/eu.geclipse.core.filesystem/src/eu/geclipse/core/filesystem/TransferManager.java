@@ -17,11 +17,13 @@ package eu.geclipse.core.filesystem;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URI;
 import java.util.List;
 
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileInfo;
 import org.eclipse.core.filesystem.IFileStore;
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -29,14 +31,20 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
 
 import eu.geclipse.core.ExtensionManager;
 import eu.geclipse.core.filesystem.internal.Activator;
+import eu.geclipse.core.filesystem.internal.filesystem.ConnectionElement;
 import eu.geclipse.core.filesystem.internal.filesystem.GEclipseFileStore;
+import eu.geclipse.core.model.GridModel;
+import eu.geclipse.core.model.IGridElement;
+import eu.geclipse.core.model.ITransferInformation;
 import eu.geclipse.core.model.ITransferManager;
 import eu.geclipse.core.model.ITransferService;
+import eu.geclipse.core.reporting.ProblemException;
 
 /**
  * Manager class for handling all the transfers.
@@ -52,7 +60,7 @@ public class TransferManager implements ITransferManager {
   
   int counter = 1;
   
-  private List<TransferOperation> pendingTransfers;
+  private List<TransferInformation> pendingTransfers;
   
   private final boolean useRepo = true;
   
@@ -62,7 +70,7 @@ public class TransferManager implements ITransferManager {
    * Constructor of TransferManager class. It checks repository for unfinished
    * transfer operations and tries to resume them.
    */
-  public TransferManager() {
+  private TransferManager() {
     TransferRepository repo = TransferRepository.getTransferRepository();
     this.pendingTransfers = repo.getOperations();
   }
@@ -79,30 +87,104 @@ public class TransferManager implements ITransferManager {
     return singleton;
   }
   
-  public List<TransferOperation> getPendingTransfers() {
+  public List<TransferInformation> getPendingTransfers() {
     return this.pendingTransfers;
   }
 
-  public boolean resumeTransfer( final TransferOperation op,
+  public boolean resumeTransfer( final ITransferInformation transfer,
                                  final IProgressMonitor monitor )
   {
     boolean status = false;
-    ITransferService service = findService( op.getSource().toURI().getScheme(),
-                                            op.getDestination()
+    ITransferService service = findService( transfer.getSource().toURI().getScheme(),
+                                            transfer.getDestination()
                                               .toURI()
                                               .getScheme() );
-    status = service.transfer( op.getSource(), op.getDestination(), monitor );
+    status = service.transfer( transfer,
+                               transfer.isMove(),
+                               monitor );
+    try {
+      IGridElement[] children = GridModel.getConnectionManager().getChildren( monitor );
+      IContainer[] findContainersForLocationURI = GridModel.getRoot().getResource().getWorkspace().getRoot().findContainersForLocationURI( transfer.getDestination().toURI() );
+      for( IContainer cont: findContainersForLocationURI ) {
+        cont.refreshLocal( IContainer.DEPTH_ONE, monitor );
+      }
+      for( IGridElement elem: children ) {
+        if( elem instanceof ConnectionElement ) {
+          recursiveRefreshChild( transfer.getDestination().toURI(), ( ConnectionElement )elem, monitor );
+        }
+      }
+    } catch( ProblemException e ) {
+      // TODO Auto-generated catch block
+      Activator.logException( e );
+    } catch( CoreException e ) {
+      // TODO Auto-generated catch block
+      Activator.logException( e );
+    }
+    
     if( status && this.useRepo ) {
       TransferRepository repo = TransferRepository.getTransferRepository();
-      repo.delete( op.getId() );
+      repo.delete( transfer.getId() );
     }
     return status;
   }
+  
+  /**
+   * Method used to refresh all connection elements containing the transferred 
+   * element.
+   * 
+   * @param uri of the transferred element.
+   * @param element element on a connection tree which should be checked 
+   * @param monitor progress monitor
+   */
+  private void recursiveRefreshChild( final URI uri,
+                                      final ConnectionElement element,
+                                      final IProgressMonitor monitor )
+  {
+    ConnectionElement resultElement = null;
+    try {
+      String slaveScheme = new GEclipseURI( element.getConnectionFileStore().toURI() ).toSlaveURI().getScheme().toString();
+      if( uri.getScheme().equalsIgnoreCase( slaveScheme )
+          && element.hasChildren() )
+      {
+        IGridElement[] children = element.getChildren( monitor );
+        for( IGridElement child : children ) {
+          if( child instanceof ConnectionElement ) {
+            URI slaveURI = new GEclipseURI( ( ( ConnectionElement )child ).getConnectionFileStore()
+              .toURI() ).toSlaveURI();
+            if( slaveURI.equals( uri ) ) {
+              resultElement = ( ConnectionElement )child;
+              resultElement.refresh( monitor );
+            } else if( ( ( ConnectionElement )child ).hasChildren() ) {
+              Path uriPath = new Path( uri.getPath() );
+              Path slavePath = new Path( slaveURI.getPath() );
+              boolean continueSearch = true;
+              for( int i = 0; i < slavePath.segmentCount()
+                              && i < uriPath.segmentCount(); i++ )
+              {
+                if( !slavePath.segment( i ).equals( uriPath.segment( i ) ) ) {
+                  continueSearch = false;
+                }
+              }
+              if( continueSearch ) {
+                recursiveRefreshChild( uri, ( ConnectionElement )child, monitor );
+              }
+            }
+          }
+        }
+      }
+    } catch( ProblemException e ) {
+      //TODO better error handling
+      Activator.logException( e );
+    } catch( CoreException e ) {
+      //TODO better error handling
+      Activator.logException( e );
+    }
+  }
 
-  public boolean doTransfer( final IFileStore sourceGecl,
-                             final IFileStore destinationGecl,
-                             final boolean moveFlag,
-                             final IProgressMonitor monitor )
+  public boolean startTransfer( final IFileStore sourceGecl,
+                               final IFileStore destinationGecl,
+                               final boolean moveFlag,
+                               final IProgressMonitor monitor )
   {
     boolean status = false;
     IFileStore source;
@@ -121,7 +203,7 @@ public class TransferManager implements ITransferManager {
     ITransferService service = findService( source.toURI().getScheme(),
                                             destination.toURI().getScheme() );
     Integer transferId = getNextKey();
-    TransferOperation op = new TransferOperation( transferId,
+    TransferInformation op = new TransferInformation( transferId,
                                                   source,
                                                   destination,
                                                   "",
@@ -136,50 +218,38 @@ public class TransferManager implements ITransferManager {
     if ( monitor.isCanceled() ) {
       throw new OperationCanceledException();
     }
-    status = service.transfer( source, destination, monitor );
+    status = service.transfer( op, moveFlag, monitor );
     if( this.useRepo ) {
       repo.delete( transferId );
     }
     return status;
   }
-  
-  private boolean isTransferPending( final int id ) {
-    boolean result = false;
-    for( TransferOperation op: this.pendingTransfers ) {
-      if( op.getId().intValue() == id ) {
-        result = true;
-      }
-    }
-    return result;
-  }
-
+ 
   private ITransferService findService( final String scheme1,
                                         final String scheme2 )
   {
     ITransferService operation = null;
     ExtensionManager manager = new ExtensionManager();
-    List<IConfigurationElement> transfers = manager.getConfigurationElements( "eu.geclipse.core.filesystem.transferService",
-                                                                              "transfer" );
+    List<IConfigurationElement> transfers = manager.getConfigurationElements( "eu.geclipse.core.filesystem.transferService", //$NON-NLS-1$
+                                                                              "transfer" ); //$NON-NLS-1$
     int priority = TransferManager.INF;
     
+    //search extensions for operation with highest priority
     for ( IConfigurationElement provider: transfers ) {
-      if ( provider.getAttribute( "source" ).equalsIgnoreCase( scheme1 ) 
-          && provider.getAttribute( "target" ).equalsIgnoreCase( scheme2 ) 
-          && Integer.valueOf( provider.getAttribute( "priority" ) ).intValue() < priority ) {
+      if ( provider.getAttribute( "source" ).equalsIgnoreCase( scheme1 )  //$NON-NLS-1$
+          && provider.getAttribute( "target" ).equalsIgnoreCase( scheme2 )  //$NON-NLS-1$
+          && Integer.valueOf( provider.getAttribute( "priority" ) ).intValue() < priority ) { //$NON-NLS-1$
         
         try {
-          operation = (ITransferService) provider.createExecutableExtension( "class" );
-          priority = Integer.valueOf( provider.getAttribute( "priority" ) ).intValue();
+          operation = (ITransferService) provider.createExecutableExtension( "class" ); //$NON-NLS-1$
+          priority = Integer.valueOf( provider.getAttribute( "priority" ) ).intValue(); //$NON-NLS-1$
         } catch( CoreException e ) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
+          //TODO better error handling
+          Activator.logException( e );
         }
       }
       
     }
-    transfers.isEmpty();
-    // TODO search extensions for operation with highest priority
-    // FIXME tutaj
     if( operation == null ) {
       operation = new DefaultTransferService();
     }
@@ -192,17 +262,19 @@ public class TransferManager implements ITransferManager {
      * store. If destination IFileStore exists, then it will be deleted before
      * the operation.
      * 
-     * @param from The source of the transfer.
-     * @param to The target of the transfer.
+     * @param transfer information about the transfer
+     * @param isMove flag set to true if transfer is a move operation
      * @param monitor A progress monitor used to track the transfer.
      * @return A status object tracking errors of the transfer.
      */
-    public boolean transfer( final IFileStore from,
-                             final IFileStore to,
+    public boolean transfer( final ITransferInformation transfer,
+                             final boolean isMove,
                              final IProgressMonitor monitor )
     {
       boolean transferStatus = true;
       // Prepare copy operation
+      IFileStore from = transfer.getSource();
+      IFileStore to = transfer.getDestination();
       monitor.beginTask( Messages.getString( "TransferManager.copying_progress" ) + from.getName(), 100 ); //$NON-NLS-1$
       monitor.setTaskName( Messages.getString( "TransferManager.copying_progress" ) + from.getName() ); //$NON-NLS-1$
       InputStream inStream = null;
@@ -299,7 +371,7 @@ public class TransferManager implements ITransferManager {
       }
       } else {
         //Directory
-        copyDirectory( from, to, monitor );
+        copyDirectory( from, to, isMove, monitor );
       }
       return transferStatus;
     }
@@ -315,6 +387,7 @@ public class TransferManager implements ITransferManager {
      */
     private IStatus copyDirectory( final IFileStore from,
                                    final IFileStore to,
+                                   final boolean isMove,
                                    final IProgressMonitor monitor ) {
       
       // Prepare operation
@@ -370,7 +443,14 @@ public class TransferManager implements ITransferManager {
             for ( IFileStore child : children ) {
               
 //              IStatus tempStatus = copy( child, newTo, new SubProgressMonitor( subMonitor, 1) );
-              boolean statusChild = transfer( child, newTo, new SubProgressMonitor( subMonitor, 1 ) );
+              TransferInformation childTransfer = new TransferInformation( 0,
+                                                                      child,
+                                                                      newTo,
+                                                                      "",
+                                                                      0 );
+              boolean statusChild = transfer( childTransfer,
+                                              isMove,
+                                              new SubProgressMonitor( subMonitor, 1 ) );
               
               
               if ( subMonitor.isCanceled() ) {
@@ -408,7 +488,7 @@ public class TransferManager implements ITransferManager {
     // TODO Auto-generated method stub
     TransferRepository repo = TransferRepository.getTransferRepository();
     Integer transferId = getNextKey();
-    TransferOperation op = new TransferOperation( transferId,
+    TransferInformation op = new TransferInformation( transferId,
                                                   source,
                                                   destination,
                                                   "",

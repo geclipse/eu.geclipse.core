@@ -74,7 +74,7 @@ public class TransferRepository {
    * @param operationSpecificData
    * @param monitor
    */
-  public void save( final TransferOperation op ) {
+  public void save( final TransferInformation op ) {
     // TODO save
     try {
       TransferRepositoryWriter.saveOperation( op, getRepoFile() );
@@ -124,8 +124,8 @@ public class TransferRepository {
     }
   }
 
-  public List<TransferOperation> getOperations() {
-    List<TransferOperation> operations = null;
+  public List<TransferInformation> getOperations() {
+    List<TransferInformation> operations = null;
     // TODO iterate over XML file and get all unfinished operations
     // Create transfer operations from it using stored informations (src, dst,
     // data) and add to list
@@ -169,11 +169,11 @@ public class TransferRepository {
   }
   private static class TransferRepositoryParser {
 
-    public static List<TransferOperation> getOperations( final File file )
+    public static List<TransferInformation> getOperations( final File file )
       throws ParserConfigurationException, SAXException, IOException,
       CoreException, URISyntaxException
     {
-      List<TransferOperation> result = new ArrayList<TransferOperation>();
+      List<TransferInformation> result = new ArrayList<TransferInformation>();
       DocumentBuilderFactory factoryDOM = DocumentBuilderFactory.newInstance();
       DocumentBuilder builder = factoryDOM.newDocumentBuilder();
       Document document = builder.parse( file );
@@ -192,14 +192,14 @@ public class TransferRepository {
             .item( 0 ) ).getTextContent() );
         IFileStore source = EFS.getStore( new URI( sourceURI ) );
         IFileStore destination = EFS.getStore( new URI( destinationURI ) );
-        result.add( new TransferOperation( id, source, destination, data, lenght ) );
+        result.add( new TransferInformation( id, source, destination, data, lenght ) );
       }
       return result;
     }
   }
   private static class TransferRepositoryWriter {
 
-    public static void saveOperation( final TransferOperation op,
+    public static void saveOperation( final TransferInformation op,
                                       final File file )
       throws ParserConfigurationException, SAXException, IOException,
       TransformerFactoryConfigurationError, TransformerException

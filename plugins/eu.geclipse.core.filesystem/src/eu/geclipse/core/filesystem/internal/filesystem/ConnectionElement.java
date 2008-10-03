@@ -326,9 +326,9 @@ public class ConnectionElement
       GEclipseFileStore fileStore = ( GEclipseFileStore ) getConnectionFileStore();
 
       // Step 1: Reset and Refresh
-      /*fileStore.reset();
-      fileStore.setExternalMonitor( sMonitor.newChild( 10 ) );
-      res.refreshLocal( IResource.DEPTH_INFINITE, null );*/
+//      fileStore.reset();
+//      fileStore.setExternalMonitor( sMonitor.newChild( 10 ) );
+//      res.refreshLocal( IResource.DEPTH_INFINITE, null );
       
       // Step 2: Activate and fetch children remotely
       fileStore.setActive( GEclipseFileStore.FETCH_CHILDREN_ACTIVE_POLICY );

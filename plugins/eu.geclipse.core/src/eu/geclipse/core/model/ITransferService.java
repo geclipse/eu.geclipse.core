@@ -14,7 +14,6 @@
  *****************************************************************************/
 package eu.geclipse.core.model;
 
-import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 
@@ -27,13 +26,13 @@ public interface ITransferService {
   /**
    * Transfers contents of the source IFileStore to the target IFileStore.
    * 
-   * @param source of the transfer
-   * @param destination of the transfer
+   * @param operation details of the transfer
+   * @param isMove true if this is move operation, false if this is copy operation
    * @param monitor progress monitor
    * @return true if transfer succeeded, false if the transfer failed
    */
-  public boolean transfer( final IFileStore source,
-                           final IFileStore destination,
+  public boolean transfer( final ITransferInformation operation,
+                           final boolean isMove, 
                            final IProgressMonitor monitor );
     
   

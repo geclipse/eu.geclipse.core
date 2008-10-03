@@ -34,10 +34,20 @@ public interface ITransferManager {
    * @param monitor progress monitor
    * @return true if transfer succeeded, false if the transfer failed
    */
-  public boolean doTransfer( final IFileStore source, 
+  public boolean startTransfer( final IFileStore source, 
                              final IFileStore destination,
                              final boolean moveFlag,
                              final IProgressMonitor monitor );
+  
+  /**
+   * Method used to resume transfer described by <code>transfer</code> parameter.
+   * 
+   * @param transfer Informations about the transfer to be resumed
+   * @param monitor progress monitor
+   * @return true if transfer resuming was successful
+   */
+  public boolean resumeTransfer( final ITransferInformation transfer,
+                                 final IProgressMonitor monitor );
   
   /**
    * Removes transfer with the specified ID.
