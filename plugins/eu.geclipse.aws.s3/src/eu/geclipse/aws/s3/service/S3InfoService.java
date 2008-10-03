@@ -33,14 +33,9 @@ import eu.geclipse.aws.s3.S3BucketStorage;
 import eu.geclipse.aws.s3.internal.Activator;
 import eu.geclipse.aws.s3.internal.S3ServiceRegistry;
 import eu.geclipse.aws.vo.AWSVirtualOrganization;
-import eu.geclipse.core.model.IGridApplication;
-import eu.geclipse.core.model.IGridComputing;
 import eu.geclipse.core.model.IGridContainer;
-import eu.geclipse.core.model.IGridInfoService;
 import eu.geclipse.core.model.IGridResource;
 import eu.geclipse.core.model.IGridResourceCategory;
-import eu.geclipse.core.model.IGridService;
-import eu.geclipse.core.model.IGridStorage;
 import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.core.model.impl.AbstractGridInfoService;
 import eu.geclipse.core.model.impl.GridResourceCategoryFactory;
@@ -54,9 +49,7 @@ import eu.geclipse.core.reporting.ProblemException;
  * @author Moritz Post
  * @see AWSInfoService
  */
-public class S3InfoService extends AbstractGridInfoService
-  implements IGridInfoService
-{
+public class S3InfoService extends AbstractGridInfoService {
 
   /** The name of the file to save this grid element in. */
   public static String STORAGE_NAME = ".s3InfoService"; //$NON-NLS-1$
@@ -87,43 +80,6 @@ public class S3InfoService extends AbstractGridInfoService
       result = fetchBuckets( parent, vo, monitor );
     }
     return result;
-  }
-
-  @Deprecated
-  public IGridApplication[] fetchApplications( final IGridContainer parent,
-                                               final IVirtualOrganization vo,
-                                               final IGridComputing computing,
-                                               final IProgressMonitor monitor )
-  {
-    // not supported at the moment
-    return null;
-  }
-
-  @Deprecated
-  public IGridComputing[] fetchComputing( final IGridContainer parent,
-                                          final IVirtualOrganization vo,
-                                          final IProgressMonitor monitor )
-  {
-    // not supported at the moment
-    return null;
-  }
-
-  @Deprecated
-  public IGridService[] fetchServices( final IGridContainer parent,
-                                       final IVirtualOrganization vo,
-                                       final IProgressMonitor monitor )
-  {
-    // not supported at the moment
-    return null;
-  }
-
-  @Deprecated
-  public IGridStorage[] fetchStorage( final IGridContainer parent,
-                                      final IVirtualOrganization vo,
-                                      final IProgressMonitor monitor )
-  {
-    // not supported at the moment
-    return null;
   }
 
   /**
