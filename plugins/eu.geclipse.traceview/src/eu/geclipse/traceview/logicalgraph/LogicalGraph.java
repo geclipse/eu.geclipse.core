@@ -40,6 +40,7 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IViewSite;
 
+import eu.geclipse.traceview.IEvent;
 import eu.geclipse.traceview.IEventMarker;
 import eu.geclipse.traceview.ILamportTrace;
 import eu.geclipse.traceview.ITrace;
@@ -126,7 +127,7 @@ public class LogicalGraph extends TraceVisualization {
       @Override
       protected boolean shouldCreateToolTip( final Event event ) {
         Object obj = mouseAdapter.getObjectForPosition( event.x, event.y );
-        return obj != null;
+        return obj != null && obj.toString() != null;
       }
 
       @Override
@@ -135,6 +136,15 @@ public class LogicalGraph extends TraceVisualization {
         Object obj = mouseAdapter.getObjectForPosition( event.x, event.y );
         if( obj != null ) {
           result = obj.toString();
+          if (obj instanceof IEvent) {
+            for( IEventMarker eventmarker : getEventMarkers() ) {
+              eventmarker.mark( (IEvent)obj );
+              String markerString = eventmarker.getToolTip();
+              if (markerString != null) {
+                result += '\n' + markerString;
+              }
+            }
+          }
         }
         return result;
       }

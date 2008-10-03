@@ -161,7 +161,8 @@ public class Process extends AbstractFileCacheProcess {
                      final File cacheDir,
                      final List<String> sourceFilenames,
                      final String projectName,
-                     final ITrace trace )
+                     final ITrace trace,
+                     final int initialSize )
   {
     super( trace, processId, sourceFilenames, cacheDir );
     this.projectName = projectName;
@@ -196,7 +197,7 @@ public class Process extends AbstractFileCacheProcess {
                                                         + "_workaround" ), //$NON-NLS-1$
                                           "rw" ); //$NON-NLS-1$
         this.buffer = this.file.getChannel()
-          .map( FileChannel.MapMode.READ_WRITE, 0, this.eventSize * sizeInc )
+          .map( FileChannel.MapMode.READ_WRITE, 0, this.eventSize * initialSize )
           .order( ByteOrder.nativeOrder() )
           .asIntBuffer();
         this.buffer.limit( 0 );

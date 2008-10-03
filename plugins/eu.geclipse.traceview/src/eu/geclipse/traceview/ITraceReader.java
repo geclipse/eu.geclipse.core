@@ -18,6 +18,7 @@ package eu.geclipse.traceview;
 import java.io.IOException;
 
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 /**
  * Interface for trace readers.
@@ -31,5 +32,5 @@ public interface ITraceReader {
    * @return the opened trace
    * @throws IOException thrown if opening the trace fails
    */
-  ITrace openTrace( IPath tracePath ) throws IOException;
+  ITrace openTrace( IPath tracePath, IProgressMonitor monitor ) throws IOException;
 }

@@ -28,6 +28,7 @@ import java.util.TreeSet;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 import eu.geclipse.traceview.EventType;
 import eu.geclipse.traceview.ILamportTrace;
@@ -141,7 +142,7 @@ public class Trace extends AbstractTrace
    * @param trace NOPE trace directory.
    * @throws IOException thrown if a read error occurs.
    */
-  public ITrace openTrace( final IPath trace ) throws IOException {
+  public ITrace openTrace( final IPath trace, final IProgressMonitor monitor ) throws IOException {
     this.supportsVectorClocks = Activator.getDefault()
       .getPreferenceStore()
       .getBoolean( PreferenceConstants.vectorClocks );
@@ -173,6 +174,7 @@ public class Trace extends AbstractTrace
       }
     }
     this.processes = new Process[ files.length ];
+    monitor.beginTask( "Loading trace data", this.processes.length );
     int dirNr = this.tracedir.hashCode();
     this.tmpDir = new File( System.getProperty( "java.io.tmpdir" ), //$NON-NLS-1$
                             "trace_" + Integer.toHexString( dirNr ) ); //$NON-NLS-1$
@@ -191,23 +193,33 @@ public class Trace extends AbstractTrace
       }
       bufferedReader.close();
     }
+    Process prevProcess = null;
     for( File file : files ) {
       String filename = file.getName();
       int traceProc = Integer.parseInt( filename.substring( filename.length() - 3 ) );
+      monitor.subTask( "Loading process " + traceProc );
       Process processTrace = new Process( new File( this.tracedir, filename ),
                                           traceProc,
                                           reuseFile,
                                           this.tmpDir,
                                           this.sourceFilenames,
                                           projectName,
-                                          this );
+                                          this,
+                                          ( prevProcess == null ) ? 1000 : prevProcess.getMaximumLogicalClock() + 1000
+                                          );
+      prevProcess = processTrace;
       this.processes[ traceProc ] = processTrace;
+      monitor.worked( 1 );
     }
     if( !reuseFile ) {
+      monitor.subTask( "Updating logical clocks" );
       updatePartnerClocks();
+      monitor.subTask( "Calculating lamport clocks" );
       ClockCalculator.calcLamportClock( this );
-      if( this.supportsVectorClocks )
+      if( this.supportsVectorClocks ) {
+        monitor.subTask( "Calculating vector clocks" );
         updateVectorClocks();
+      }
     }
     for( Process process : this.processes ) {
       if( this.maximumLamportClock < process.getMaximumLamportClock() )

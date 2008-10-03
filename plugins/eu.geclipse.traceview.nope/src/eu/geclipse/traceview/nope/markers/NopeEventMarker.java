@@ -156,4 +156,8 @@ public class NopeEventMarker implements IEventMarker {
     }
     return result;
   }
+
+  public String getToolTip() {
+    return null;
+  }
 }

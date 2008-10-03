@@ -99,4 +99,8 @@ public class EventBreakpointMarker implements IEventMarker {
   public void setTrace( final ITrace trace ) {
     // empty
   }
+
+  public String getToolTip() {
+    return null;
+  }
 }

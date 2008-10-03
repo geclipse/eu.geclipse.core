@@ -84,4 +84,8 @@ public class CauseEffectMarker implements IEventMarker {
   public void setTrace( final ITrace trace ) {
     this.trace = trace;
   }
+
+  public String getToolTip() {
+    return null;
+  }
 }

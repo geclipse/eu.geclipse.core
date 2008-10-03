@@ -8,8 +8,10 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 import eu.geclipse.traceview.ILamportProcess;
 import eu.geclipse.traceview.ILamportTrace;
@@ -34,22 +36,24 @@ public class OTFReader extends AbstractTrace
   private String filename;
   private OTFUtils otfUtils = new OTFUtils();
 
-  public ITrace openTrace( final IPath tracePath ) throws IOException {
+  public ITrace openTrace( final IPath tracePath, final IProgressMonitor monitor ) throws IOException {
     File file = tracePath.toFile();
     this.input = new BufferedReader( new FileReader( file ) );
     this.filenameBase = file.getAbsolutePath()
       .substring( 0, file.getAbsolutePath().length() - 4 );
     this.filename = file.getName();
-    readOTF();
+    readOTF( monitor );
     for( Process process : this.processes ) {
       process.doneReading();
     }
+    monitor.subTask( "Calculating logical clocks" );
     ClockCalculator.calcPartnerLogicalClocks(this);
+    monitor.subTask( "Calculating lamport clocks" );
     ClockCalculator.calcLamportClock(this);
     return this;
   }
 
-  private void readOTF() throws IOException {
+  private void readOTF( final IProgressMonitor monitor ) throws IOException {
     while( ( this.otfUtils.line = this.input.readLine() ) != null ) {
       this.otfUtils.lineIdx = 0;
       parseStreamFileDef();
@@ -58,8 +62,12 @@ public class OTFReader extends AbstractTrace
     for( int i = 0; i < this.numProcs; i++ ) {
       this.processes[ i ] = new Process( i, this );
     }
-    for( Integer streamNr : this.streamMap.keySet() ) {
+    Set<Integer> streamNrs = this.streamMap.keySet();
+    monitor.beginTask( "Loading trace", streamNrs.size() );
+    for( Integer streamNr : streamNrs ) {
+      monitor.subTask( "Loading stream " + streamNr );
       loadStream( streamNr.intValue() );
+      monitor.worked( 1 );
     }
   }
 

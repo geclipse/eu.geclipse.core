@@ -89,4 +89,6 @@ public interface IEventMarker {
    * @param trace
    */
   public void setTrace( ITrace trace );
+
+  public String getToolTip();
 }

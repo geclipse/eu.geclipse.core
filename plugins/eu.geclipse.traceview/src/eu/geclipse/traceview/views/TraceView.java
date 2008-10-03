@@ -21,8 +21,12 @@ import java.util.Vector;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.IMenuCreator;
@@ -42,6 +46,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.ui.IWorkbenchActionConstants;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
 import eu.geclipse.traceview.ITrace;
@@ -66,12 +72,18 @@ public class TraceView extends ViewPart implements ITraceView {
 
   public void addTrace( final ITrace trace ) {
     if( trace != null ) {
-      getViewSite().getActionBars().getToolBarManager().removeAll();
-      this.traceVisPage = new TraceVisPage( this.cTabFolder,
-                                            SWT.NONE,
-                                            this.getViewSite(),
-                                            this,
-                                            trace );
+      try {
+        PlatformUI.getWorkbench().getActiveWorkbenchWindow()
+                  .getActivePage().showView( "eu.geclipse.traceview.views.TraceView" );
+        getViewSite().getActionBars().getToolBarManager().removeAll();
+        this.traceVisPage = new TraceVisPage( this.cTabFolder,
+                                              SWT.NONE,
+                                              this.getViewSite(),
+                                              this,
+                                              trace );
+      } catch( PartInitException exception ) {
+        Activator.logException( exception );
+      }
     }
   }
 
@@ -88,19 +100,35 @@ public class TraceView extends ViewPart implements ITraceView {
       public void run() {
         String tracePathString = TraceView.this.fileDialog.open();
         if( tracePathString != null ) {
-          IPath path = new Path( tracePathString );
+          final IPath path = new Path( tracePathString );
           String extension = path.getFileExtension();
           // get the trace reader
           for( IConfigurationElement configurationElement : Platform.getExtensionRegistry()
             .getConfigurationElementsFor( "eu.geclipse.traceview.TraceReader" ) ) { //$NON-NLS-1$
             if( configurationElement.getAttribute( "fileextension" ).equals( extension ) ) { //$NON-NLS-1$
               try {
-                ITraceReader traceReader = ( ITraceReader )configurationElement.createExecutableExtension( "class" ); //$NON-NLS-1$
-                ITrace trace = traceReader.openTrace( path );
-                addTrace( trace );
+                final ITraceReader traceReader = ( ITraceReader )configurationElement.createExecutableExtension( "class" ); //$NON-NLS-1$
+                Job openTraceJob = new Job("Opening Trace") {
+                  @Override
+                  protected IStatus run( final IProgressMonitor monitor ) {
+                    IStatus status = Status.OK_STATUS;
+                    try {
+                      final ITrace trace = traceReader.openTrace( path, monitor );
+                      Display.getDefault().syncExec( new Runnable() {
+                        public void run() {
+                          addTrace( trace );                        
+                        }
+                      } );
+                    } catch( IOException exception ) {
+                      Activator.logException( exception );
+                      status = Status.CANCEL_STATUS;
+                    }
+                    return status;
+                  }
+                };
+                openTraceJob.setUser( true );
+                openTraceJob.schedule();
               } catch( CoreException exception ) {
-                Activator.logException( exception );
-              } catch( IOException exception ) {
                 Activator.logException( exception );
               }
             }

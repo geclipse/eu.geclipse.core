@@ -18,8 +18,7 @@ package eu.geclipse.traceview.nope.preferences;
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceConverter;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.graphics.RGB;
 
 import eu.geclipse.traceview.IEventMarker;
 import eu.geclipse.traceview.nope.Activator;
@@ -40,7 +39,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
       store.setDefault( PreferenceConstants.Names[ i ]
                         + PreferenceConstants.enabled, false );
     }
-    // set all markers to ellipe
+    // set all markers to ellipse
     for( int i = 0; i < PreferenceConstants.Names.length; i++ ) {
       store.setDefault( PreferenceConstants.Names[ i ]
                         + PreferenceConstants.shape, IEventMarker.Ellipse_Event );
@@ -50,9 +49,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
       PreferenceConverter.setDefault( store,
                                       PreferenceConstants.Names[ i ]
                                           + PreferenceConstants.color,
-                                      Display.getCurrent()
-                                        .getSystemColor( SWT.COLOR_BLACK )
-                                        .getRGB() );
+                                      new RGB(0,0,0) );
     }
   }
 }
