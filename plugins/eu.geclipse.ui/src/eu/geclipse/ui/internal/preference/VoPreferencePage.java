@@ -501,10 +501,10 @@ public class VoPreferencePage
     List< IVirtualOrganization > vos = getSelectedVos();
     
     if ( ! vos.isEmpty() ) {
-      boolean confirm = ! MessageDialog.openConfirm( getShell(),
-                                                     Messages.getString("VoPreferencePage.delete_vos"), //$NON-NLS-1$
-                                                     Messages.getString("VoPreferencePage.really_delete_vos") ); //$NON-NLS-1$
-      if ( ! confirm ) {
+      boolean confirm = MessageDialog.openConfirm( getShell(),
+                                                   Messages.getString("VoPreferencePage.delete_vos"), //$NON-NLS-1$
+                                                   Messages.getString("VoPreferencePage.really_delete_vos") ); //$NON-NLS-1$
+      if ( confirm ) {
         IGridElement[] projectElements = {};
         
         // Collect a list of children of the GridRoot
@@ -525,10 +525,14 @@ public class VoPreferencePage
             
             // Projects have a ProjectVO wrapper, not the real VO
             IVirtualOrganization realVo = null;
-            realVo = ( IVirtualOrganization ) igp.getVO().getAdapter( IVirtualOrganization.class );
-            if ( ( realVo != null ) && ( vo == realVo ) ) {
-              used = true;
-              break;
+            IVirtualOrganization projectVo = igp.getVO();
+            // HiddenProject doesn't have a VO
+            if ( projectVo != null ) {
+              realVo = ( IVirtualOrganization ) projectVo.getAdapter( IVirtualOrganization.class );
+              if ( ( realVo != null ) && ( vo == realVo ) ) {
+                used = true;
+                break;
+              }
             }
           }
           
