@@ -91,6 +91,7 @@ public class NewJobWizard extends Wizard
   private DataStagingNewJobWizardPage outputFilesPage;
   private JSDLJobDescription basicJSDL;
   private String appName = ""; //$NON-NLS-1$
+  private boolean hasFinished = false;
 
   @Override
   public void addPages() {
@@ -191,9 +192,9 @@ public class NewJobWizard extends Wizard
     // this.file.setContents( getInitialStream(), true, true, monitor );
     if( jsdlJobDescription != null ) {
       setInitialModel( jsdlJobDescription );
-      jsdlJobDescription.save( this.file );
+      jsdlJobDescription.save(  );
     }
-    if ( translate ) {
+    if( translate ) {
       try {
         creator.setSource( jsdlJobDescription );
         IGridElement newElement = creator.create( jsdlJobDescription.getParent() );
@@ -226,27 +227,30 @@ public class NewJobWizard extends Wizard
         // this.basicJSDL = this.executablePage.getBasicJSDL();
         updateBasicJSDL( tempJSDL, tempAppName );
         if( this.basicJSDL != null ) {
-          jsdl.setRoot( this.basicJSDL.getRoot() );
+          jsdl.setRoot( this.basicJSDL.getDocumentRoot() );
         } else {
-          jsdl.createRoot();
-          jsdl.addJobDescription();
+//          jsdl.createRoot();
+//          jsdl.addJobDescription();
+          jsdl.setUpBasicJSDLStructure();
         }
       } else {
         if( this.basicJSDL != null ) {
           this.basicJSDL.removeDataStaging();
-          jsdl.setRoot( this.basicJSDL.getRoot() );
+          jsdl.setRoot( this.basicJSDL.getDocumentRoot() );
         } else {
-          jsdl.createRoot();
-          jsdl.addJobDescription();
+//          jsdl.createRoot();
+//          jsdl.addJobDescription();
+          jsdl.setUpBasicJSDLStructure();
         }
       }
     } else {
       if( this.basicJSDL != null ) {
         this.basicJSDL.removeDataStaging();
-        jsdl.setRoot( this.basicJSDL.getRoot() );
+        jsdl.setRoot( this.basicJSDL.getDocumentRoot() );
       } else {
-        jsdl.createRoot();
-        jsdl.addJobDescription();
+//        jsdl.createRoot();
+//        jsdl.addJobDescription();
+        jsdl.setUpBasicJSDLStructure();
       }
     }
     String applicationName = this.executablePage.getApplicationName();
@@ -255,14 +259,14 @@ public class NewJobWizard extends Wizard
       applicationName = applicationName.substring( 0,
                                                    applicationName.indexOf( "." ) ); //$NON-NLS-1$
     }
-    jsdl.addJobIdentification( applicationName, null );
+    jsdl.setJobIdentification( applicationName, null );
     String appName1 = ""; //$NON-NLS-1$
     if( this.executablePage.getApplicationName().equals( "" ) ) { //$NON-NLS-1$
       appName1 = applicationName;
     } else {
       appName1 = this.executablePage.getApplicationName();
     }
-    jsdl.addApplication();
+//    jsdl.addApplication();
     String in = null;
     String out = null;
     String err = null;
@@ -308,13 +312,13 @@ public class NewJobWizard extends Wizard
           String execNameTemp = test.toString()
             .substring( test.toString().lastIndexOf( "/" ) + 1, //$NON-NLS-1$
                         test.toString().length() );
-          jsdl.setInDataStaging( execNameTemp, execName );
+          jsdl.addDataStagingIn( execNameTemp, execName );
           execName = execNameTemp;
         }
       } catch( URISyntaxException e ) {
         // TODO katis what to do with this exception?
       }
-      jsdl.addPOSIXApplicationDetails( appName1,
+      jsdl.setPOSIXApplicationDetails( appName1,
                                        execName,
                                        in,
                                        inName,
@@ -328,7 +332,8 @@ public class NewJobWizard extends Wizard
       outFiles = this.outputFilesPage.getFiles( FileType.OUTPUT );
       if( !outFiles.isEmpty() ) {
         for( DataStagingType data : outFiles ) {
-          jsdl.addDataStagingType( data );
+//          jsdl.addDataStagingType( data );
+          jsdl.addDataStagingOut( data.getFileName(), data.getTarget().getURI() );
         }
       }
       // HashMap<String, String> outFiles = this.outputFilesPage.getFiles(
@@ -341,7 +346,8 @@ public class NewJobWizard extends Wizard
       outFiles = this.outputFilesPage.getFiles( FileType.INPUT );
       if( !outFiles.isEmpty() ) {
         for( DataStagingType data : outFiles ) {
-          jsdl.addDataStagingType( data );
+          jsdl.addDataStagingIn( data.getFileName(), data.getSource().getURI() );
+//          jsdl.addDataStagingType( data );
         }
         // for( String name : outFiles.keySet() ) {
         // jsdl.setInDataStaging( name, outFiles.get( name ) );
@@ -374,7 +380,7 @@ public class NewJobWizard extends Wizard
             }
             jsdl.addArgumentForPosixApplication( argName, values );
             for( String value : values ) {
-              jsdl.setInDataStaging( value, stagingIn.get( argName )
+              jsdl.addDataStagingIn( value, stagingIn.get( argName )
                 .getProperty( value ) );
             }
           }
@@ -389,7 +395,7 @@ public class NewJobWizard extends Wizard
               }
               jsdl.addArgumentForPosixApplication( argName, values );
               for( String value : values ) {
-                jsdl.setOutDataStaging( value, stagingOut.get( argName )
+                jsdl.addDataStagingOut( value, stagingOut.get( argName )
                   .getProperty( value ) );
               }
             }
@@ -405,8 +411,8 @@ public class NewJobWizard extends Wizard
   /**
    * @param newBasicJSDL
    * @param aspName name of application (its 'display name', shown on Name list
-   *            in Job Wizard, see also
-   *            {@link ApplicationParametersRegistry#getApplicationDataMapping()})
+   *          in Job Wizard, see also
+   *          {@link ApplicationParametersRegistry#getApplicationDataMapping()})
    */
   void updateBasicJSDL( final JSDLJobDescription newBasicJSDL,
                         final String aspName )
@@ -613,8 +619,8 @@ public class NewJobWizard extends Wizard
     }
 
     private void initTypeCombo( final Combo combo ) {
-      List<IConfigurationElement> elements
-        = GridModel.getCreatorRegistry().getConfigurations( JSDLJobDescription.class, IGridJobDescription.class );
+      List<IConfigurationElement> elements = GridModel.getCreatorRegistry()
+        .getConfigurations( JSDLJobDescription.class, IGridJobDescription.class );
       List<String> names = new ArrayList<String>();
       for( IConfigurationElement element : elements ) {
         try {
@@ -624,7 +630,7 @@ public class NewJobWizard extends Wizard
           names.add( name );
         } catch( CoreException e ) {
           // TODO Auto-generated catch block
-//          e.printStackTrace();
+          // e.printStackTrace();
           Activator.logException( e );
         }
       }
@@ -646,11 +652,21 @@ public class NewJobWizard extends Wizard
       if( project instanceof IGridProject ) {
         result = ( ( IGridProject )project ).getVO();
         if( result instanceof IWrappedElement ) {
-           result = ( IVirtualOrganization )( ( IWrappedElement )result ).getWrappedElement();
+          result = ( IVirtualOrganization )( ( IWrappedElement )result ).getWrappedElement();
         }
-        
       }
     }
     return result;
+  }
+
+  /**
+   * Method to access information if wizard's performFinish() method has
+   * returned <code>true</code> or <code>false</code>.
+   * 
+   * @return <code>true</code> if performFinish method succeeded,
+   *         <code>false</code> otherwise
+   */
+  public boolean getIsFinished() {
+    return this.hasFinished;
   }
 }
