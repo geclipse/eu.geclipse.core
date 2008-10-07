@@ -19,7 +19,6 @@ package eu.geclipse.workflow.ui.wizards;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.net.URL;
-import java.util.Iterator;
 
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IFolder;
@@ -27,7 +26,6 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -53,6 +51,10 @@ import org.eclipse.ui.internal.ide.IDEWorkbenchMessages;
 import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
 import org.eclipse.ui.internal.ide.misc.ResourceAndContainerGroup;
 
+import eu.geclipse.core.model.IGridContainer;
+import eu.geclipse.core.model.IGridElement;
+import eu.geclipse.core.model.IGridProject;
+import eu.geclipse.workflow.IGridWorkflowDescription;
 import eu.geclipse.workflow.ui.internal.WorkflowDiagramEditorPlugin;
 import eu.geclipse.workflow.ui.part.Messages;
 
@@ -309,25 +311,22 @@ public class NewWorkflowCreationWizardPage extends WizardPage
   /**
    * Initializes this page's controls.
    */
-  protected void initializePage() {
-    Iterator it = this.currentSelection.iterator();
-    if( it.hasNext() ) {
-      Object next = it.next();
-      IResource selectedResource = null;
-      if( next instanceof IResource ) {
-        selectedResource = ( IResource )next;
-      } else if( next instanceof IAdaptable ) {
-        selectedResource = ( IResource )( ( IAdaptable )next ).getAdapter( IResource.class );
-      }
-      if( selectedResource != null ) {
-        if( selectedResource.getType() == IResource.FILE ) {
-          selectedResource = selectedResource.getParent();
-        }
-        if( selectedResource.isAccessible() ) {
-          this.resourceGroup.setContainerFullPath( selectedResource.getFullPath() );
+  protected void initializePage() {    
+    Object o = this.currentSelection.getFirstElement();
+    if (o instanceof IGridContainer) {
+      IGridElement e = (IGridElement)o;
+      IGridProject project = e.getProject();
+      IPath path = null;
+      if (project != null) {
+        IGridElement workflows = project.getProjectFolder( IGridWorkflowDescription.class );
+        if( workflows != null ) {
+            path = workflows.getPath();
+        } else {
+          path = project.getPath();
         }
       }
-    }
+     this.resourceGroup.setContainerFullPath( path );
+    }    
     setPageComplete( false );
   }
 
