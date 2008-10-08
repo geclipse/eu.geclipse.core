@@ -24,6 +24,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -185,18 +186,11 @@ public class AccessControlDialog extends Dialog {
       
       @Override
       public void widgetSelected( final SelectionEvent e ) {
-        
         IACLEntry newEntry = AccessControlDialog.this.aclList.get( 0 ).getEmptyEntry();
-        AccessControlRuleDialog dialog
-          = new AccessControlRuleDialog( newEntry,
-                                         ! AccessControlDialog.this.canSaveWholeACL,
-                                         AccessControlDialog.this.getShell() );
-        
-        dialog.open();
+        editEntry( newEntry );
       }
+      
     } );
-    // TODO reenable when write support is available
-    addEntryButton.setEnabled( false );
     
     Button editEntryButton = new Button( buttons, SWT.PUSH );
     editEntryButton.setText( Messages.getString("AccessControlDialog.edit_button_text") ); //$NON-NLS-1$
@@ -206,14 +200,9 @@ public class AccessControlDialog extends Dialog {
       
       @Override
       public void widgetSelected( final SelectionEvent e ) {
-        
-        AccessControlRuleDialog dialog
-          = new AccessControlRuleDialog( getSelectedEntry(),
-                                         ! AccessControlDialog.this.canSaveWholeACL,
-                                         AccessControlDialog.this.getShell() );
-        
-        dialog.open();
+        editEntry( getSelectedEntry() );
       }
+      
     } );
     
     Button removeEntryButton = new Button( buttons, SWT.PUSH );
@@ -228,10 +217,8 @@ public class AccessControlDialog extends Dialog {
       }
     
     } );
-    // TODO reenable when write support is available
-    removeEntryButton.setEnabled( false );
     
-    // Fetch the entries to initialize the table
+    // Fetch the entries to initialise the table
     initialize();
     
     if ( this.entriesList != null ) {
@@ -242,7 +229,7 @@ public class AccessControlDialog extends Dialog {
   }
   
   /**
-   * Initializes the entries which should be displayed and managed in the
+   * Initialises the entries which should be displayed and managed in the
    * dialog.
    */
   private void initialize() {
@@ -316,12 +303,37 @@ public class AccessControlDialog extends Dialog {
   }
   
   /**
+   * Helper method to edit an entry.
+   * 
+   * @param entry the ACL entry to edit.
+   */
+  void editEntry( final IACLEntry entry ) {
+
+    AccessControlRuleDialog dialog
+      = new AccessControlRuleDialog( entry,
+                                     ! this.canSaveWholeACL,
+                                     this.getShell() );
+
+    int result = dialog.open();
+    switch ( result ) {
+      case Window.OK :
+        //save();
+        break;
+      case Window.CANCEL :
+        //undo();
+        break;
+      default :
+        break;
+    }
+  }
+  
+  /**
    * Helper method for removing the entry selected in the table.
    */
   void removeEntry() {
     
     /*
-     * We only ask for confirmation if the changes cannot be canceled,
+     * We only ask for confirmation if the changes cannot be cancelled,
      * i.e. if single ACL entries have to be saved separately.
      */
     boolean confirm = true;
@@ -338,7 +350,8 @@ public class AccessControlDialog extends Dialog {
       IACLEntry entry = getSelectedEntry();
       
       try {
-        for( IACL acl : this.aclList ) {
+        // This ACLEntry may belong to several ACLs
+        for ( IACL acl : this.aclList ) {
           acl.removeEntry( entry, null );
         }
         this.entriesList.remove( entry );
