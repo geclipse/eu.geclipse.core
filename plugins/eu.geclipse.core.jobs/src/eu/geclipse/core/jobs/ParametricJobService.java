@@ -108,7 +108,7 @@ public class ParametricJobService implements IGridJobService {
     int statusType = IGridJobStatus.DONE;
     List<GridJob> childrenJobs = getChildrenJobs();
     subMonitor.setWorkRemaining( childrenJobs.size() );
-    boolean unkOccured = false, abortedOccured = false, runningOccured = false;
+    boolean unkOccured = false, abortedOccured = false, runningOccured = false, waitingOccured = false, submittedOccured = false;
     
     for( GridJob gridJob : childrenJobs ) {
       subMonitor.subTask( String.format( Messages.getString("ParametricJobService.taskNameUpdating"), gridJob.getID().getJobID() ) ); //$NON-NLS-1$
@@ -122,17 +122,24 @@ public class ParametricJobService implements IGridJobService {
         case IGridJobStatus.DONE:
           break;
           
+        case IGridJobStatus.SUBMITTED:
+          submittedOccured = true;
+          break;
+          
         case IGridJobStatus.ABORTED:        
           abortedOccured = true;
           break;
         
         case IGridJobStatus.WAITING:
+          waitingOccured = true;
+          break;
         case IGridJobStatus.RUNNING:
           runningOccured = true;
           break;
           
         case IGridJobStatus.PURGED:
         case IGridJobStatus.UNKNOWN:
+        case IGridJobStatus.UNDEF:
           unkOccured = true;
           break;
       }
@@ -142,6 +149,10 @@ public class ParametricJobService implements IGridJobService {
       statusType = IGridJobStatus.UNKNOWN;
     } else if( abortedOccured ) {
       statusType = IGridJobStatus.ABORTED;
+    } else if( submittedOccured ) {
+      statusType = IGridJobStatus.SUBMITTED;
+    } else if( waitingOccured ) {
+      statusType = IGridJobStatus.WAITING;
     } else if( runningOccured ) {
       statusType = IGridJobStatus.RUNNING;
     } else {
