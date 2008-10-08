@@ -223,7 +223,7 @@ public class AuthTokenView
                 int hours = ( int )( ( lifetime % 86400 ) / 3600 );
                 int minutes = ( int )( ( lifetime % 3600 ) / 60 );
                 int seconds = ( int )( lifetime % 60 );
-                columnText = String.format( "%1$3dd %2$2dh %3$2dm %4$2ds", //$NON-NLS-1$
+                columnText = String.format( "%1$3dd %2$02dh %3$02dm %4$02ds", //$NON-NLS-1$
                                             Integer.valueOf( days ),
                                             Integer.valueOf( hours ),
                                             Integer.valueOf( minutes ),
