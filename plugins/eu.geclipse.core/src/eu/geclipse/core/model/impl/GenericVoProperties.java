@@ -132,6 +132,7 @@ public class GenericVoProperties
                 Class< ? > targetClass = bundle.loadClass( targetType );
                 if ( targetClass.isAssignableFrom( serviceClass ) ) {
                   creator = ( IGridElementCreator ) element.createExecutableExtension( Extensions.GRID_ELEMENT_CREATOR_EXECUTABLE );
+                  creator.setSource( serviceURI );
                   break;
                 }
               }
