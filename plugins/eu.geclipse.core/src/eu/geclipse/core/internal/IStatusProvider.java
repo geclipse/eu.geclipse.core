@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -22,7 +22,7 @@ import org.eclipse.core.runtime.Status;
  * The <code>IStatusProvider</code> interface defines status
  * objects that can be used to create logs and/or exceptions.
  * This interface centralised on the one hand the efforts for
- * internatiolization and offers the possibility to reuse status
+ * internationalisation and offers the possibility to reuse status
  * objects.
  */
 public interface IStatusProvider {
