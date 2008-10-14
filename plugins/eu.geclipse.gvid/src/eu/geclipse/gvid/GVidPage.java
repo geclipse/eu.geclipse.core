@@ -13,7 +13,7 @@
  *    Thomas Koeckerbauer GUP, JKU - initial API and implementation
  *****************************************************************************/
 
-package eu.geclipse.gvid.internal.views;
+package eu.geclipse.gvid;
 
 import java.awt.Frame;
 import java.io.IOException;
@@ -29,12 +29,11 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 
 import eu.geclipse.core.IBidirectionalConnection;
-import eu.geclipse.gvid.IGVidStatsListener;
 import eu.geclipse.gvid.internal.GVidClient;
 import eu.geclipse.gvid.internal.GVidStatsEvent;
-import eu.geclipse.ui.visualisation.IVisualisationWindow;
+import eu.geclipse.gvid.internal.views.Messages;
 
-class GVidPage extends Composite implements IGVidStatsListener, IVisualisationWindow {
+public class GVidPage extends Composite implements IGVidStatsListener {
   IBidirectionalConnection connection;
   GVidClient gvidClient;
   Thread gvidThread;
@@ -43,7 +42,7 @@ class GVidPage extends Composite implements IGVidStatsListener, IVisualisationWi
   private Composite SWT_AWT_container;
   private final CTabItem tabItem;
 
-  GVidPage( final Composite parent, final int style,  final CTabItem cTabItem ) {
+  public GVidPage( final Composite parent, final int style,  final CTabItem cTabItem ) {
     super( parent, style );
     this.tabItem = cTabItem;
     initialize();
@@ -99,7 +98,7 @@ class GVidPage extends Composite implements IGVidStatsListener, IVisualisationWi
     this.tabItem.setText( name );
   }
 
-  void startClient( final IBidirectionalConnection conn ) throws IOException {
+  public void startClient( final IBidirectionalConnection conn ) throws IOException {
     this.connection = conn;
     this.gvidClient = new GVidClient( this.connection.getInputStream(),
                                       this.connection.getOutputStream() );

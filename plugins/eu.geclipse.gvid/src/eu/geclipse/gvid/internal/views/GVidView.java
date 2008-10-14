@@ -31,8 +31,8 @@ import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.part.ViewPart;
 
 import eu.geclipse.core.IBidirectionalConnection;
+import eu.geclipse.gvid.GVidPage;
 import eu.geclipse.gvid.IGVidView;
-import eu.geclipse.ui.visualisation.IVisualisationWindow;
 
 /**
  * View for displaying the output of remote visualisation applications.
@@ -134,7 +134,7 @@ public class GVidView extends ViewPart implements IGVidView {
       public void focusGained( final FocusEvent event ) {
         CTabFolder folder = (CTabFolder) event.widget;
         CTabItem item = folder.getSelection();
-        if( ( item != null ) && ( item.getControl() != null ) ) {
+        if( item != null && item.getControl() != null ) {
           item.getControl().setFocus();
         }
       }
@@ -157,7 +157,7 @@ public class GVidView extends ViewPart implements IGVidView {
     }
   }
 
-  public IVisualisationWindow addGVidPage( final IBidirectionalConnection connection ) throws IOException {
+  public GVidPage addGVidPage( final IBidirectionalConnection connection ) throws IOException {
     CTabItem cTabItem = new CTabItem( this.cTabFolder, SWT.CLOSE );
     final GVidPage page = new GVidPage( this.cTabFolder, SWT.NONE, cTabItem );
     page.startClient( connection );

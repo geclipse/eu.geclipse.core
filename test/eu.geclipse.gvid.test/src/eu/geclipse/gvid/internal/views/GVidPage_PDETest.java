@@ -27,6 +27,8 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import eu.geclipse.gvid.GVidPage;
+
 
 /**tests the class GVidPage
  * @author tao-j

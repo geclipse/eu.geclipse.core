@@ -18,7 +18,6 @@ package eu.geclipse.gvid;
 import java.io.IOException;
 
 import eu.geclipse.core.IBidirectionalConnection;
-import eu.geclipse.ui.visualisation.IVisualisationWindow;
 
 /**
  * Interface to the GVid view, allows to add new GVid pages.
@@ -31,5 +30,5 @@ public interface IGVidView {
    * @return the created GVid page.
    * @throws IOException thrown if a connection error occurs.
    */
-  public IVisualisationWindow addGVidPage( final IBidirectionalConnection connection ) throws IOException;
+  public GVidPage addGVidPage( final IBidirectionalConnection connection ) throws IOException;
 }
