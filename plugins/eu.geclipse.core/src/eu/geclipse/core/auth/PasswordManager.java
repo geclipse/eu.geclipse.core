@@ -16,6 +16,8 @@
 
 package eu.geclipse.core.auth;
 
+import java.util.Hashtable;
+
 import org.eclipse.equinox.security.storage.ISecurePreferences;
 import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
 import org.eclipse.equinox.security.storage.StorageException;
@@ -30,11 +32,15 @@ import eu.geclipse.core.internal.Activator;
  * this id could be the path to the key file in the file system. If the key file
  * is then opened for the first time the user is asked for the password. Then
  * the password is stored with the file path as <code>pwuid</code>. If the file
- * has to be opened a second time the user has not again to specify the password
- * since the PasswordManager has already stored this password and knows that it
- * belongs to the key file. Please note that passwords are only hold in memory.
- * They are not stored on disk and are therefore not available across different
- * sessions.
+ * has to be opened a second time the user does not have to specify the password
+ * again since the PasswordManager has already stored it and knows that it
+ * belongs to the key file. The PasswordManager currently relies on Equinox's
+ * secure storage (SS) mechanism to persist passwords across sessions. Note
+ * however that this SS does have an access password of its own. Therefore,
+ * depending on the SS settings and also the platform, the user might need
+ * to provide the SS password to access its stored passwords. If the user avoids
+ * providing this SS password then an internal in-memory implementation is used
+ * to keep already entered passwords for the lifetime of the gEclipse session.
  * 
  * @author stuempert-m
  */
@@ -42,6 +48,19 @@ public abstract class PasswordManager {
 
   /** A constant to denote the password field. */
   private static final String PASSWORD = "password"; //$NON-NLS-1$
+
+  /** The error code for the case "user denied providing password" */
+  private static final int SECURE_STORAGE_NO_PASSWD_PROVIDED = 4;
+
+  /** A flag denoting that the user allowed access to secure storage */
+  private static boolean useSecureStorage = true;
+
+  /**
+   * 
+   * The internal list of managed passwords.
+   */
+  private static Hashtable< String, String > registeredPasswords
+           = new Hashtable< String, String >();
 
   /**
    * Look up the password with the specified ID and return it if it could be
@@ -53,14 +72,28 @@ public abstract class PasswordManager {
   static public String getPassword( final String pwuid ) {
     String result = null;
     
-    ISecurePreferences securePreferences = SecurePreferencesFactory.getDefault();
-    ISecurePreferences node = securePreferences.node( pwuid );
-    
-    try {
-      result = node.get( PasswordManager.PASSWORD, null );
-    } catch ( StorageException storageEx ) {
-      Activator.logException( storageEx );
+    if ( useSecureStorage == true ) {
+      ISecurePreferences securePreferences = SecurePreferencesFactory.getDefault();
+      ISecurePreferences node = securePreferences.node( pwuid );
+      
+      try {
+        result = node.get( PasswordManager.PASSWORD, null );
+      } catch ( StorageException storageEx ) {
+
+        // If the user declined accessing the SS then use the internal mechanism
+        if ( storageEx.getErrorCode() == SECURE_STORAGE_NO_PASSWD_PROVIDED ) {
+          useSecureStorage = false;
+        } else {
+          Activator.logException( storageEx );
+        }
+
+      }
     }
+    
+    if ( useSecureStorage == false ) {
+      result = registeredPasswords.get( pwuid );
+    }
+    
     return result;
   }
 
@@ -73,13 +106,29 @@ public abstract class PasswordManager {
    * @param pw The password that should be registered.
    */
   static public void registerPassword( final String pwuid, final String pw ) {
-    ISecurePreferences securePreferences = SecurePreferencesFactory.getDefault();
-    ISecurePreferences node = securePreferences.node( pwuid );
-    try {
-      node.put( PasswordManager.PASSWORD, pw, true );
-    } catch ( StorageException storageEx ) {
-      Activator.logException( storageEx );
+
+    if ( useSecureStorage == true ) {
+      ISecurePreferences securePreferences = SecurePreferencesFactory.getDefault();
+      ISecurePreferences node = securePreferences.node( pwuid );
+
+      try {
+        node.put( PasswordManager.PASSWORD, pw, true );
+      } catch ( StorageException storageEx ) {
+
+        // The user declined accessing the SS
+        if ( storageEx.getErrorCode() == SECURE_STORAGE_NO_PASSWD_PROVIDED ) {
+          useSecureStorage = false;
+        } else {
+          Activator.logException( storageEx );
+        }
+
+      }
     }
+
+    if ( useSecureStorage == false ) {
+      registeredPasswords.put( pwuid, pw );
+    }
+
   }
 
   /**
@@ -89,8 +138,14 @@ public abstract class PasswordManager {
    * @param pwuid The unique ID of the password that should be erased.
    */
   static public void erasePassword( final String pwuid ) {
-    ISecurePreferences securePreferences = SecurePreferencesFactory.getDefault();
-    ISecurePreferences node = securePreferences.node( pwuid );
-    node.remove( PasswordManager.PASSWORD );
+
+    if ( useSecureStorage == true ) {
+      ISecurePreferences securePreferences = SecurePreferencesFactory.getDefault();
+      ISecurePreferences node = securePreferences.node( pwuid );
+      node.remove( PasswordManager.PASSWORD );
+    } else {
+      registeredPasswords.remove( pwuid );
+    }
+
   }
 }
