@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006, 2007 g-Eclipse Consortium
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -15,6 +15,7 @@
 
 package eu.geclipse.ui.internal.actions;
 
+import java.text.MessageFormat;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
@@ -32,12 +33,12 @@ public class Messages {
 
   /**
    * Returns a localised version of a message.
-   * 
+   *
    * @param key key for the message.
    * @return the localised string.
    */
   public static String getString( final String key ) {
-    String resultString = '!' + key + '!'; 
+    String resultString = '!' + key + '!';
     try {
       resultString = RESOURCE_BUNDLE.getString( key );
     } catch( MissingResourceException mrEx ) {
@@ -45,5 +46,19 @@ public class Messages {
     }
     return resultString;
   }
-  
+  /**
+   * Returns a localised version of a message (Containing one argument).
+   *
+   * @param key key for the message.
+   * @param arg0 argument to insert.
+   * @return the localised string.
+   */
+  public static String formatMessage( final String key, final Object arg0 ) {
+    String messageString = getString( key );
+    MessageFormat mf = new MessageFormat( messageString );
+    Object[] args = new Object[ 1 ];
+    args[ 0 ] = arg0;
+    return mf.format( args );
+  }
+
 }

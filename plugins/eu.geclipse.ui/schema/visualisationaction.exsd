@@ -3,10 +3,10 @@
 <schema targetNamespace="eu.geclipse.ui" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appinfo>
-         <meta.schema plugin="eu.geclipse.ui" id="visualisationWindow" name="Visualisation Window"/>
+         <meta.schema plugin="eu.geclipse.ui" id="eu.geclipse.ui.visualisationaction" name="Visualisation Action"/>
       </appinfo>
       <documentation>
-         Implementing this extension will add a custom defined visualisation support to g-Eclipse. The visualisation window showing the rendered images will be placed within the Visualisation View Part of g-Eclipse.
+         [Enter description of this extension point.]
       </documentation>
    </annotation>
 
@@ -18,7 +18,7 @@
       </annotation>
       <complexType>
          <sequence>
-            <element ref="window" minOccurs="1" maxOccurs="unbounded"/>
+            <element ref="action" minOccurs="1" maxOccurs="unbounded"/>
          </sequence>
          <attribute name="point" type="string" use="required">
             <annotation>
@@ -47,16 +47,23 @@
       </complexType>
    </element>
 
-   <element name="window">
+   <element name="action">
       <complexType>
-         <attribute name="name" type="string" use="required">
+         <attribute name="text" type="string" use="required">
             <annotation>
                <documentation>
                   
                </documentation>
             </annotation>
          </attribute>
-         <attribute name="id" type="string">
+         <attribute name="tooltip" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="fileExtension" type="string" use="required">
             <annotation>
                <documentation>
                   
@@ -69,22 +76,8 @@
                   
                </documentation>
                <appinfo>
-                  <meta.attribute kind="java" basedOn=":eu.geclipse.ui.visualisation.AbstractVisualisationWindow"/>
+                  <meta.attribute kind="java" basedOn="eu.geclipse.ui.visualisation.AbstractVisualisationAction:"/>
                </appinfo>
-            </annotation>
-         </attribute>
-         <attribute name="remote" type="boolean" use="required">
-            <annotation>
-               <documentation>
-                  Set to true, signifies that the rendering will take place on a remote machine. If false, signifies that the rendering will be done locally.
-               </documentation>
-            </annotation>
-         </attribute>
-         <attribute name="fileExt" type="string" use="required">
-            <annotation>
-               <documentation>
-                  The file extension of the resource that this visualisation window knows how to deal with.
-               </documentation>
             </annotation>
          </attribute>
       </complexType>
@@ -104,17 +97,7 @@
          <meta.section type="examples"/>
       </appinfo>
       <documentation>
-         &lt;pre&gt;
-&lt;extension point=&quot;eu.geclipse.ui.visualisationWindow&quot;&gt;
-  &lt;page
-    class=&quot;eu.geclipse.vtk.ui.GVidVisWindow&quot;
-    id=&quot;eu.geclipse.vtk.ui.gvidviswindow&quot;
-    name=&quot;Remote Visualisation&quot;
-    remote=true
-    fileExt=&quot;vtkpipeline&quot;&gt;
-  &lt;/page&gt;
-&lt;/extension&gt;
-&lt;/pre&gt;
+         [Enter extension point usage example here.]
       </documentation>
    </annotation>
 

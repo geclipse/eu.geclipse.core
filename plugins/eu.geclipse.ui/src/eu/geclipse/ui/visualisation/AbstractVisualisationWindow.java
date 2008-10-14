@@ -14,6 +14,8 @@
  *****************************************************************************/
 package eu.geclipse.ui.visualisation;
 
+import java.awt.Canvas;
+
 import org.eclipse.swt.widgets.Composite;
 
 
@@ -24,7 +26,10 @@ import org.eclipse.swt.widgets.Composite;
  * @author sgirtel
  *
  */
-public interface IVisualisationWindow {
+public abstract class AbstractVisualisationWindow {
+
+  protected Canvas canvas = null;
+  protected VisComposite viscomp = null;
 
   /**
    * The file extension of the resource that this visualisation window knows how to render.
@@ -42,7 +47,7 @@ public interface IVisualisationWindow {
   public static final String EXT_SITE = "remote"; //$NON-NLS-1$
 
   /**
-   * Name of the attribute which specifies the class name of the IVisualisationWindow
+   * Name of the attribute which specifies the class name of the AbstractVisualisationWindow
    * implementation.
    */
   public static final String EXT_VISUALISATION_PAGE_CLASS = "class"; //$NON-NLS-1$
@@ -65,9 +70,19 @@ public interface IVisualisationWindow {
   public abstract String getTabName();
 
   /**
-   * @return
+   * @param canvas
    */
-  public abstract Composite getVisComp();
+  public void setCanvas( final Canvas canvas ) {
+    this.canvas = canvas;
+  }
+
+  public Canvas getCanvas() {
+    return this.canvas;
+  }
+
+  public Composite getVisComp() {
+    return this.viscomp;
+  }
 
   /**
    * @param parent

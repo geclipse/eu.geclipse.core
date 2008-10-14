@@ -42,7 +42,7 @@ import eu.geclipse.ui.internal.Activator;
  */
 public class VisualisationView extends ViewPart {
 
-  private final int allowedNumOfTabs = 5;
+  private final int allowedNumOfTabs = 10;
 //  private final VisViewDropDownAction fileDropDownAction = null;
   IAction checkBtnAction = null;
   private CTabFolder cTabFolder;
@@ -117,7 +117,7 @@ public class VisualisationView extends ViewPart {
         //the IVisualisatioWindow interface have been changed to fit the
         //vis extension implementation, but it didn't work anyway - the remote
         //kept running on the remote host so this has to be handled differently
-//        ((IVisualisationWindow)((CTabItem)event.item).getControl()).stopClient();
+//        ((AbstractVisualisationWindow)((CTabItem)event.item).getControl()).stopClient();
       }
     } );
 
@@ -257,7 +257,7 @@ public class VisualisationView extends ViewPart {
       return;
     }
 
-    this.visResource.render( resFileNameExt );//send the extension instead of the array
+    this.visResource.render( resFileNameExt );
   }
 
   /**

@@ -11,6 +11,7 @@
    <extension-point id="deploymentWizard" name="eu.geclipse.ui.deploymentWizard" schema="schema/deploymentWizard.exsd"/>
    <extension-point id="uninstallWizard" name="eu.geclipse.ui.uninstallWizard" schema="schema/uninstallWizard.exsd"/>
    <extension-point id="eu.geclipse.ui.visualisationWindow" name="Visualisation Window" schema="schema/visualisationWindow.exsd"/>
+   <extension-point id="eu.geclipse.ui.visualisationaction" name="Visualisation Action" schema="schema/visualisationaction.exsd"/>
    <extension
          point="org.eclipse.core.runtime.preferences">
       <initializer

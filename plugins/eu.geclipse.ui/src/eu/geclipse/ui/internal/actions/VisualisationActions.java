@@ -14,12 +14,23 @@
  *****************************************************************************/
 package eu.geclipse.ui.internal.actions;
 
+import java.util.ArrayList;
+
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtension;
+import org.eclipse.core.runtime.IExtensionPoint;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.actions.ActionGroup;
 import org.eclipse.ui.navigator.ICommonMenuConstants;
+
+import eu.geclipse.ui.dialogs.ProblemDialog;
+import eu.geclipse.ui.visualisation.AbstractVisualisationAction;
 
 
 /**
@@ -33,7 +44,9 @@ public class VisualisationActions extends ActionGroup {
    */
   private final IWorkbenchPartSite site;
 
-  private final RenderVTKPipelineAction renderLocalPipelineAction;
+  //have a list of visualisationActions and init them through extensions
+  private final ArrayList<AbstractVisualisationAction> actions
+  = new ArrayList<AbstractVisualisationAction>();
 
   /**
    * @param site
@@ -41,8 +54,45 @@ public class VisualisationActions extends ActionGroup {
   public VisualisationActions(final IWorkbenchPartSite site){
     this.site = site;
     ISelectionProvider selectionProvider = site.getSelectionProvider();
-    this.renderLocalPipelineAction = new RenderVTKPipelineAction( site );
-    selectionProvider.addSelectionChangedListener( this.renderLocalPipelineAction );
+    String fileExtension = ""; //$NON-NLS-1$
+
+    //find classes implementing the visualisation action extension point
+      CoreException exception = null;
+      AbstractVisualisationAction actionImpl = null;
+      String text = null;
+      String tooltip = null;
+      try {
+        IExtensionPoint p = Platform.getExtensionRegistry()
+          .getExtensionPoint( AbstractVisualisationAction.ACTION_EXTENSION_POINT );
+        IExtension[] extensions = p.getExtensions();
+        for( IExtension extension : extensions ) {
+          IConfigurationElement[] elements = extension.getConfigurationElements();
+          for( IConfigurationElement element : elements ) {
+            if( AbstractVisualisationAction.EXT_ACTION_ELEMENT.equals( element.getName() )
+//                && fileExtension.contains( element.getAttribute( AbstractVisualisationAction.EXT_ACTION_FILE_EXTENSION ) )
+                ) {
+              text = element.getAttribute( AbstractVisualisationAction.EXT_ACTION_TEXT );
+              tooltip = element.getAttribute( AbstractVisualisationAction.EXT_ACTION_TOOLTIP );
+              fileExtension = element.getAttribute( AbstractVisualisationAction.EXT_ACTION_FILE_EXTENSION );
+              actionImpl =
+              (AbstractVisualisationAction) element
+              .createExecutableExtension( AbstractVisualisationAction.EXT_ACTION_CLASS );
+              actionImpl.init( text, tooltip, fileExtension, site );
+              selectionProvider.addSelectionChangedListener( actionImpl );
+              this.actions.add( actionImpl );
+            }
+          }
+        }
+      } catch( CoreException coreException ) {
+        exception = coreException;
+        // Activator.logException( coreException );
+      }
+      if ( actionImpl == null || exception != null) {
+        ProblemDialog.openProblem( Display.getCurrent().getActiveShell(),
+                                   Messages.getString( "VisualisationActions.actionExtensionErrorTitle" ), //$NON-NLS-1$
+                                   Messages.formatMessage( "VisualisationActions.cantInstanciateAction", fileExtension ), //$NON-NLS-1$
+                                   exception );
+      }
   }
 
   /*
@@ -54,7 +104,9 @@ public class VisualisationActions extends ActionGroup {
   public void dispose()
   {
     ISelectionProvider selectionProvider = this.site.getSelectionProvider();
-    selectionProvider.removeSelectionChangedListener( this.renderLocalPipelineAction );
+    for( AbstractVisualisationAction action : this.actions ) {
+      selectionProvider.removeSelectionChangedListener( action );
+    }
   }
 
   /*
@@ -66,8 +118,10 @@ public class VisualisationActions extends ActionGroup {
   public void fillContextMenu( final IMenuManager mgr )
   {
     super.fillContextMenu( mgr );
-    if ( this.renderLocalPipelineAction.isEnabled() ) {
-      mgr.appendToGroup( ICommonMenuConstants.GROUP_BUILD, this.renderLocalPipelineAction );
+    for( AbstractVisualisationAction action : this.actions ) {
+      if ( action.isEnabled() ) {
+        mgr.appendToGroup( ICommonMenuConstants.GROUP_BUILD, action );
+      }
     }
   }
 
@@ -80,11 +134,12 @@ public class VisualisationActions extends ActionGroup {
 
     IStructuredSelection selection = null;
 
-    if( ( getContext() != null )
-        && ( getContext().getSelection() instanceof IStructuredSelection ) ) {
+    if( getContext() != null
+        && getContext().getSelection() instanceof IStructuredSelection ) {
       selection = (IStructuredSelection)getContext().getSelection();
     }
-
-    this.renderLocalPipelineAction.selectionChanged( selection );
+    for( AbstractVisualisationAction action : this.actions ) {
+      action.selectionChanged( selection );
+    }
   }
 }
