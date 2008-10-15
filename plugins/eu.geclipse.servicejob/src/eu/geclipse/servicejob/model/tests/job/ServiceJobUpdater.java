@@ -79,7 +79,7 @@ public class ServiceJobUpdater extends Job {
             if( this.test != null && this.test.getProject() != null ) {
               vo = this.test.getProject().getVO();
             }
-            IGridJobStatus newStatus = jobService.getJobStatus( jobID, vo, monitor );
+            IGridJobStatus newStatus = jobService.getJobStatus( jobID, vo, false, monitor );
             lastRefreshTime = newStatus.getLastUpdateTime();
             if( newStatus.canChange() ) {
               this.test.setJobResult( jobID,

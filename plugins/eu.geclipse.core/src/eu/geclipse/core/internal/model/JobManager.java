@@ -302,7 +302,9 @@ public class JobManager extends AbstractGridElementManager
     JobStatusUpdater updater;
     for(int i=0;i<jobs.length;i++){
       updater=this.updaters.get( jobs[i].getID() );
-      updater.removeJobStatusListener( listener );
+      if( updater != null ) {
+        updater.removeJobStatusListener( listener );
+      }
     }
     this.globalListeners.remove( listener );
   }
@@ -317,7 +319,9 @@ public class JobManager extends AbstractGridElementManager
     JobStatusUpdater updater;
     for(int i=0;i<ids.length;i++){
       updater=this.updaters.get( ids[i] );
-      updater.removeJobStatusListener( listener );
+      if( updater != null ) {
+        updater.removeJobStatusListener( listener );
+      }
     }
     this.globalListeners.remove( listener );
   }
@@ -334,10 +338,22 @@ public class JobManager extends AbstractGridElementManager
       }    
   }
   
-  public void jobStatusChanged ( final IGridJob job ) {
+  public void jobStatusChanged( final IGridJob job,
+                                final IGridJobStatus oldStatus )
+  {
     JobStatusUpdater updater = getUpdater( job );
-    if ( updater != null ) {
+    if( updater != null ) { // delegate notification to updater, which notify
+                            // also global listeners
       updater.statusUpdated( job.getJobStatus() );
+    } else { // updater doesn't exist, so notify global listeners
+      IGridJobStatus newStatus = job.getJobStatus();
+      boolean statusChanged = ( oldStatus.getType() != newStatus.getType() );
+      for( IGridJobStatusListener listener : this.globalListeners ) {
+        if( statusChanged ) {
+          listener.statusChanged( job );
+        }
+        listener.statusUpdated( job );
+      }
     }
   }
 
@@ -362,13 +378,7 @@ public class JobManager extends AbstractGridElementManager
       result = this.updaters.get( job.getID() );
     }
     return result;
-  }
-
-  public void jobStatusUpdated( final IGridJob job ) {
-    for( IGridJobStatusListener listener : this.globalListeners ) {
-      listener.statusUpdated( job );
-    }
-    
-  }
+  }  
+  
   
 }

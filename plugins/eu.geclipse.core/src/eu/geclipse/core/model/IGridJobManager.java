@@ -31,6 +31,8 @@ public interface IGridJobManager
   public void addJobStatusListener(IGridJob[] jobs, int status, IGridJobStatusListener listener);
 
   public void removeJobStatusListener(IGridJobStatusListener listener);
+  
+  public void removeJobStatusListener(IGridJob[] jobs, IGridJobStatusListener listener);
 
   /**
    * Stops refreshing all job status updaters
@@ -49,17 +51,12 @@ public interface IGridJobManager
   public void updateJobsStatus( final ArrayList< IGridJob > selectedJobs );
   
   /**
-   * Tells updater of the given job that status has been changed externally
+   * Tells updater of the given job that status has been updated externally
    * (i.e. job status wasn't updated in job status updater).
    * @param job Job, which status has changed.
+   * @param oldStatus status which was set, before job status was updated
    */
-  public void jobStatusChanged( final IGridJob job );
-
-  /**
-   * Tells updater of the given job that status has been updated (maybe no changed)
-   * @param job
-   */
-  public void jobStatusUpdated( IGridJob job );
+  public void jobStatusChanged( final IGridJob job, final IGridJobStatus oldStatus );
   
   /**
    * Cancel current operation in job status updater and remove it from job scheduler

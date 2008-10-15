@@ -57,9 +57,10 @@ public interface IGridJob
    * ask the middleware for the up-to-date job status.
    * 
    * @param monitor Use to monitor the progress. May be <code>null</code>.
+   * @param fullStatus <code>true</code> if all available information about job should be downloaded, <code>false</code> if only basic info about status should be downloaded (only those available from {@link IGridJobStatus})
    * @return This job's current status.
    */
-  public IGridJobStatus updateJobStatus( IProgressMonitor monitor );
+  public IGridJobStatus updateJobStatus( IProgressMonitor monitor, boolean fullStatus );
   
   /**
    * Gets the unique id of this job. This id may be used to query

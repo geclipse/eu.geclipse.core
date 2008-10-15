@@ -86,7 +86,7 @@ public class JobStatusUpdater extends Job {
       try {
         if( this.job != null ) {
           testCancelled( subMonitor );
-          this.job.updateJobStatus( subMonitor );
+          this.job.updateJobStatus( subMonitor, false );
           newStatus = this.job.getJobStatus();
         }
         if( newStatus != null ) {
@@ -100,9 +100,9 @@ public class JobStatusUpdater extends Job {
             IGridJobStatusListener listener = e.nextElement();
             int trigger = this.listeners.get( listener ).intValue();
             if( ( newType & trigger ) > 0 ) {
-              listener.statusChanged( this.job );
-              listener.statusUpdated( this.job );
+              listener.statusChanged( this.job );              
             }
+            listener.statusUpdated( this.job );
           }
         } else {
           for( Enumeration<IGridJobStatusListener> e = this.listeners.keys(); e.hasMoreElements(); )
@@ -161,6 +161,12 @@ public class JobStatusUpdater extends Job {
             if( ( newType & trigger ) > 0 ) {
               listener.statusChanged( this.job );
             }
+            listener.statusUpdated( this.job );
+          }
+        } else {
+          for( Enumeration<IGridJobStatusListener> e = this.listeners.keys(); e.hasMoreElements(); ) {
+            IGridJobStatusListener listener = e.nextElement();
+            listener.statusUpdated( this.job );
           }
         }
     }

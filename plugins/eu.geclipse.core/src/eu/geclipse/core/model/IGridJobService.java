@@ -72,11 +72,14 @@ public interface IGridJobService extends IGridService {
    * 
    * @param id The id of the job whose status has to be queried.
    * @param vo Virtual Organization, to which job with passed id belongs to
+   * @param fullStatus <code>true</code> if all available status information
+   *          should be downloaded, <code>false</code> if only basic information
+   *          are needed (status type, status name and reason)
    * @param monitor Use to monitor progress. May be <code>null</code>.
    * @return IGridJobStatus the current status of the job.
    * @throws ProblemException if the status query failed.
    */
-  public IGridJobStatus getJobStatus( final IGridJobID id, final IVirtualOrganization vo, final IProgressMonitor monitor )
+  public IGridJobStatus getJobStatus( final IGridJobID id, final IVirtualOrganization vo, boolean fullStatus, final IProgressMonitor monitor )
     throws ProblemException;
   
   /**

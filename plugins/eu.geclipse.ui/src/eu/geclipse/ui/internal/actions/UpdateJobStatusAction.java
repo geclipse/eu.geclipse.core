@@ -29,6 +29,7 @@ import org.eclipse.ui.actions.SelectionListenerAction;
 import eu.geclipse.core.jobs.GridJob;
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridJob;
+import eu.geclipse.core.model.IGridJobStatus;
 import eu.geclipse.ui.internal.Activator;
 
 /**
@@ -74,9 +75,9 @@ public class UpdateJobStatusAction extends SelectionListenerAction {
               if( !subMonitor.isCanceled() ) {
                 subMonitor.subTask( Messages.getString( "UpdateJobStatusAction.manual_update_subtask_name" ) //$NON-NLS-1$
                                  + " " + jobToUpdate.getID().getJobID() );                 //$NON-NLS-1$
-                jobToUpdate.updateJobStatus( subMonitor.newChild( 1 ) );
-                GridModel.getJobManager().jobStatusChanged( jobToUpdate );
-                GridModel.getJobManager().jobStatusUpdated( jobToUpdate );                
+                IGridJobStatus oldStatus = jobToUpdate.getJobStatus();
+                jobToUpdate.updateJobStatus( subMonitor.newChild( 1 ), true );
+                GridModel.getJobManager().jobStatusChanged( jobToUpdate, oldStatus );                
               }
             }
             subMonitor.done();

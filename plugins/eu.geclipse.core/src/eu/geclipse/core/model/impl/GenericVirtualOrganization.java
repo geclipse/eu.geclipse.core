@@ -15,10 +15,15 @@
 
 package eu.geclipse.core.model.impl;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import org.eclipse.core.filesystem.IFileStore;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 import eu.geclipse.core.internal.Activator;
 import eu.geclipse.core.model.IGridElement;
+import eu.geclipse.core.model.IGridJobService;
 import eu.geclipse.core.model.IGridService;
 import eu.geclipse.core.model.IStorableElement;
 import eu.geclipse.core.model.IVirtualOrganization;
@@ -188,6 +193,24 @@ public class GenericVirtualOrganization
 
   public String getId() {
     return this.getClass().getName();
+  }
+
+  // TODO mariusz remove this method. Temporary fix for [Bug 245099] Manually added services for VO are not stored
+  @Override
+  public IGridJobService[] getJobSubmissionServices( final IProgressMonitor monitor )
+    throws ProblemException
+  {
+    IGridJobService[] dynamicServices = super.getJobSubmissionServices( monitor );
+    ArrayList<IGridJobService> result = new ArrayList<IGridJobService>();
+    result.addAll( Arrays.asList( dynamicServices ) );
+
+    for( IGridElement element : getChildren( monitor ) ) {
+      if( element instanceof IGridJobService ) {
+        IGridJobService service = ( IGridJobService )element;
+        result.add( service );
+      }
+    }
+    return result.toArray( new IGridJobService[0] );
   }
   
 }

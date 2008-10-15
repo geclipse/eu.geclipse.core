@@ -240,9 +240,7 @@ implements ISelectionListener, IViewConfiguration, IGridJobStatusListener
   }  
   
   public void statusChanged( final IGridJob job ) {
-    if( this.inputJob == job ) {
-      scheduleRefresh();
-    }
+    // do nothing, because refresh is done in statusUpdated(), which is called always even if status is changed
   }
   
   public void statusUpdated( final IGridJob job ) {

@@ -102,7 +102,7 @@ public class ParametricJobService implements IGridJobService {
   /* (non-Javadoc)
    * @see eu.geclipse.core.model.IGridJobService#getJobStatus(eu.geclipse.core.model.IGridJobID, org.eclipse.core.runtime.IProgressMonitor)
    */
-  public IGridJobStatus getJobStatus( final IGridJobID id, final IVirtualOrganization vo, final IProgressMonitor progressMonitor ) throws ProblemException {
+  public IGridJobStatus getJobStatus( final IGridJobID id, final IVirtualOrganization vo, final boolean fullStatus, final IProgressMonitor progressMonitor ) throws ProblemException {
     SubMonitor subMonitor = SubMonitor.convert( progressMonitor );
     Set<String> statusNames = new HashSet<String>();
     int statusType = IGridJobStatus.DONE;
@@ -112,11 +112,11 @@ public class ParametricJobService implements IGridJobService {
     
     for( GridJob gridJob : childrenJobs ) {
       subMonitor.subTask( String.format( Messages.getString("ParametricJobService.taskNameUpdating"), gridJob.getID().getJobID() ) ); //$NON-NLS-1$
-      IGridJobStatus jobStatus = gridJob.updateJobStatus( subMonitor.newChild( 1 ) );
+      IGridJobStatus oldStatus = gridJob.getJobStatus();
+      IGridJobStatus jobStatus = gridJob.updateJobStatus( subMonitor.newChild( 1 ), fullStatus );
       statusNames.add( jobStatus.getName() );
       
-      GridModel.getJobManager().jobStatusChanged( gridJob );
-      GridModel.getJobManager().jobStatusUpdated( gridJob );
+      GridModel.getJobManager().jobStatusChanged( gridJob, oldStatus );      
       
       switch( jobStatus.getType() ) {
         case IGridJobStatus.DONE:
