@@ -67,6 +67,7 @@ public class Messages extends NLS {
    * 
    */
   public static String JobDetailSectionsManager_general;
+  public static String JobDetailSectionsManager_taskNameUpdateJobStatus;
   /**
    * 
    */

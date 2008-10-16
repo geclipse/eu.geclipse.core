@@ -19,13 +19,21 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.widgets.Composite;
 
+import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridJob;
+import eu.geclipse.core.model.IGridJobID;
+import eu.geclipse.core.model.IGridJobStatus;
 import eu.geclipse.ui.Extensions;
 
 /**
@@ -36,6 +44,7 @@ public class JobDetailSectionsManager {
   static private int nextId = 1;
   static private Integer generalSectionId;
   static private Integer applicationSectionId;
+  static private HashSet<IGridJobID> updatedJobs = new HashSet<IGridJobID>();
   private Composite parent; // parent for sections
   private Map<Integer, IJobDetailsSection> sectionsMap = new HashMap<Integer, IJobDetailsSection>();
   private List<IJobDetail> currentDetails;
@@ -75,7 +84,17 @@ public class JobDetailSectionsManager {
 
   void refresh( final IGridJob inputJob )
   {
-    List<IJobDetail> details = getDetails( inputJob );
+    List<IJobDetailsFactory> factories = null;
+      
+    if( inputJob != null ) {
+      Class<?> statusClass = inputJob.getJobStatus() != null
+                                                            ? inputJob.getJobStatus()
+                                                              .getClass()
+                                                            : null;
+      factories = Extensions.getJobDetailsFactories( inputJob.getClass(),
+                                                     statusClass );
+    }
+    List<IJobDetail> details = getDetails( inputJob, factories );
     List<IJobDetailsSection> sections = getSections( details );
     disposeNotUsedDetails( details );
     dispatchDetailsToSections( details );
@@ -84,17 +103,43 @@ public class JobDetailSectionsManager {
       section.refresh( inputJob, this.parent );
     }
     this.currentDetails = details;
+    scheduleJobStatusUpdate( factories, inputJob );
   }
 
-  private List<IJobDetail> getDetails( final IGridJob gridJob ) {
+  private void scheduleJobStatusUpdate( final List<IJobDetailsFactory> factories,
+                                        final IGridJob inputJob )
+  {
+    if( factories != null
+        && inputJob != null ) {
+      IGridJobID id = inputJob.getID();
+      
+      if( !JobDetailSectionsManager.updatedJobs.contains( id ) ) {
+        for( IJobDetailsFactory jobDetailsFactory : factories ) {
+          if( jobDetailsFactory.shouldUpdateJobStatus( inputJob ) ) {
+            Job backgroundJob = new Job( String.format( Messages.JobDetailSectionsManager_taskNameUpdateJobStatus, inputJob.getJobName() ) ) {
+    
+              @Override
+              protected IStatus run( final IProgressMonitor monitor ) {
+                IStatus status = Status.OK_STATUS;
+                IGridJobStatus oldStatus = inputJob.getJobStatus();
+                inputJob.updateJobStatus( monitor, true );
+                GridModel.getJobManager().jobStatusChanged( inputJob, oldStatus );
+                return status;
+              }
+            };
+            
+            JobDetailSectionsManager.updatedJobs.add( id );
+            backgroundJob.schedule();
+            break;
+          }
+        }
+      }
+    }
+  }
+
+  private List<IJobDetail> getDetails( final IGridJob gridJob, final List<IJobDetailsFactory> factories ) {
     List<IJobDetail> details = new ArrayList<IJobDetail>( 100 );
     if( gridJob != null ) {
-      Class<?> statusClass = gridJob.getJobStatus() != null
-                                                           ? gridJob.getJobStatus()
-                                                             .getClass()
-                                                           : null;
-      List<IJobDetailsFactory> factories = Extensions.getJobDetailsFactories( gridJob.getClass(),
-                                                                              statusClass );
       for( IJobDetailsFactory jobDetailsFactory : factories ) {
         details.addAll( jobDetailsFactory.getDetails( gridJob, this ) );
       }

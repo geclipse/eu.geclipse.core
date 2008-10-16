@@ -36,6 +36,7 @@ import org.eclipse.core.runtime.SubMonitor;
 
 import eu.geclipse.core.jobs.internal.Activator;
 import eu.geclipse.core.jobs.internal.ParametricJobID;
+import eu.geclipse.core.jobs.internal.ParametricJobStatus;
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
@@ -159,7 +160,7 @@ public class ParametricJobService implements IGridJobService {
       statusType = IGridJobStatus.DONE;
     }    
     
-    return new GridJobStatus( statusNames.toString(), statusType );
+    return new ParametricJobStatus( statusNames.toString(), statusType, childrenJobs );
   }
 
   private List<GridJob> getChildrenJobs() throws ProblemException {

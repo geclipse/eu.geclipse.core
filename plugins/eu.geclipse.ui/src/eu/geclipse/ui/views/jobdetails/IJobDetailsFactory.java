@@ -35,4 +35,10 @@ public interface IJobDetailsFactory {
    */
   List<IJobDetail> getDetails( final IGridJob gridJob,
                                final JobDetailSectionsManager sectionManager );
+  
+  /**
+   * @param gridJob job, which details are shown in the view
+   * @return <code>true</code> if all details for gridJob aren't available and job status update should be scheduled
+   */
+  boolean shouldUpdateJobStatus( final IGridJob gridJob );
 }

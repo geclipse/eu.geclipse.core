@@ -19,7 +19,9 @@ import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import eu.geclipse.core.jobs.GridJobStatus;
 import eu.geclipse.core.model.IGridJob;
+import eu.geclipse.core.model.IGridJobStatus;
 
 /**
  *
@@ -229,6 +231,17 @@ public class GridJobDetailsFactory implements IJobDetailsFactory {
         return value;
       }
     };
+  }
+
+  public boolean shouldUpdateJobStatus( final IGridJob gridJob ) {
+    boolean updateJobStatus = false;
+    IGridJobStatus jobStatus = gridJob.getJobStatus();
+    if( jobStatus != null ) {
+      // if job status has general type GridJobStatus, then we need to update
+      // job status to have middleware specific details
+      updateJobStatus = jobStatus.getClass().equals( GridJobStatus.class );
+    }
+    return updateJobStatus;
   }
 
 }

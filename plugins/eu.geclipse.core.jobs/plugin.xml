@@ -58,5 +58,11 @@
             id="eu.geclipse.core.jobs.problem.unsupportedOperation">
       </problem>
    </extension>
+   <extension
+         point="eu.geclipse.core.jobs.jobStatus">
+      <JobStatus
+            class="eu.geclipse.core.jobs.internal.ParametricJobStatus">
+      </JobStatus>
+   </extension>
 
 </plugin>
