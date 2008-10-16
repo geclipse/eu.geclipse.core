@@ -24,6 +24,8 @@ public class Messages extends NLS {
 
   public static String WebView_action_2_tooltip;
 
+
+  public static String WebView_refresh;
   public static String WebView_back;
   public static String WebView_forward;
 

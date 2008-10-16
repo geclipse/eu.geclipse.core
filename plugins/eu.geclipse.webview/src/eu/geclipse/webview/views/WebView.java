@@ -46,14 +46,14 @@ public class WebView extends ViewPart {
   private Action dgridAction;
   private Action back;
   private Action forward;
+  private Action refresh;
 
   /**
    * This is a callback that will allow us to create the viewer and initialize
    * it.
    */
   @Override
-  public void createPartControl( final Composite parent )
-  {
+  public void createPartControl( final Composite parent ) {
     // readin the Preferences from the Preference Page
     updateUrlsFromPreferences();
     try {
@@ -79,8 +79,7 @@ public class WebView extends ViewPart {
    * Leave the focus as it is
    */
   @Override
-  public void setFocus()
-  {
+  public void setFocus() {
     // TODO
   }
 
@@ -89,8 +88,14 @@ public class WebView extends ViewPart {
   /*
    * set the Browser's URL to the value defined in the action!
    */
-  void setUrl( final String url ) {
+  public void setUrl( final String url ) {
     this.browser.setUrl( url );
+  }
+
+  public void setProjectUrl(final String url){
+    Preferences prefs = Activator.getDefault().getPluginPreferences();
+    prefs.setValue( PreferenceConstants.PROJECT_URL, url );
+    this.updateUrlsFromPreferences();
   }
 
   private void contributeToActionBars() {
@@ -117,6 +122,7 @@ public class WebView extends ViewPart {
   }
 
   private void fillLocalToolBar( final IToolBarManager manager ) {
+    manager.add( this.refresh );
     manager.add( this.back );
     manager.add( this.forward );
   }
@@ -131,8 +137,7 @@ public class WebView extends ViewPart {
     this.gEclipseHomeAction = new Action() {
 
       @Override
-      public void run()
-      {
+      public void run() {
         setUrl( "http://www.geclipse.eu" ); //$NON-NLS-1$
       }
     };
@@ -142,8 +147,7 @@ public class WebView extends ViewPart {
     this.projectHomeAction = new Action() {
 
       @Override
-      public void run()
-      {
+      public void run() {
         setUrl( WebView.this.projectHomeUrl );
       }
     };
@@ -153,8 +157,7 @@ public class WebView extends ViewPart {
     this.ggusAction = new Action() {
 
       @Override
-      public void run()
-      {
+      public void run() {
         setUrl( WebView.this.projectUserSupport );
       }
     };
@@ -164,8 +167,7 @@ public class WebView extends ViewPart {
     this.dgridAction = new Action() {
 
       @Override
-      public void run()
-      {
+      public void run() {
         setUrl( WebView.this.projectVoms );
       }
     };
@@ -175,8 +177,7 @@ public class WebView extends ViewPart {
     this.back = new Action() {
 
       @Override
-      public void run()
-      {
+      public void run() {
         WebView.this.browser.back();
       }
     };
@@ -187,8 +188,7 @@ public class WebView extends ViewPart {
     this.forward = new Action() {
 
       @Override
-      public void run()
-      {
+      public void run() {
         WebView.this.browser.forward();
       }
     };
@@ -196,5 +196,16 @@ public class WebView extends ViewPart {
     this.forward.setToolTipText( Messages.WebView_forward );
     ImageDescriptor forwareImage = sharedImages.getImageDescriptor( ISharedImages.IMG_TOOL_FORWARD );
     this.forward.setImageDescriptor( forwareImage );
+    this.refresh = new Action() {
+
+      @Override
+      public void run() {
+         WebView.this.browser.refresh();
+      }
+    };
+    this.refresh.setText( Messages.WebView_refresh );
+    this.refresh.setToolTipText( Messages.WebView_refresh );
+    ImageDescriptor refreshImage = sharedImages.getImageDescriptor( ISharedImages.IMG_ETOOL_HOME_NAV );
+    this.refresh.setImageDescriptor( refreshImage );
   }
 }
