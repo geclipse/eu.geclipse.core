@@ -14,8 +14,6 @@
  *****************************************************************************/
 package eu.geclipse.ui.visualisation;
 
-import java.awt.Canvas;
-
 import org.eclipse.swt.widgets.Composite;
 
 
@@ -28,7 +26,6 @@ import org.eclipse.swt.widgets.Composite;
  */
 public abstract class AbstractVisualisationWindow {
 
-  protected Canvas canvas = null;
   protected VisComposite viscomp = null;
 
   /**
@@ -69,19 +66,12 @@ public abstract class AbstractVisualisationWindow {
    */
   public abstract String getTabName();
 
-  /**
-   * @param canvas
-   */
-  public void setCanvas( final Canvas canvas ) {
-    this.canvas = canvas;
-  }
-
-  public Canvas getCanvas() {
-    return this.canvas;
-  }
-
   public Composite getVisComp() {
     return this.viscomp;
+  }
+
+  public void redraw() {
+    this.viscomp.redraw();
   }
 
   /**
@@ -106,4 +96,5 @@ public abstract class AbstractVisualisationWindow {
    *
    */
   public abstract void stopClient();
+
 }
