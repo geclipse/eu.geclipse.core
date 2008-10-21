@@ -120,7 +120,13 @@ public class VisualisationActions extends ActionGroup {
     super.fillContextMenu( mgr );
     for( AbstractVisualisationAction action : this.actions ) {
       if ( action.isEnabled() ) {
-        mgr.appendToGroup( ICommonMenuConstants.GROUP_BUILD, action );
+        if ( ( ( IStructuredSelection )getContext().getSelection()).toString().contains( "VTKPipeline" ) //$NON-NLS-1$
+            && action.getFileExt().compareTo( "vtkpipeline" ) == 0 //$NON-NLS-1$
+            || ( ( IStructuredSelection )getContext().getSelection()).toString().contains( "PharmaDataResource" ) //$NON-NLS-1$
+            && action.getFileExt().compareTo( "pharma" ) == 0 ) { //$NON-NLS-1$
+          mgr.appendToGroup( ICommonMenuConstants.GROUP_BUILD, action );
+      }
+
       }
     }
   }

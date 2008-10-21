@@ -28,12 +28,20 @@ import org.eclipse.swt.widgets.Label;
 
 
 
+/**
+ * @author sgirtel
+ *
+ */
 public class VisComposite extends Composite {
 
   private Label statsLabel = null;
   private final Frame awtFrame;
   private Composite SWT_AWT_composite;
 
+  /**
+   * @param vis
+   * @param style
+   */
   public VisComposite( final Composite vis,
                        final int style ) {
     super( vis, style );//SWT.DOUBLE_BUFFERED
