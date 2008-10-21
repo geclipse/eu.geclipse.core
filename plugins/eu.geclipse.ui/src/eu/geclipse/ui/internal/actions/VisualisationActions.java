@@ -14,6 +14,8 @@
  *****************************************************************************/
 package eu.geclipse.ui.internal.actions;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 import org.eclipse.core.runtime.CoreException;
@@ -30,7 +32,9 @@ import org.eclipse.ui.actions.ActionGroup;
 import org.eclipse.ui.navigator.ICommonMenuConstants;
 
 import eu.geclipse.ui.dialogs.ProblemDialog;
+import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.visualisation.AbstractVisualisationAction;
+import eu.geclipse.ui.visualisation.GridVisualisationResource;
 
 
 /**
@@ -120,13 +124,27 @@ public class VisualisationActions extends ActionGroup {
     super.fillContextMenu( mgr );
     for( AbstractVisualisationAction action : this.actions ) {
       if ( action.isEnabled() ) {
-        if ( ( ( IStructuredSelection )getContext().getSelection()).toString().contains( "VTKPipeline" ) //$NON-NLS-1$
-            && action.getFileExt().compareTo( "vtkpipeline" ) == 0 //$NON-NLS-1$
-            || ( ( IStructuredSelection )getContext().getSelection()).toString().contains( "PharmaDataResource" ) //$NON-NLS-1$
-            && action.getFileExt().compareTo( "pharma" ) == 0 ) { //$NON-NLS-1$
-          mgr.appendToGroup( ICommonMenuConstants.GROUP_BUILD, action );
-      }
-
+        try {
+          Class<GridVisualisationResource> cl
+          = ( Class<GridVisualisationResource> )
+          (( IStructuredSelection )getContext().getSelection()).getFirstElement()
+          .getClass();
+          Method met = cl.getMethod( "getResourceFileExtension" ); //$NON-NLS-1$
+          String resourceFileExt = ( String )met.invoke( null, null );
+          if ( resourceFileExt.compareTo( action.getFileExt() ) == 0 ) {
+            mgr.appendToGroup( ICommonMenuConstants.GROUP_BUILD, action );
+          }
+        } catch( SecurityException e ) {
+          Activator.logException( e );
+        } catch( NoSuchMethodException e ) {
+          Activator.logException( e );
+        } catch( IllegalArgumentException e ) {
+          Activator.logException( e );
+        } catch( IllegalAccessException e ) {
+          Activator.logException( e );
+        } catch( InvocationTargetException e ) {
+          Activator.logException( e );
+        }
       }
     }
   }

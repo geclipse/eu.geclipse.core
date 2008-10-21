@@ -22,33 +22,28 @@ import eu.geclipse.core.reporting.ProblemException;
 
 
 /**
- * @author JKU
+ * @author sgirtel
  *
  */
-public class GridVisualisationResource extends ResourceGridContainer
+public abstract class GridVisualisationResource extends ResourceGridContainer
   implements IGridVisualisation
 {
 
+
   protected GridVisualisationResource( final IResource resource ) {
     super( resource );
-    // TODO Auto-generated constructor stub
   }
 
   public String getDescription() {
-    // TODO Auto-generated method stub
     return null;
-  }
-
-  public String getResourceFileNameExtension() {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  public void render( final String fileExtention ) {
-    // TODO Auto-generated method stub
   }
 
   public void validate() throws ProblemException {
     // TODO Auto-generated method stub
   }
+
+//  public abstract String getResourceFileNameExtension();
+
+  public abstract void render( final String fileExtention );
+
 }
