@@ -132,11 +132,6 @@
             name="%preferences.name.vodeclarations"/>
       <page
             category="eu.geclipse.ui.internal.preference.GEclipsePreferencePage"
-            class="eu.geclipse.ui.internal.preference.CaCertPreferencePage"
-            id="eu.geclipse.ui.internal.preference.CaCertPreferencePage"
-            name="%page.caCertificates"/>
-      <page
-            category="eu.geclipse.ui.internal.preference.GEclipsePreferencePage"
             class="eu.geclipse.ui.internal.preference.JobUpdatersPreferencePage"
             id="eu.geclipse.ui.internal.preference.JobsPreferencePage"
             name="%page.jobUpdates"/>
