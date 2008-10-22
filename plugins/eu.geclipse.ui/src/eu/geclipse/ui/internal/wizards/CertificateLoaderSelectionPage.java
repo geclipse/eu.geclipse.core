@@ -1,185 +1,201 @@
-/*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- * Initial development of the original code was made for the
- * g-Eclipse project founded by European Union
- * project number: FP6-IST-034327  http://www.geclipse.eu/
- *
- * Contributors:
- *    Mathias Stuempert - initial API and implementation
- *****************************************************************************/
-
 package eu.geclipse.ui.internal.wizards;
 
-import java.util.ArrayList;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.jface.wizard.IWizardContainer;
-import org.eclipse.jface.wizard.IWizardPage;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.MouseAdapter;
-import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.List;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.TreeItem;
 
 import eu.geclipse.core.ExtensionManager;
 import eu.geclipse.core.Extensions;
-import eu.geclipse.core.auth.ICaCertificateLoader;
-import eu.geclipse.ui.internal.Activator;
+import eu.geclipse.core.security.ICertificateLoader;
+import eu.geclipse.ui.widgets.StoredCombo;
 
-/**
- * This wizard page is used by the {@link CaCertificateImportWizard} in order to
- * chose an available VO loader.
- */
 public class CertificateLoaderSelectionPage extends WizardPage {
   
-  protected List list;
+  private StoredCombo uriCombo;
   
-  private CaCertificateImportWizard.ImportMethod importMethod;
+  private TreeViewer certLoaderViewer;
   
-  private java.util.List< IConfigurationElement > loaders;
-  
-  /**
-   * Construct a new <code>CertificateLoaderSelectionPage</code>
-   * that shows all available loader for the selected import
-   * method.
-   * 
-   * @param importMethod Either <code>LOCAL</code> or <code>REMOTE</code>.
-   */
-  public CertificateLoaderSelectionPage( final CaCertificateImportWizard.ImportMethod importMethod ) {
-    super( "certLoaderPage", //$NON-NLS-1$
-           Messages.getString("CertificateLoaderSelectionPage.title"), //$NON-NLS-1$
-           null );
-    setDescription( Messages.getString("CertificateLoaderSelectionPage.description") ); //$NON-NLS-1$
-    this.importMethod = importMethod;
-  }
-  
-  public int initCertificateLoaders() {
-    ExtensionManager manager = new ExtensionManager();
-    this.loaders = new ArrayList< IConfigurationElement >();
-    this.loaders.addAll(
-      manager.getConfigurationElements(
-          Extensions.CA_CERT_LOADER_POINT, 
-          Extensions.CA_CERT_LOADER_ELEMENT
-      )
-    );
-    return this.loaders.size();
-  }
+  private Text descriptionText;
 
+  public CertificateLoaderSelectionPage() {
+    super( "certLoaderPage", //$NON-NLS-1$
+           "Certificate Repository",
+           null );
+    setDescription( "Select one of the available repositories" );
+  }
+  
   public void createControl( final Composite parent ) {
     
     GridData gData;
     
     Composite mainComp = new Composite( parent, SWT.NULL );
-    mainComp.setLayout( new GridLayout( 1, false ) );
+    mainComp.setLayout( new GridLayout( 2, false ) );
     gData = new GridData( GridData.FILL_BOTH );
     mainComp.setLayoutData( gData );
     
-    this.list = new List( mainComp, SWT.BORDER | SWT.SINGLE );
-    gData = new GridData( GridData.FILL_BOTH );
-    gData.grabExcessHorizontalSpace = true;
-    gData.grabExcessVerticalSpace = true;
-    this.list.setLayoutData( gData );
+    Label uriLabel = new Label( mainComp, SWT.NONE );
+    uriLabel.setText( "URI:" );
+    uriLabel.setLayoutData( new GridData() );
     
-    this.list.addSelectionListener( new SelectionAdapter() {
-      @Override
-      public void widgetSelected( final SelectionEvent e ) {
-        setPageComplete( CertificateLoaderSelectionPage.this.list.getSelectionCount() > 0 );
+    this.uriCombo = new StoredCombo( mainComp, SWT.NONE );
+    this.uriCombo.setLayoutData( new GridData( GridData.FILL, GridData.CENTER, true, false ) );
+    
+    Label repoLabel = new Label( mainComp, SWT.NONE );
+    repoLabel.setText( "Certificate repositories:" );
+    gData = new GridData();
+    gData.horizontalSpan = 2;
+    repoLabel.setLayoutData( gData );
+    
+    this.certLoaderViewer = new TreeViewer( mainComp, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER | SWT.SINGLE );
+    gData = new GridData( GridData.FILL, GridData.FILL, true, true );
+    gData.horizontalSpan = 2;
+    gData.heightHint = 150;
+    certLoaderViewer.getTree().setLayoutData( gData );
+    
+    certLoaderViewer.setContentProvider( new CertificateLoaderContentProvider() );
+    certLoaderViewer.setLabelProvider( new CertificateLoaderLabelProvider() );
+    ExtensionManager manager = new ExtensionManager();
+    certLoaderViewer.setInput(
+      manager.getConfigurationElements(
+        Extensions.CERT_LOADER_POINT,
+        Extensions.CERT_LOADER_ELEMENT
+      )
+    );
+    
+    Label descLabel = new Label( mainComp, SWT.NONE );
+    descLabel.setText( "Description:" );
+    gData = new GridData();
+    gData.horizontalSpan = 2;
+    descLabel.setLayoutData( gData );
+    
+    this.descriptionText = new Text( mainComp, SWT.BORDER | SWT.WRAP | SWT.V_SCROLL | SWT.MULTI );
+    gData = new GridData( GridData.FILL, GridData.CENTER, true, false );
+    gData.horizontalSpan = 2;
+    gData.heightHint = 50;
+    this.descriptionText.setLayoutData( gData );
+    
+    certLoaderViewer.addSelectionChangedListener( new ISelectionChangedListener() {
+      public void selectionChanged( final SelectionChangedEvent event ) {
+        setSelection( event.getSelection() );
       }
     } );
-    this.list.addMouseListener( new MouseAdapter() {
-      @SuppressWarnings("synthetic-access")
-      @Override
-      public void mouseDoubleClick( final MouseEvent e ) {
-        setPageComplete( CertificateLoaderSelectionPage.this.list.getSelectionCount() > 0 );
-        IWizardPage nextPage = CertificateLoaderSelectionPage.this.getNextPage();
-        IWizardContainer container = CertificateLoaderSelectionPage.this.getContainer();
-        container.showPage( nextPage );
+    this.uriCombo.addModifyListener( new ModifyListener() {
+      public void modifyText( final ModifyEvent e ) {
+        validatePage();
       }
     } );
     
+    certLoaderViewer.expandAll();
+    TreeItem[] items = certLoaderViewer.getTree().getItems();
+    while ( ( items != null ) && ( items.length > 0 ) ) {
+      Object data = items[ 0 ].getData();
+      if ( ( data instanceof IConfigurationElement )
+          && Extensions.CERT_LOADER_DISTRIBUTION_ELEMENT.equals( ( ( IConfigurationElement ) data ).getName() ) ) {
+        certLoaderViewer.setSelection( new StructuredSelection( data ) );
+        break;
+      }
+      items = items[ 0 ].getItems();
+    }
+    
+    validatePage();    
     setControl( mainComp );
-    
-    populateList();
-    setPageComplete( false );
     
   }
   
-  /**
-   * Get the currently selected certificate loader or <code>null</code>
-   * if no loader is selected.
-   * 
-   * @return The currently selected certificate loader.
-   */
-  public ICaCertificateLoader getSelectedLoader() {
+  public ICertificateLoader getSelectedLoader() {
     
-    ICaCertificateLoader result = null;
+    ICertificateLoader result = null;
     
-    String[] selection = new String[] {
-        this.loaders.get( 0 ).getAttribute( Extensions.CA_CERT_LOADER_NAME_ATTRIBUTE )
-    };
-    
-    if ( this.list != null ) {
-      selection = this.list.getSelection();
+    ISelection selection = this.certLoaderViewer.getSelection();
+    IConfigurationElement element = null;
+    if ( selection instanceof IStructuredSelection ) {
+      Object object = ( ( IStructuredSelection ) selection ).getFirstElement();
+      while ( ( object != null ) && ( object instanceof IConfigurationElement ) ) {
+        element = ( IConfigurationElement ) object;
+        object = element.getParent();
+      }
     }
     
-    if ( ( selection != null ) && ( selection.length > 0 ) ) {
-      
-      for ( IConfigurationElement element : this.loaders ) {
-        String name = element.getAttribute( Extensions.CA_CERT_LOADER_NAME_ATTRIBUTE );
-        if ( selection[ 0 ].equals( name ) ) {
-          try {
-            result = ( ICaCertificateLoader ) element.createExecutableExtension( Extensions.CA_CERT_LOADER_CLASS_ATTRIBUTE );
-          } catch ( CoreException cExc ) {
-            Activator.logException( cExc );
-          }
-          break;
-        }
+    if ( ( element != null ) && Extensions.CERT_LOADER_ELEMENT.equals( element.getName() ) ) {
+      try {
+        result = ( ICertificateLoader ) element.createExecutableExtension( Extensions.CERT_LOADER_CLASS_ATTRIBUTE );
+      } catch( CoreException cExc ) {
+        setErrorMessage( "No valid certificate loader found: " + cExc.getLocalizedMessage() );
       }
-      
+    } else {
+      setErrorMessage( "No valid certificate loader found" );
     }
     
     return result;
     
   }
   
-  protected void populateList() {
+  public URI getURI() {
     
-    this.list.removeAll();
+    URI result = null;
+    String text = this.uriCombo.getText().trim();
     
-    if ( this.loaders == null ) {
-      initCertificateLoaders();
-    }
-
-    for ( IConfigurationElement element : this.loaders ) {
-      
-      boolean methodSupported = false;
-      
-      if ( this.importMethod == CaCertificateImportWizard.ImportMethod.LOCAL ) {
-        String fromLocal = element.getAttribute( Extensions.CA_CERT_LOADER_FROM_LOCAL_ATTRIBUTE );
-        methodSupported = Boolean.parseBoolean( fromLocal );
-      } else if ( this.importMethod == CaCertificateImportWizard.ImportMethod.REMOTE ) {
-        String fromRemote = element.getAttribute( Extensions.CA_CERT_LOADER_FROM_REMOTE_ATTRIBUTE );
-        methodSupported = Boolean.parseBoolean( fromRemote );
+    if ( text.length() > 0 ) {    
+      try {
+        result = new URI( this.uriCombo.getText() );
+      } catch( URISyntaxException uriExc ) {
+        setErrorMessage( "Invalid URI: " + uriExc.getLocalizedMessage() );
       }
-      
-      if ( methodSupported ) {
-        String name = element.getAttribute( Extensions.CA_CERT_LOADER_NAME_ATTRIBUTE );
-        this.list.add( name );
-      }
-      
     }
+    
+    return result;
     
   }
   
+  protected void setSelection( final ISelection selection ) {
+    if ( selection instanceof IStructuredSelection ) {
+      Object element = ( ( IStructuredSelection ) selection ).getFirstElement();
+      if ( element instanceof IConfigurationElement ) {
+        setSelection( ( IConfigurationElement ) element );
+      }
+    }
+  }
+  
+  protected void validatePage() {
+    URI uri = getURI();
+    ICertificateLoader loader = getSelectedLoader();
+    setPageComplete( ( uri != null ) && ( loader != null ) );
+  }
+  
+  private void setSelection( final IConfigurationElement element ) {
+    
+    String url = ""; //$NON-NLS-1$
+    String description = ""; //$NON-NLS-1$
+    String name = element.getName();
+    
+    if ( Extensions.CERT_LOADER_AUTHORITY_ELEMENT.equals( name ) ) {
+      description = element.getAttribute( Extensions.CERT_LOADER_AUTHORITY_DESCRIPTION_ATTRIBUTE );
+    } else if ( Extensions.CERT_LOADER_DISTRIBUTION_ELEMENT.equals( name ) ) {
+      url = element.getAttribute( Extensions.CERT_LOADER_DISTRIBUTION_URL_ATTRIBUTE );
+      description = element.getAttribute( Extensions.CERT_LOADER_DISTRIBUTION_DESCRIPTION_ATTRIBUTE );
+    }
+    
+    this.uriCombo.setText( url );
+    this.descriptionText.setText( description );
+    
+  }
+
 }

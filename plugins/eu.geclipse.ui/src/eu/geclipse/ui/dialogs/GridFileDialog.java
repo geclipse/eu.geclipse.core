@@ -588,14 +588,6 @@ public class GridFileDialog
     return super.close();
   }
 
-  /* (non-Javadoc)
-   * @see org.eclipse.jface.dialogs.Dialog#create()
-   */
-  @Override
-  public void create() {
-    super.create();
-  }
-
   /**
    * Get all currently selected {@link IFileStore}s that meet the style of
    * this dialog.

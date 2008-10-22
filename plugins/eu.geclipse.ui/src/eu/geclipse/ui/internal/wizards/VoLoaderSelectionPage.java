@@ -152,7 +152,7 @@ public class VoLoaderSelectionPage extends WizardPage {
     }
 
     for ( IConfigurationElement element : this.loaders ) {
-      String name = element.getAttribute( Extensions.CA_CERT_LOADER_NAME_ATTRIBUTE );
+      String name = element.getAttribute( Extensions.VO_LOADER_NAME_ATTRIBUTE );
       this.list.add( name );
     }
 

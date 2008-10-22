@@ -1,19 +1,3 @@
-/*****************************************************************************
- * Copyright (c) 2006-2008 g-Eclipse Consortium 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- * Initial development of the original code was made for the
- * g-Eclipse project founded by European Union
- * project number: FP6-IST-034327  http://www.geclipse.eu/
- *
- * Contributors:
- *    Mathias Stuempert - initial API and implementation
- *    Ariel Garcia      - handle errors when downloading CAs
- *****************************************************************************/
-
 package eu.geclipse.ui.internal.wizards;
 
 import java.lang.reflect.InvocationTargetException;
@@ -23,6 +7,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
+import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -33,24 +18,26 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 
-import eu.geclipse.core.auth.ICaCertificateLoader;
 import eu.geclipse.core.reporting.ProblemException;
+import eu.geclipse.core.security.ICertificateLoader;
+import eu.geclipse.core.security.ICertificateLoader.CertificateID;
 import eu.geclipse.ui.dialogs.ProblemDialog;
 
+
 public class CertificateChooserPage extends WizardPage {
-  
+
   protected CheckboxTableViewer viewer;
+
+  private CertificateLoaderSelectionPage selectionPage; 
   
-  private AbstractLocationChooserPage locationChooserPage;
-  
-  public CertificateChooserPage( final AbstractLocationChooserPage locationChooserPage ) {
+  public CertificateChooserPage( final CertificateLoaderSelectionPage selectionPage ) {
     super( "certificateChooserPage",
            "Choose Certificates",
            null );
     setDescription( "Choose the Certificates you would like to import" );
-    this.locationChooserPage = locationChooserPage;
+    this.selectionPage = selectionPage;
   }
-
+  
   public void createControl( final Composite parent ) {
     
     GridData gData;
@@ -68,12 +55,21 @@ public class CertificateChooserPage extends WizardPage {
     
     this.viewer = new CheckboxTableViewer( table );
     this.viewer.setContentProvider( new ArrayContentProvider() );
+    this.viewer.setLabelProvider( new LabelProvider() {
+      @Override
+      public String getText( final Object element ) {
+        String result = super.getText( element );
+        if ( element instanceof CertificateID ) {
+          result = ( ( CertificateID ) element ).getName();
+        }
+        return result;
+      }
+    } );
     
     Composite buttonComp = new Composite( mainComp, SWT.NULL );
     buttonComp.setLayout( new GridLayout( 3, false ) );
     gData = new GridData();
     buttonComp.setLayoutData( gData );
-    
     
     Button selectAllButton = new Button( buttonComp, SWT.PUSH );
     selectAllButton.setText( "&Select All" );
@@ -115,20 +111,28 @@ public class CertificateChooserPage extends WizardPage {
     
   }
   
-  public String[] getSelectedCertificates() {
+  public CertificateID[] getSelectedCertificates() {
     
-    String[] result = null;
+    CertificateID[] result = null;
     
     Object[] checkedElements = this.viewer.getCheckedElements();
     if ( checkedElements != null ) {
-      result = new String[ checkedElements.length ];
+      result = new CertificateID[ checkedElements.length ];
       for ( int i = 0 ; i < checkedElements.length ; i++ ) {
-        result[ i ] = ( String ) checkedElements[ i ];
+        result[ i ] = ( CertificateID ) checkedElements[ i ];
       }
     }
     
     return result;
     
+  }
+  
+  @Override
+  public void setVisible( final boolean visible ) {
+    super.setVisible( visible );
+    if ( visible ) {
+      loadCertificates();
+    }
   }
   
   protected void selectAll() {
@@ -140,56 +144,56 @@ public class CertificateChooserPage extends WizardPage {
   }
   
   protected void revertSelection() {
-    String[] elements = ( String[] ) this.viewer.getInput();
-    for ( String element : elements ) {
+    CertificateID[] elements = ( CertificateID[] ) this.viewer.getInput();
+    for ( CertificateID element : elements ) {
       boolean state = this.viewer.getChecked( element );
       this.viewer.setChecked( element, ! state );
     }
   }
   
-  /**
-   * This method gets called by the IPageChangedListener set up in
-   * the CaCertPreferencePage. That listener takes care of jumping the
-   * WizardPage back if an error happens.
-   * 
-   * @return true if the certificate list could be retrieved successfully
-   */
-  public boolean loadCertificateList() {
+  private void loadCertificates() {
     
-    boolean result = false;
+    setErrorMessage( null );
+    setMessage( null, WARNING );
+    this.viewer.setInput( null );
     
-    final ICaCertificateLoader loader = this.locationChooserPage.getLoader();
-    final URI uri = this.locationChooserPage.getSelectedLocation();
+    final ICertificateLoader loader = this.selectionPage.getSelectedLoader();
+    final URI uri = this.selectionPage.getURI();
+    
+    setErrorMessage( this.selectionPage.getErrorMessage() );
     
     try {
-      getContainer().run( false, true, new IRunnableWithProgress() {
+      getContainer().run( true, true, new IRunnableWithProgress() {
+        @SuppressWarnings("synthetic-access")
         public void run( final IProgressMonitor monitor )
             throws InvocationTargetException, InterruptedException {
           try {
-            String[] certificateList = loader.getCertificateList( uri, monitor );
-            CertificateChooserPage.this.viewer.setInput( certificateList );
+            final CertificateID[] certificates
+              = loader.listAvailableCertificates( uri, monitor );
+            getContainer().getShell().getDisplay().syncExec( new Runnable() {
+              public void run() {
+                CertificateChooserPage.this.viewer.setInput( certificates );
+                if ( certificates.length == 0 ) {
+                  setMessage( "No certificates found at the specified location", WARNING );
+                }
+              }
+            } );
           } catch ( ProblemException pExc ) {
             throw new InvocationTargetException( pExc );
           }
         }
       } );
-      
-      result = true;
-      
-    } catch ( InvocationTargetException itExc ) {
-      Throwable cause = itExc.getCause();
-      ProblemDialog.openProblem(
-          getShell(),
-          "Import Failed",
-          "Unable to load certificate list",
-          cause
-      );
-      setErrorMessage( cause.getLocalizedMessage() );
-    } catch ( InterruptedException intExc ) {
-      // Do nothing on user interrupt
+    } catch( InvocationTargetException itExc ) {
+      Throwable exc = itExc.getCause() == null ? itExc : itExc.getCause();
+      setErrorMessage( "Unable to load certificates: " + exc.getLocalizedMessage() );
+      ProblemDialog.openProblem( getShell(),
+                                 "Certificate load failed",
+                                 "Unable to load certificates",
+                                 exc );
+    } catch( InterruptedException intExc ) {
+      setErrorMessage( "Unable to load certificates: " + intExc.getLocalizedMessage() );
     }
     
-    return result;
   }
 
 }

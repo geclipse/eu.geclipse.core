@@ -152,6 +152,12 @@
             id="eu.geclipse.ui.visualisation.preferences.VisualisationPreferencePage"
             name="%page.visualisation">
       </page>
+      <page
+            category="eu.geclipse.ui.internal.preference.GEclipsePreferencePage"
+            class="eu.geclipse.ui.internal.preference.SecurityPreferencePage"
+            id="eu.geclipse.ui.internal.preference.securityPreferencePage"
+            name="Security">
+      </page>
    </extension>
    <extension
          point="org.eclipse.ui.propertyPages">
@@ -391,5 +397,12 @@
             id="eu.geclipse.ui.simpleTest.PortScanUIFactory"
             name="Port Scan UI Factory">
       </factory>
+   </extension>
+   <extension
+         point="eu.geclipse.core.certificateTrustVerifier">
+      <verifier
+            class="eu.geclipse.ui.internal.UICertificateTrustVerifier"
+            id="eu.geclipse.ui.certificateTrustVerifier">
+      </verifier>
    </extension>
 </plugin>
