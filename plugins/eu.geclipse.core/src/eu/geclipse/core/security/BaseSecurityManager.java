@@ -13,10 +13,11 @@
  *    Mathias Stuempert - initial API and implementation
  *****************************************************************************/
 
-package eu.geclipse.core.auth;
+package eu.geclipse.core.security;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 /**
  * Abstract implementation of the {@link ISecurityManager} that serves
@@ -58,7 +59,7 @@ public abstract class BaseSecurityManager
    * Notify all registered listeners that the content of this manager
    * has changed.
    */
-  protected void fireContentChanged() {
+  public void fireContentChanged() {
     if ( this.listeners != null ) {
       for ( ISecurityManagerListener l : this.listeners ) {
         l.contentChanged( this );

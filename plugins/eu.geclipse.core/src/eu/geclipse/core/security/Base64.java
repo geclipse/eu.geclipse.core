@@ -154,18 +154,18 @@ public class Base64 {
     
     for ( int i = 0 ; i < decoded.length ; i += 3 ) {
       byte d1 = decoded[i];
-      byte d2 = ( i+1 < decoded.length ) ? decoded[i+1] : -1;
-      byte d3 = ( i+2 < decoded.length ) ? decoded[i+2] : -1;
+      byte d2 = ( i+1 < decoded.length ) ? decoded[i+1] : 0;
+      byte d3 = ( i+2 < decoded.length ) ? decoded[i+2] : 0;
       int i1 = ( d1 >>> 2 ) & 0x3F;
       int i2 = ( d1 << 4) & 0x3F;
       int i3 = -1;
       int i4 = -1;
-      if ( d2 >= 0 ) {
-        i2 |= ( d2 >>> 4 ) & 0x3F;
+      if ( i+1 < decoded.length ) {
+        i2 |= ( d2 >>> 4 ) & 0x0F;
         i3 = ( d2 << 2) & 0x3F;
       }
-      if ( d3 >= 0 ) {
-        i3 |= ( d3 >>> 6 ) & 0x3F;
+      if ( i+2 < decoded.length ) {
+        i3 |= ( d3 >>> 6 ) & 0x03;
         i4 = d3 & 0x3F;
       }
       out.write( this.encodingTable[ i1 ] );

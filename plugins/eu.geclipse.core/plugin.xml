@@ -4,12 +4,13 @@
    <extension-point id="applicationDeployment" name="Application Deployment" schema="schema/applicationDeployment.exsd"/>
    <extension-point id="authTokenProvider" name="Authentication Token Provider" schema="schema/authTokenProvider.exsd"/>
    <extension-point id="authTokens" name="Authentication Tokens" schema="schema/authTokens.exsd"/>
-   <extension-point id="caCertificateLoader" name="CA Certificate Loader" schema="schema/caCertificateLoader.exsd"/>
    <extension-point id="gridElementCreator" name="%extension-point.gridElementCreator" schema="schema/gridElementCreator.exsd"/>
    <extension-point id="gridProjectFolder" name="Grid Project Folder" schema="schema/gridProjectFolder.exsd"/>
    <extension-point id="simpleTests" name="Simple Tests" schema="schema/simpleTests.exsd"/>
    <extension-point id="voLoader" name="VO Loader" schema="schema/voLoader.exsd"/>
    <extension-point id="gridResourceCategory" name="Grid Resource Category" schema="schema/gridResourceCategory.exsd"/>
+   <extension-point id="certificateLoader" name="Certificate Loader" schema="schema/certificateLoader.exsd"/>
+   <extension-point id="certificateTrustVerifier" name="Certificate Trust Verifier" schema="schema/certificateTrustVerifier.exsd"/>
    <extension
          point="org.eclipse.core.expressions.propertyTesters">
       <propertyTester
@@ -61,21 +62,6 @@
             class="eu.geclipse.core.auth.CoreAuthTokenProvider"
             priority="0">
       </provider>
-   </extension>
-   <extension
-         point="eu.geclipse.core.caCertificateLoader">
-      <loader
-            class="eu.geclipse.core.auth.EUGridPMACertificateLoader"
-            fromLocal="true"
-            fromRemote="true"
-            name="European Policy Management Authority for Grid Authentication">
-      </loader>
-      <loader
-            class="eu.geclipse.core.auth.PEMCertificateLoader"
-            fromLocal="true"
-            fromRemote="false"
-            name="PEM Based Certificate Loader">
-      </loader>
    </extension>
    <extension
          point="eu.geclipse.core.gridElementCreator">
@@ -380,7 +366,7 @@
             description="Check your imported CA-certificates"
             id="eu.geclipse.core.solution.auth.checkCaCertificates">
          <preferenceTag
-               pageID="eu.geclipse.ui.internal.preference.CaCertPreferencePage">
+               pageID="eu.geclipse.ui.internal.preference.securityPreferencePage">
          </preferenceTag>
       </solution>
       <solution
@@ -495,5 +481,63 @@
             id="eu.geclipse.core.simpleTest.reachabilityTest"
             name="Reachability Test">
       </test>
+   </extension>
+   <extension
+         point="eu.geclipse.core.certificateLoader">
+      <loader
+            class="eu.geclipse.core.security.GridPMACertificateLoader"
+            name="Grid Policy Management Authorities">
+         <authority
+               description="The EUGridPMA is the international organisation to coordinate the trust fabric for e-Science grid authentication in Europe. It collaborates with the regional peers APGridPMA for the Asia-Pacific and The Americas Grid PMA in the International Grid Trust Federation. The charter document defines the group&apos;s objective, scope and operation. It is the basis for the guidelines documents on the accreditation procedure, the Authentication profile for X.509 secured &quot;classic&quot; certification authorities and other IGTF recognised Profiles. "
+               name="European Grid Policy Management Authority">
+            <distribution
+                  description="Current distribution of IGTF accredited authorites"
+                  name="accredited"
+                  url="http://dist.eugridpma.info/distribution/igtf/current/accredited/tgz/">
+            </distribution>
+            <distribution
+                  description="This area contains the trust anchors of &quot;experimental&quot; authority certificates. THESE ARE NOT (YET) ACCREDITED AND THE IGTF DOES NOT MAKE ANY CLAIMS REGARDING THEIR CONFORMANCE TO ANY AUTHENTICATION PROFILE."
+                  name="experimental"
+                  url="http://dist.eugridpma.info/distribution/igtf/current/experimental/tgz/">
+            </distribution>
+            <distribution
+                  description="This area contains the trust anchors of &quot;worthless&quot; authority certificates. THESE ARE NOT ACCREDITED AND THE IGTF DOES NOT MAKE ANY CLAIMS REGARDING THEIR CONFORMANCE TO ANY AUTHENTICATION PROFILE THERE ARE AUTHORITIES THAT THEMSELVES CLAIM THAT THEY ARE NOT TO BE USED IN A PRODUCTION ENVIRONMENT, OR EVEN IN ANY ENVIRONMENT AT ALL. PLEASE REVIEW THE INDIVIDUAL POLICIES OF THE CAS YOU INSTALL."
+                  name="worthless"
+                  url="https://dist.eugridpma.info/distribution/igtf/current/worthless/tgz/">
+            </distribution>
+         </authority>
+         <authority
+               description="The Asia Pacific Grid Policy Management Authority (APGrid PMA) supports Grid communities in Asia Pacific to implement a common trust domain across organizations. The main activity of the APGrid PMA is to coordinate Public Key Infrastructure for use with Grid authentication. The APGrid PMA is expected to be referred as a representative policy management authority in Asia Pacific. The APGrid PMA is not specific for any existing Grid communities in Asia Pacific such as Asia Pacific Partnership for Grid Computing (ApGrid) and Pacific Rim Applications and Grid Middleware Assembly (PRAGMA)."
+               name="Asia Pacific Grid Policy Management Authority">
+            <distribution
+                  description="Current distribution of the APGrid PMA"
+                  name="accredited"
+                  url="http://www.apgridpma.org/distribution/igtf/current/accredited/tgz/">
+            </distribution>
+            <distribution
+                  description="This area contains the trust anchors of &quot;experimental&quot; authority certificates. THESE ARE NOT (YET) ACCREDITED AND THE IGTF DOES NOT MAKE ANY CLAIMS REGARDING THEIR CONFORMANCE TO ANY AUTHENTICATION PROFILE."
+                  name="experimental"
+                  url="http://www.apgridpma.org/distribution/igtf/current/experimental/tgz/">
+            </distribution>
+            <distribution
+                  description="This area contains the trust anchors of &quot;worthless&quot; authority certificates. THESE ARE NOT ACCREDITED AND THE IGTF DOES NOT MAKE ANY CLAIMS REGARDING THEIR CONFORMANCE TO ANY AUTHENTICATION PROFILE THERE ARE AUTHORITIES THAT THEMSELVES CLAIM THAT THEY ARE NOT TO BE USED IN A PRODUCTION ENVIRONMENT, OR EVEN IN ANY ENVIRONMENT AT ALL. PLEASE REVIEW THE INDIVIDUAL POLICIES OF THE CAS YOU INSTALL."
+                  name="worthless"
+                  url="http://www.apgridpma.org/distribution/igtf/current/worthless/tgz/">
+            </distribution>
+         </authority>
+      </loader>
+      <loader
+            class="eu.geclipse.core.security.GildaCertificateLoader"
+            name="GILDA">
+         <authority
+               description="GILDA (Grid Infn Laboratory for Dissemination Activities) is a virtual laboratory to demonstrate/disseminate the strong capabilities of grid computing."
+               name="Grid Infn Laboratory for Dissemination Activities">
+            <distribution
+                  description="The GILDA Certification Authority (GILDA CA) issues temporary (two weeks) personal public key certificates (compliant with the X.509 standard) in order to access the GILDA Testbed."
+                  name="The GILDA Certification Authority"
+                  url="https://gilda.ct.infn.it/CA/mgt/">
+            </distribution>
+         </authority>
+      </loader>
    </extension>
 </plugin>

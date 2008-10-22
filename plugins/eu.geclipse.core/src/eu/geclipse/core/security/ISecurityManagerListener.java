@@ -13,26 +13,20 @@
  *    Mathias Stuempert - initial API and implementation
  *****************************************************************************/
 
-package eu.geclipse.core.auth;
+package eu.geclipse.core.security;
+
 
 /**
- * A security manager is a container for security tokens.
+ * Interface definition for listeners to security managers.
  */
-public interface ISecurityManager {
+public interface ISecurityManagerListener {
 
   /**
-   * Add a listener to this manager that is informed whenever the
-   * content of the manager changes.
+   * If registered as listener to a security manager this method
+   * is called by the manager whenever its content changes.
    * 
-   * @param l The listener to be added.
+   * @param manager The manager that issued the change.
    */
-  public void addListener( final ISecurityManagerListener l );
-  
-  /**
-   * Remove a listener from the manager's internal list of listeners.
-   * 
-   * @param l The listener to be removed.
-   */
-  public void removeListener( final ISecurityManagerListener l );
+  public void contentChanged( final ISecurityManager manager );
   
 }

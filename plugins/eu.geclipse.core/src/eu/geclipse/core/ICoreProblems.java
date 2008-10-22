@@ -111,6 +111,13 @@ public interface ICoreProblems {
   public static final String NET_UNKNOWN_HOST
     = "eu.geclipse.core.problem.net.unknownHost"; //$NON-NLS-1$
   
+  //public static final String SECURITY_CERT_CREATION_FAILED
+    //= "eu.geclipse.core.problem.security.certCreationFailed";
+  public static final String SECURITY_CERT_LOAD_FAILED
+    = "eu.geclipse.core.problem.security.certLoadFailed";
+  public static final String SECURITY_CERT_SAVE_FAILED
+    = "eu.geclipse.core.problem.security.certSaveFailed";
+  
   // System
   public static final String SYS_SYSTEM_TIME_CHECK_FAILED
     = "eu.geclipse.core.problem.sys.systemTimeCheckFailed"; //$NON-NLS-1$

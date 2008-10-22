@@ -15,12 +15,24 @@
 
 package eu.geclipse.core.internal;
 
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.UnknownHostException;
+
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
+
 import org.eclipse.core.net.proxy.IProxyService;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
 import org.osgi.framework.BundleContext;
 import org.osgi.util.tracker.ServiceTracker;
+
+import eu.geclipse.core.internal.security.CertificateManager;
+import eu.geclipse.core.security.Security;
 
 /**
  * The activator class controls the plug-in life cycle.
@@ -59,11 +71,21 @@ public class Activator extends Plugin {
    */
   @Override
   public void start( final BundleContext context ) throws Exception {
+    
     super.start( context );
+    
     this.tracker = new ServiceTracker( getBundle().getBundleContext(),
                                        IProxyService.class.getName(),
                                        null );
     this.tracker.open();
+    
+    try {
+      SSLSocketFactory socketFactory = Security.getSocketFactory();
+      HttpsURLConnection.setDefaultSSLSocketFactory( socketFactory );
+    } catch ( Exception exc ) {
+      logException( exc );
+    }
+    
   }
 
   /*

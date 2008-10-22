@@ -119,46 +119,38 @@ public class Extensions {
   public static final String AUTH_TOKEN_PROVIDER_PRIORITY_ATTRIBUTE
     = "priority"; //$NON-NLS-1$
   
-  /**
-   * The ID of the CA certificate loader extension point.
-   */
-  public static final String CA_CERT_LOADER_POINT
-    = "eu.geclipse.core.caCertificateLoader"; //$NON-NLS-1$
+  public static final String CERT_LOADER_POINT
+    = "eu.geclipse.core.certificateLoader"; //$NON-NLS-1$
   
-  /**
-   * The ID of the CA certificate loader configuration element
-   * of the CA certificate loader extension point.
-   */
-  public static final String CA_CERT_LOADER_ELEMENT
+  public static final String CERT_LOADER_ELEMENT
     = "loader"; //$NON-NLS-1$
   
-  /**
-   * The ID of the name attribute of the loader configuration element
-   * of the CA certificate loader extension point.
-   */
-  public static final String CA_CERT_LOADER_NAME_ATTRIBUTE
+  public static final String CERT_LOADER_NAME_ATTRIBUTE
     = "name"; //$NON-NLS-1$
   
-  /**
-   * The ID of the class attribute of the loader configuration element
-   * of the CA certificate loader extension point.
-   */
-  public static final String CA_CERT_LOADER_CLASS_ATTRIBUTE
+  public static final String CERT_LOADER_CLASS_ATTRIBUTE
     = "class"; //$NON-NLS-1$
   
-  /**
-   * The ID of the fromLocal attribute of the loader configuration element
-   * of the CA certificate loader extension point.
-   */
-  public static final String CA_CERT_LOADER_FROM_LOCAL_ATTRIBUTE
-    = "fromLocal"; //$NON-NLS-1$
+  public static final String CERT_LOADER_AUTHORITY_ELEMENT
+    = "authority"; //$NON-NLS-1$
   
-  /**
-   * The ID of the fromRemote attribute of the loader configuration element
-   * of the CA certificate loader extension point.
-   */
-  public static final String CA_CERT_LOADER_FROM_REMOTE_ATTRIBUTE
-    = "fromRemote"; //$NON-NLS-1$
+  public static final String CERT_LOADER_AUTHORITY_NAME_ATTRIBUTE
+    = "name"; //$NON-NLS-1$
+  
+  public static final String CERT_LOADER_AUTHORITY_DESCRIPTION_ATTRIBUTE
+    = "description"; //$NON-NLS-1$
+  
+  public static final String CERT_LOADER_DISTRIBUTION_ELEMENT
+    = "distribution"; //$NON-NLS-1$
+  
+  public static final String CERT_LOADER_DISTRIBUTION_NAME_ATTRIBUTE
+    = "name"; //$NON-NLS-1$
+  
+  public static final String CERT_LOADER_DISTRIBUTION_URL_ATTRIBUTE
+    = "url"; //$NON-NLS-1$
+  
+  public static final String CERT_LOADER_DISTRIBUTION_DESCRIPTION_ATTRIBUTE
+    = "description"; //$NON-NLS-1$
   
   /**
    * The ID of the filesystems extension point.
