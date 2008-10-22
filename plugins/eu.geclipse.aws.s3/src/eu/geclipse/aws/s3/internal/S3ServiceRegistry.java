@@ -36,9 +36,9 @@ import eu.geclipse.core.auth.AbstractAuthTokenProvider;
 import eu.geclipse.core.auth.AuthTokenRequest;
 import eu.geclipse.core.auth.AuthenticationTokenManager;
 import eu.geclipse.core.auth.IAuthenticationToken;
-import eu.geclipse.core.auth.ISecurityManager;
-import eu.geclipse.core.auth.ISecurityManagerListener;
 import eu.geclipse.core.reporting.ProblemException;
+import eu.geclipse.core.security.ISecurityManager;
+import eu.geclipse.core.security.ISecurityManagerListener;
 
 /**
  * Class that manages all instances of S3Services.
