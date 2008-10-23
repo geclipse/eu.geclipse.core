@@ -32,6 +32,12 @@ public class CertificateInfoDialog extends TitleAreaDialog {
     setTitleImage( imgDesc.createImage() );
   }
   
+  @Override
+  protected void configureShell( final Shell newShell ) {
+    super.configureShell( newShell );
+    newShell.setText( "Certificate Information" );
+  }
+  
   public static void openDialog( final Shell parentShell,
                                  final X509Certificate certificate ) {
     CertificateInfoDialog dialog = new CertificateInfoDialog( parentShell );
@@ -72,7 +78,7 @@ public class CertificateInfoDialog extends TitleAreaDialog {
       internalSetCertificateChain( this.certificateChain );
     }
     
-    setMessage( "Information dialog for X.509 based certificates." );
+    setMessage( "Information about X.509 based certificates." );
     
     return this.infoPanel;
     

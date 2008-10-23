@@ -1,11 +1,8 @@
 package eu.geclipse.ui.internal.preference;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -237,22 +234,22 @@ public class SecurityPreferencePage
     buttons.setLayout( layout );
     
     this.addButton = new Button( buttons, SWT.PUSH );
-    this.addButton.setText( "Add..." );
+    this.addButton.setText( "&Add..." );
     gData = new GridData( GridData.FILL_HORIZONTAL );
     this.addButton.setLayoutData( gData );
     
     this.importButton = new Button( buttons, SWT.PUSH );
-    this.importButton.setText( "Import" );
+    this.importButton.setText( "&Import..." );
     gData = new GridData( GridData.FILL_HORIZONTAL );
     this.importButton.setLayoutData( gData );
     
     this.infoButton = new Button( buttons, SWT.PUSH );
-    this.infoButton.setText( "Info" );
+    this.infoButton.setText( "I&nfo..." );
     gData = new GridData( GridData.FILL_HORIZONTAL );
     this.infoButton.setLayoutData( gData );
     
     this.deleteButton = new Button( buttons, SWT.PUSH );
-    this.deleteButton.setText( "Delete" );
+    this.deleteButton.setText( "&Delete" );
     gData = new GridData( GridData.FILL_HORIZONTAL );
     this.deleteButton.setLayoutData( gData );
     
