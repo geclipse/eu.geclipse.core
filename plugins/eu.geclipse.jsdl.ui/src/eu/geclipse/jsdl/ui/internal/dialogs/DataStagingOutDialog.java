@@ -17,11 +17,13 @@
 package eu.geclipse.jsdl.ui.internal.dialogs;
 
 import java.net.URI;
+import java.net.URL;
 import java.util.ArrayList;
 
 import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -46,6 +48,7 @@ import eu.geclipse.jsdl.model.base.DataStagingType;
 import eu.geclipse.jsdl.model.base.JsdlFactory;
 import eu.geclipse.jsdl.model.base.JsdlPackage;
 import eu.geclipse.jsdl.model.base.SourceTargetType;
+import eu.geclipse.jsdl.ui.internal.Activator;
 import eu.geclipse.jsdl.ui.widgets.Messages;
 import eu.geclipse.ui.dialogs.GridFileDialog;
 
@@ -123,7 +126,7 @@ public class DataStagingOutDialog extends Dialog {
     gd = new GridData( GridData.FILL_HORIZONTAL );
     panel.setLayoutData( gd );
     Label nameLabel = new Label( panel, SWT.LEAD );
-    nameLabel.setText( Messages.getString( "DataStageInTable.name_field_label" ) ); //$NON-NLS-1$
+    nameLabel.setText( Messages.getString( "DataStageInDialog.name_field_label" ) ); //$NON-NLS-1$
     nameLabel.setLayoutData( new GridData() );
     this.nameText = new Text( panel, SWT.BORDER );
     gd = new GridData();
@@ -143,7 +146,7 @@ public class DataStagingOutDialog extends Dialog {
       }
     } );
     Label pathLabel = new Label( panel, SWT.LEAD );
-    pathLabel.setText( Messages.getString( "DataStageInTable.target_location_field_label" ) ); //$NON-NLS-1$
+    pathLabel.setText( Messages.getString( "DataStageInDialog.target_location_field_label" ) ); //$NON-NLS-1$
     gd = new GridData();
     pathLabel.setLayoutData( gd );
     this.pathText = new Text( panel, SWT.BORDER );
@@ -161,9 +164,9 @@ public class DataStagingOutDialog extends Dialog {
     gd = new GridData( GridData.FILL_HORIZONTAL );
     this.pathText.setLayoutData( gd );
     Button browseButton = new Button( panel, SWT.PUSH );
-    ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
-    Image fileImage = sharedImages.getImage( ISharedImages.IMG_OBJ_FILE );
-    browseButton.setImage( fileImage );
+    URL openFileIcon = Activator.getDefault().getBundle().getEntry( "icons/obj16/open_file.gif" ); //$NON-NLS-1$
+    Image openFileImage = ImageDescriptor.createFromURL( openFileIcon ).createImage();
+    browseButton.setImage( openFileImage );
     browseButton.addSelectionListener( new SelectionAdapter() {
 
       @Override
