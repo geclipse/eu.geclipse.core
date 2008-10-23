@@ -123,7 +123,9 @@ public class BatchCreationWizard extends Wizard implements INewWizard {
 
     if( null != this.selection ) {
       IGridElement selected = ( IGridElement )this.selection.getFirstElement();
-      result = selected.getProject();
+      if ( selected != null ) {
+        result = selected.getProject();
+      }
     }
     
     return result;
