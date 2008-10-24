@@ -11,7 +11,7 @@
    <extension-point id="deploymentWizard" name="eu.geclipse.ui.deploymentWizard" schema="schema/deploymentWizard.exsd"/>
    <extension-point id="uninstallWizard" name="eu.geclipse.ui.uninstallWizard" schema="schema/uninstallWizard.exsd"/>
    <extension-point id="eu.geclipse.ui.visualisationWindow" name="Visualisation Window" schema="schema/visualisationWindow.exsd"/>
-   <extension-point id="eu.geclipse.ui.visualisationaction" name="Visualisation Action" schema="schema/visualisationaction.exsd"/>
+   <extension-point id="eu.geclipse.ui.visualisationAction" name="Visualisation Action" schema="schema/visualisationAction.exsd"/>
    <extension
          point="org.eclipse.core.runtime.preferences">
       <initializer
@@ -222,7 +222,16 @@
             icon="icons/job.gif"
             id="eu.geclipse.ui.views.ProcessStatView"
             name="Process Status Viewer"/>  -->
+      <view
+            allowMultiple="false"
+            category="eu.geclipse.ui.viewcategory"
+            class="eu.geclipse.ui.views.VisualisationView"
+            icon="icons/vis/classImg.png"
+            id="eu.geclipse.ui.views.visualisationview"
+            name="Visualisation">
+      </view>
    </extension>
+   
    <extension
          point="eu.geclipse.core.authTokenProvider">
       <provider

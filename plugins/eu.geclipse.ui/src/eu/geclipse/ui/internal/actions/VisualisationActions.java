@@ -34,7 +34,7 @@ import org.eclipse.ui.navigator.ICommonMenuConstants;
 import eu.geclipse.ui.dialogs.ProblemDialog;
 import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.visualisation.AbstractVisualisationAction;
-import eu.geclipse.ui.visualisation.GridVisualisationResource;
+import eu.geclipse.ui.visualisation.AbstractGridVisualisationResource;
 
 
 /**
@@ -125,8 +125,8 @@ public class VisualisationActions extends ActionGroup {
     for( AbstractVisualisationAction action : this.actions ) {
       if ( action.isEnabled() ) {
         try {
-          Class<GridVisualisationResource> cl
-          = ( Class<GridVisualisationResource> )
+          Class<AbstractGridVisualisationResource> cl
+          = ( Class<AbstractGridVisualisationResource> )
           (( IStructuredSelection )getContext().getSelection()).getFirstElement()
           .getClass();
           Method met = cl.getMethod( "getResourceFileExtension" ); //$NON-NLS-1$

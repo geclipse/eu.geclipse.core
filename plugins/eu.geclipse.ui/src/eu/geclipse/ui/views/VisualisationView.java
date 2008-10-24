@@ -42,11 +42,11 @@ import eu.geclipse.ui.internal.Activator;
  */
 public class VisualisationView extends ViewPart {
 
+  protected boolean newTabOn = false;
+  protected IAction checkBtnAction = null;
   private final int allowedNumOfTabs = 10;
 //  private final VisViewDropDownAction fileDropDownAction = null;
-  IAction checkBtnAction = null;
   private CTabFolder cTabFolder;
-  protected boolean newTabOn = false;
   private IGridVisualisation visResource = null;
 
   private void createActions() {
@@ -113,11 +113,7 @@ public class VisualisationView extends ViewPart {
     this.cTabFolder.addCTabFolder2Listener( new CTabFolder2Adapter() {
       @Override
       public void close( final CTabFolderEvent event ) {
-        //the following throws exception now that the classes implementing
-        //the IVisualisatioWindow interface have been changed to fit the
-        //vis extension implementation, but it didn't work anyway - the remote
-        //kept running on the remote host so this has to be handled differently
-//        ((AbstractVisualisationWindow)((CTabItem)event.item).getControl()).stopClient();
+        //nothing
       }
     } );
 

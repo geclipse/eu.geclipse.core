@@ -41,7 +41,7 @@ public abstract class AbstractVisualisationAction extends SelectionListenerActio
    * Extension point which has to be implemented to provide additional actions for
    * visualisable elements (i.e. elements that extend the IGridVisualisation interface).
    */
-  public static final String ACTION_EXTENSION_POINT = "eu.geclipse.ui.visualisationaction"; //$NON-NLS-1$
+  public static final String ACTION_EXTENSION_POINT = "eu.geclipse.ui.visualisationAction"; //$NON-NLS-1$
 
   /**
    * Name of the attribute which specifies the class name of the AbstractVisualisationAction

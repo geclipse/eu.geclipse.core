@@ -25,25 +25,23 @@ import eu.geclipse.core.reporting.ProblemException;
  * @author sgirtel
  *
  */
-public abstract class GridVisualisationResource extends ResourceGridContainer
+public abstract class AbstractGridVisualisationResource
+  extends ResourceGridContainer
   implements IGridVisualisation
 {
 
-
-  protected GridVisualisationResource( final IResource resource ) {
+  protected AbstractGridVisualisationResource( final IResource resource ) {
     super( resource );
+    setResourceFileExtenstion( resource.getFileExtension() );
   }
 
-  public String getDescription() {
-    return null;
-  }
+  public abstract void setResourceFileExtenstion( final String fileExt );
+
+  public abstract String getResourceFileNameExtension();
+
+  public abstract void render( final String fileExtention );
 
   public void validate() throws ProblemException {
     // TODO Auto-generated method stub
   }
-
-//  public abstract String getResourceFileNameExtension();
-
-  public abstract void render( final String fileExtention );
-
 }
