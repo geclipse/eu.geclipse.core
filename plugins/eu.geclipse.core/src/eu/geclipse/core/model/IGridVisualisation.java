@@ -24,11 +24,6 @@ import eu.geclipse.core.reporting.ProblemException;
 public interface IGridVisualisation extends IGridContainer {
 
   /**
-   * @return user's description for the specific VTK pipeline
-   */
-  String getDescription();
-
-  /**
    * @return
    */
   String getResourceFileNameExtension();
