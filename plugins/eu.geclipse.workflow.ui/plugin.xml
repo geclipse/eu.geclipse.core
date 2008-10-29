@@ -644,8 +644,9 @@
             icon="icons/ovr16/workflow_ovr.gif"
             id="eu.geclipse.core.projectfolder.workflows"
             label="Workflows"
-            name="Grid Workflow Folder">
-      </folder>
+            name="Grid Workflows Folder"
+            preset="true">
+      </folder>  
    </extension>
    <extension
          point="org.eclipse.ui.bindings">

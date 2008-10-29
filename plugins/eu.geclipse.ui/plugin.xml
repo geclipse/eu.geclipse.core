@@ -265,14 +265,6 @@
             name="Grid Connection Folder"
             preset="true">
       </folder>
-      <folder
-            elementClass="eu.geclipse.workflow.IGridWorkflowDescription"
-            icon="icons/ovr16/connection_ovr.gif"
-            id="eu.geclipse.core.projectfolder.workflows"
-            label="Workflows"
-            name="Workflows Folder"
-            preset="true">
-      </folder>
    </extension>
    <extension
          point="eu.geclipse.core.reporting.problemReporting">
