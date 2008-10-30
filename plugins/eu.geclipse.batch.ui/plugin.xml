@@ -18,7 +18,7 @@
        extensions="qdl"
        icon="icons/queue16.gif"
        id="eu.geclipse.batch.ui.editors.QueueEditor"
-       name="Queue Configuration Editor"/> 
+       name="%editor.queueEditor"/> 
    </extension>
    <extension
          point="org.eclipse.ui.newWizards">

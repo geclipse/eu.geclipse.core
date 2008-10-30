@@ -168,7 +168,6 @@ public class QueueEditor extends FormEditor implements IEditingDomainProvider {
                    {
                      public void run() {
                        getSite().getPage().closeEditor( QueueEditor.this, false );
-                       QueueEditor.this.dispose();
                      }
                    });
               }
