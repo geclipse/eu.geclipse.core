@@ -88,6 +88,12 @@ public class CertificateTrustDialog extends TitleAreaDialog {
   }
   
   @Override
+  protected void configureShell( final Shell newShell ) {
+    super.configureShell( newShell );
+    newShell.setText( "Certificate Trust Dialog" );
+  }
+  
+  @Override
   protected void createButtonsForButtonBar( final Composite parent ) {
     createButton( parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true );
   }
