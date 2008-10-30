@@ -19,6 +19,7 @@ package eu.geclipse.jsdl.ui.wizards;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -161,7 +162,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
         if( path != null && !path.toOSString().equals( "" ) ) { //$NON-NLS-1$
           // getting jsdl source
           // creating temp Eclipse's resource
-          IPath workspacePath = ( ( NewJobWizard )this.getWizard() ).getProject();
+          IPath workspacePath = ( ( NewJobWizard )getWizard() ).getProject();
           workspacePath = workspacePath.append( ".tempJSDL.jsdl" ); //$NON-NLS-1$
           IFile newFileHandle = ResourcesPlugin.getWorkspace()
             .getRoot()
@@ -172,7 +173,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
               .findElement( newFileHandle );
             if( element instanceof JSDLJobDescription ) {
               this.basicJSDL = ( JSDLJobDescription )element;
-              ( ( NewJobWizard )this.getWizard() ).updateBasicJSDL( this.basicJSDL,
+              ( ( NewJobWizard )getWizard() ).updateBasicJSDL( this.basicJSDL,
                                                                     this.applicationName.getText() );
             }
           } catch( CoreException e ) {
@@ -185,12 +186,12 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
             }
           }
         } else {
-          ( ( NewJobWizard )this.getWizard() ).updateBasicJSDL( null,
+          ( ( NewJobWizard )getWizard() ).updateBasicJSDL( null,
                                                                 this.applicationName.getText() );
         }
       }
     } else {
-      ( ( NewJobWizard )this.getWizard() ).updateBasicJSDL( null,
+      ( ( NewJobWizard )getWizard() ).updateBasicJSDL( null,
                                                             this.applicationName.getText() );
     }
     return super.getNextPage();
@@ -236,7 +237,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
       public void focusGained( final FocusEvent e ) {
         if( ExecutableNewJobWizardPage.this.firstTime ) {
           fetchApps( ExecutableNewJobWizardPage.this.virtualOrg );
-          applicationName.setListVisible( true );
+          ExecutableNewJobWizardPage.this.applicationName.setListVisible( true );
         }
       }
 
@@ -341,7 +342,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
                                                     GridFileDialog.STYLE_ALLOW_ONLY_FILES
                                                         | GridFileDialog.STYLE_ALLOW_ONLY_EXISTING );
         if( dialog.open() == Window.OK ) {
-          URI[] uris = dialog.getSelectedURIs();
+          URI[] uris = getUrisFromDialog( dialog );
           if( ( uris != null ) && ( uris.length > 0 ) ) {
             ExecutableNewJobWizardPage.this.stdin.setText( uris[ 0 ].toString() );
           }
@@ -375,7 +376,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
         GridFileDialog dialog = new GridFileDialog( getShell(),
                                                     GridFileDialog.STYLE_ALLOW_ONLY_FILES );
         if( dialog.open() == Window.OK ) {
-          URI[] uris = dialog.getSelectedURIs();
+          URI[] uris = getUrisFromDialog( dialog );
           if( ( uris != null ) && ( ( uris.length > 0 ) ) ) {
             ExecutableNewJobWizardPage.this.stdout.setText( uris[ 0 ].toString() );
           }
@@ -409,7 +410,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
         GridFileDialog dialog = new GridFileDialog( getShell(),
                                                     GridFileDialog.STYLE_ALLOW_ONLY_FILES );
         if( dialog.open() == Window.OK ) {
-          URI[] uris = dialog.getSelectedURIs();
+          URI[] uris = getUrisFromDialog( dialog );
           if( ( uris != null ) && ( uris.length > 0 ) ) {
             ExecutableNewJobWizardPage.this.stderr.setText( uris[ 0 ].toString() );
           }
@@ -418,11 +419,49 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
     } );
     if( this.basicNode == null ) {
       this.basicNode = new BasicWizardPart( this.internalPages,
-                                            this.getWizard() );
+                                            getWizard() );
     }
     setSelectedNode( this.basicNode );
     setStdFilesGroupEnabled( false );
     setControl( mainComp );
+  }
+  
+  URI[] getUrisFromDialog( final GridFileDialog dialog ) {
+    URI[] uris = dialog.getSelectedURIs();
+    for( int j = 0; j < uris.length; j++ ) {
+      URI uri = uris[j];
+      String query = uri.getQuery();
+      if( query != null && query.trim().length() > 0 ) {
+        String[] qParts = query.split( "&" ); //$NON-NLS-1$
+        query = ""; //$NON-NLS-1$
+        for( int i=0; i < qParts.length; i++ ) {
+          String qPart = qParts[i];
+          if( !qPart.startsWith( "vo" ) ){ //$NON-NLS-1$
+            if( query.trim().length() > 0 ) {
+              query += "&"; //$NON-NLS-1$
+            }
+            query += qPart;
+          }
+        }
+        if( query.trim().length() == 0 ) {
+          query = null;
+        }
+      }
+      
+      try {
+        uri = new URI( uri.getScheme(),
+                       uri.getUserInfo(),
+                       uri.getHost(),
+                       uri.getPort(),
+                       uri.getPath(),
+                       query,
+                       uri.getFragment() );
+       uris[j] = uri;
+      } catch( URISyntaxException e ) {
+        //TODO
+      }
+    }
+    return uris;
   }
 
   void fetchApps( final IVirtualOrganization vo ) {
@@ -523,10 +562,10 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
   }
 
   public void modifyText( final ModifyEvent e ) {
-    this.getContainer().updateButtons();
+    getContainer().updateButtons();
     if( this.basicNode == null ) {
       this.basicNode = new BasicWizardPart( this.internalPages,
-                                            this.getWizard() );
+                                            getWizard() );
     }
     if( this.appsWithParametersFromPrefs.keySet()
       .contains( this.applicationName.getText() ) )
@@ -578,10 +617,10 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
    */
   public List<IApplicationSpecificPage> getApplicationSpecificPages() {
     List<IApplicationSpecificPage> result = new ArrayList<IApplicationSpecificPage>();
-    if( this.getSelectedNode() != null
-        && this.getSelectedNode() != this.basicNode )
+    if( getSelectedNode() != null
+        && getSelectedNode() != this.basicNode )
     {
-      SpecificWizardPart specificNode = ( SpecificWizardPart )this.getSelectedNode();
+      SpecificWizardPart specificNode = ( SpecificWizardPart )getSelectedNode();
       for( IWizardPage asp : specificNode.getPages() ) {
         result.add( ( IApplicationSpecificPage )asp );
       }
@@ -638,7 +677,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
         .getApplicationData( aspID.intValue() )
         .getJsdlPath();
       if( path != null && !path.toOSString().equals( "" ) ) { //$NON-NLS-1$
-        IPath workspacePath = ( ( NewJobWizard )this.getWizard() ).getProject();
+        IPath workspacePath = ( ( NewJobWizard )getWizard() ).getProject();
         workspacePath = workspacePath.append( ".tempJSDL.jsdl" ); //$NON-NLS-1$
         IFile newFileHandle = ResourcesPlugin.getWorkspace()
           .getRoot()
@@ -672,12 +711,12 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
    * Updates buttons as a reaction to changes in page's fields content.
    */
   public void updateButtons() {
-    this.getContainer().updateButtons();
+    getContainer().updateButtons();
   }
   class ModifyTextListener implements ModifyListener {
 
     public void modifyText( final ModifyEvent event ) {
-      ExecutableNewJobWizardPage.this.updateButtons();
+      updateButtons();
     }
   }
 

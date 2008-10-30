@@ -17,9 +17,11 @@
 package eu.geclipse.jsdl.ui.internal.dialogs;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 
+import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -118,7 +120,7 @@ public class DataStagingOutDialog extends Dialog {
     composite.setLayout( new GridLayout( 1, false ) );
     composite.setLayoutData( new GridData( GridData.FILL_BOTH ) );
     Composite panel = new Composite( composite, SWT.NONE );
-    this.initializeDialogUnits( composite );
+    initializeDialogUnits( composite );
     GridData gd;
     GridLayout gLayout = new GridLayout( 3, false );
     panel.setLayout( gLayout );
@@ -176,15 +178,55 @@ public class DataStagingOutDialog extends Dialog {
           .getShell(), GridFileDialog.STYLE_ALLOW_ONLY_FILES );
         if( dialog.open() == Window.OK ) {
           DataStagingOutDialog.this.uris = dialog.getSelectedURIs();
+          for( int j = 0; j < DataStagingOutDialog.this.uris.length; j++ ) {
+            URI uri = DataStagingOutDialog.this.uris[j];
+            String query = uri.getQuery();
+            if( query != null && query.trim().length() > 0 ) {
+              String[] qParts = query.split( "&" ); //$NON-NLS-1$
+              query = ""; //$NON-NLS-1$
+              for( int i=0; i < qParts.length; i++ ) {
+                String qPart = qParts[i];
+                if( !qPart.startsWith( "vo" ) ){ //$NON-NLS-1$
+                  if( query.trim().length() > 0 ) {
+                    query += "&"; //$NON-NLS-1$
+                  }
+                  query += qPart;
+                }
+              }
+              if( query.trim().length() == 0 ) {
+                query = null;
+              }
+            }
+            
+            try {
+              uri = new URI( uri.getScheme(),
+                             uri.getUserInfo(),
+                             uri.getHost(),
+                             uri.getPort(),
+                             uri.getPath(),
+                             query,
+                             uri.getFragment() );
+              DataStagingOutDialog.this.uris[j] = uri;
+            } catch( URISyntaxException e1 ) {
+              //TODO
+              Activator.logException( e1 );
+            }
+          }
           if( ( DataStagingOutDialog.this.uris != null )
               && ( DataStagingOutDialog.this.uris.length > 0 ) )
           {
             DataStagingOutDialog.this.filename = new String[ DataStagingOutDialog.this.uris.length ];
             for( int i = 0; i < DataStagingOutDialog.this.uris.length; i++ ) {
               currentURI = DataStagingOutDialog.this.uris[ i ].toString();
-              DataStagingOutDialog.this.filename[ i ] = currentURI.substring( currentURI.lastIndexOf( "/" ) //$NON-NLS-1$
-                                                                              + 1,
-                                                                              currentURI.length() );
+              URI uri;
+              try {
+                uri = new URI( currentURI );
+                DataStagingOutDialog.this.filename[i] = new Path( uri.getPath() ).lastSegment();
+              } catch( URISyntaxException e1 ) {
+                //TODO
+                Activator.logException( e1 );
+              }
+              
               if( i == 0 ) {
                 DataStagingOutDialog.this.pathText.setText( DataStagingOutDialog.this.uris[ i ].toString() );
                 /*
