@@ -167,7 +167,7 @@ public class GridProject
         if( elementClass != null ) {
           if ( elementClass.isAssignableFrom( elementType ) ) {
             result = getProjectFolder( label );
-            break;
+//            break;
           }
         }        
       }      
