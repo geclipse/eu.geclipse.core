@@ -524,4 +524,13 @@ public abstract class AbstractGridContainer
     }
   }
   
+  /**
+   * @return get current children elements. This method do not
+   *         fetchChildren, so for dirty container it return dirty (old)
+   *         children, for lazy container it may return empty list (even if
+   *         children really exists but weren't fetched yet).
+   */
+  protected List<IGridElement> getCachedChildren() {
+    return this.children;
+  }  
 }

@@ -36,6 +36,7 @@ import org.eclipse.core.runtime.SubMonitor;
 
 import eu.geclipse.core.Extensions;
 import eu.geclipse.core.filesystem.GEclipseFileSystem;
+import eu.geclipse.core.filesystem.GEclipseURI;
 import eu.geclipse.core.filesystem.internal.Activator;
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridConnectionElement;
@@ -175,7 +176,7 @@ public class ConnectionElement
     IResource res = getResource();
     if ( res != null ) {
       URI uri = res.getLocationURI();
-      GEclipseFileSystem fileSystem = new GEclipseFileSystem();
+      GEclipseFileSystem fileSystem = ( GEclipseFileSystem )EFS.getFileSystem( GEclipseURI.getScheme() );
       result = fileSystem.getStore( uri ); 
     }
     return result;
