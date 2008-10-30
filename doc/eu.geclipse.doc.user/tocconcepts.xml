@@ -19,9 +19,17 @@
   			<topic label="Deleting VOs"
   				href="html/concepts/setup/vosettings/deleteVO.html"/>
   		</topic>
-    <topic
-      label="CA Certificates"
-      href="html/concepts/setup/cacertificates.html">
+    <topic href="html/concepts/setup/security/security.html" label="Security Settings">
+       <topic href="html/concepts/setup/security/preferencePage.html" label="The Security Preference Page">
+       </topic>
+       <topic href="html/concepts/setup/security/addingCerts.html" label="Adding Trusted Certificates">
+       </topic>
+       <topic href="html/concepts/setup/security/importingCerts.html" label="Importing Trusted Certificates">
+       </topic>
+       <topic href="html/concepts/setup/security/certInfoDialog.html" label="The Certificate Info Dialog">
+       </topic>
+       <topic href="html/concepts/setup/security/certTrustDialog.html" label="The Certificate Trust Dialog">
+       </topic>
     </topic>
   </topic>
 
