@@ -69,7 +69,7 @@ import eu.geclipse.info.internal.Activator;
        uri = new URI( gs.endpoint );
        name += uri.toString();
      } catch (URISyntaxException e) {
-       name += "[Unknown Endpoint]"; //$NON-NLS-1$
+       name += "[Unknown Endpoint] (invalid URI \"" + gs.endpoint + "\")"; //$NON-NLS-1$ //$NON-NLS-2$
      }
      return name;
    }
