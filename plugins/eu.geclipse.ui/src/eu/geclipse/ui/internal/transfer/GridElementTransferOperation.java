@@ -47,8 +47,8 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
 import eu.geclipse.core.filesystem.GEclipseURI;
-import eu.geclipse.core.filesystem.TransferManager;
 import eu.geclipse.core.filesystem.TransferInformation;
+import eu.geclipse.core.filesystem.TransferManager;
 import eu.geclipse.core.model.IGridConnection;
 import eu.geclipse.core.model.IGridConnectionElement;
 import eu.geclipse.core.model.IGridContainer;
@@ -279,7 +279,8 @@ public class GridElementTransferOperation
     IProblem problem = problemException.getProblem();
     for( IStatus status : failedStatuses ) {
       String msg = status.getMessage();
-      if( !msg.equals( status.getException().getMessage() ) ) {
+      if( status.getException() != null
+          && !msg.equals( status.getException().getMessage() ) ) {
         msg = msg + "\n" + status.getException().getMessage(); //$NON-NLS-1$
       }
       problem.addReason( msg );
