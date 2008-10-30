@@ -20,19 +20,6 @@
                pattern=".*\.batch">
          </source>
       </creator>
-      <creator
-            class="eu.geclipse.batch.BatchQueueDescriptionCreator"
-            id="eu.geclipse.batch.batchQueueDescriptionCreator"
-            name="Batch Queue Configuration">
-         <target
-               class="eu.geclipse.batch.BatchQueueDescriptionCreator"
-               name="Batch Queue Configuration Description">
-         </target>
-         <source
-               class="org.eclipse.core.resources.IFile"
-               pattern=".*\.qdl">
-         </source>
-      </creator>
    </extension>
    <extension
          point="eu.geclipse.batch.batchService">
@@ -72,6 +59,22 @@
             description="Check the setting of the ssh service"
             id="eu.geclipse.batch.solution.check_ssh_server_config">
       </solution>
+   </extension>
+   <extension
+         point="eu.geclipse.core.gridElementCreator">
+      <creator
+            class="eu.geclipse.batch.BatchQueueDescriptionCreator"
+            id="eu.geclipse.batch.batchQueueDescriptionCreator"
+            name="Batch Queue Configuration">
+         <source
+               class="Batch Queue Configuration Description"
+               pattern=".*\.qdl">
+         </source>
+         <target
+               class="eu.geclipse.batch.BatchQueueDescription"
+               name="Batch Queue Configuration Description">
+         </target>
+      </creator>
    </extension>
 
 </plugin>
