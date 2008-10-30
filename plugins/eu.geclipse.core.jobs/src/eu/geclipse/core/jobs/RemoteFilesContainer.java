@@ -43,6 +43,9 @@ import eu.geclipse.core.reporting.ProblemException;
 public class RemoteFilesContainer extends ResourceGridContainer {
   boolean constructed = false;
 
+  /**
+   * @param resource folder containing links to remote files
+   */
   public RemoteFilesContainer( final IResource resource ) {
     super( resource );
     this.constructed = true;
