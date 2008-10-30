@@ -117,7 +117,7 @@ public class PortScanDialog extends AbstractSimpleTestDialog{
   @Override
   protected void configureShell( final Shell newShell ) {
     super.configureShell( newShell );
-    newShell.setMinimumSize( 500, 520 );
+    //newShell.setMinimumSize( 500, 520 );
     newShell.setText( Messages.getString( "PortScanDialog.dialogTitle" ) ); //$NON-NLS-1$
   }
   
@@ -140,6 +140,7 @@ public class PortScanDialog extends AbstractSimpleTestDialog{
    // setSize(new Point(500, 520));
     //setLayout(new GridLayout());
     
+    
     GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL);
     gridData.horizontalSpan = 4;
     
@@ -161,18 +162,45 @@ public class PortScanDialog extends AbstractSimpleTestDialog{
     listData.widthHint = 150;
     listData.heightHint = 150;
     
+    
+    this.mainComp = new Composite( parent, SWT.FILL );
+    this.mainComp.setLayout( new GridLayout( 1, false ) );
+    GridData gData = new GridData( SWT.FILL, SWT.FILL, true, true);
+    this.mainComp.setLayoutData( gData );
+    
+    /*
     this.mainComp = new Composite( parent, SWT.NONE );
     this.mainComp.setLayout( new GridLayout( 1, false ) );
+    */
     
+    Group settingsGroup = new Group( this.mainComp, SWT.FILL );
+    settingsGroup.setLayout( new GridLayout( 2, false ) );
+    settingsGroup.setText( Messages.getString("PortScanDialog.selectionGroup" ) ); //$NON-NLS-1$
+    gData = new GridData( GridData.FILL_HORIZONTAL );
+    gData.grabExcessHorizontalSpace = true;
+    settingsGroup.setLayoutData( gData );
+    
+    /*
     Group settingsGroup = new Group( this.mainComp, SWT.NONE );
     settingsGroup.setLayout( new GridLayout( 2, false ) );
     settingsGroup.setText( Messages.getString("PortScanDialog.selectionGroup" )); //$NON-NLS-1$
+    */
     
+    Group resultsGroup = new Group( this.mainComp, SWT.FILL );
+    resultsGroup.setLayout( new GridLayout( 2, false ) );
+    resultsGroup.setText( Messages.getString("PortScanDialog.resultsGroup" ) ); //$NON-NLS-1$
+    gData = new GridData( GridData.FILL_HORIZONTAL );
+    gData.grabExcessHorizontalSpace = true;
+    resultsGroup.setLayoutData( gData );
+    
+    /*
     Group resultsGroup = new Group( this.mainComp, SWT.NONE );
     resultsGroup.setLayout( new GridLayout( 2, false ) );
     resultsGroup.setText(Messages.getString("PortScanDialog.resultsGroup" )); //$NON-NLS-1$
-
-    this.portComp = new Composite( settingsGroup, SWT.NONE );
+    */
+    
+    
+    this.portComp = new Composite( settingsGroup, SWT.FILL );
     this.portComp.setLayout( new GridLayout( 4, false ) );
     this.wellKnownPortsLbl = new Label( this.portComp, 0 );
     
@@ -296,7 +324,7 @@ public class PortScanDialog extends AbstractSimpleTestDialog{
       }
     });
     
-    this.listComp = new Composite( settingsGroup, SWT.NONE );
+    this.listComp = new Composite( settingsGroup, SWT.FILL );
     this.listComp.setLayout( new GridLayout( 4, false ) );
     
     this.rangeLbl = new Label( this.listComp, 0 );
@@ -493,6 +521,7 @@ public class PortScanDialog extends AbstractSimpleTestDialog{
         PortScanDialog.this.scan.setEnabled( true );
       }
     });
+    
     
     return this.mainComp;
   }

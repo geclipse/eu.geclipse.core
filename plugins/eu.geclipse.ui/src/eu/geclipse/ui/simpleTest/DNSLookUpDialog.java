@@ -84,7 +84,6 @@ public class DNSLookUpDialog extends AbstractSimpleTestDialog  {
   @Override
   protected void configureShell( final Shell newShell ) {
     super.configureShell( newShell );
-    newShell.setMinimumSize( 560, 320 );
     newShell.setText( Messages.getString( "DNSLookUpDialog.dialogTitle" ) ); //$NON-NLS-1$
   }
 
@@ -103,15 +102,17 @@ public class DNSLookUpDialog extends AbstractSimpleTestDialog  {
     
     Composite mainComp = new Composite( parent, SWT.NONE );
     mainComp.setLayout( new GridLayout( 1, false ) );
-    gData = new GridData( SWT.BEGINNING, SWT.BEGINNING, false, false );
+    gData = new GridData( SWT.FILL, SWT.FILL, true, true);
     mainComp.setLayoutData( gData );
-
+    
     Group outPutGroup = new Group( mainComp, SWT.NONE );
     outPutGroup.setLayout( new GridLayout( 2, false ) );
     outPutGroup.setText( Messages.getString( "DNSLookUpDialog.output_group" ) ); //$NON-NLS-1$
-    gData = new GridData( SWT.BEGINNING, SWT.BEGINNING, true, true );
+    gData = new GridData( GridData.FILL_HORIZONTAL );
+    gData.grabExcessHorizontalSpace = true;
+    gData.grabExcessVerticalSpace = true;
+    gData.verticalAlignment = SWT.BEGINNING;
     outPutGroup.setLayoutData( gData );
-
     
     Composite tableComp = new Composite( outPutGroup, SWT.NONE );
     // Create the table that holds the result
@@ -125,37 +126,15 @@ public class DNSLookUpDialog extends AbstractSimpleTestDialog  {
     GridData gridData = new GridData( SWT.BEGINNING, SWT.BEGINNING, true, true );
     gridData.heightHint = 200;
     tableComp.setLayout( new GridLayout( 2, false ) );
-    tableComp.setLayoutData( gridData );
-    
-    
-//    this.tableList = new TableViewer( this.tableOutPut );
-//    this.tableList.setLabelProvider( new JobLabelProvider() );
-//    this.tableList.setContentProvider( new JobContentProvider() );
-    
-    //TableColumnListener columnListener = new TableColumnListener( this.tableList );
+    tableComp.setLayoutData( gData );
 
     TableColumn hostColumn = new TableColumn( this.tableOutPut, SWT.LEFT );
     hostColumn.setText( Messages.getString( "DNSLookUpDialog.hostName" ) ); //$NON-NLS-1$
-    hostColumn.setWidth( 250 );    
-//    hostColumn.setAlignment( SWT.LEFT );
-//    hostColumn.addSelectionListener( columnListener );
+    hostColumn.setWidth( 250 );
 
     TableColumn ipAdrColumn = new TableColumn( this.tableOutPut, SWT.LEFT );
     ipAdrColumn.setText( Messages.getString( "DNSLookUpDialog.ipAddress" ) ); //$NON-NLS-1$
-    ipAdrColumn.setWidth( 150 );    
-//    ipAdrColumn.setAlignment( SWT.LEFT );
-//    ipAdrColumn.addSelectionListener( columnListener );
-    
-//    TableColumn dnsColumn = new TableColumn( this.tableOutPut, SWT.CENTER );
-//    dnsColumn.setText( Messages.getString( "DNSLookUpDialog.dnsServer" ) ); //$NON-NLS-1$
-//    dnsColumn.setWidth( 200 );    
-//    dnsColumn.addSelectionListener( columnListener );
-    
-    // Initially we sort the jobs by ID, ascending
-//    this.tableOutPut.setSortColumn( hostColumn );
-//    this.tableOutPut.setSortDirection( SWT.UP );
-
-//    this.tableList.setComparator( new TableColumnComparator( hostColumn ) );
+    ipAdrColumn.setWidth( 150 );
 
     // Listener that waits for the results to be presented
     this.tableOutPut.addListener( SWT.SetData, new Listener() {
