@@ -164,9 +164,8 @@ public class DataStagingInDialog extends Dialog {
         String currentURI = null;
         GridFileDialog dialog = new GridFileDialog( PlatformUI.getWorkbench()
                                                             .getActiveWorkbenchWindow()
-                                                            .getShell(),
-                                                          GridFileDialog.STYLE_ALLOW_ONLY_EXISTING 
-                                                          | GridFileDialog.STYLE_ALLOW_ONLY_FILES 
+                                                            .getShell(), 
+                                                          GridFileDialog.STYLE_ALLOW_ONLY_FILES 
                                                           | GridFileDialog.STYLE_MULTI_SELECTION
                                                               );
         if( dialog.open() == Window.OK ) {
