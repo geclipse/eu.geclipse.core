@@ -45,6 +45,10 @@
             description="Cannot query nodes in XML document"
             id="eu.geclipse.jsdl.problem.getXpathNodesFailed">
       </problem>
+      <problem
+            description="Sweep parameters defined on the same level doesn&apos;t contain the same number of values."
+            id="eu.geclipse.jsdl.problem.wrongNumberValues">
+      </problem>
    </extension>
 
 </plugin>

@@ -85,4 +85,9 @@ class Assignment {
   public IFunction getFunction() {
     return this.function;
   }
+  
+  
+  public List<String> getXPathQueries() {
+    return xPathQueries;
+  }
 }

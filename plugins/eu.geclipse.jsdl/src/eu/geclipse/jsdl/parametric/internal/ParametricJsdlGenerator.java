@@ -127,8 +127,29 @@ public class ParametricJsdlGenerator implements IParametricJsdlGenerator {
       testCancelled( monitor );
       Assignment assignment = aIterator.next();
       Iterator<String> functionIterator = fIterator.next();
-      assignment.setParamValue( functionIterator, generationContext, monitor );
+      
+      if( functionIterator.hasNext() ) {
+        assignment.setParamValue( functionIterator, generationContext, monitor );
+      } else {
+        throw createWrongNrValueException( assignmentList );
+      }
     }
+  }
+
+  private ProblemException createWrongNrValueException( final List<Assignment> assignmentList )
+  {
+    ProblemException problemException = new ProblemException( "eu.geclipse.jsdl.problem.wrongNumberValues", Activator.PLUGIN_ID ); //$NON-NLS-1$
+    String desc = Messages.ParametricJsdlGenerator_descParametersWithWrongNr;
+   
+    for( Assignment assignment : assignmentList ) {
+      for( String query : assignment.getXPathQueries() ) {
+        desc = desc + "\n" + query; //$NON-NLS-1$
+      }
+    }
+    
+    problemException.getProblem().addReason( desc );
+    
+    return problemException;
   }
 
   private void processAssignments( final NodeList assignmentsList,

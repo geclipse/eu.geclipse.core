@@ -11,6 +11,7 @@ public class Messages extends NLS {
   public static String FunctionIntegerLoop_errIntegerExpected;
   public static String FunctionIntegerLoop_errOnlyOneLoopIsAllowed;
   public static String FunctionIntegerLoop_errStepIsZero;
+  public static String ParametricJsdlGenerator_descParametersWithWrongNr;
   public static String ParametricJsdlGenerator_errAssignmentShouldBeElement;
   public static String ParametricJsdlGenerator_errSweepShouldBeElement;
   public static String ParametricJsdlGenerator_errSweepShouldContainAssignment;
