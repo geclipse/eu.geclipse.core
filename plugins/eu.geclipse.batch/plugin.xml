@@ -61,19 +61,21 @@
       </solution>
    </extension>
    <extension
+         id="eu.geclipse.batch.queueCreator"
+         name="Queue Configuration Creator"
          point="eu.geclipse.core.gridElementCreator">
       <creator
             class="eu.geclipse.batch.BatchQueueDescriptionCreator"
             id="eu.geclipse.batch.batchQueueDescriptionCreator"
             name="Batch Queue Configuration">
-         <source
-               class="Batch Queue Configuration Description"
-               pattern=".*\.qdl">
-         </source>
          <target
                class="eu.geclipse.batch.BatchQueueDescription"
                name="Batch Queue Configuration Description">
          </target>
+         <source
+               class="org.eclipse.core.resources.IFile"
+               pattern=".*\.qdl">
+         </source>
       </creator>
    </extension>
 
