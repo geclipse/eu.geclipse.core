@@ -35,6 +35,9 @@ public abstract class AbstractGridVisualisationResource
     setResourceFileExtenstion( resource.getFileExtension() );
   }
 
+  /**
+   * @param fileExt
+   */
   public abstract void setResourceFileExtenstion( final String fileExt );
 
   public abstract String getResourceFileNameExtension();
