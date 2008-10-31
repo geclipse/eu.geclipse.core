@@ -182,8 +182,16 @@
     <anchor id="geclipse_concepts_siteadministration" />        
   </topic>
   
-  <anchor id="geclipse_concepts_visualisation" />
+  <topic
+    label="Visualisation">
+    <topic
+      label="The Visualisation View"
+      href="html/concepts/visualisation/visualisation.html">
+    </topic>
+    <anchor id="geclipse_concepts_visualisation" />
+  </topic>
 
   <anchor id="geclipse_concepts_benchmarking" />
+  
 
 </toc>
