@@ -110,7 +110,7 @@ public class SecurityPreferencePage
    * Standard constructor for the security preference page.
    */
   public SecurityPreferencePage() {
-    setDescription( "Manage your trusted and untrusted certifcates. Import CA certificates from remote repositories or add them from a local or remote directory." );
+    setDescription( "Manage your trusted and untrusted certificates. Import CA certificates from remote repositories or add them from a local or remote directory." );
     Security.getCertificateManager().addListener( this );
   }
   
