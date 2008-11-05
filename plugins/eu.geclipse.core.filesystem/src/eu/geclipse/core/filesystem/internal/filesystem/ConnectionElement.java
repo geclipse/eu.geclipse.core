@@ -108,8 +108,12 @@ public class ConnectionElement
   public void dispose() {
     try {
       IFileStore fileStore = getConnectionFileStore();
-      FileStoreRegistry registry = FileStoreRegistry.getInstance();
-      registry.removeStore( fileStore );
+      
+      // if project is being deleted, then filestore may be null
+      if( fileStore != null ) {
+        FileStoreRegistry registry = FileStoreRegistry.getInstance();
+        registry.removeStore( fileStore );
+      }
     } catch ( CoreException cExc ) {
       Activator.logException( cExc );
     }
@@ -176,8 +180,11 @@ public class ConnectionElement
     IResource res = getResource();
     if ( res != null ) {
       URI uri = res.getLocationURI();
-      GEclipseFileSystem fileSystem = ( GEclipseFileSystem )EFS.getFileSystem( GEclipseURI.getScheme() );
-      result = fileSystem.getStore( uri ); 
+      
+      if( uri != null ) {   // for deleted projects URI can be null
+        GEclipseFileSystem fileSystem = ( GEclipseFileSystem )EFS.getFileSystem( GEclipseURI.getScheme() );
+        result = fileSystem.getStore( uri );
+      }
     }
     return result;
   }
