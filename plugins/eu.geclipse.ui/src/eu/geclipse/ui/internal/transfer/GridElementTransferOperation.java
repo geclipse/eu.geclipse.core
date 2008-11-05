@@ -180,7 +180,8 @@ public class GridElementTransferOperation
         throw new OperationCanceledException();
       }
       if( data.status.isOK() ) {
-        TransferManager.getManager().resumeTransfer( this.transferOperation, localMonitor );
+        IStatus resStatus = TransferManager.getManager().resumeTransfer( this.transferOperation, localMonitor );
+        status.merge( resStatus );
       }
     } else {
       //Transfer grid elements
@@ -225,6 +226,13 @@ public class GridElementTransferOperation
         if( this.globalTarget.getResource() instanceof IContainer ) {
           //Refresh only if target is a container
           this.globalTarget.refresh( new SubProgressMonitor( localMonitor, 1 ) );
+        } else {
+          this.globalTarget.getParent().refresh( new SubProgressMonitor( localMonitor, 1 ) );
+          for( IGridElement elem: this.globalTarget.getParent().getChildren( new SubProgressMonitor( localMonitor, 1 ) ) ) {
+            if( elem.getResource() instanceof IContainer && elem instanceof IGridContainer ) {
+              ((IGridContainer)elem).refresh( new SubProgressMonitor( localMonitor,1 ) );
+            }
+          }
         }
       } catch ( ProblemException pExc ) {
         status.merge( pExc.getStatus() );
@@ -313,10 +321,10 @@ public class GridElementTransferOperation
       throw new OperationCanceledException();
     }
     if( data.status.isOK() ) {
-      TransferManager.getManager().startTransfer( from, 
-                                                  to,
-                                                  this.move, 
-                                                  monitor );
+      data.status = TransferManager.getManager().startTransfer( from, 
+                                                                to,
+                                                                this.move, 
+                                                                monitor );
     }
     return data.status;
     

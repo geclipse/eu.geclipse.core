@@ -16,6 +16,9 @@ package eu.geclipse.core.model;
 
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+
+import eu.geclipse.core.reporting.ProblemException;
 
 
 /**
@@ -23,7 +26,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
  *
  */
 public interface ITransferManager {
-  
+
   /**
    * Main method doing transfer from source IFileStore to destination
    * IFileStore.
@@ -33,11 +36,12 @@ public interface ITransferManager {
    * @param moveFlag flag representing move operation
    * @param monitor progress monitor
    * @return true if transfer succeeded, false if the transfer failed
+   * @throws ProblemException
    */
-  public boolean startTransfer( final IFileStore source, 
-                             final IFileStore destination,
-                             final boolean moveFlag,
-                             final IProgressMonitor monitor );
+  public IStatus startTransfer( final IFileStore source,
+                               final IFileStore destination,
+                               final boolean moveFlag,
+                               final IProgressMonitor monitor );
   
   /**
    * Method used to resume transfer described by <code>transfer</code> parameter.
@@ -45,9 +49,10 @@ public interface ITransferManager {
    * @param transfer Informations about the transfer to be resumed
    * @param monitor progress monitor
    * @return true if transfer resuming was successful
+   * @throws ProblemException 
    */
-  public boolean resumeTransfer( final ITransferInformation transfer,
-                                 final IProgressMonitor monitor );
+  public IStatus resumeTransfer( final ITransferInformation transfer,
+                                final IProgressMonitor monitor );
   
   /**
    * Removes transfer with the specified ID.

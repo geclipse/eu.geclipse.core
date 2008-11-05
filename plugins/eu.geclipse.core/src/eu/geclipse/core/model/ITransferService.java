@@ -15,6 +15,7 @@
 package eu.geclipse.core.model;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 
 
 /**
@@ -31,7 +32,7 @@ public interface ITransferService {
    * @param monitor progress monitor
    * @return true if transfer succeeded, false if the transfer failed
    */
-  public boolean transfer( final ITransferInformation operation,
+  public IStatus transfer( final ITransferInformation operation,
                            final boolean isMove, 
                            final IProgressMonitor monitor );
     

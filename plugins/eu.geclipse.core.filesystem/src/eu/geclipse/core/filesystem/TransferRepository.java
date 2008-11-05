@@ -148,8 +148,8 @@ public class TransferRepository {
       Activator.logException( e );
     }
     return operations;
-  }
-
+  } 
+  
   private File getRepoFile() {
     IPath path = Activator.getDefault().getStateLocation();
     File file = path.append( "transferRepository.xml" ).toFile();
@@ -208,7 +208,20 @@ public class TransferRepository {
       DocumentBuilder builder;
       builder = factoryDOM.newDocumentBuilder();
       Document document = builder.parse( file );
-      NodeList resultsList = document.getElementsByTagName( "transfer" ); //$NON-NLS-1$
+      
+      Node nodeToDelete = null;
+      NodeList resultsList = document.getElementsByTagName( "transfer"); //$NON-NLS-1$
+      for( int i = 0; i < resultsList.getLength(); i++ ) {
+        String idString = ((Element)resultsList.item( i ))
+          .getElementsByTagName( "id" ).item( 0 ).getTextContent();
+        
+        DocumentBuilderFactory factoryDOM2 = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder2 = factoryDOM2.newDocumentBuilder();
+        if( Integer.valueOf( idString ).equals( op.getId() ) ){
+          nodeToDelete = resultsList.item( i );
+        }
+      }
+      
       Element newTransfer = document.createElement( "transfer" );
       Element transferIdElement = document.createElement( "id" );
       transferIdElement.setTextContent( op.getId().toString() );
@@ -226,7 +239,11 @@ public class TransferRepository {
       newTransfer.appendChild( dataElement );
       newTransfer.appendChild( sizeElement ); 
       
-      document.getFirstChild().appendChild( newTransfer );
+      if( nodeToDelete != null ){
+        document.getFirstChild().replaceChild( newTransfer, nodeToDelete );
+      } else {
+        document.getFirstChild().appendChild( newTransfer );
+      }
       Transformer transformer = TransformerFactory.newInstance()
         .newTransformer();
       transformer.setOutputProperty( OutputKeys.INDENT, "yes" ); //$NON-NLS-1$

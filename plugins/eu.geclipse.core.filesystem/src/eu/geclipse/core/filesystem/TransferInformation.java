@@ -95,6 +95,7 @@ public class TransferInformation implements ITransferInformation {
    */
   public void setData( final String data ) {
     this.data = data;
+    TransferRepository.getTransferRepository().save( this );
   }
 
   /**

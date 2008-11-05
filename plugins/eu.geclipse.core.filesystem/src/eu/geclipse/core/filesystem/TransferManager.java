@@ -91,26 +91,35 @@ public class TransferManager implements ITransferManager {
     return this.pendingTransfers;
   }
 
-  public boolean resumeTransfer( final ITransferInformation transfer,
-                                 final IProgressMonitor monitor )
+  public IStatus resumeTransfer( final ITransferInformation transfer,
+                                final IProgressMonitor monitor )
   {
-    boolean status = false;
-    ITransferService service = findService( transfer.getSource().toURI().getScheme(),
-                                            transfer.getDestination()
-                                              .toURI()
-                                              .getScheme() );
-    status = service.transfer( transfer,
-                               transfer.isMove(),
-                               monitor );
+    IStatus status = new Status( IStatus.OK,
+                                Activator.PLUGIN_ID,
+                                "Transfer status",
+                                null );
+    ITransferService service = findService( transfer.getSource()
+      .toURI()
+      .getScheme(), transfer.getDestination().toURI().getScheme() );
+    status = service.transfer( transfer, transfer.isMove(), monitor );
     try {
-      IGridElement[] children = GridModel.getConnectionManager().getChildren( monitor );
-      IContainer[] findContainersForLocationURI = GridModel.getRoot().getResource().getWorkspace().getRoot().findContainersForLocationURI( transfer.getDestination().toURI() );
-      for( IContainer cont: findContainersForLocationURI ) {
+      IGridElement[] children = GridModel.getConnectionManager()
+        .getChildren( monitor );
+      IContainer[] findContainersForLocationURI = GridModel.getRoot()
+        .getResource()
+        .getWorkspace()
+        .getRoot()
+        .findContainersForLocationURI( transfer.getDestination().toURI() );
+      for( IContainer cont : findContainersForLocationURI ) {
         cont.refreshLocal( IContainer.DEPTH_ONE, monitor );
       }
-      for( IGridElement elem: children ) {
-        if( elem instanceof ConnectionElement ) {
-          recursiveRefreshChild( transfer.getDestination().toURI(), ( ConnectionElement )elem, monitor );
+      if( status.isOK() ) {
+        for( IGridElement elem : children ) {
+          if( elem instanceof ConnectionElement ) {
+            recursiveRefreshChild( transfer.getDestination().toURI(),
+                                   ( ConnectionElement )elem,
+                                   monitor );
+          }
         }
       }
     } catch( ProblemException e ) {
@@ -120,8 +129,7 @@ public class TransferManager implements ITransferManager {
       // TODO Auto-generated catch block
       Activator.logException( e );
     }
-    
-    if( status && this.useRepo ) {
+    if( this.useRepo ) {
       TransferRepository repo = TransferRepository.getTransferRepository();
       repo.delete( transfer.getId() );
     }
@@ -181,12 +189,15 @@ public class TransferManager implements ITransferManager {
     }
   }
 
-  public boolean startTransfer( final IFileStore sourceGecl,
+  public IStatus startTransfer( final IFileStore sourceGecl,
                                final IFileStore destinationGecl,
                                final boolean moveFlag,
                                final IProgressMonitor monitor )
   {
-    boolean status = false;
+    IStatus status = new Status( IStatus.OK,
+                                Activator.PLUGIN_ID,
+                                "Transfer status",
+                                null );
     IFileStore source;
     IFileStore destination;
     
@@ -267,14 +278,19 @@ public class TransferManager implements ITransferManager {
      * @param monitor A progress monitor used to track the transfer.
      * @return A status object tracking errors of the transfer.
      */
-    public boolean transfer( final ITransferInformation transfer,
+    public Status transfer( final ITransferInformation transfer,
                              final boolean isMove,
                              final IProgressMonitor monitor )
     {
+      Status status = new Status( IStatus.OK,
+                                  Activator.PLUGIN_ID,
+                                  "Transfer status",
+                                  null );
       boolean transferStatus = true;
       // Prepare copy operation
       IFileStore from = transfer.getSource();
       IFileStore to = transfer.getDestination();
+      IFileStore targetFile = null;
       monitor.beginTask( Messages.getString( "TransferManager.copying_progress" ) + from.getName(), 100 ); //$NON-NLS-1$
       monitor.setTaskName( Messages.getString( "TransferManager.copying_progress" ) + from.getName() ); //$NON-NLS-1$
       InputStream inStream = null;
@@ -295,12 +311,21 @@ public class TransferManager implements ITransferManager {
                                              new SubProgressMonitor( monitor, 8 ) );
           } catch( CoreException cExc ) {
             transferStatus = false;
+            status = new Status( IStatus.ERROR, 
+                                      Activator.PLUGIN_ID, 
+                                      String.format( "Error opening input stream for %s",
+                                                     from.toURI() ),
+                                      cExc );
           }
         }
         // Open output stream
         if( transferStatus ) {
+          if( to.fetchInfo().isDirectory() ) {
+            targetFile = to.getChild( from.getName() );
+          } else {
+            targetFile = to.getParent().getChild( from.getName() );   
+          }
           try {
-            IFileStore targetFile = to.getChild( from.getName() );
             //TODO possible solution to possible bug >_<
 //            if(  targetFile.fetchInfo().exists() ) {
 //              targetFile.delete( EFS.NONE, monitor );
@@ -310,6 +335,11 @@ public class TransferManager implements ITransferManager {
                                                                              8 ) );
           } catch( CoreException cExc ) {
             transferStatus = false;
+            status = new Status( IStatus.ERROR, 
+                                      Activator.PLUGIN_ID, 
+                                      String.format( "Error opening output stream for %s",
+                                                     targetFile.toURI() ),
+                                      cExc );
           }
         }
         // Prepare copy operation
@@ -328,6 +358,11 @@ public class TransferManager implements ITransferManager {
               bytesRead = inStream.read( buffer );
             } catch( IOException ioExc ) {
               transferStatus = false;
+              status = new Status( IStatus.ERROR, 
+                                        Activator.PLUGIN_ID, 
+                                        String.format( "Error reading from %s",
+                                                       from.toURI() ),
+                                        ioExc );
             }
             // Check if there is still data available
             if( bytesRead == -1 ) {
@@ -338,6 +373,11 @@ public class TransferManager implements ITransferManager {
               outStream.write( buffer, 0, bytesRead );
             } catch( IOException ioExc ) {
               transferStatus = false;
+              status = new Status( IStatus.ERROR, 
+                                        Activator.PLUGIN_ID, 
+                                        String.format( "Error writing to %s",
+                                                       to.toURI() ),
+                                        ioExc );
             }
             byteCounter += bytesRead;
             subMonitor.worked( bytesRead );
@@ -373,7 +413,7 @@ public class TransferManager implements ITransferManager {
         //Directory
         copyDirectory( from, to, isMove, monitor );
       }
-      return transferStatus;
+      return status;
     }
     
     /**
@@ -448,7 +488,7 @@ public class TransferManager implements ITransferManager {
                                                                       newTo,
                                                                       "",
                                                                       0 );
-              boolean statusChild = transfer( childTransfer,
+              status = transfer( childTransfer,
                                               isMove,
                                               new SubProgressMonitor( subMonitor, 1 ) );
               

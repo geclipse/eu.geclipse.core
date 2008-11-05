@@ -462,6 +462,7 @@ public class GEclipseFileStore
       registry.removeStore( new GEclipseURI( oldUri ) );
       registry.putStore( this );
     }
+    setActive( FETCH_INFO_ACTIVE_POLICY );
     return outputStream;
   }
   
