@@ -57,6 +57,18 @@
             description="Unsupported operation"
             id="eu.geclipse.core.jobs.problem.unsupportedOperation">
       </problem>
+      <problem
+            description="Cannot create xml document"
+            id="eu.geclipse.core.jobs.problem.xmlCreateFailed">
+      </problem>
+      <problem
+            description="Unable to transform xml document to string"
+            id="eu.geclipse.core.jobs.problem.xml2StringFailed">
+      </problem>
+      <problem
+            description="Unable to tranform string to xml document"
+            id="eu.geclipse.core.jobs.problem.string2XmlFailed">
+      </problem>
    </extension>
    <extension
          point="eu.geclipse.core.jobs.jobStatus">

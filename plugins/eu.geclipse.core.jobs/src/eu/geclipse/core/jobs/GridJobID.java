@@ -14,10 +14,30 @@
  *****************************************************************************/
 package eu.geclipse.core.jobs;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.TransformerFactoryConfigurationError;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
+import eu.geclipse.core.jobs.internal.Activator;
 import eu.geclipse.core.model.IGridJobID;
+import eu.geclipse.core.reporting.ProblemException;
 
 /**
  * Class representing handle returned from grid to submitted job 
@@ -30,6 +50,8 @@ public class GridJobID implements IGridJobID {
   final static private String XML_NAMENODE = "Name"; //$NON-NLS-1$
   final static private String XML_DATANODE = "Data"; //$NON-NLS-1$
   final static private String XML_VONODE = "VO"; //$NON-NLS-1$
+  final static private String XML_DATA_NODE_ROOT = "GriaJobId"; //$NON-NLS-1$  
+  
   private String jobID = UNKNOWN;
   private String VO = UNKNOWN;
   private GridJob job;  
@@ -44,7 +66,7 @@ public class GridJobID implements IGridJobID {
   /**
    * Empty constructor for JobId created in past g-Eclipse sessions
    */
-  public GridJobID(String _jobID, String _VO) {
+  public GridJobID(final String _jobID, final String _VO) {
     this.jobID=_jobID;
     this.VO=_VO;
   }
@@ -128,4 +150,75 @@ public class GridJobID implements IGridJobID {
   public String getVO() {
     return this.VO;
   }
+  
+  protected String xmlGetNodeValue( final Element parent, final String nodeName ) {
+    String value = null;
+    NodeList elements = parent.getElementsByTagName( nodeName );
+    
+    if( elements != null 
+        && elements.getLength() > 0 ) {
+      value = elements.item( 0 ).getTextContent();
+    }
+    
+    return value;
+  }
+  
+  protected String xmlToString( final Document document )
+    throws ProblemException
+  {
+    try {
+      document.normalizeDocument();
+      ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+      Transformer transformer = TransformerFactory.newInstance()
+        .newTransformer();
+      transformer.transform( new DOMSource( document ),
+                             new StreamResult( outputStream ) );
+      return outputStream.toString();
+    } catch( TransformerConfigurationException exception ) {
+      throw new ProblemException( "eu.geclipse.core.jobs.problem.xml2StringFailed",
+                                  exception,
+                                  Activator.PLUGIN_ID );
+    } catch( TransformerFactoryConfigurationError exception ) {
+      throw new ProblemException( "eu.geclipse.core.jobs.problem.xml2StringFailed",
+                                  exception,
+                                  Activator.PLUGIN_ID );
+    } catch( TransformerException exception ) {
+      throw new ProblemException( "eu.geclipse.core.jobs.problem.xml2StringFailed",
+                                  exception,
+                                  Activator.PLUGIN_ID );
+    }
+  }
+
+  protected Document xmlCreateDocument() throws ProblemException {    
+    try {
+      Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
+      Node root = document.createElement( XML_DATA_NODE_ROOT );
+      document.appendChild( root );
+      return document;
+    } catch( ParserConfigurationException exception ) {
+      throw new ProblemException( "eu.geclipse.core.jobs.problem.xmlCreateFailed", exception, Activator.PLUGIN_ID );
+    }
+  }
+  
+  protected Document xmlGetDocument( final String data ) throws ProblemException
+  {
+    try {
+      InputStream inputStream = new ByteArrayInputStream( data.getBytes() );
+      Document xmlDocument = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse( inputStream );
+      return xmlDocument;
+    } catch( SAXException exception ) {
+      throw new ProblemException( "eu.geclipse.core.jobs.problem.string2XmlFailed", exception, Activator.PLUGIN_ID );
+    } catch( IOException exception ) {
+      throw new ProblemException( "eu.geclipse.core.jobs.problem.string2XmlFailed", exception, Activator.PLUGIN_ID );
+    } catch( ParserConfigurationException exception ) {
+      throw new ProblemException( "eu.geclipse.core.jobs.problem.string2XmlFailed", exception, Activator.PLUGIN_ID );
+    }    
+  }
+  
+  protected void xmlAddNode( final Element parent, final String nodeName, final String value ) {
+    Element element = parent.getOwnerDocument().createElement( nodeName );    
+    parent.appendChild( element );
+    element.appendChild( element.getOwnerDocument().createTextNode( value != null ? value : "" ) ); //$NON-NLS-1$
+  }
+
 }
