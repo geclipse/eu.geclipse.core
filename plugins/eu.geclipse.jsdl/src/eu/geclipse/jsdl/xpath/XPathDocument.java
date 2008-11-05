@@ -1,11 +1,18 @@
 package eu.geclipse.jsdl.xpath;
 
+import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
 import javax.xml.XMLConstants;
 import javax.xml.namespace.NamespaceContext;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
@@ -122,9 +129,12 @@ public class XPathDocument {
         else if( "sweepfunc".equals( prefix ) ) { //$NON-NLS-1$
           namespace = "http://schemas.ogf.org/jsdl/2007/01/jsdl-sweep/functions" ; //$NON-NLS-1$
         }
-        else if ("xml".equals(prefix)) { //$NON-NLS-1$
+        else if ("xml".equals( prefix )) { //$NON-NLS-1$
           namespace = XMLConstants.XML_NS_URI;
-        }        
+        }
+        else if( "fn".equals( prefix ) ) { //$NON-NLS-1$
+          namespace = "http://www.w3.org/2005/xpath-functions"; //$NON-NLS-1$
+        }
         return namespace;
       }
 
@@ -137,7 +147,29 @@ public class XPathDocument {
         throw new UnsupportedOperationException();
       }};
   }
-  
-  
-  
+
+  @Override
+  public String toString() {
+    String string = "(null)"; //$NON-NLS-1$
+    
+    try {
+      ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+      Transformer transformer = TransformerFactory.newInstance().newTransformer();
+      transformer.transform( new DOMSource( this.document ), new StreamResult( outputStream ) );
+      string = outputStream.toString();
+    } catch( TransformerConfigurationException exception ) {      
+      string = exception.getMessage();
+    } catch( TransformerException exception ) {
+      string = exception.getMessage();
+    }  
+
+    return string;
+  }
+
+  /**
+   * @return dom document, which is attached to this xpath document
+   */
+  public Document getDomDocument() {
+    return this.document;
+  }  
 }

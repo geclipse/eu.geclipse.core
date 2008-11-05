@@ -16,8 +16,9 @@ package eu.geclipse.jsdl;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.math.BigInteger;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -286,13 +287,18 @@ public class JSDLJobDescriptionModel extends AbstractGridContainer
    * @throws IOException when there was a problem while reading the file
    */
   public String getJSDLString() throws IOException {
-    String jsdl = null;
-    BufferedReader jsdlReader = new BufferedReader( new FileReader( this.fileResource ) );
-    String line;
-    while( null != ( line = jsdlReader.readLine() ) ) {
-      jsdl += System.getProperty( "line.separator" ) + line; //$NON-NLS-1$
-    }
-    return jsdl;
+    FileInputStream inputStream = new FileInputStream( this.fileResource );
+    BufferedReader reader = new BufferedReader( new InputStreamReader( inputStream ) );
+    char[] buffer = new char[ 1024 ];
+    int bytesRead = 0;
+    StringBuilder builder = new StringBuilder();
+    do {
+      bytesRead = reader.read( buffer );
+      if( bytesRead > 0 ) {
+        builder.append( buffer, 0, bytesRead );
+      }
+    } while( bytesRead > 0 );
+    return builder.toString();
   }
 
   /**
