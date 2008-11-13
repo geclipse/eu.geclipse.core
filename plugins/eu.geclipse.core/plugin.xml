@@ -117,6 +117,12 @@
       </category>
       <category
             active="true"
+            id="eu.geclipse.core.model.category.services.instrumentation"
+            name="Instrumentation Services"
+            parent="eu.geclipse.core.model.category.services">
+      </category>
+      <category
+            active="true"
             id="eu.geclipse.core.model.category.services.others"
             name="Other Services"
             parent="eu.geclipse.core.model.category.services">

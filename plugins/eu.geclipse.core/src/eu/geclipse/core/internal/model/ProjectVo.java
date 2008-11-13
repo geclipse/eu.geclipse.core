@@ -59,6 +59,7 @@ public class ProjectVo
       GridResourceCategoryFactory.getCategory( GridResourceCategoryFactory.ID_DATA_SERVICES ),
       GridResourceCategoryFactory.getCategory( GridResourceCategoryFactory.ID_INFO_SERVICES ),
       GridResourceCategoryFactory.getCategory( GridResourceCategoryFactory.ID_JOB_SERVICES ),
+      GridResourceCategoryFactory.getCategory( GridResourceCategoryFactory.ID_INSTRUMENTATION_SERVICES ),
       GridResourceCategoryFactory.getCategory( GridResourceCategoryFactory.ID_OTHER_SERVICES ),
       GridResourceCategoryFactory.getCategory( GridResourceCategoryFactory.ID_STORAGE )
   };

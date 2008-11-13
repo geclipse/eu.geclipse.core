@@ -63,6 +63,11 @@ public class GridResourceCategoryFactory {
   public static final String ID_JOB_SERVICES = "eu.geclipse.core.model.category.services.jobs"; //$NON-NLS-1$
   
   /**
+   * Unique ID for the default instrumentation services category as defined by the g-Eclipse core plug-in.
+   */
+  public static final String ID_INSTRUMENTATION_SERVICES = "eu.geclipse.core.model.category.services.instrumentation"; //$NON-NLS-1$
+  
+  /**
    * Unique ID for the default other services category as defined by the g-Eclipse core plug-in.
    */
   public static final String ID_OTHER_SERVICES = "eu.geclipse.core.model.category.services.others"; //$NON-NLS-1$
