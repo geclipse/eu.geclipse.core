@@ -19,30 +19,34 @@ package eu.geclipse.ui.widgets;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 
-
 /**
- * Verifier for Text widgets. Allows to only enter (positive) float numbers. Usage:
+ * Verifier for Text widgets. Allows to only enter float numbers. Usage:
  * textWidget.addListener( SWT.Verify, new NumberVerifier() );
  */
 public class DoubleNumberVerifier implements Listener {
+  private boolean allowNegative;
 
-  private int counter = 0;
+  public DoubleNumberVerifier() {
+    this.allowNegative = false;
+  }
+
+  public DoubleNumberVerifier( final boolean allowNegative ) {
+    this.allowNegative = allowNegative;
+  }
+
   /* (non-Javadoc)
    * @see org.eclipse.swt.widgets.Listener#handleEvent(org.eclipse.swt.widgets.Event)
    */
   public void handleEvent( final Event event ) {
     String eventText = event.text;
-    
     for( int ii = 0; ii < eventText.length(); ++ii ) {
-      if ( eventText.charAt( ii ) == '.' ) {
-        this.counter++;
-      }
-      
-      if( (!Character.isDigit( eventText.charAt( ii ) ) ) && ( eventText.charAt( ii ) != '.' ) || (this.counter > 1)) {
+      if( !Character.isDigit( eventText.charAt( ii ) )
+          && !(eventText.charAt( ii ) == '.')
+          && !(allowNegative && eventText.charAt( ii ) == '-'
+               && ii == 0 && event.start == 0 ) ) {
         event.doit = false;
         return;
       }
     }
-  
   }
 }
