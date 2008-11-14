@@ -74,7 +74,7 @@ public class UpdateJobStatusAction extends SelectionListenerAction {
             {
               if( !subMonitor.isCanceled() ) {
                 subMonitor.subTask( Messages.getString( "UpdateJobStatusAction.manual_update_subtask_name" ) //$NON-NLS-1$
-                                 + " " + jobToUpdate.getID().getJobID() );                 //$NON-NLS-1$
+                                 + " " + jobToUpdate.getJobName() );                 //$NON-NLS-1$
                 IGridJobStatus oldStatus = jobToUpdate.getJobStatus();
                 jobToUpdate.updateJobStatus( subMonitor.newChild( 1 ), true );
                 GridModel.getJobManager().jobStatusChanged( jobToUpdate, oldStatus );                

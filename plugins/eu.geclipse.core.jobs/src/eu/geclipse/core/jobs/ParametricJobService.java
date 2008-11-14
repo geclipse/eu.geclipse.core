@@ -112,12 +112,12 @@ public class ParametricJobService implements IGridJobService {
     boolean unkOccured = false, abortedOccured = false, runningOccured = false, waitingOccured = false, submittedOccured = false;
     
     for( GridJob gridJob : childrenJobs ) {
-      subMonitor.subTask( String.format( Messages.getString("ParametricJobService.taskNameUpdating"), gridJob.getID().getJobID() ) ); //$NON-NLS-1$
+      subMonitor.subTask( String.format( Messages.getString("ParametricJobService.taskNameUpdating"), gridJob.getJobName() ) ); //$NON-NLS-1$
       IGridJobStatus oldStatus = gridJob.getJobStatus();
       IGridJobStatus jobStatus = gridJob.updateJobStatus( subMonitor.newChild( 1 ), fullStatus );
       statusNames.add( jobStatus.getName() );
       
-      GridModel.getJobManager().jobStatusChanged( gridJob, oldStatus );      
+      GridModel.getJobManager().jobStatusChanged( gridJob, oldStatus );
       
       switch( jobStatus.getType() ) {
         case IGridJobStatus.DONE:
@@ -127,7 +127,7 @@ public class ParametricJobService implements IGridJobService {
           submittedOccured = true;
           break;
           
-        case IGridJobStatus.ABORTED:        
+        case IGridJobStatus.ABORTED:
           abortedOccured = true;
           break;
         
