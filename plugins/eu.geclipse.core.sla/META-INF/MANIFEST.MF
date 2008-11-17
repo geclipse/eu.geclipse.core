@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: SLA Plug-in
+Bundle-SymbolicName: eu.geclipse.core.sla;singleton:=true
+Bundle-Version: 1.0.0
+Bundle-Activator: eu.geclipse.core.sla.Activator
+Bundle-Vendor: NEC Laboratories Europe
+Require-Bundle: org.eclipse.core.filesystem,
+ org.eclipse.core.resources,
+ org.eclipse.core.runtime,
+ eu.geclipse.core,
+ eu.geclipse.core.reporting;bundle-version="1.0.0"
+Bundle-ActivationPolicy: lazy
+Export-Package: eu.geclipse.core.sla,
+ eu.geclipse.core.sla.example,
+ eu.geclipse.core.sla.model,
+ eu.geclipse.core.sla.preferences

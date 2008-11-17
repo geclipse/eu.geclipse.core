@@ -1,0 +1,73 @@
+<plugin>
+   <extension-point id="slaService" name="SLA Service" schema="schema/slaService.exsd"/>
+   <extension-point id="slaServiceSelector" name="SLA Service Selector" schema="schema/slaServiceSelector.exsd"/>
+   <extension
+         point="eu.geclipse.core.sla.slaService">
+      <Service
+            class="eu.geclipse.core.sla.example.SimpleRegistryService"
+            id="eu.geclipse.nextgrid.sla.example.SimpleSlaService"
+            name="Simple Registry Service">
+      </Service>
+   </extension>
+   <extension-point id="slaDocumentService" name="SLA Document Service" schema="schema/slaDocumentService.exsd"/>
+   <extension-point id="slaDocumentServiceSelector" name="SLA Document Service Selector" schema="schema/slaDocumentServiceSelector.exsd"/>
+   <extension
+         point="eu.geclipse.core.sla.slaDocumentService">
+      <Service
+            class="eu.geclipse.core.sla.example.SimpleDocumentService"
+            id="eu.geclipse.core.sla.example.SimpleDocumentService"
+            name="Simple Schema Document Service">
+      </Service>
+   </extension>
+   <extension
+         point="eu.geclipse.core.reporting.problemReporting">
+      <problem
+            id="eu.geclipse.core.sla.missingSLAService"
+            description="No SLA Service registered"
+            mailto="">
+            <reference
+				referenceID="eu.geclipse.core.sla.solution.installImplementation">
+			</reference>
+			<reference
+				referenceID="eu.geclipse.core.sla.solution.registerImplementation">
+			</reference>
+      </problem>
+      <solution description="Check if any SLAService implementation is installed in your environment"
+            id="eu.geclipse.core.sla.solution.installImplementation"/>
+      <solution description="Check if the SLAService implementation is registered"
+            id="eu.geclipse.core.sla.solution.registerImplementation"/>
+      
+      <problem
+            id="eu.geclipse.core.sla.missingDocumentService"
+            description="No SLA Schema Document Service registered"
+            mailto="">
+            <reference
+				referenceID="eu.geclipse.core.sla.solution.installSchemaImplementation">
+			</reference>
+			<reference
+				referenceID="eu.geclipse.core.sla.solution.registerSchemaImplementation">
+			</reference>
+			</problem>
+      <solution description="Check if any SLA Schema Document Service implementation is installed in your environment"
+            id="eu.geclipse.core.sla.solution.installSchemaImplementation"/>
+      <solution description="Check if the SLA Schema Document Service implementation is registered"
+            id="eu.geclipse.core.sla.solution.registerSchemaImplementation"/>
+      
+      <problem
+            id="eu.geclipse.core.sla.missingProviderURI"
+            description="The Provider URI is not specified"
+            >
+            <reference
+                  referenceID="eu.geclipse.core.sla.solution.addProviderURI">
+            </reference>
+      </problem>
+      <solution description="Enter the SLA Provider preferences including the URI endpoint"
+            id="eu.geclipse.core.sla.solution.addProviderURI">
+            <preferenceTag
+               pageID="eu.geclipse.core.sla.ui.preferences.provider">
+         </preferenceTag>
+      </solution>
+      
+ 
+   </extension>
+</plugin>
