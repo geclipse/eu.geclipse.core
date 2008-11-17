@@ -204,6 +204,11 @@
             mailto="">
       </problem>
       <problem
+            description="Failed to get an authentication token"
+            id="eu.geclipse.core.problem.auth.didNotGetToken"
+            mailto="">
+      </problem>
+      <problem
             description="Corrupted file"
             id="eu.geclipse.core.problem.io.corruptedFile">
       </problem>
