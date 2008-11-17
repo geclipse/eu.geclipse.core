@@ -449,8 +449,12 @@ public class TransferManager implements ITransferManager {
         }
         
         if ( status.isOK() && ( children != null ) ) {
-          
-          IFileStore newTo = to.getChild( from.getName() );
+          IFileStore newTo = null;
+          if( to.fetchInfo().isDirectory() ) {
+            newTo = to.getChild( from.getName() );
+          } else {
+            newTo = to.getParent().getChild( from.getName() );   
+          }
           IFileInfo newToInfo = newTo.fetchInfo();
           boolean mkdir = !newToInfo.exists();
         
