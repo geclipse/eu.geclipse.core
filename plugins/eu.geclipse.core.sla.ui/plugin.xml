@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+    <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="eu.geclipse.core.sla.ui.preferences.PreferencePage"
+            id="eu.geclipse.core.sla.ui.preferences"
+            name="SLAEditor">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="eu.geclipse.core.sla.ui.preferences"
+            class="eu.geclipse.core.sla.ui.preferences.ProviderPreferencePage"
+            id="eu.geclipse.core.sla.ui.preferences.provider"
+            name="Provider">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="eu.geclipse.core.sla.ui.preferences"
+            class="eu.geclipse.core.sla.ui.preferences.ConsumerPreferencePage"
+            id="eu.geclipse.core.sla.ui.preferences.consumer"
+            name="Consumer">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="eu.geclipse.core.sla.ui.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+   <extension
+         point="eu.geclipse.core.sla.slaServiceSelector">
+      <serviceselector
+            class="eu.geclipse.core.sla.ui.dialogs.SlaServiceSelector"
+            id="eu.geclipse.core.sla.ui.dialogs.SlaServiceSelector"
+            name="SlaServiceSelector">
+      </serviceselector>
+   </extension>
+   <extension
+         point="eu.geclipse.core.sla.slaDocumentServiceSelector">
+      <serviceselector
+            class="eu.geclipse.core.sla.ui.dialogs.SlaDocumentServiceSelector"
+            id="eu.geclipse.core.sla.ui.dialogs.SlaDocumentServiceSelector"
+            name="SlaDocumentServiceSelector">
+      </serviceselector>
+   </extension>
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            adaptable="true"
+            id="eu.geclipse.core.sla.SLTContribution"
+            nameFilter="*slt"
+            objectClass="org.eclipse.core.resources.IResource">
+         <menu
+               id="eu.geclipse.core.sla.popupMenu"
+               label="SLA managment"
+               path="additions">
+            <separator
+                  name="content">
+            </separator>
+            <separator
+                  name="additions">
+            </separator>
+         </menu>
+         <action
+               class="eu.geclipse.core.sla.ui.actions.PublishServiceLevelTemplate"
+               id="eu.geclipse.core.sla.publishSLT"
+               label="Publish SLT to SLA registry"
+               menubarPath="eu.geclipse.core.sla.popupMenu/additions">
+         </action>
+      </objectContribution>
+   </extension>
+<extension
+         point="org.eclipse.ui.actionSets">
+      <actionSet
+            label="SLA Action Set"
+            visible="true"
+            id="eu.geclipse.core.sla.toolbar.actionSet">
+         <menu
+               label="SLA &amp;Menu"
+               id="slaMenu">
+            <separator
+                  name="slaGroup">
+            </separator>
+         </menu>
+         <action
+               class="eu.geclipse.core.sla.ui.actions.SlaAction"
+               id="eu.geclipse.nextgrid.sla.ui.actionSLA"
+               label="Start SLA Query Wizard"
+               menubarPath="slaMenu/slaGroup"
+               tooltip="Create a Service Level Agreement">
+         </action>
+      </actionSet>
+   </extension>
+</plugin>
