@@ -39,6 +39,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Shell;
@@ -114,7 +115,11 @@ public class ProblemDialog extends ErrorDialog {
       = new ProblemDialog( shell, dialogTitle, message, exc );
 
     if ( shell != null ) {
-      shell.getDisplay().syncExec( new Runnable() {
+      Display display = Display.getCurrent();
+      if ( ( display == null ) || ( display.isDisposed() ) ) {
+        display = Display.getDefault();
+      }
+      display.syncExec( new Runnable() {
         public void run() {
           dialog.open();
         }
