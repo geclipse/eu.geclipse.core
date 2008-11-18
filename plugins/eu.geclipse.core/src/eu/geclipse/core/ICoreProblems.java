@@ -62,6 +62,13 @@ public interface ICoreProblems {
     = "eu.geclipse.core.problem.auth.tokenActivateFailed"; //$NON-NLS-1$
   public static final String AUTH_TOKEN_NOT_YET_VALID
     = "eu.geclipse.core.problem.auth.tokenNotYetValid"; //$NON-NLS-1$
+
+  public static final String CONFIG_INVALID_VO_PARAMETER
+    = "eu.geclipse.core.problem.config.invalidVoParameter"; //$NON-NLS-1$
+  public static final String CONFIG_MISSING_VO_PARAMETER
+    = "eu.geclipse.core.problem.config.missingVoParameter"; //$NON-NLS-1$
+  public static final String CONFIG_WRONG_VO_CREATOR
+    = "eu.geclipse.core.problem.config.wrongVoCreator"; //$NON-NLS-1$
   
   // IO
   public static final String IO_CORRUPTED_FILE
