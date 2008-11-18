@@ -31,7 +31,6 @@ public class GridProjectStructureWizardPage extends WizardPage {
            "Grid Project Folders",
            null );
     setDescription( "Specify the folders that should be available for your Grid project" );
-    //initialize();
   }
 
   public void createControl( final Composite parent ) {
