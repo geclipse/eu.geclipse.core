@@ -126,9 +126,6 @@ public class CertificateInfoPanel extends Composite {
     
     SashForm detailsForm = new SashForm( tabFolder, SWT.VERTICAL );
     detailsForm.setLayout( new FillLayout() );
-    //Composite detailsComp = new Composite( tabFolder, SWT.NONE );
-    //detailsComp.setLayoutData( new GridData( GridData.FILL, GridData.FILL, true, true ) );
-    //detailsComp.setLayout( new GridLayout( 1, false ) );
     detailsItem.setControl( detailsForm );
     
     Composite tableComp = new Composite( detailsForm, SWT.NONE );
