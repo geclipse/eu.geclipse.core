@@ -401,4 +401,20 @@
             id="eu.geclipse.ui.certificateTrustVerifier">
       </verifier>
    </extension>
+   <extension
+         point="org.eclipse.ui.actionSets">
+      <actionSet
+            id="eu.geclipse.ui.configuration"
+            label="g-Eclipse Easy Configuration"
+            visible="true">
+         <action
+               class="eu.geclipse.ui.internal.actions.ConfigurationAction"
+               icon="icons/geclipse16.gif"
+               id="eu.geclipse.ui.configurationAction"
+               label="g-Eclipse Easy Configuration"
+               menubarPath="help/helpEnd"
+               style="push">
+         </action>
+      </actionSet>
+   </extension>
 </plugin>
