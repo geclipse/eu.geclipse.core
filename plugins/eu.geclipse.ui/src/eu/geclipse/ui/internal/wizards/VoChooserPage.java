@@ -215,7 +215,9 @@ public class VoChooserPage extends WizardPage {
     super.setVisible( visible );
     if ( visible ) {
       loadVoList();
-      this.filterText.setFocus();
+      if ( ! this.filterText.isDisposed() ) {
+        this.filterText.setFocus();
+      }
     }
   }
   
