@@ -30,13 +30,7 @@ public class ConfiguratorSelectionPage extends WizardPage {
   
   protected Tree confTree;
   
-  private Text confNameText;
-  
-  private Text confDescText;
-  
-  private Text confPrereqText;
-  
-  private Tree certTree;
+  private ConfigurationDetailsComposite detailsFolder;
   
   public ConfiguratorSelectionPage() {
     super( "confSelectPage", //$NON-NLS-1$
@@ -66,86 +60,9 @@ public class ConfiguratorSelectionPage extends WizardPage {
     detailsGroup.setLayout( new GridLayout( 1, false ) );
     detailsGroup.setText( "Configuration Details" );
     
-    TabFolder detailsFolder = new TabFolder( detailsGroup, SWT.NONE );
-    detailsFolder.setLayout( new GridLayout( 1, false ) );
+    this.detailsFolder = new ConfigurationDetailsComposite( detailsGroup, SWT.NONE );
     detailsFolder.setLayoutData( new GridData ( GridData.FILL, GridData.FILL, true, true ) );
     
-    TabItem generalTab = new TabItem( detailsFolder, SWT.NONE );
-    generalTab.setText( "General" );
-    
-    Composite generalComp = new Composite( detailsFolder, SWT.NONE );
-    generalComp.setLayout( new GridLayout( 1, false ) );
-    generalComp.setLayoutData( new GridData( GridData.FILL, GridData.FILL, true, true ) );
-    generalTab.setControl( generalComp );
-    
-    Label confNameLabel = new Label( generalComp, SWT.NONE );
-    confNameLabel.setLayoutData( new GridData() );
-    confNameLabel.setText( "Configuration Name:" );
-    
-    this.confNameText = new Text( generalComp, SWT.BORDER | SWT.SINGLE | SWT.READ_ONLY );
-    this.confNameText.setLayoutData( new GridData( GridData.FILL, GridData.BEGINNING, true, false ) );
-    
-    Label confDescLabel = new Label( generalComp, SWT.NONE );
-    confDescLabel.setLayoutData( new GridData() );
-    confDescLabel.setText( "Description:" );
-    
-    this.confDescText = new Text( generalComp, SWT.BORDER | SWT.WRAP | SWT.V_SCROLL | SWT.MULTI | SWT.READ_ONLY );
-    gData = new GridData( GridData.FILL, GridData.FILL, true, true );
-    gData.widthHint = 300;
-    gData.heightHint = 80;
-    this.confDescText.setLayoutData( gData );
-    
-    Label confPrereqLabel = new Label( generalComp, SWT.NONE );
-    confPrereqLabel.setLayoutData( new GridData() );
-    confPrereqLabel.setText( "Prerequisites:" );
-    
-    this.confPrereqText = new Text( generalComp, SWT.BORDER | SWT.WRAP | SWT.V_SCROLL | SWT.MULTI | SWT.READ_ONLY );
-    gData = new GridData( GridData.FILL, GridData.FILL, true, true );
-    gData.widthHint = 300;
-    gData.heightHint = 80;
-    this.confPrereqText.setLayoutData( gData );
-    
-    TabItem certificatesTab = new TabItem( detailsFolder, SWT.NONE );
-    certificatesTab.setText( "Certificates" );
-    
-    Composite certComp = new Composite( detailsFolder, SWT.NONE );
-    certComp.setLayout( new GridLayout( 1, false ) );
-    certComp.setLayoutData( new GridData( GridData.FILL, GridData.FILL, true, true ) );
-    certificatesTab.setControl( certComp );
-    
-    Label certLabel = new Label( certComp, SWT.NONE );
-    certLabel.setText( "Certificate Configurations" );
-    certLabel.setLayoutData( new GridData() );
-    
-    this.certTree = new Tree( certComp, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER );
-    this.certTree.setLayoutData( new GridData( GridData.FILL, GridData.FILL, true, true ) );
-    this.certTree.setHeaderVisible( true );
-    
-    TreeColumn certFieldColumn = new TreeColumn( this.certTree, SWT.LEFT );
-    certFieldColumn.setText( "Field" );
-    certFieldColumn.setWidth( 200 );
-    
-    TreeColumn certValueColumn = new TreeColumn( this.certTree, SWT.LEFT );
-    certValueColumn.setText( "Value" );
-    certValueColumn.setWidth( 100 );
-    
-    TabItem voTab = new TabItem( detailsFolder, SWT.NONE );
-    voTab.setText( "Virtual Organizations" );
-    
-    Composite voComp = new Composite( detailsFolder, SWT.NONE );
-    voComp.setLayout( new GridLayout( 1, false ) );
-    voComp.setLayoutData( new GridData( GridData.FILL, GridData.FILL, true, true ) );
-    voTab.setControl( voComp );
-    
-    TabItem projectsTab = new TabItem( detailsFolder, SWT.NONE );
-    projectsTab.setText( "Projects" );
-    
-    Composite projectsComp = new Composite( detailsFolder, SWT.NONE );
-    projectsComp.setLayout( new GridLayout( 1, false ) );
-    projectsComp.setLayoutData( new GridData( GridData.FILL, GridData.FILL, true, true ) );
-    projectsTab.setControl( projectsComp );
-    
-    buildTree( this.confTree );
     mainComp.setWeights( new int[] { 1, 2 } );
     
     this.confTree.addSelectionListener( new SelectionAdapter() {
@@ -165,8 +82,10 @@ public class ConfiguratorSelectionPage extends WizardPage {
       }
     } );
     
+    initConfigTree( this.confTree );
     updateDetails();
     validatePage();
+    
     setControl( mainComp );
     
   }
@@ -187,35 +106,16 @@ public class ConfiguratorSelectionPage extends WizardPage {
   
   protected void updateDetails() {
     
-    this.certTree.removeAll();
-    
     IConfigurationElement configurator = null;
+    
     TreeItem[] selection = this.confTree.getSelection();
     if ( ( selection != null ) && ( selection.length == 1 ) ) {
       configurator = ( IConfigurationElement ) selection[ 0 ].getData( "configurator" );
     }
     
-    this.confNameText.setText( securelyGetAttribute( configurator, "name" ) );
-    this.confDescText.setText( securelyGetAttribute( configurator, "description" ) );
+    this.detailsFolder.setConfigurator( configurator );
     
-    if ( configurator != null ) {
-      StringBuffer buffer = new StringBuffer();
-      IConfigurationElement[] children = configurator.getChildren( "certificates" );
-      if ( ( children != null ) && ( children.length > 0 ) ) {
-        buffer.append( "- Your proxy settings (Window -> Preferences -> General -> Network Connections) have to be valid.\n" );
-      }
-      String prereq = configurator.getAttribute( "prerequisites" );
-      if ( prereq != null ) {
-        String[] parts = prereq.split( ";" );
-        for ( String part : parts ) {
-          buffer.append( String.format( "- %s\n", part ) );
-        }
-      }
-      this.confPrereqText.setText( buffer.toString() );
-    } else {
-      this.confPrereqText.setText( "N/A" );
-    }
-
+    /*
     if ( configurator != null ) {
       IConfigurationElement[] certs = configurator.getChildren( "certificates" );
       if ( ( certs != null ) && ( certs.length > 0 ) ) {
@@ -254,7 +154,7 @@ public class ConfiguratorSelectionPage extends WizardPage {
     } else {
       new TreeItem( this.certTree, SWT.NONE ).setText( "N/A" );
     }
-    
+    */
   }
   
   protected void validatePage() {
@@ -307,7 +207,7 @@ public class ConfiguratorSelectionPage extends WizardPage {
     
   }
   
-  private void buildTree( final Tree tree ) {
+  private void initConfigTree( final Tree tree ) {
     
     ExtensionManager manager = new ExtensionManager();
     List< IConfigurationElement > elements
@@ -319,20 +219,4 @@ public class ConfiguratorSelectionPage extends WizardPage {
     
   }
   
-  private String securelyGetAttribute( final IConfigurationElement conf,
-                                       final String attribute ) {
-    
-    String result = "N/A"; //$NON-NLS-1$
-    
-    if ( conf != null ) {
-      String s = conf.getAttribute( attribute );
-      if ( ( s != null ) && ( s.trim().length() > 0 ) ) {
-        result = s;
-      }
-    }
-    
-    return result;
-    
-  }
-
 }
