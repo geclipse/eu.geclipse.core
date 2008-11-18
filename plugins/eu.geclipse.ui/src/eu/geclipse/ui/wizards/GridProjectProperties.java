@@ -24,7 +24,7 @@ import eu.geclipse.core.model.IVirtualOrganization;
 
 /**
  * Class which contains the Properties of a Grid Project. 
- * Propoerties are Name, Location, VirtualOrganisation, ... 
+ * Properties are Name, Location, VirtualOrganisation, ... 
  */
 public class GridProjectProperties {
   
