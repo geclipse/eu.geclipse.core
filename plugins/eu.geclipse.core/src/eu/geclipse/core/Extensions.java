@@ -125,6 +125,9 @@ public class Extensions {
   public static final String CERT_LOADER_ELEMENT
     = "loader"; //$NON-NLS-1$
   
+  public static final String CERT_LOADER_ID_ATTRIBUTE
+    = "id"; //$NON-NLS-1$
+  
   public static final String CERT_LOADER_NAME_ATTRIBUTE
     = "name"; //$NON-NLS-1$
   
@@ -134,6 +137,9 @@ public class Extensions {
   public static final String CERT_LOADER_AUTHORITY_ELEMENT
     = "authority"; //$NON-NLS-1$
   
+  public static final String CERT_LOADER_AUTHORITY_ID_ATTRIBUTE
+    = "id"; //$NON-NLS-1$
+  
   public static final String CERT_LOADER_AUTHORITY_NAME_ATTRIBUTE
     = "name"; //$NON-NLS-1$
   
@@ -142,6 +148,9 @@ public class Extensions {
   
   public static final String CERT_LOADER_DISTRIBUTION_ELEMENT
     = "distribution"; //$NON-NLS-1$
+  
+  public static final String CERT_LOADER_DISTRIBUTION_ID_ATTRIBUTE
+    = "id"; //$NON-NLS-1$
   
   public static final String CERT_LOADER_DISTRIBUTION_NAME_ATTRIBUTE
     = "name"; //$NON-NLS-1$
