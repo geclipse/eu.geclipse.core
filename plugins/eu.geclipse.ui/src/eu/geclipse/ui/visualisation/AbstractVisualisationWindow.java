@@ -26,8 +26,6 @@ import org.eclipse.swt.widgets.Composite;
  */
 public abstract class AbstractVisualisationWindow {
 
-  protected VisComposite viscomp = null;
-
   /**
    * The file extension of the resource that this visualisation window knows how to render.
    */
@@ -59,6 +57,8 @@ public abstract class AbstractVisualisationWindow {
    */
   public static final String VISUALISATION_PAGE_EXTENSION_POINT = "eu.geclipse.ui.visualisationWindow"; //$NON-NLS-1$
 
+  protected VisComposite viscomp = null;
+
   /**
    * Returns the name of the page's tab.
    *
@@ -66,10 +66,17 @@ public abstract class AbstractVisualisationWindow {
    */
   public abstract String getTabName();
 
+
+  /**
+   * @return
+   */
   public Composite getVisComp() {
     return this.viscomp;
   }
 
+  /**
+   *
+   */
   public void redraw() {
     this.viscomp.redraw();
   }

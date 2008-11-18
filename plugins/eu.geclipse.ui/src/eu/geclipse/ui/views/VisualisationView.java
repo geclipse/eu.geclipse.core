@@ -208,17 +208,17 @@ public class VisualisationView extends ViewPart {
   }
 
   /**
+   * @param onRenderAction
    * @return tab item
    */
-  public CTabItem getCTabItem() {
-    CTabItem cTabItem = this.cTabFolder
-    != null ? getTab() : null;
+  public CTabItem getCTabItem( final boolean onRenderAction ) {
+    CTabItem cTabItem = this.cTabFolder != null ? getTab( onRenderAction ) : null;
     return cTabItem;
   }
 
-  private CTabItem getTab() {
+  private CTabItem getTab( final boolean onRenderAction ) {
     CTabItem tabItem = null;
-    if ( !this.checkBtnAction.isChecked() ) {
+    if ( !this.checkBtnAction.isChecked() && onRenderAction ) {
       if ( this.cTabFolder.getItemCount() < this.allowedNumOfTabs ) {
         tabItem = new CTabItem( this.cTabFolder, SWT.CLOSE );
         this.cTabFolder.setSelection( tabItem );
