@@ -571,7 +571,7 @@ public class VoPreferencePage
    */
   private void checkDefaultVo() {
     IVoManager manager = GridModel.getVoManager();
-    if ( ( manager.getChildCount() > 0 ) ) {
+    if ( ( manager.getChildCount() > 0 ) && ! this.voViewer.getControl().isDisposed() ) {
       Object[] checked = new Object[] { manager.getDefault() };
       VoPreferencePage.this.voViewer.setCheckedElements( checked );
     }
