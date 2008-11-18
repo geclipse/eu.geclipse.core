@@ -3,7 +3,9 @@
     xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="workflow"
     nsURI="http:///eu/geclipse/workflow.ecore" nsPrefix="eu.geclipse.workflow.model">
-  <eClassifiers xsi:type="ecore:EClass" name="IPort" abstract="true" eSuperTypes="#//IWorkflowElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="IPort" abstract="true" eSuperTypes="#//IWorkflowElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fileName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ILink" eSuperTypes="#//IWorkflowElement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="workflow" lowerBound="1"
         eType="#//IWorkflow" eOpposite="#//IWorkflow/links"/>

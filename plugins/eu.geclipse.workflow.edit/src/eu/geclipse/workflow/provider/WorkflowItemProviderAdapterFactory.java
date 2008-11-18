@@ -46,46 +46,42 @@ public class WorkflowItemProviderAdapterFactory extends WorkflowAdapterFactory
 {
 
   /**
-   * This keeps track of the root adapter factory that delegates to this adapter
-   * factory. <!-- begin-user-doc --> <!-- end-user-doc -->
-   * 
+   * This keeps track of the root adapter factory that delegates to this adapter factory.
+   * <!-- begin-user-doc --> <!-- end-user-doc -->
    * @generated
    */
   protected ComposedAdapterFactory parentAdapterFactory;
   /**
-   * This is used to implement
-   * {@link org.eclipse.emf.edit.provider.IChangeNotifier}. <!-- begin-user-doc
+   * This is used to implement {@link org.eclipse.emf.edit.provider.IChangeNotifier}.
+   * <!-- begin-user-doc
    * --> <!-- end-user-doc -->
-   * 
    * @generated
    */
   protected IChangeNotifier changeNotifier = new ChangeNotifier();
   /**
-   * This keeps track of all the supported types checked by
-   * {@link #isFactoryForType isFactoryForType}. <!-- begin-user-doc --> <!--
+   * This keeps track of all the supported types checked by {@link #isFactoryForType isFactoryForType}.
+   * <!-- begin-user-doc --> <!--
    * end-user-doc -->
-   * 
    * @generated
    */
   protected Collection<Object> supportedTypes = new ArrayList<Object>();
 
   /**
-   * This constructs an instance. <!-- begin-user-doc --> <!-- end-user-doc -->
-   * 
+   * This constructs an instance.
+   * <!-- begin-user-doc --> <!-- end-user-doc -->
    * @generated
    */
   public WorkflowItemProviderAdapterFactory() {
-    this.supportedTypes.add( IEditingDomainItemProvider.class );
-    this.supportedTypes.add( IStructuredItemContentProvider.class );
-    this.supportedTypes.add( ITreeItemContentProvider.class );
-    this.supportedTypes.add( IItemLabelProvider.class );
-    this.supportedTypes.add( IItemPropertySource.class );
+    supportedTypes.add(IEditingDomainItemProvider.class);
+    supportedTypes.add(IStructuredItemContentProvider.class);
+    supportedTypes.add(ITreeItemContentProvider.class);
+    supportedTypes.add(IItemLabelProvider.class);
+    supportedTypes.add(IItemPropertySource.class);
   }
   /**
-   * This keeps track of the one adapter used for all
-   * {@link eu.geclipse.workflow.model.ILink} instances. <!-- begin-user-doc --> <!--
+   * This keeps track of the one adapter used for all {@link eu.geclipse.workflow.ILink} instances.
+   * <!-- begin-user-doc --> <!--
    * end-user-doc -->
-   * 
    * @generated
    */
   protected LinkItemProvider iLinkItemProvider;
@@ -98,64 +94,62 @@ public class WorkflowItemProviderAdapterFactory extends WorkflowAdapterFactory
    */
   @Override
   public Adapter createILinkAdapter() {
-    if( this.iLinkItemProvider == null ) {
-      this.iLinkItemProvider = new LinkItemProvider( this );
+    if (iLinkItemProvider == null)
+    {
+      iLinkItemProvider = new LinkItemProvider(this);
     }
-    return this.iLinkItemProvider;
+
+    return iLinkItemProvider;
   }
   /**
-   * This keeps track of the one adapter used for all
-   * {@link eu.geclipse.workflow.model.IInputPort} instances. <!-- begin-user-doc -->
+   * This keeps track of the one adapter used for all {@link eu.geclipse.workflow.IInputPort} instances.
+   * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * 
    * @generated
    */
-  protected InputPortItemProvider inputPortItemProvider;
-
+  protected InputPortItemProvider iInputPortItemProvider;
   /**
-   * This creates an adapter for a {@link eu.geclipse.workflow.model.IInputPort}.
+   * This creates an adapter for a {@link eu.geclipse.workflow.IInputPort}.
    * <!-- begin-user-doc --> <!-- end-user-doc -->
-   * 
    * @generated
    */
   @Override
   public Adapter createIInputPortAdapter() {
-    if( this.inputPortItemProvider == null ) {
-      this.inputPortItemProvider = new InputPortItemProvider( this );
+    if (iInputPortItemProvider == null)
+    {
+      iInputPortItemProvider = new InputPortItemProvider(this);
     }
-    return this.inputPortItemProvider;
+
+    return iInputPortItemProvider;
   }
   /**
-   * This keeps track of the one adapter used for all
-   * {@link eu.geclipse.workflow.model.IOutputPort} instances. <!-- begin-user-doc -->
+   * This keeps track of the one adapter used for all {@link eu.geclipse.workflow.IOutputPort} instances.
+   * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * 
    * @generated
    */
-  protected OutputPortItemProvider outputPortItemProvider;
-
+  protected OutputPortItemProvider iOutputPortItemProvider;
   /**
-   * This creates an adapter for a {@link eu.geclipse.workflow.model.IOutputPort}.
+   * This creates an adapter for a {@link eu.geclipse.workflow.IOutputPort}.
    * <!-- begin-user-doc --> <!-- end-user-doc -->
-   * 
    * @generated
    */
   @Override
   public Adapter createIOutputPortAdapter() {
-    if( this.outputPortItemProvider == null ) {
-      this.outputPortItemProvider = new OutputPortItemProvider( this );
+    if (iOutputPortItemProvider == null)
+    {
+      iOutputPortItemProvider = new OutputPortItemProvider(this);
     }
-    return this.outputPortItemProvider;
+
+    return iOutputPortItemProvider;
   }
   /**
-   * This keeps track of the one adapter used for all
-   * {@link eu.geclipse.workflow.model.IWorkflow} instances. <!-- begin-user-doc -->
+   * This keeps track of the one adapter used for all {@link eu.geclipse.workflow.IWorkflow} instances.
+   * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * 
    * @generated
    */
-  protected WorkflowItemProvider workflowItemProvider;
-
+  protected WorkflowItemProvider iWorkflowItemProvider;
   /**
    * This creates an adapter for a {@link eu.geclipse.workflow.model.IWorkflow}. <!--
    * begin-user-doc --> <!-- end-user-doc -->
@@ -164,32 +158,33 @@ public class WorkflowItemProviderAdapterFactory extends WorkflowAdapterFactory
    */
   @Override
   public Adapter createIWorkflowAdapter() {
-    if( this.workflowItemProvider == null ) {
-      this.workflowItemProvider = new WorkflowItemProvider( this );
+    if (iWorkflowItemProvider == null)
+    {
+      iWorkflowItemProvider = new WorkflowItemProvider(this);
     }
-    return this.workflowItemProvider;
+
+    return iWorkflowItemProvider;
   }
   /**
-   * This keeps track of the one adapter used for all
-   * {@link eu.geclipse.workflow.model.IWorkflowJob} instances. <!-- begin-user-doc
-   * --> <!-- end-user-doc -->
-   * 
+   * This keeps track of the one adapter used for all {@link eu.geclipse.workflow.IWorkflowJob} instances.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
    * @generated
    */
-  protected WorkflowJobItemProvider workflowJobItemProvider;
-
+  protected WorkflowJobItemProvider iWorkflowJobItemProvider;
   /**
-   * This creates an adapter for a {@link eu.geclipse.workflow.model.IWorkflowJob}.
+   * This creates an adapter for a {@link eu.geclipse.workflow.IWorkflowJob}.
    * <!-- begin-user-doc --> <!-- end-user-doc -->
-   * 
    * @generated
    */
   @Override
   public Adapter createIWorkflowJobAdapter() {
-    if( this.workflowJobItemProvider == null ) {
-      this.workflowJobItemProvider = new WorkflowJobItemProvider( this );
+    if (iWorkflowJobItemProvider == null)
+    {
+      iWorkflowJobItemProvider = new WorkflowJobItemProvider(this);
     }
-    return this.workflowJobItemProvider;
+
+    return iWorkflowJobItemProvider;
   }
 
   /**
@@ -199,9 +194,7 @@ public class WorkflowItemProviderAdapterFactory extends WorkflowAdapterFactory
    * @generated
    */
   public ComposeableAdapterFactory getRootAdapterFactory() {
-    return this.parentAdapterFactory == null
-                                       ? this
-                                       : this.parentAdapterFactory.getRootAdapterFactory();
+    return parentAdapterFactory == null ? this : parentAdapterFactory.getRootAdapterFactory();
   }
 
   /**
@@ -217,59 +210,57 @@ public class WorkflowItemProviderAdapterFactory extends WorkflowAdapterFactory
 
   /**
    * <!-- begin-user-doc --> <!-- end-user-doc -->
-   * 
    * @generated
    */
   @Override
   public boolean isFactoryForType( Object type ) {
-    return this.supportedTypes.contains( type ) || super.isFactoryForType( type );
+    return supportedTypes.contains(type) || super.isFactoryForType(type);
   }
 
   /**
-   * This implementation substitutes the factory itself as the key for the
-   * adapter. <!-- begin-user-doc --> <!-- end-user-doc -->
-   * 
+   * This implementation substitutes the factory itself as the key for the adapter.
+   * <!-- begin-user-doc --> <!-- end-user-doc -->
    * @generated
    */
   @Override
   public Adapter adapt( Notifier notifier, Object type ) {
-    return super.adapt( notifier, this );
+    return super.adapt(notifier, this);
   }
 
   /**
    * <!-- begin-user-doc --> <!-- end-user-doc -->
-   * 
    * @generated
    */
   @Override
   public Object adapt( Object object, Object type ) {
-    if( isFactoryForType( type ) ) {
-      Object adapter = super.adapt( object, type );
-      if( !( type instanceof Class )
-          || ( ( ( Class<?> )type ).isInstance( adapter ) ) )
+    if (isFactoryForType(type))
+    {
+      Object adapter = super.adapt(object, type);
+      if (!(type instanceof Class) || (((Class<?>)type).isInstance(adapter)))
       {
         return adapter;
       }
     }
+
     return null;
   }
 
   /**
-   * This adds a listener. <!-- begin-user-doc --> <!-- end-user-doc -->
-   * 
+   * This adds a listener.
+   * <!-- begin-user-doc --> <!-- end-user-doc -->
    * @generated
    */
   public void addListener( INotifyChangedListener notifyChangedListener ) {
-    this.changeNotifier.addListener( notifyChangedListener );
+    changeNotifier.addListener(notifyChangedListener);
   }
 
   /**
-   * This removes a listener. <!-- begin-user-doc --> <!-- end-user-doc -->
-   * 
+   * This removes a listener.
+   * <!-- begin-user-doc --> <!-- end-user-doc -->
    * @generated
    */
   public void removeListener( INotifyChangedListener notifyChangedListener ) {
-    this.changeNotifier.removeListener( notifyChangedListener );
+    changeNotifier.removeListener(notifyChangedListener);
   }
 
   /**
@@ -280,9 +271,11 @@ public class WorkflowItemProviderAdapterFactory extends WorkflowAdapterFactory
    * @generated
    */
   public void fireNotifyChanged( Notification notification ) {
-    this.changeNotifier.fireNotifyChanged( notification );
-    if( this.parentAdapterFactory != null ) {
-      this.parentAdapterFactory.fireNotifyChanged( notification );
+    changeNotifier.fireNotifyChanged(notification);
+
+    if (parentAdapterFactory != null)
+    {
+      parentAdapterFactory.fireNotifyChanged(notification);
     }
   }
 }

@@ -16,18 +16,22 @@
 package eu.geclipse.workflow.provider;
 
 import eu.geclipse.workflow.model.IPort;
+import eu.geclipse.workflow.model.IWorkflowPackage;
 
 import java.util.Collection;
 import java.util.List;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.ResourceLocator;
+import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.ViewerNotification;
 
 /**
  * This is the item provider adapter for a {@link eu.geclipse.workflow.model.IPort}
@@ -63,6 +67,30 @@ public class PortItemProvider extends WorkflowElementItemProvider
     }
     return this.itemPropertyDescriptors;
   }
+  
+
+  /**
+   * This adds a property descriptor for the File Name feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void addFileNamePropertyDescriptor(Object object)
+  {
+    itemPropertyDescriptors.add
+      (createItemPropertyDescriptor
+        (((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+         getResourceLocator(),
+         getString("_UI_IPort_fileName_feature"), //$NON-NLS-1$
+         getString("_UI_PropertyDescriptor_description", "_UI_IPort_fileName_feature", "_UI_IPort_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+         IWorkflowPackage.Literals.IPORT__FILE_NAME,
+         true,
+         false,
+         false,
+         ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+         null,
+         null));
+  }
 
   /**
    * This returns the label text for the adapted class. <!-- begin-user-doc -->
@@ -91,6 +119,12 @@ public class PortItemProvider extends WorkflowElementItemProvider
   @Override
   public void notifyChanged( Notification notification ) {
     updateChildren( notification );
+    switch (notification.getFeatureID(IPort.class))
+    {
+      case IWorkflowPackage.IPORT__FILE_NAME:
+        fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+        return;
+    }
     super.notifyChanged( notification );
   }
 

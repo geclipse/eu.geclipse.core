@@ -15,6 +15,7 @@
  ******************************************************************************/
 package eu.geclipse.workflow.util;
 
+import eu.geclipse.workflow.*;
 import eu.geclipse.workflow.model.*;
 
 import org.eclipse.emf.common.notify.Adapter;
@@ -43,7 +44,8 @@ public class WorkflowAdapterFactory extends AdapterFactoryImpl {
    * @generated
    */
   public WorkflowAdapterFactory() {
-    if( modelPackage == null ) {
+    if (modelPackage == null)
+    {
       modelPackage = IWorkflowPackage.eINSTANCE;
     }
   }
@@ -58,11 +60,13 @@ public class WorkflowAdapterFactory extends AdapterFactoryImpl {
    */
   @Override
   public boolean isFactoryForType( Object object ) {
-    if( object == modelPackage ) {
+    if (object == modelPackage)
+    {
       return true;
     }
-    if( object instanceof EObject ) {
-      return ( ( EObject )object ).eClass().getEPackage() == modelPackage;
+    if (object instanceof EObject)
+    {
+      return ((EObject)object).eClass().getEPackage() == modelPackage;
     }
     return false;
   }
@@ -71,53 +75,53 @@ public class WorkflowAdapterFactory extends AdapterFactoryImpl {
    * @generated
    */
   protected WorkflowSwitch<Adapter> modelSwitch = new WorkflowSwitch<Adapter>()
-  {
-
-    @Override
-    public Adapter caseIPort( IPort object ) {
-      return createIPortAdapter();
-    }
-
-    @Override
-    public Adapter caseILink( ILink object ) {
-      return createILinkAdapter();
-    }
-
-    @Override
-    public Adapter caseIInputPort( IInputPort object ) {
-      return createIInputPortAdapter();
-    }
-
-    @Override
-    public Adapter caseIOutputPort( IOutputPort object ) {
-      return createIOutputPortAdapter();
-    }
-
-    @Override
-    public Adapter caseIWorkflow( IWorkflow object ) {
-      return createIWorkflowAdapter();
-    }
-
-    @Override
-    public Adapter caseIWorkflowJob( IWorkflowJob object ) {
-      return createIWorkflowJobAdapter();
-    }
-
-    @Override
-    public Adapter caseIWorkflowElement( IWorkflowElement object ) {
-      return createIWorkflowElementAdapter();
-    }
-
-    @Override
-    public Adapter caseIWorkflowNode( IWorkflowNode object ) {
-      return createIWorkflowNodeAdapter();
-    }
-
-    @Override
-    public Adapter defaultCase( EObject object ) {
-      return createEObjectAdapter();
-    }
-  };
+    {
+      @Override
+      public Adapter caseIPort(IPort object)
+      {
+        return createIPortAdapter();
+      }
+      @Override
+      public Adapter caseILink(ILink object)
+      {
+        return createILinkAdapter();
+      }
+      @Override
+      public Adapter caseIInputPort(IInputPort object)
+      {
+        return createIInputPortAdapter();
+      }
+      @Override
+      public Adapter caseIOutputPort(IOutputPort object)
+      {
+        return createIOutputPortAdapter();
+      }
+      @Override
+      public Adapter caseIWorkflow(IWorkflow object)
+      {
+        return createIWorkflowAdapter();
+      }
+      @Override
+      public Adapter caseIWorkflowJob(IWorkflowJob object)
+      {
+        return createIWorkflowJobAdapter();
+      }
+      @Override
+      public Adapter caseIWorkflowElement(IWorkflowElement object)
+      {
+        return createIWorkflowElementAdapter();
+      }
+      @Override
+      public Adapter caseIWorkflowNode(IWorkflowNode object)
+      {
+        return createIWorkflowNodeAdapter();
+      }
+      @Override
+      public Adapter defaultCase(EObject object)
+      {
+        return createEObjectAdapter();
+      }
+    };
 
   /**
    * Creates an adapter for the <code>target</code>.
@@ -127,17 +131,17 @@ public class WorkflowAdapterFactory extends AdapterFactoryImpl {
    */
   @Override
   public Adapter createAdapter( Notifier target ) {
-    return this.modelSwitch.doSwitch( ( EObject )target );
+    return modelSwitch.doSwitch((EObject)target);
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link eu.geclipse.workflow.model.IPort <em>IPort</em>}'.
+   * Creates a new adapter for an object of class '{@link eu.geclipse.workflow.IPort <em>IPort</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see eu.geclipse.workflow.model.IPort
+   * @see eu.geclipse.workflow.IPort
    * @generated
    */
   public Adapter createIPortAdapter() {
@@ -145,13 +149,13 @@ public class WorkflowAdapterFactory extends AdapterFactoryImpl {
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link eu.geclipse.workflow.model.ILink <em>ILink</em>}'.
+   * Creates a new adapter for an object of class '{@link eu.geclipse.workflow.ILink <em>ILink</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see eu.geclipse.workflow.model.ILink
+   * @see eu.geclipse.workflow.ILink
    * @generated
    */
   public Adapter createILinkAdapter() {
@@ -159,13 +163,13 @@ public class WorkflowAdapterFactory extends AdapterFactoryImpl {
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link eu.geclipse.workflow.model.IInputPort <em>IInput Port</em>}'.
+   * Creates a new adapter for an object of class '{@link eu.geclipse.workflow.IInputPort <em>IInput Port</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see eu.geclipse.workflow.model.IInputPort
+   * @see eu.geclipse.workflow.IInputPort
    * @generated
    */
   public Adapter createIInputPortAdapter() {
@@ -173,13 +177,13 @@ public class WorkflowAdapterFactory extends AdapterFactoryImpl {
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link eu.geclipse.workflow.model.IOutputPort <em>IOutput Port</em>}'.
+   * Creates a new adapter for an object of class '{@link eu.geclipse.workflow.IOutputPort <em>IOutput Port</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see eu.geclipse.workflow.model.IOutputPort
+   * @see eu.geclipse.workflow.IOutputPort
    * @generated
    */
   public Adapter createIOutputPortAdapter() {
@@ -187,13 +191,13 @@ public class WorkflowAdapterFactory extends AdapterFactoryImpl {
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link eu.geclipse.workflow.model.IWorkflow <em>IWorkflow</em>}'.
+   * Creates a new adapter for an object of class '{@link eu.geclipse.workflow.IWorkflow <em>IWorkflow</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see eu.geclipse.workflow.model.IWorkflow
+   * @see eu.geclipse.workflow.IWorkflow
    * @generated
    */
   public Adapter createIWorkflowAdapter() {
@@ -201,13 +205,13 @@ public class WorkflowAdapterFactory extends AdapterFactoryImpl {
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link eu.geclipse.workflow.model.IWorkflowJob <em>IWorkflow Job</em>}'.
+   * Creates a new adapter for an object of class '{@link eu.geclipse.workflow.IWorkflowJob <em>IWorkflow Job</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see eu.geclipse.workflow.model.IWorkflowJob
+   * @see eu.geclipse.workflow.IWorkflowJob
    * @generated
    */
   public Adapter createIWorkflowJobAdapter() {
@@ -215,13 +219,13 @@ public class WorkflowAdapterFactory extends AdapterFactoryImpl {
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link eu.geclipse.workflow.model.IWorkflowElement <em>IWorkflow Element</em>}'.
+   * Creates a new adapter for an object of class '{@link eu.geclipse.workflow.IWorkflowElement <em>IWorkflow Element</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see eu.geclipse.workflow.model.IWorkflowElement
+   * @see eu.geclipse.workflow.IWorkflowElement
    * @generated
    */
   public Adapter createIWorkflowElementAdapter() {
@@ -229,13 +233,13 @@ public class WorkflowAdapterFactory extends AdapterFactoryImpl {
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link eu.geclipse.workflow.model.IWorkflowNode <em>IWorkflow Node</em>}'.
+   * Creates a new adapter for an object of class '{@link eu.geclipse.workflow.IWorkflowNode <em>IWorkflow Node</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see eu.geclipse.workflow.model.IWorkflowNode
+   * @see eu.geclipse.workflow.IWorkflowNode
    * @generated
    */
   public Adapter createIWorkflowNodeAdapter() {

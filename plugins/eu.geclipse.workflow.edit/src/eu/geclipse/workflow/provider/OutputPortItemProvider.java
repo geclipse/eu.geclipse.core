@@ -118,8 +118,10 @@ public class OutputPortItemProvider extends PortItemProvider
     IOutputPort outPort = ( IOutputPort )object;
     String label = ""; //$NON-NLS-1$
     String portName = outPort.getNode().getName();
+//    String portFileName = outPort.getFileName();
     if( !( portName == null || portName.length() == 0 ) )
       label = " belonging to " + portName; //$NON-NLS-1$
+//    label = " belonging to " + portName + ";" + portFileName; //$NON-NLS-1$
     return label == null || label.length() == 0
                                                ? getString( "_UI_IOutputPort_type" ) //$NON-NLS-1$
                                                : getString( "_UI_IOutputPort_type" ) //$NON-NLS-1$

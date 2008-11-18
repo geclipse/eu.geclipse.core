@@ -110,8 +110,10 @@ public class InputPortItemProvider extends PortItemProvider
     IInputPort inPort = ( IInputPort )object;
     String label = ""; //$NON-NLS-1$
     String portName = inPort.getNode().getName();
+//    String portFileName = inPort.getFileName();
     if( !( portName == null || portName.length() == 0 ) )
       label += " belonging to " + portName; //$NON-NLS-1$
+//    label += " belonging to " + portName + ";" + portFileName; //$NON-NLS-1$
     return label == null || label.length() == 0
                                                ? getString( "_UI_IInputPort_type" ) //$NON-NLS-1$
                                                : getString( "_UI_IInputPort_type" ) //$NON-NLS-1$

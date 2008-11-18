@@ -20,6 +20,9 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
+import eu.geclipse.workflow.model.IWorkflowFactory;
+import eu.geclipse.workflow.model.IWorkflowPackage;
+
 /**
  * <!-- begin-user-doc -->
  * The <b>Package</b> for the model.
@@ -36,8 +39,7 @@ import org.eclipse.emf.ecore.EReference;
  * @generated
  */
 public interface IWorkflowPackage extends EPackage
-{
-  /**
+{ /**
    * The package name.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -59,7 +61,7 @@ public interface IWorkflowPackage extends EPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  String eNS_PREFIX = "eu.geclipse.workflow"; //$NON-NLS-1$
+  String eNS_PREFIX = "eu.geclipse.workflow.model"; //$NON-NLS-1$
 
   /**
    * The singleton instance of the package.
@@ -70,10 +72,10 @@ public interface IWorkflowPackage extends EPackage
   IWorkflowPackage eINSTANCE = eu.geclipse.workflow.impl.WorkflowPackageImpl.init();
 
   /**
-   * The meta object id for the '{@link eu.geclipse.workflow.impl.WorkflowElementImpl <em>IWorkflow Element</em>}' class.
+   * The meta object id for the '{@link eu.geclipse.workflow.impl.IWorkflowElementImpl <em>IWorkflow Element</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see eu.geclipse.workflow.impl.WorkflowElementImpl
+   * @see eu.geclipse.workflow.impl.IWorkflowElementImpl
    * @see eu.geclipse.workflow.impl.WorkflowPackageImpl#getIWorkflowElement()
    * @generated
    */
@@ -107,10 +109,10 @@ public interface IWorkflowPackage extends EPackage
   int IWORKFLOW_ELEMENT_FEATURE_COUNT = 2;
 
   /**
-   * The meta object id for the '{@link eu.geclipse.workflow.impl.PortImpl <em>IPort</em>}' class.
+   * The meta object id for the '{@link eu.geclipse.workflow.impl.IPortImpl <em>IPort</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see eu.geclipse.workflow.impl.PortImpl
+   * @see eu.geclipse.workflow.impl.IPortImpl
    * @see eu.geclipse.workflow.impl.WorkflowPackageImpl#getIPort()
    * @generated
    */
@@ -135,19 +137,28 @@ public interface IWorkflowPackage extends EPackage
   int IPORT__ID = IWORKFLOW_ELEMENT__ID;
 
   /**
+   * The feature id for the '<em><b>File Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int IPORT__FILE_NAME = IWORKFLOW_ELEMENT_FEATURE_COUNT + 0;
+
+  /**
    * The number of structural features of the '<em>IPort</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int IPORT_FEATURE_COUNT = IWORKFLOW_ELEMENT_FEATURE_COUNT + 0;
+  int IPORT_FEATURE_COUNT = IWORKFLOW_ELEMENT_FEATURE_COUNT + 1;
 
   /**
-   * The meta object id for the '{@link eu.geclipse.workflow.impl.LinkImpl <em>ILink</em>}' class.
+   * The meta object id for the '{@link eu.geclipse.workflow.impl.ILinkImpl <em>ILink</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see eu.geclipse.workflow.impl.LinkImpl
+   * @see eu.geclipse.workflow.impl.ILinkImpl
    * @see eu.geclipse.workflow.impl.WorkflowPackageImpl#getILink()
    * @generated
    */
@@ -208,10 +219,10 @@ public interface IWorkflowPackage extends EPackage
   int ILINK_FEATURE_COUNT = IWORKFLOW_ELEMENT_FEATURE_COUNT + 3;
 
   /**
-   * The meta object id for the '{@link eu.geclipse.workflow.impl.InputPortImpl <em>IInput Port</em>}' class.
+   * The meta object id for the '{@link eu.geclipse.workflow.impl.IInputPortImpl <em>IInput Port</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see eu.geclipse.workflow.impl.InputPortImpl
+   * @see eu.geclipse.workflow.impl.IInputPortImpl
    * @see eu.geclipse.workflow.impl.WorkflowPackageImpl#getIInputPort()
    * @generated
    */
@@ -234,6 +245,15 @@ public interface IWorkflowPackage extends EPackage
    * @ordered
    */
   int IINPUT_PORT__ID = IPORT__ID;
+
+  /**
+   * The feature id for the '<em><b>File Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int IINPUT_PORT__FILE_NAME = IPORT__FILE_NAME;
 
   /**
    * The feature id for the '<em><b>Node</b></em>' container reference.
@@ -263,10 +283,10 @@ public interface IWorkflowPackage extends EPackage
   int IINPUT_PORT_FEATURE_COUNT = IPORT_FEATURE_COUNT + 2;
 
   /**
-   * The meta object id for the '{@link eu.geclipse.workflow.impl.OutputPortImpl <em>IOutput Port</em>}' class.
+   * The meta object id for the '{@link eu.geclipse.workflow.impl.IOutputPortImpl <em>IOutput Port</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see eu.geclipse.workflow.impl.OutputPortImpl
+   * @see eu.geclipse.workflow.impl.IOutputPortImpl
    * @see eu.geclipse.workflow.impl.WorkflowPackageImpl#getIOutputPort()
    * @generated
    */
@@ -289,6 +309,15 @@ public interface IWorkflowPackage extends EPackage
    * @ordered
    */
   int IOUTPUT_PORT__ID = IPORT__ID;
+
+  /**
+   * The feature id for the '<em><b>File Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int IOUTPUT_PORT__FILE_NAME = IPORT__FILE_NAME;
 
   /**
    * The feature id for the '<em><b>Node</b></em>' container reference.
@@ -318,10 +347,10 @@ public interface IWorkflowPackage extends EPackage
   int IOUTPUT_PORT_FEATURE_COUNT = IPORT_FEATURE_COUNT + 2;
 
   /**
-   * The meta object id for the '{@link eu.geclipse.workflow.impl.WorkflowImpl <em>IWorkflow</em>}' class.
+   * The meta object id for the '{@link eu.geclipse.workflow.impl.IWorkflowImpl <em>IWorkflow</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see eu.geclipse.workflow.impl.WorkflowImpl
+   * @see eu.geclipse.workflow.impl.IWorkflowImpl
    * @see eu.geclipse.workflow.impl.WorkflowPackageImpl#getIWorkflow()
    * @generated
    */
@@ -373,10 +402,10 @@ public interface IWorkflowPackage extends EPackage
   int IWORKFLOW_FEATURE_COUNT = IWORKFLOW_ELEMENT_FEATURE_COUNT + 2;
 
   /**
-   * The meta object id for the '{@link eu.geclipse.workflow.impl.WorkflowNodeImpl <em>IWorkflow Node</em>}' class.
+   * The meta object id for the '{@link eu.geclipse.workflow.impl.IWorkflowNodeImpl <em>IWorkflow Node</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see eu.geclipse.workflow.impl.WorkflowNodeImpl
+   * @see eu.geclipse.workflow.impl.IWorkflowNodeImpl
    * @see eu.geclipse.workflow.impl.WorkflowPackageImpl#getIWorkflowNode()
    * @generated
    */
@@ -455,10 +484,10 @@ public interface IWorkflowPackage extends EPackage
   int IWORKFLOW_NODE_FEATURE_COUNT = IWORKFLOW_ELEMENT_FEATURE_COUNT + 5;
 
   /**
-   * The meta object id for the '{@link eu.geclipse.workflow.impl.WorkflowJobImpl <em>IWorkflow Job</em>}' class.
+   * The meta object id for the '{@link eu.geclipse.workflow.impl.IWorkflowJobImpl <em>IWorkflow Job</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see eu.geclipse.workflow.impl.WorkflowJobImpl
+   * @see eu.geclipse.workflow.impl.IWorkflowJobImpl
    * @see eu.geclipse.workflow.impl.WorkflowPackageImpl#getIWorkflowJob()
    * @generated
    */
@@ -556,278 +585,289 @@ public interface IWorkflowPackage extends EPackage
 
 
   /**
-   * Returns the meta object for class '{@link eu.geclipse.workflow.model.IPort <em>IPort</em>}'.
+   * Returns the meta object for class '{@link eu.geclipse.workflow.IPort <em>IPort</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for class '<em>IPort</em>'.
-   * @see eu.geclipse.workflow.model.IPort
+   * @see eu.geclipse.workflow.IPort
    * @generated
    */
   EClass getIPort();
 
   /**
-   * Returns the meta object for class '{@link eu.geclipse.workflow.model.ILink <em>ILink</em>}'.
+   * Returns the meta object for the attribute '{@link eu.geclipse.workflow.IPort#getFileName <em>File Name</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>File Name</em>'.
+   * @see eu.geclipse.workflow.IPort#getFileName()
+   * @see #getIPort()
+   * @generated
+   */
+  EAttribute getIPort_FileName();
+
+  /**
+   * Returns the meta object for class '{@link eu.geclipse.workflow.ILink <em>ILink</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for class '<em>ILink</em>'.
-   * @see eu.geclipse.workflow.model.ILink
+   * @see eu.geclipse.workflow.ILink
    * @generated
    */
   EClass getILink();
 
   /**
-   * Returns the meta object for the container reference '{@link eu.geclipse.workflow.model.ILink#getWorkflow <em>Workflow</em>}'.
+   * Returns the meta object for the container reference '{@link eu.geclipse.workflow.ILink#getWorkflow <em>Workflow</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the container reference '<em>Workflow</em>'.
-   * @see eu.geclipse.workflow.model.ILink#getWorkflow()
+   * @see eu.geclipse.workflow.ILink#getWorkflow()
    * @see #getILink()
    * @generated
    */
   EReference getILink_Workflow();
 
   /**
-   * Returns the meta object for the reference '{@link eu.geclipse.workflow.model.ILink#getTarget <em>Target</em>}'.
+   * Returns the meta object for the reference '{@link eu.geclipse.workflow.ILink#getTarget <em>Target</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the reference '<em>Target</em>'.
-   * @see eu.geclipse.workflow.model.ILink#getTarget()
+   * @see eu.geclipse.workflow.ILink#getTarget()
    * @see #getILink()
    * @generated
    */
   EReference getILink_Target();
 
   /**
-   * Returns the meta object for the reference '{@link eu.geclipse.workflow.model.ILink#getSource <em>Source</em>}'.
+   * Returns the meta object for the reference '{@link eu.geclipse.workflow.ILink#getSource <em>Source</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the reference '<em>Source</em>'.
-   * @see eu.geclipse.workflow.model.ILink#getSource()
+   * @see eu.geclipse.workflow.ILink#getSource()
    * @see #getILink()
    * @generated
    */
   EReference getILink_Source();
 
   /**
-   * Returns the meta object for class '{@link eu.geclipse.workflow.model.IInputPort <em>IInput Port</em>}'.
+   * Returns the meta object for class '{@link eu.geclipse.workflow.IInputPort <em>IInput Port</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for class '<em>IInput Port</em>'.
-   * @see eu.geclipse.workflow.model.IInputPort
+   * @see eu.geclipse.workflow.IInputPort
    * @generated
    */
   EClass getIInputPort();
 
   /**
-   * Returns the meta object for the container reference '{@link eu.geclipse.workflow.model.IInputPort#getNode <em>Node</em>}'.
+   * Returns the meta object for the container reference '{@link eu.geclipse.workflow.IInputPort#getNode <em>Node</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the container reference '<em>Node</em>'.
-   * @see eu.geclipse.workflow.model.IInputPort#getNode()
+   * @see eu.geclipse.workflow.IInputPort#getNode()
    * @see #getIInputPort()
    * @generated
    */
   EReference getIInputPort_Node();
 
   /**
-   * Returns the meta object for the reference list '{@link eu.geclipse.workflow.model.IInputPort#getLinks <em>Links</em>}'.
+   * Returns the meta object for the reference list '{@link eu.geclipse.workflow.IInputPort#getLinks <em>Links</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the reference list '<em>Links</em>'.
-   * @see eu.geclipse.workflow.model.IInputPort#getLinks()
+   * @see eu.geclipse.workflow.IInputPort#getLinks()
    * @see #getIInputPort()
    * @generated
    */
   EReference getIInputPort_Links();
 
   /**
-   * Returns the meta object for class '{@link eu.geclipse.workflow.model.IOutputPort <em>IOutput Port</em>}'.
+   * Returns the meta object for class '{@link eu.geclipse.workflow.IOutputPort <em>IOutput Port</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for class '<em>IOutput Port</em>'.
-   * @see eu.geclipse.workflow.model.IOutputPort
+   * @see eu.geclipse.workflow.IOutputPort
    * @generated
    */
   EClass getIOutputPort();
 
   /**
-   * Returns the meta object for the container reference '{@link eu.geclipse.workflow.model.IOutputPort#getNode <em>Node</em>}'.
+   * Returns the meta object for the container reference '{@link eu.geclipse.workflow.IOutputPort#getNode <em>Node</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the container reference '<em>Node</em>'.
-   * @see eu.geclipse.workflow.model.IOutputPort#getNode()
+   * @see eu.geclipse.workflow.IOutputPort#getNode()
    * @see #getIOutputPort()
    * @generated
    */
   EReference getIOutputPort_Node();
 
   /**
-   * Returns the meta object for the reference list '{@link eu.geclipse.workflow.model.IOutputPort#getLinks <em>Links</em>}'.
+   * Returns the meta object for the reference list '{@link eu.geclipse.workflow.IOutputPort#getLinks <em>Links</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the reference list '<em>Links</em>'.
-   * @see eu.geclipse.workflow.model.IOutputPort#getLinks()
+   * @see eu.geclipse.workflow.IOutputPort#getLinks()
    * @see #getIOutputPort()
    * @generated
    */
   EReference getIOutputPort_Links();
 
   /**
-   * Returns the meta object for class '{@link eu.geclipse.workflow.model.IWorkflow <em>IWorkflow</em>}'.
+   * Returns the meta object for class '{@link eu.geclipse.workflow.IWorkflow <em>IWorkflow</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for class '<em>IWorkflow</em>'.
-   * @see eu.geclipse.workflow.model.IWorkflow
+   * @see eu.geclipse.workflow.IWorkflow
    * @generated
    */
   EClass getIWorkflow();
 
   /**
-   * Returns the meta object for the containment reference list '{@link eu.geclipse.workflow.model.IWorkflow#getNodes <em>Nodes</em>}'.
+   * Returns the meta object for the containment reference list '{@link eu.geclipse.workflow.IWorkflow#getNodes <em>Nodes</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the containment reference list '<em>Nodes</em>'.
-   * @see eu.geclipse.workflow.model.IWorkflow#getNodes()
+   * @see eu.geclipse.workflow.IWorkflow#getNodes()
    * @see #getIWorkflow()
    * @generated
    */
   EReference getIWorkflow_Nodes();
 
   /**
-   * Returns the meta object for the containment reference list '{@link eu.geclipse.workflow.model.IWorkflow#getLinks <em>Links</em>}'.
+   * Returns the meta object for the containment reference list '{@link eu.geclipse.workflow.IWorkflow#getLinks <em>Links</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the containment reference list '<em>Links</em>'.
-   * @see eu.geclipse.workflow.model.IWorkflow#getLinks()
+   * @see eu.geclipse.workflow.IWorkflow#getLinks()
    * @see #getIWorkflow()
    * @generated
    */
   EReference getIWorkflow_Links();
 
   /**
-   * Returns the meta object for class '{@link eu.geclipse.workflow.model.IWorkflowJob <em>IWorkflow Job</em>}'.
+   * Returns the meta object for class '{@link eu.geclipse.workflow.IWorkflowJob <em>IWorkflow Job</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for class '<em>IWorkflow Job</em>'.
-   * @see eu.geclipse.workflow.model.IWorkflowJob
+   * @see eu.geclipse.workflow.IWorkflowJob
    * @generated
    */
   EClass getIWorkflowJob();
 
   /**
-   * Returns the meta object for the attribute '{@link eu.geclipse.workflow.model.IWorkflowJob#getJobDescription <em>Job Description</em>}'.
+   * Returns the meta object for the attribute '{@link eu.geclipse.workflow.IWorkflowJob#getJobDescription <em>Job Description</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the attribute '<em>Job Description</em>'.
-   * @see eu.geclipse.workflow.model.IWorkflowJob#getJobDescription()
+   * @see eu.geclipse.workflow.IWorkflowJob#getJobDescription()
    * @see #getIWorkflowJob()
    * @generated
    */
   EAttribute getIWorkflowJob_JobDescription();
 
   /**
-   * Returns the meta object for the attribute '{@link eu.geclipse.workflow.model.IWorkflowJob#getJobDescriptionFileName <em>Job Description File Name</em>}'.
+   * Returns the meta object for the attribute '{@link eu.geclipse.workflow.IWorkflowJob#getJobDescriptionFileName <em>Job Description File Name</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the attribute '<em>Job Description File Name</em>'.
-   * @see eu.geclipse.workflow.model.IWorkflowJob#getJobDescriptionFileName()
+   * @see eu.geclipse.workflow.IWorkflowJob#getJobDescriptionFileName()
    * @see #getIWorkflowJob()
    * @generated
    */
   EAttribute getIWorkflowJob_JobDescriptionFileName();
 
   /**
-   * Returns the meta object for class '{@link eu.geclipse.workflow.model.IWorkflowElement <em>IWorkflow Element</em>}'.
+   * Returns the meta object for class '{@link eu.geclipse.workflow.IWorkflowElement <em>IWorkflow Element</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for class '<em>IWorkflow Element</em>'.
-   * @see eu.geclipse.workflow.model.IWorkflowElement
+   * @see eu.geclipse.workflow.IWorkflowElement
    * @generated
    */
   EClass getIWorkflowElement();
 
   /**
-   * Returns the meta object for the attribute '{@link eu.geclipse.workflow.model.IWorkflowElement#getName <em>Name</em>}'.
+   * Returns the meta object for the attribute '{@link eu.geclipse.workflow.IWorkflowElement#getName <em>Name</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the attribute '<em>Name</em>'.
-   * @see eu.geclipse.workflow.model.IWorkflowElement#getName()
+   * @see eu.geclipse.workflow.IWorkflowElement#getName()
    * @see #getIWorkflowElement()
    * @generated
    */
   EAttribute getIWorkflowElement_Name();
 
   /**
-   * Returns the meta object for the attribute '{@link eu.geclipse.workflow.model.IWorkflowElement#getId <em>Id</em>}'.
+   * Returns the meta object for the attribute '{@link eu.geclipse.workflow.IWorkflowElement#getId <em>Id</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the attribute '<em>Id</em>'.
-   * @see eu.geclipse.workflow.model.IWorkflowElement#getId()
+   * @see eu.geclipse.workflow.IWorkflowElement#getId()
    * @see #getIWorkflowElement()
    * @generated
    */
   EAttribute getIWorkflowElement_Id();
 
   /**
-   * Returns the meta object for class '{@link eu.geclipse.workflow.model.IWorkflowNode <em>IWorkflow Node</em>}'.
+   * Returns the meta object for class '{@link eu.geclipse.workflow.IWorkflowNode <em>IWorkflow Node</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for class '<em>IWorkflow Node</em>'.
-   * @see eu.geclipse.workflow.model.IWorkflowNode
+   * @see eu.geclipse.workflow.IWorkflowNode
    * @generated
    */
   EClass getIWorkflowNode();
 
   /**
-   * Returns the meta object for the container reference '{@link eu.geclipse.workflow.model.IWorkflowNode#getWorkflow <em>Workflow</em>}'.
+   * Returns the meta object for the container reference '{@link eu.geclipse.workflow.IWorkflowNode#getWorkflow <em>Workflow</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the container reference '<em>Workflow</em>'.
-   * @see eu.geclipse.workflow.model.IWorkflowNode#getWorkflow()
+   * @see eu.geclipse.workflow.IWorkflowNode#getWorkflow()
    * @see #getIWorkflowNode()
    * @generated
    */
   EReference getIWorkflowNode_Workflow();
 
   /**
-   * Returns the meta object for the containment reference list '{@link eu.geclipse.workflow.model.IWorkflowNode#getOutputs <em>Outputs</em>}'.
+   * Returns the meta object for the containment reference list '{@link eu.geclipse.workflow.IWorkflowNode#getOutputs <em>Outputs</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the containment reference list '<em>Outputs</em>'.
-   * @see eu.geclipse.workflow.model.IWorkflowNode#getOutputs()
+   * @see eu.geclipse.workflow.IWorkflowNode#getOutputs()
    * @see #getIWorkflowNode()
    * @generated
    */
   EReference getIWorkflowNode_Outputs();
 
   /**
-   * Returns the meta object for the containment reference list '{@link eu.geclipse.workflow.model.IWorkflowNode#getInputs <em>Inputs</em>}'.
+   * Returns the meta object for the containment reference list '{@link eu.geclipse.workflow.IWorkflowNode#getInputs <em>Inputs</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the containment reference list '<em>Inputs</em>'.
-   * @see eu.geclipse.workflow.model.IWorkflowNode#getInputs()
+   * @see eu.geclipse.workflow.IWorkflowNode#getInputs()
    * @see #getIWorkflowNode()
    * @generated
    */
   EReference getIWorkflowNode_Inputs();
 
   /**
-   * Returns the meta object for the attribute '{@link eu.geclipse.workflow.model.IWorkflowNode#isIsStart <em>Is Start</em>}'.
+   * Returns the meta object for the attribute '{@link eu.geclipse.workflow.IWorkflowNode#isIsStart <em>Is Start</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the attribute '<em>Is Start</em>'.
-   * @see eu.geclipse.workflow.model.IWorkflowNode#isIsStart()
+   * @see eu.geclipse.workflow.IWorkflowNode#isIsStart()
    * @see #getIWorkflowNode()
    * @generated
    */
   EAttribute getIWorkflowNode_IsStart();
 
   /**
-   * Returns the meta object for the attribute '{@link eu.geclipse.workflow.model.IWorkflowNode#isIsFinish <em>Is Finish</em>}'.
+   * Returns the meta object for the attribute '{@link eu.geclipse.workflow.IWorkflowNode#isIsFinish <em>Is Finish</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the attribute '<em>Is Finish</em>'.
-   * @see eu.geclipse.workflow.model.IWorkflowNode#isIsFinish()
+   * @see eu.geclipse.workflow.IWorkflowNode#isIsFinish()
    * @see #getIWorkflowNode()
    * @generated
    */
@@ -857,20 +897,28 @@ public interface IWorkflowPackage extends EPackage
   interface Literals
   {
     /**
-     * The meta object literal for the '{@link eu.geclipse.workflow.impl.PortImpl <em>IPort</em>}' class.
+     * The meta object literal for the '{@link eu.geclipse.workflow.impl.IPortImpl <em>IPort</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see eu.geclipse.workflow.impl.PortImpl
+     * @see eu.geclipse.workflow.impl.IPortImpl
      * @see eu.geclipse.workflow.impl.WorkflowPackageImpl#getIPort()
      * @generated
      */
     EClass IPORT = eINSTANCE.getIPort();
 
     /**
-     * The meta object literal for the '{@link eu.geclipse.workflow.impl.LinkImpl <em>ILink</em>}' class.
+     * The meta object literal for the '<em><b>File Name</b></em>' attribute feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see eu.geclipse.workflow.impl.LinkImpl
+     * @generated
+     */
+    EAttribute IPORT__FILE_NAME = eINSTANCE.getIPort_FileName();
+
+    /**
+     * The meta object literal for the '{@link eu.geclipse.workflow.impl.ILinkImpl <em>ILink</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see eu.geclipse.workflow.impl.ILinkImpl
      * @see eu.geclipse.workflow.impl.WorkflowPackageImpl#getILink()
      * @generated
      */
@@ -901,10 +949,10 @@ public interface IWorkflowPackage extends EPackage
     EReference ILINK__SOURCE = eINSTANCE.getILink_Source();
 
     /**
-     * The meta object literal for the '{@link eu.geclipse.workflow.impl.InputPortImpl <em>IInput Port</em>}' class.
+     * The meta object literal for the '{@link eu.geclipse.workflow.impl.IInputPortImpl <em>IInput Port</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see eu.geclipse.workflow.impl.InputPortImpl
+     * @see eu.geclipse.workflow.impl.IInputPortImpl
      * @see eu.geclipse.workflow.impl.WorkflowPackageImpl#getIInputPort()
      * @generated
      */
@@ -927,10 +975,10 @@ public interface IWorkflowPackage extends EPackage
     EReference IINPUT_PORT__LINKS = eINSTANCE.getIInputPort_Links();
 
     /**
-     * The meta object literal for the '{@link eu.geclipse.workflow.impl.OutputPortImpl <em>IOutput Port</em>}' class.
+     * The meta object literal for the '{@link eu.geclipse.workflow.impl.IOutputPortImpl <em>IOutput Port</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see eu.geclipse.workflow.impl.OutputPortImpl
+     * @see eu.geclipse.workflow.impl.IOutputPortImpl
      * @see eu.geclipse.workflow.impl.WorkflowPackageImpl#getIOutputPort()
      * @generated
      */
@@ -953,10 +1001,10 @@ public interface IWorkflowPackage extends EPackage
     EReference IOUTPUT_PORT__LINKS = eINSTANCE.getIOutputPort_Links();
 
     /**
-     * The meta object literal for the '{@link eu.geclipse.workflow.impl.WorkflowImpl <em>IWorkflow</em>}' class.
+     * The meta object literal for the '{@link eu.geclipse.workflow.impl.IWorkflowImpl <em>IWorkflow</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see eu.geclipse.workflow.impl.WorkflowImpl
+     * @see eu.geclipse.workflow.impl.IWorkflowImpl
      * @see eu.geclipse.workflow.impl.WorkflowPackageImpl#getIWorkflow()
      * @generated
      */
@@ -979,10 +1027,10 @@ public interface IWorkflowPackage extends EPackage
     EReference IWORKFLOW__LINKS = eINSTANCE.getIWorkflow_Links();
 
     /**
-     * The meta object literal for the '{@link eu.geclipse.workflow.impl.WorkflowJobImpl <em>IWorkflow Job</em>}' class.
+     * The meta object literal for the '{@link eu.geclipse.workflow.impl.IWorkflowJobImpl <em>IWorkflow Job</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see eu.geclipse.workflow.impl.WorkflowJobImpl
+     * @see eu.geclipse.workflow.impl.IWorkflowJobImpl
      * @see eu.geclipse.workflow.impl.WorkflowPackageImpl#getIWorkflowJob()
      * @generated
      */
@@ -1005,10 +1053,10 @@ public interface IWorkflowPackage extends EPackage
     EAttribute IWORKFLOW_JOB__JOB_DESCRIPTION_FILE_NAME = eINSTANCE.getIWorkflowJob_JobDescriptionFileName();
 
     /**
-     * The meta object literal for the '{@link eu.geclipse.workflow.impl.WorkflowElementImpl <em>IWorkflow Element</em>}' class.
+     * The meta object literal for the '{@link eu.geclipse.workflow.impl.IWorkflowElementImpl <em>IWorkflow Element</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see eu.geclipse.workflow.impl.WorkflowElementImpl
+     * @see eu.geclipse.workflow.impl.IWorkflowElementImpl
      * @see eu.geclipse.workflow.impl.WorkflowPackageImpl#getIWorkflowElement()
      * @generated
      */
@@ -1031,10 +1079,10 @@ public interface IWorkflowPackage extends EPackage
     EAttribute IWORKFLOW_ELEMENT__ID = eINSTANCE.getIWorkflowElement_Id();
 
     /**
-     * The meta object literal for the '{@link eu.geclipse.workflow.impl.WorkflowNodeImpl <em>IWorkflow Node</em>}' class.
+     * The meta object literal for the '{@link eu.geclipse.workflow.impl.IWorkflowNodeImpl <em>IWorkflow Node</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see eu.geclipse.workflow.impl.WorkflowNodeImpl
+     * @see eu.geclipse.workflow.impl.IWorkflowNodeImpl
      * @see eu.geclipse.workflow.impl.WorkflowPackageImpl#getIWorkflowNode()
      * @generated
      */
