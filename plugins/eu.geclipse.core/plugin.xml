@@ -11,6 +11,7 @@
    <extension-point id="gridResourceCategory" name="Grid Resource Category" schema="schema/gridResourceCategory.exsd"/>
    <extension-point id="certificateLoader" name="Certificate Loader" schema="schema/certificateLoader.exsd"/>
    <extension-point id="certificateTrustVerifier" name="Certificate Trust Verifier" schema="schema/certificateTrustVerifier.exsd"/>
+   <extension-point id="configurator" name="Configurator" schema="schema/configurator.exsd"/>
    <extension
          point="org.eclipse.core.expressions.propertyTesters">
       <propertyTester
@@ -484,6 +485,33 @@
             description="The VO import failed for one or more VOs"
             id="eu.geclipse.core.problem.vo.importFailed">
       </problem>
+      <problem
+            description="The specified VO creator is not a configurable grid element creator"
+            id="eu.geclipse.core.problem.config.wrongVoCreator"
+            mailto="bugreports@geclipse.eu">
+         <reference
+               referenceID="eu.geclipse.core.solution.config.checkVoConfig">
+         </reference>
+      </problem>
+      <solution
+            description="Check the VO element in the corresponding configuration extension"
+            id="eu.geclipse.core.solution.config.checkVoConfig">
+      </solution>
+      <problem
+            description="The VO element of the specified configuration extension is missing a mandatory VO parameter"
+            id="eu.geclipse.core.problem.config.missingVoParameter"
+            mailto="bugreports@geclipse.eu">
+         <reference
+               referenceID="eu.geclipse.core.solution.config.checkVoConfig">
+         </reference>
+      </problem>
+      <problem
+            description="The VO element of the specified configuration extension contains an invalid VO parameter"
+            id="eu.geclipse.core.problem.config.invalidVoParameter">
+         <reference
+               referenceID="eu.geclipse.core.solution.config.checkVoConfig">
+         </reference>
+      </problem>
    </extension>
    <extension
          point="eu.geclipse.core.simpleTests">
@@ -497,41 +525,50 @@
          point="eu.geclipse.core.certificateLoader">
       <loader
             class="eu.geclipse.core.security.GridPMACertificateLoader"
+            id="grid.pma"
             name="Grid Policy Management Authorities">
          <authority
                description="The EUGridPMA is the international organisation to coordinate the trust fabric for e-Science grid authentication in Europe. It collaborates with the regional peers APGridPMA for the Asia-Pacific and The Americas Grid PMA in the International Grid Trust Federation. The charter document defines the group&apos;s objective, scope and operation. It is the basis for the guidelines documents on the accreditation procedure, the Authentication profile for X.509 secured &quot;classic&quot; certification authorities and other IGTF recognised Profiles. "
+               id="grid.pma.eu"
                name="European Grid Policy Management Authority">
             <distribution
                   description="Current distribution of IGTF accredited authorites"
+                  id="grid.pma.eu.acc"
                   name="accredited"
                   url="http://dist.eugridpma.info/distribution/igtf/current/accredited/tgz/">
             </distribution>
             <distribution
                   description="This area contains the trust anchors of &quot;experimental&quot; authority certificates. THESE ARE NOT (YET) ACCREDITED AND THE IGTF DOES NOT MAKE ANY CLAIMS REGARDING THEIR CONFORMANCE TO ANY AUTHENTICATION PROFILE."
+                  id="grid.pma.eu.exp"
                   name="experimental"
                   url="http://dist.eugridpma.info/distribution/igtf/current/experimental/tgz/">
             </distribution>
             <distribution
                   description="This area contains the trust anchors of &quot;worthless&quot; authority certificates. THESE ARE NOT ACCREDITED AND THE IGTF DOES NOT MAKE ANY CLAIMS REGARDING THEIR CONFORMANCE TO ANY AUTHENTICATION PROFILE THERE ARE AUTHORITIES THAT THEMSELVES CLAIM THAT THEY ARE NOT TO BE USED IN A PRODUCTION ENVIRONMENT, OR EVEN IN ANY ENVIRONMENT AT ALL. PLEASE REVIEW THE INDIVIDUAL POLICIES OF THE CAS YOU INSTALL."
+                  id="grid.pma.eu.wl"
                   name="worthless"
                   url="https://dist.eugridpma.info/distribution/igtf/current/worthless/tgz/">
             </distribution>
          </authority>
          <authority
                description="The Asia Pacific Grid Policy Management Authority (APGrid PMA) supports Grid communities in Asia Pacific to implement a common trust domain across organizations. The main activity of the APGrid PMA is to coordinate Public Key Infrastructure for use with Grid authentication. The APGrid PMA is expected to be referred as a representative policy management authority in Asia Pacific. The APGrid PMA is not specific for any existing Grid communities in Asia Pacific such as Asia Pacific Partnership for Grid Computing (ApGrid) and Pacific Rim Applications and Grid Middleware Assembly (PRAGMA)."
+               id="grid.pma.ap"
                name="Asia Pacific Grid Policy Management Authority">
             <distribution
                   description="Current distribution of the APGrid PMA"
+                  id="grid.pma.ap.acc"
                   name="accredited"
                   url="http://www.apgridpma.org/distribution/igtf/current/accredited/tgz/">
             </distribution>
             <distribution
                   description="This area contains the trust anchors of &quot;experimental&quot; authority certificates. THESE ARE NOT (YET) ACCREDITED AND THE IGTF DOES NOT MAKE ANY CLAIMS REGARDING THEIR CONFORMANCE TO ANY AUTHENTICATION PROFILE."
+                  id="grid.pma.ap.exp"
                   name="experimental"
                   url="http://www.apgridpma.org/distribution/igtf/current/experimental/tgz/">
             </distribution>
             <distribution
                   description="This area contains the trust anchors of &quot;worthless&quot; authority certificates. THESE ARE NOT ACCREDITED AND THE IGTF DOES NOT MAKE ANY CLAIMS REGARDING THEIR CONFORMANCE TO ANY AUTHENTICATION PROFILE THERE ARE AUTHORITIES THAT THEMSELVES CLAIM THAT THEY ARE NOT TO BE USED IN A PRODUCTION ENVIRONMENT, OR EVEN IN ANY ENVIRONMENT AT ALL. PLEASE REVIEW THE INDIVIDUAL POLICIES OF THE CAS YOU INSTALL."
+                  id="grid.pma.ap.wl"
                   name="worthless"
                   url="http://www.apgridpma.org/distribution/igtf/current/worthless/tgz/">
             </distribution>
@@ -539,16 +576,154 @@
       </loader>
       <loader
             class="eu.geclipse.core.security.GildaCertificateLoader"
+            id="grid.gilda"
             name="GILDA">
          <authority
                description="GILDA (Grid Infn Laboratory for Dissemination Activities) is a virtual laboratory to demonstrate/disseminate the strong capabilities of grid computing."
+               id="grid.gilda.infn"
                name="Grid Infn Laboratory for Dissemination Activities">
             <distribution
                   description="The GILDA Certification Authority (GILDA CA) issues temporary (two weeks) personal public key certificates (compliant with the X.509 standard) in order to access the GILDA Testbed."
+                  id="grid.gilda.infn.dist"
                   name="The GILDA Certification Authority"
                   url="https://gilda.ct.infn.it/CA/mgt/">
             </distribution>
          </authority>
       </loader>
+   </extension>
+   <extension
+         point="eu.geclipse.core.configurator">
+      <configuration
+            description="Configures g-Eclipse to be used with the geclipse VO in the context of the gLite EGEE infrastructure."
+            id="eu.geclipse.core.geclipse"
+            name="g-Eclipse"
+            path="gLite/EGEE"
+            prerequisites="You should be a member of the VOMS VO called &quot;geclipse&quot;.">
+         <certificates
+               loaderID="grid.pma">
+            <certificateDistribution
+                  authorityID="grid.pma.eu"
+                  distributionID="grid.pma.eu.acc">
+            </certificateDistribution>
+         </certificates>
+         <vo
+               creatorID="eu.geclipse.voms.voCreator"
+               voName="geclipse">
+            <voParameter
+                  key="host">
+               <parameterValue
+                     value="dgrid-voms.fzk.de">
+               </parameterValue>
+            </voParameter>
+            <voParameter
+                  key="port">
+               <parameterValue
+                     value="15009">
+               </parameterValue>
+            </voParameter>
+            <voParameter
+                  key="hostdn">
+               <parameterValue
+                     value="/O=GermanGrid/OU=FZK/CN=host/dgrid-voms.fzk.de">
+               </parameterValue>
+            </voParameter>
+            <voParameter
+                  key="infoservice">
+               <parameterValue
+                     value="ldap://iwrbdii.fzk.de:2170">
+               </parameterValue>
+            </voParameter>
+         </vo>
+         <project
+               projectName="g-Eclipse"
+               voName="geclipse">
+            <projectFolder
+                  folderID="eu.geclipse.core.projectfolder.connections"
+                  folderName="Connections">
+            </projectFolder>
+            <projectFolder
+                  folderID="eu.geclipse.core.projectfolder.jobdescriptions"
+                  folderName="Job Descriptions">
+            </projectFolder>
+            <projectFolder
+                  folderID="eu.geclipse.core.projectfolder.jobs"
+                  folderName="Jobs">
+            </projectFolder>
+            <projectFolder
+                  folderID="eu.geclipse.core.projectfolder.workflows"
+                  folderName="Workflows">
+            </projectFolder>
+            <projectFolder
+                  folderID="eu.geclipse.vtk.ui.visFolder"
+                  folderName="Visualization">
+            </projectFolder>
+            <projectFolder
+                  folderID="eu.geclipse.benchmarking.benchmarkDesctiptionFolder"
+                  folderName="Benchmark Descriptions">
+            </projectFolder>
+            <projectFolder
+                  folderID="eu.geclipse.core.projectfolder.siteconfig"
+                  folderName="Site Configurations">
+            </projectFolder>
+         </project>
+      </configuration>
+      <configuration
+            description="Configures g-Eclipse to be used with the geclipsetutor VO in the context of the Gilda training infrastructure"
+            id="eu.geclipse.core.geclipsetutor"
+            name="g-Eclipse Tutor"
+            path="gLite/Gilda"
+            prerequisites="You should have a valid Gilda certificate.">
+         <certificates
+               loaderID="grid.gilda">
+            <certificateDistribution
+                  authorityID="grid.gilda.infn"
+                  distributionID="grid.gilda.infn.dist">
+            </certificateDistribution>
+         </certificates>
+         <vo
+               creatorID="eu.geclipse.voms.voCreator"
+               voName="geclipsetutor">
+            <voParameter
+                  key="host">
+               <parameterValue
+                     value="dgrid-voms.fzk.de">
+               </parameterValue>
+            </voParameter>
+            <voParameter
+                  key="port">
+               <parameterValue
+                     value="15007">
+               </parameterValue>
+            </voParameter>
+            <voParameter
+                  key="hostdn">
+               <parameterValue
+                     value="/O=GermanGrid/OU=FZK/CN=host/dgrid-voms.fzk.de">
+               </parameterValue>
+            </voParameter>
+            <voParameter
+                  key="infoservice">
+               <parameterValue
+                     value="ldap://iwrbdii.fzk.de:2170">
+               </parameterValue>
+            </voParameter>
+         </vo>
+         <project
+               projectName="g-Eclipse Training"
+               voName="geclipsetutor">
+            <projectFolder
+                  folderID="eu.geclipse.core.projectfolder.connections"
+                  folderName="Connections">
+            </projectFolder>
+            <projectFolder
+                  folderID="eu.geclipse.core.projectfolder.jobdescriptions"
+                  folderName="Job Descriptions">
+            </projectFolder>
+            <projectFolder
+                  folderID="eu.geclipse.core.projectfolder.jobs"
+                  folderName="Jobs">
+            </projectFolder>
+         </project>
+      </configuration>
    </extension>
 </plugin>
