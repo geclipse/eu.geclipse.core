@@ -43,8 +43,8 @@ public interface IVoLoader {
    * incomplete.
    */
   public void createVo( final URI uri,
-                           final String name,
-                           final IProgressMonitor monitor )
+                        final String name,
+                        final IProgressMonitor monitor )
       throws ProblemException;
   
   /**
