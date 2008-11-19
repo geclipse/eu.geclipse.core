@@ -54,6 +54,8 @@ public class GEclipseFileStore
   
   public static final int FETCH_INFO_ACTIVE_POLICY = 0x02;
   
+  public static final int MOVE_COPY_ACTIVE_POLICY = 0x04;
+  
   /**
    * The file system.
    */
@@ -111,6 +113,8 @@ public class GEclipseFileStore
     this.fileInfo = new FileInfo( getNameWithoutConnect( slave ) );    
     
     clearActive( FETCH_CHILDREN_ACTIVE_POLICY | FETCH_INFO_ACTIVE_POLICY );
+    setActive( MOVE_COPY_ACTIVE_POLICY );
+    
   }
 
   /**
@@ -130,7 +134,7 @@ public class GEclipseFileStore
     this.slave = slave;
     this.fileInfo = new FileInfo( name );
     clearActive( FETCH_CHILDREN_ACTIVE_POLICY );
-    setActive( FETCH_INFO_ACTIVE_POLICY );  // file info is not correct now, so fetch it during next occasion
+    setActive( FETCH_INFO_ACTIVE_POLICY | MOVE_COPY_ACTIVE_POLICY );  // file info is not correct now, so fetch it during next occasion
   }
   /**
    * Create a new master store from the specified slave store. The
@@ -149,6 +153,7 @@ public class GEclipseFileStore
     this.slave = slave;
     this.fileInfo = info;
     clearActive( FETCH_CHILDREN_ACTIVE_POLICY | FETCH_INFO_ACTIVE_POLICY );
+    setActive( MOVE_COPY_ACTIVE_POLICY );
   }
 
   /**
@@ -236,6 +241,19 @@ public class GEclipseFileStore
     }
     return result;
     
+  }
+  
+  /* (non-Javadoc)
+   * @see org.eclipse.core.filesystem.provider.FileStore#move(org.eclipse.core.filesystem.IFileStore, int, org.eclipse.core.runtime.IProgressMonitor)
+   */
+  @Override
+  public void copy( final IFileStore destination,
+                    final int options,
+                    final IProgressMonitor monitor )
+      throws CoreException {
+    if ( isActive( MOVE_COPY_ACTIVE_POLICY ) ) {
+      getSlave().copy( slave( destination ), options, monitor( monitor ) );
+    }
   }
 
   private void setCachedInfos( final IFileInfo[] infos ) {
@@ -429,6 +447,19 @@ public class GEclipseFileStore
     }
     return result;
   }
+  
+  /* (non-Javadoc)
+   * @see org.eclipse.core.filesystem.provider.FileStore#move(org.eclipse.core.filesystem.IFileStore, int, org.eclipse.core.runtime.IProgressMonitor)
+   */
+  @Override
+  public void move( final IFileStore destination,
+                    final int options,
+                    final IProgressMonitor monitor )
+      throws CoreException {
+    if ( isActive( MOVE_COPY_ACTIVE_POLICY ) ) {
+      getSlave().move( slave( destination ), options, monitor( monitor ) );
+    }
+  }
 
   /* (non-Javadoc)
    * @see org.eclipse.core.filesystem.provider.FileStore#openInputStream(int, org.eclipse.core.runtime.IProgressMonitor)
@@ -520,22 +551,10 @@ public class GEclipseFileStore
    * 
    * @param active True if the store should be active.
    */
-  private void clearActive( final int policy ) {
+  public void clearActive( final int policy ) {
     this.active &= ~policy;
   }
 
-  /* (non-Javadoc)
-   * @see org.eclipse.core.filesystem.provider.FileStore#move(org.eclipse.core.filesystem.IFileStore, int, org.eclipse.core.runtime.IProgressMonitor)
-   */
-  @Override
-  public void move( final IFileStore destination,
-                    final int options,
-                    final IProgressMonitor monitor )
-      throws CoreException {
-    getSlave().move( slave( destination ), options, monitor( monitor ) );
-  }
-
-  
   private IProgressMonitor monitor( final IProgressMonitor monitor ) {
     return new MasterMonitor( monitor, this.externalMonitor );
   }

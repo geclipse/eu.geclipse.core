@@ -50,9 +50,48 @@ public class GEclipseFileSystem
   
   public static IFileStore assureFileStoreIsActive( final IFileStore fileStore ) {
     if ( fileStore instanceof GEclipseFileStore ) {
-      ( ( GEclipseFileStore ) fileStore ).setActive( GEclipseFileStore.FETCH_CHILDREN_ACTIVE_POLICY | GEclipseFileStore.FETCH_INFO_ACTIVE_POLICY );
+      ( ( GEclipseFileStore ) fileStore ).setActive( GEclipseFileStore.FETCH_CHILDREN_ACTIVE_POLICY
+                                                     | GEclipseFileStore.FETCH_INFO_ACTIVE_POLICY
+                                                     | GEclipseFileStore.MOVE_COPY_ACTIVE_POLICY );
     }
     return fileStore;
+  }
+  
+  public static IFileStore setFileStoreActive( final IFileStore fileStore,
+                                               final boolean fetchChildren,
+                                               final boolean fetchInfo,
+                                               final boolean modeCopy ) {
+    
+    if ( fileStore instanceof GEclipseFileStore ) {
+      
+      int active = 0;
+      int notactive = 0;
+      
+      if ( fetchChildren ) {
+        active |= GEclipseFileStore.FETCH_CHILDREN_ACTIVE_POLICY;
+      } else {
+        notactive |= GEclipseFileStore.FETCH_CHILDREN_ACTIVE_POLICY;
+      }
+      
+      if ( fetchInfo ) {
+        active |= GEclipseFileStore.FETCH_INFO_ACTIVE_POLICY;
+      } else {
+        notactive |= GEclipseFileStore.FETCH_INFO_ACTIVE_POLICY;
+      }
+      
+      if ( modeCopy ) {
+        active |= GEclipseFileStore.MOVE_COPY_ACTIVE_POLICY;
+      } else {
+        notactive |= GEclipseFileStore.MOVE_COPY_ACTIVE_POLICY;
+      }
+      
+      ( ( GEclipseFileStore ) fileStore ).setActive( active );
+      ( ( GEclipseFileStore ) fileStore ).clearActive( notactive );
+      
+    }
+    
+    return fileStore;
+    
   }
   
   /* (non-Javadoc)

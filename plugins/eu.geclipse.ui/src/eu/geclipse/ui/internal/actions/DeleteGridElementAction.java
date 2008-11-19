@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -35,6 +36,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.window.IShellProvider;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Button;
@@ -46,7 +48,9 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.DeleteResourceAction;
 import org.eclipse.ui.actions.SelectionListenerAction;
 
+import eu.geclipse.core.filesystem.GEclipseFileSystem;
 import eu.geclipse.core.model.GridModel;
+import eu.geclipse.core.model.IGridConnectionElement;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridJob;
@@ -67,11 +71,15 @@ public class DeleteGridElementAction extends SelectionListenerAction {
   Shell shell;
   private DeleteResourceAction eclipseAction;
 
-  protected DeleteGridElementAction(final Shell shell) {
+  protected DeleteGridElementAction( final Shell shell ) {
     super( Messages.getString("DeleteGridElementAction.actionNameDelete") ); //$NON-NLS-1$
     
     this.shell = shell;
-    this.eclipseAction = new DeleteResourceAction( shell );
+    this.eclipseAction = new DeleteResourceAction( new IShellProvider() {
+      public Shell getShell() {
+        return shell;
+      }
+    } );
     
     ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
     ImageDescriptor deleteImage 
@@ -106,16 +114,20 @@ public class DeleteGridElementAction extends SelectionListenerAction {
     return ! getSelectedResources().isEmpty();
   }
   
-  private void dispatchSelectedElements( final List<IGridJob> selectedJobs, final List<IGridJobDescription> selectedWorkflowJobDescriptions, final List<IResource> otherSelectedResources ) {   
+  private void dispatchSelectedElements( final List<IGridJob> selectedJobs, final List<IGridJobDescription> selectedWorkflowJobDescriptions, final List<IResource> otherSelectedResources ) {
+    
     for( Object obj : getSelectedResources() ) {
+      
       if( obj instanceof IResource ) {
+      
         IResource resource = (IResource)obj;
         IGridElement element = GridModel.getRoot().findElement( resource );
         
         if( element instanceof IGridJob ) {
           selectedJobs.add( (IGridJob)element );
-        } else 
-        if (element instanceof IGridJobDescription ) {
+        }
+        
+        else if (element instanceof IGridJobDescription ) {
           // find out if the parent resource is a workflow
           IGridContainer parent = element.getParent();
           if (parent instanceof IGridWorkflowDescription) {
@@ -137,10 +149,22 @@ public class DeleteGridElementAction extends SelectionListenerAction {
           } else {
             otherSelectedResources.add( resource );
           }
-        } else {
+        }
+        
+        else {
+          if ( element instanceof IGridConnectionElement ) {
+            try {
+              IFileStore fileStore = ( ( IGridConnectionElement ) element ).getConnectionFileStore();
+              GEclipseFileSystem.setFileStoreActive( fileStore, false, false, false );
+            } catch ( CoreException cExc ) {
+              Activator.logException( cExc );
+            }
+          }
           otherSelectedResources.add( resource );
         }
+        
       }
+      
     }
   }
   
