@@ -15,6 +15,7 @@
 
 package eu.geclipse.core.auth;
 
+import eu.geclipse.core.ICoreProblems;
 import eu.geclipse.core.reporting.ProblemException;
 
 /**
@@ -37,6 +38,9 @@ public interface IAuthTokenProvider {
    * 
    * @return Any token that could be found. In fact the currently defined
    * default token is returned.
+   * @throws ProblemException If a problem occured during the token request.
+   * This exception with the {@link ICoreProblems#AUTH_TOKEN_REQUEST_CANCELED}
+   * id is especially thrown if the token request was canceled by the user.
    */
   public IAuthenticationToken requestToken() throws ProblemException;
   
@@ -48,6 +52,9 @@ public interface IAuthTokenProvider {
    * @param request A token request that is used to determine the
    * type of the token that is requested.
    * @return A token that matches the specified token description.
+   * @throws ProblemException If a problem occured during the token request.
+   * This exception with the {@link ICoreProblems#AUTH_TOKEN_REQUEST_CANCELED}
+   * id is especially thrown if the token request was canceled by the user.
    */
   public IAuthenticationToken requestToken( final AuthTokenRequest request ) throws ProblemException;
   
