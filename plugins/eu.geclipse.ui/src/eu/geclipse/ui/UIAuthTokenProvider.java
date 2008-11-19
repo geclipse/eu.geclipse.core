@@ -37,12 +37,14 @@ import org.eclipse.ui.cheatsheets.CheatSheetListener;
 import org.eclipse.ui.cheatsheets.ICheatSheetEvent;
 import org.eclipse.ui.cheatsheets.ICheatSheetManager;
 
+import eu.geclipse.core.ICoreProblems;
 import eu.geclipse.core.auth.AuthTokenRequest;
 import eu.geclipse.core.auth.AuthenticationException;
 import eu.geclipse.core.auth.CoreAuthTokenProvider;
 import eu.geclipse.core.auth.IAuthTokenProvider;
 import eu.geclipse.core.auth.IAuthenticationToken;
 import eu.geclipse.core.auth.IAuthenticationTokenDescription;
+import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.ui.dialogs.ProblemDialog;
 import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.wizards.wizardselection.ExtPointWizardSelectionListPage;
@@ -73,6 +75,8 @@ public class UIAuthTokenProvider extends CheatSheetListener implements IAuthToke
      * The token that was found or created.
      */
     IAuthenticationToken token;
+    
+    ProblemException exc;
 
     private CoreAuthTokenProvider cProvider;
     
@@ -94,27 +98,32 @@ public class UIAuthTokenProvider extends CheatSheetListener implements IAuthToke
      */
     public void run() {      
         
-        // No token could be found, so create one
-        
-        String title = this.request.getRequester();
-        if ( title == null ) {
-          title = Messages.getString( "UIAuthTokenProvider.req_token_title" ); //$NON-NLS-1$
+      // No token could be found, so create one
+
+      String title = this.request.getRequester();
+      if ( title == null ) {
+        title = Messages.getString( "UIAuthTokenProvider.req_token_title" ); //$NON-NLS-1$
+      }
+
+      String message = this.request.getPurpose();
+      if ( message == null ) {
+        message = Messages.getString( "UIAuthTokenProvider.new_token_question" ); //$NON-NLS-1$
+      }
+
+      boolean result = MessageDialog.openQuestion( UIAuthTokenProvider.this.shell, title, message );
+
+      if( result ) {
+        IAuthenticationTokenDescription description = this.request.getDescription();
+        String tokenWizardId = description.getWizardId();
+        if ( showNewTokenWizard( tokenWizardId, false, description ) ) {
+          this.token = this.cProvider.requestToken( this.request );
+        } else {
+          this.exc = new ProblemException( ICoreProblems.AUTH_TOKEN_REQUEST_CANCELED, Activator.PLUGIN_ID );
         }
-        
-        String message = this.request.getPurpose();
-        if ( message == null ) {
-          message = Messages.getString( "UIAuthTokenProvider.new_token_question" ); //$NON-NLS-1$
-        }
-        
-        boolean result = MessageDialog.openQuestion( UIAuthTokenProvider.this.shell, title, message );
-        
-        if( result ) {
-          IAuthenticationTokenDescription description = this.request.getDescription();
-          String tokenWizardId = description.getWizardId();
-          if ( showNewTokenWizard( tokenWizardId, false, description ) ) {
-            this.token = this.cProvider.requestToken( this.request );
-          }
-        }      
+      } else {
+        this.exc = new ProblemException( ICoreProblems.AUTH_TOKEN_REQUEST_CANCELED, Activator.PLUGIN_ID );
+      }
+      
     }
     
   }
@@ -168,9 +177,10 @@ public class UIAuthTokenProvider extends CheatSheetListener implements IAuthToke
    * <code>requestToken(null)</code>.
    * 
    * @return Any token that could be found.
+   * @throws ProblemException If the token request was canceled by the user.
    * @see #requestToken(AuthTokenRequest)
    */
-  public IAuthenticationToken requestToken() {
+  public IAuthenticationToken requestToken() throws ProblemException {
     return requestToken( null );
   }
 
@@ -197,8 +207,9 @@ public class UIAuthTokenProvider extends CheatSheetListener implements IAuthToke
    *          describes the token that is requested.
    * @return A token of the type that is described by the specified description
    *         or null if no such token could be found or created.
+   * @throws ProblemException If the token request was canceled by the user.
    */
-  public IAuthenticationToken requestToken( final AuthTokenRequest request ) {
+  public IAuthenticationToken requestToken( final AuthTokenRequest request ) throws ProblemException {
     IAuthenticationToken token = null;
     Throwable t = null;    
     CoreAuthTokenProvider cProvider = new CoreAuthTokenProvider();
@@ -212,6 +223,9 @@ public class UIAuthTokenProvider extends CheatSheetListener implements IAuthToke
     if ( ( token == null ) && ( t == null ) ) {
       Runner runner = new Runner( request, cProvider );
       runInUIThread( runner );
+      if ( runner.exc != null ) {
+        throw runner.exc;
+      }
       token = runner.token;
     }
     

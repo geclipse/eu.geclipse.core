@@ -121,7 +121,12 @@ public abstract class AbstractGridContainer
         this.container.deleteAll();
         IStatus status = this.container.fetchChildren( mon );
         if( !status.isOK() ) {
-          this.exception = status.getException();
+          Throwable exc = status.getException();
+          if ( ( exc != null )
+              && ( exc instanceof ProblemException )
+              && ! ( ( ProblemException ) exc ).getProblem().getID().equals( ICoreProblems.AUTH_TOKEN_REQUEST_CANCELED ) ) {
+            this.exception = status.getException();
+          }
         }
       } catch( Throwable t ) {
         this.exception = t;

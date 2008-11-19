@@ -15,6 +15,8 @@
 
 package eu.geclipse.core.auth;
 
+import eu.geclipse.core.reporting.ProblemException;
+
 /**
  * This interface is the base for all authentication token providers.
  * It is included in the authentication management extension point but
@@ -36,7 +38,7 @@ public interface IAuthTokenProvider {
    * @return Any token that could be found. In fact the currently defined
    * default token is returned.
    */
-  public IAuthenticationToken requestToken();
+  public IAuthenticationToken requestToken() throws ProblemException;
   
   /**
    * Request an authentication token of the specified type. If the default
@@ -47,6 +49,6 @@ public interface IAuthTokenProvider {
    * type of the token that is requested.
    * @return A token that matches the specified token description.
    */
-  public IAuthenticationToken requestToken( final AuthTokenRequest request );
+  public IAuthenticationToken requestToken( final AuthTokenRequest request ) throws ProblemException;
   
 }

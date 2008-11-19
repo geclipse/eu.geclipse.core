@@ -62,6 +62,8 @@ public interface ICoreProblems {
     = "eu.geclipse.core.problem.auth.tokenActivateFailed"; //$NON-NLS-1$
   public static final String AUTH_TOKEN_NOT_YET_VALID
     = "eu.geclipse.core.problem.auth.tokenNotYetValid"; //$NON-NLS-1$
+  public static final String AUTH_TOKEN_REQUEST_CANCELED
+    = "eu.geclipse.core.problem.auth.tokenRequestCanceled"; //$NON-NLS-1$
 
   public static final String CONFIG_INVALID_VO_PARAMETER
     = "eu.geclipse.core.problem.config.invalidVoParameter"; //$NON-NLS-1$

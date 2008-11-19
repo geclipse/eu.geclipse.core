@@ -24,6 +24,7 @@ import org.eclipse.core.runtime.IConfigurationElement;
 
 import eu.geclipse.core.ExtensionManager;
 import eu.geclipse.core.Extensions;
+import eu.geclipse.core.reporting.ProblemException;
 
 /**
  * Abstract implementation of the {@link eu.geclipse.core.auth.IAuthTokenProvider}
@@ -44,7 +45,7 @@ public abstract class AbstractAuthTokenProvider implements IAuthTokenProvider {
    * registered and a token could be found.
    * @see eu.geclipse.core.auth.IAuthTokenProvider#requestToken()
    */
-  public static synchronized IAuthenticationToken staticRequestToken() {
+  public static synchronized IAuthenticationToken staticRequestToken() throws ProblemException {
     IAuthTokenProvider provider = getHighestPriorityProvider();
     return provider == null ? null : provider.requestToken();
   }
@@ -64,7 +65,7 @@ public abstract class AbstractAuthTokenProvider implements IAuthTokenProvider {
    * registered and a token could be found.
    * @see eu.geclipse.core.auth.IAuthTokenProvider#requestToken(AuthTokenRequest)
    */
-  public static synchronized IAuthenticationToken staticRequestToken( final AuthTokenRequest request ) {
+  public static synchronized IAuthenticationToken staticRequestToken( final AuthTokenRequest request ) throws ProblemException {
     IAuthTokenProvider provider = getHighestPriorityProvider();
     return provider == null ? null : provider.requestToken( request );
   }

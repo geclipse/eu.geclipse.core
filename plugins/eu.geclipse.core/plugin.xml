@@ -167,6 +167,10 @@
             mailto="">
       </problem>
       <problem
+            description="Token request canceled"
+            id="eu.geclipse.core.problem.auth.tokenRequestCanceled">
+      </problem>
+      <problem
             description="Unable to create credential"
             id="eu.geclipse.core.problem.auth.credentialCreateFailed"
             mailto="">
