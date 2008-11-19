@@ -83,6 +83,13 @@ public interface IProblem {
   public Throwable getException();
   
   /**
+   * Get the ID of this problem.
+   * 
+   * @return The problem's ID.
+   */
+  public String getID();
+  
+  /**
    * Get the mailing-address as specified in the mailto-field of
    * the problem extension point.
    *  
