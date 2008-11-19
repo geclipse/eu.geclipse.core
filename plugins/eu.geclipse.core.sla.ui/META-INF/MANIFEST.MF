@@ -5,13 +5,13 @@ Bundle-SymbolicName: eu.geclipse.core.sla.ui;singleton:=true
 Bundle-Version: 1.0.0
 Bundle-Activator: eu.geclipse.core.sla.ui.Activator
 Bundle-Vendor: g-Eclipse consortium
-Require-Bundle: org.eclipse.core.runtime,
- org.eclipse.core.resources,
+Require-Bundle: org.eclipse.core.resources,
+ org.eclipse.core.runtime,
  org.eclipse.ui,
  eu.geclipse.core,
- eu.geclipse.core.reporting;bundle-version="1.0.0",
+ eu.geclipse.core.reporting,
  eu.geclipse.core.sla,
- eu.geclipse.ui;bundle-version="1.0.0"
+ eu.geclipse.ui
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Export-Package: eu.geclipse.core.sla.ui.wizards
