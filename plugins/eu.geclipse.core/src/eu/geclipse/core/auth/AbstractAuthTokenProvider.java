@@ -24,6 +24,7 @@ import org.eclipse.core.runtime.IConfigurationElement;
 
 import eu.geclipse.core.ExtensionManager;
 import eu.geclipse.core.Extensions;
+import eu.geclipse.core.ICoreProblems;
 import eu.geclipse.core.reporting.ProblemException;
 
 /**
@@ -43,6 +44,9 @@ public abstract class AbstractAuthTokenProvider implements IAuthTokenProvider {
    * 
    * @return An authentication token if at least one provider is 
    * registered and a token could be found.
+   * @throws ProblemException If a problem occured during the token request.
+   * This exception with the {@link ICoreProblems#AUTH_TOKEN_REQUEST_CANCELED}
+   * id is especially thrown if the token request was canceled by the user.
    * @see eu.geclipse.core.auth.IAuthTokenProvider#requestToken()
    */
   public static synchronized IAuthenticationToken staticRequestToken() throws ProblemException {
@@ -63,6 +67,9 @@ public abstract class AbstractAuthTokenProvider implements IAuthTokenProvider {
    * @param request Request parameters for the token.
    * @return An authentication token if at least one provider is 
    * registered and a token could be found.
+   * @throws ProblemException If a problem occured during the token request.
+   * This exception with the {@link ICoreProblems#AUTH_TOKEN_REQUEST_CANCELED}
+   * id is especially thrown if the token request was canceled by the user.
    * @see eu.geclipse.core.auth.IAuthTokenProvider#requestToken(AuthTokenRequest)
    */
   public static synchronized IAuthenticationToken staticRequestToken( final AuthTokenRequest request ) throws ProblemException {
