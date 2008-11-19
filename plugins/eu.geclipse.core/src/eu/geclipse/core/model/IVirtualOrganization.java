@@ -72,29 +72,12 @@ public interface IVirtualOrganization
    * Gets a list of all job submission services that are available for
    * this virtual organization.
    * 
-   * @param monitor Use to monitor the progress.
+   * @param monitor Used to monitor the progress.
    * @return A list of all currently available job submission services.
    * @throws ProblemException If an error occurs while retrieving
    * the services.
    */
   public IGridJobService[] getJobSubmissionServices( final IProgressMonitor monitor ) throws ProblemException;
-  
-  /**
-   * Gets all services that are registered within this VO.
-   * 
-   * @param monitor Use to monitor the progress.
-   * @return All services that are currently available for
-   * this VO.
-   * @throws ProblemException If an error occurs while retrieving the services.
-   */
-  @Deprecated
-  public IGridService[] getServices( final IProgressMonitor monitor ) throws ProblemException;
-  
-  @Deprecated
-  public IGridComputing[] getComputing( final IProgressMonitor monitor ) throws ProblemException;
-  
-  @Deprecated
-  public IGridStorage[] getStorage( final IProgressMonitor monitor ) throws ProblemException;
   
   public IGridApplicationManager getApplicationManager();
   
@@ -122,4 +105,18 @@ public interface IVirtualOrganization
    * @see #getTypeName() 
    */
   public String getId();
+  
+  /**
+   * Reload the resources of the specified category without taking any caching
+   * into account.
+   * 
+   * @param category The resource category to be refreshed.
+   * @param monitor Used to monitor the progress.
+   * @throws ProblemException If an error occurs while refreshing
+   * the resources.
+   */
+  public void refreshResources( final IGridResourceCategory category,
+                                final IProgressMonitor monitor )
+      throws ProblemException;
+  
 }
