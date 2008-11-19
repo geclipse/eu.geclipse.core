@@ -45,7 +45,7 @@ public class GenericVoCreator
   private String voName;
   
   private List< IGridElementCreator > serviceCreators
-  = new ArrayList< IGridElementCreator >();
+    = new ArrayList< IGridElementCreator >();
   
   private List< IGridService > serviceMaintainers
     = new ArrayList< IGridService >();
