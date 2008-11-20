@@ -41,6 +41,12 @@ public class PreferenceConstants {
   public static final String JOBS_UPDATE_JOBS_STATUS = "jobs.update.jobs.status"; //$NON-NLS-1$
   
   /**
+   * Behaviour of the global job status updater when user cancels creating
+   * proxy needed by job status updater
+   */
+  public static final String JOBS_UPDATE_JOBS_CANCEL_BAHAVIOUR = "jobs.update.jobs.cancelBehaviour";
+  
+  /**
    * Time between background updates for each job
    */
   public static final String JOBS_UPDATE_JOBS_PERIOD = "jobs.update.jobs.period"; //$NON-NLS-1$

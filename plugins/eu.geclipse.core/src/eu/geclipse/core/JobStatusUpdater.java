@@ -115,6 +115,12 @@ public class JobStatusUpdater extends Job {
       } catch( RuntimeException e ) {
         Activator.logException( e );
       }
+      if( newStatus != null && newStatus.getReason() != null && newStatus.getReason().equals( "Token request canceled" ) ) {
+        if( Preferences.getJobUpdaterCancelBehaviour() ) {
+          Preferences.setUpdateJobsStatus( false );
+          JobManager.getManager().pauseUpdater( this );
+        }
+      }
       if( !this.jobRemoved
           && !monitor.isCanceled()
           && newStatus != null
@@ -140,35 +146,37 @@ public class JobStatusUpdater extends Job {
 
 
   /**
-   * Used when job status was updated outside of the updater.
-   * Checks if status changed from previous update. If so informs
-   * all listeners that status has changed.
-   * @param newStatus Fetched status 
+   * Used when job status was updated outside of the updater. Checks if status
+   * changed from previous update. If so informs all listeners that status has
+   * changed.
+   * 
+   * @param newStatus Fetched status
    */
   public void statusUpdated( final IGridJobStatus newStatus ) {
     int oldType = -1;
     if( this.lastStatus != null ) {
       oldType = this.lastStatus.getType();
     }
-    if ( newStatus != null ) {
-        int newType = newStatus.getType();
-        if ( oldType != newType ) {
-          this.lastStatus = newStatus;
-          for( Enumeration<IGridJobStatusListener> e = this.listeners.keys(); e.hasMoreElements(); )
-          {
-            IGridJobStatusListener listener = e.nextElement();
-            int trigger = this.listeners.get( listener ).intValue();
-            if( ( newType & trigger ) > 0 ) {
-              listener.statusChanged( this.job );
-            }
-            listener.statusUpdated( this.job );
+    if( newStatus != null ) {
+      int newType = newStatus.getType();
+      if( oldType != newType ) {
+        this.lastStatus = newStatus;
+        for( Enumeration<IGridJobStatusListener> e = this.listeners.keys(); e.hasMoreElements(); )
+        {
+          IGridJobStatusListener listener = e.nextElement();
+          int trigger = this.listeners.get( listener ).intValue();
+          if( ( newType & trigger ) > 0 ) {
+            listener.statusChanged( this.job );
           }
-        } else {
-          for( Enumeration<IGridJobStatusListener> e = this.listeners.keys(); e.hasMoreElements(); ) {
-            IGridJobStatusListener listener = e.nextElement();
-            listener.statusUpdated( this.job );
-          }
+          listener.statusUpdated( this.job );
         }
+      } else {
+        for( Enumeration<IGridJobStatusListener> e = this.listeners.keys(); e.hasMoreElements(); )
+        {
+          IGridJobStatusListener listener = e.nextElement();
+          listener.statusUpdated( this.job );
+        }
+      }
     }
   }
   
@@ -200,6 +208,10 @@ public class JobStatusUpdater extends Job {
    */
   public void setRemoved() {
     this.jobRemoved = true;
+  }
+  
+  public void wakeUpdater() {
+    wakeUp();
   }
 
 }

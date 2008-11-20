@@ -314,7 +314,7 @@
          </reference>
       </problem>
       <problem
-            description="URL is nor correct"
+            description="URL is not correct"
             id="eu.geclipse.core.problem.net.malformedURL">
          <reference
                referenceID="eu.geclipse.core.solution.net.checkServerURL">
@@ -446,7 +446,7 @@
             id="eu.geclipse.core.solution.net.checkPublicIPAddress">
       </solution>
       <solution
-            description="Check your server URL"
+            description="Check server URL"
             id="eu.geclipse.core.solution.net.checkServerURL">
       </solution>
       <solution

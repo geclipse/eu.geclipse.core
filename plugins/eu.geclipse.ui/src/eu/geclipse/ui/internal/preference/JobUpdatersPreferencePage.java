@@ -60,6 +60,11 @@ public class JobUpdatersPreferencePage extends FieldEditorPreferencePage
                                                               Messages.getString("JobUpdatersPreferencePage.job_status_updates_active"), //$NON-NLS-1$
                                                               getFieldEditorParent() );
     addField( updateStatus );
+    BooleanFieldEditor cancelBehaviour = new BooleanFieldEditor( "jobs.update.jobs.cancelBehaviour", //$NON-NLS-1$
+                                                                 "Canceling token creation for job status updaters turns off global updating",
+                                                                 getFieldEditorParent() );
+    addField( cancelBehaviour );
+    
     IntegerFieldEditor updatePeriod = new IntegerFieldEditor( Messages.getString( "JobsPreferencePage.jobs_update_jobs_period" ), //$NON-NLS-1$
                                                               Messages.getString("JobUpdatersPreferencePage.period_between_updates"), //$NON-NLS-1$
                                                               getFieldEditorParent(),

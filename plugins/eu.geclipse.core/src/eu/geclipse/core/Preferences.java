@@ -143,6 +143,26 @@ public class Preferences {
     return valueUpdateJobsStatus;
   }
   
+  static public void setJobUpdaterCancelBehaviour( final boolean cancel ) {
+    org.eclipse.core.runtime.Preferences preferenceStore = getPreferenceStore();
+    preferenceStore.setValue( PreferenceConstants.JOBS_UPDATE_JOBS_CANCEL_BAHAVIOUR, cancel );
+  }
+  
+  /**
+   * Gets the behaviour of the global job status updating when user cancels token
+   * request of the job status updater.
+   * @return <code>true</code> if cancel should turn off global updating. <br>
+   *         <code>false</code> if cancel shouldn't change the status of the global updating.
+   */
+  static public boolean getJobUpdaterCancelBehaviour() {
+    boolean valueUpdateCancelBehaviour = false;
+    org.eclipse.core.runtime.Preferences preferenceStore = getPreferenceStore();
+    if( preferenceStore != null ) {
+      valueUpdateCancelBehaviour = preferenceStore.getBoolean( PreferenceConstants.JOBS_UPDATE_JOBS_CANCEL_BAHAVIOUR );
+    }
+    return valueUpdateCancelBehaviour;
+  }
+  
   /**
    * Sets the time period (in miliseconds) between job updates
    * @param period Period between job status' updates

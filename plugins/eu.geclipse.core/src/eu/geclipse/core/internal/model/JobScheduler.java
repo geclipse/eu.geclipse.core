@@ -14,8 +14,10 @@
  *****************************************************************************/
 package eu.geclipse.core.internal.model;
 
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Iterator;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -24,6 +26,8 @@ import org.eclipse.core.runtime.jobs.Job;
 
 import eu.geclipse.core.JobStatusUpdater;
 import eu.geclipse.core.Preferences;
+import eu.geclipse.core.model.IGridJob;
+import eu.geclipse.core.model.IGridJobStatus;
 
 
 /**
@@ -46,6 +50,8 @@ class JobScheduler extends Job {
    * Singleton of this class 
    */
   private static JobScheduler singleton;
+  
+  private ArrayList<JobStatusUpdater> startingUpdaters = new ArrayList<JobStatusUpdater>();
   
   /**
    * Hashtable holding paused updaters and their priorities to start/resume updating
@@ -88,6 +94,33 @@ class JobScheduler extends Job {
 
   @Override
   public IStatus run( final IProgressMonitor monitor ) {
+    
+    if( this.startingUpdaters.size() > 0 ) {
+      Iterator<JobStatusUpdater> iterator = this.startingUpdaters.iterator();
+      int updatePeriod = Preferences.getUpdateJobsPeriod();
+      ArrayList<JobStatusUpdater> resumedUpdaters = new ArrayList<JobStatusUpdater>();
+      while( iterator.hasNext() && Preferences.getUpdateJobsStatus() ) {
+        JobStatusUpdater updater = iterator.next();
+        IGridJob job = updater.getJob();
+        IGridJobStatus updateJobStatus = job.updateJobStatus( monitor, false );
+        if( updateJobStatus.getReason().equals( "Token request canceled" )) {
+          if( Preferences.getJobUpdaterCancelBehaviour() ) {
+            Preferences.setUpdateJobsStatus( false );
+          }
+        } else {
+          updater.statusUpdated( updateJobStatus );
+          if( updateJobStatus.canChange() ) {
+            updater.schedule( updatePeriod );
+            this.workingUpdaters.put( updater, Integer.valueOf( UPDATER_NORMAL_PRIORITY ) );
+          }
+          resumedUpdaters.add( updater );
+        }
+      }
+      for( JobStatusUpdater up: resumedUpdaters ) {
+        this.startingUpdaters.remove( up );
+      }
+    }
+    
     if( Preferences.getUpdateJobsStatus() && this.sleepingUpdaters.size() > 0 
         && ( getNumberOfRunningUpdaters() < Preferences.getUpdatersLimit() ) )
     {
@@ -135,9 +168,7 @@ class JobScheduler extends Job {
    */
   public void scheduleNewUpdater( final JobStatusUpdater updater ) {
     if( Preferences.getUpdateJobsStatus() && ( getNumberOfRunningUpdaters() < Preferences.getUpdatersLimit() ) ) {
-      int updatePeriod = Preferences.getUpdateJobsPeriod();
-      updater.schedule( updatePeriod ); 
-      this.workingUpdaters.put( updater, Integer.valueOf( UPDATER_NORMAL_PRIORITY ) );
+      this.startingUpdaters.add( updater );
     } else {
       this.sleepingUpdaters.put( updater, Integer.valueOf( UPDATER_NORMAL_PRIORITY ) );
     }
@@ -188,9 +219,10 @@ class JobScheduler extends Job {
     boolean result = false;
     if ( this.sleepingUpdaters.containsKey( updater ) ) {
       result = true;
-      updater.wakeUp();
+      updater.wakeUpdater();
       this.workingUpdaters.put( updater, Integer.valueOf( UPDATER_NORMAL_PRIORITY ) );
       this.sleepingUpdaters.remove( updater );
+      updater.schedule( 30000 );
     }
     return result;
   }
