@@ -193,11 +193,16 @@ public class GEclipseFileStore
       );
 
     try {
-      InputStream siStream = openInputStream( EFS.NONE, sMonitor.newChild( 1 ) );
       setActive( FETCH_INFO_ACTIVE_POLICY );
       IFileInfo info = fetchInfo( EFS.NONE, sMonitor.newChild( 1 ) );
-      cElement.getResource().refreshLocal( IResource.DEPTH_ZERO, monitor );
-      this.ciStream = new CachedInputStream( siStream, ( int ) info.getLength() );
+      
+      if( info.exists() ) {
+        InputStream siStream = openInputStream( EFS.NONE, sMonitor.newChild( 1 ) );
+        cElement.getResource().refreshLocal( IResource.DEPTH_ZERO, monitor );
+        this.ciStream = new CachedInputStream( siStream, ( int ) info.getLength() );
+      } else {
+        throw new ProblemException( ICoreProblems.IO_FILE_NOT_FOUND, Activator.PLUGIN_ID );
+      }
   
       try {
         this.ciStream.cache( sMonitor.newChild( 8 ) );
