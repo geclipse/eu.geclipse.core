@@ -12,6 +12,7 @@
  * Contributors:
  *    Mathias Stuempert - initial API and implementation
  *    Moritz Post       - switch to use new Equinox secure storage
+ *    Ariel Garcia      - updated to allow both secure storage or internal
  *****************************************************************************/
 
 package eu.geclipse.core.auth;
@@ -61,6 +62,19 @@ public abstract class PasswordManager {
    */
   private static Hashtable< String, String > registeredPasswords
            = new Hashtable< String, String >();
+
+
+  /**
+   * Selects the type of storage to use, either Equinox's secure
+   * storage or the internal implementation. Needed in certain cases
+   * if running in head-less mode. Do not switch the mode if the user
+   * is interacting with the system!
+   * 
+   * @param useSS if Equinox's secure storage should be used or not
+   */
+  public static void useSecureStorage( final boolean useSS ) {
+    PasswordManager.useSecureStorage = useSS;
+  }
 
   /**
    * Look up the password with the specified ID and return it if it could be
