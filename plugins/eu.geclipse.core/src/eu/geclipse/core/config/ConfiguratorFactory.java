@@ -13,7 +13,6 @@ import eu.geclipse.core.ExtensionManager;
 import eu.geclipse.core.Extensions;
 import eu.geclipse.core.ICoreProblems;
 import eu.geclipse.core.internal.Activator;
-import eu.geclipse.core.internal.config.Configurator;
 import eu.geclipse.core.model.IConfigurableElementCreator;
 import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.core.security.ICertificateLoader;

@@ -1,4 +1,4 @@
-package eu.geclipse.core.internal.config;
+package eu.geclipse.core.config;
 
 import java.net.URI;
 import java.security.cert.X509Certificate;
@@ -14,9 +14,6 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubMonitor;
 
-import eu.geclipse.core.config.Configuration;
-import eu.geclipse.core.config.IConfiguration;
-import eu.geclipse.core.config.IConfigurator;
 import eu.geclipse.core.internal.Activator;
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IConfigurableElementCreator;
