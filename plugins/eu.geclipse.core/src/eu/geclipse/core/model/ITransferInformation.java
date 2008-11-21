@@ -60,4 +60,6 @@ public interface ITransferInformation {
    * @return size of the transfered file, or 0 if the transfer object is a folder.
    */
   public long getSize();
+  
+  public void setData( final String data );
 }
