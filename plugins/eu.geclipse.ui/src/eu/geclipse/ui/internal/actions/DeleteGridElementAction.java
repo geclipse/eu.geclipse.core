@@ -22,6 +22,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.core.filesystem.IFileStore;
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -98,20 +99,65 @@ public class DeleteGridElementAction extends SelectionListenerAction {
     List<IGridJobDescription> selectedWorkflowJobDescriptions = new ArrayList<IGridJobDescription>( getSelectedResources().size() );
     List<IResource> selectedResources = new ArrayList<IResource>( getSelectedResources().size() );
     dispatchSelectedElements( selectedJobs, selectedWorkflowJobDescriptions, selectedResources );
-      if( !selectedJobs.isEmpty() ) {
-        deleteJobs( selectedJobs );
-      }
-      if( !selectedResources.isEmpty() ) {
-        deleteOtherResources( selectedResources );
-      }  
-      if (!selectedWorkflowJobDescriptions.isEmpty()) {
-        deleteWorkflowJobDescriptions( selectedWorkflowJobDescriptions );
-      }  
+    deactivateConnections( selectedResources.toArray( new IResource[ selectedResources.size() ] ) );
+    if( !selectedJobs.isEmpty() ) {
+      deleteJobs( selectedJobs );
+    }
+    if( !selectedResources.isEmpty() ) {
+      deleteOtherResources( selectedResources );
+    }  
+    if (!selectedWorkflowJobDescriptions.isEmpty()) {
+      deleteWorkflowJobDescriptions( selectedWorkflowJobDescriptions );
+    }  
   }
   
   @Override
   protected boolean updateSelection( final IStructuredSelection selection ) {
     return ! getSelectedResources().isEmpty();
+  }
+  
+  private void deactivateConnections( final IResource[] resources ) {
+    
+    if ( resources != null ) {
+    
+      for ( IResource resource : resources ) {
+        
+        IGridElement element = GridModel.getRoot().findElement( resource );
+        
+        if ( element instanceof IGridConnectionElement ) {
+          
+          try {
+            
+            IGridConnectionElement connection = ( IGridConnectionElement ) element;
+            IFileStore fileStore = connection.getConnectionFileStore();
+          
+            // Deactivate the connection before deleting it in order to avoid
+            // info or child fetching
+            GEclipseFileSystem.setFileStoreActive( fileStore, false, false, false );
+            
+            // Refresh the resource tree in order to remove all cached child
+            // resources that would also cause info fetching
+            resource.refreshLocal( IResource.DEPTH_INFINITE, null );
+            
+          } catch( CoreException cExc ) {
+            Activator.logException( cExc );
+          }
+          
+        }
+        
+        if ( resource instanceof IContainer ) {
+          try {
+            IResource[] members = ( ( IContainer ) resource ).members();
+            deactivateConnections( members );
+          } catch ( CoreException cExc ) {
+            Activator.logException( cExc );
+          }
+        }
+        
+      }
+      
+    }
+    
   }
   
   private void dispatchSelectedElements( final List<IGridJob> selectedJobs, final List<IGridJobDescription> selectedWorkflowJobDescriptions, final List<IResource> otherSelectedResources ) {
@@ -152,14 +198,6 @@ public class DeleteGridElementAction extends SelectionListenerAction {
         }
         
         else {
-          if ( element instanceof IGridConnectionElement ) {
-            try {
-              IFileStore fileStore = ( ( IGridConnectionElement ) element ).getConnectionFileStore();
-              GEclipseFileSystem.setFileStoreActive( fileStore, false, false, false );
-            } catch ( CoreException cExc ) {
-              Activator.logException( cExc );
-            }
-          }
           otherSelectedResources.add( resource );
         }
         
