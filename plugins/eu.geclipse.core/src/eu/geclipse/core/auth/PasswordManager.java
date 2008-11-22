@@ -83,31 +83,24 @@ public abstract class PasswordManager {
    * @param pwuid The unique ID of the password.
    * @return The password if it could be found, null otherwise.
    */
-  static public String getPassword( final String pwuid ) {
+  public static String getPassword( final String pwuid ) {
     String result = null;
-    
+
     if ( useSecureStorage == true ) {
       ISecurePreferences securePreferences = SecurePreferencesFactory.getDefault();
       ISecurePreferences node = securePreferences.node( pwuid );
-      
+
       try {
         result = node.get( PasswordManager.PASSWORD, null );
       } catch ( StorageException storageEx ) {
-
-        // If the user declined accessing the SS then use the internal mechanism
-        if ( storageEx.getErrorCode() == SECURE_STORAGE_NO_PASSWD_PROVIDED ) {
-          useSecureStorage = false;
-        } else {
-          Activator.logException( storageEx );
-        }
-
+        handleStorageException( storageEx );
       }
     }
-    
+
     if ( useSecureStorage == false ) {
       result = registeredPasswords.get( pwuid );
     }
-    
+
     return result;
   }
 
@@ -119,7 +112,7 @@ public abstract class PasswordManager {
    * @param pwuid The unique ID of the new password.
    * @param pw The password that should be registered.
    */
-  static public void registerPassword( final String pwuid, final String pw ) {
+  public static void registerPassword( final String pwuid, final String pw ) {
 
     if ( useSecureStorage == true ) {
       ISecurePreferences securePreferences = SecurePreferencesFactory.getDefault();
@@ -128,14 +121,7 @@ public abstract class PasswordManager {
       try {
         node.put( PasswordManager.PASSWORD, pw, true );
       } catch ( StorageException storageEx ) {
-
-        // The user declined accessing the SS
-        if ( storageEx.getErrorCode() == SECURE_STORAGE_NO_PASSWD_PROVIDED ) {
-          useSecureStorage = false;
-        } else {
-          Activator.logException( storageEx );
-        }
-
+        handleStorageException( storageEx );
       }
     }
 
@@ -151,7 +137,7 @@ public abstract class PasswordManager {
    * 
    * @param pwuid The unique ID of the password that should be erased.
    */
-  static public void erasePassword( final String pwuid ) {
+  public static void erasePassword( final String pwuid ) {
 
     if ( useSecureStorage == true ) {
       ISecurePreferences securePreferences = SecurePreferencesFactory.getDefault();
@@ -162,4 +148,24 @@ public abstract class PasswordManager {
     }
 
   }
+
+  /**
+   * 
+   * @param storageExc the storage exception to handle
+   */
+  private static void handleStorageException( final StorageException storageExc ) {
+
+    // Switch to use the internal store unconditionally, for robustness
+    useSecureStorage = false;
+
+    // The user declined accessing the secure storage
+    if ( storageExc.getErrorCode() == SECURE_STORAGE_NO_PASSWD_PROVIDED ) {
+      // Do nothing
+    } else {
+      // Some other error, just log it
+      Activator.logException( storageExc );
+    }
+
+  }
+
 }
