@@ -150,6 +150,7 @@ public abstract class PasswordManager {
   }
 
   /**
+   * Helper method to handle the exceptions thrown by the secure store
    * 
    * @param storageExc the storage exception to handle
    */
