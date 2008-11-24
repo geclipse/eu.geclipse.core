@@ -34,7 +34,7 @@ import eu.geclipse.ui.views.VisualisationView;
  * @author sgirtel
  *
  */
-public abstract class AbstractVisualisationAction extends SelectionListenerAction {
+public class AbstractVisualisationAction extends SelectionListenerAction {
 
 
   /**
@@ -75,7 +75,10 @@ public abstract class AbstractVisualisationAction extends SelectionListenerActio
 
   private IWorkbenchSite workbenchSite;
 
-  protected AbstractVisualisationAction() {
+  /**
+   *
+   */
+  public AbstractVisualisationAction() {
     super( Messages.getString( "AbstractVisualisationAction.title" ) ); //$NON-NLS-1$
   }
 

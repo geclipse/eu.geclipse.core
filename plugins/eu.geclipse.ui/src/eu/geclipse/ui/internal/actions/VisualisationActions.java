@@ -26,12 +26,10 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.actions.ActionGroup;
 import org.eclipse.ui.navigator.ICommonMenuConstants;
 
-import eu.geclipse.ui.dialogs.ProblemDialog;
 import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.visualisation.AbstractGridVisualisationResource;
 import eu.geclipse.ui.visualisation.AbstractVisualisationAction;
@@ -60,43 +58,29 @@ public class VisualisationActions extends ActionGroup {
     ISelectionProvider selectionProvider = site.getSelectionProvider();
     String fileExtension = ""; //$NON-NLS-1$
 
-    //find classes implementing the visualisation action extension point
-      CoreException exception = null;
-      AbstractVisualisationAction actionImpl = null;
-      String text = null;
-      String tooltip = null;
-      try {
-        IExtensionPoint p = Platform.getExtensionRegistry()
-          .getExtensionPoint( AbstractVisualisationAction.ACTION_EXTENSION_POINT );
-        IExtension[] extensions = p.getExtensions();
-        for( IExtension extension : extensions ) {
-          IConfigurationElement[] elements = extension.getConfigurationElements();
-          for( IConfigurationElement element : elements ) {
-            if( AbstractVisualisationAction.EXT_ACTION_ELEMENT.equals( element.getName() )
-//                && fileExtension.contains( element.getAttribute( AbstractVisualisationAction.EXT_ACTION_FILE_EXTENSION ) )
-                ) {
-              text = element.getAttribute( AbstractVisualisationAction.EXT_ACTION_TEXT );
-              tooltip = element.getAttribute( AbstractVisualisationAction.EXT_ACTION_TOOLTIP );
-              fileExtension = element.getAttribute( AbstractVisualisationAction.EXT_ACTION_FILE_EXTENSION );
-              actionImpl =
-              (AbstractVisualisationAction) element
-              .createExecutableExtension( AbstractVisualisationAction.EXT_ACTION_CLASS );
-              actionImpl.init( text, tooltip, fileExtension, site );
-              selectionProvider.addSelectionChangedListener( actionImpl );
-              this.actions.add( actionImpl );
-            }
-          }
+    // find classes implementing the visualisation action extension point
+    CoreException exception = null;
+    AbstractVisualisationAction actionImpl = null;
+    String text = null;
+    String tooltip = null;
+    IExtensionPoint p = Platform.getExtensionRegistry()
+      .getExtensionPoint( AbstractVisualisationAction.ACTION_EXTENSION_POINT );
+    IExtension[] extensions = p.getExtensions();
+    for( IExtension extension : extensions ) {
+      IConfigurationElement[] elements = extension.getConfigurationElements();
+      for( IConfigurationElement element : elements ) {
+        if( AbstractVisualisationAction.EXT_ACTION_ELEMENT.equals( element.getName() ) )
+        {
+          text = element.getAttribute( AbstractVisualisationAction.EXT_ACTION_TEXT );
+          tooltip = element.getAttribute( AbstractVisualisationAction.EXT_ACTION_TOOLTIP );
+          fileExtension = element.getAttribute( AbstractVisualisationAction.EXT_ACTION_FILE_EXTENSION );
+          actionImpl = new AbstractVisualisationAction();
+          actionImpl.init( text, tooltip, fileExtension, site );
+          selectionProvider.addSelectionChangedListener( actionImpl );
+          this.actions.add( actionImpl );
         }
-      } catch( CoreException coreException ) {
-        exception = coreException;
-        // Activator.logException( coreException );
       }
-      if ( exception != null) {
-        ProblemDialog.openProblem( Display.getCurrent().getActiveShell(),
-                                   Messages.getString( "VisualisationActions.actionExtensionErrorTitle" ), //$NON-NLS-1$
-                                   Messages.formatMessage( "VisualisationActions.cantInstanciateAction", fileExtension ), //$NON-NLS-1$
-                                   exception );
-      }
+    }
   }
 
   /*
