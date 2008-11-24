@@ -1,3 +1,18 @@
+/*****************************************************************************
+ * Copyright (c) 2008 g-Eclipse Consortium 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Initial development of the original code was made for the
+ * g-Eclipse project founded by European Union
+ * project number: FP6-IST-034327  http://www.geclipse.eu/
+ *
+ * Contributors:
+ *    Mathias Stuempert - initial API and implementation
+ *****************************************************************************/
+
 package eu.geclipse.core.config;
 
 import java.net.URI;
@@ -17,9 +32,22 @@ import eu.geclipse.core.model.IConfigurableElementCreator;
 import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.core.security.ICertificateLoader;
 
-
+/**
+ * Factory class for {@link IConfigurator}s.
+ */
 public class ConfiguratorFactory {
   
+  /**
+   * Create an {@link IConfigurator} from the specified
+   * {@link IConfigurationElement}. This element has to correspond to an
+   * extension of the <code>eu.geclipse.core.configurator</code> extension
+   * point.
+   * 
+   * @param element The configurator extension.
+   * @return An {@link IConfiguration} object corresponding to the specified
+   * extension.
+   * @throws ProblemException If the configuration could not be parsed.
+   */
   public static IConfigurator createConfigurator( final IConfigurationElement element )
       throws ProblemException {
     
@@ -27,13 +55,13 @@ public class ConfiguratorFactory {
     
     try { // TODO mathias fine-grained error handling
       
-      IConfigurationElement[] certificates = element.getChildren( "certificates" );
+      IConfigurationElement[] certificates = element.getChildren( Extensions.CONFIG_CERTIFICATES_ELEMENT );
       
       if ( certificates != null ) {
         
         for ( IConfigurationElement cert : certificates ) {
           
-          String loaderID = cert.getAttribute( "loaderID" );
+          String loaderID = cert.getAttribute( Extensions.CONFIG_CERTIFICATES_LOADER_ID_ATTRIBUTE );
           ICertificateLoader certLoader = getCertificateLoader( loaderID );
           
           List< URI > uris = new ArrayList< URI >();
@@ -43,12 +71,12 @@ public class ConfiguratorFactory {
             
             String certURI = null;
             
-            if ( loader.getName().equals( "certificateDistribution" ) ) {
-              String authorityID = loader.getAttribute( "authorityID" );
-              String distributionID = loader.getAttribute( "distributionID" );
+            if ( loader.getName().equals( Extensions.CONFIG_CERTIFICATE_DISTRIBUTION_ELEMENT ) ) {
+              String authorityID = loader.getAttribute( Extensions.CONFIG_CERTIFICATE_DISTRIBUTION_AUTHORITY_ID_ATTRIBUTE );
+              String distributionID = loader.getAttribute( Extensions.CONFIG_CERTIFICATE_DISTRIBUTION_DISTRIBUTION_ID_ATTRIBUTE );
               certURI = getCertLoaderURI( loaderID, authorityID, distributionID );
-            } else if ( loader.getName().equals( "certificateURL" ) ) {
-              certURI = loader.getAttribute( "url" );
+            } else if ( loader.getName().equals( Extensions.CONFIG_CERTIFICATE_URL_ELEMENT ) ) {
+              certURI = loader.getAttribute( Extensions.CONFIG_CERTIFICATE_URL_URL_ATTRIBUTE );
             }
             
             if ( certURI != null ) {
@@ -69,21 +97,21 @@ public class ConfiguratorFactory {
       
       }
       
-      IConfigurationElement[] vos = element.getChildren( "vo" );
+      IConfigurationElement[] vos = element.getChildren( Extensions.CONFIG_VO_ELEMENT );
       if ( vos != null ) {
         for ( IConfigurationElement vo : vos ) {
-          String voName = vo.getAttribute( "voName" );
-          String creatorID = vo.getAttribute( "creatorID" );
+          String voName = vo.getAttribute( Extensions.CONFIG_VO_NAME_ATTRIBUTE );
+          String creatorID = vo.getAttribute( Extensions.CONFIG_VO_CREATOR_ID_ATTRIBUTE );
           IConfigurableElementCreator voCreator = getVoCreator( creatorID );
           IConfigurationElement[] tokens = vo.getChildren();
           Configuration config = new Configuration();
           for ( IConfigurationElement token : tokens ) {
-            String key = token.getAttribute( "key" );
-            IConfigurationElement[] values = token.getChildren( "parameterValue" );
+            String key = token.getAttribute( Extensions.CONFIG_VO_PARAMETER_KEY_ATTRIBUTE );
+            IConfigurationElement[] values = token.getChildren( Extensions.CONFIG_PARAMETER_VALUE_ELEMENT );
             if ( ( values != null ) && ( values.length > 0 ) ) {
               String[] valueStrings = new String[ values.length ];
               for ( int i = 0 ; i < values.length ; i++ ) {
-                valueStrings[ i ] = values[ i ].getAttribute( "value" );
+                valueStrings[ i ] = values[ i ].getAttribute( Extensions.CONFIG_PARAMETER_VALUE_ATTRIBUTE );
               }
               config.setParameters( key, valueStrings );
             }
@@ -92,16 +120,16 @@ public class ConfiguratorFactory {
         }
       }
       
-      IConfigurationElement[] projects = element.getChildren( "project" );
+      IConfigurationElement[] projects = element.getChildren( Extensions.CONFIG_PROJECT_ELEMENT );
       if ( projects != null ) {
         for ( IConfigurationElement project : projects ) {
-          String projectName = project.getAttribute( "projectName" );
-          String voName = project.getAttribute( "voName" );
+          String projectName = project.getAttribute( Extensions.CONFIG_PROJECT_NAME_ATTRIBUTE );
+          String voName = project.getAttribute( Extensions.CONFIG_PROJECT_VO_NAME_ATTRIBUTE );
           IConfigurationElement[] folderElements = project.getChildren();
           Hashtable< String, String > projectFolders = new Hashtable< String, String >();
           for ( IConfigurationElement folderElement : folderElements ) {
-            String folderID = folderElement.getAttribute( "folderID" );
-            String folderName = folderElement.getAttribute( "folderName" );
+            String folderID = folderElement.getAttribute( Extensions.CONFIG_PROJECT_FOLDER_ID_ATTRIBUTE );
+            String folderName = folderElement.getAttribute( Extensions.CONFIG_PROJECT_FOLDER_NAME_ATTRIBUTE );
             projectFolders.put( folderID, folderName );
           }
           result.addProjectConfiguration( projectName, voName, projectFolders );

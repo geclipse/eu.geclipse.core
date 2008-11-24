@@ -1,3 +1,18 @@
+/*****************************************************************************
+ * Copyright (c) 2008 g-Eclipse Consortium 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Initial development of the original code was made for the
+ * g-Eclipse project founded by European Union
+ * project number: FP6-IST-034327  http://www.geclipse.eu/
+ *
+ * Contributors:
+ *    Mathias Stuempert - initial API and implementation
+ *****************************************************************************/
+
 package eu.geclipse.core.security;
 
 import java.io.BufferedInputStream;
@@ -11,8 +26,6 @@ import java.net.SocketTimeoutException;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
-import java.security.cert.CertificateException;
-import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +43,10 @@ import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.core.util.tar.TarEntry;
 import eu.geclipse.core.util.tar.TarInputStream;
 
+/**
+ * Certificate loader to import certificates from the grid policy management
+ * authorities such as EUGridPMA. 
+ */
 public class GridPMACertificateLoader implements ICertificateLoader {
   
   private static final String TGZ_PREFIX
@@ -38,6 +55,9 @@ public class GridPMACertificateLoader implements ICertificateLoader {
   private static final String TAR_GZ_PREFIX
     = ".tar.gz"; //$NON-NLS-1$
 
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.security.ICertificateLoader#fetchCertificate(eu.geclipse.core.security.ICertificateLoader.CertificateID, org.eclipse.core.runtime.IProgressMonitor)
+   */
   public X509Certificate fetchCertificate( final CertificateID id,
                                            final IProgressMonitor monitor )
       throws ProblemException {
@@ -47,13 +67,13 @@ public class GridPMACertificateLoader implements ICertificateLoader {
       ? new NullProgressMonitor()
       : monitor;
 
-    lMonitor.beginTask( String.format( "Loading certificate: %s", id.getName() ), 2 );
+    lMonitor.beginTask( String.format( Messages.getString("GridPMACertificateLoader.loading_cert_progress"), id.getName() ), 2 ); //$NON-NLS-1$
 
     X509Certificate result = null;
 
     try {
 
-      lMonitor.subTask( "Contacting server" );
+      lMonitor.subTask( Messages.getString("GridPMACertificateLoader.contact_server_progress") ); //$NON-NLS-1$
       URL url = id.getURI().toURL();
       URLConnection connection = Preferences.getURLConnection( url );
       try {
@@ -63,7 +83,7 @@ public class GridPMACertificateLoader implements ICertificateLoader {
       }
       lMonitor.worked( 1 );
 
-      lMonitor.subTask( "Decompressing" );
+      lMonitor.subTask( Messages.getString("GridPMACertificateLoader.decompressing_progress") ); //$NON-NLS-1$
       InputStream iStream = connection.getInputStream();
       BufferedInputStream bStream = new BufferedInputStream( iStream );
       GZIPInputStream zStream = new GZIPInputStream( bStream );
@@ -94,6 +114,9 @@ public class GridPMACertificateLoader implements ICertificateLoader {
 
   }
 
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.security.ICertificateLoader#listAvailableCertificates(java.net.URI, org.eclipse.core.runtime.IProgressMonitor)
+   */
   public CertificateID[] listAvailableCertificates( final URI uri,
                                                     final IProgressMonitor monitor )
       throws ProblemException {
@@ -105,11 +128,11 @@ public class GridPMACertificateLoader implements ICertificateLoader {
       ? new NullProgressMonitor()
       : monitor;
       
-    lMonitor.beginTask( "Loading certificates", 3 );
+    lMonitor.beginTask( Messages.getString("GridPMACertificateLoader.loading_certs_progress"), 3 ); //$NON-NLS-1$
     
     try {
 
-      lMonitor.subTask( "Contacting server" );
+      lMonitor.subTask( Messages.getString("GridPMACertificateLoader.contact_server_progress") ); //$NON-NLS-1$
       URLConnection connection = Preferences.getURLConnection( uri.toURL() );
       try {
         connection.connect();
@@ -118,7 +141,7 @@ public class GridPMACertificateLoader implements ICertificateLoader {
       }
       lMonitor.worked( 1 );
 
-      lMonitor.subTask( "Loading certificate list" );
+      lMonitor.subTask( Messages.getString("GridPMACertificateLoader.loading_cert_list_progress") ); //$NON-NLS-1$
       InputStream iStream = connection.getInputStream();
       InputStreamReader iReader = new InputStreamReader( iStream );
       BufferedReader bReader = new BufferedReader( iReader );
@@ -130,15 +153,15 @@ public class GridPMACertificateLoader implements ICertificateLoader {
       bReader.close();
       lMonitor.worked( 1 );
 
-      lMonitor.subTask( "Parsing certificate list" );
+      lMonitor.subTask( Messages.getString("GridPMACertificateLoader.parsing_cert_list_progress") ); //$NON-NLS-1$
       String content = buffer.toString().replaceAll( " ", "" ); //$NON-NLS-1$ //$NON-NLS-2$
       int index = -1;
       while ( ( index = content.indexOf( "ahref=\"", index+1 ) ) > 0 ) { //$NON-NLS-1$
         int endIndex = content.indexOf( "\">", index+7 ); //$NON-NLS-1$
         if ( endIndex > 0 ) {
           String file = content.substring( index+7, endIndex );
-          if ( file.toLowerCase().endsWith( ".tar.gz" ) //$NON-NLS-1$
-              || file.toLowerCase().endsWith( ".tgz" ) ) { //$NON-NLS-1$
+          if ( file.toLowerCase().endsWith( TAR_GZ_PREFIX )
+              || file.toLowerCase().endsWith( TGZ_PREFIX ) ) {
             result.add( new CertificateID( uri, file ) );
           }
         }

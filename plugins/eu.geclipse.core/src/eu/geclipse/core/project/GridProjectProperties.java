@@ -1,3 +1,18 @@
+/*****************************************************************************
+ * Copyright (c) 2008 g-Eclipse Consortium 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Initial development of the original code was made for the
+ * g-Eclipse project founded by European Union
+ * project number: FP6-IST-034327  http://www.geclipse.eu/
+ *
+ * Contributors:
+ *    Mathias Stuempert - initial API and implementation
+ *****************************************************************************/
+
 package eu.geclipse.core.project;
 
 import java.util.Hashtable;
@@ -25,55 +40,61 @@ private String projectName;
     = new Hashtable< String, String >();
 
   /**
-   * return project name
-   * @return
+   * Get the project's name.
+   * 
+   * @return The project's name.
    */
   public String getProjectName() {
     return this.projectName;
   }
   
   /**
-   * set the ProjectName()
-   * @param projectName
+   * Set the project's name.
+   * 
+   * @param projectName The project's name.
    */
   public void setProjectName( final String projectName ) {
     this.projectName = projectName;
   }
   
   /**
-   * set ProjectLocation
-   * @return
+   * Get the project's location within the workspace.
+   * 
+   * @return The project's workspace location.
    */
   public IPath getProjectLocation() {
     return this.projectLocation;
   }
   
   /**
-   * get ProjectLocation
-   * @param projectLocation
+   * Set the project's location within the workspace.
+   * 
+   * @param projectLocation The project's workspace location.
    */
   public void setProjectLocation( final IPath projectLocation ) {
     this.projectLocation = projectLocation;
   }
   
   /**
-   * get Virtual Organization of the Project
-   * @return
+   * Get the project's {@link IVirtualOrganization}.
+   * 
+   * @return The project's {@link IVirtualOrganization}.
    */
   public IVirtualOrganization getProjectVo() {
     return this.projectVo;
   }
   
   /**
-   * set the Virtual Organization of the Project 
-   * @param vo
+   * Set the project's {@link IVirtualOrganization}.
+   * 
+   * @param vo The project's {@link IVirtualOrganization}.
    */
   public void setProjectVo( final IVirtualOrganization vo ) {
     this.projectVo = vo;
   }
   
   /**
-   * Get the list of reference projects
+   * Get the list of referenced projects.
    * 
    * @return The referenced projects or <code>null</code>.
    */
@@ -91,7 +112,7 @@ private String projectName;
   }
 
   /**
-   * Set the list of references projects.
+   * Set the list of referenced projects.
    * 
    * @param referencesProjects The referenced projects.
    */
@@ -100,19 +121,20 @@ private String projectName;
   }
   
   /**
-   * add a folder to the projects structure
+   * Add a project folder to the project structure.
    * 
-   * @param id
-   * @param label
+   * @param id The id of the project folder.
+   * @param label The label of the project folder.
    */
   public void addProjectFolder( final String id, final String label ) {
     this.projectFolders.put( id, label );
   }
   
   /** 
-   * adds a list of project folders
+   * Adds a list of project folders to the project structure.
    * 
-   * @param folders
+   * @param folders A {@link Hashtable} containing pairs of ids and labels
+   * of the project folders.
    */
   public void addProjectFolders( final Hashtable< String, String > folders ) {
     for ( String key : folders.keySet() ) {

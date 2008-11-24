@@ -21,13 +21,8 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.Platform;
-import org.osgi.framework.Bundle;
 
 import eu.geclipse.core.auth.IAuthenticationTokenDescription;
-import eu.geclipse.core.internal.Activator;
-import eu.geclipse.core.model.IGridElement;
-import eu.geclipse.core.model.IGridElementCreator;
 
 /**
  * This is a helper class that holds static fields and methods to
@@ -119,47 +114,223 @@ public class Extensions {
   public static final String AUTH_TOKEN_PROVIDER_PRIORITY_ATTRIBUTE
     = "priority"; //$NON-NLS-1$
   
+  /**
+   * The ID of the certificate loader extension point.
+   */
   public static final String CERT_LOADER_POINT
     = "eu.geclipse.core.certificateLoader"; //$NON-NLS-1$
   
+  /**
+   * The ID of the certificate loader configuration element.
+   */
   public static final String CERT_LOADER_ELEMENT
     = "loader"; //$NON-NLS-1$
   
+  /**
+   * The ID of the certificate loader ID attribute.
+   */
   public static final String CERT_LOADER_ID_ATTRIBUTE
     = "id"; //$NON-NLS-1$
   
+  /**
+   * The ID of the certificate loader name attribute.
+   */
   public static final String CERT_LOADER_NAME_ATTRIBUTE
     = "name"; //$NON-NLS-1$
   
+  /**
+   * The ID of the certificate loader executable attribute.
+   */
   public static final String CERT_LOADER_CLASS_ATTRIBUTE
     = "class"; //$NON-NLS-1$
   
+  /**
+   * The ID of the certificate loader's authority element.
+   */
   public static final String CERT_LOADER_AUTHORITY_ELEMENT
     = "authority"; //$NON-NLS-1$
   
+  /**
+   * The ID of the authority element's id attribute.
+   */
   public static final String CERT_LOADER_AUTHORITY_ID_ATTRIBUTE
     = "id"; //$NON-NLS-1$
   
+  /**
+   * The ID of the authority element's name attribute.
+   */
   public static final String CERT_LOADER_AUTHORITY_NAME_ATTRIBUTE
     = "name"; //$NON-NLS-1$
   
+  /**
+   * The ID of the authority element's description attribute.
+   */
   public static final String CERT_LOADER_AUTHORITY_DESCRIPTION_ATTRIBUTE
     = "description"; //$NON-NLS-1$
   
+  /**
+   * The ID of the certificate loader's distribution element.
+   */
   public static final String CERT_LOADER_DISTRIBUTION_ELEMENT
     = "distribution"; //$NON-NLS-1$
   
+  /**
+   * The ID of the distribution's id attribute.
+   */
   public static final String CERT_LOADER_DISTRIBUTION_ID_ATTRIBUTE
     = "id"; //$NON-NLS-1$
   
+  /**
+   * The ID of the distribution's name attribute.
+   */
   public static final String CERT_LOADER_DISTRIBUTION_NAME_ATTRIBUTE
     = "name"; //$NON-NLS-1$
   
+  /**
+   * The ID of the distribution's url attribute.
+   */
   public static final String CERT_LOADER_DISTRIBUTION_URL_ATTRIBUTE
     = "url"; //$NON-NLS-1$
   
+  /**
+   * The ID of the distribution's description attribute.
+   */
   public static final String CERT_LOADER_DISTRIBUTION_DESCRIPTION_ATTRIBUTE
     = "description"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the configurator extension point.
+   */
+  public static final String CONFIG_POINT
+    = "eu.geclipse.core.configurator"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the configurator's configuration element.
+   */
+  public static final String CONFIG_ELEMENT
+    = "configuration"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the configurator's certificates element.
+   */
+  public static final String CONFIG_CERTIFICATES_ELEMENT
+    = "certificates"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the certificates element's loader ID attribute.
+   */
+  public static final String CONFIG_CERTIFICATES_LOADER_ID_ATTRIBUTE
+    = "loaderID"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the configurator's certificate url element.
+   */
+  public static final String CONFIG_CERTIFICATE_URL_ELEMENT
+    = "certificateURL"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the configurator's certificate url url attribute.
+   */
+  public static final String CONFIG_CERTIFICATE_URL_URL_ATTRIBUTE
+    = "url"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the configurator's certificate distribution element.
+   */
+  public static final String CONFIG_CERTIFICATE_DISTRIBUTION_ELEMENT
+    = "certificateDistribution"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the configurator's certificate distribution
+   * authority id attribute.
+   */
+  public static final String CONFIG_CERTIFICATE_DISTRIBUTION_AUTHORITY_ID_ATTRIBUTE
+    = "authorityID"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the configurator's certificate distribution
+   * distribution id attribute.
+   */
+  public static final String CONFIG_CERTIFICATE_DISTRIBUTION_DISTRIBUTION_ID_ATTRIBUTE
+    = "distributionID"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the configurator's vo element.
+   */
+  public static final String CONFIG_VO_ELEMENT
+    = "vo"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the configurator's vo name attribute.
+   */
+  public static final String CONFIG_VO_NAME_ATTRIBUTE
+    = "voName"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the configurator's vo creator id attribute.
+   */
+  public static final String CONFIG_VO_CREATOR_ID_ATTRIBUTE
+    = "creatorID"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the configurator's vo parameter element.
+   */
+  public static final String CONFIG_VO_PARAMETER_ELEMENT
+    = "voParameter"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the configurator's vo parameter key attribute.
+   */
+  public static final String CONFIG_VO_PARAMETER_KEY_ATTRIBUTE
+    = "key"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the configurator's parameter value element.
+   */
+  public static final String CONFIG_PARAMETER_VALUE_ELEMENT
+    = "parameterValue"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the configurator's parameter value attribute.
+   */
+  public static final String CONFIG_PARAMETER_VALUE_ATTRIBUTE
+    = "value"; //$NON-NLS-1$
+    
+  /**
+   * The ID of the configurator's project element.
+   */
+  public static final String CONFIG_PROJECT_ELEMENT
+    = "project"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the configurator's project name attribute.
+   */
+  public static final String CONFIG_PROJECT_NAME_ATTRIBUTE
+    = "projectName"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the configurator's project vo name attribute.
+   */
+  public static final String CONFIG_PROJECT_VO_NAME_ATTRIBUTE
+    = "voName"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the configurator's project folder element.
+   */
+  public static final String CONFIG_PROJECT_FOLDER_ELEMENT
+    = "projectFolder"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the configurator's project folder id attribute.
+   */
+  public static final String CONFIG_PROJECT_FOLDER_ID_ATTRIBUTE
+    = "folderID"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the configurator's project folder name attribute.
+   */
+  public static final String CONFIG_PROJECT_FOLDER_NAME_ATTRIBUTE
+    = "folderName"; //$NON-NLS-1$
   
   /**
    * The ID of the filesystems extension point.
@@ -412,11 +583,6 @@ public class Extensions {
   public static final String VO_LOADER_CLASS_ATTRIBUTE
     = "class"; //$NON-NLS-1$
   
-  /**
-   * List that holds all known element creators.
-   */
-  private static List< IGridElementCreator > elementCreators = null;
-
   /**
    * List that holds all known authentication token descriptions.
    */
