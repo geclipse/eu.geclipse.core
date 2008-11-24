@@ -72,7 +72,7 @@ public abstract class PasswordManager {
    * 
    * @param useSS if Equinox's secure storage should be used or not
    */
-  public static void useSecureStorage( final boolean useSS ) {
+  public static void setUseSecureStorage( final boolean useSS ) {
     PasswordManager.useSecureStorage = useSS;
   }
 
