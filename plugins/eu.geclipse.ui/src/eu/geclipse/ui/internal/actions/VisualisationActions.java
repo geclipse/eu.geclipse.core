@@ -33,8 +33,8 @@ import org.eclipse.ui.navigator.ICommonMenuConstants;
 
 import eu.geclipse.ui.dialogs.ProblemDialog;
 import eu.geclipse.ui.internal.Activator;
-import eu.geclipse.ui.visualisation.AbstractVisualisationAction;
 import eu.geclipse.ui.visualisation.AbstractGridVisualisationResource;
+import eu.geclipse.ui.visualisation.AbstractVisualisationAction;
 
 
 /**
@@ -91,7 +91,7 @@ public class VisualisationActions extends ActionGroup {
         exception = coreException;
         // Activator.logException( coreException );
       }
-      if ( actionImpl == null || exception != null) {
+      if ( exception != null) {
         ProblemDialog.openProblem( Display.getCurrent().getActiveShell(),
                                    Messages.getString( "VisualisationActions.actionExtensionErrorTitle" ), //$NON-NLS-1$
                                    Messages.formatMessage( "VisualisationActions.cantInstanciateAction", fileExtension ), //$NON-NLS-1$
