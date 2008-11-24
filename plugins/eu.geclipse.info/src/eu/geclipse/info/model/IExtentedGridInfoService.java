@@ -24,14 +24,11 @@ import eu.geclipse.core.model.IVirtualOrganization;
 
 
 /**
- * This interface defines an information service (glite, gria). An information service can be used
- * to retrieve information like computing elements and can fill a glue store will all the available
- * information
- * @see eu.geclipse.glite.info.bdii.BDIIService
- * @see eu.geclipse.gria.info.GriaInfoService
- * @see eu.geclipse.glite.info.bdii.BDIIStore
+ * This interface defines an information service. An information service can
+ * be used to retrieve information like computing elements and can fill a glue
+ * store will all the available information.
+ * 
  * @author tnikos
- *
  */
 public interface IExtentedGridInfoService extends IGridInfoService {
 
@@ -68,4 +65,5 @@ public interface IExtentedGridInfoService extends IGridInfoService {
    * @return An ArrayList<String[]> or an empty ArrayList.
    */
   public ArrayList<InfoTopTreeElement> getTopTreeElements();
+
 }
