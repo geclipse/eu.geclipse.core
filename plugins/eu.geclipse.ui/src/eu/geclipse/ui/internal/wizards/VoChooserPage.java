@@ -148,10 +148,10 @@ public class VoChooserPage extends WizardPage {
     gData = new GridData();
     deselectAllButton.setLayoutData( gData );
     
-    Button revertButton = new Button( buttonComp, SWT.PUSH );
-    revertButton.setText( Messages.getString("VoChooserPage.revert_selection_button") ); //$NON-NLS-1$
+    Button invertButton = new Button( buttonComp, SWT.PUSH );
+    invertButton.setText( Messages.getString("VoChooserPage.invert_selection_button") ); //$NON-NLS-1$
     gData = new GridData();
-    revertButton.setLayoutData( gData );
+    invertButton.setLayoutData( gData );
     
     this.viewer.addCheckStateListener( new ICheckStateListener() {
       public void checkStateChanged( final CheckStateChangedEvent event ) {
@@ -181,10 +181,10 @@ public class VoChooserPage extends WizardPage {
       }
     } );
     
-    revertButton.addSelectionListener( new SelectionAdapter() {
+    invertButton.addSelectionListener( new SelectionAdapter() {
       @Override
       public void widgetSelected( final SelectionEvent e ) {
-        revertSelection();
+        invertSelection();
       }
     } );
     
@@ -240,7 +240,7 @@ public class VoChooserPage extends WizardPage {
     this.viewer.setAllChecked( false );
   }
   
-  protected void revertSelection() {
+  protected void invertSelection() {
     TableItem[] items = this.viewer.getTable().getItems();
     for ( TableItem item : items ) {
       String element = ( String ) item.getData();

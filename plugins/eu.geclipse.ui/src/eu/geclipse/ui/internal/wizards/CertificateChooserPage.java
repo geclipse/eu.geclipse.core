@@ -81,10 +81,10 @@ public class CertificateChooserPage extends WizardPage {
     gData = new GridData();
     deselectAllButton.setLayoutData( gData );
     
-    Button revertButton = new Button( buttonComp, SWT.PUSH );
-    revertButton.setText( "&Revert Selection" );
+    Button invertButton = new Button( buttonComp, SWT.PUSH );
+    invertButton.setText( "&Invert Selection" );
     gData = new GridData();
-    revertButton.setLayoutData( gData );
+    invertButton.setLayoutData( gData );
     
     selectAllButton.addSelectionListener( new SelectionAdapter() {
       @Override
@@ -100,10 +100,10 @@ public class CertificateChooserPage extends WizardPage {
       }
     } );
     
-    revertButton.addSelectionListener( new SelectionAdapter() {
+    invertButton.addSelectionListener( new SelectionAdapter() {
       @Override
       public void widgetSelected( final SelectionEvent e ) {
-        revertSelection();
+        invertSelection();
       }
     } );
     
@@ -143,7 +143,7 @@ public class CertificateChooserPage extends WizardPage {
     this.viewer.setAllChecked( false );
   }
   
-  protected void revertSelection() {
+  protected void invertSelection() {
     CertificateID[] elements = ( CertificateID[] ) this.viewer.getInput();
     for ( CertificateID element : elements ) {
       boolean state = this.viewer.getChecked( element );

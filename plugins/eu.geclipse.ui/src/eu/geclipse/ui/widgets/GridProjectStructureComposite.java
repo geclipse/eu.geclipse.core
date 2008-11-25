@@ -191,13 +191,13 @@ public class GridProjectStructureComposite extends Composite {
       }
     } );
     
-    Button revertButton = new Button( buttonComp, SWT.NONE );
-    revertButton.setText( "Revert Selection" );
-    revertButton.setLayoutData( new GridData( SWT.BEGINNING, SWT.CENTER, false, false ) );
-    revertButton.addSelectionListener( new SelectionAdapter() {
+    Button invertButton = new Button( buttonComp, SWT.NONE );
+    invertButton.setText( "Invert Selection" );
+    invertButton.setLayoutData( new GridData( SWT.BEGINNING, SWT.CENTER, false, false ) );
+    invertButton.addSelectionListener( new SelectionAdapter() {
       @Override
       public void widgetSelected( final SelectionEvent e ) {
-        revertSelection();
+        invertSelection();
       }
     } );
     
@@ -282,7 +282,7 @@ public class GridProjectStructureComposite extends Composite {
     updateTree();
   }
   
-  protected void revertSelection() {
+  protected void invertSelection() {
     List< String[] > elements = ( List< String[] > ) this.viewer.getInput();
     for ( String[] element : elements ) {
       boolean state = this.viewer.getChecked( element );
