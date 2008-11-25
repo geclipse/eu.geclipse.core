@@ -73,11 +73,29 @@ import eu.geclipse.ui.dialogs.ProblemDialog;
  * plugin.xml
  */
 public class BatchEditor extends GraphicalEditor {
+  /**
+   * 
+   */
   public int queueByName = 0;
+  /**
+   * 
+   */
   public int sortedQ = 0;
+  /**
+   * 
+   */
   public int sortedN = 0;
+  /**
+   * 
+   */
   public int workerNodeByName = 0;
+  /**
+   * 
+   */
   public int queueByState = 0;
+  /**
+   * 
+   */
   public int workerNodeByState = 0;
 
   protected BatchUpdate updateJob;

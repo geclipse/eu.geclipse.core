@@ -407,7 +407,6 @@ public class QueueAdapter extends QdlAdaptersFactory {
    * @param tableViewer The {@link TableViewer} that contains all allowed VO's for the {@link QueueType}.
    * @param value The new value for the VO Name.
    */
-  @SuppressWarnings("unchecked")
   public void editAllowedVO(final TableViewer tableViewer, final Object value) {
     
     if (value == null) {

@@ -407,7 +407,10 @@ public class AdvancedQueueAdapter extends QdlAdaptersFactory {
                    else{
                      integerExactType = integerRangeValueType.getExact().get( 0 );
                    }
-                   spinner.setSelection( integerExactType.getValue() );                 }
+                   if ( null != integerExactType ){
+                     spinner.setSelection( integerExactType.getValue() );
+                   }
+                 }
                }                  
                break;
                default:

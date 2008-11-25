@@ -56,7 +56,9 @@ import eu.geclipse.batch.ui.internal.providers.QueueLabelProvider;
 
 /**
  * @author nloulloud
- *
+ * 
+ * This class is responsible for displaying the Simple Queue Configuration Page of
+ * the Queue Configuration Editor.
  */
 public class SimpleQueueConfigPage extends FormPage implements INotifyChangedListener
 {

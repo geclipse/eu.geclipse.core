@@ -38,11 +38,11 @@ import eu.geclipse.batch.ui.editors.QueueEditor;
 import eu.geclipse.batch.ui.internal.Messages;
 import eu.geclipse.batch.ui.internal.adapters.AdvancedQueueAdapter;
 
-
-
 /**
  * @author nloulloud
- *
+ * 
+ * This class is responsible for displaying the Advanced Queue Configuration Page of
+ * the Queue Configuration Editor.
  */
 public class AdvancedQueueConfigPage extends FormPage implements INotifyChangedListener {
   
@@ -91,7 +91,7 @@ public class AdvancedQueueConfigPage extends FormPage implements INotifyChangedL
   
   /**
    * Method that set's the SimpleQueueConfig Page content. The content is the root 
-   * QDL element (Queue). Also this method is responsible to initialize the associated 
+   * QDL element (Queue). Also this method is responsible to initialise the associated 
    * type adapters for the elements of this page.  This method must be called only
    * from the Queue Editor.
    * 
