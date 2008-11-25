@@ -124,7 +124,7 @@ public class SimpleQueueConfigPage extends FormPage implements INotifyChangedLis
   
   /**
    * Method that set's the SimpleQueueConfig Page content. The content is the root 
-   * QDL element (Queue). Also this method is responsible to initialize the associated 
+   * QDL element (Queue). Also this method is responsible to initialise the associated 
    * type adapters for the elements of this page.  This method must be called only
    * from the Queue Editor.
    * 
