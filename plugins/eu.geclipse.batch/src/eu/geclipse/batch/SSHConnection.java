@@ -155,6 +155,17 @@ public class SSHConnection {
     return execCommand( command, null );
   }
 
+  /**
+   * Execute a command on the remote host and returns the output.
+   * 
+   * @param command The command to be executed on the remote host.
+   * @param stdin
+   * @return Returns the output of the executed command if executed
+   *         successfully, if no output of the successfully executed command
+   *         <code>null</code> is returned.
+   *         
+   * @throws ProblemException If the command is not successfully executed.
+   */
   public String execCommand( final String command, final InputStream stdin )
     throws ProblemException
   {

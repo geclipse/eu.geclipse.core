@@ -26,7 +26,6 @@ import org.eclipse.jsch.core.IJSchService;
 import com.jcraft.jsch.ChannelShell;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
-import com.jcraft.jsch.ChannelDirectTCPIP;
 
 import eu.geclipse.batch.internal.Activator;
 import eu.geclipse.core.IBidirectionalConnection;
