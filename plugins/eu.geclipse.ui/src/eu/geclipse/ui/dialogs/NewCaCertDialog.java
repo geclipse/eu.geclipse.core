@@ -250,7 +250,7 @@ public class NewCaCertDialog extends IconAndMessageDialog {
    * @return The chosen file.
    */
   protected String showFileDialog( final String initial ) {
-    String[] filterExtensions = { "*.pem", "*.*" }; //$NON-NLS-1$ //$NON-NLS-2$
+    String[] filterExtensions = { "*.pem", "*;*.*" }; //$NON-NLS-1$ //$NON-NLS-2$
     String[] filterNames = { "PEM-Files", "All Files" }; //$NON-NLS-1$ //$NON-NLS-2$
     FileDialog fileDialog = new FileDialog( getShell(), SWT.OPEN | SWT.SINGLE );
     fileDialog.setFilterExtensions( filterExtensions );
