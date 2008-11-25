@@ -108,9 +108,9 @@ public class FetchJob extends Job {
     // Get the information from the info systems to file the glue view.
     for (int i=0; infoServicesArray!= null && !localMonitor.isCanceled() && i<infoServicesArray.size() ; i++)
     {
-      if (infoServicesArray.get( i ) instanceof IExtentedGridInfoService)
+      if (infoServicesArray.get( i ) instanceof IExtendedGridInfoService)
       {
-        IExtentedGridInfoService infoService = ( IExtentedGridInfoService )infoServicesArray.get( i );
+        IExtendedGridInfoService infoService = ( IExtendedGridInfoService )infoServicesArray.get( i );
         if (infoService != null)
         {
           infoService.scheduleFetch(localMonitor);
@@ -122,9 +122,9 @@ public class FetchJob extends Job {
     // Notify the listeners that the info has changed.
     for (int i=0; infoServicesArray != null && i<infoServicesArray.size(); i++)
     {
-      if ( infoServicesArray.get( i ) instanceof IExtentedGridInfoService)
+      if ( infoServicesArray.get( i ) instanceof IExtendedGridInfoService)
       {
-        IExtentedGridInfoService infoService = ( IExtentedGridInfoService )infoServicesArray.get( i );
+        IExtendedGridInfoService infoService = ( IExtendedGridInfoService )infoServicesArray.get( i );
         if (infoService != null && infoService.getStore() != null)
         {
           hasNotified = true;

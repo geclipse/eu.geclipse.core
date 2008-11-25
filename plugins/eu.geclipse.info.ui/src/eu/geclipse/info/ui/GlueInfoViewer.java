@@ -80,7 +80,7 @@ import eu.geclipse.info.glue.GlueCE;
 import eu.geclipse.info.glue.GlueCEAccessControlBaseRule;
 import eu.geclipse.info.glue.GlueQuery;
 import eu.geclipse.info.model.FetchJob;
-import eu.geclipse.info.model.IExtentedGridInfoService;
+import eu.geclipse.info.model.IExtendedGridInfoService;
 import eu.geclipse.info.model.IGlueStoreChangeListerner;
 import eu.geclipse.info.model.InfoTopTreeCategory;
 import eu.geclipse.info.model.InfoTopTreeElement;
@@ -422,8 +422,8 @@ public class GlueInfoViewer extends ViewPart
           IGridProject igp=(IGridProject)element;
           if(igp.isOpen() && igp.getVO()!=null){
             IGridInfoService infoService = igp.getVO().getInfoService();
-            if ( infoService != null && infoService instanceof IExtentedGridInfoService) {
-              ArrayList<InfoTopTreeElement> result = ((IExtentedGridInfoService)infoService).getTopTreeElements();
+            if ( infoService != null && infoService instanceof IExtendedGridInfoService) {
+              ArrayList<InfoTopTreeElement> result = ((IExtendedGridInfoService)infoService).getTopTreeElements();
 
               for (int i=0; result!=null && i<result.size(); i++)
               {

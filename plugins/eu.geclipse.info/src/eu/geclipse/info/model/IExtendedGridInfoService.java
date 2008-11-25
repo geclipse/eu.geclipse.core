@@ -30,7 +30,7 @@ import eu.geclipse.core.model.IVirtualOrganization;
  * 
  * @author tnikos
  */
-public interface IExtentedGridInfoService extends IGridInfoService {
+public interface IExtendedGridInfoService extends IGridInfoService {
 
   /**
    * Returns the store that holds all the glue information for sites, computing elements
