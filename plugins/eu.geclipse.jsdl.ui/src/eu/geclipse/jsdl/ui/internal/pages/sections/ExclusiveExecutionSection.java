@@ -144,11 +144,12 @@ public class ExclusiveExecutionSection extends JsdlFormPageSection {
                                                       .this.cmbExclExec.getSelectionIndex() ).equals( EMPTY_STRING )) {
           
           ExclusiveExecutionSection.this.resourcesType.unsetExclusiveExecution();
+          checkResourcesElement();
                               
         }
         else {
 
-        checkResourcesElement();
+         checkResourcesElement();
          ExclusiveExecutionSection.this.resourcesType
                .setExclusiveExecution( Boolean.parseBoolean( ExclusiveExecutionSection.this.cmbExclExec.getText() ) );
         }
@@ -189,7 +190,7 @@ public class ExclusiveExecutionSection extends JsdlFormPageSection {
      * container (JobDescriptionType).
      */
     else {
-      if ( !this.resourcesType.isExclusiveExecution() && this.resourcesType.eContents().size() == 0) {
+      if ( !this.resourcesType.isSetExclusiveExecution() && this.resourcesType.eContents().size() == 0) {
         EcoreUtil.remove( this.resourcesType );
       }
     }
@@ -202,20 +203,34 @@ public class ExclusiveExecutionSection extends JsdlFormPageSection {
     
     this.isNotifyAllowed = false;
     
-    if (null != this.jobDescriptionType.getResources() ) {
-      this.resourcesType = this.jobDescriptionType.getResources();   
-      boolean value = this.resourcesType.isExclusiveExecution();    
-      this.cmbExclExec.setText( Boolean.toString( value ) );
+    if ( null != this.jobDescriptionType.getResources() ) {
+      this.resourcesType = this.jobDescriptionType.getResources();
+      if (this.resourcesType.isSetExclusiveExecution() == true){
+        boolean value = this.resourcesType.isExclusiveExecution();    
+        this.cmbExclExec.setText( Boolean.toString( value ) );
+      } else {
+        this.cmbExclExec.setText( EMPTY_STRING );
+      }
     }
-    else{
-      this.cmbExclExec.setText( EMPTY_STRING );
-    }
+    
    
     this.isNotifyAllowed = true;
     
     if ( this.adapterRefreshed ) {
       this.adapterRefreshed = false;
     }
+  }
+  
+  protected boolean isResourceElementEmpty(){
+    
+    boolean returnValue = true;
+    
+    if ( this.resourcesType.eContents().size() > 0  ){
+      returnValue = false;
+    }
+    
+    return returnValue;
+    
   }
   
 }
