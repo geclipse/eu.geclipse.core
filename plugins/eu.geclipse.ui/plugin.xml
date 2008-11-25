@@ -411,7 +411,7 @@
                class="eu.geclipse.ui.internal.actions.ConfigurationAction"
                icon="icons/geclipse16.gif"
                id="eu.geclipse.ui.configurationAction"
-               label="g-Eclipse Easy Configuration"
+               label="g-Eclipse Easy Configuration..."
                menubarPath="help/helpEnd"
                style="push">
          </action>
