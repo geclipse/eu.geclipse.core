@@ -56,9 +56,13 @@ import eu.geclipse.jsdl.ui.providers.FeatureLabelProvider;
 
 /**
  * @author nloulloud
+ * 
+ * This class is responsible for displaying the Job Identification Section in the 
+ * Job Definition Page of the JSDL editor. It provides widgets to manipulate the 
+ * elements specified in the "Job Identity Elements" section of the Job Submission
+ *  Description Language (JSDL) Specification, Version 1.0.
  */
-public class JobIdentificationSection extends 
-JsdlFormPageSection {
+public class JobIdentificationSection extends JsdlFormPageSection {
 
   private static final int WIDGET_HEIGHT = 100;
   protected JobDefinitionType jobDefinitionType = JsdlFactory.eINSTANCE.createJobDefinitionType();
@@ -82,6 +86,8 @@ JsdlFormPageSection {
   private Composite containerComposite = null;
 
   /**
+   * Class constructor. Creates the section.
+   * 
    * @param parent The parent composite.
    * @param toolkit The parent Form Toolkit.
    */
@@ -135,7 +141,9 @@ JsdlFormPageSection {
     gd.verticalAlignment = GridData.BEGINNING;
     this.lblJobDescripiton.setLayoutData( gd );
     this.txtDescription = toolkit.createText( client,
-                                              "", SWT.MULTI | SWT.V_SCROLL | SWT.WRAP ); //$NON-NLS-1$
+                                              "", SWT.MULTI  //$NON-NLS-1$
+                                              | SWT.V_SCROLL 
+                                              | SWT.WRAP );
     this.txtDescription.addModifyListener( new ModifyListener() {
 
       public void modifyText( final ModifyEvent e ) {
@@ -171,7 +179,8 @@ JsdlFormPageSection {
     gd.widthHint = 250;
     gd.heightHint = WIDGET_HEIGHT;
     tblAnnotations.setLayoutData( gd );
-    // FIXME This is a work-around for the Bug#: 201705 for Windows.
+    
+    // This is a work-around for the Bug#: 201705 for Windows.
     this.annotationsViewer = new TableViewer( tblAnnotations );
     tblAnnotations = this.annotationsViewer.getTable();
     this.annotationsViewer.setContentProvider( new FeatureContentProvider() );
@@ -246,7 +255,8 @@ JsdlFormPageSection {
     gd.widthHint = 250;
     gd.heightHint = WIDGET_HEIGHT;
     tblProjects.setLayoutData( gd );
-    // FIXME This is a work-around for the Bug#: 201705 for Windows.
+    
+    //  This is a work-around for the Bug#: 201705 for Windows.
     this.projectsViewer = new TableViewer( tblProjects );
     tblProjects = this.annotationsViewer.getTable();
     this.projectsViewer.setContentProvider( new FeatureContentProvider() );

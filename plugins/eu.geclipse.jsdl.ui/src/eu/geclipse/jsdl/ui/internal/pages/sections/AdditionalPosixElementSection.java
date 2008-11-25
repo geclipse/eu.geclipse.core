@@ -55,10 +55,12 @@ import eu.geclipse.ui.widgets.NumberVerifier;
 
 /**
  * @author nloulloud
+ * 
+ * This class is responsible for displaying the Additional Posix Element 
+ * section in the Application Page of the JSDL editor.
  *
  */
-public class AdditionalPosixElementSection extends 
-JsdlFormPageSection {
+public class AdditionalPosixElementSection extends JsdlFormPageSection {
   
   protected Label lblWallTimeLimit = null;
   protected Label lblFileSizeLimit = null;
@@ -101,6 +103,15 @@ JsdlFormPageSection {
   
   
   
+  /**
+   * 
+   * This class constructor
+   * 
+   * 
+   * @param formPage the formPage
+   * @param parent  the Parent composite
+   * @param toolkit the Form Toolkit
+   */
   public AdditionalPosixElementSection( final FormPage formPage, final Composite parent, final FormToolkit toolkit ) {
 
     this.parentPage = formPage;

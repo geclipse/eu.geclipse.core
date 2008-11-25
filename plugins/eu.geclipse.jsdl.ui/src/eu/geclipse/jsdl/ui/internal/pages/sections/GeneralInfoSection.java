@@ -50,7 +50,10 @@ import eu.geclipse.jsdl.ui.internal.pages.Messages;
 
 /**
  * @author nloulloud
- *
+ * 
+ * This class is responsible for displaying the General Information section in the 
+ * Overview Page of the JSDL editor. It provides an overview of the value of 
+ * important JSDL elements. 
  */
 public class GeneralInfoSection extends JsdlFormPageSection {
   
@@ -73,14 +76,15 @@ public class GeneralInfoSection extends JsdlFormPageSection {
   protected ApplicationType applicationType = null;
   protected POSIXApplicationType posixApplicationType = null;
   protected DocumentRoot documentRoot = PosixFactory.eINSTANCE.createDocumentRoot();
-  
-  
-//  private Composite containerComposite = null;
-  
-  
+    
+  /**
+   * Class constructor. Creates the section.
+   * 
+   * @param parent The parent composite.
+   * @param toolkit The parent Form Toolkit.
+   */
   public GeneralInfoSection( final Composite parent, final FormToolkit toolkit ){
     
-//    this.containerComposite = parent;
     createSection( parent, toolkit );
     
   }
@@ -196,6 +200,7 @@ public class GeneralInfoSection extends JsdlFormPageSection {
      } );
      
      this.txtInput.setLayoutData( td );
+     
     /* ==============================Output File ============================ */
      
      this.lblOutput = toolkit.createLabel( client, Messages.getString( "OverviewPage_Output" ) ); //$NON-NLS-1$

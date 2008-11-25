@@ -54,12 +54,18 @@ import eu.geclipse.ui.widgets.DoubleNumberVerifier;
 /**
  * @author nloulloud
  *
+ * This class is responsible for displaying the Additional Resources Element
+ * section in the Resources Page of the JSDL editor. It provides widgets to 
+ * manipulate all additional elements specified in the "Resources Elements" 
+ * section of the Job Submission Description Language (JSDL) Specification,
+ * Version 1.0.
  */
 public class AdditionalResourceElementsSection extends JsdlFormPageSection {
   
   protected static final String LOWER_BOUND = JsdlPackage.Literals.RANGE_VALUE_TYPE__LOWER_BOUND.getName();
   protected static final String UPPER_BOUND = JsdlPackage.Literals.RANGE_VALUE_TYPE__UPPER_BOUND.getName();
   protected static final String EXACT = JsdlPackage.Literals.RANGE_VALUE_TYPE__EXACT.getName();
+  
   protected static final String[] RESOURCES_BOUNDARY_ITEMS = { EMPTY_STRING,
                                                                LOWER_BOUND,
                                                                UPPER_BOUND,
@@ -81,7 +87,6 @@ public class AdditionalResourceElementsSection extends JsdlFormPageSection {
   protected Label lblTotVirtMem = null;
   protected Label lblTotDiskSp = null;
   protected Label lblTotResCount = null;
-  
   protected Combo cmbIndividualCPUSpeed = null;
   protected Combo cmbIndividualCPUTime = null;
   protected Combo cmbIndividualCPUCount = null;
@@ -96,8 +101,6 @@ public class AdditionalResourceElementsSection extends JsdlFormPageSection {
   protected Combo cmbTotalDiskSpace = null;
   protected Combo cmbTotalResourceCount = null;
   protected Text txtIndCPUSp = null;
-  
-  
   protected Text txtIndCPUTime = null;
   protected Text txtIndCPUCount = null;
   protected Text txtIndNetBand = null;
@@ -109,16 +112,19 @@ public class AdditionalResourceElementsSection extends JsdlFormPageSection {
   protected Text txtTotPhMem = null;
   protected Text txtTotVirtMem = null;
   protected Text txtTotDiskSp = null;
-  protected Text txtTotResCount = null;  
-//  private FormPage parentPage = null;
+  protected Text txtTotResCount = null;
   
   /**
- * @param parent
- * @param toolkit
- */
+   * 
+   * Class default constructor.
+   * 
+   * @param formPage 
+   * @param parent
+   * @param toolkit
+   */
   public AdditionalResourceElementsSection( final FormPage formPage,
-                                           final Composite parent,
-                                           final FormToolkit toolkit ) {
+                                            final Composite parent,
+                                            final FormToolkit toolkit ) {
         
     this.parentPage = formPage;
     createSection( parent, toolkit );
@@ -127,12 +133,13 @@ public class AdditionalResourceElementsSection extends JsdlFormPageSection {
   
   
   /**
-   * @param jobDefinitionType
+   * Set the Input of this section. The input of this section is the 
+   * ResourcesType contained in the JobDefinitionType. 
+   * 
+   * @param jobDefinitionType The Job Definition type of the JSDL Document.
    */
   public void setInput( final JobDefinitionType jobDefinitionType ) { 
-    
-//    this.adapterRefreshed = true;
-    
+        
     this.jobDescriptionType = jobDefinitionType.getJobDescription();
     
     if ( this.jobDescriptionType.getResources() != null ) {
@@ -165,13 +172,16 @@ public class AdditionalResourceElementsSection extends JsdlFormPageSection {
     this.lblIndCPUSpl = toolkit.createLabel( client,
                                Messages.getString( "ResourcesPage_IndCPUSpeed" ) ); //$NON-NLS-1$
 
-    this.cmbIndividualCPUSpeed = new Combo( client, SWT.SIMPLE | SWT.DROP_DOWN | SWT.READ_ONLY );
+    this.cmbIndividualCPUSpeed = new Combo( client, SWT.SIMPLE 
+                                            | SWT.DROP_DOWN 
+                                            | SWT.READ_ONLY );
+    
     this.cmbIndividualCPUSpeed.setData( FormToolkit.KEY_DRAW_BORDER );
     this.cmbIndividualCPUSpeed.setItems( RESOURCES_BOUNDARY_ITEMS );
     this.cmbIndividualCPUSpeed.addSelectionListener( new SelectionListener(){
 
       public void widgetDefaultSelected( final SelectionEvent e ) {
-        // TODO Auto-generated method stub
+        // Auto-generated method stub
         
       }
 
@@ -208,13 +218,15 @@ public class AdditionalResourceElementsSection extends JsdlFormPageSection {
     td = new TableWrapData( TableWrapData.FILL_GRAB );
     this.lblIndCPUTime = toolkit.createLabel( client,
                               Messages.getString( "ResourcesPage_IndCPUTime" ) ); //$NON-NLS-1$
-    this.cmbIndividualCPUTime = new Combo( client, SWT.SIMPLE | SWT.DROP_DOWN | SWT.READ_ONLY );
+    this.cmbIndividualCPUTime = new Combo( client, SWT.SIMPLE 
+                                           | SWT.DROP_DOWN 
+                                           | SWT.READ_ONLY );
     this.cmbIndividualCPUTime.setData( FormToolkit.KEY_DRAW_BORDER );
     this.cmbIndividualCPUTime.setItems( RESOURCES_BOUNDARY_ITEMS );
     this.cmbIndividualCPUTime.addSelectionListener( new SelectionListener(){
 
       public void widgetDefaultSelected( final SelectionEvent e ) {
-        // TODO Auto-generated method stub
+        // Auto-generated method stub
         
       }
 
@@ -257,7 +269,7 @@ public class AdditionalResourceElementsSection extends JsdlFormPageSection {
     this.cmbIndividualCPUCount.addSelectionListener( new SelectionListener(){
 
       public void widgetDefaultSelected( final SelectionEvent e ) {
-        // TODO Auto-generated method stub
+        // Auto-generated method stub
         
       }
 
@@ -294,13 +306,15 @@ public class AdditionalResourceElementsSection extends JsdlFormPageSection {
     this.lblIndNetBand = toolkit.createLabel( client,
                        Messages.getString( "ResourcesPage_IndNetwBandwidth" ) ); //$NON-NLS-1$
     
-    this.cmbIndividualNetworkBandwidth = new Combo( client, SWT.SIMPLE | SWT.DROP_DOWN | SWT.READ_ONLY );
+    this.cmbIndividualNetworkBandwidth = new Combo( client, SWT.SIMPLE 
+                                                    | SWT.DROP_DOWN 
+                                                    | SWT.READ_ONLY );
     this.cmbIndividualNetworkBandwidth.setData( FormToolkit.KEY_DRAW_BORDER );
     this.cmbIndividualNetworkBandwidth.setItems( RESOURCES_BOUNDARY_ITEMS );
     this.cmbIndividualNetworkBandwidth.addSelectionListener( new SelectionListener(){
 
       public void widgetDefaultSelected( final SelectionEvent e ) {
-        // TODO Auto-generated method stub
+        // Auto-generated method stub
         
       }
 
@@ -336,13 +350,15 @@ public class AdditionalResourceElementsSection extends JsdlFormPageSection {
     this.lblPhysMem = toolkit.createLabel( client,
                                  Messages.getString( "ResourcesPage_PhysMem" ) ); //$NON-NLS-1$
     
-    this.cmbIndividualPhysicalMemory = new Combo( client, SWT.SIMPLE | SWT.DROP_DOWN | SWT.READ_ONLY );
+    this.cmbIndividualPhysicalMemory = new Combo( client, SWT.SIMPLE 
+                                                  | SWT.DROP_DOWN 
+                                                  | SWT.READ_ONLY );
     this.cmbIndividualPhysicalMemory.setData( FormToolkit.KEY_DRAW_BORDER );
     this.cmbIndividualPhysicalMemory.setItems( RESOURCES_BOUNDARY_ITEMS );
     this.cmbIndividualPhysicalMemory.addSelectionListener( new SelectionListener(){
 
       public void widgetDefaultSelected( final SelectionEvent e ) {
-        // TODO Auto-generated method stub
+        // Auto-generated method stub
         
       }
 
@@ -379,7 +395,9 @@ public class AdditionalResourceElementsSection extends JsdlFormPageSection {
     this.lblVirtMem = toolkit.createLabel( client,
                                 Messages.getString( "ResourcesPage_VirtualMem" ) ); //$NON-NLS-1$
     
-    this.cmbIndividualVirtualMesmory = new Combo( client, SWT.SIMPLE | SWT.DROP_DOWN | SWT.READ_ONLY );
+    this.cmbIndividualVirtualMesmory = new Combo( client, SWT.SIMPLE 
+                                                  | SWT.DROP_DOWN 
+                                                  | SWT.READ_ONLY );
     this.cmbIndividualVirtualMesmory.setData( FormToolkit.KEY_DRAW_BORDER );
     this.cmbIndividualVirtualMesmory.setItems( RESOURCES_BOUNDARY_ITEMS ); 
     this.txtVirtMem = toolkit.createText( client, EMPTY_STRING, SWT.NONE );
@@ -392,7 +410,9 @@ public class AdditionalResourceElementsSection extends JsdlFormPageSection {
     this.lblIndDiskSpac = toolkit.createLabel( client,
                               Messages.getString( "ResourcesPage_IndDiskSpace" ) ); //$NON-NLS-1$
     
-    this.cmbIndividualDiskSpace = new Combo( client, SWT.SIMPLE | SWT.DROP_DOWN | SWT.READ_ONLY );
+    this.cmbIndividualDiskSpace = new Combo( client, SWT.SIMPLE 
+                                             | SWT.DROP_DOWN
+                                             | SWT.READ_ONLY );
     this.cmbIndividualDiskSpace.setData( FormToolkit.KEY_DRAW_BORDER );
     this.cmbIndividualDiskSpace.setItems( RESOURCES_BOUNDARY_ITEMS );    
     
@@ -406,7 +426,9 @@ public class AdditionalResourceElementsSection extends JsdlFormPageSection {
     this.lblCPUTime = toolkit.createLabel( client,
                                    Messages.getString( "ResourcesPage_CPUTime" ) ); //$NON-NLS-1$
     
-    this.cmbTotalCPUTime = new Combo( client, SWT.SIMPLE | SWT.DROP_DOWN | SWT.READ_ONLY );
+    this.cmbTotalCPUTime = new Combo( client, SWT.SIMPLE 
+                                      | SWT.DROP_DOWN 
+                                      | SWT.READ_ONLY );
     this.cmbTotalCPUTime.setData( FormToolkit.KEY_DRAW_BORDER );
     this.cmbTotalCPUTime.setItems( RESOURCES_BOUNDARY_ITEMS ); 
     this.txtCPUTime = toolkit.createText( client, EMPTY_STRING, SWT.NONE );
@@ -419,7 +441,9 @@ public class AdditionalResourceElementsSection extends JsdlFormPageSection {
     this.lblCPUCount = toolkit.createLabel( client,
                                Messages.getString( "ResourcesPage_TotCPUCount" ) ); //$NON-NLS-1$
 
-    this.cmbTotalCPUCount = new Combo( client, SWT.SIMPLE | SWT.DROP_DOWN | SWT.READ_ONLY );
+    this.cmbTotalCPUCount = new Combo( client, SWT.SIMPLE 
+                                       | SWT.DROP_DOWN 
+                                       | SWT.READ_ONLY );
     this.cmbTotalCPUCount.setData( FormToolkit.KEY_DRAW_BORDER );
     this.cmbTotalCPUCount.setItems( RESOURCES_BOUNDARY_ITEMS ); 
     this.txtCPUCount = toolkit.createText( client, EMPTY_STRING, SWT.NONE );
@@ -432,13 +456,15 @@ public class AdditionalResourceElementsSection extends JsdlFormPageSection {
     this.lblTotPhMem = toolkit.createLabel( client,
                                 Messages.getString( "ResourcesPage_TotPhysMem" ) ); //$NON-NLS-1$
     
-    this.cmbTotalPhysicalMemory = new Combo( client, SWT.SIMPLE | SWT.DROP_DOWN | SWT.READ_ONLY );
+    this.cmbTotalPhysicalMemory = new Combo( client, SWT.SIMPLE 
+                                             | SWT.DROP_DOWN 
+                                             | SWT.READ_ONLY );
     this.cmbTotalPhysicalMemory.setData( FormToolkit.KEY_DRAW_BORDER );
     this.cmbTotalPhysicalMemory.setItems( RESOURCES_BOUNDARY_ITEMS ); 
     this.cmbTotalPhysicalMemory.addSelectionListener( new SelectionListener(){
 
       public void widgetDefaultSelected( final SelectionEvent e ) {
-        // TODO Auto-generated method stub
+        // Auto-generated method stub
         
       }
 
@@ -473,7 +499,9 @@ public class AdditionalResourceElementsSection extends JsdlFormPageSection {
     this.lblTotVirtMem = toolkit.createLabel(client,
                              Messages.getString("ResourcesPage_TotVirtualMem")); //$NON-NLS-1$
     
-    this.cmbTotalVirtualMemory = new Combo( client, SWT.SIMPLE | SWT.DROP_DOWN | SWT.READ_ONLY );
+    this.cmbTotalVirtualMemory = new Combo( client, SWT.SIMPLE 
+                                            | SWT.DROP_DOWN 
+                                            | SWT.READ_ONLY );
     this.cmbTotalVirtualMemory.setData( FormToolkit.KEY_DRAW_BORDER );
     this.cmbTotalVirtualMemory.setItems( RESOURCES_BOUNDARY_ITEMS ); 
     this.txtTotVirtMem = toolkit.createText( client, EMPTY_STRING, SWT.NONE );
@@ -486,7 +514,9 @@ public class AdditionalResourceElementsSection extends JsdlFormPageSection {
     this.lblTotDiskSp = toolkit.createLabel( client,
                            Messages.getString( "ResourcesPage_TotDiskSpace" ) ); //$NON-NLS-1$
     
-    this.cmbTotalDiskSpace = new Combo( client, SWT.SIMPLE | SWT.DROP_DOWN | SWT.READ_ONLY );
+    this.cmbTotalDiskSpace = new Combo( client, SWT.SIMPLE 
+                                        | SWT.DROP_DOWN 
+                                        | SWT.READ_ONLY );
     this.cmbTotalDiskSpace.setData( FormToolkit.KEY_DRAW_BORDER );
     this.cmbTotalDiskSpace.setItems( RESOURCES_BOUNDARY_ITEMS );
     this.txtTotDiskSp = toolkit.createText( client, EMPTY_STRING, SWT.NONE );
@@ -499,7 +529,9 @@ public class AdditionalResourceElementsSection extends JsdlFormPageSection {
     this.lblTotResCount = toolkit.createLabel( client,
                              Messages.getString( "ResourcesPage_TotRescCount" ) ); //$NON-NLS-1$
     
-    this.cmbTotalResourceCount = new Combo( client, SWT.SIMPLE | SWT.DROP_DOWN | SWT.READ_ONLY );
+    this.cmbTotalResourceCount = new Combo( client, SWT.SIMPLE 
+                                            | SWT.DROP_DOWN 
+                                            | SWT.READ_ONLY );
     this.cmbTotalResourceCount.setData( FormToolkit.KEY_DRAW_BORDER );
     this.cmbTotalResourceCount.setItems( RESOURCES_BOUNDARY_ITEMS );
     this.txtTotResCount = toolkit.createText( client, EMPTY_STRING, SWT.NONE );
@@ -619,7 +651,7 @@ public class AdditionalResourceElementsSection extends JsdlFormPageSection {
         
     }
   }
-  /* Total Netwokr Bandwidth */
+  /* Total Network Bandwidth */
   if (this.resourcesType.getIndividualNetworkBandwidth() != null ){
     
     if (this.resourcesType.getIndividualNetworkBandwidth().getLowerBound() != null ) {    
@@ -826,8 +858,7 @@ public class AdditionalResourceElementsSection extends JsdlFormPageSection {
   protected String getMessage() {
     
     return this.parentPage.getManagedForm().getForm().getMessage();
-  }
-  
+  }  
   
    
 }

@@ -58,13 +58,16 @@ import eu.geclipse.jsdl.ui.providers.FeatureLabelProvider;
 /**
  * @author nloulloud
  *
+ * This class is responsible for displaying the File System section in the 
+ * Resources Page of the JSDL editor. It provides widgets to manipulate the
+ * FileSystemType element specified in the "Resources Elements" section of the 
+ * Job Submission Description Language (JSDL) Specification, Version 1.0.
  */
-public class FileSystemSection extends 
-JsdlFormPageSection {
-  
+public class FileSystemSection extends JsdlFormPageSection { 
   
   private static final int TXT_LENGTH = 300;
   private static final int WIDGET_HEIGHT = 100;
+  
   protected JobDescriptionType jobDescriptionType = JsdlFactory.eINSTANCE.createJobDescriptionType();
   protected ResourcesType resourcesType = JsdlFactory.eINSTANCE.createResourcesType();
   protected FileSystemType fileSystemType;
@@ -79,11 +82,12 @@ JsdlFormPageSection {
   private Composite containerComposite = null;
   
   /**
-   * @param parent
-   * @param toolkit
+   * Class constructor. Creates the section.
+   * 
+   * @param parent The parent composite.
+   * @param toolkit The parent Form Toolkit.
    */
-  public FileSystemSection (final Composite parent,
-                            final FormToolkit toolkit) {
+  public FileSystemSection (final Composite parent, final FormToolkit toolkit) {
     
     this.containerComposite = parent;
     createSection( parent, toolkit );
@@ -92,7 +96,10 @@ JsdlFormPageSection {
   
   
   /**
-   * @param jobDefinitionType
+   * Set the Input of this section. The input of this section is the 
+   * ResourcesType contained in the JobDefinitionType. 
+   * 
+   * @param jobDefinitionType The Job Definition type of the JSDL Document.
    */
   public void setInput( final JobDefinitionType jobDefinitionType ) { 
 
@@ -102,25 +109,21 @@ JsdlFormPageSection {
     if ( this.jobDescriptionType.getResources() != null ) {
       this.resourcesType = this.jobDescriptionType.getResources();
     }
+    
     fillFields();
     
   }
-  
-  
-  
-  private void createSection  ( final Composite parent,
-                                final FormToolkit toolkit ) {
+    
+  private void createSection  ( final Composite parent, final FormToolkit toolkit ) {
     
     String sectionTitle = Messages.getString( "ResourcesPage_FileSystem") ;  //$NON-NLS-1$
     String sectionDescription = Messages.getString( "ResourcesPage_FileSystemDesc" ); //$NON-NLS-1$
-    
-
        
     Composite client = FormSectionFactory.createGridStaticSection( toolkit,
-                                                               parent,
-                                                               sectionTitle,
-                                                               sectionDescription,
-                                                               2 );
+                                                                   parent,
+                                                                   sectionTitle,
+                                                                   sectionDescription,
+                                                                   2 );
     GridData gd;
     gd = new GridData();
     
@@ -128,8 +131,11 @@ JsdlFormPageSection {
     
    
     
-    this.tblFileSystems = new Table( client, SWT.BORDER | SWT.H_SCROLL 
-                                            | SWT.V_SCROLL | SWT.MULTI );
+    this.tblFileSystems = new Table( client, SWT.BORDER 
+                                     | SWT.H_SCROLL
+                                     | SWT.V_SCROLL 
+                                     | SWT.MULTI );
+    
     gd = new GridData( GridData.FILL_BOTH );
     gd.grabExcessHorizontalSpace = true;
     gd.grabExcessVerticalSpace = true;

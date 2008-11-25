@@ -49,12 +49,17 @@ import eu.geclipse.jsdl.ui.internal.pages.Messages;
 
 /**
  * @author nloulloud
+ * 
+ * This class is responsible for displaying the Operating System section in the 
+ * Resources Page of the JSDL editor. It provides widgets to manipulate the 
+ * OperatingSystemType element specified in the "Resources Elements" section of 
+ * the Job Submission Description Language (JSDL) Specification, Version 1.0.
  *
  */
-public class OperatingSystemSection extends 
-JsdlFormPageSection {
+public class OperatingSystemSection extends JsdlFormPageSection {
   
   private static final int WIDGET_HEIGHT = 100;
+  
   protected JobDescriptionType jobDescriptionType = JsdlFactory.eINSTANCE.createJobDescriptionType();
   protected ResourcesType resourcesType = JsdlFactory.eINSTANCE.createResourcesType();  
   protected OperatingSystemType operatingSystemType = JsdlFactory.eINSTANCE.createOperatingSystemType();
@@ -68,20 +73,23 @@ JsdlFormPageSection {
     
   
   /**
-   * @param parent
-   * @param toolkit
+   * Class constructor. Creates the section.
+   * 
+   * @param parent The parent composite.
+   * @param toolkit The parent Form Toolkit.
    */
-  public OperatingSystemSection(final Composite parent,
-                                final FormToolkit toolkit ){
+  public OperatingSystemSection(final Composite parent, final FormToolkit toolkit ){
     
       createSection( parent, toolkit );
-    
   }
   
   
   
   /**
-   * @param jobDefinitionType
+   * Set the Input of this section. The input of this section is the 
+   * ResourcesType contained in the JobDefinitionType. 
+   * 
+   * @param jobDefinitionType The Job Definition type of the JSDL Document.
    */
   public void setInput( final JobDefinitionType jobDefinitionType ) { 
 
@@ -95,20 +103,7 @@ JsdlFormPageSection {
     
   }
     
-  
-  
-//  protected void contentChanged() {
-//    
-//    if (this.isNotifyAllowed){
-//      fireNotifyChanged( null);
-//    }
-//    
-//  }
-  
-  
-  
-  private void createSection (final Composite parent,
-                              final FormToolkit toolkit ) {
+  private void createSection (final Composite parent, final FormToolkit toolkit ) {
     
     String sectionTitle = Messages.getString( "ResourcesPage_OperSyst" ); //$NON-NLS-1$
     String sectionDescription = Messages.getString( "ResourcesPage_OperSystDescr" ); //$NON-NLS-1$
@@ -127,7 +122,10 @@ JsdlFormPageSection {
     /*==================== Operating System Type Widgets =====================*/
     this.lblOperSystType = toolkit.createLabel( client,
                               Messages.getString( "ResourcesPage_OperSystType" ) ); //$NON-NLS-1$
-    this.cmbOperSystType = new Combo( client, SWT.SIMPLE | SWT.DROP_DOWN | SWT.READ_ONLY );
+    this.cmbOperSystType = new Combo( client, SWT.SIMPLE 
+                                      | SWT.DROP_DOWN 
+                                      | SWT.READ_ONLY );
+    
     this.cmbOperSystType.setData( FormToolkit.KEY_DRAW_BORDER );
     
     /* Populate the Combo Box with the CPU Architecture Literals */    
@@ -162,9 +160,9 @@ JsdlFormPageSection {
                     
         }
         else {
+          
           checkOSElement();   
           
-
           OperatingSystemSection.this.operatingSystemTypeType
                            .setOperatingSystemName(OperatingSystemTypeEnumeration
                                    .get( selectedOSName ) );

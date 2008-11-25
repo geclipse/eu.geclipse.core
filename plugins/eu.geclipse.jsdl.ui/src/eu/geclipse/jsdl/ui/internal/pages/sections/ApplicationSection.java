@@ -34,7 +34,12 @@ import eu.geclipse.jsdl.ui.internal.pages.Messages;
 
 /**
  * @author nloulloud
- *
+ * 
+ * This class is responsible for displaying the Application Section in the 
+ * Application Page of the JSDL editor. It provides widgets to manipulate all 
+ * elements specified in the "Application Elements" section of the Job 
+ * Submission Description Language (JSDL) Specification, Version 1.0.
+ *  
  */
 public class ApplicationSection extends JsdlFormPageSection {
   
@@ -50,6 +55,8 @@ public class ApplicationSection extends JsdlFormPageSection {
   protected ApplicationType applicationType = JsdlFactory.eINSTANCE.createApplicationType();
   
   /**
+   * Class constructor. Creates the section.
+   *  
    * @param parent The parent composite.
    * @param toolkit The parent Form Toolkit.
    */
@@ -90,7 +97,7 @@ public class ApplicationSection extends JsdlFormPageSection {
         if (!ApplicationSection.this.txtApplicationName.getText().equals( EMPTY_STRING )){
           ApplicationSection.this.applicationType.setApplicationName( 
                                                                 ApplicationSection.this.txtApplicationName.getText() );
-        }else{
+        } else {
           ApplicationSection.this.applicationType.setApplicationName( null );
         }
         
@@ -132,8 +139,8 @@ public class ApplicationSection extends JsdlFormPageSection {
     
     this.txtDescription = toolkit.createText( client, "", //$NON-NLS-1$
                                               SWT.NONE
-                                                  | SWT.V_SCROLL
-                                                  | SWT.WRAP );
+                                              | SWT.V_SCROLL
+                                              | SWT.WRAP );
     gd = new GridData();
     gd.verticalSpan = 3;
     gd.widthHint = 285;

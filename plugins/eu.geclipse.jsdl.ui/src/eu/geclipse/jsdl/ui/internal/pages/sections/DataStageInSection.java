@@ -61,12 +61,16 @@ import eu.geclipse.jsdl.ui.providers.FeatureContentProvider;
 /**
  * @author nloulloud
  *
+ * This class is responsible for displaying the Stage-In Files section in the 
+ * Data Staging Page of the JSDL editor. It provides widgets to manipulate the 
+ * elements specified in the "Data Staging Elements" section of the 
+ * Job Submission Description Language (JSDL) Specification, Version 1.0.
  */
-public class DataStageInSection extends 
-JsdlFormPageSection {
+public class DataStageInSection extends JsdlFormPageSection {
   
   
   private static final int WIDGET_HEIGHT = 170;
+  
   protected Button btnStageInAdd = null;
   protected Button btnStageInEdit = null;
   protected Button btnStageInDel = null;
@@ -83,6 +87,12 @@ JsdlFormPageSection {
   
   
   
+  /**
+   * Class constructor. Creates the section.
+   *  
+   * @param parent The parent composite.
+   * @param toolkit The parent Form Toolkit.
+   */
   public DataStageInSection( final Composite parent, final FormToolkit toolkit ){
     
     this.containerComposite = parent;
@@ -116,7 +126,9 @@ JsdlFormPageSection {
    gd.widthHint = 600;
    gd.heightHint = WIDGET_HEIGHT;
    
-   this.stageInViewer = new TableViewer( client, SWT.BORDER| SWT.FULL_SELECTION | SWT.MULTI);
+   this.stageInViewer = new TableViewer( client, SWT.BORDER 
+                                         | SWT.FULL_SELECTION 
+                                         | SWT.MULTI);
    
    this.tblStageIn = this.stageInViewer.getTable();
    this.tblStageIn .setHeaderVisible( true);   
@@ -253,7 +265,6 @@ JsdlFormPageSection {
   }
   
   
-  @SuppressWarnings("boxing")
   protected void handleEventDialog( final DataStagingType selectedObject ) {
     
      DataStagingInDialog dialog;
@@ -293,7 +304,7 @@ JsdlFormPageSection {
    * 
    */
   @SuppressWarnings({
-    "boxing", "unchecked"
+    "unchecked"
   })
   public void performAdd ( final TableViewer tableViewer, final ArrayList<DataStagingType> innerDataStageList) {
     
@@ -444,7 +455,7 @@ JsdlFormPageSection {
    *  
    */
   @SuppressWarnings({
-    "unchecked", "boxing"
+    "unchecked"
   })
   public void performEdit( final TableViewer tableViewer, final ArrayList<DataStagingType> innerDataStageList) {
 

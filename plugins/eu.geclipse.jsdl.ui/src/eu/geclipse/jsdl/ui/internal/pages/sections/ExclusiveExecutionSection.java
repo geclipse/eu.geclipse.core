@@ -39,9 +39,12 @@ import eu.geclipse.jsdl.ui.internal.pages.Messages;
 /**
  * @author nloulloud
  *
+ * This class is responsible for displaying the Exclusive Execution section in the 
+ * Resources Page of the JSDL editor. It provides widgets to manipulate the 
+ * ExclusiveExecutionType element specified in the "Resources Elements" section of the 
+ * Job Submission Description Language (JSDL) Specification, Version 1.0.
  */
-public class ExclusiveExecutionSection extends 
-JsdlFormPageSection {
+public class ExclusiveExecutionSection extends JsdlFormPageSection {
   
   protected JobDescriptionType jobDescriptionType = JsdlFactory.eINSTANCE.createJobDescriptionType();
   protected ResourcesType resourcesType = JsdlFactory.eINSTANCE.createResourcesType();
@@ -50,11 +53,12 @@ JsdlFormPageSection {
   
     
   /**
-   * @param parent
-   * @param toolkit
+   * Class constructor. Creates the section.
+   *  
+   * @param parent The parent composite.
+   * @param toolkit The parent Form Toolkit.
    */
-  public ExclusiveExecutionSection(final Composite parent,
-                                   final FormToolkit toolkit ){
+  public ExclusiveExecutionSection(final Composite parent, final FormToolkit toolkit ){
     
    createSection( parent,toolkit );
     
@@ -62,7 +66,10 @@ JsdlFormPageSection {
   
   
   /**
-   * @param jobDefinitionType
+   * Set the Input of this section. The input of this section is the 
+   * ResourcesType contained in the JobDefinitionType. 
+   * 
+   * @param jobDefinitionType The Job Definition type of the JSDL Document.
    */
   public void setInput( final JobDefinitionType jobDefinitionType ) { 
 
@@ -111,8 +118,9 @@ JsdlFormPageSection {
     this.lblExclExecution = toolkit.createLabel( client,
                              Messages.getString( "ResourcesPage_ExclExec" ) ); //$NON-NLS-1$
     
-    this.cmbExclExec = new Combo( client, SWT.SIMPLE 
-                                              | SWT.DROP_DOWN | SWT.READ_ONLY );
+    this.cmbExclExec = new Combo( client, SWT.SIMPLE
+                                  | SWT.DROP_DOWN 
+                                  | SWT.READ_ONLY );
     
     this.cmbExclExec.setData( FormToolkit.KEY_DRAW_BORDER );
     

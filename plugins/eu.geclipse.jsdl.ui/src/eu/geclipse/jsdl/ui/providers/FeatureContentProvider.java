@@ -18,9 +18,8 @@
 package eu.geclipse.jsdl.ui.providers;
 
 /**
- * @author nickl
+ * @author nloulloud
  */
-
 import java.util.Collection;
 
 import org.eclipse.emf.common.util.EList;

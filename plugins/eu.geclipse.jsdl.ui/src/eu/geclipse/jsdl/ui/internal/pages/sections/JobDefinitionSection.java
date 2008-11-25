@@ -29,17 +29,21 @@ import eu.geclipse.jsdl.model.base.JobDefinitionType;
 import eu.geclipse.jsdl.ui.internal.pages.FormSectionFactory;
 import eu.geclipse.jsdl.ui.internal.pages.Messages;
 
-
 /**
  * @author nloulloud
+ * 
+ * This class is responsible for displaying the General Information section in the 
+ * Job Definition Page of the JSDL editor. It provides widgets to manipulate the 
+ * JobDefinitionType element specified in the "Job Structure Elements" section of 
+ * the Job Submission Description Language (JSDL) Specification, Version 1.0.
  *
  */
-public class JobDefinitionSection extends 
-JsdlFormPageSection {
+public class JobDefinitionSection extends JsdlFormPageSection {
   
   protected JobDefinitionType jobDefinitionType;
   protected Text txtId = null;
   protected Label lblJobId = null;
+  
   /**
    * Constructs a new <code> JobDefinitionSection </code> for the JSDLEditor. This section allows to manipulate
    * the <b>Job Definition </b> element through the Job Definition Page of the JSDL editor. 

@@ -47,6 +47,13 @@ public class SweepValuesSection extends JsdlFormPageSection {
   private Combo sweepListCombo;
   private Shell shell;
 
+  /**
+   * Class constructor. Creates the section.
+   * 
+   * @param parent The parent composite.
+   * @param toolkit The parent Form Toolkit.
+   * @param adapter 
+   */
   public SweepValuesSection(final Composite parent,
                             final FormToolkit toolkit,
                             final ParametricJobAdapter adapter){
@@ -56,8 +63,8 @@ public class SweepValuesSection extends JsdlFormPageSection {
 
   private void createSection( final Composite parent, final FormToolkit toolkit ) {
     this.shell = parent.getShell();
-    String sectionTitle = "Sweep values";
-    String sectionDescription = "Specify the values of parameters";
+    String sectionTitle = "Sweep values"; //$NON-NLS-1$
+    String sectionDescription = "Specify the values of parameters"; //$NON-NLS-1$
     Composite client = FormSectionFactory.createGridStaticSection( toolkit,
                                                                    parent,
                                                                    sectionTitle,
@@ -66,7 +73,13 @@ public class SweepValuesSection extends JsdlFormPageSection {
     this.sweepListCombo = new Combo(client, SWT.NONE);
   }
 
-  public void setInput( JobDefinitionType jobDefinition ) {
+  /**
+   * Set the Input of this section. The input of this section is the 
+   * ResourcesType contained in the JobDefinitionType. 
+   * 
+   * @param jobDefinition The Job Definition type of the JSDL Document.
+   */
+  public void setInput( final JobDefinitionType jobDefinition ) {
     this.adapterRefreshed = true;
     this.sweepType = new ArrayList<SweepType>();
     if( null != jobDefinition ) {

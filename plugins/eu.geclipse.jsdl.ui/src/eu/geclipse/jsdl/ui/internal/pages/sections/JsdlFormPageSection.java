@@ -20,6 +20,12 @@ import org.eclipse.ui.forms.editor.FormPage;
 
 import eu.geclipse.jsdl.ui.adapters.jsdl.JsdlAdaptersFactory;
 
+/**
+ * @author nloulloud
+ * 
+ * The base class for any FormPageSection subclass.
+ *
+ */
 public class JsdlFormPageSection extends JsdlAdaptersFactory {
 
   protected static final String EMPTY_STRING = ""; //$NON-NLS-1$
@@ -27,6 +33,9 @@ public class JsdlFormPageSection extends JsdlAdaptersFactory {
   protected boolean isNotifyAllowed = true;
   protected boolean adapterRefreshed = false;
 
+  /**
+   * Default class constructor. Calls the super constructor.
+   */
   public JsdlFormPageSection() {
     super();
   }

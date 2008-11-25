@@ -71,7 +71,11 @@ import eu.geclipse.jsdl.ui.providers.FeatureLabelProvider;
 
 /**
  * @author nloulloud
- *
+ * 
+ * This class is responsible for displaying the POSIX Application section in the 
+ * Application Page of the JSDL editor. It provides widgets to manipulate the 
+ * elements specified in the "POSIX Application Elements" section of 
+ * the Job Submission Description Language (JSDL) Specification, Version 1.0.
  */
 public class PosixApplicationSection extends JsdlFormPageSection {
   
@@ -112,6 +116,8 @@ public class PosixApplicationSection extends JsdlFormPageSection {
   
   
   /**
+   * Class constructor. Creates the section.
+   *  
    * @param formPage The FormPage that contains this Section
    * @param parent The parent composite.
    * @param toolkit The parent Form Toolkit.
@@ -125,14 +131,10 @@ public class PosixApplicationSection extends JsdlFormPageSection {
   
   
   /*
-   * Create the Posix Application Section which includes the following:
-   * -Executable (String) -Argument (String) -Input (String) -Output (String)
-   * -Error (String) -Environment (String)
+   * Create the Posix Application Section 
    */
-  private void createSection( final Composite parent,
-                              final FormToolkit toolkit ){
-    
-    
+  private void createSection( final Composite parent, final FormToolkit toolkit ){
+        
     String sectionTitle = Messages.getString( "JobApplicationPage_PosixApplicationtitle" ); //$NON-NLS-1$
     String sectionDescripiton = Messages.getString( "JobApplicationPage_PosixApplicationDescription" ); //$NON-NLS-1$
     GridData gd;

@@ -229,7 +229,7 @@ public class ApplicationSpecificControlsFactory {
                                                          Activator.PLUGIN_ID );
       ProblemDialog.openProblem( PlatformUI.getWorkbench()
         .getActiveWorkbenchWindow()
-        .getShell(), "Problem", "There was a problem with XML", exception );
+        .getShell(), "Problem", "There was a problem with XML", exception );  //$NON-NLS-1$//$NON-NLS-2$
     }
   }
 

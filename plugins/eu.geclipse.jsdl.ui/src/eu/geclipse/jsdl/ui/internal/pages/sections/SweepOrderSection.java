@@ -116,6 +116,12 @@ public class SweepOrderSection extends JsdlFormPageSection {
     createSection( parent, toolkit );
   }
 
+  /**
+   * Set the Input of this section. The input of this section is the 
+   * ResourcesType contained in the JobDefinitionType. 
+   * 
+   * @param jobDefinitionType The Job Definition type of the JSDL Document.
+   */
   public void setInput( final JobDefinitionType jobDefinition ) {
     this.adapterRefreshed = true;
     this.sweepType = new ArrayList<SweepType>();
@@ -172,8 +178,8 @@ public class SweepOrderSection extends JsdlFormPageSection {
   {
     // general form settings
     this.shell = parent.getShell();
-    String sectionTitle = "Sweep order";
-    String sectionDescription = "Specify the order of parameters sweep and their dependency from each other";
+    String sectionTitle = "Sweep order"; //$NON-NLS-1$
+    String sectionDescription = "Specify the order of parameters sweep and their dependency from each other"; //$NON-NLS-1$
     Composite client = FormSectionFactory.createGridStaticSection( toolkit,
                                                                    parent,
                                                                    sectionTitle,
@@ -230,29 +236,29 @@ public class SweepOrderSection extends JsdlFormPageSection {
     // tree buttons composite
     Composite buttonComp = toolkit.createComposite( treeComp );
     buttonComp.setLayout( new GridLayout( 1, true ) );
-    this.newButton = toolkit.createButton( buttonComp, "New sweep...", SWT.PUSH );
+    this.newButton = toolkit.createButton( buttonComp, "New sweep...", SWT.PUSH ); //$NON-NLS-1$
     this.newButton.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ) );
     this.independentButton = toolkit.createButton( buttonComp,
-                                                   "Independent sweep...",
+                                                   "Independent sweep...", //$NON-NLS-1$
                                                    SWT.PUSH );
     gData = new GridData( GridData.FILL_HORIZONTAL );
     gData.verticalIndent = 15;
     this.independentButton.setLayoutData( gData );
     this.sameLevelButton = toolkit.createButton( buttonComp,
-                                                 "Sweep on the same level...",
+                                                 "Sweep on the same level...", //$NON-NLS-1$
                                                  SWT.PUSH );
     this.sameLevelButton.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ) );
     this.innerButton = toolkit.createButton( buttonComp,
-                                             "Inner sweep...",
+                                             "Inner sweep...", //$NON-NLS-1$
                                              SWT.PUSH );
     this.innerButton.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ) );
-    this.deleteButton = toolkit.createButton( buttonComp, "Delete", SWT.PUSH );
+    this.deleteButton = toolkit.createButton( buttonComp, "Delete", SWT.PUSH ); //$NON-NLS-1$
     gData = new GridData( GridData.FILL_HORIZONTAL );
     gData.verticalIndent = 15;
     this.deleteButton.setLayoutData( gData );
     updateButtons();
     // values controls
-    toolkit.createLabel( client, "Sweep element" );
+    toolkit.createLabel( client, "Sweep element" ); //$NON-NLS-1$
     this.sweepCombo = new Combo( client, SWT.NONE | SWT.READ_ONLY );
     gData = new GridData( GridData.FILL_BOTH | GridData.GRAB_HORIZONTAL );
     gData.widthHint = 200;
@@ -268,7 +274,7 @@ public class SweepOrderSection extends JsdlFormPageSection {
       }
     } );
     toolkit.createLabel( client,
-                         "Parameter values\n(put each value in new line)" );
+                         "Parameter values\n(put each value in new line)" ); //$NON-NLS-1$
     this.textArea = new Text( client, SWT.MULTI
                                       | SWT.WRAP
                                       | SWT.V_SCROLL
@@ -314,7 +320,7 @@ public class SweepOrderSection extends JsdlFormPageSection {
     Composite buttonValComp = toolkit.createComposite( client );
     buttonValComp.setLayout( new GridLayout( 1, true ) );
     this.addFunctionButton = toolkit.createButton( buttonValComp,
-                                                   "Define loop...",
+                                                   "Define loop...", //$NON-NLS-1$
                                                    SWT.PUSH );
     gData = new GridData();
     this.addFunctionButton.addSelectionListener( new SelectionAdapter() {
@@ -344,7 +350,7 @@ public class SweepOrderSection extends JsdlFormPageSection {
 
   protected void appendTextToTextArea( final String string ) {
     String newText = this.textArea.getText();
-    newText = newText.trim() + System.getProperty( "line.separator" ) + string;
+    newText = newText.trim() + System.getProperty( "line.separator" ) + string; //$NON-NLS-1$
     this.textArea.setText( newText.trim() );
     List<String> val = new ArrayList<String>();
     for( String value : SweepOrderSection.this.textArea.getText()
@@ -352,8 +358,8 @@ public class SweepOrderSection extends JsdlFormPageSection {
     {
       val.add( value );
     }
-    SweepType sweep = SweepOrderSection.this.adapter.findSweepElement( sweepCombo.getText(),
-                                                                       inerSweepList );
+    SweepType sweep = SweepOrderSection.this.adapter.findSweepElement( this.sweepCombo.getText(),
+                                                                       this.inerSweepList );
     AssignmentType assignment = null;
     if( sweep.getAssignment() != null ) {
       for( int j = 0; j < sweep.getAssignment().size(); j++ ) {
@@ -445,10 +451,10 @@ public class SweepOrderSection extends JsdlFormPageSection {
     this.innerButton.setEnabled( enable );
     this.deleteButton.setEnabled( enable );
     if( this.addFunctionButton != null ) {
-      this.addFunctionButton.setEnabled( !this.sweepCombo.getText().equals( "" )
+      this.addFunctionButton.setEnabled( !this.sweepCombo.getText().equals( "" ) //$NON-NLS-1$
                                          && this.textArea.getText()
                                            .trim()
-                                           .equals( "" ) );
+                                           .equals( "" ) ); //$NON-NLS-1$
     }
   }
 
@@ -465,7 +471,7 @@ public class SweepOrderSection extends JsdlFormPageSection {
       this.textArea.setText( multiLinesContent );
       updateButtons();
     } else {
-      this.textArea.setText( "" );
+      this.textArea.setText( "" ); //$NON-NLS-1$
       updateButtons();
     }
   }
@@ -478,7 +484,7 @@ public class SweepOrderSection extends JsdlFormPageSection {
         removeSelected();
       }
     };
-    action.setText( "Delete" );
+    action.setText( "Delete" ); //$NON-NLS-1$
     return action;
   }
 
@@ -490,7 +496,7 @@ public class SweepOrderSection extends JsdlFormPageSection {
         addNew();
       }
     };
-    action.setText( "New..." );
+    action.setText( "New..." ); //$NON-NLS-1$
     return action;
   }
 
@@ -502,7 +508,7 @@ public class SweepOrderSection extends JsdlFormPageSection {
         addChangesForEachChange();
       }
     };
-    action.setText( "Add inner sweep..." );
+    action.setText( "Add inner sweep..." ); //$NON-NLS-1$
     return action;
   }
 
@@ -574,7 +580,7 @@ public class SweepOrderSection extends JsdlFormPageSection {
         addIndependent();
       }
     };
-    action.setText( "Add independent sweep..." );
+    action.setText( "Add independent sweep..." ); //$NON-NLS-1$
     return action;
   }
 
@@ -586,7 +592,7 @@ public class SweepOrderSection extends JsdlFormPageSection {
         addChangesWith();
       }
     };
-    action.setText( "Add sweep on the same level..." );
+    action.setText( "Add sweep on the same level..." ); //$NON-NLS-1$
     return action;
   }
 
@@ -660,25 +666,25 @@ public class SweepOrderSection extends JsdlFormPageSection {
           enable = true;
         }
         // Adds a separator
-        mManager.add( new Separator( "Zero" ) );
+        mManager.add( new Separator( "Zero" ) ); //$NON-NLS-1$
         // Adds a GroupMarker
         GroupMarker marker = new GroupMarker( IWorkbenchActionConstants.MB_ADDITIONS );
         mManager.add( marker );
         mManager.add( createNewAction() );
         Action action = createIndependentSweepAction();
         action.setEnabled( enable );
-        mManager.add( new Separator( "First" ) );
-        mManager.appendToGroup( "First", action );
+        mManager.add( new Separator( "First" ) ); //$NON-NLS-1$
+        mManager.appendToGroup( "First", action ); //$NON-NLS-1$
         action = createChangesWithSweepAction();
         action.setEnabled( enable );
-        mManager.appendToGroup( "First", action );
+        mManager.appendToGroup( "First", action ); //$NON-NLS-1$
         action = createChangesForEachAction();
         action.setEnabled( enable );
-        mManager.appendToGroup( "First", action );
-        mManager.add( new Separator( "Second" ) );
+        mManager.appendToGroup( "First", action ); //$NON-NLS-1$
+        mManager.add( new Separator( "Second" ) ); //$NON-NLS-1$
         action = createDeleteAction();
         action.setEnabled( enable );
-        mManager.appendToGroup( "Second", action );
+        mManager.appendToGroup( "Second", action ); //$NON-NLS-1$
       }
     } );
     Menu contextMenu = mManager.createContextMenu( this.viewer.getTree() );
@@ -783,7 +789,7 @@ public class SweepOrderSection extends JsdlFormPageSection {
     ParametersDialog dialog = new ParametersDialog( this.shell,
                                                     adapterList,
                                                     getInerSweepNames(),
-                                                    "",
+                                                    "", //$NON-NLS-1$
                                                     ParametersDialog.NEW_ELEMENT );
     // dialog.setTitle( "Add new sweep" );
     if( dialog.open() == Dialog.OK ) {

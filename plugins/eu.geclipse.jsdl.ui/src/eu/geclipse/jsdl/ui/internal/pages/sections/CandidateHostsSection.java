@@ -62,6 +62,10 @@ import eu.geclipse.jsdl.ui.providers.FeatureLabelProvider;
 /**
  * @author nloulloud
  *
+ * This class is responsible for displaying the Candidate Hosts Section in the 
+ * Resources Page of the JSDL editor. It provides widgets to manipulate the 
+ * Candidate Host element specified in the "Resources Elements" section of the 
+ * Job Submission Description Language (JSDL) Specification, Version 1.0.
  */
 public class CandidateHostsSection extends 
 JsdlFormPageSection {
@@ -81,9 +85,11 @@ JsdlFormPageSection {
   
   
   /**
-   * @param formPage 
-   * @param parent
-   * @param toolkit
+   * Class constructor. Creates the Candidate Hosts section.
+   * 
+   * @param formPage the FormPage.
+   * @param parent the Parent composite.
+   * @param toolkit The Form page toolkit.
    */
   public CandidateHostsSection( final FormPage formPage,
                                 final Composite parent,
@@ -98,7 +104,10 @@ JsdlFormPageSection {
   
   
   /**
-   * @param jobDefinitionType
+   * Set the Input of this section. The input of this section is the 
+   * ResourcesType contained in the JobDefinitionType. 
+   * 
+   * @param jobDefinitionType The Job Definition type of the JSDL Document.
    */
   public void setInput( final JobDefinitionType jobDefinitionType ) { 
 
@@ -111,16 +120,6 @@ JsdlFormPageSection {
     fillFields();
     
   }
-  
-  
-  
-//  protected void contentChanged() {
-//    
-//    if (this.isNotifyAllowed){
-//      fireNotifyChanged( null);
-//    }
-//    
-//  }
     
   private void createSection (final Composite parent,
                               final FormToolkit toolkit ) {
@@ -143,6 +142,7 @@ JsdlFormPageSection {
     
     Table tblHosts = new Table( client, SWT.BORDER | SWT.H_SCROLL 
                                       | SWT.V_SCROLL | SWT.MULTI );
+    
     gd = new GridData( GridData.FILL_BOTH );
     gd.grabExcessHorizontalSpace = true;
     gd.grabExcessVerticalSpace = true;
@@ -153,7 +153,7 @@ JsdlFormPageSection {
 
     tblHosts.setLayoutData( gd );
     
-    //FIXME This is a work-around for the Bug#: 201705 for Windows.
+    // This is a work-around for the Bug#: 201705 for Windows.
     this.hostsViewer = new TableViewer( tblHosts );
     tblHosts = this.hostsViewer.getTable();    
     this.hostsViewer.setContentProvider( new FeatureContentProvider() );
@@ -229,9 +229,8 @@ JsdlFormPageSection {
   
   
   /*
-   * Method which opens a Dialog for selecting Candidate Hosts for Job Submission.
+   * Method which opens Dialog for selecting Candidate Hosts for Job Submission.
    */
-  @SuppressWarnings("unchecked")
   protected void handleAddDialog( final String dialogTitle ) {
     
     this.value = null;
