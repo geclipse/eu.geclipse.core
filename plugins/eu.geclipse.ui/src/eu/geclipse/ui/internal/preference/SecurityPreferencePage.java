@@ -352,10 +352,9 @@ public class SecurityPreferencePage
   
   protected void openAddDialog() {
     
-    int style
-      = GridFileDialog.STYLE_ALLOW_ONLY_FILES
-      | GridFileDialog.STYLE_ALLOW_ONLY_EXISTING
-      | GridFileDialog.STYLE_MULTI_SELECTION;
+    int style = GridFileDialog.STYLE_ALLOW_ONLY_FILES
+                | GridFileDialog.STYLE_ALLOW_ONLY_EXISTING
+                | GridFileDialog.STYLE_MULTI_SELECTION;
     GridFileDialog dialog = new GridFileDialog( getShell(), style );
     dialog.addFileTypeFilter( "0", "Base64 encoded certificate (*.0)" );
     dialog.addFileTypeFilter( "pem", "Base64 encoded certificate (*.pem)" );
