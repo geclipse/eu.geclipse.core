@@ -16,6 +16,7 @@
 package eu.geclipse.ui.wizards;
 
 import java.net.URL;
+import java.util.regex.Pattern;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -29,7 +30,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import eu.geclipse.core.model.GridModel;
-import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.core.model.impl.GenericVirtualOrganization;
 import eu.geclipse.core.model.impl.GenericVoCreator;
 import eu.geclipse.ui.internal.Activator;
@@ -44,6 +44,10 @@ public class GenericVoWizardPage
   private GenericVirtualOrganization initialVo;
   
   private Text nameText;
+  
+  /** A pattern for matching the VO name */
+  private Pattern voNamePattern = Pattern.compile( "^[\\w.-]+$" ); //$NON-NLS-1$
+  
   
   /**
    * Standard constructor.
@@ -87,7 +91,7 @@ public class GenericVoWizardPage
     IStatus result = Status.OK_STATUS;
     
     String name = this.nameText.getText();
-    if ( ( name == null ) || ( name.length() == 0 ) ) {
+    if ( ! validateVoName( name ) ) {
       result = new Status( IStatus.ERROR, Activator.PLUGIN_ID, "You have to specify a valid VO name" );
     } else if ( ( this.initialVo == null )
         && ( GridModel.getVoManager().findChild( name ) != null ) ) {
@@ -120,6 +124,16 @@ public class GenericVoWizardPage
    */
   protected void setInitialVo( final GenericVirtualOrganization vo ) {
     this.initialVo = vo;
+  }
+  
+  /**
+   * Helper method to validate the VO name entered by the user.
+   * 
+   * @param voName the VO name to validate
+   * @return true if the VO name matches the allowed pattern
+   */
+  private boolean validateVoName( final String voName ) {
+    return this.voNamePattern.matcher( voName ).matches();
   }
 
 }
