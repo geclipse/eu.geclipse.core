@@ -284,7 +284,7 @@ public class QueueTypeImpl extends EObjectImpl implements QueueType
    */
   public String getQueueName()
   {
-    return queueName;
+    return this.queueName;
   }
 
   /**
@@ -294,10 +294,10 @@ public class QueueTypeImpl extends EObjectImpl implements QueueType
    */
   public void setQueueName(String newQueueName)
   {
-    String oldQueueName = queueName;
-    queueName = newQueueName;
+    String oldQueueName = this.queueName;
+    this.queueName = newQueueName;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, QdlPackage.QUEUE_TYPE__QUEUE_NAME, oldQueueName, queueName));
+      eNotify(new ENotificationImpl(this, Notification.SET, QdlPackage.QUEUE_TYPE__QUEUE_NAME, oldQueueName, this.queueName));
   }
 
   /**
@@ -307,7 +307,7 @@ public class QueueTypeImpl extends EObjectImpl implements QueueType
    */
   public String getDescription()
   {
-    return description;
+    return this.description;
   }
 
   /**
@@ -317,10 +317,10 @@ public class QueueTypeImpl extends EObjectImpl implements QueueType
    */
   public void setDescription(String newDescription)
   {
-    String oldDescription = description;
-    description = newDescription;
+    String oldDescription = this.description;
+    this.description = newDescription;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, QdlPackage.QUEUE_TYPE__DESCRIPTION, oldDescription, description));
+      eNotify(new ENotificationImpl(this, Notification.SET, QdlPackage.QUEUE_TYPE__DESCRIPTION, oldDescription, this.description));
   }
 
   /**
@@ -330,7 +330,7 @@ public class QueueTypeImpl extends EObjectImpl implements QueueType
    */
   public QueueTypeEnumeration getQueueType()
   {
-    return queueType;
+    return this.queueType;
   }
 
   /**
@@ -340,12 +340,12 @@ public class QueueTypeImpl extends EObjectImpl implements QueueType
    */
   public void setQueueType(QueueTypeEnumeration newQueueType)
   {
-    QueueTypeEnumeration oldQueueType = queueType;
-    queueType = newQueueType == null ? QUEUE_TYPE_EDEFAULT : newQueueType;
-    boolean oldQueueTypeESet = queueTypeESet;
-    queueTypeESet = true;
+    QueueTypeEnumeration oldQueueType = this.queueType;
+    this.queueType = newQueueType == null ? QUEUE_TYPE_EDEFAULT : newQueueType;
+    boolean oldQueueTypeESet = this.queueTypeESet;
+    this.queueTypeESet = true;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, QdlPackage.QUEUE_TYPE__QUEUE_TYPE, oldQueueType, queueType, !oldQueueTypeESet));
+      eNotify(new ENotificationImpl(this, Notification.SET, QdlPackage.QUEUE_TYPE__QUEUE_TYPE, oldQueueType, this.queueType, !oldQueueTypeESet));
   }
 
   /**
@@ -355,10 +355,10 @@ public class QueueTypeImpl extends EObjectImpl implements QueueType
    */
   public void unsetQueueType()
   {
-    QueueTypeEnumeration oldQueueType = queueType;
-    boolean oldQueueTypeESet = queueTypeESet;
-    queueType = QUEUE_TYPE_EDEFAULT;
-    queueTypeESet = false;
+    QueueTypeEnumeration oldQueueType = this.queueType;
+    boolean oldQueueTypeESet = this.queueTypeESet;
+    this.queueType = QUEUE_TYPE_EDEFAULT;
+    this.queueTypeESet = false;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.UNSET, QdlPackage.QUEUE_TYPE__QUEUE_TYPE, oldQueueType, QUEUE_TYPE_EDEFAULT, oldQueueTypeESet));
   }
@@ -370,7 +370,7 @@ public class QueueTypeImpl extends EObjectImpl implements QueueType
    */
   public boolean isSetQueueType()
   {
-    return queueTypeESet;
+    return this.queueTypeESet;
   }
 
   /**
@@ -380,7 +380,7 @@ public class QueueTypeImpl extends EObjectImpl implements QueueType
    */
   public QueueStatusEnumeration getQueueStatus()
   {
-    return queueStatus;
+    return this.queueStatus;
   }
 
   /**
@@ -390,12 +390,12 @@ public class QueueTypeImpl extends EObjectImpl implements QueueType
    */
   public void setQueueStatus(QueueStatusEnumeration newQueueStatus)
   {
-    QueueStatusEnumeration oldQueueStatus = queueStatus;
-    queueStatus = newQueueStatus == null ? QUEUE_STATUS_EDEFAULT : newQueueStatus;
-    boolean oldQueueStatusESet = queueStatusESet;
-    queueStatusESet = true;
+    QueueStatusEnumeration oldQueueStatus = this.queueStatus;
+    this.queueStatus = newQueueStatus == null ? QUEUE_STATUS_EDEFAULT : newQueueStatus;
+    boolean oldQueueStatusESet = this.queueStatusESet;
+    this.queueStatusESet = true;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, QdlPackage.QUEUE_TYPE__QUEUE_STATUS, oldQueueStatus, queueStatus, !oldQueueStatusESet));
+      eNotify(new ENotificationImpl(this, Notification.SET, QdlPackage.QUEUE_TYPE__QUEUE_STATUS, oldQueueStatus, this.queueStatus, !oldQueueStatusESet));
   }
 
   /**
@@ -405,10 +405,10 @@ public class QueueTypeImpl extends EObjectImpl implements QueueType
    */
   public void unsetQueueStatus()
   {
-    QueueStatusEnumeration oldQueueStatus = queueStatus;
-    boolean oldQueueStatusESet = queueStatusESet;
-    queueStatus = QUEUE_STATUS_EDEFAULT;
-    queueStatusESet = false;
+    QueueStatusEnumeration oldQueueStatus = this.queueStatus;
+    boolean oldQueueStatusESet = this.queueStatusESet;
+    this.queueStatus = QUEUE_STATUS_EDEFAULT;
+    this.queueStatusESet = false;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.UNSET, QdlPackage.QUEUE_TYPE__QUEUE_STATUS, oldQueueStatus, QUEUE_STATUS_EDEFAULT, oldQueueStatusESet));
   }
@@ -420,7 +420,7 @@ public class QueueTypeImpl extends EObjectImpl implements QueueType
    */
   public boolean isSetQueueStatus()
   {
-    return queueStatusESet;
+    return this.queueStatusESet;
   }
 
   /**
@@ -430,7 +430,7 @@ public class QueueTypeImpl extends EObjectImpl implements QueueType
    */
   public boolean isQueueStarted()
   {
-    return queueStarted;
+    return this.queueStarted;
   }
 
   /**
@@ -440,12 +440,12 @@ public class QueueTypeImpl extends EObjectImpl implements QueueType
    */
   public void setQueueStarted(boolean newQueueStarted)
   {
-    boolean oldQueueStarted = queueStarted;
-    queueStarted = newQueueStarted;
-    boolean oldQueueStartedESet = queueStartedESet;
-    queueStartedESet = true;
+    boolean oldQueueStarted = this.queueStarted;
+    this.queueStarted = newQueueStarted;
+    boolean oldQueueStartedESet = this.queueStartedESet;
+    this.queueStartedESet = true;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, QdlPackage.QUEUE_TYPE__QUEUE_STARTED, oldQueueStarted, queueStarted, !oldQueueStartedESet));
+      eNotify(new ENotificationImpl(this, Notification.SET, QdlPackage.QUEUE_TYPE__QUEUE_STARTED, oldQueueStarted, this.queueStarted, !oldQueueStartedESet));
   }
 
   /**
@@ -455,10 +455,10 @@ public class QueueTypeImpl extends EObjectImpl implements QueueType
    */
   public void unsetQueueStarted()
   {
-    boolean oldQueueStarted = queueStarted;
-    boolean oldQueueStartedESet = queueStartedESet;
-    queueStarted = QUEUE_STARTED_EDEFAULT;
-    queueStartedESet = false;
+    boolean oldQueueStarted = this.queueStarted;
+    boolean oldQueueStartedESet = this.queueStartedESet;
+    this.queueStarted = QUEUE_STARTED_EDEFAULT;
+    this.queueStartedESet = false;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.UNSET, QdlPackage.QUEUE_TYPE__QUEUE_STARTED, oldQueueStarted, QUEUE_STARTED_EDEFAULT, oldQueueStartedESet));
   }
@@ -470,7 +470,7 @@ public class QueueTypeImpl extends EObjectImpl implements QueueType
    */
   public boolean isSetQueueStarted()
   {
-    return queueStartedESet;
+    return this.queueStartedESet;
   }
 
   /**
@@ -480,7 +480,7 @@ public class QueueTypeImpl extends EObjectImpl implements QueueType
    */
   public RangeValueType getCPUTimeLimit()
   {
-    return cPUTimeLimit;
+    return this.cPUTimeLimit;
   }
 
   /**
@@ -490,8 +490,8 @@ public class QueueTypeImpl extends EObjectImpl implements QueueType
    */
   public NotificationChain basicSetCPUTimeLimit(RangeValueType newCPUTimeLimit, NotificationChain msgs)
   {
-    RangeValueType oldCPUTimeLimit = cPUTimeLimit;
-    cPUTimeLimit = newCPUTimeLimit;
+    RangeValueType oldCPUTimeLimit = this.cPUTimeLimit;
+    this.cPUTimeLimit = newCPUTimeLimit;
     if (eNotificationRequired())
     {
       ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, QdlPackage.QUEUE_TYPE__CPU_TIME_LIMIT, oldCPUTimeLimit, newCPUTimeLimit);
@@ -507,11 +507,11 @@ public class QueueTypeImpl extends EObjectImpl implements QueueType
    */
   public void setCPUTimeLimit(RangeValueType newCPUTimeLimit)
   {
-    if (newCPUTimeLimit != cPUTimeLimit)
+    if (newCPUTimeLimit != this.cPUTimeLimit)
     {
       NotificationChain msgs = null;
-      if (cPUTimeLimit != null)
-        msgs = ((InternalEObject)cPUTimeLimit).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - QdlPackage.QUEUE_TYPE__CPU_TIME_LIMIT, null, msgs);
+      if (this.cPUTimeLimit != null)
+        msgs = ((InternalEObject)this.cPUTimeLimit).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - QdlPackage.QUEUE_TYPE__CPU_TIME_LIMIT, null, msgs);
       if (newCPUTimeLimit != null)
         msgs = ((InternalEObject)newCPUTimeLimit).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - QdlPackage.QUEUE_TYPE__CPU_TIME_LIMIT, null, msgs);
       msgs = basicSetCPUTimeLimit(newCPUTimeLimit, msgs);
@@ -528,7 +528,7 @@ public class QueueTypeImpl extends EObjectImpl implements QueueType
    */
   public RangeValueType getWallTimeLimit()
   {
-    return wallTimeLimit;
+    return this.wallTimeLimit;
   }
 
   /**
@@ -538,8 +538,8 @@ public class QueueTypeImpl extends EObjectImpl implements QueueType
    */
   public NotificationChain basicSetWallTimeLimit(RangeValueType newWallTimeLimit, NotificationChain msgs)
   {
-    RangeValueType oldWallTimeLimit = wallTimeLimit;
-    wallTimeLimit = newWallTimeLimit;
+    RangeValueType oldWallTimeLimit = this.wallTimeLimit;
+    this.wallTimeLimit = newWallTimeLimit;
     if (eNotificationRequired())
     {
       ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, QdlPackage.QUEUE_TYPE__WALL_TIME_LIMIT, oldWallTimeLimit, newWallTimeLimit);
@@ -555,11 +555,11 @@ public class QueueTypeImpl extends EObjectImpl implements QueueType
    */
   public void setWallTimeLimit(RangeValueType newWallTimeLimit)
   {
-    if (newWallTimeLimit != wallTimeLimit)
+    if (newWallTimeLimit != this.wallTimeLimit)
     {
       NotificationChain msgs = null;
-      if (wallTimeLimit != null)
-        msgs = ((InternalEObject)wallTimeLimit).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - QdlPackage.QUEUE_TYPE__WALL_TIME_LIMIT, null, msgs);
+      if (this.wallTimeLimit != null)
+        msgs = ((InternalEObject)this.wallTimeLimit).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - QdlPackage.QUEUE_TYPE__WALL_TIME_LIMIT, null, msgs);
       if (newWallTimeLimit != null)
         msgs = ((InternalEObject)newWallTimeLimit).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - QdlPackage.QUEUE_TYPE__WALL_TIME_LIMIT, null, msgs);
       msgs = basicSetWallTimeLimit(newWallTimeLimit, msgs);
@@ -576,7 +576,7 @@ public class QueueTypeImpl extends EObjectImpl implements QueueType
    */
   public AllowedVirtualOrganizationsType getAllowedVirtualOrganizations()
   {
-    return allowedVirtualOrganizations;
+    return this.allowedVirtualOrganizations;
   }
 
   /**
@@ -586,8 +586,8 @@ public class QueueTypeImpl extends EObjectImpl implements QueueType
    */
   public NotificationChain basicSetAllowedVirtualOrganizations(AllowedVirtualOrganizationsType newAllowedVirtualOrganizations, NotificationChain msgs)
   {
-    AllowedVirtualOrganizationsType oldAllowedVirtualOrganizations = allowedVirtualOrganizations;
-    allowedVirtualOrganizations = newAllowedVirtualOrganizations;
+    AllowedVirtualOrganizationsType oldAllowedVirtualOrganizations = this.allowedVirtualOrganizations;
+    this.allowedVirtualOrganizations = newAllowedVirtualOrganizations;
     if (eNotificationRequired())
     {
       ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, QdlPackage.QUEUE_TYPE__ALLOWED_VIRTUAL_ORGANIZATIONS, oldAllowedVirtualOrganizations, newAllowedVirtualOrganizations);
@@ -603,11 +603,11 @@ public class QueueTypeImpl extends EObjectImpl implements QueueType
    */
   public void setAllowedVirtualOrganizations(AllowedVirtualOrganizationsType newAllowedVirtualOrganizations)
   {
-    if (newAllowedVirtualOrganizations != allowedVirtualOrganizations)
+    if (newAllowedVirtualOrganizations != this.allowedVirtualOrganizations)
     {
       NotificationChain msgs = null;
-      if (allowedVirtualOrganizations != null)
-        msgs = ((InternalEObject)allowedVirtualOrganizations).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - QdlPackage.QUEUE_TYPE__ALLOWED_VIRTUAL_ORGANIZATIONS, null, msgs);
+      if (this.allowedVirtualOrganizations != null)
+        msgs = ((InternalEObject)this.allowedVirtualOrganizations).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - QdlPackage.QUEUE_TYPE__ALLOWED_VIRTUAL_ORGANIZATIONS, null, msgs);
       if (newAllowedVirtualOrganizations != null)
         msgs = ((InternalEObject)newAllowedVirtualOrganizations).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - QdlPackage.QUEUE_TYPE__ALLOWED_VIRTUAL_ORGANIZATIONS, null, msgs);
       msgs = basicSetAllowedVirtualOrganizations(newAllowedVirtualOrganizations, msgs);
@@ -624,7 +624,7 @@ public class QueueTypeImpl extends EObjectImpl implements QueueType
    */
   public IntegerRangeValueType getPriority()
   {
-    return priority;
+    return this.priority;
   }
 
   /**
@@ -634,8 +634,8 @@ public class QueueTypeImpl extends EObjectImpl implements QueueType
    */
   public NotificationChain basicSetPriority(IntegerRangeValueType newPriority, NotificationChain msgs)
   {
-    IntegerRangeValueType oldPriority = priority;
-    priority = newPriority;
+    IntegerRangeValueType oldPriority = this.priority;
+    this.priority = newPriority;
     if (eNotificationRequired())
     {
       ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, QdlPackage.QUEUE_TYPE__PRIORITY, oldPriority, newPriority);
@@ -651,11 +651,11 @@ public class QueueTypeImpl extends EObjectImpl implements QueueType
    */
   public void setPriority(IntegerRangeValueType newPriority)
   {
-    if (newPriority != priority)
+    if (newPriority != this.priority)
     {
       NotificationChain msgs = null;
-      if (priority != null)
-        msgs = ((InternalEObject)priority).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - QdlPackage.QUEUE_TYPE__PRIORITY, null, msgs);
+      if (this.priority != null)
+        msgs = ((InternalEObject)this.priority).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - QdlPackage.QUEUE_TYPE__PRIORITY, null, msgs);
       if (newPriority != null)
         msgs = ((InternalEObject)newPriority).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - QdlPackage.QUEUE_TYPE__PRIORITY, null, msgs);
       msgs = basicSetPriority(newPriority, msgs);
@@ -672,7 +672,7 @@ public class QueueTypeImpl extends EObjectImpl implements QueueType
    */
   public IntegerRangeValueType getRunningJobs()
   {
-    return runningJobs;
+    return this.runningJobs;
   }
 
   /**
@@ -682,8 +682,8 @@ public class QueueTypeImpl extends EObjectImpl implements QueueType
    */
   public NotificationChain basicSetRunningJobs(IntegerRangeValueType newRunningJobs, NotificationChain msgs)
   {
-    IntegerRangeValueType oldRunningJobs = runningJobs;
-    runningJobs = newRunningJobs;
+    IntegerRangeValueType oldRunningJobs = this.runningJobs;
+    this.runningJobs = newRunningJobs;
     if (eNotificationRequired())
     {
       ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, QdlPackage.QUEUE_TYPE__RUNNING_JOBS, oldRunningJobs, newRunningJobs);
@@ -699,11 +699,11 @@ public class QueueTypeImpl extends EObjectImpl implements QueueType
    */
   public void setRunningJobs(IntegerRangeValueType newRunningJobs)
   {
-    if (newRunningJobs != runningJobs)
+    if (newRunningJobs != this.runningJobs)
     {
       NotificationChain msgs = null;
-      if (runningJobs != null)
-        msgs = ((InternalEObject)runningJobs).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - QdlPackage.QUEUE_TYPE__RUNNING_JOBS, null, msgs);
+      if (this.runningJobs != null)
+        msgs = ((InternalEObject)this.runningJobs).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - QdlPackage.QUEUE_TYPE__RUNNING_JOBS, null, msgs);
       if (newRunningJobs != null)
         msgs = ((InternalEObject)newRunningJobs).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - QdlPackage.QUEUE_TYPE__RUNNING_JOBS, null, msgs);
       msgs = basicSetRunningJobs(newRunningJobs, msgs);
@@ -720,7 +720,7 @@ public class QueueTypeImpl extends EObjectImpl implements QueueType
    */
   public IntegerRangeValueType getJobsInQueue()
   {
-    return jobsInQueue;
+    return this.jobsInQueue;
   }
 
   /**
@@ -730,8 +730,8 @@ public class QueueTypeImpl extends EObjectImpl implements QueueType
    */
   public NotificationChain basicSetJobsInQueue(IntegerRangeValueType newJobsInQueue, NotificationChain msgs)
   {
-    IntegerRangeValueType oldJobsInQueue = jobsInQueue;
-    jobsInQueue = newJobsInQueue;
+    IntegerRangeValueType oldJobsInQueue = this.jobsInQueue;
+    this.jobsInQueue = newJobsInQueue;
     if (eNotificationRequired())
     {
       ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, QdlPackage.QUEUE_TYPE__JOBS_IN_QUEUE, oldJobsInQueue, newJobsInQueue);
@@ -747,11 +747,11 @@ public class QueueTypeImpl extends EObjectImpl implements QueueType
    */
   public void setJobsInQueue(IntegerRangeValueType newJobsInQueue)
   {
-    if (newJobsInQueue != jobsInQueue)
+    if (newJobsInQueue != this.jobsInQueue)
     {
       NotificationChain msgs = null;
-      if (jobsInQueue != null)
-        msgs = ((InternalEObject)jobsInQueue).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - QdlPackage.QUEUE_TYPE__JOBS_IN_QUEUE, null, msgs);
+      if (this.jobsInQueue != null)
+        msgs = ((InternalEObject)this.jobsInQueue).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - QdlPackage.QUEUE_TYPE__JOBS_IN_QUEUE, null, msgs);
       if (newJobsInQueue != null)
         msgs = ((InternalEObject)newJobsInQueue).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - QdlPackage.QUEUE_TYPE__JOBS_IN_QUEUE, null, msgs);
       msgs = basicSetJobsInQueue(newJobsInQueue, msgs);
@@ -768,7 +768,7 @@ public class QueueTypeImpl extends EObjectImpl implements QueueType
    */
   public IntegerRangeValueType getAssignedResources()
   {
-    return assignedResources;
+    return this.assignedResources;
   }
 
   /**
@@ -778,8 +778,8 @@ public class QueueTypeImpl extends EObjectImpl implements QueueType
    */
   public NotificationChain basicSetAssignedResources(IntegerRangeValueType newAssignedResources, NotificationChain msgs)
   {
-    IntegerRangeValueType oldAssignedResources = assignedResources;
-    assignedResources = newAssignedResources;
+    IntegerRangeValueType oldAssignedResources = this.assignedResources;
+    this.assignedResources = newAssignedResources;
     if (eNotificationRequired())
     {
       ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, QdlPackage.QUEUE_TYPE__ASSIGNED_RESOURCES, oldAssignedResources, newAssignedResources);
@@ -795,11 +795,11 @@ public class QueueTypeImpl extends EObjectImpl implements QueueType
    */
   public void setAssignedResources(IntegerRangeValueType newAssignedResources)
   {
-    if (newAssignedResources != assignedResources)
+    if (newAssignedResources != this.assignedResources)
     {
       NotificationChain msgs = null;
-      if (assignedResources != null)
-        msgs = ((InternalEObject)assignedResources).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - QdlPackage.QUEUE_TYPE__ASSIGNED_RESOURCES, null, msgs);
+      if (this.assignedResources != null)
+        msgs = ((InternalEObject)this.assignedResources).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - QdlPackage.QUEUE_TYPE__ASSIGNED_RESOURCES, null, msgs);
       if (newAssignedResources != null)
         msgs = ((InternalEObject)newAssignedResources).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - QdlPackage.QUEUE_TYPE__ASSIGNED_RESOURCES, null, msgs);
       msgs = basicSetAssignedResources(newAssignedResources, msgs);
@@ -986,9 +986,9 @@ public class QueueTypeImpl extends EObjectImpl implements QueueType
     switch (featureID)
     {
       case QdlPackage.QUEUE_TYPE__QUEUE_NAME:
-        return QUEUE_NAME_EDEFAULT == null ? queueName != null : !QUEUE_NAME_EDEFAULT.equals(queueName);
+        return QUEUE_NAME_EDEFAULT == null ? this.queueName != null : !QUEUE_NAME_EDEFAULT.equals(this.queueName);
       case QdlPackage.QUEUE_TYPE__DESCRIPTION:
-        return DESCRIPTION_EDEFAULT == null ? description != null : !DESCRIPTION_EDEFAULT.equals(description);
+        return DESCRIPTION_EDEFAULT == null ? this.description != null : !DESCRIPTION_EDEFAULT.equals(this.description);
       case QdlPackage.QUEUE_TYPE__QUEUE_TYPE:
         return isSetQueueType();
       case QdlPackage.QUEUE_TYPE__QUEUE_STATUS:
@@ -996,19 +996,19 @@ public class QueueTypeImpl extends EObjectImpl implements QueueType
       case QdlPackage.QUEUE_TYPE__QUEUE_STARTED:
         return isSetQueueStarted();
       case QdlPackage.QUEUE_TYPE__CPU_TIME_LIMIT:
-        return cPUTimeLimit != null;
+        return this.cPUTimeLimit != null;
       case QdlPackage.QUEUE_TYPE__WALL_TIME_LIMIT:
-        return wallTimeLimit != null;
+        return this.wallTimeLimit != null;
       case QdlPackage.QUEUE_TYPE__ALLOWED_VIRTUAL_ORGANIZATIONS:
-        return allowedVirtualOrganizations != null;
+        return this.allowedVirtualOrganizations != null;
       case QdlPackage.QUEUE_TYPE__PRIORITY:
-        return priority != null;
+        return this.priority != null;
       case QdlPackage.QUEUE_TYPE__RUNNING_JOBS:
-        return runningJobs != null;
+        return this.runningJobs != null;
       case QdlPackage.QUEUE_TYPE__JOBS_IN_QUEUE:
-        return jobsInQueue != null;
+        return this.jobsInQueue != null;
       case QdlPackage.QUEUE_TYPE__ASSIGNED_RESOURCES:
-        return assignedResources != null;
+        return this.assignedResources != null;
     }
     return super.eIsSet(featureID);
   }
@@ -1024,16 +1024,16 @@ public class QueueTypeImpl extends EObjectImpl implements QueueType
     if (eIsProxy()) return super.toString();
 
     StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (queueName: ");
-    result.append(queueName);
-    result.append(", description: ");
-    result.append(description);
-    result.append(", queueType: ");
-    if (queueTypeESet) result.append(queueType); else result.append("<unset>");
-    result.append(", queueStatus: ");
-    if (queueStatusESet) result.append(queueStatus); else result.append("<unset>");
-    result.append(", queueStarted: ");
-    if (queueStartedESet) result.append(queueStarted); else result.append("<unset>");
+    result.append(" (queueName: "); //$NON-NLS-1$
+    result.append(this.queueName);
+    result.append(", description: "); //$NON-NLS-1$
+    result.append(this.description);
+    result.append(", queueType: "); //$NON-NLS-1$
+    if (this.queueTypeESet) result.append(this.queueType); else result.append("<unset>"); //$NON-NLS-1$
+    result.append(", queueStatus: "); //$NON-NLS-1$
+    if (this.queueStatusESet) result.append(this.queueStatus); else result.append("<unset>"); //$NON-NLS-1$
+    result.append(", queueStarted: "); //$NON-NLS-1$
+    if (this.queueStartedESet) result.append(this.queueStarted); else result.append("<unset>"); //$NON-NLS-1$
     result.append(')');
     return result.toString();
   }

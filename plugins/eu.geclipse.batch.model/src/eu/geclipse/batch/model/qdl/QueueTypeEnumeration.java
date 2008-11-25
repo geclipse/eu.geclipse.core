@@ -41,7 +41,7 @@ public enum QueueTypeEnumeration implements Enumerator
    * @generated
    * @ordered
    */
-  EXECUTION(0, "Execution", "Execution"),
+  EXECUTION(0, "Execution", "Execution"), //$NON-NLS-1$ //$NON-NLS-2$
 
   /**
    * The '<em><b>Route</b></em>' literal object.
@@ -51,7 +51,7 @@ public enum QueueTypeEnumeration implements Enumerator
    * @generated
    * @ordered
    */
-  ROUTE(1, "Route", "Route");
+  ROUTE(1, "Route", "Route"); //$NON-NLS-1$ //$NON-NLS-2$
 
   /**
    * The '<em><b>Execution</b></em>' literal value.
@@ -108,6 +108,8 @@ public enum QueueTypeEnumeration implements Enumerator
    * Returns the '<em><b>Queue Type Enumeration</b></em>' literal with the specified literal value.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   * @param literal 
+   * @return return
    * @generated
    */
   public static QueueTypeEnumeration get(String literal)
@@ -127,6 +129,8 @@ public enum QueueTypeEnumeration implements Enumerator
    * Returns the '<em><b>Queue Type Enumeration</b></em>' literal with the specified name.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   * @param name name
+   * @return return
    * @generated
    */
   public static QueueTypeEnumeration getByName(String name)
@@ -146,6 +150,8 @@ public enum QueueTypeEnumeration implements Enumerator
    * Returns the '<em><b>Queue Type Enumeration</b></em>' literal with the specified integer value.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   * @param value 
+   * @return return
    * @generated
    */
   public static QueueTypeEnumeration get(int value)
@@ -199,7 +205,7 @@ public enum QueueTypeEnumeration implements Enumerator
    */
   public int getValue()
   {
-    return value;
+    return this.value;
   }
 
   /**
@@ -209,7 +215,7 @@ public enum QueueTypeEnumeration implements Enumerator
    */
   public String getName()
   {
-    return name;
+    return this.name;
   }
 
   /**
@@ -219,7 +225,7 @@ public enum QueueTypeEnumeration implements Enumerator
    */
   public String getLiteral()
   {
-    return literal;
+    return this.literal;
   }
 
   /**
@@ -231,7 +237,7 @@ public enum QueueTypeEnumeration implements Enumerator
   @Override
   public String toString()
   {
-    return literal;
+    return this.literal;
   }
   
 } //QueueTypeEnumeration

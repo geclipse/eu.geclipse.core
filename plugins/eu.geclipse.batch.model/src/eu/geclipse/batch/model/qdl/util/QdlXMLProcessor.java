@@ -56,13 +56,13 @@ public class QdlXMLProcessor extends XMLProcessor
   @Override
   protected Map<String, Resource.Factory> getRegistrations()
   {
-    if (registrations == null)
+    if (this.registrations == null)
     {
       super.getRegistrations();
-      registrations.put(XML_EXTENSION, new QdlResourceFactoryImpl());
-      registrations.put(STAR_EXTENSION, new QdlResourceFactoryImpl());
+      this.registrations.put(XML_EXTENSION, new QdlResourceFactoryImpl());
+      this.registrations.put(STAR_EXTENSION, new QdlResourceFactoryImpl());
     }
-    return registrations;
+    return this.registrations;
   }
 
 } //QdlXMLProcessor

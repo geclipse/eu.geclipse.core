@@ -108,7 +108,7 @@ public class IntegerRangeTypeImpl extends EObjectImpl implements IntegerRangeTyp
    */
   public IntegerBoundaryType getIntegerLowerBound()
   {
-    return integerLowerBound;
+    return this.integerLowerBound;
   }
 
   /**
@@ -118,8 +118,8 @@ public class IntegerRangeTypeImpl extends EObjectImpl implements IntegerRangeTyp
    */
   public NotificationChain basicSetIntegerLowerBound(IntegerBoundaryType newIntegerLowerBound, NotificationChain msgs)
   {
-    IntegerBoundaryType oldIntegerLowerBound = integerLowerBound;
-    integerLowerBound = newIntegerLowerBound;
+    IntegerBoundaryType oldIntegerLowerBound = this.integerLowerBound;
+    this.integerLowerBound = newIntegerLowerBound;
     if (eNotificationRequired())
     {
       ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, QdlPackage.INTEGER_RANGE_TYPE__INTEGER_LOWER_BOUND, oldIntegerLowerBound, newIntegerLowerBound);
@@ -135,11 +135,11 @@ public class IntegerRangeTypeImpl extends EObjectImpl implements IntegerRangeTyp
    */
   public void setIntegerLowerBound(IntegerBoundaryType newIntegerLowerBound)
   {
-    if (newIntegerLowerBound != integerLowerBound)
+    if (newIntegerLowerBound != this.integerLowerBound)
     {
       NotificationChain msgs = null;
-      if (integerLowerBound != null)
-        msgs = ((InternalEObject)integerLowerBound).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - QdlPackage.INTEGER_RANGE_TYPE__INTEGER_LOWER_BOUND, null, msgs);
+      if (this.integerLowerBound != null)
+        msgs = ((InternalEObject)this.integerLowerBound).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - QdlPackage.INTEGER_RANGE_TYPE__INTEGER_LOWER_BOUND, null, msgs);
       if (newIntegerLowerBound != null)
         msgs = ((InternalEObject)newIntegerLowerBound).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - QdlPackage.INTEGER_RANGE_TYPE__INTEGER_LOWER_BOUND, null, msgs);
       msgs = basicSetIntegerLowerBound(newIntegerLowerBound, msgs);
@@ -156,7 +156,7 @@ public class IntegerRangeTypeImpl extends EObjectImpl implements IntegerRangeTyp
    */
   public IntegerBoundaryType getIntegerUpperBound()
   {
-    return integerUpperBound;
+    return this.integerUpperBound;
   }
 
   /**
@@ -166,8 +166,8 @@ public class IntegerRangeTypeImpl extends EObjectImpl implements IntegerRangeTyp
    */
   public NotificationChain basicSetIntegerUpperBound(IntegerBoundaryType newIntegerUpperBound, NotificationChain msgs)
   {
-    IntegerBoundaryType oldIntegerUpperBound = integerUpperBound;
-    integerUpperBound = newIntegerUpperBound;
+    IntegerBoundaryType oldIntegerUpperBound = this.integerUpperBound;
+    this.integerUpperBound = newIntegerUpperBound;
     if (eNotificationRequired())
     {
       ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, QdlPackage.INTEGER_RANGE_TYPE__INTEGER_UPPER_BOUND, oldIntegerUpperBound, newIntegerUpperBound);
@@ -183,11 +183,11 @@ public class IntegerRangeTypeImpl extends EObjectImpl implements IntegerRangeTyp
    */
   public void setIntegerUpperBound(IntegerBoundaryType newIntegerUpperBound)
   {
-    if (newIntegerUpperBound != integerUpperBound)
+    if (newIntegerUpperBound != this.integerUpperBound)
     {
       NotificationChain msgs = null;
-      if (integerUpperBound != null)
-        msgs = ((InternalEObject)integerUpperBound).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - QdlPackage.INTEGER_RANGE_TYPE__INTEGER_UPPER_BOUND, null, msgs);
+      if (this.integerUpperBound != null)
+        msgs = ((InternalEObject)this.integerUpperBound).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - QdlPackage.INTEGER_RANGE_TYPE__INTEGER_UPPER_BOUND, null, msgs);
       if (newIntegerUpperBound != null)
         msgs = ((InternalEObject)newIntegerUpperBound).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - QdlPackage.INTEGER_RANGE_TYPE__INTEGER_UPPER_BOUND, null, msgs);
       msgs = basicSetIntegerUpperBound(newIntegerUpperBound, msgs);
@@ -204,11 +204,11 @@ public class IntegerRangeTypeImpl extends EObjectImpl implements IntegerRangeTyp
    */
   public FeatureMap getAnyAttribute()
   {
-    if (anyAttribute == null)
+    if (this.anyAttribute == null)
     {
-      anyAttribute = new BasicFeatureMap(this, QdlPackage.INTEGER_RANGE_TYPE__ANY_ATTRIBUTE);
+      this.anyAttribute = new BasicFeatureMap(this, QdlPackage.INTEGER_RANGE_TYPE__ANY_ATTRIBUTE);
     }
-    return anyAttribute;
+    return this.anyAttribute;
   }
 
   /**
@@ -309,11 +309,11 @@ public class IntegerRangeTypeImpl extends EObjectImpl implements IntegerRangeTyp
     switch (featureID)
     {
       case QdlPackage.INTEGER_RANGE_TYPE__INTEGER_LOWER_BOUND:
-        return integerLowerBound != null;
+        return this.integerLowerBound != null;
       case QdlPackage.INTEGER_RANGE_TYPE__INTEGER_UPPER_BOUND:
-        return integerUpperBound != null;
+        return this.integerUpperBound != null;
       case QdlPackage.INTEGER_RANGE_TYPE__ANY_ATTRIBUTE:
-        return anyAttribute != null && !anyAttribute.isEmpty();
+        return this.anyAttribute != null && !this.anyAttribute.isEmpty();
     }
     return super.eIsSet(featureID);
   }
@@ -329,8 +329,8 @@ public class IntegerRangeTypeImpl extends EObjectImpl implements IntegerRangeTyp
     if (eIsProxy()) return super.toString();
 
     StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (anyAttribute: ");
-    result.append(anyAttribute);
+    result.append(" (anyAttribute: "); //$NON-NLS-1$
+    result.append(this.anyAttribute);
     result.append(')');
     return result.toString();
   }

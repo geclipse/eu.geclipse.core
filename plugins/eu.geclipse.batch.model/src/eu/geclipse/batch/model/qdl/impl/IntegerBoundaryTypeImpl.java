@@ -16,23 +16,18 @@
   *****************************************************************************/
 package eu.geclipse.batch.model.qdl.impl;
 
-import eu.geclipse.batch.model.qdl.IntegerBoundaryType;
-import eu.geclipse.batch.model.qdl.QdlPackage;
-
-import java.math.BigInteger;
-
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
-
 import org.eclipse.emf.ecore.util.BasicFeatureMap;
 import org.eclipse.emf.ecore.util.FeatureMap;
 import org.eclipse.emf.ecore.util.InternalEList;
+
+import eu.geclipse.batch.model.qdl.IntegerBoundaryType;
+import eu.geclipse.batch.model.qdl.QdlPackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -147,7 +142,7 @@ public class IntegerBoundaryTypeImpl extends EObjectImpl implements IntegerBound
    */
   public int getValue()
   {
-    return value;
+    return this.value;
   }
 
   /**
@@ -157,12 +152,12 @@ public class IntegerBoundaryTypeImpl extends EObjectImpl implements IntegerBound
    */
   public void setValue(int newValue)
   {
-    int oldValue = value;
-    value = newValue;
-    boolean oldValueESet = valueESet;
-    valueESet = true;
+    int oldValue = this.value;
+    this.value = newValue;
+    boolean oldValueESet = this.valueESet;
+    this.valueESet = true;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, QdlPackage.INTEGER_BOUNDARY_TYPE__VALUE, oldValue, value, !oldValueESet));
+      eNotify(new ENotificationImpl(this, Notification.SET, QdlPackage.INTEGER_BOUNDARY_TYPE__VALUE, oldValue, this.value, !oldValueESet));
   }
 
   /**
@@ -172,10 +167,10 @@ public class IntegerBoundaryTypeImpl extends EObjectImpl implements IntegerBound
    */
   public void unsetValue()
   {
-    int oldValue = value;
-    boolean oldValueESet = valueESet;
-    value = VALUE_EDEFAULT;
-    valueESet = false;
+    int oldValue = this.value;
+    boolean oldValueESet = this.valueESet;
+    this.value = VALUE_EDEFAULT;
+    this.valueESet = false;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.UNSET, QdlPackage.INTEGER_BOUNDARY_TYPE__VALUE, oldValue, VALUE_EDEFAULT, oldValueESet));
   }
@@ -187,7 +182,7 @@ public class IntegerBoundaryTypeImpl extends EObjectImpl implements IntegerBound
    */
   public boolean isSetValue()
   {
-    return valueESet;
+    return this.valueESet;
   }
 
   /**
@@ -197,7 +192,7 @@ public class IntegerBoundaryTypeImpl extends EObjectImpl implements IntegerBound
    */
   public int getExclusiveBound()
   {
-    return exclusiveBound;
+    return this.exclusiveBound;
   }
 
   /**
@@ -207,12 +202,12 @@ public class IntegerBoundaryTypeImpl extends EObjectImpl implements IntegerBound
    */
   public void setExclusiveBound(int newExclusiveBound)
   {
-    int oldExclusiveBound = exclusiveBound;
-    exclusiveBound = newExclusiveBound;
-    boolean oldExclusiveBoundESet = exclusiveBoundESet;
-    exclusiveBoundESet = true;
+    int oldExclusiveBound = this.exclusiveBound;
+    this.exclusiveBound = newExclusiveBound;
+    boolean oldExclusiveBoundESet = this.exclusiveBoundESet;
+    this.exclusiveBoundESet = true;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, QdlPackage.INTEGER_BOUNDARY_TYPE__EXCLUSIVE_BOUND, oldExclusiveBound, exclusiveBound, !oldExclusiveBoundESet));
+      eNotify(new ENotificationImpl(this, Notification.SET, QdlPackage.INTEGER_BOUNDARY_TYPE__EXCLUSIVE_BOUND, oldExclusiveBound, this.exclusiveBound, !oldExclusiveBoundESet));
   }
 
   /**
@@ -222,10 +217,10 @@ public class IntegerBoundaryTypeImpl extends EObjectImpl implements IntegerBound
    */
   public void unsetExclusiveBound()
   {
-    int oldExclusiveBound = exclusiveBound;
-    boolean oldExclusiveBoundESet = exclusiveBoundESet;
-    exclusiveBound = EXCLUSIVE_BOUND_EDEFAULT;
-    exclusiveBoundESet = false;
+    int oldExclusiveBound = this.exclusiveBound;
+    boolean oldExclusiveBoundESet = this.exclusiveBoundESet;
+    this.exclusiveBound = EXCLUSIVE_BOUND_EDEFAULT;
+    this.exclusiveBoundESet = false;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.UNSET, QdlPackage.INTEGER_BOUNDARY_TYPE__EXCLUSIVE_BOUND, oldExclusiveBound, EXCLUSIVE_BOUND_EDEFAULT, oldExclusiveBoundESet));
   }
@@ -237,7 +232,7 @@ public class IntegerBoundaryTypeImpl extends EObjectImpl implements IntegerBound
    */
   public boolean isSetExclusiveBound()
   {
-    return exclusiveBoundESet;
+    return this.exclusiveBoundESet;
   }
 
   /**
@@ -247,11 +242,11 @@ public class IntegerBoundaryTypeImpl extends EObjectImpl implements IntegerBound
    */
   public FeatureMap getAnyAttribute()
   {
-    if (anyAttribute == null)
+    if (this.anyAttribute == null)
     {
-      anyAttribute = new BasicFeatureMap(this, QdlPackage.INTEGER_BOUNDARY_TYPE__ANY_ATTRIBUTE);
+      this.anyAttribute = new BasicFeatureMap(this, QdlPackage.INTEGER_BOUNDARY_TYPE__ANY_ATTRIBUTE);
     }
-    return anyAttribute;
+    return this.anyAttribute;
   }
 
   /**
@@ -352,7 +347,7 @@ public class IntegerBoundaryTypeImpl extends EObjectImpl implements IntegerBound
       case QdlPackage.INTEGER_BOUNDARY_TYPE__EXCLUSIVE_BOUND:
         return isSetExclusiveBound();
       case QdlPackage.INTEGER_BOUNDARY_TYPE__ANY_ATTRIBUTE:
-        return anyAttribute != null && !anyAttribute.isEmpty();
+        return this.anyAttribute != null && !this.anyAttribute.isEmpty();
     }
     return super.eIsSet(featureID);
   }
@@ -368,12 +363,12 @@ public class IntegerBoundaryTypeImpl extends EObjectImpl implements IntegerBound
     if (eIsProxy()) return super.toString();
 
     StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (value: ");
-    if (valueESet) result.append(value); else result.append("<unset>");
-    result.append(", exclusiveBound: ");
-    if (exclusiveBoundESet) result.append(exclusiveBound); else result.append("<unset>");
-    result.append(", anyAttribute: ");
-    result.append(anyAttribute);
+    result.append(" (value: "); //$NON-NLS-1$
+    if (this.valueESet) result.append(this.value); else result.append("<unset>"); //$NON-NLS-1$
+    result.append(", exclusiveBound: "); //$NON-NLS-1$
+    if (this.exclusiveBoundESet) result.append(this.exclusiveBound); else result.append("<unset>"); //$NON-NLS-1$
+    result.append(", anyAttribute: "); //$NON-NLS-1$
+    result.append(this.anyAttribute);
     result.append(')');
     return result.toString();
   }

@@ -16,10 +16,7 @@
   *****************************************************************************/
 package eu.geclipse.batch.model.qdl;
 
-import java.math.BigInteger;
-
 import org.eclipse.emf.ecore.EObject;
-
 import org.eclipse.emf.ecore.util.FeatureMap;
 
 /**

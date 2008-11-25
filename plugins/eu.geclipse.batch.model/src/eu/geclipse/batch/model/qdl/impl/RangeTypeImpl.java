@@ -108,7 +108,7 @@ public class RangeTypeImpl extends EObjectImpl implements RangeType
    */
   public BoundaryType getLowerBound()
   {
-    return lowerBound;
+    return this.lowerBound;
   }
 
   /**
@@ -118,8 +118,8 @@ public class RangeTypeImpl extends EObjectImpl implements RangeType
    */
   public NotificationChain basicSetLowerBound(BoundaryType newLowerBound, NotificationChain msgs)
   {
-    BoundaryType oldLowerBound = lowerBound;
-    lowerBound = newLowerBound;
+    BoundaryType oldLowerBound = this.lowerBound;
+    this.lowerBound = newLowerBound;
     if (eNotificationRequired())
     {
       ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, QdlPackage.RANGE_TYPE__LOWER_BOUND, oldLowerBound, newLowerBound);
@@ -135,11 +135,11 @@ public class RangeTypeImpl extends EObjectImpl implements RangeType
    */
   public void setLowerBound(BoundaryType newLowerBound)
   {
-    if (newLowerBound != lowerBound)
+    if (newLowerBound != this.lowerBound)
     {
       NotificationChain msgs = null;
-      if (lowerBound != null)
-        msgs = ((InternalEObject)lowerBound).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - QdlPackage.RANGE_TYPE__LOWER_BOUND, null, msgs);
+      if (this.lowerBound != null)
+        msgs = ((InternalEObject)this.lowerBound).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - QdlPackage.RANGE_TYPE__LOWER_BOUND, null, msgs);
       if (newLowerBound != null)
         msgs = ((InternalEObject)newLowerBound).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - QdlPackage.RANGE_TYPE__LOWER_BOUND, null, msgs);
       msgs = basicSetLowerBound(newLowerBound, msgs);
@@ -156,7 +156,7 @@ public class RangeTypeImpl extends EObjectImpl implements RangeType
    */
   public BoundaryType getUpperBound()
   {
-    return upperBound;
+    return this.upperBound;
   }
 
   /**
@@ -166,8 +166,8 @@ public class RangeTypeImpl extends EObjectImpl implements RangeType
    */
   public NotificationChain basicSetUpperBound(BoundaryType newUpperBound, NotificationChain msgs)
   {
-    BoundaryType oldUpperBound = upperBound;
-    upperBound = newUpperBound;
+    BoundaryType oldUpperBound = this.upperBound;
+    this.upperBound = newUpperBound;
     if (eNotificationRequired())
     {
       ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, QdlPackage.RANGE_TYPE__UPPER_BOUND, oldUpperBound, newUpperBound);
@@ -183,11 +183,11 @@ public class RangeTypeImpl extends EObjectImpl implements RangeType
    */
   public void setUpperBound(BoundaryType newUpperBound)
   {
-    if (newUpperBound != upperBound)
+    if (newUpperBound != this.upperBound)
     {
       NotificationChain msgs = null;
-      if (upperBound != null)
-        msgs = ((InternalEObject)upperBound).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - QdlPackage.RANGE_TYPE__UPPER_BOUND, null, msgs);
+      if (this.upperBound != null)
+        msgs = ((InternalEObject)this.upperBound).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - QdlPackage.RANGE_TYPE__UPPER_BOUND, null, msgs);
       if (newUpperBound != null)
         msgs = ((InternalEObject)newUpperBound).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - QdlPackage.RANGE_TYPE__UPPER_BOUND, null, msgs);
       msgs = basicSetUpperBound(newUpperBound, msgs);
@@ -204,11 +204,11 @@ public class RangeTypeImpl extends EObjectImpl implements RangeType
    */
   public FeatureMap getAnyAttribute()
   {
-    if (anyAttribute == null)
+    if (this.anyAttribute == null)
     {
-      anyAttribute = new BasicFeatureMap(this, QdlPackage.RANGE_TYPE__ANY_ATTRIBUTE);
+      this.anyAttribute = new BasicFeatureMap(this, QdlPackage.RANGE_TYPE__ANY_ATTRIBUTE);
     }
-    return anyAttribute;
+    return this.anyAttribute;
   }
 
   /**
@@ -309,11 +309,11 @@ public class RangeTypeImpl extends EObjectImpl implements RangeType
     switch (featureID)
     {
       case QdlPackage.RANGE_TYPE__LOWER_BOUND:
-        return lowerBound != null;
+        return this.lowerBound != null;
       case QdlPackage.RANGE_TYPE__UPPER_BOUND:
-        return upperBound != null;
+        return this.upperBound != null;
       case QdlPackage.RANGE_TYPE__ANY_ATTRIBUTE:
-        return anyAttribute != null && !anyAttribute.isEmpty();
+        return this.anyAttribute != null && !this.anyAttribute.isEmpty();
     }
     return super.eIsSet(featureID);
   }
@@ -330,7 +330,7 @@ public class RangeTypeImpl extends EObjectImpl implements RangeType
 
     StringBuffer result = new StringBuffer(super.toString());
     result.append(" (anyAttribute: ");
-    result.append(anyAttribute);
+    result.append(this.anyAttribute);
     result.append(')');
     return result.toString();
   }

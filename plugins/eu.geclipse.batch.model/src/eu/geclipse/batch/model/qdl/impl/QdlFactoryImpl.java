@@ -48,7 +48,7 @@ public class QdlFactoryImpl extends EFactoryImpl implements QdlFactory
   {
     try
     {
-      QdlFactory theQdlFactory = (QdlFactory)EPackage.Registry.INSTANCE.getEFactory("http://www.eclipse.org/geclipse/qdl"); 
+      QdlFactory theQdlFactory = (QdlFactory)EPackage.Registry.INSTANCE.getEFactory("http://www.eclipse.org/geclipse/qdl");  //$NON-NLS-1$
       if (theQdlFactory != null)
       {
         return theQdlFactory;
@@ -94,7 +94,7 @@ public class QdlFactoryImpl extends EFactoryImpl implements QdlFactory
       case QdlPackage.RANGE_TYPE: return createRangeType();
       case QdlPackage.RANGE_VALUE_TYPE: return createRangeValueType();
       default:
-        throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+        throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
     }
   }
 
@@ -119,7 +119,7 @@ public class QdlFactoryImpl extends EFactoryImpl implements QdlFactory
       case QdlPackage.QUEUE_TYPE_ENUMERATION_OBJECT:
         return createQueueTypeEnumerationObjectFromString(eDataType, initialValue);
       default:
-        throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+        throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
     }
   }
 
@@ -144,7 +144,7 @@ public class QdlFactoryImpl extends EFactoryImpl implements QdlFactory
       case QdlPackage.QUEUE_TYPE_ENUMERATION_OBJECT:
         return convertQueueTypeEnumerationObjectToString(eDataType, instanceValue);
       default:
-        throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+        throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
     }
   }
 
@@ -277,7 +277,7 @@ public class QdlFactoryImpl extends EFactoryImpl implements QdlFactory
   public QueueStatusEnumeration createQueueStatusEnumerationFromString(EDataType eDataType, String initialValue)
   {
     QueueStatusEnumeration result = QueueStatusEnumeration.get(initialValue);
-    if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+    if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     return result;
   }
 
@@ -299,7 +299,7 @@ public class QdlFactoryImpl extends EFactoryImpl implements QdlFactory
   public QueueTypeEnumeration createQueueTypeEnumerationFromString(EDataType eDataType, String initialValue)
   {
     QueueTypeEnumeration result = QueueTypeEnumeration.get(initialValue);
-    if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+    if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     return result;
   }
 

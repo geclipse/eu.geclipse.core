@@ -46,7 +46,7 @@ public interface QdlPackage extends EPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  String eNAME = "qdl";
+  String eNAME = "qdl"; //$NON-NLS-1$
 
   /**
    * The package namespace URI.
@@ -54,7 +54,7 @@ public interface QdlPackage extends EPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  String eNS_URI = "http://www.eclipse.org/geclipse/qdl";
+  String eNS_URI = "http://www.eclipse.org/geclipse/qdl"; //$NON-NLS-1$
 
   /**
    * The package namespace name.
@@ -62,7 +62,7 @@ public interface QdlPackage extends EPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  String eNS_PREFIX = "qdl";
+  String eNS_PREFIX = "qdl"; //$NON-NLS-1$
 
   /**
    * The singleton instance of the package.
