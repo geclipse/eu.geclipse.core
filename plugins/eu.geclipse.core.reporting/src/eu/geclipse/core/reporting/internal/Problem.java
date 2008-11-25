@@ -206,7 +206,11 @@ public class Problem implements IProblem {
     
     if ( ( this.exception != null ) && ( this.exception instanceof ProblemException ) ) {
       IProblem slave = ( ( ProblemException ) this.exception ).getProblem();
-      result.addAll( Arrays.asList( slave.getSolutions() ) );
+      for ( ISolution solution : slave.getSolutions() ) {
+        if ( !result.contains( solution ) ) {
+          result.add( solution );
+        }
+      }
     }
     
     return result.toArray( new ISolution[ result.size() ] );

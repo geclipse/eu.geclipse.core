@@ -37,6 +37,25 @@
          </reference>
       </problem>
       <problem
+            description="Error contacting server"
+            id="eu.geclipse.core.filesystem.serverCouldNotBeContacted">
+         <reference
+               referenceID="eu.geclipse.core.solution.auth.checkTokens">
+         </reference>
+         <reference
+               referenceID="eu.geclipse.core.solution.auth.checkCaCertificates">
+         </reference>
+         <reference
+               referenceID="eu.geclipse.core.solution.net.checkInternetConnection">
+         </reference>
+         <reference
+               referenceID="eu.geclipse.core.solution.net.checkFirewall">
+         </reference>
+         <reference
+               referenceID="eu.geclipse.core.solution.net.contactServerAdmin">
+         </reference>
+      </problem>
+      <problem
             description="Access denied"
             id="eu.geclipse.core.filesystem.problem.accessDenied">
          <reference

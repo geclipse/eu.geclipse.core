@@ -107,4 +107,18 @@ public class Solution
     }
   }
 
+  @Override
+  public boolean equals( final Object obj ) {
+    boolean result = false;
+    if ( obj instanceof ISolution ) {
+      result = getID().equals( ( ( ISolution )obj ).getID() );
+    }
+    return result;
+  }
+
+  @Override
+  public int hashCode() {
+    return getID().hashCode();
+  }
+
 }

@@ -1,3 +1,18 @@
+/*****************************************************************************
+ * Copyright (c) 2008 g-Eclipse Consortium 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Initial development of the original code was made for the
+ * g-Eclipse project founded by European Union
+ * project number: FP6-IST-034327  http://www.geclipse.eu/
+ *
+ * Contributors:
+ *    Mathias Stuempert - initial API and implementation
+ *****************************************************************************/
+
 package eu.geclipse.ui.internal.actions;
 
 import java.net.URI;
@@ -16,11 +31,10 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.MultiStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubMonitor;
-import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -33,13 +47,13 @@ import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridConnection;
 import eu.geclipse.core.model.IGridConnectionElement;
 import eu.geclipse.core.model.IGridContainer;
-import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridPreferences;
 import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.model.IMountable;
 import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.core.model.IMountable.MountPoint;
 import eu.geclipse.core.model.IMountable.MountPointID;
+import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.ui.dialogs.ProblemDialog;
 import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.wizards.ConnectionWizard;
@@ -106,13 +120,10 @@ public class MountAction extends Action {
         createMount( mountable, sMonitor.newChild( 1 ) );
         
       } catch ( CoreException cExc ) {
-        IStatus status = new Status(
-            IStatus.ERROR,
-            Activator.PLUGIN_ID,
-            String.format( "Failed to mount %s", mountable.getName() ),
-            cExc
-        );
-        errors.add( status );
+        ProblemDialog.openProblem( this.shell,
+                                   String.format( "Mount failed" ), 
+                                   String.format( "Failed to mount %s", mountable.getName() ), 
+                                   cExc );
       }
       
     }
@@ -120,17 +131,6 @@ public class MountAction extends Action {
     sMonitor.done();
     
     IStatus result = Status.OK_STATUS;
-    
-    if ( ! errors.isEmpty() ) {
-      IStatus[] errorArray = errors.toArray( new IStatus[ errors.size() ] );
-      result = new MultiStatus(
-          Activator.PLUGIN_ID,
-          IStatus.ERROR,
-          errorArray,
-          "Mount failed",
-          null
-      );
-    }
     
     return result;
     
@@ -210,8 +210,8 @@ public class MountAction extends Action {
     SubMonitor sMonitor = SubMonitor.convert( monitor, 10 );
     
     try {
+      sMonitor.subTask( String.format( "Preparing resources for %s", name ) );
       
-      sMonitor.subTask( "Preparing resources" );
       GEclipseURI geclURI = new GEclipseURI( uri );
       boolean isDirectory = isDirectory( geclURI );
       sMonitor.worked( 4 );
@@ -238,7 +238,7 @@ public class MountAction extends Action {
     
     try {
     
-      sMonitor.subTask( "Preparing resources" );
+      sMonitor.subTask( String.format( "Preparing resources for %s", path.toString() ) );
       String projectName = path.segment( 0 );
       IGridProject project = ( IGridProject ) GridModel.getRoot().findChild( projectName );
       IVirtualOrganization vo = project.getVO();
@@ -311,18 +311,26 @@ public class MountAction extends Action {
   }
   
   private static boolean isDirectory( final GEclipseURI uri )
-      throws CoreException {
+      throws CoreException, ProblemException {
     URI masterURI = uri.toMasterURI();
     IFileStore fileStore = EFS.getStore( masterURI );
     GEclipseFileSystem.assureFileStoreIsActive( fileStore );
-    IFileInfo fileInfo = fileStore.fetchInfo();
-    
+    IFileInfo fileInfo = null;
+    try {
+      fileInfo = fileStore.fetchInfo( EFS.NONE, new NullProgressMonitor() );
+    } catch ( CoreException coreExc ) {
+      throw new ProblemException( "eu.geclipse.core.filesystem.serverCouldNotBeContacted",
+                                  String.format( "File info could not be fetched for mounting %s.",
+                                                 uri.toSlaveURI() ),
+                                  coreExc,
+                                  Activator.PLUGIN_ID );
+    }
     // Check if the server could be really contacted
-    if ( ! fileInfo.exists() ) {
-      throw new CoreException( new Status( IStatus.ERROR,
-                                           Activator.PLUGIN_ID,
-                                           String.format( "Error contacting the server for mounting %s",
-                                                          fileStore.toString() ) ) );
+    if ( fileInfo == null || !fileInfo.exists() ) {
+      throw new ProblemException( "eu.geclipse.core.filesystem.serverCouldNotBeContacted",
+                                  String.format( "Server could not be contacted for mounting %s.",
+                                                 uri.toSlaveURI() ),
+                                  Activator.PLUGIN_ID );
     }
     
     return fileInfo.isDirectory();
