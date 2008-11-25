@@ -103,7 +103,7 @@ class JobScheduler extends Job {
         JobStatusUpdater updater = iterator.next();
         IGridJob job = updater.getJob();
         IGridJobStatus updateJobStatus = job.updateJobStatus( monitor, false );
-        if( updateJobStatus.getReason().equals( "Token request canceled" )) {
+        if( updateJobStatus.getReason() != null && updateJobStatus.getReason().equals( "Token request canceled" )) {
           if( Preferences.getJobUpdaterCancelBehaviour() ) {
             Preferences.setUpdateJobsStatus( false );
           }
