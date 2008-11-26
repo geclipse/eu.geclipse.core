@@ -356,13 +356,15 @@ public class DataStageOutTable {
       dialog = new DataStagingOutDialog( this.mainComp.getShell(),
                                          DataStagingOutDialog.SIMPLE_DIALOG );
       if( dialog.open() == Window.OK ) {
-        DataStagingType newData = getNewDataStagingType( dialog.getDataStageInList() );
-        if( !isDataInInput( newData ) ) {
-          this.input.add( newData );
-        } else {
-          MessageDialog.openError( this.mainComp.getShell(),
-                                   Messages.getString( "DataStageOutTable.new_dialog_title" ), //$NON-NLS-1$
-                                   Messages.getString( "DataStageOutTable.data_exists_error" ) ); //$NON-NLS-1$
+        for( DataStagingType newData : getNewDataStagingType( dialog.getDataStageInList() ) )
+        {
+          if( !isDataInInput( newData ) ) {
+            this.input.add( newData );
+          } else {
+            MessageDialog.openError( this.mainComp.getShell(),
+                                     Messages.getString( "DataStageOutTable.new_dialog_title" ), //$NON-NLS-1$
+                                     Messages.getString( "DataStageOutTable.data_exists_error" ) ); //$NON-NLS-1$
+          }
         }
         this.tableViewer.refresh();
       }
@@ -371,24 +373,27 @@ public class DataStageOutTable {
                                          DataStagingOutDialog.SIMPLE_DIALOG,
                                          selectedObject );
       if( dialog.open() == Window.OK ) {
-        DataStagingType newData = getNewDataStagingType( dialog.getDataStageInList() );
-        if( !newData.getFileName().equals( selectedObject.getFileName() )
-            || !newData.getTarget().getURI().equals( selectedObject.getTarget()
-              .getURI() ) )
+        for( DataStagingType newData : getNewDataStagingType( dialog.getDataStageInList() ) )
         {
-          if( !isDataInInput( newData ) ) {
-            this.input.add( newData );
-            this.input.remove( selectedObject );
-            this.tableViewer.refresh();
-          } else {
-            MessageDialog.openError( this.mainComp.getShell(),
-                                     Messages.getString( "DataStageOutTable.edit_dialog_title" ), //$NON-NLS-1$
-                                     Messages.getString( "DataStageOutTable.data_exists_error" ) ); //$NON-NLS-1$
-          } 
-        } 
-      } 
-    } 
-  } 
+          if( !newData.getFileName().equals( selectedObject.getFileName() )
+              || !newData.getTarget()
+                .getURI()
+                .equals( selectedObject.getTarget().getURI() ) )
+          {
+            if( !isDataInInput( newData ) ) {
+              this.input.add( newData );
+              this.input.remove( selectedObject );
+              this.tableViewer.refresh();
+            } else {
+              MessageDialog.openError( this.mainComp.getShell(),
+                                       Messages.getString( "DataStageOutTable.edit_dialog_title" ), //$NON-NLS-1$
+                                       Messages.getString( "DataStageOutTable.data_exists_error" ) ); //$NON-NLS-1$
+            }
+          }
+        }
+      }
+    }
+  }
 
   boolean isDataInInput( final DataStagingType newData ) {
     boolean result = false;
@@ -402,20 +407,24 @@ public class DataStageOutTable {
     return result;
   }
 
-  DataStagingType getNewDataStagingType( final ArrayList<DataStagingType> dataStageList )
+  List<DataStagingType> getNewDataStagingType( final ArrayList<DataStagingType> dataStageList )
   {
-    DataStagingType result = JSDLModelFacade.getDataStagingType();
-    SourceTargetType target = JSDLModelFacade.getSourceTargetType();
+    List<DataStagingType> result = new ArrayList<DataStagingType>();
+    DataStagingType dsType = null;
+    SourceTargetType target = null;
     for( int i = 0; i < dataStageList.size(); i++ ) {
+      dsType = JSDLModelFacade.getDataStagingType();
+      target = JSDLModelFacade.getSourceTargetType();
       DataStagingType temp = dataStageList.get( i );
-      result.setFileName( temp.getFileName() );
+      dsType.setFileName( temp.getFileName() );
       target.setURI( temp.getTarget().getURI() );
-      result.setTarget( target );
+      dsType.setTarget( target );
       // if (!result.isSetCreationFlag()){
-      result.setCreationFlag( JSDLModelFacade.getDefaultCreationFlag() );
+      dsType.setCreationFlag( JSDLModelFacade.getDefaultCreationFlag() );
       // }
       // if (!result.isDeleteOnTermination()){
-      result.setDeleteOnTermination( false );
+      dsType.setDeleteOnTermination( false );
+      result.add( dsType );
       // }
     }
     return result;

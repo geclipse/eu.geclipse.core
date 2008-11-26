@@ -382,14 +382,16 @@ public class DataStageInTable {
       dialog = new DataStagingInDialog( this.mainComp.getShell(),
                                         DataStagingInDialog.SIMPLE_DIALOG );
       if( dialog.open() == Window.OK ) {
-        DataStagingType newData = getNewDataStagingType( dialog.getDataStageInList() );
-        if( !isDataInInput( newData ) ) {
-          this.input.add( newData );
-          this.tableViewer.refresh();
-        } else {
-          MessageDialog.openError( this.mainComp.getShell(),
-                                   Messages.getString( "DataStageInTable.value_exists_dialog_title" ), //$NON-NLS-1$
-                                   Messages.getString( "DataStagingPage_New_DuplicateEntryDialog_Message" ) ); //$NON-NLS-1$
+        for( DataStagingType newData : getNewDataStagingType( dialog.getDataStageInList() ) )
+        {
+          if( !isDataInInput( newData ) ) {
+            this.input.add( newData );
+            this.tableViewer.refresh();
+          } else {
+            MessageDialog.openError( this.mainComp.getShell(),
+                                     Messages.getString( "DataStageInTable.value_exists_dialog_title" ), //$NON-NLS-1$
+                                     Messages.getString( "DataStagingPage_New_DuplicateEntryDialog_Message" ) ); //$NON-NLS-1$
+          }
         }
       }
     } else {
@@ -397,31 +399,34 @@ public class DataStageInTable {
                                         DataStagingInDialog.SIMPLE_DIALOG,
                                         selectedObject );
       if( dialog.open() == Window.OK ) {
-        DataStagingType newData = getNewDataStagingType( dialog.getDataStageInList() );
-        // DataStagingType newData = selectedObject;
-        // newData.setFileName( dialog.getName() );
-        // SourceTargetType source = JSDLModelFacade.getSourceTargetType();
-        // source.setURI( dialog.getPath() );
-        // newData.setSource( source );
-        if( !newData.getFileName().equals( selectedObject.getFileName() )
-            || !newData.getSource().getURI().equals( selectedObject.getSource()
-              .getURI() ) )
+        for( DataStagingType newData : getNewDataStagingType( dialog.getDataStageInList() ) )
         {
-          if( !isDataInInput( newData ) ) {
-            // this.input.add( getNewDataStagingType( dialog.getName(),
-            // dialog.getPath() ) );
-            // this.input.remove( selectedObject );
-            // this.input.add( getNewDataStagingType( dialog.getName(),
-            // dialog.getPath() ) );
-            // this.input.remove( selectedObject );
-            updateDataStaging( selectedObject,
-                               newData.getFileName(),
-                               newData.getSource() );
-            this.tableViewer.refresh();
-          } else {
-            MessageDialog.openError( this.mainComp.getShell(),
-                                     Messages.getString( "DataStageInTable.edit_dialog_title" ), //$NON-NLS-1$
-                                     Messages.getString( "DataStageInTable.value_exists_dialog_message" ) ); //$NON-NLS-1$
+          // DataStagingType newData = selectedObject;
+          // newData.setFileName( dialog.getName() );
+          // SourceTargetType source = JSDLModelFacade.getSourceTargetType();
+          // source.setURI( dialog.getPath() );
+          // newData.setSource( source );
+          if( !newData.getFileName().equals( selectedObject.getFileName() )
+              || !newData.getSource()
+                .getURI()
+                .equals( selectedObject.getSource().getURI() ) )
+          {
+            if( !isDataInInput( newData ) ) {
+              // this.input.add( getNewDataStagingType( dialog.getName(),
+              // dialog.getPath() ) );
+              // this.input.remove( selectedObject );
+              // this.input.add( getNewDataStagingType( dialog.getName(),
+              // dialog.getPath() ) );
+              // this.input.remove( selectedObject );
+              updateDataStaging( selectedObject,
+                                 newData.getFileName(),
+                                 newData.getSource() );
+              this.tableViewer.refresh();
+            } else {
+              MessageDialog.openError( this.mainComp.getShell(),
+                                       Messages.getString( "DataStageInTable.edit_dialog_title" ), //$NON-NLS-1$
+                                       Messages.getString( "DataStageInTable.value_exists_dialog_message" ) ); //$NON-NLS-1$
+            }
           }
         }
       }
@@ -448,21 +453,25 @@ public class DataStageInTable {
     return result;
   }
 
-  DataStagingType getNewDataStagingType( final ArrayList<DataStagingType> dataStageList )
+  List<DataStagingType> getNewDataStagingType( final ArrayList<DataStagingType> dataStageList )
   {
-    DataStagingType result = JSDLModelFacade.getDataStagingType();
-    SourceTargetType source = JSDLModelFacade.getSourceTargetType();
+    List<DataStagingType> result = new ArrayList<DataStagingType>();
+    SourceTargetType source = null;
+    DataStagingType dsType = null;
     for( int i = 0; i < dataStageList.size(); i++ ) {
+      dsType = JSDLModelFacade.getDataStagingType();
+      source = JSDLModelFacade.getSourceTargetType();
       DataStagingType temp = dataStageList.get( i );
-      result.setFileName( temp.getFileName() );
+      dsType.setFileName( temp.getFileName() );
       source.setURI( temp.getSource().getURI() );
-      result.setSource( source );
+      dsType.setSource( source );
       // if (!result.isSetCreationFlag()){
-      result.setCreationFlag( JSDLModelFacade.getDefaultCreationFlag() );
+      dsType.setCreationFlag( JSDLModelFacade.getDefaultCreationFlag() );
       // }
       // if (!result.isDeleteOnTermination()){
-      result.setDeleteOnTermination( true );
+      dsType.setDeleteOnTermination( true );
       // }
+      result.add( dsType );
     }
     return result;
   }
