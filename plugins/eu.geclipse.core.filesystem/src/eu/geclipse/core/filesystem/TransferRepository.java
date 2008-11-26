@@ -125,12 +125,15 @@ public class TransferRepository {
   }
 
   public List<TransferInformation> getOperations() {
-    List<TransferInformation> operations = null;
+    List<TransferInformation> operations = new ArrayList<TransferInformation>();
     // TODO iterate over XML file and get all unfinished operations
     // Create transfer operations from it using stored informations (src, dst,
     // data) and add to list
     try {
-      operations = TransferRepositoryParser.getOperations( getRepoFile() );
+      File repoFile = getRepoFile();
+      if( repoFile != null ) {
+        operations = TransferRepositoryParser.getOperations( repoFile );
+      }
     } catch( ParserConfigurationException e ) {
       // TODO Auto-generated catch block
       Activator.logException( e );
@@ -151,20 +154,24 @@ public class TransferRepository {
   } 
   
   private File getRepoFile() {
-    IPath path = Activator.getDefault().getStateLocation();
-    File file = path.append( "transferRepository.xml" ).toFile();
-    if( !file.exists() ) {
-      try {
-        file.createNewFile();
-        FileOutputStream stream = new FileOutputStream( file );
-        String contents = "<root>\n</root>";
-        stream.write( contents.getBytes() );
-        stream.close();
-      } catch( IOException e ) {
-        // TODO Auto-generated catch block
-        Activator.logException( e );
+    IPath path = null;
+    File file = null;
+    if( Activator.getDefault() != null ) {
+      path = Activator.getDefault().getStateLocation();
+      file = path.append( "transferRepository.xml" ).toFile();
+      if( !file.exists() ) {
+        try {
+          file.createNewFile();
+          FileOutputStream stream = new FileOutputStream( file );
+          String contents = "<root>\n</root>";
+          stream.write( contents.getBytes() );
+          stream.close();
+        } catch( IOException e ) {
+          // TODO Auto-generated catch block
+          Activator.logException( e );
+        }
       }
-    }
+    } 
     return file;
   }
   private static class TransferRepositoryParser {
