@@ -250,6 +250,7 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
     this.jobDescription = description;
     this.jobStatus = new GridJobStatus( Messages.getString( "GridJob.jobStatusSubmitted" ), //$NON-NLS-1$
                                         IGridJobStatus.SUBMITTED );
+    this.jobID.setJob( this );
     this.jobName = uniqueJobName;
     writeJobDescription( description, jobFolder );
     writeJobID( id, jobFolder );

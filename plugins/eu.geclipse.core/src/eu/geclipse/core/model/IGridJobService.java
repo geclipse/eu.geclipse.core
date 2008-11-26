@@ -107,14 +107,24 @@ public interface IGridJobService extends IGridService {
   
   /**
    * Get pairs (filename, URI) of output files for job.
+   * 
    * @param jobId id of job, for which input files will be returned
-   * @param jobDescription job description, which was used to submit job
+   * @param jobDescription job description, which was used to submit job.<br>
+   *          May be <code>null</code> - in this case only output files, which
+   *          can be get without reading job description will be returned.<br>
+   *          E.g. for gLite jobs only files stayed in the sandbox will be
+   *          returned. Files transfered to the Storage Element can be read only
+   *          from Job Description.
    * @param vo Virtual Organization, for which job belongs to
-   * @return URI Map containing output files created by job. Map contains pairs: <b>filename</b> (used to create link), and <b>URI</b> of output file.<br/>
-   * It's possible to return <code>null</code> if input files cannot be returned
+   * @return URI Map containing output files created by job. Map contains pairs:
+   *         <b>filename</b> (used to create link), and <b>URI</b> of output
+   *         file.<br/> It's possible to return <code>null</code> if input files
+   *         cannot be returned now (because e.g. job status doesn't allow it now).
    * @throws ProblemException
    */
-  public Map<String, URI> getOutputFiles( IGridJobID jobId, IGridJobDescription jobDescription, IVirtualOrganization vo )
+  public Map<String, URI> getOutputFiles( IGridJobID jobId,
+                                          IGridJobDescription jobDescription,
+                                          IVirtualOrganization vo )
     throws ProblemException;
   
 }
