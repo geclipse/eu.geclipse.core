@@ -70,4 +70,29 @@
       
  
    </extension>
+   <extension
+         point="eu.geclipse.core.gridProjectFolder">
+      <folder
+            elementClass="eu.geclipse.core.sla.SLATemplateFile"
+            id="eu.geclipse.core.sla.templates"
+            label="SLA Templates"
+            name="eu.geclipse.core.sla.templates">
+      </folder>
+   </extension>
+   <extension
+         point="eu.geclipse.core.gridElementCreator">
+      <creator
+            class="eu.geclipse.core.sla.SLATemplateFileCreator"
+            id="eu.geclipse.core.sla.SLATemplateFileCreator"
+            name="eu.geclipse.core.sla.SLATemplateFileCreator">
+         <source
+               class="org.eclipse.core.resources.IFile"
+               pattern=".*\.slt">
+         </source>
+         <target
+               class="eu.geclipse.core.sla.SLATemplateFile"
+               name="eu.geclipse.core.sla.SLATemplateFile">
+         </target>
+      </creator>
+   </extension>
 </plugin>
