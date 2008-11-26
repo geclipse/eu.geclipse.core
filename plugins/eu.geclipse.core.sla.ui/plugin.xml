@@ -4,9 +4,10 @@
     <extension
          point="org.eclipse.ui.preferencePages">
       <page
+            category="eu.geclipse.ui.internal.preference.GEclipsePreferencePage"
             class="eu.geclipse.core.sla.ui.preferences.PreferencePage"
             id="eu.geclipse.core.sla.ui.preferences"
-            name="SLAEditor">
+            name="SLA Editor">
       </page>
    </extension>
    <extension
