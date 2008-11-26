@@ -19,7 +19,6 @@ package eu.geclipse.core.model;
 import java.net.URI;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
 
 import eu.geclipse.core.reporting.ProblemException;
 
@@ -68,8 +67,7 @@ public interface IVoLoader {
     throws ProblemException; 
   
   /**
-   * Get a list of predefined import location for this VO
-   * loader.
+   * Gets a list of predefined import locations for this VO loader.
    * 
    * @return The list of predefined VO repositories.
    */
