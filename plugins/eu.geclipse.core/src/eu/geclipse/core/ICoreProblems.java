@@ -81,6 +81,8 @@ public interface ICoreProblems {
     = "eu.geclipse.core.problem.io.operationFailed"; //$NON-NLS-1$
   public static final String IO_UNSPECIFIED_PROBLEM
     = "eu.geclipse.core.problem.io.unspecified"; //$NON-NLS-1$
+  public static final String IO_FILE_EXISTS
+    = "eu.geclipse.core.problem.io.unspecified"; //$NON-NLS-1$
   
   // Jobs
   public static final String JOB_DESCRIPTION_INVALID
