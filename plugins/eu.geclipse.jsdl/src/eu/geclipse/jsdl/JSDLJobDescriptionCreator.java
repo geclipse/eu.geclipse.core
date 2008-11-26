@@ -12,7 +12,6 @@
  * Contributors:
  *    Mathias Stuempert - initial API and implementation
  *****************************************************************************/
-
 package eu.geclipse.jsdl;
 
 import org.eclipse.core.resources.IFile;
@@ -22,24 +21,27 @@ import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.impl.AbstractGridElementCreator;
 import eu.geclipse.core.reporting.ProblemException;
 
-
 /**
- * Creator for JSDL job descriptions. Creates
- * {@link JSDLJobDescription}s from files with file extension ".jsdl". 
+ * Creator for JSDL job descriptions. Creates {@link JSDLJobDescription}s from
+ * files with file extension ".jsdl".
  */
-public class JSDLJobDescriptionCreator
-    extends AbstractGridElementCreator {
-  
-  /* (non-Javadoc)
-   * @see eu.geclipse.core.model.IGridElementCreator#create(eu.geclipse.core.model.IGridContainer)
+public class JSDLJobDescriptionCreator extends AbstractGridElementCreator {
+
+  /*
+   * (non-Javadoc)
+   * @see
+   * eu.geclipse.core.model.IGridElementCreator#create(eu.geclipse.core.model
+   * .IGridContainer)
    */
-  public IGridElement create( final IGridContainer parent ) throws ProblemException {
+  public IGridElement create( final IGridContainer parent )
+    throws ProblemException
+  {
     IGridElement result = null;
-    IFile file = ( IFile ) getSource();
-    if ( file != null && !file.isLinked() ) {
+    IFile file = ( IFile )getSource();
+    // if ( file != null && !file.isLinked() ) {
+    if( file != null ) {
       result = new JSDLJobDescription( file );
     }
     return result;
   }
-  
 }
