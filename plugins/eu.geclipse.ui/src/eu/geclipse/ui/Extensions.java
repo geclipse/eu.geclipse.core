@@ -29,7 +29,7 @@ import eu.geclipse.core.ExtensionManager;
 import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.properties.IPropertiesFactory;
 import eu.geclipse.ui.views.jobdetails.IJobDetailsFactory;
-import eu.geclipse.ui.wizards.wizardselection.IInitalizableWizard;
+import eu.geclipse.ui.wizards.wizardselection.IInitializableWizard;
 
 /**
  * This is a helper class that holds static fields and methods to easily access
@@ -414,8 +414,8 @@ public class Extensions {
    * @return The wizard extension or <code>null</code> if no extension for the
    * specified ID could be found.
    */
-  public static IInitalizableWizard getWizardExtension( final String refID ) {
-    IInitalizableWizard result = null;
+  public static IInitializableWizard getWizardExtension( final String refID ) {
+    IInitializableWizard result = null;
     ExtensionManager browser = new ExtensionManager();
     List< IConfigurationElement > elements
       = browser.getConfigurationElements( WIZARD_EXTENSION_POINT, WIZARD_EXTENSION_ELEMENT );
@@ -423,7 +423,7 @@ public class Extensions {
       String rid = element.getAttribute( WIZARD_EXTENSION_REFID_ATTRIBUTE );
       if ( refID.equals( rid ) ) {
         try {
-          result = ( IInitalizableWizard ) element.createExecutableExtension( WIZARD_EXTENSION_EXECUTABLE );
+          result = ( IInitializableWizard ) element.createExecutableExtension( WIZARD_EXTENSION_EXECUTABLE );
           break;
         } catch ( CoreException cExc ) {
           Activator.logException( cExc );

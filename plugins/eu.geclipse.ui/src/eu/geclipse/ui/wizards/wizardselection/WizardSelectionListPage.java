@@ -111,7 +111,7 @@ public class WizardSelectionListPage
 
   /**
    * Sets the data to initialize a selected wizard with in case the wizard
-   * implements {@link IInitalizableWizard}.
+   * implements {@link IInitializableWizard}.
    * 
    * @param initData the data to initialize the wizard with.
    */
@@ -201,8 +201,8 @@ public class WizardSelectionListPage
       boolean isCreated = node.isContentCreated();
       wizard = node.getWizard();
       if( wizard != null && !isCreated ) {
-        if( wizard instanceof IInitalizableWizard ) {
-          ( ( IInitalizableWizard )wizard ).init( this.initData );
+        if( wizard instanceof IInitializableWizard ) {
+          ( ( IInitializableWizard )wizard ).init( this.initData );
         }
         wizard.addPages();
         updateCheatSheetManager( wizard );

@@ -56,13 +56,13 @@ import eu.geclipse.core.reporting.ISolution;
 import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.ui.dialogs.ProblemDialog;
 import eu.geclipse.ui.internal.Activator;
-import eu.geclipse.ui.wizards.wizardselection.IInitalizableWizard;
+import eu.geclipse.ui.wizards.wizardselection.IInitializableWizard;
 
 /**
  * Base class for submission wizard
  */
 public abstract class JobSubmissionWizardBase extends Wizard
-  implements IInitalizableWizard, IExecutableExtension
+  implements IInitializableWizard, IExecutableExtension
 {
 
   protected IGridJobCreator creator;
@@ -156,7 +156,7 @@ public abstract class JobSubmissionWizardBase extends Wizard
   /*
    * (non-Javadoc)
    * 
-   * @see eu.geclipse.ui.wizards.wizardselection.IInitalizableWizard#init(java.lang.Object)
+   * @see eu.geclipse.ui.wizards.wizardselection.IInitializableWizard#init(java.lang.Object)
    */
   @SuppressWarnings("unchecked")
   public boolean init( final Object data ) {

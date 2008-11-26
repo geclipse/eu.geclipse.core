@@ -21,7 +21,7 @@ import org.eclipse.jface.wizard.IWizard;
  * Interface for wizards that have to be initialized after
  * creation.
  */
-public interface IInitalizableWizard extends IWizard {
+public interface IInitializableWizard extends IWizard {
 
   /**
    * This method is called after the creation of the wizard.

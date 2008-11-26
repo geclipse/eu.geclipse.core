@@ -30,12 +30,12 @@ import org.eclipse.ui.PlatformUI;
 import eu.geclipse.core.portforward.IForward;
 import eu.geclipse.terminal.ITerminalView;
 import eu.geclipse.ui.wizards.portforward.PortForwardOptionsWizardPage;
-import eu.geclipse.ui.wizards.wizardselection.IInitalizableWizard;
+import eu.geclipse.ui.wizards.wizardselection.IInitializableWizard;
 
 /**
  * A "new terminal wizard" for creating SSH terminal sessions.
  */
-public class SSHWizard extends Wizard implements IInitalizableWizard {
+public class SSHWizard extends Wizard implements IInitializableWizard {
   SSHConnectionWizardPage mainPage;
   ITerminalView termView;
   PortForwardOptionsWizardPage portForwardPage;

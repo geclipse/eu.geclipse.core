@@ -21,7 +21,7 @@ import java.util.List;
 
 import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.model.IGridResource;
-import eu.geclipse.ui.wizards.wizardselection.IInitalizableWizard;
+import eu.geclipse.ui.wizards.wizardselection.IInitializableWizard;
 import eu.geclipse.ui.wizards.wizardselection.IWizardSelectionNode;
 
 /**
@@ -29,7 +29,7 @@ import eu.geclipse.ui.wizards.wizardselection.IWizardSelectionNode;
  * content through this interface.
  */
 public interface IServiceJobWizardNode
-  extends IWizardSelectionNode, IInitalizableWizard
+  extends IWizardSelectionNode, IInitializableWizard
 {
 
   /**

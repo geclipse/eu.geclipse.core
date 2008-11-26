@@ -26,12 +26,12 @@ import eu.geclipse.core.model.impl.GenericVirtualOrganization;
 import eu.geclipse.core.model.impl.GenericVoCreator;
 import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.ui.internal.Activator;
-import eu.geclipse.ui.wizards.wizardselection.IInitalizableWizard;
+import eu.geclipse.ui.wizards.wizardselection.IInitializableWizard;
 
 
 public class GenericVoWizard
     extends Wizard
-    implements IInitalizableWizard {
+    implements IInitializableWizard {
   
   private GenericVirtualOrganization initialVo;
   
