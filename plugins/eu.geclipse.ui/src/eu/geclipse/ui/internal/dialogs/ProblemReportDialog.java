@@ -52,6 +52,7 @@ import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.ui.dialogs.GridFileDialog;
 import eu.geclipse.ui.internal.Activator;
 
+
 /**
  * Dialog for reporting {@link IProblem}s. The dialog supports sending, saving
  * and copying the problem report to the system clipboard.
@@ -114,6 +115,16 @@ public class ProblemReportDialog extends TitleAreaDialog {
                    .getResource( "icons/extras/problem_report_dlg.gif" ); //$NON-NLS-1$
     ImageDescriptor imgDesc = ImageDescriptor.createFromURL( imgURL );
     setTitleImage( imgDesc.createImage() );
+  }
+  
+  /*
+   * (non-Javadoc)
+   * @see org.eclipse.jface.window.Window#configureShell(org.eclipse.swt.widgets.Shell)
+   */
+  @Override
+  protected void configureShell( final Shell shell ) {
+    super.configureShell( shell );
+    shell.setText( "Problem Report" );
   }
   
   /* (non-Javadoc)
@@ -192,8 +203,8 @@ public class ProblemReportDialog extends TitleAreaDialog {
       }
     } );
     
-    setTitle( "Problem Reporting Dialog" );
-    setMessage( "A problem report was created, choose one of the options by pressing the appropriate button." );
+    setTitle( "Problem Report" );
+    setMessage( "A problem report was created, you may save it, send it via email, or copy it to clipboard." );
     
     updateUI();
     
