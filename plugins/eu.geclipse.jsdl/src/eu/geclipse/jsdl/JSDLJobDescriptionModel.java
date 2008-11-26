@@ -17,7 +17,9 @@ package eu.geclipse.jsdl;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.math.BigInteger;
 import java.net.URI;
@@ -1251,6 +1253,22 @@ public class JSDLJobDescriptionModel extends AbstractGridContainer
       result.addAll( getSweepChildren( ( SweepType )list.get( i ) ) );
     }
     result.add( rootSweep );
+    return result;
+  }
+  
+  public void save(){
+    writeModelToFile( documentRoot );
+  }
+
+  
+  public InputStream getInputStream(){
+    InputStream result = null;
+    try {
+      result = new FileInputStream(this.fileResource);
+    } catch( FileNotFoundException e ) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
     return result;
   }
 }
