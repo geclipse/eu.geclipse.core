@@ -35,6 +35,17 @@
       </initializer>
    </extension>
    <extension
+         point="org.eclipse.ui.newWizards">
+      <wizard
+            canFinishEarly="false"
+            category="eu.geclipse.ui.newResourceCategory"
+            class="eu.geclipse.core.sla.ui.wizards.SLAQueryWizard"
+            hasPages="true"
+            id="eu.geclipse.core.sla.ui.wizards.SLAQueryWizard"
+            name="Query for new SLA"
+            preferredPerspectives="eu.geclipse.ui.gEclipsePerspective"/>       
+    </extension>
+   <extension
          point="eu.geclipse.core.sla.slaServiceSelector">
       <serviceselector
             class="eu.geclipse.core.sla.ui.dialogs.SlaServiceSelector"
