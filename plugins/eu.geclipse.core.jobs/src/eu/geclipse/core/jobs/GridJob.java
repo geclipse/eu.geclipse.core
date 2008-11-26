@@ -738,7 +738,8 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
     }
   }
 
-  public IGridJobStatus updateJobStatus( final IProgressMonitor progressMonitor, final boolean fullStatus )
+  public IGridJobStatus updateJobStatus( final IProgressMonitor progressMonitor,
+                                         final boolean fullStatus )
   {
     SubMonitor subMonitor = SubMonitor.convert( progressMonitor );
     IGridJobStatus newJobStatus = null;
@@ -751,11 +752,14 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
         if( project != null ) {
           newJobStatus = service.getJobStatus( this.jobID,
                                                project.getVO(),
-                                               fullStatus, subMonitor );
+                                               fullStatus,
+                                               subMonitor );
         }
         testCancelled( subMonitor );
       }
-      if( newJobStatus != null && newJobStatus instanceof GridJobStatus && !subMonitor.isCanceled() ) {
+      if ( newJobStatus != null && newJobStatus instanceof GridJobStatus
+             && !subMonitor.isCanceled() )
+      {
         this.jobStatus = ( GridJobStatus )newJobStatus;
         writeJobStatus( this.jobStatusFile );
       }
