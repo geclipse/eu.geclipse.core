@@ -83,7 +83,7 @@
             visible="true"
             id="eu.geclipse.core.sla.toolbar.actionSet">
          <menu
-               label="SLA &amp;Menu"
+               label="SLA"
                id="slaMenu">
             <separator
                   name="slaGroup">

@@ -19,6 +19,7 @@ import java.net.URISyntaxException;
 
 import org.eclipse.core.resources.IFile;
 
+import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.core.sla.model.SimpleTermModel;
 
 /**
@@ -56,8 +57,9 @@ public interface ISLAService {
    * 
    * @param terms
    * @return the ordered list of potential SLT documents
+   * @throws ProblemException 
    */
-  public Object[] queryRegistry( String terms );
+  public Object[] queryRegistry( String terms ) throws ProblemException;
 
   /**
    * Sends the final SLA document to the provider for confirmation.

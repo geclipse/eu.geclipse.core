@@ -23,15 +23,20 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 
+import javax.swing.plaf.synth.SynthLookAndFeel;
+
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Preferences;
 
+import eu.geclipse.core.reporting.ProblemException;
+import eu.geclipse.core.sla.Activator;
+import eu.geclipse.core.sla.ISLAProblems;
 import eu.geclipse.core.sla.ISLAService;
-import eu.geclipse.core.sla.model.SltContainer;
 import eu.geclipse.core.sla.model.SimpleTermModel;
+import eu.geclipse.core.sla.model.SltContainer;
 import eu.geclipse.core.sla.preferences.PreferenceConstants;
 
 /**
@@ -53,6 +58,9 @@ public class SimpleRegistryService implements ISLAService {
   public void setRegistryURI( final String registryURI )
     throws URISyntaxException
   {
+    if (registryURI.equals( "" ))   //$NON-NLS-1$
+      throw new URISyntaxException(registryURI, "The Registry URI is empty");  
+    
     this.registryURI = new URI( registryURI );
   }
 
@@ -73,7 +81,7 @@ public class SimpleRegistryService implements ISLAService {
     }
   }
 
-  public Object[] queryRegistry( final String terms ) {
+  public Object[] queryRegistry( final String terms ) throws ProblemException {
     ArrayList<SltContainer> results = new ArrayList<SltContainer>( 10 );
     // we look in the registry (directory) for the files which contains the
     // term for the service name
@@ -105,8 +113,9 @@ public class SimpleRegistryService implements ISLAService {
       // TODO Auto-generated catch block
       e.printStackTrace();
     } catch( URISyntaxException e ) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
+        throw new ProblemException(ISLAProblems.MISSING_PROVIDER_URI, 
+                                   Activator.PLUGIN_ID) ; 
+      
     } catch( IOException e ) {
       // TODO Auto-generated catch block
       e.printStackTrace();
