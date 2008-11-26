@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -30,6 +30,7 @@ import org.eclipse.swt.widgets.Label;
 import eu.geclipse.core.model.IVoLoader;
 import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.widgets.StoredCombo;
+
 
 public class VoImportLocationChooserPage extends WizardPage {
   
@@ -125,12 +126,17 @@ public class VoImportLocationChooserPage extends WizardPage {
     IVoLoader loader = getLoader();
     if ( loader != null ) {
       URI[] locations = loader.getPredefinedURIs();
-      if ( locations != null ) {
+      
+      if ( ( locations != null ) && ( locations.length > 0 ) ) {
+        
+        // Set the combo text with the first predefined location, if empty
+        String text = this.combo.getText();
+        if ( ( text == null ) || ( text.length() == 0 ) ) {
+          this.combo.setText( locations[ 0 ].toString() );
+        }
+        
         for ( URI location : locations ) {
-          if ( ( this.combo.getText() == null ) || ( this.combo.getText().length() == 0 ) ) {
-            this.combo.setText( location.toString() );
-          }
-          this.combo.add( location.toString() );
+          this.combo.addUnique( location.toString() );
         }
       }
     }

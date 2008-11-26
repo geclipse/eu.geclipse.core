@@ -174,6 +174,18 @@ public class StoredCombo extends Combo {
     return valid;
   }
   
+  /**
+   * Adds the given entry to the combo list if it doesn't exist yet.
+   * No changes are performed if the entry is already in the list.
+   * 
+   * @param newEntry the new entry to add to the combo list.
+   */
+  public void addUnique( final String newEntry ) {
+    if ( indexOf( newEntry ) == -1 ) {
+      add( newEntry );
+    }
+  }
+  
   protected void doAutoCompletion() {
     
     String text = getText();
