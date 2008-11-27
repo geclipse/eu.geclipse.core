@@ -96,28 +96,30 @@ class JobScheduler extends Job {
   public IStatus run( final IProgressMonitor monitor ) {
     
     if( this.startingUpdaters.size() > 0 ) {
-      Iterator<JobStatusUpdater> iterator = this.startingUpdaters.iterator();
-      int updatePeriod = Preferences.getUpdateJobsPeriod();
-      ArrayList<JobStatusUpdater> resumedUpdaters = new ArrayList<JobStatusUpdater>();
-      while( iterator.hasNext() && Preferences.getUpdateJobsStatus() ) {
-        JobStatusUpdater updater = iterator.next();
-        IGridJob job = updater.getJob();
-        IGridJobStatus updateJobStatus = job.updateJobStatus( monitor, false );
-        if( updateJobStatus.getReason() != null && updateJobStatus.getReason().equals( "Token request canceled" )) {
-          if( Preferences.getJobUpdaterCancelBehaviour() ) {
-            Preferences.setUpdateJobsStatus( false );
+      synchronized(this) {
+        Iterator<JobStatusUpdater> iterator = this.startingUpdaters.iterator();
+        int updatePeriod = Preferences.getUpdateJobsPeriod();
+        ArrayList<JobStatusUpdater> resumedUpdaters = new ArrayList<JobStatusUpdater>();
+        while( iterator.hasNext() && Preferences.getUpdateJobsStatus() ) {
+          JobStatusUpdater updater = iterator.next();
+          IGridJob job = updater.getJob();
+          IGridJobStatus updateJobStatus = job.updateJobStatus( monitor, false );
+          if( updateJobStatus.getReason() != null && updateJobStatus.getReason().equals( "Token request canceled" )) {
+            if( Preferences.getJobUpdaterCancelBehaviour() ) {
+              Preferences.setUpdateJobsStatus( false );
+            }
+          } else {
+            updater.statusUpdated( updateJobStatus );
+            if( updateJobStatus.canChange() ) {
+              updater.schedule( updatePeriod );
+              this.workingUpdaters.put( updater, Integer.valueOf( UPDATER_NORMAL_PRIORITY ) );
+            }
+            resumedUpdaters.add( updater );
           }
-        } else {
-          updater.statusUpdated( updateJobStatus );
-          if( updateJobStatus.canChange() ) {
-            updater.schedule( updatePeriod );
-            this.workingUpdaters.put( updater, Integer.valueOf( UPDATER_NORMAL_PRIORITY ) );
-          }
-          resumedUpdaters.add( updater );
         }
-      }
-      for( JobStatusUpdater up: resumedUpdaters ) {
-        this.startingUpdaters.remove( up );
+        for( JobStatusUpdater up: resumedUpdaters ) {
+          this.startingUpdaters.remove( up );
+        }
       }
     }
     
@@ -168,7 +170,9 @@ class JobScheduler extends Job {
    */
   public void scheduleNewUpdater( final JobStatusUpdater updater ) {
     if( Preferences.getUpdateJobsStatus() && ( getNumberOfRunningUpdaters() < Preferences.getUpdatersLimit() ) ) {
-      this.startingUpdaters.add( updater );
+      synchronized(this) {
+        this.startingUpdaters.add( updater );
+      }
     } else {
       this.sleepingUpdaters.put( updater, Integer.valueOf( UPDATER_NORMAL_PRIORITY ) );
     }
