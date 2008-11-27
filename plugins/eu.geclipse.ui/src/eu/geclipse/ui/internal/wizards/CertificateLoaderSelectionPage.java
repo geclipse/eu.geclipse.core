@@ -86,7 +86,7 @@ public class CertificateLoaderSelectionPage extends WizardPage {
     gData.horizontalSpan = 2;
     descLabel.setLayoutData( gData );
     
-    this.descriptionText = new Text( mainComp, SWT.BORDER | SWT.WRAP | SWT.V_SCROLL | SWT.MULTI );
+    this.descriptionText = new Text( mainComp, SWT.BORDER | SWT.WRAP | SWT.V_SCROLL | SWT.MULTI | SWT.READ_ONLY );
     gData = new GridData( GridData.FILL, GridData.CENTER, true, false );
     gData.horizontalSpan = 2;
     gData.heightHint = 50;
