@@ -36,7 +36,6 @@ import eu.geclipse.ui.decorators.GridJobDecorator;
 import eu.geclipse.ui.internal.actions.ActionGroupManager;
 import eu.geclipse.ui.internal.actions.BuildActions;
 import eu.geclipse.ui.internal.actions.EditorActions;
-import eu.geclipse.ui.internal.actions.MonitorActions;
 import eu.geclipse.ui.internal.actions.NewWizardActions;
 import eu.geclipse.ui.internal.actions.ProjectActions;
 import eu.geclipse.ui.internal.actions.SimpleTestActions;
@@ -131,9 +130,6 @@ public class GridProjectView
     
     BuildActions buildActions = new BuildActions( site );
     groups.addGroup( buildActions );
-    
-    MonitorActions monitorActions = new MonitorActions ( site );
-    groups.addGroup ( monitorActions);
     
     VisualisationActions visualizationActions = new VisualisationActions ( site );
     groups.addGroup ( visualizationActions );
