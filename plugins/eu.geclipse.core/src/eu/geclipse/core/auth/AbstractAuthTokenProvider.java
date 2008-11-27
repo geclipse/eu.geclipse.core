@@ -38,6 +38,32 @@ import eu.geclipse.core.reporting.ProblemException;
 public abstract class AbstractAuthTokenProvider implements IAuthTokenProvider {
 
   /**
+   * Checks if the specified {@link Throwable} was issued by a token request
+   * cancelation.
+   * 
+   * @param t The {@link Throwable} to be checked.
+   * @return <code>True</code> if the specified {@link Throwable} is a
+   * {@link ProblemException} and the exception's id is equal to
+   * {@link ICoreProblems#AUTH_TOKEN_REQUEST_CANCELED}.
+   */
+  public static boolean isTokenRequestCanceledException( final Throwable t ) {
+    
+    boolean result = false;
+    
+    if ( t instanceof ProblemException ) {
+      String id = ( ( ProblemException ) t ).getProblem().getID();
+      result = ICoreProblems.AUTH_TOKEN_REQUEST_CANCELED.equals( id );
+    }
+    
+    if ( ! result && ( t.getCause() != null ) ) {
+      result = isTokenRequestCanceledException( t.getCause() );
+    }
+    
+    return result;
+    
+  }
+  
+  /**
    * Static access method that calls the corresponding method of the
    * token provider with the highest priority of all currently
    * registered providers.

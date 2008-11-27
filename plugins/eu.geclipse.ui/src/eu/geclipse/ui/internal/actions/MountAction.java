@@ -36,11 +36,13 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.help.AbstractTocProvider;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Shell;
 
+import eu.geclipse.core.auth.AbstractAuthTokenProvider;
 import eu.geclipse.core.filesystem.GEclipseFileSystem;
 import eu.geclipse.core.filesystem.GEclipseURI;
 import eu.geclipse.core.model.GridModel;
@@ -120,10 +122,12 @@ public class MountAction extends Action {
         createMount( mountable, sMonitor.newChild( 1 ) );
         
       } catch ( CoreException cExc ) {
-        ProblemDialog.openProblem( this.shell,
-                                   String.format( "Mount failed" ), 
-                                   String.format( "Failed to mount %s", mountable.getName() ), 
-                                   cExc );
+        if ( ! AbstractAuthTokenProvider.isTokenRequestCanceledException( cExc ) ) {
+          ProblemDialog.openProblem( this.shell,
+                                     String.format( "Mount failed" ), 
+                                     String.format( "Failed to mount %s", mountable.getName() ), 
+                                     cExc );
+        }
       }
       
     }
