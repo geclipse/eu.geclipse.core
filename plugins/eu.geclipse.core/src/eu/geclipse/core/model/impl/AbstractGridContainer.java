@@ -29,6 +29,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 
 import eu.geclipse.core.ICoreProblems;
+import eu.geclipse.core.auth.AbstractAuthTokenProvider;
 import eu.geclipse.core.internal.Activator;
 import eu.geclipse.core.internal.model.GridRoot;
 import eu.geclipse.core.internal.model.notify.GridModelEvent;
@@ -122,9 +123,7 @@ public abstract class AbstractGridContainer
         IStatus status = this.container.fetchChildren( mon );
         if( !status.isOK() ) {
           Throwable exc = status.getException();
-          if ( ( exc != null )
-              && ( exc instanceof ProblemException )
-              && ! ( ( ProblemException ) exc ).getProblem().getID().equals( ICoreProblems.AUTH_TOKEN_REQUEST_CANCELED ) ) {
+          if ( ! AbstractAuthTokenProvider.isTokenRequestCanceledException( exc ) ) {
             this.exception = status.getException();
           }
         }

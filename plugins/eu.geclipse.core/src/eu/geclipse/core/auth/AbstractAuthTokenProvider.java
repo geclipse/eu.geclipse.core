@@ -50,13 +50,17 @@ public abstract class AbstractAuthTokenProvider implements IAuthTokenProvider {
     
     boolean result = false;
     
-    if ( t instanceof ProblemException ) {
-      String id = ( ( ProblemException ) t ).getProblem().getID();
-      result = ICoreProblems.AUTH_TOKEN_REQUEST_CANCELED.equals( id );
-    }
+    if ( t != null ) {
     
-    if ( ! result && ( t.getCause() != null ) ) {
-      result = isTokenRequestCanceledException( t.getCause() );
+      if ( t instanceof ProblemException ) {
+        String id = ( ( ProblemException ) t ).getProblem().getID();
+        result = ICoreProblems.AUTH_TOKEN_REQUEST_CANCELED.equals( id );
+      }
+      
+      if ( ! result && ( t.getCause() != null ) ) {
+        result = isTokenRequestCanceledException( t.getCause() );
+      }
+      
     }
     
     return result;
