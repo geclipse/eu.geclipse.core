@@ -111,11 +111,11 @@ public class CertificateTrustDialog extends TitleAreaDialog {
     mainComp.setLayout( new GridLayout( 1, false ) );
     
     Label label1 = new Label( mainComp, SWT.WRAP );
-    label1.setText( "A secured operation required to trust a specific certificate. Since the certificate is issued by an unknown certificate authority there is no way to securely verify the certificate." );
+    label1.setText( "A secured operation requires to trust a specific certificate. Since the certificate is issued by an unknown Certificate Authority (CA), there is no way to securely verify the certificate." );
     label1.setLayoutData( new GridData( GridData.FILL, GridData.BEGINNING, true, false ) );
     
     Label label2 = new Label( mainComp, SWT.WRAP );
-    label2.setText( "The distinct name of the certificate's issuer is:" );
+    label2.setText( "The Distinguished Name (DN) of the certificate's issuer is:" );
     label2.setLayoutData( new GridData( GridData.FILL, GridData.BEGINNING, true, false ) );
     
     this.issuerDNLabel = new Label( mainComp, SWT.WRAP );
@@ -198,7 +198,7 @@ public class CertificateTrustDialog extends TitleAreaDialog {
     this.selection = TrustMode.NotNow;
     
     setTitle( "Certificate Trust Verifier" );
-    setMessage( "You should carefully select from the options below if you are willed to trust this certificate." );
+    setMessage( "You should carefully select from the options below if you are willing to trust this certificate or not." );
     
     return mainComp;
     
