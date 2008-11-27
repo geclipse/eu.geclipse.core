@@ -37,6 +37,7 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 
+
 /**
  * The <code>StoredCombo</code> is a extension of the <code>org.eclipse.swt.widgets.Combo</code>
  * that provides functionality for storing the entered values in a preference store
@@ -77,7 +78,9 @@ public class StoredCombo extends Combo {
    * @param style The style of this <code>StoredCombo</code>.
    */
   public StoredCombo( final Composite parent, final int style ) {
+    
     super( parent, style );
+    
     addModifyListener( new ModifyListener() {
       private boolean alreadyModifing = false;
       public void modifyText( final ModifyEvent event ) {
@@ -88,12 +91,14 @@ public class StoredCombo extends Combo {
         }
       }
     } );
+    
     addSelectionListener( new SelectionAdapter() {
       @Override
       public void widgetDefaultSelected( final SelectionEvent event ) {
         StoredCombo.this.allowCompletion = false;
       }
     } );
+    
     addKeyListener( new KeyAdapter() {
       @Override
       public void keyPressed( final KeyEvent event ) {
@@ -108,6 +113,7 @@ public class StoredCombo extends Combo {
         }
       }
     } );
+    
     addFocusListener( new FocusAdapter() {
       @Override
       public void focusLost( final FocusEvent event ) {
@@ -116,6 +122,7 @@ public class StoredCombo extends Combo {
         combo.setSelection( new Point( text.length(), text.length() ) );
       }
     } );
+    
     addDisposeListener( new DisposeListener() {
       public void widgetDisposed( final DisposeEvent e ) {
         savePreferences();
@@ -186,6 +193,15 @@ public class StoredCombo extends Combo {
     }
   }
   
+  /**
+   * Removes all entries form the combo list and empties the
+   * IPreferenceStore.
+   */
+  public void purgeAll() {
+    removeAll();
+    savePreferences();
+  }
+  
   protected void doAutoCompletion() {
     
     String text = getText();
@@ -234,7 +250,9 @@ public class StoredCombo extends Combo {
       if ( buffer.length() > 0 ) {
         String s = buffer.substring( 0, buffer.length() - 1 );
         this.prefStore.setValue( this.prefID, s );
-      }      
+      } else {
+        this.prefStore.setToDefault( this.prefID );
+      }
     }
   }
 
