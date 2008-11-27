@@ -165,6 +165,11 @@
                name="nature"
                value="eu.geclipse.core.project.GridProjectNature">
          </filter>
+         <enabledWhen>
+            <adapt
+                  type="org.eclipse.core.resources.IProject">
+            </adapt>
+         </enabledWhen>
       </page>
       <page
             adaptable="false"
@@ -172,9 +177,14 @@
             id="eu.geclipse.ui.gridConnections"
             name="Grid Connections">
          <enabledWhen>
-            <test
-                  property="eu.geclipse.core.isGridConnection">
-            </test>
+            <and>
+               <adapt
+                     type="org.eclipse.core.resources.IResource">
+               </adapt>
+               <test
+                     property="eu.geclipse.core.isGridConnection">
+               </test>
+            </and>
          </enabledWhen>
       </page>
    </extension>
