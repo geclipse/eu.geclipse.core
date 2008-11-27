@@ -33,10 +33,12 @@
 	<target name="pre.build.jars">
 
 		<antcall target="proxy" />
+		<!--
 		<get src="http://typica.googlecode.com/svn/tags/v1.3/lib/activation.jar" 
 		     dest="lib/activation.jar" 
 		     verbose="true"
 		     usetimestamp="true"/>
+		     -->
 		<get src="http://typica.googlecode.com/svn/tags/v1.3/lib/jaxb-api.jar" 
 		     dest="lib/jaxb-api.jar" 
 		     verbose="true"
