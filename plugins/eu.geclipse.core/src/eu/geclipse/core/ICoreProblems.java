@@ -75,13 +75,13 @@ public interface ICoreProblems {
   // IO
   public static final String IO_CORRUPTED_FILE
     = "eu.geclipse.core.problem.io.corruptedFile"; //$NON-NLS-1$
+  public static final String IO_FILE_EXISTS
+    = "eu.geclipse.core.problem.io.fileExists"; //$NON-NLS-1$
   public static final String IO_FILE_NOT_FOUND
     = "eu.geclipse.core.problem.io.fileNotFound"; //$NON-NLS-1$
   public static final String IO_OPERATION_FAILED
     = "eu.geclipse.core.problem.io.operationFailed"; //$NON-NLS-1$
   public static final String IO_UNSPECIFIED_PROBLEM
-    = "eu.geclipse.core.problem.io.unspecified"; //$NON-NLS-1$
-  public static final String IO_FILE_EXISTS
     = "eu.geclipse.core.problem.io.unspecified"; //$NON-NLS-1$
   
   // Jobs
