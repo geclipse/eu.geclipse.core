@@ -63,7 +63,7 @@ public class VoImportLocationChooserPage extends WizardPage {
     label.setLayoutData( gData );
     
     this.combo = new StoredCombo( mainComp, SWT.NONE );
-    this.combo.setPreferences(preferenceStore, preferenceID );
+    this.combo.setPreferences( preferenceStore, preferenceID );
     gData = new GridData( GridData.FILL_HORIZONTAL );
     gData.grabExcessHorizontalSpace = true;
     this.combo.setLayoutData( gData );
