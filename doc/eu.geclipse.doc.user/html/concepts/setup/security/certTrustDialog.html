@@ -25,7 +25,7 @@
 
 <p>
 Whenever an operation needs to trust a certificate that is not yet listed as a
-trusted or untrusted certificate in the Security Preference Page the Certificate
+trusted or untrusted certificate in the Security Preference Page, the Certificate
 Trust Dialog is used to explicitly ask the user if she wants to trust this
 particular certificate (chain). The following screenshot shows the Certificate
 Trust Dialog:
@@ -36,39 +36,39 @@ Trust Dialog:
 
 <p>
 In the dialog itself the issuer DN of the certificate is shown to the user. To
-get some more detailed information of the certificate (chain) one may use the
+see more detailed information of the certificate (chain) one may use the
 <b>See certificate details</b> link to bring up the
 <a href="certInfoDialog.html">Certificate Info Dialog</a> for this specific
 certificate (chain).
 
 <p>
-To react on the trust request the user has five different options:
+To respond to the trust request, the user has five different options:
 <ul>
 <li><img border="0" src="images/cert_trust_never_obj.gif" alt="Never trust">
 <b>Never trust this certificate</b>:
-The certificate is untrusted and is added to the list as untrusted certificate.
+The certificate is untrusted and is added to the list as an untrusted certificate.
 The certificate is not stored permanently as untrusted. Therefore after a
-g-Eclipse restart the user will be asked again to trust the certificate.
+g-Eclipse restart, the user will be asked again whether to trust the certificate or not.
 <li><img border="0" src="images/cert_trust_notnow_obj.gif" alt="Do not trust">
 <b>Do not trust this certificate now</b>:
 The certificate is untrusted but is not added to the list as untrusted certificate.
-Therefore the user is asked again to trust this certificate the next time a
+Therefore the user is asked again if they trust this certificate the next time a
 trust is required.
 <li><img border="0" src="images/cert_trust_temp_obj.gif" alt="Temporarily trust">
 <b>Trust this certificate temporarily</b>:
 The certificate is trusted but is not added to the list as trusted certificate.
-Therefore the user is asked again to trust this certificate the next time a
+Therefore the user is asked again if they trust this certificate the next time a
 trust is required.
 <li><img border="0" src="images/cert_trust_session_obj.gif" alt="Session trust">
 <b>Trust this certificate for the whole session</b>:
 The certificate is trusted and is added to the list as trusted certificate.
 The certificate is not stored permanently as trusted. Therefore after a
-g-Eclipse restart the user will be asked again to trust the certificate.
+g-Eclipse restart, the user will be asked again whether to trust the certificate or not.
 <li><img border="0" src="images/cert_trust_permanent_obj.gif" alt="Permanent trust">
 <b>Always trust this certificate</b>:
 The certificate is trusted and is added to the list as trusted certificate.
 The certificate is stored permanently as trusted. Therefore after a
-g-Eclipse restart the user will not be asked again to trust the certificate.
+g-Eclipse restart the user will not be asked again if they trust the certificate.
 </ul>
 
 <p>
