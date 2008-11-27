@@ -47,10 +47,17 @@ import eu.geclipse.ui.internal.Activator;
  * Label provider implementation to be used by any Grid model view.
  */
 public class GridModelLabelProvider
-    extends LabelProvider implements IStyledLabelProvider {
+    extends LabelProvider
+    implements IStyledLabelProvider {
   
+  /**
+   * The info marker image path.
+   */
   public static final String INFO_MARKER = "icons/obj16/info_obj.gif"; //$NON-NLS-1$
 
+  /**
+   * The error marker image path.
+   */
   public static final String ERROR_MARKER = "icons/obj16/ihigh_obj.gif"; //$NON-NLS-1$
   
   private static final String APPLICATION_ELEMENT = "icons/obj16/application_obj.gif"; //$NON-NLS-1$
@@ -317,7 +324,10 @@ public class GridModelLabelProvider
 
   public StyledString getStyledText( final Object element ) {
     String text = getText( element );
-    if (text == null) text = ""; //$NON-NLS-1$
+    if ( text == null ) {
+      text = ""; //$NON-NLS-1$
+    }
     return new StyledString( text );
   }
+  
 }

@@ -40,6 +40,7 @@ import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.ILabelDecorator;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -66,6 +67,7 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
+import org.eclipse.ui.PlatformUI;
 
 import eu.geclipse.core.filesystem.GEclipseURI;
 import eu.geclipse.core.model.GridModel;
@@ -77,6 +79,7 @@ import eu.geclipse.core.model.IGridModelListener;
 import eu.geclipse.ui.comparators.TreeColumnComparator;
 import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.listeners.TreeColumnListener;
+import eu.geclipse.ui.providers.DecoratingGridModelLabelProvider;
 import eu.geclipse.ui.providers.FileStoreLabelProvider;
 import eu.geclipse.ui.providers.GridFileDialogContentProvider;
 import eu.geclipse.ui.providers.NewGridModelLabelProvider;
@@ -791,12 +794,14 @@ public class GridFileDialog
     }
 
     this.treeViewer = new TreeViewer( browserComp, treeStyle );
+    this.treeViewer.setContentProvider( new GridFileDialogContentProvider() );
     NewGridModelLabelProvider lProvider = new NewGridModelLabelProvider();
     lProvider.addColumn( 0, FileStoreLabelProvider.COLUMN_TYPE_NAME );
     lProvider.addColumn( 1, FileStoreLabelProvider.COLUMN_TYPE_SIZE );
     lProvider.addColumn( 2, FileStoreLabelProvider.COLUMN_TYPE_MOD_DATE );
-    this.treeViewer.setContentProvider( new GridFileDialogContentProvider() );
-    this.treeViewer.setLabelProvider( lProvider );
+    ILabelDecorator decorator = PlatformUI.getWorkbench().getDecoratorManager().getLabelDecorator();
+    DecoratingGridModelLabelProvider dProvider = new DecoratingGridModelLabelProvider( lProvider, decorator );
+    this.treeViewer.setLabelProvider( dProvider );
 
     Tree tree = this.treeViewer.getTree();
     tree.setHeaderVisible( true );

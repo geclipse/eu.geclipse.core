@@ -380,8 +380,7 @@ public abstract class GridModelViewPart
    * 
    * @param event The associated {@link DoubleClickEvent}.
    */
-  protected void handleDoubleClick( @SuppressWarnings("unused")
-                                    final DoubleClickEvent event ) {
+  protected void handleDoubleClick( final DoubleClickEvent event ) {
     if ( this.viewer instanceof TreeViewer ) {
       TreeViewer treeViewer = ( TreeViewer ) this.viewer;
       ISelection selection = event.getSelection();
@@ -401,8 +400,7 @@ public abstract class GridModelViewPart
    * 
    * @param event The associated {@link OpenEvent}.
    */
-  protected void handleOpen( @SuppressWarnings("unused")
-                             final OpenEvent event ) {
+  protected void handleOpen( final OpenEvent event ) {
     this.openActions.delegateOpenEvent( event );
   }
   

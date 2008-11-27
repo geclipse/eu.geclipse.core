@@ -16,11 +16,13 @@
 package eu.geclipse.ui.views;
 
 import org.eclipse.jface.viewers.IBaseLabelProvider;
+import org.eclipse.jface.viewers.ILabelDecorator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.ui.IWorkbenchSite;
 import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
 
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridConnectionElement;
@@ -32,9 +34,14 @@ import eu.geclipse.ui.internal.actions.NewWizardActions;
 import eu.geclipse.ui.providers.ConfigurableContentProvider;
 import eu.geclipse.ui.providers.ConnectionViewContentProvider;
 import eu.geclipse.ui.providers.ConnectionViewLabelProvider;
+import eu.geclipse.ui.providers.DecoratingGridModelLabelProvider;
 
+/**
+ * The connection view is a {@link GridModelViewPart} dedicated to
+ * Grid Connections.
+ */
 public class GridConnectionView extends ElementManagerViewPart {
-
+  
   @Override
   protected void contributeAdditionalActions( final ActionGroupManager groups ) {
     
@@ -68,7 +75,10 @@ public class GridConnectionView extends ElementManagerViewPart {
    */
   @Override
   protected IBaseLabelProvider createLabelProvider() {
-    return new ConnectionViewLabelProvider();
+    ConnectionViewLabelProvider provider = new ConnectionViewLabelProvider();
+    ILabelDecorator decorator = PlatformUI.getWorkbench().getDecoratorManager().getLabelDecorator();
+    DecoratingGridModelLabelProvider result = new DecoratingGridModelLabelProvider( provider, decorator );
+    return result;
   }
   
   /* (non-Javadoc)

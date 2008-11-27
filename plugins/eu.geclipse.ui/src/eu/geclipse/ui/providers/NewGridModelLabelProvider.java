@@ -20,6 +20,8 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.jface.viewers.ILabelProvider;
+import org.eclipse.jface.viewers.StyledString;
+import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider.IStyledLabelProvider;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.model.WorkbenchLabelProvider;
 
@@ -41,7 +43,8 @@ import eu.geclipse.info.model.GridGlueService;
  * Label provider for {@link IGridElement}s and {@link IFileStore}s.
  */
 public class NewGridModelLabelProvider
-    extends FileStoreLabelProvider {
+    extends FileStoreLabelProvider
+    implements IStyledLabelProvider {
   
   /**
    * Path of the computing image.
@@ -154,6 +157,14 @@ public class NewGridModelLabelProvider
     
     return result;
     
+  }
+  
+  public StyledString getStyledText( final Object element ) {
+    String text = getText( element );
+    if ( text == null ) {
+      text = ""; //$NON-NLS-1$
+    }
+    return new StyledString( text );
   }
   
   /**
@@ -352,5 +363,5 @@ public class NewGridModelLabelProvider
     return result;
     
   }
-  
+
 }
