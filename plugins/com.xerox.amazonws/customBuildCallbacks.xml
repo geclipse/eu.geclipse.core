@@ -77,6 +77,10 @@
 		<ant antfile="build.xml"
 			target="schema"
 			dir="repo" />
+		
+		<eclipse.refreshLocal resource="com.xerox.amazonws/lib" depth="infinite"/>
+		<eclipse.refreshLocal resource="com.xerox.amazonws/repo" depth="infinite"/>
+		
 	</target>
 
 	<!-- ===================================================================== -->
