@@ -27,6 +27,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource.IOWrappedException;
 import org.w3c.dom.Document;
@@ -163,6 +164,11 @@ public class JSDLJobDescription extends ResourceGridContainer
   @SuppressWarnings("unchecked")
   private void writeModelToFile( final EObject jsdlRoot ) {
     this.internalJSDL.writeModelToFile( jsdlRoot );
+    try {
+      this.getResource().refreshLocal( 0, new NullProgressMonitor() );
+    } catch( CoreException exc ) {
+      Activator.logException( exc );
+    }
   }
 
   /**
