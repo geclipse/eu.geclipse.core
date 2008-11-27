@@ -30,6 +30,7 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
@@ -279,8 +280,8 @@ public class TransferManager implements ITransferManager {
      * @return A status object tracking errors of the transfer.
      */
     public Status transfer( final ITransferInformation transfer,
-                             final boolean isMove,
-                             final IProgressMonitor monitor )
+                            final boolean isMove,
+                            final IProgressMonitor monitor )
     {
       Status status = new Status( IStatus.OK,
                                   Activator.PLUGIN_ID,
@@ -296,99 +297,124 @@ public class TransferManager implements ITransferManager {
       InputStream inStream = null;
       OutputStream outStream = null;
       if( from instanceof GEclipseFileStore ) {
-        ((GEclipseFileStore)from).setActive( GEclipseFileStore.FETCH_INFO_ACTIVE_POLICY );
+        ( ( GEclipseFileStore )from ).setActive( GEclipseFileStore.FETCH_INFO_ACTIVE_POLICY );
       }
-      if( !from.fetchInfo().isDirectory() ) {
-      // File
       try {
-        // Fetch file info
-        IFileInfo sourceFileInfo = from.fetchInfo();
-        long length = sourceFileInfo.getLength();
-        // Open input stream
-        if( transferStatus ) {
-          try {
-            inStream = from.openInputStream( EFS.NONE,
-                                             new SubProgressMonitor( monitor, 8 ) );
-          } catch( CoreException cExc ) {
-            transferStatus = false;
-            status = new Status( IStatus.ERROR, 
-                                      Activator.PLUGIN_ID, 
-                                      String.format( "Error opening input stream for %s",
-                                                     from.toURI() ),
-                                      cExc );
-          }
-        }
-        // Open output stream
-        if( transferStatus ) {
-          if( to.fetchInfo().isDirectory() ) {
-            targetFile = to.getChild( from.getName() );
+        IFileInfo sourceFileInfo = from.fetchInfo( EFS.NONE,
+                                                   new NullProgressMonitor() );
+        if( sourceFileInfo.exists() ) {
+          if( !sourceFileInfo.isDirectory() ) {
+            // File
+            long length = sourceFileInfo.getLength();
+            // Open input stream
+            if( transferStatus ) {
+              try {
+                inStream = from.openInputStream( EFS.NONE,
+                                                 new SubProgressMonitor( monitor,
+                                                                         8 ) );
+              } catch( CoreException cExc ) {
+                transferStatus = false;
+                status = new Status( IStatus.ERROR,
+                                     Activator.PLUGIN_ID,
+                                     String.format( "Error opening input stream for %s",
+                                                    from.toURI() ),
+                                     cExc );
+              }
+            }
+            // Open output stream
+            if( transferStatus ) {
+              try {
+                IFileInfo fileInfo = to.fetchInfo();
+                if( fileInfo.exists() ) {
+                  if( fileInfo.isDirectory() ) {
+                    targetFile = to.getChild( from.getName() );
+                  } else {
+                    targetFile = to.getParent().getChild( from.getName() );
+                  }
+                  outStream = targetFile.openOutputStream( EFS.NONE,
+                                                           new SubProgressMonitor( monitor,
+                                                                                   8 ) );
+                } else {
+                  transferStatus = false;
+                  status = new Status( IStatus.ERROR,
+                                       Activator.PLUGIN_ID,
+                                       String.format( "Error opening input stream for %s",
+                                                      from.toURI() ),
+                                       null );
+                }
+                // TODO possible solution to possible bug >_<
+                // if( targetFile.fetchInfo().exists() ) {
+                // targetFile.delete( EFS.NONE, monitor );
+                // }
+              } catch( CoreException cExc ) {
+                transferStatus = false;
+                status = new Status( IStatus.ERROR,
+                                     Activator.PLUGIN_ID,
+                                     String.format( "Error opening output stream for %s",
+                                                    targetFile.toURI() ),
+                                     cExc );
+              }
+            }
+            // Prepare copy operation
+            if( transferStatus && ( inStream != null ) && ( outStream != null ) )
+            {
+              byte[] buffer = new byte[ 1024 * 1024 ];
+              Integer totalKb = Integer.valueOf( ( int )Math.ceil( ( double )length / 1024 ) );
+              SubProgressMonitor subMonitor = new SubProgressMonitor( monitor,
+                                                                      84 );
+              subMonitor.beginTask( Messages.getString( "TransferManager.copying_progress" ) + from.getName(), ( int )length ); //$NON-NLS-1$
+              subMonitor.subTask( Messages.getString( "TransferManager.copying_progress" ) + from.getName() ); //$NON-NLS-1$
+              // Copy the data
+              long byteCounter = 0;
+              while( !subMonitor.isCanceled() && transferStatus ) {
+                int bytesRead = -1;
+                // Read data from source
+                try {
+                  bytesRead = inStream.read( buffer );
+                } catch( IOException ioExc ) {
+                  transferStatus = false;
+                  status = new Status( IStatus.ERROR,
+                                       Activator.PLUGIN_ID,
+                                       String.format( "Error reading from %s",
+                                                      from.toURI() ),
+                                       ioExc );
+                }
+                // Check if there is still data available
+                if( bytesRead == -1 ) {
+                  break;
+                }
+                // Write data to target
+                try {
+                  outStream.write( buffer, 0, bytesRead );
+                } catch( IOException ioExc ) {
+                  transferStatus = false;
+                  status = new Status( IStatus.ERROR,
+                                       Activator.PLUGIN_ID,
+                                       String.format( "Error writing to %s",
+                                                      to.toURI() ),
+                                       ioExc );
+                }
+                byteCounter += bytesRead;
+                subMonitor.worked( bytesRead );
+                subMonitor.subTask( String.format( Messages.getString( "TransferManager.transfer_progress_format" ), //$NON-NLS-1$
+                                                   sourceFileInfo.getName(),
+                                                   Integer.valueOf( ( int )( 100. * byteCounter / length ) ),
+                                                   Integer.valueOf( ( int )( byteCounter / 1024 ) ),
+                                                   totalKb ) );
+              }
+              subMonitor.done();
+            }
           } else {
-            targetFile = to.getParent().getChild( from.getName() );   
-          }
-          try {
-            //TODO possible solution to possible bug >_<
-//            if(  targetFile.fetchInfo().exists() ) {
-//              targetFile.delete( EFS.NONE, monitor );
-//            }
-            outStream = targetFile.openOutputStream( EFS.NONE,
-                                                     new SubProgressMonitor( monitor,
-                                                                             8 ) );
-          } catch( CoreException cExc ) {
-            transferStatus = false;
-            status = new Status( IStatus.ERROR, 
-                                      Activator.PLUGIN_ID, 
-                                      String.format( "Error opening output stream for %s",
-                                                     targetFile.toURI() ),
-                                      cExc );
+            // Directory
+            copyDirectory( from, to, isMove, monitor );
           }
         }
-        // Prepare copy operation
-        if( transferStatus && ( inStream != null ) && ( outStream != null ) ) {
-          byte[] buffer = new byte[ 1024 * 1024 ];
-          Integer totalKb = Integer.valueOf( ( int )Math.ceil( ( double )length / 1024 ) );
-          SubProgressMonitor subMonitor = new SubProgressMonitor( monitor, 84 );
-          subMonitor.beginTask( Messages.getString( "TransferManager.copying_progress" ) + from.getName(), ( int )length ); //$NON-NLS-1$
-          subMonitor.subTask( Messages.getString( "TransferManager.copying_progress" ) + from.getName() ); //$NON-NLS-1$
-          // Copy the data
-          long byteCounter = 0;
-          while( !subMonitor.isCanceled() && transferStatus ) {
-            int bytesRead = -1;
-            // Read data from source
-            try {
-              bytesRead = inStream.read( buffer );
-            } catch( IOException ioExc ) {
-              transferStatus = false;
-              status = new Status( IStatus.ERROR, 
-                                        Activator.PLUGIN_ID, 
-                                        String.format( "Error reading from %s",
-                                                       from.toURI() ),
-                                        ioExc );
-            }
-            // Check if there is still data available
-            if( bytesRead == -1 ) {
-              break;
-            }
-            // Write data to target
-            try {
-              outStream.write( buffer, 0, bytesRead );
-            } catch( IOException ioExc ) {
-              transferStatus = false;
-              status = new Status( IStatus.ERROR, 
-                                        Activator.PLUGIN_ID, 
-                                        String.format( "Error writing to %s",
-                                                       to.toURI() ),
-                                        ioExc );
-            }
-            byteCounter += bytesRead;
-            subMonitor.worked( bytesRead );
-            subMonitor.subTask( String.format( Messages.getString( "TransferManager.transfer_progress_format" ), //$NON-NLS-1$
-                                               sourceFileInfo.getName(),
-                                               Integer.valueOf( ( int )( 100. * byteCounter / length ) ),
-                                               Integer.valueOf( ( int )( byteCounter / 1024 ) ),
-                                               totalKb ) );
-          }
-          subMonitor.done();
-        }
+      } catch( Exception exc ) {
+        status = new Status( IStatus.ERROR,
+                             Activator.PLUGIN_ID,
+                             String.format( "Error during transfering %s",
+                                            from.toURI() ),
+                             exc );
       } finally {
         monitor.subTask( Messages.getString( "TransferManager.closing_streams" ) ); //$NON-NLS-1$
         // Close output stream
@@ -408,10 +434,6 @@ public class TransferManager implements ITransferManager {
           }
         }
         monitor.done();
-      }
-      } else {
-        //Directory
-        copyDirectory( from, to, isMove, monitor );
       }
       return status;
     }

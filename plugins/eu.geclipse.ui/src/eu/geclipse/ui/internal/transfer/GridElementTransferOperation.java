@@ -162,19 +162,22 @@ public class GridElementTransferOperation
     if( this.transferOperation != null ) {
       //Resume file stores
       localMonitor.beginTask( Messages.getString("GridElementTransferOperation.transfering_element_progress"), 1 ); //$NON-NLS-1$
+      String sourceName = new Path( this.transferOperation.getSource()
+                                    .toURI()
+                                    .getPath() ).lastSegment();
       TransferParams data = new TransferParams( this.transferOperation.getSource(),
                                                 null,
                                                 this.transferOperation.getDestination(),
                                                 this.transferOperation.getDestination()
-                                                  .getChild( this.transferOperation.getSource()
-                                                    .getName() ),
+                                                  .getChild( sourceName ),
                                                 localMonitor );
       try {
         checkExistingTarget( data );
       } catch( ProblemException exc ) {
         String msg = String.format( Messages.getString( "GridElementTransferOperation.errCannotCopyFile" ), //$NON-NLS-1$
-                                    this.transferOperation.getSource().getName() );
+                                    sourceName );
         data.status = new Status( IStatus.ERROR, Activator.PLUGIN_ID, msg, exc );
+        status.merge( data.status );
       }
       if ( localMonitor.isCanceled() ) {
         throw new OperationCanceledException();
@@ -223,14 +226,16 @@ public class GridElementTransferOperation
       }
     
       try {
-        if( this.globalTarget.getResource() instanceof IContainer ) {
-          //Refresh only if target is a container
-          this.globalTarget.refresh( new SubProgressMonitor( localMonitor, 1 ) );
-        } else {
-          this.globalTarget.getParent().refresh( new SubProgressMonitor( localMonitor, 1 ) );
-          for( IGridElement elem: this.globalTarget.getParent().getChildren( new SubProgressMonitor( localMonitor, 1 ) ) ) {
-            if( elem.getResource() instanceof IContainer && elem instanceof IGridContainer ) {
-              ((IGridContainer)elem).refresh( new SubProgressMonitor( localMonitor,1 ) );
+        if( status.isOK() ) {
+          if( this.globalTarget.getResource() instanceof IContainer ) {
+            //Refresh only if target is a container
+            this.globalTarget.refresh( new SubProgressMonitor( localMonitor, 1 ) );
+          } else {
+            this.globalTarget.getParent().refresh( new SubProgressMonitor( localMonitor, 1 ) );
+            for( IGridElement elem: this.globalTarget.getParent().getChildren( new SubProgressMonitor( localMonitor, 1 ) ) ) {
+              if( elem.getResource() instanceof IContainer && elem instanceof IGridContainer ) {
+                ((IGridContainer)elem).refresh( new SubProgressMonitor( localMonitor,1 ) );
+              }
             }
           }
         }
@@ -239,7 +244,7 @@ public class GridElementTransferOperation
       }
     }
     
-    if( status.getSeverity() != IStatus.OK ) {
+    if( status.getSeverity() == IStatus.ERROR ) {
       showProblemDialog( status );
     }
     return Status.OK_STATUS;    // always return OK, because we displays our own ProblemDialog 
@@ -503,8 +508,27 @@ public class GridElementTransferOperation
   }
   
   private void checkExistingTarget( final TransferParams data ) throws ProblemException {
-    IFileInfo targetInfo = data.targetFile.fetchInfo();
-    if( targetInfo.exists() ) {
+    IFileInfo targetInfo = null;
+    GEclipseURI geclURI = new GEclipseURI( data.targetFile.toURI() );
+    try {
+      targetInfo = EFS.getStore( geclURI.toSlaveURI() )
+        .fetchInfo( EFS.NONE, new NullProgressMonitor() );
+    } catch( ProblemException problemExc ) {
+      throw new ProblemException( "eu.geclipse.core.filesystem.serverCouldNotBeContacted",
+                                  String.format( "Could not contact server to fetch file info for %s",
+                                                 data.targetFile.toURI().toString() ),
+                                  problemExc,
+                                  Activator.PLUGIN_ID );
+    } catch( CoreException exc ) {
+      throw new ProblemException( "eu.geclipse.core.problem.net.malformedURL",
+                                  String.format( "URL %s is malformed or EFS using scheme %s doesn't exist",
+                                                 data.targetFile.toURI().toString(),
+                                                 geclURI.getSlaveScheme() ),
+                                  exc,
+                                  Activator.PLUGIN_ID );
+    }
+    
+    if( targetInfo != null && targetInfo.exists() ) {
       
       if( data.sourceFile.toURI().equals( data.targetFile.toURI() ) ) {
         String msg = String.format( Messages.getString("GridElementTransferOperation.errSourceAndTargetAreTheSame"), data.sourceFile.getName() ); //$NON-NLS-1$
