@@ -1,3 +1,18 @@
+/*****************************************************************************
+ * Copyright (c) 2008 g-Eclipse Consortium 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Initial development of the original code was made for the
+ * g-Eclipse project founded by European Union
+ * project number: FP6-IST-034327  http://www.geclipse.eu/
+ *
+ * Contributors:
+ *    Mathias Stuempert - initial API and implementation
+ *****************************************************************************/
+
 package eu.geclipse.core.internal.security;
 
 import java.io.File;
@@ -21,15 +36,36 @@ import eu.geclipse.core.security.ICertificateHandle;
 import eu.geclipse.core.security.X509Util;
 import eu.geclipse.core.security.ICertificateManager.CertTrust;
 
+/**
+ * Certificate handle dedicated to X.509 certificates.
+ */
 public class X509CertificateHandle
     implements ICertificateHandle {
   
+  /**
+   * The certificate itself.
+   */
   private X509Certificate certificate;
   
+  /**
+   * A file linked to the certificate.
+   */
   private File file;
   
+  /**
+   * The certificates's trust mode.
+   */
   private CertTrust trust;
   
+  /**
+   * Create a new handle for the specified certificate. If the trust mode
+   * is {@link CertTrust#AlwaysTrusted} the certificate is saved to disk.
+   * 
+   * @param c The certificate itself.
+   * @param trust The trust mode of the certificate.
+   * @throws ProblemException If saving the certificate failed.
+   * @see {@link #save(X509Certificate)}
+   */
   public X509CertificateHandle( final X509Certificate c, final CertTrust trust )
       throws ProblemException {
     if ( trust == CertTrust.AlwaysTrusted ) {
@@ -39,6 +75,13 @@ public class X509CertificateHandle
     this.trust = trust;
   }
   
+  /**
+   * Create a new handle from the specified file.
+   * 
+   * @param f The file from which to load a certificate.
+   * @throws ProblemException If no certificate could be loaded from the
+   * specified file.
+   */
   X509CertificateHandle( final File f )
       throws ProblemException {
     this.certificate = load( f );
@@ -46,10 +89,16 @@ public class X509CertificateHandle
     this.trust = CertTrust.AlwaysTrusted;
   }
   
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.security.ICertificateHandle#delete()
+   */
   public boolean delete() {
     return this.file != null ? this.file.delete() : true;
   }
   
+  /* (non-Javadoc)
+   * @see java.lang.Object#equals(java.lang.Object)
+   */
   @Override
   public boolean equals( final Object o ) {
     
@@ -63,33 +112,28 @@ public class X509CertificateHandle
     
   }
   
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.security.ICertificateHandle#getCertificate()
+   */
   public X509Certificate getCertificate() {
     return this.certificate;
   }
   
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.security.ICertificateHandle#getTrust()
+   */
   public CertTrust getTrust() {
     return this.trust;
   }
   
-  private static String getPrincipalPart( final X500Principal principal, final String dnID ) {
-
-    String result = ""; //$NON-NLS-1$
-    
-    String name = principal.getName();
-    int i1 = name.indexOf( dnID+"=" ); //$NON-NLS-1$
-    int i2 = name.indexOf( ",", i1+1 ); //$NON-NLS-1$
-    
-    if ( i1 >= 0 ) {
-      if ( i2 < 0 ) {
-        i2 = name.length();
-      }
-      result = name.substring( i1+dnID.length()+1, i2 );
-    }
-    
-    return result;
-    
-  }
-  
+  /**
+   * Try to load a certificate from the specified file.
+   * 
+   * @param f The file from which to load the certificate.
+   * @return The loaded certificate.
+   * @throws ProblemException if no certificate could be loaded from the
+   * specified file.
+   */
   private X509Certificate load( final File f )
       throws ProblemException {
     try {
@@ -97,12 +141,20 @@ public class X509CertificateHandle
       return X509Util.loadCertificate( fis );
     } catch( FileNotFoundException fnfExc ) {
       throw new ProblemException( ICoreProblems.SECURITY_CERT_LOAD_FAILED,
-                                  "Unable to create a certificate object from file " + f.getName(),
+                                  Messages.getString("X509CertificateHandle.load_failed") + f.getName(), //$NON-NLS-1$
                                   fnfExc,
                                   Activator.PLUGIN_ID );
     }
   }
   
+  /**
+   * Try to save the specified certificate at
+   * {@link CertificateManager#getCertificateLocation()}.
+   * 
+   * @param c The certificate to be saved.
+   * @return The corresponding file.
+   * @throws ProblemException If saving the certificate failed.
+   */
   private File save( final X509Certificate c )
       throws ProblemException {
     
@@ -115,7 +167,7 @@ public class X509CertificateHandle
     } catch( NoSuchAlgorithmException nsaExc ) {
       Activator.logStatus( new Status( IStatus.WARNING,
                                        Activator.PLUGIN_ID,
-                                       "Could not create MD5 hash as certificate file name. Using alternative hash instead.",
+                                       Messages.getString("X509CertificateHandle.no_md5_hash"), //$NON-NLS-1$
                                        nsaExc ) );
       hash = c.getSubjectX500Principal().hashCode();
     }
@@ -136,7 +188,7 @@ public class X509CertificateHandle
         break;
       } else if ( i == 9 ) {
         throw new ProblemException( ICoreProblems.SECURITY_CERT_SAVE_FAILED,
-                                    "No appropriate file name ending found",
+                                    Messages.getString("X509CertificateHandle.inappropriate_file_name"), //$NON-NLS-1$
                                     Activator.PLUGIN_ID );
       }
     }
@@ -145,6 +197,13 @@ public class X509CertificateHandle
     
   }
   
+  /**
+   * Create the MD5 hash of the specified certificate's subject DN.
+   * 
+   * @param c The certificate for which to create the hash.
+   * @return The create hash.
+   * @throws NoSuchAlgorithmException If no MD5 algorithm could be found.
+   */
   private int subjectDNHash( final X509Certificate c )
       throws NoSuchAlgorithmException {
     

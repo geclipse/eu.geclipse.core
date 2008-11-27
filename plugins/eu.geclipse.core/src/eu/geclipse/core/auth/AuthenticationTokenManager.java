@@ -19,8 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import eu.geclipse.core.security.BaseSecurityManager;
-import eu.geclipse.core.security.ISecurityManager;
-
 
 /**
  * The <code>AuthenticationTokenManager</code> manages all types of authentication tokens.
@@ -31,8 +29,7 @@ import eu.geclipse.core.security.ISecurityManager;
  * @author stuempert-m
  */
 public class AuthenticationTokenManager
-    extends BaseSecurityManager
-    implements ISecurityManager {
+    extends BaseSecurityManager {
   
   /**
    * The singleton that holds the instance of this

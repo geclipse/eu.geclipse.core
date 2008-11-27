@@ -1,3 +1,18 @@
+/*****************************************************************************
+ * Copyright (c) 2008 g-Eclipse Consortium 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Initial development of the original code was made for the
+ * g-Eclipse project founded by European Union
+ * project number: FP6-IST-034327  http://www.geclipse.eu/
+ *
+ * Contributors:
+ *    Mathias Stuempert - initial API and implementation
+ *****************************************************************************/
+
 package eu.geclipse.core.security;
 
 import java.io.ByteArrayInputStream;
@@ -16,31 +31,60 @@ import eu.geclipse.core.ICoreProblems;
 import eu.geclipse.core.internal.Activator;
 import eu.geclipse.core.reporting.ProblemException;
 
+/**
+ * Utility class for handling {@link X509Certificate}s.
+ */
 public class X509Util {
   
+  /**
+   * ID for the X.509 certificate provider.
+   */
+  private static final String X509_CERTIFICATE_FACTORY_PROVIDER = "X.509"; //$NON-NLS-1$
+  
+  /**
+   * Begin tag for PEM formatted certificates.
+   */
   private static final String BEGIN_CERT = "-----BEGIN CERTIFICATE-----"; //$NON-NLS-1$
   
+  /**
+   * End tag for PEM formatted certificates.
+   */
   private static final String END_CERT = "-----END CERTIFICATE-----"; //$NON-NLS-1$
   
+  /**
+   * OS specific line separator.
+   */
   private static final String LINE_SEPARATOR = System.getProperty( "line.separator" ); //$NON-NLS-1$
   
+  /**
+   * Get a proper string representation of a certificate's serial number.
+   * 
+   * @param serial The certificate's serial number.
+   * @return A string representation of the serial number.
+   */
   public static String formatSerialNumber( final BigInteger serial ) {
     
     StringBuffer b = new StringBuffer( serial.toString( 16 ).toUpperCase() );
     
     if ( ( b.length() % 2 ) != 0 ) {
-      b.insert( 0, "0" );
+      b.insert( 0, "0" ); //$NON-NLS-1$
     }
     
     int index = 2;
     for ( index = 2 ; index < b.length() ; index += 3 ) {
-      b.insert( index, ":" );
+      b.insert( index, ":" ); //$NON-NLS-1$
     }
     
     return  b.toString();
     
   }
   
+  /**
+   * Get a proper string representation of the specified encrypted data.
+   * 
+   * @param data The encrypted data. 
+   * @return A string representing the specified data.
+   */
   public static String formatEncodedData( final byte[] data ) {
     
     StringBuffer buffer = new StringBuffer();
@@ -53,13 +97,21 @@ public class X509Util {
           buffer.append( " " ); //$NON-NLS-1$
         }
       }
-      buffer.append( String.format( "%02X", data[ i ] ) );
+      buffer.append( String.format( "%02X", Byte.valueOf( data[ i ] ) ) ); //$NON-NLS-1$
     }
     
     return buffer.toString();
     
   }
   
+  /**
+   * Load a certificate from the specified input stream.
+   * 
+   * @param iStream The input stream pointing to the certificates raw data.
+   * @return The certificate itself.
+   * @throws ProblemException If no certificate could be loaded from the
+   * specified input stream.
+   */
   public static X509Certificate loadCertificate( final InputStream iStream )
       throws ProblemException {
     
@@ -93,7 +145,7 @@ public class X509Util {
     
     try {
       
-      CertificateFactory factory = CertificateFactory.getInstance( "X.509" );
+      CertificateFactory factory = CertificateFactory.getInstance( X509_CERTIFICATE_FACTORY_PROVIDER );
       
       if ( ( i1 >= 0 ) && ( i2 >= 0 ) && ( i2 > i1 ) ) {
         String cString = s.substring( i1, i2 + END_CERT.length() );
@@ -115,10 +167,20 @@ public class X509Util {
     
   }
   
+  /**
+   * Save the specified certificate formatted as PEM to the specified output
+   * stream.
+   * 
+   * @param c The certificate to be saved.
+   * @param oStream The output stream where the certificate data should be
+   * written.
+   * @throws ProblemException If An error occurs.
+   */
   public static void saveCertificate( final X509Certificate c, final OutputStream oStream )
       throws ProblemException {
     
     try {
+      
       byte[] encoded = c.getEncoded();
       Base64 base64 = new Base64();
       byte[] base64encoded = base64.encode( encoded );
@@ -138,7 +200,7 @@ public class X509Util {
       pStream.close();
       
     } catch ( CertificateEncodingException ceExc ) {
-      
+      throw new ProblemException( ICoreProblems.AUTH_CREDENTIAL_SAVE_FAILED, ceExc, Activator.PLUGIN_ID );
     }
     
   }

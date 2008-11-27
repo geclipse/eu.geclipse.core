@@ -1,3 +1,18 @@
+/*****************************************************************************
+ * Copyright (c) 2008 g-Eclipse Consortium 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Initial development of the original code was made for the
+ * g-Eclipse project founded by European Union
+ * project number: FP6-IST-034327  http://www.geclipse.eu/
+ *
+ * Contributors:
+ *    Mathias Stuempert - initial API and implementation
+ *****************************************************************************/
+
 package eu.geclipse.core.internal.security;
 
 import java.io.File;
@@ -19,24 +34,47 @@ import eu.geclipse.core.security.BaseSecurityManager;
 import eu.geclipse.core.security.ICertificateHandle;
 import eu.geclipse.core.security.ICertificateManager;
 
+/**
+ * Internal singleton implementation of the {@link ICertificateManager}.
+ */
 public class CertificateManager
     extends BaseSecurityManager
     implements ICertificateManager {
   
+  /**
+   * Pattern for globus style certificate file names.
+   */
   public static final Pattern CERT_FILE_PATTERN = Pattern.compile( ".*\\.[0-9]" ); //$NON-NLS-1$
   
+  /**
+   * The singleton instance.
+   */
   private static CertificateManager singleton;
   
+  /**
+   * List containing the currently trusted certificates.
+   */
   private List< X509CertificateHandle > trusted;
   
+  /**
+   * List containing the currently untrusted certificates.
+   */
   private List< X509CertificateHandle > untrusted;
   
+  /**
+   * Private constructor.
+   */
   private CertificateManager() {
     this.trusted = new ArrayList< X509CertificateHandle >();
     this.untrusted = new ArrayList< X509CertificateHandle >();
     update();
   }
   
+  /**
+   * Get the singleton of this certificate manager.
+   * 
+   * @return The singleton instance.
+   */
   public static CertificateManager getManager() {
     if ( singleton == null ) {
       singleton = new CertificateManager();
@@ -44,6 +82,12 @@ public class CertificateManager
     return singleton;
   }
   
+  /**
+   * Get the location where this certificate manager stores its trusted
+   * certificates.
+   * 
+   * @return The certificate location.
+   */
   public static IPath getCertificateLocation() {
     IPath location = Activator.getDefault().getStateLocation();
     if ( !location.hasTrailingSeparator() ) {
@@ -57,7 +101,7 @@ public class CertificateManager
             new Status(
                 IStatus.WARNING,
                 Activator.PLUGIN_ID,
-                "Unable to create security configuration directory"
+                Messages.getString("CertificateManager.cert_location_creation_failed") //$NON-NLS-1$
             )
         );
       }
@@ -65,6 +109,9 @@ public class CertificateManager
     return location;
   }
   
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.security.ICertificateManager#addCertificate(java.security.cert.X509Certificate, eu.geclipse.core.security.ICertificateManager.CertTrust)
+   */
   public ICertificateHandle addCertificate( final X509Certificate c, final CertTrust trust )
       throws ProblemException {
     
@@ -78,6 +125,9 @@ public class CertificateManager
     
   }
   
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.security.ICertificateManager#addCertificates(java.security.cert.X509Certificate[], eu.geclipse.core.security.ICertificateManager.CertTrust)
+   */
   public ICertificateHandle[] addCertificates( final X509Certificate[] list, final CertTrust trust )
       throws ProblemException {
     
@@ -98,6 +148,14 @@ public class CertificateManager
     
   }
   
+  /**
+   * Find the {@link ICertificateHandle} corresponding to the specified
+   * certificate.
+   * 
+   * @param cert The certificate to be looked up.
+   * @return The handle or <code>null</code> if no such handle currently
+   * exists.
+   */
   public ICertificateHandle findHandle( final X509Certificate cert ) {
     
     ICertificateHandle result = null;
@@ -114,16 +172,28 @@ public class CertificateManager
     
   }
   
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.security.ICertificateManager#getAllCertificates()
+   */
   public List< ICertificateHandle > getAllCertificates() {
     List< ICertificateHandle > result = new ArrayList< ICertificateHandle >( this.trusted );
     result.addAll( this.untrusted );
     return result;
   }
   
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.security.ICertificateManager#getTrustedCertificates()
+   */
   public List< ICertificateHandle > getTrustedCertificates() {
     return new ArrayList< ICertificateHandle >( this.trusted );
   }
   
+  /**
+   * Get a {@link Set} of {@link TrustAnchor}s initialised with the trusted
+   * certificates known by this manager.
+   * 
+   * @return The trust anchor set.
+   */
   public Set< TrustAnchor > getTrustAnchors() {
     List< ICertificateHandle > trustedCertificates = getTrustedCertificates();
     Set< TrustAnchor > set = new HashSet< TrustAnchor >( trustedCertificates.size() );
@@ -133,16 +203,25 @@ public class CertificateManager
     return set;
   }
   
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.security.ICertificateManager#getUntrustedCertificates()
+   */
   public List< ICertificateHandle > getUntrustedCertificates() {
     return new ArrayList< ICertificateHandle >( this.untrusted );
   }
   
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.security.ICertificateManager#removeCertificate(eu.geclipse.core.security.ICertificateHandle)
+   */
   public void removeCertificate( final ICertificateHandle c ) {
     if ( internalRemoveCertificate( c ) ) {
       fireContentChanged();
     }
   }
   
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.security.ICertificateManager#removeCertificates(eu.geclipse.core.security.ICertificateHandle[])
+   */
   public void removeCertificates( final ICertificateHandle[] list ) {
     
     boolean changed = false;
@@ -157,6 +236,16 @@ public class CertificateManager
     
   }
   
+  /**
+   * Internal helper method to properly add the specified certificate to this
+   * manager.
+   * 
+   * @param c The certificate to be added.
+   * @param trust The trust mode of the certificate.
+   * @return The {@link X509CertificateHandle} corresponding to the added
+   * certificate.
+   * @throws ProblemException If the operation failed.
+   */
   private X509CertificateHandle internalAddCertificate( final X509Certificate c, final CertTrust trust )
       throws ProblemException {
     
@@ -175,6 +264,13 @@ public class CertificateManager
     
   }
   
+  /**
+   * Internal helper method to properly remove the specified certificate from
+   * this manager.
+   * 
+   * @param c The certificate to be removed.
+   * @return <code>True</code> if the certificate could be removed properly.
+   */
   private boolean internalRemoveCertificate( final ICertificateHandle c ) {
     
     boolean result = false;
@@ -193,6 +289,10 @@ public class CertificateManager
     
   }
   
+  /**
+   * Update the manager's content, i.e. reset all certificate lists and reload
+   * the certificates from disk.
+   */
   private void update() {
     
     this.trusted.clear();

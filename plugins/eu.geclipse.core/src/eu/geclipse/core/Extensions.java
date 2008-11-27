@@ -199,6 +199,25 @@ public class Extensions {
     = "description"; //$NON-NLS-1$
   
   /**
+   * The ID of the certificate trust verifier extension point.
+   */
+  public static final String CERT_TRUST_VERIFIER_POINT
+    = "eu.geclipse.core.certificateTrustVerifier"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the certificate trust verifier extension point's verifier
+   * element.
+   */
+  public static final String CERT_TRUST_VERIFIER_ELEMENT
+    = "verifier"; //$NON-NLS-1$
+     
+  /**
+   * The ID of the certificate trust verifier extension point's class attribute.
+   */
+  public static final String CERT_TRUST_VERIFIER_CLASS
+    = "class"; //$NON-NLS-1$
+  
+  /**
    * The ID of the configurator extension point.
    */
   public static final String CONFIG_POINT
