@@ -936,14 +936,57 @@ public class GridFileDialog
     };
 
     GridModel.getRoot().addGridModelListener( this.modelListener );
+    
+    Shell shell = getShell();
+    if ( hasStyle( STYLE_ALLOW_ONLY_FILES ) ) {
+      if ( hasStyle( STYLE_MULTI_SELECTION ) ) {
+        shell.setText( Messages.getString("GridFileDialog.shell_title_files") ); //$NON-NLS-1$
+      } else {
+        shell.setText( Messages.getString("GridFileDialog.shell_title_file") ); //$NON-NLS-1$
+      }
+    } else if ( hasStyle( STYLE_ALLOW_ONLY_FOLDERS ) ) {
+      if ( hasStyle( STYLE_MULTI_SELECTION ) ) {
+        shell.setText( Messages.getString("GridFileDialog.shell_title_folders") ); //$NON-NLS-1$
+      } else {
+        shell.setText( Messages.getString("GridFileDialog.shell_title_folder") ); //$NON-NLS-1$
+      }
+    } else {
+      if ( hasStyle( STYLE_MULTI_SELECTION ) ) {
+        shell.setText( Messages.getString("GridFileDialog.shell_title_files_folders") ); //$NON-NLS-1$
+      } else {
+        shell.setText( Messages.getString("GridFileDialog.shell_title_file_folder") ); //$NON-NLS-1$
+      }
+    }
 
     setTitle( Messages.getString("GridFileDialog.title") ); //$NON-NLS-1$
-    setMessage( Messages.getString("GridFileDialog.message_select_your_files") ); //$NON-NLS-1$
+    
+    if ( hasStyle( STYLE_ALLOW_ONLY_FILES ) ) {
+      if ( hasStyle( STYLE_MULTI_SELECTION ) ) {
+        setMessage( Messages.getString("GridFileDialog.title_files") ); //$NON-NLS-1$
+      } else {
+        setMessage( Messages.getString("GridFileDialog.title_file") ); //$NON-NLS-1$
+      }
+    } else if ( hasStyle( STYLE_ALLOW_ONLY_FOLDERS ) ) {
+      if ( hasStyle( STYLE_MULTI_SELECTION ) ) {
+        setMessage( Messages.getString("GridFileDialog.title_folders") ); //$NON-NLS-1$
+      } else {
+        setMessage( Messages.getString("GridFileDialog.title_folder") ); //$NON-NLS-1$
+      }
+    } else {
+      if ( hasStyle( STYLE_MULTI_SELECTION ) ) {
+        setMessage( Messages.getString("GridFileDialog.title_files_folders") ); //$NON-NLS-1$
+      } else {
+        setMessage( Messages.getString("GridFileDialog.title_file_folder") ); //$NON-NLS-1$
+      }
+    }
+    
     addFileTypeFilter( new FileTypeFilter(),
                        Messages.getString("GridFileDialog.label_all_files") ); //$NON-NLS-1$
+    
     if ( this.filenameCombo != null && this.filenameCombo.getItemCount() != 0 ) {
       this.filetypeCombo.select( 0 );
     }
+    
     return mainComp;
 
   }
@@ -1017,19 +1060,19 @@ public class GridFileDialog
             IFileInfo fileInfo = fileStore.fetchInfo();
 
             if ( hasStyle( STYLE_ALLOW_ONLY_FILES ) && fileInfo.isDirectory() ) {
-              errMsg = "Dialog is in file-only-mode but at least one folder is selected";
+              errMsg = Messages.getString("GridFileDialog.file_only_mode_warning"); //$NON-NLS-1$
             } else if ( hasStyle( STYLE_ALLOW_ONLY_FOLDERS ) && ! fileInfo.isDirectory() ) {
-              errMsg = "Dialog is in folder-only-mode but at least one file is selected";
+              errMsg = Messages.getString("GridFileDialog.folder_only_mode_warning"); //$NON-NLS-1$
             } else {
               setCurrentSelection( new IFileStore[] { fileStore } );
             }
 
           } catch ( CoreException cExc ) {
-            errMsg = String.format( "Unable to create file store - %s", cExc.getLocalizedMessage() );
+            errMsg = String.format( Messages.getString("GridFileDialog.create_file_store_error"), cExc.getLocalizedMessage() ); //$NON-NLS-1$
           }
 
         } catch ( URISyntaxException uriExc ) {
-          errMsg = String.format( "Invalid filename - ", newFilename );
+          errMsg = String.format( Messages.getString("GridFileDialog.invalid_file_name_error"), newFilename ); //$NON-NLS-1$
         }
 
       }
@@ -1058,10 +1101,10 @@ public class GridFileDialog
       for ( IFileStore store : selection ) {
         IFileInfo info = store.fetchInfo();
         if ( hasStyle( STYLE_ALLOW_ONLY_FILES ) && info.isDirectory() ) {
-          errMsg = "Dialog is in file-only-mode but at least one folder is selected";
+          errMsg = Messages.getString("GridFileDialog.file_only_mode_warning"); //$NON-NLS-1$
           break;
         } else if ( hasStyle( STYLE_ALLOW_ONLY_FOLDERS ) && ! info.isDirectory() ) {
-          errMsg = "Dialog is in folder-only-mode but at least one file is selected";
+          errMsg = Messages.getString("GridFileDialog.folder_only_mode_warning"); //$NON-NLS-1$
           break;
         }
       }
@@ -1106,16 +1149,16 @@ public class GridFileDialog
         IFileInfo fileInfo = fileStore.fetchInfo();
 
         if ( hasStyle( STYLE_ALLOW_ONLY_FILES ) && fileInfo.isDirectory() ) {
-          errMsg = "Dialog is in file-only-mode but at least one folder is selected";
+          errMsg = Messages.getString("GridFileDialog.file_only_mode_warning"); //$NON-NLS-1$
         } else if ( hasStyle( STYLE_ALLOW_ONLY_FOLDERS ) && ! fileInfo.isDirectory() ) {
-          errMsg = "Dialog is in folder-only-mode but at least one file is selected";
+          errMsg = Messages.getString("GridFileDialog.folder_only_mode_warning"); //$NON-NLS-1$
         } else {
           setFilename( fileInfo.getName() );
           setCurrentSelection( new IFileStore[] { fileStore } );
         }
 
       } catch ( CoreException cExc ) {
-        errMsg = String.format( "Unable to create file store - %s", cExc.getLocalizedMessage() );
+        errMsg = String.format( Messages.getString("GridFileDialog.create_file_store_error"), cExc.getLocalizedMessage() ); //$NON-NLS-1$
       }
 
       if ( errMsg != null ) {
@@ -1308,7 +1351,7 @@ public class GridFileDialog
       try {
         result = new URI( text );
       } catch ( URISyntaxException uriExc ) {
-        setErrorMessage( String.format( "Invalid URI - %s", uriExc.getLocalizedMessage() ) );
+        setErrorMessage( String.format( Messages.getString("GridFileDialog.invalid_uri_error"), uriExc.getLocalizedMessage() ) ); //$NON-NLS-1$
       }
     }
 
