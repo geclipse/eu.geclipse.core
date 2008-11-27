@@ -19,7 +19,8 @@
             name="File System">
          <source
                class="org.eclipse.core.resources.IResource"
-               matcher="eu.geclipse.core.filesystem.FileSystemCreator">
+               matcher="eu.geclipse.core.filesystem.FileSystemCreator"
+               priority="90">
          </source>
          <target
                class="eu.geclipse.core.model.IGridConnection"

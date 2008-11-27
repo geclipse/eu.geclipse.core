@@ -419,6 +419,13 @@ public class Extensions {
     = "pattern"; //$NON-NLS-1$
   
   /**
+   * The ID of the priority attribute of the source configuration element
+   * contained in the Grid element creator extension point.
+   */
+  public static final String GRID_ELEMENT_CREATOR_SOURCE_PRIORITY_ATTRIBUTE
+    = "priority"; //$NON-NLS-1$
+  
+  /**
    * The ID of the default attribute of the source configuration element
    * contained in the Grid element creator extension point.
    */

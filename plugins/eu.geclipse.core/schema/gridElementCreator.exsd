@@ -114,6 +114,13 @@
                </documentation>
             </annotation>
          </attribute>
+         <attribute name="priority" type="string">
+            <annotation>
+               <documentation>
+                  If more than one creator matches the requirements this field is used to decide which creator should be taken to create a grid model element. Values from 1 to 99 are supported. Values less than 1 will be treated as 1, values greater than 99 will be treated as 99. The default value is 50.
+               </documentation>
+            </annotation>
+         </attribute>
          <attribute name="default" type="boolean">
             <annotation>
                <documentation>

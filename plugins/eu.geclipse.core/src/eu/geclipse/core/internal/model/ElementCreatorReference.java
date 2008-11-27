@@ -49,6 +49,11 @@ public class ElementCreatorReference {
   private static class SourceMatcher {
     
     /**
+     * The default priority taken if no priority is specified in the extension.
+     */
+    private static final int DEFAULT_PRIORITY = 50;
+    
+    /**
      * The type of the supported source.
      */
     private Class< ? > sourceClass;
@@ -58,6 +63,11 @@ public class ElementCreatorReference {
      * object.
      */
     private Pattern sourcePattern;
+    
+    /**
+     * The priority of the creator concerning this source matcher.
+     */
+    private int sourcePriority;
     
     /**
      * Specifies if this is the default source of the corresponding creator.
@@ -117,6 +127,24 @@ public class ElementCreatorReference {
         }
       }
       
+      String srcprrtyatt = element.getAttribute( Extensions.GRID_ELEMENT_CREATOR_SOURCE_PRIORITY_ATTRIBUTE );
+      if ( srcprrtyatt != null ) {
+        try {
+          this.sourcePriority = Integer.parseInt( srcprrtyatt );
+          if ( this.sourcePriority < 1 ) {
+            this.sourcePriority = 1;
+          } else if ( this.sourcePriority > 99 ) {
+            this.sourcePriority = 99;
+          }
+        } catch ( NumberFormatException nfExc ) {
+          throw new ProblemException( ICoreProblems.MODEL_ELEMENT_CREATE_FAILED,
+                                      Messages.getString("ElementCreatorReference.invalid_priority"), //$NON-NLS-1$
+                                      Activator.PLUGIN_ID );
+        }
+      } else {
+        this.sourcePriority = DEFAULT_PRIORITY;
+      }
+      
       // Parse the default attribute
       String srcdfltatt = element.getAttribute( Extensions.GRID_ELEMENT_CREATOR_SOURCE_DEFAULT_ATTRIBUTE );
       if ( srcdfltatt != null ) {
@@ -140,6 +168,15 @@ public class ElementCreatorReference {
         }
       }
       
+    }
+    
+    /**
+     * Get the priority assigned to this source matcher.
+     * 
+     * @return The matcher's priority.
+     */
+    public int getPriority() {
+      return this.sourcePriority;
     }
     
     /**
@@ -305,14 +342,15 @@ public class ElementCreatorReference {
    * element creator.
    * 
    * @param source The source to be checked.
-   * @return <code>true</code> if the source is supported by the corresponding
-   * element creator.
+   * @return A number between 1 and 99 inclusive if the source is supported by
+   * the corresponding element creator. The number corresponds to the creators
+   * priority. If the source is not supported -1 will be returned.
    * @throws ProblemException If a problem occurs.
    * @see SourceMatcher#matches(Object)
    */
-  public boolean checkSource( final Object source ) throws ProblemException {
+  public int checkSource( final Object source ) throws ProblemException {
     
-     boolean result = source == null;
+     int result = -1;
 
      if ( source != null ) {
        if ( this.sourceMatchers == null ) {
@@ -320,8 +358,10 @@ public class ElementCreatorReference {
        }
        for ( SourceMatcher matcher : this.sourceMatchers ) {
          if ( matcher.matches( source ) ) {
-           result = true;
-           break;
+           int priority = matcher.getPriority();
+           if ( priority > result ) {
+             result = priority;
+           }
          }
        }
      }

@@ -120,17 +120,27 @@ public class ElementCreatorRegistry
     IGridElementCreator result = null;
     
     List< ElementCreatorReference > references = findReferences( source, target );
+    int priority = -1;
     
     if ( ! references.isEmpty() ) {
-      for ( ElementCreatorReference reference : references ) {
-        result = reference.getElementCreator();
-        if ( result != null ) {
-          if ( ! ( source instanceof Class< ? > ) ) {
-            result.setSource( source );
+      for ( ElementCreatorReference ref : references ) {
+        try {
+          int p = ref.checkSource( source );
+          if ( p > priority ) {
+            result = ref.getElementCreator();
+            if ( result != null ) {
+              priority = p;
+            }
           }
-          break;
+        } catch ( ProblemException pExc ) {
+          // Should never happen since this was already checked before in findReferences
+          Activator.logException( pExc );
         }
       }
+    }
+    
+    if ( ( result != null ) && ! ( source instanceof Class< ? > ) ) {
+      result.setSource( source );
     }
     
     return result;
@@ -273,7 +283,7 @@ public class ElementCreatorRegistry
     
     for ( ElementCreatorReference reference : Collections.synchronizedCollection( this.creators ) ) {
       try {
-        if ( reference.checkSource( source ) && reference.checkTarget( target ) ) {
+        if ( ( reference.checkSource( source ) != -1 ) && reference.checkTarget( target ) ) {
           result.add( reference );
         }
       } catch ( ProblemException pExc ) {
