@@ -137,7 +137,7 @@ public class CertificateLoaderSelectionPage extends WizardPage {
     if ( ( element != null ) && Extensions.CERT_LOADER_ELEMENT.equals( element.getName() ) ) {
       try {
         result = ( ICertificateLoader ) element.createExecutableExtension( Extensions.CERT_LOADER_CLASS_ATTRIBUTE );
-      } catch( CoreException cExc ) {
+      } catch ( CoreException cExc ) {
         setErrorMessage( "No valid certificate loader found: " + cExc.getLocalizedMessage() );
       }
     } else {
@@ -155,8 +155,10 @@ public class CertificateLoaderSelectionPage extends WizardPage {
     
     if ( text.length() > 0 ) {    
       try {
-        result = new URI( this.uriCombo.getText() );
-      } catch( URISyntaxException uriExc ) {
+        result = new URI( text );
+        setErrorMessage( null );
+        setDescription( "Select one of the available repositories" );
+      } catch ( URISyntaxException uriExc ) {
         setErrorMessage( "Invalid URI: " + uriExc.getLocalizedMessage() );
       }
     }
