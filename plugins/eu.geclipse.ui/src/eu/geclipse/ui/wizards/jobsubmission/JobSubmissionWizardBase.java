@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2006 g-Eclipse consortium
+ * Copyright (c) 2006-2008 g-Eclipse consortium
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -108,38 +108,31 @@ public abstract class JobSubmissionWizardBase extends Wizard
     IGridProject project = description.getProject();
     IPath projectPath = project.getPath();
     IGridContainer jobFolder = project.getProjectFolder( IGridJob.class );
+    
     IPath jobFolderPath = jobFolder.getPath();
     if( jobFolderPath.equals( projectPath ) ) {
       result = project;
     } else {
+      
       IPath descriptionPath = description.getPath().removeLastSegments( 1 );
       IGridContainer descriptionFolder = project.getProjectFolder( IGridJobDescription.class );
       IPath descriptionFolderPath = descriptionFolder.getPath();
+      
       if( descriptionFolderPath.isPrefixOf( descriptionPath ) ) {
         int matchingFirstSegments = descriptionPath.matchingFirstSegments( descriptionFolderPath );
         IPath appendedPath = descriptionPath.removeFirstSegments( matchingFirstSegments );
         jobFolderPath = jobFolderPath.append( appendedPath );
-        IWorkspaceRoot workspaceRoot = ( IWorkspaceRoot )GridModel.getRoot()
-          .getResource();
+        
+        IWorkspaceRoot workspaceRoot
+          = ( IWorkspaceRoot ) GridModel.getRoot().getResource();
         IFolder folder = workspaceRoot.getFolder( jobFolderPath );
         createFolder( folder );
         result = ( IGridContainer )GridModel.getRoot().findElement( folder );
+        
       } else {
         result = jobFolder;
       }
     }
-    /*
-     * IPath descPath = description.getPath().removeLastSegments( 1 ); IPath
-     * projPath = description.getProject().getPath(); descPath =
-     * descPath.removeFirstSegments( projPath.segmentCount() ); IPath jobPath =
-     * projPath.append( IGridProject.DIR_JOBS ); if (
-     * IGridProject.DIR_JOBDESCRIPTIONS.equals( descPath.segment( 0 ) ) ) {
-     * jobPath = jobPath.append( descPath.removeFirstSegments( 1 ) ); }
-     * IWorkspaceRoot workspaceRoot = ( IWorkspaceRoot )GridModel.getRoot()
-     * .getResource(); IFolder folder = workspaceRoot.getFolder( jobPath );
-     * createFolder( folder ); result = ( IGridContainer
-     * )GridModel.getRoot().findElement( folder );
-     */
     return result;
   }
 
