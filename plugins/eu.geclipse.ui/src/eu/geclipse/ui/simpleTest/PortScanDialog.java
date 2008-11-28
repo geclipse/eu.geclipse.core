@@ -117,7 +117,7 @@ public class PortScanDialog extends AbstractSimpleTestDialog{
   @Override
   protected void configureShell( final Shell newShell ) {
     super.configureShell( newShell );
-    //newShell.setMinimumSize( 500, 520 );
+    newShell.setMinimumSize( 500, 500 );
     newShell.setText( Messages.getString( "PortScanDialog.dialogTitle" ) ); //$NON-NLS-1$
   }
   
