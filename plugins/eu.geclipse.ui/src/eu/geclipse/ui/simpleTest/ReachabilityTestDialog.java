@@ -96,7 +96,7 @@ public class ReachabilityTestDialog extends AbstractSimpleTestDialog  {
   @Override
   protected void configureShell( final Shell newShell ) {
     super.configureShell( newShell );
-    newShell.setMinimumSize( 500, 400 );
+    newShell.setMinimumSize( 600, 400 );
     newShell.setText( Messages.getString( "ReachabilityTestDialog.dialogTitle" ) ); //$NON-NLS-1$
   }
 
