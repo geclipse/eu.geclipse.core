@@ -11,7 +11,8 @@
     </title>
   </head>
   <body bgcolor="white">
-    <h1>
+  	<h1>Implementing Job Submission</h1>	
+    <h2>
       Overview
     </h1>Once user created a Job Description, she/he want to submit it to the grid: just click on the job and start action "Submit".
     <p>
@@ -23,7 +24,7 @@
 	  <br />You have also to identify your job, so you must implement class implementing interface <code>IGridJobID</code>
 	  <br />All these tasks are described below.
     </p>
-    <h1>
+    <h2>
       Implementing IGridJobService
     </h1>
     <ol>
@@ -124,7 +125,7 @@ public IGridJobID submitJob( final IGridJobDescription description,
 	   
       </li>
     </ol>
-    <h1>
+    <h2>
       Implementing IGridJobID
     </h1>
     Object implementing <code>eu.geclipse.core.model.IGridJobID</code> is passed to every method, which deal with submitted job. It should contain all information needed to identify particular job on remote service.<br/>
@@ -149,7 +150,7 @@ Set following attributes describing contribution to this extension-point:
 </ul> 
 </li>
 </ol>
-<h1>Testing</h1>
+<h2>Testing</h1>
 Now you can test your job service. Don't forget to add URI to your job service to Virtual Organization.
 <br />If you don't have implemented specialized VO for your middleware, just create Generic VO, add to it new service. As service type select your just created job service and type correct URI to the service.   
   </body>
