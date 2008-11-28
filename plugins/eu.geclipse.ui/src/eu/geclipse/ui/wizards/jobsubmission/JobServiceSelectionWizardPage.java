@@ -51,8 +51,8 @@ public class JobServiceSelectionWizardPage extends WizardPage {
   public void setServices(final List<IGridJobService> _jobServices) {
     setMessage( null );
     this.jobServices = _jobServices;
-    for ( Iterator<IGridJobService> i = jobServices.iterator(); i.hasNext(); ) {
-      list.add( i.next().getName() );
+    for ( Iterator<IGridJobService> i = this.jobServices.iterator(); i.hasNext(); ) {
+      this.list.add( i.next().getName() );
     }
   }
   
@@ -90,7 +90,7 @@ public class JobServiceSelectionWizardPage extends WizardPage {
 
   public IGridJobService getSubmissionService() {
     IGridJobService service = null;
-    int index = list.getSelectionIndex();
+    int index = this.list.getSelectionIndex();
     if (index != -1) {
       service = this.jobServices.get( index );
     }
