@@ -1,0 +1,156 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+  <head>
+    <meta name="generator" content="HTML Tidy for Windows (vers 14 February 2006), see www.w3.org">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="Content-Style-Type" content="text/css">
+    <link rel="STYLESHEET" href="PLUGINS_ROOT/eu.geclipse.doc.user/book.css" charset="UTF-8" type="text/css">
+    <title>
+      g-Eclipse - Implementing Job Submission
+    </title>
+  </head>
+  <body bgcolor="white">
+    <h1>
+      Overview
+    </h1>Once user created a Job Description, she/he want to submit it to the grid: just click on the job and start action "Submit".
+    <p>
+      Wizard "Submit job" appears, in which user can select Job Service, to which job will be submitted:<br>
+      <img src="images/submitJobWizard.PNG" alt="Submit Job Wizard" title="Submit Job Wizard" height="555" width="438">
+    </p>
+    <p>
+      In order to submit job to the grid you have to write a class implementing interface <code>IGridJobService</code> and register it by contributing to extension point: <code>eu.geclipse.gria.griaElementCreators</code>.
+	  <br />You have also to identify your job, so you must implement class implementing interface <code>IGridJobID</code>
+	  <br />All these tasks are described below.
+    </p>
+    <h1>
+      Implementing IGridJobService
+    </h1>
+    <ol>
+      <li>Generate new class, which implement interface <code>eu.geclipse.core.model.IGridJobService</code><br>
+      </li>
+      <li>Implement method canSubmit()
+	  <br />
+        This method should check if your job service can accept passed job description.<br/>
+        For example:
+        <pre align="left">
+public boolean canSubmit( final IGridJobDescription desc ) {
+  return ( desc instanceof JSDLJobDescription );
+}
+</pre>
+      </li>
+      <li>Implement method <code>submitJob()</code>
+	  <br />
+	  This method should connect with remote job service, register new job using passed IGridJobDescription and return object IGridJobID allowing to identify job on the remote service.<br/>
+	  Optionally method submitJob() may:
+	  <ul>
+		  <li>translate Job Descriptcodeion to form accepted by middleware (e.g. some middlewares doesn't accept all nodes from JSDL)</li>
+		  <li>upload input files used by the job</li>
+	  </ul>
+	  <br />
+	Example:
+	<pre >
+public IGridJobID submitJob( final IGridJobDescription description,
+                       final IVirtualOrganization vo,
+                       final IProgressMonitor monitor )
+    throws ProblemException {
+    IGridJobID jobID = null;
+    authenticate();
+    
+    String jobDesc = translateJsdl( description );
+    JobIdentifier serviceJobId = this.webservice.submitJob( jobDesc );
+    jobID = new GridgeJobID( serviceJobId, vo, this.serviceUri );
+    
+    return jobID;
+}
+	</pre>
+      </li>
+      <li>
+       Create new class JobServiceCreator, which extends <code>eu.geclipse.core.model.impl.AbstractGridElementCreator</code> and implements interface <code>eu.geclipse.core.model.ICreatorSourceMatcher</code>.
+	   <br />
+	   This class will create JobService objects from passed URI or from passed IGridJobID.
+      </li>
+      <li>
+       Implement method <code>boolean canCreate( final Object source )</code>.<br/>
+	   Return true if you detect that passed source is an URI to your remote job service.<br />
+	   Return true also if you detect that passed source is IGridJobID for job, which was previously submitted by your IGridJobService.
+	   Example:
+	   <pre>
+  public boolean canCreate( final Object source ) {
+    boolean canCreate = false;
+    
+    if( source instanceof URI ) {
+      URI uri = ( URI )source;
+      Path servicePath = new Path( uri.getPath() );
+      canCreate = new Path( "yourmiddeware/services/jobService" ).isPrefixOf( servicePath );
+    } if( source instanceof YourMiddlewareJobID ) {
+      canCreate = true;
+    }
+
+    return canCreate;
+  }</pre>
+      </li>
+	  <li>Implement method <code>IGridElement create( final IGridContainer parent )</code>
+	  <br />
+	  Create your job service object from passed URI or IGridJobID.
+	  <br />Example:
+	  <pre>
+  public IGridElement create( final IGridContainer parent ) {
+    IGridElement service = null;
+    
+    Object source = getSource();
+
+    if( source instanceof URI ) {
+      URI uri = ( URI )source;
+      service = new YourJobService( uri );      
+    } else if( source instanceof YourMiddlewareJobID ) {
+      YourMiddlewareJobID jobID = ( YourMiddlewareJobID )source;
+      service = new YourJobService( jobID.getJobServiceUri() );
+    }
+    
+    return service;
+  }</pre>
+	  </li>
+      <li>
+       Contribute to extension point: <code>eu.geclipse.core.gridElementCreator</code> (open file plugin.xml on page "Extensions")
+	   <br />
+	   Set following attributes describing contribution to this extension-point:
+	<ul>
+    <li>class - YourJobServiceCreator</li>
+    <li>target - YourJobService</li>
+    <li>source - java.net.URI, matcher - YourJobServiceCreator</li>
+    <li>source - your YourMiddlewareJobID</li>
+	</ul> 
+	   
+      </li>
+    </ol>
+    <h1>
+      Implementing IGridJobID
+    </h1>
+    Object implementing <code>eu.geclipse.core.model.IGridJobID</code> is passed to every method, which deal with submitted job. It should contain all information needed to identify particular job on remote service.<br/>
+    Following steps have to be done to implement <code>IGridJobID</code>:
+<ol>
+<li>
+ Create new class, which extends abstract class <code>eu.geclipse.core.jobs.GridJobID</code>.<br/>This class adds serialization features to IGridJobID.<br/>
+</li>
+<li>Store in this class URI to job service, to which job was submitted. It allows in the future to manage job using only IGridJobID object.</li>
+<li>
+     If you want to serialize more data (e.g. URI to job service) in your IGridJobID implementation - just override following methods:
+    <ul>
+    <li><code>String GridJobID#setData(String)</code></li>
+    <li><code>String GridJobID#getData(String)</code></li>
+    </ul>
+</li>
+<li>Contribute to extension point <code>eu.geclipse.core.jobs.jobID</code>
+<br />
+Set following attributes describing contribution to this extension-point:
+<ul>
+    <li>class - YourMiddlewareJobID</li>
+</ul> 
+</li>
+</ol>
+<h1>Testing</h1>
+Now you can test your job service. Don't forget to add URI to your job service to Virtual Organization.
+<br />If you don't have implemented specialized VO for your middleware, just create Generic VO, add to it new service. As service type select your just created job service and type correct URI to the service.   
+  </body>
+</html>
