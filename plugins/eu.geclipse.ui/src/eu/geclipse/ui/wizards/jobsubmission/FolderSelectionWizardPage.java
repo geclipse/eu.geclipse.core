@@ -61,7 +61,7 @@ public class FolderSelectionWizardPage extends WizardPage {
   {
     super( pageName );
     super.setTitle( "Submit job description" );
-    super.setDescription( "Choose location and name for job." );
+    super.setDescription( "Choose location and name for the job" );
     this.project = project;
     this.jobDescriptions = jobDescriptions;
   }
