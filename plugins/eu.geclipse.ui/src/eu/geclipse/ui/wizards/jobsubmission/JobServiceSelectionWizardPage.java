@@ -48,10 +48,10 @@ public class JobServiceSelectionWizardPage extends WizardPage {
     this.jobDescriptions = _jobDescriptions;
   }
 
-  public void setServices(final List<IGridJobService> _jobServices){
+  public void setServices(final List<IGridJobService> _jobServices) {
     setMessage( null );
     this.jobServices = _jobServices;
-    for(Iterator<IGridJobService> i=jobServices.iterator(); i.hasNext();){
+    for ( Iterator<IGridJobService> i = jobServices.iterator(); i.hasNext(); ) {
       list.add( i.next().getName() );
     }
   }
@@ -84,15 +84,15 @@ public class JobServiceSelectionWizardPage extends WizardPage {
   }
 
   protected void updateButtons() {
-    setPageComplete( list.getSelectionCount()>0 );
+    setPageComplete( list.getSelectionCount() > 0 );
     this.getContainer().updateButtons();
   }
 
   public IGridJobService getSubmissionService() {
-    IGridJobService service=null;
-    int index=list.getSelectionIndex();
-    if(index!=-1){
-      service=this.jobServices.get( index );
+    IGridJobService service = null;
+    int index = list.getSelectionIndex();
+    if (index != -1) {
+      service = this.jobServices.get( index );
     }
     return service;
   }
@@ -112,7 +112,5 @@ public class JobServiceSelectionWizardPage extends WizardPage {
 //    }
 //    return result;
 //  }
-
-
 
 }
