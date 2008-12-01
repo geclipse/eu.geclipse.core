@@ -181,7 +181,10 @@
     </topic>
     <anchor id="geclipse_concepts_siteadministration" />        
   </topic>
-  
+  <topic label="Service Level Agreements">
+    <anchor id="geclipse_concepts_sla" /> 
+    <topic href="html/concepts/sla/sla_process.html" label="Service Level Agreement Support" /> 
+  </topic>
   <topic
     label="Visualisation">
     <topic
