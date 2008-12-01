@@ -165,10 +165,9 @@ public class SimpleTermModel {
                                        "<=" );
     model.addTerm( term4 );
     SimpleTerm result = model.getTerm( "performance-1" );
-    System.out.println( "huschel" + result.getText() );
-    model.removeTerm( "performance-1" );
-    System.out.println( "huschel" );
+    System.out.println (result.getText() );
+    model.removeTerm( "performance-1" ); 
     model.addTerm( result );
-    System.out.println( "huschel" );
+    System.out.println (result.getText() );
   }
 }

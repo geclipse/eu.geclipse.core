@@ -72,7 +72,7 @@ public class SLAQuerySLAPublication extends WizardPage {
     gData = new GridData( GridData.FILL_BOTH );
     this.finalSLA.setLayoutData( gData );
     this.finalSLA.setEditable( false );
-    this.finalSLA.setText( "Huschel" );
+    this.finalSLA.setText( "" );
     setControl( composite );
   }
 

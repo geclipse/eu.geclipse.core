@@ -31,7 +31,7 @@ public class SlaServiceLabelProvider extends LabelProvider {
 
   @Override
   public String getText( Object element ) {
-    String huschel = ( String )element;
-    return huschel;
+    String text = ( String )element;
+    return text;
   }
 }
