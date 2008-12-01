@@ -15,8 +15,10 @@
  *****************************************************************************/
 package eu.geclipse.ui.wizards.jobsubmission;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -51,8 +53,37 @@ public class JobServiceSelectionWizardPage extends WizardPage {
   public void setServices(final List<IGridJobService> _jobServices) {
     setMessage( null );
     this.jobServices = _jobServices;
+    
+    Map< String, Integer > repeatedEntries = new HashMap< String, Integer >( 5 );
+
     for ( Iterator<IGridJobService> i = this.jobServices.iterator(); i.hasNext(); ) {
-      this.list.add( i.next().getName() );
+      
+      IGridJobService service = i.next();
+      String name = service.getName();
+      Integer count = repeatedEntries.get( name );
+      
+      // No repeated entry yet
+      if ( count == null ) {
+        int index = this.list.indexOf( name );
+        if ( index != -1 ) {
+          // First repetition found
+          repeatedEntries.put( name, 1 );
+          
+          // Now we update the older entry
+          String oldUri = this.jobServices.get( index ).getURI().toString();
+          this.list.setItem( index, name + '[' + oldUri + ']' );
+          
+          // And we create an appropriate name for the new entry
+          name += '[' + service.getURI().toString() + ']';
+        }
+      } else {
+        // Repeated entries present, increase the counter
+        repeatedEntries.put( name, count + 1 );
+        
+        // And modify the label adequately
+        name += '[' + service.getURI().toString() + ']';
+      }
+      this.list.add( name );
     }
   }
   
