@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="Content-Style-Type" content="text/css">
+    <link rel="STYLESHEET" href="PLUGINS_ROOT/eu.geclipse.doc.user/book.css" charset="UTF-8" type="text/css">
+    <title>
+      g-Eclipse - Implementing Job Status Update
+    </title>
+  </head>
+  <body bgcolor="white">
+    <h1>Implementing Job Status Update</h1>
+	<h2>Overview</h2>
+	For submitted job user may update status to see if this job is watinging for something, running, finished etc.
+	<br />Addtionionally in the background g-Eclipse updates periodicaly status of not finished jobs.
+	<br />To implement updating of job status you have to implement method <code>IGridJobService#getJobStatus()</code> and return object implementing <code>IGridJobStatus</code>.
+	<h2>Implementing IGridJobStatus</h2>
+	The simplest way to implement IGridJobStatus is to use abstract class <code>GridJobStatus</code>, which contains basic functionality like serialization of common job status data.
+	<br /><ol type="1">
+    <li>Create new class, which extends <code>eu.geclipse.core.jobs.GridJobStatus</code>	
+	</li>
+	<li>Create constructor for your class and pass 2 values to constructor of super class: status name, status type
+	<dl>
+	<dt>status name</dt><dd>String describing shortly current job status in terms of your middleware. So if your middleware has status "FINISHED" instead of "DONE" (like g-eclipse has) just return "FINISHED", which is more familiar for your users.</dd>
+	<dt>status type</dt><dd>Integer value representing current state of job in term of g-Eclipse states like: IGridJobStatus#RUNNING, IGridJobStatus#DONE...</dd>
+	</dl>
+	</li>
+	<li>If you have longer description of current status, pass to it member: GridJobStatus#reason</li>
+	<li>All data passed to super class will be serialized in the workspace (status type, status name and reason).
+	<br />If you want to serialize more data, override following methods:
+      <ul>
+      <li><code>String GridJobID#setData(String)</code></li>
+      <li><code>String GridJobID#getData(String)</code></li>
+      </ul>
+	</li>
+	
+	Example:<pre>
+  public JobStatus( final MiddlewareJobStatus middlewareStatus ) {
+    super( middlewareStatus.getProcessState(), mapStatus( middlewareStatus ) );    
+    this.reason = middlewareStatus.getAppSpecificStatus();    
+  }
+
+  private static int mapStatus( final MiddlewareJobStatus middlewareStatus ) { 
+    int status = IGridJobStatus.RUNNING;
+    
+    if( !middlewareStatus.getInProgress() ) {      
+      status = middlewareStatustatus.getExitStatus() == 0 ? IGridJobStatus.DONE : IGridJobStatus.ABORTED;
+    }
+    
+    return status;
+  }</pre>
+</ol>
+<h2>Implementing IGridJobService#getJobStatus()</h2>
+This method should connect with the remote service and check current status of submitted job. Based on returned data new object IGridJobStatus should be created and returned.
+<br />Example:
+<pre>  public IGridJobStatus getJobStatus( final IGridJobID id,
+                                      final IVirtualOrganization vo,
+                                      final boolean fullStatus,
+                                      final IProgressMonitor progressMonitor )
+    throws ProblemException
+  {
+    authenticate();
+    MiddlewareJobStatus middlewareStatus = this.webservice.checkJob( id.getJobID(), fullStatus );
+    return new JobStatus( middlewareStatus );
+  }</pre>
+  
+  If you can control how many data remote service will sent during checking job status, then check parameter <code>fullStatus</code>:
+<ul>
+    <li>If status is updated in the background, then only basic status information are requested and <code>fullStatus</code> is <code>false</code>.</li>
+    <li>If status is updated by the user's (she/he pressed update button or opened view "Job Details") then all available status data are requested and <code>fullStatus</code> is <code>true</code>.</li>
+</ul>  
+  </body>
+</html>
