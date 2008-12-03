@@ -58,7 +58,7 @@ public class SubmitJobAction extends SelectionListenerAction {
    */
   @Override
   public void run() {
-    if(this.jobDescriptions.size()>0)
+    if( this.jobDescriptions.size() > 0 )
     {
       JobCreatorSelectionWizard wizard = new JobCreatorSelectionWizard( this.jobDescriptions);
       WizardDialog dialog = new WizardDialog( this.site.getShell(), wizard );

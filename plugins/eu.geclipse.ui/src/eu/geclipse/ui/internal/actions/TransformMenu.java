@@ -11,6 +11,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.ui.IWorkbenchSite;
 import org.eclipse.ui.actions.CompoundContributionItem;
 
 import eu.geclipse.core.Extensions;
@@ -26,8 +27,11 @@ public class TransformMenu
   private List< TransformAction > actions
     = new ArrayList< TransformAction >();
   
-  public TransformMenu() {
+  private IWorkbenchSite site;
+  
+  public TransformMenu(final IWorkbenchSite site) {
     checkVisible();
+    this.site = site;
   }
   
   @Override
@@ -122,7 +126,7 @@ public class TransformMenu
     try {
       IGridElementCreator creator
         = ( IGridElementCreator ) fromElement.createExecutableExtension( Extensions.GRID_ELEMENT_CREATOR_EXECUTABLE );
-      result = new TransformAction( name, creator, descriptions );
+      result = new TransformAction( name, creator, descriptions, this.site );
     } catch ( CoreException cExc ) {
       Activator.logException( cExc );
     }

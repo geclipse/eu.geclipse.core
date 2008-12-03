@@ -18,20 +18,27 @@ package eu.geclipse.ui.internal.actions;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.Action;
+import org.eclipse.ui.IWorkbenchSite;
 
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElementCreator;
 import eu.geclipse.core.model.IGridJobDescription;
 import eu.geclipse.core.reporting.ProblemException;
+import eu.geclipse.jsdl.JSDLJobDescription;
 import eu.geclipse.ui.internal.Activator;
+import eu.geclipse.ui.internal.dialogs.FileOverwriteDialog;
 
 
 public class TransformAction extends Action {
@@ -40,17 +47,21 @@ public class TransformAction extends Action {
   
   protected IGridJobDescription[] input;
   
+  private IWorkbenchSite site;
+  
   public TransformAction( final String title,
                           final IGridElementCreator creator,
-                          final IGridJobDescription[] input ) {
+                          final IGridJobDescription[] input,
+                          final IWorkbenchSite site) {
     super( title );
     this.creator = creator;
     this.input = input;
+    this.site = site;
   }
   
   @Override
   public void run() {
-    WorkspaceJob job = new WorkspaceJob( "transformer" ) {
+    WorkspaceJob job = new WorkspaceJob( "transformer" ) { //$NON-NLS-1$
       @Override
       public IStatus runInWorkspace( final IProgressMonitor monitor )
           throws CoreException {
@@ -59,6 +70,7 @@ public class TransformAction extends Action {
     };
     job.setUser( true );
     job.schedule();
+     
   }
   
   protected IStatus transform( final IGridElementCreator creator,
@@ -68,39 +80,66 @@ public class TransformAction extends Action {
     IStatus result = Status.OK_STATUS;
     List< IStatus > errors = new ArrayList< IStatus >();
     
-    IProgressMonitor lMonitor
-      = monitor == null
-      ? new NullProgressMonitor()
-      : monitor;
+    for (IGridJobDescription description : input ){
       
-    lMonitor.beginTask( "Transforming job descriptions", input.length );
-    
-    try {
-      for ( IGridJobDescription description : input ) {
-        lMonitor.subTask( description.getName() );
-        IStatus status = transform( creator, description );
-        if ( ! status.isOK() ) {
-          errors.add( status );
+      IFile file = getFile( description );
+      
+      if ( file.exists() ){
+        FileOverwriteDialog dialog = new FileOverwriteDialog( this.site.getShell(), file.getName() );
+        boolean temp = dialog.open();
+        if (temp == true ){        
+          try {
+            file.delete( true, null );
+            
+            IProgressMonitor lMonitor
+            = monitor == null
+            ? new NullProgressMonitor()
+            : monitor;
+            
+          lMonitor.beginTask( "Transforming job descriptions", input.length ); //$NON-NLS-1$
+          
+          try {
+            for ( IGridJobDescription descr : input ) {
+              
+              lMonitor.subTask( descr.getName() );
+              IStatus status = transform( creator, descr );
+              if ( ! status.isOK() ) {
+                errors.add( status );
+              }
+              lMonitor.worked( 1 );
+            }
+          } finally {
+            lMonitor.done();
+          }
+          
+          if ( ( errors != null ) && ( errors.size() > 0 ) ) {
+            if ( errors.size() == 1 ) {
+              result = errors.get( 0 );
+            } else {
+              result = new MultiStatus(
+                  Activator.PLUGIN_ID,
+                  0,
+                  errors.toArray( new IStatus[ errors.size() ] ),
+                  "Transformation problems", //$NON-NLS-1$
+                  null
+              );
+            }
+          }
+            
+          } catch( CoreException e ) {
+            Activator.logException( e );
+          }
         }
-        lMonitor.worked( 1 );
+        else {
+          result = new Status(
+                              IStatus.OK,
+                              Activator.PLUGIN_ID,
+                              String.format( "Transformation canceleled for %s", file.getName() )); //$NON-NLS-1$
+        }
       }
-    } finally {
-      lMonitor.done();
     }
     
-    if ( ( errors != null ) && ( errors.size() > 0 ) ) {
-      if ( errors.size() == 1 ) {
-        result = errors.get( 0 );
-      } else {
-        result = new MultiStatus(
-            Activator.PLUGIN_ID,
-            0,
-            errors.toArray( new IStatus[ errors.size() ] ),
-            "Transformation problems",
-            null
-        );
-      }
-    }
+    
     
     return result;
     
@@ -111,7 +150,7 @@ public class TransformAction extends Action {
     
     IStatus result = Status.OK_STATUS;
     
-    creator.setSource( input );
+    creator.setSource( input );    
     IGridContainer parent = input.getParent();
 
     try {
@@ -120,13 +159,29 @@ public class TransformAction extends Action {
       result = new Status(
                           IStatus.ERROR,
                           Activator.PLUGIN_ID,
-                          String.format( "Transformation failed for %s", input.getName() ),
+                          String.format( "Transformation failed for %s", input.getName() ), //$NON-NLS-1$
                           pExc
       );
     }
     
     return result;
     
+  }
+  
+  private IFile getFile( final IGridJobDescription inputDescr ){
+    
+    IFile returnFile = null;
+    JSDLJobDescription jsdl = null;
+    
+    if ( inputDescr instanceof JSDLJobDescription ){
+      jsdl = (JSDLJobDescription) inputDescr;
+    }
+    IPath jdlName = new Path( jsdl.getName() ).removeFileExtension().addFileExtension( "jdl" ); //$NON-NLS-1$
+    IFile jdlFile = ( ( IContainer ) jsdl.getParent().getResource() ).getFile( jdlName );
+    
+    returnFile = jdlFile;
+    
+    return returnFile;
   }
 
 }

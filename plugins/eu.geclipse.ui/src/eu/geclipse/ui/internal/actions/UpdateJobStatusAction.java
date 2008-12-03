@@ -45,7 +45,7 @@ public class UpdateJobStatusAction extends SelectionListenerAction {
    * @param workbenchWindow Workbench window
    */
   public UpdateJobStatusAction( final IWorkbenchWindow workbenchWindow ) {
-    super( Messages.getString( "UpdateJobStatusAction.title" ) ); //$NON-NLS-1$
+    super( Messages.getString( "UpdateJobStatusAction.title" )   ); //$NON-NLS-1$
     this.workbenchWindow = workbenchWindow;
     setImageDescriptor( Activator.getDefault()
       .getImageRegistry()
@@ -59,6 +59,7 @@ public class UpdateJobStatusAction extends SelectionListenerAction {
       .getDescriptor( Activator.IMG_UPDATE_JOB_STATUS ) );
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public void run() {
     if( this.selectedJobs.size() > 0 ) {
@@ -107,5 +108,13 @@ public class UpdateJobStatusAction extends SelectionListenerAction {
     }
     return super.updateSelection( selection )
            && ( this.selectedJobs.size() > 0 );
+  }
+
+
+ /**
+   * @return the Workbench Window
+   */
+   public IWorkbenchWindow getWorkbenchWindow() {
+    return this.workbenchWindow;
   }
 }
