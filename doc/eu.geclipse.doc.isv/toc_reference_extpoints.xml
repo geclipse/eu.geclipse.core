@@ -109,6 +109,14 @@
     label="eu.geclipse.ui.simpleTestUI"
     href="html/extension-points/eu_geclipse_ui_simpleTestUI.html">
   </topic>
+  <topic
+    label="eu.geclipse.info.infoViewerFilter"
+    href="html/extension-points/eu_geclipse_info_infoViewerFilter.html">
+  </topic>
+  <topic
+    label="eu.geclipse.info.supportedServices"
+    href="html/extension-points/eu_geclipse_info_supportedServices.html">
+  </topic>
 
   <anchor id="geclipse_reference_extpoint_ext" />
 </toc>
