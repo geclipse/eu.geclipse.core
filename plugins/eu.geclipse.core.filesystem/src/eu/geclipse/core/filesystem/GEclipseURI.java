@@ -42,6 +42,8 @@ public class GEclipseURI {
   
   private static final String QUERY_UID_TOKEN = "gecluid"; //$NON-NLS-1$
   
+  private static final String QUERY_VO_TOKEN = "vo"; //$NON-NLS-1$
+  
   private URI masterURI;
 
   /**
@@ -186,6 +188,8 @@ public class GEclipseURI {
             scheme = tokenParts[1];
             append = false;
           } else if ( tokenParts[0].equals( QUERY_UID_TOKEN ) ) {
+            append = false;
+          } else if ( tokenParts[0].equals( QUERY_VO_TOKEN ) ) {
             append = false;
           }
         }
