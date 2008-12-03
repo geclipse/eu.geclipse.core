@@ -344,30 +344,36 @@ public class ElementCreatorReference {
    * @param source The source to be checked.
    * @return A number between 1 and 99 inclusive if the source is supported by
    * the corresponding element creator. The number corresponds to the creators
-   * priority. If the source is not supported -1 will be returned.
+   * priority. If the source is not supported -1 will be returned. If source is
+   * specified as <code>null</code> this method returns a value of 0.
    * @throws ProblemException If a problem occurs.
    * @see SourceMatcher#matches(Object)
    */
   public int checkSource( final Object source ) throws ProblemException {
-    
-     int result = -1;
 
-     if ( source != null ) {
-       if ( this.sourceMatchers == null ) {
-         initSourceMatchers();
-       }
-       for ( SourceMatcher matcher : this.sourceMatchers ) {
-         if ( matcher.matches( source ) ) {
-           int priority = matcher.getPriority();
-           if ( priority > result ) {
-             result = priority;
-           }
-         }
-       }
-     }
-     
-     return result;
-     
+    int result = 0;
+
+    if ( source != null ) {
+      
+      result = -1;
+      
+      if ( this.sourceMatchers == null ) {
+        initSourceMatchers();
+      }
+      
+      for ( SourceMatcher matcher : this.sourceMatchers ) {
+        if ( matcher.matches( source ) ) {
+          int priority = matcher.getPriority();
+          if ( priority > result ) {
+            result = priority;
+          }
+        }
+      }
+      
+    }
+
+    return result;
+
   }
   
   /**
