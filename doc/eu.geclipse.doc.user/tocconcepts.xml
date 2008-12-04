@@ -164,6 +164,8 @@
       label="Batch System Configuration"
       href="html/concepts/siteadministration/batchSystemConfiguration.html">
     </topic>
+    <topic href="html/concepts/siteadministration/creatingQDL.html" label="Queue Configuration Description Wizard">
+    </topic>
 
     <topic
       label="Simple Physical Resource Tests"
