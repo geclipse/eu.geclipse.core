@@ -14,7 +14,7 @@
          point="org.eclipse.ui.preferencePages">
       <page
             name="GVid"
-            category="eu.geclipse.ui.internal.preference.GEclipsePreferencePage"
+            category="eu.geclipse.ui.visualisation.preferences.VisualisationPreferencePage"
             class="eu.geclipse.gvid.internal.preferences.GVidPreferencePage"
             id="eu.geclipse.gvid.internal.preferences.GVidPreferencePage">
       </page>
