@@ -42,7 +42,7 @@ public abstract class AbstractGridVisualisationResource
 
   public abstract String getResourceFileNameExtension();
 
-  public abstract void render( final String fileExtention );
+  public abstract void render( final String fileExtention, final String visType );
 
   public void validate() throws ProblemException {
     // TODO Auto-generated method stub

@@ -32,7 +32,7 @@ public interface IGridVisualisation extends IGridContainer {
    * @param fileExtention
    *
    */
-  void render( String fileExtention );
+  void render( String fileExtention, String visType );
 
   /**
    * @throws ProblemException

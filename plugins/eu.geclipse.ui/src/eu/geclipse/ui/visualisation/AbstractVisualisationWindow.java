@@ -52,11 +52,6 @@ public abstract class AbstractVisualisationWindow {
    */
   public static final String EXT_VISUALISATION_PAGE_ELEMENT = "window"; //$NON-NLS-1$
 
-  /**
-   * Extension point which has to be implemented to provide custom support for visualisation. (Other than VTK.)
-   */
-  public static final String VISUALISATION_PAGE_EXTENSION_POINT = "eu.geclipse.ui.visualisationWindow"; //$NON-NLS-1$
-
   protected VisComposite viscomp = null;
 
   /**

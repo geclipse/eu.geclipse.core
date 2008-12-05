@@ -247,13 +247,13 @@ public class VisualisationView extends ViewPart {
    * @param resFileNameExt
    *
    */
-  public void render( final String resFileNameExt) {
+  public void render( final String resFileNameExt, final String visType ) {
 
     if ( this.visResource == null ) {
       return;
     }
 
-    this.visResource.render( resFileNameExt );
+    this.visResource.render( resFileNameExt, visType );
   }
 
   /**

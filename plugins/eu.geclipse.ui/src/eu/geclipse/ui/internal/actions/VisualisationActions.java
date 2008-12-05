@@ -24,6 +24,7 @@ import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IWorkbenchPartSite;
@@ -74,8 +75,9 @@ public class VisualisationActions extends ActionGroup {
           text = element.getAttribute( AbstractVisualisationAction.EXT_ACTION_TEXT );
           tooltip = element.getAttribute( AbstractVisualisationAction.EXT_ACTION_TOOLTIP );
           fileExtension = element.getAttribute( AbstractVisualisationAction.EXT_ACTION_FILE_EXTENSION );
+          String type = element.getAttribute( AbstractVisualisationAction.EXT_ACTION_TYPE );
           actionImpl = new AbstractVisualisationAction();
-          actionImpl.init( text, tooltip, fileExtension, site );
+          actionImpl.init( text, tooltip, fileExtension, site, type );
           selectionProvider.addSelectionChangedListener( actionImpl );
           this.actions.add( actionImpl );
         }
@@ -105,6 +107,7 @@ public class VisualisationActions extends ActionGroup {
   @Override
   public void fillContextMenu( final IMenuManager mgr )
   {
+    IMenuManager submenu = null;
     super.fillContextMenu( mgr );
     for( AbstractVisualisationAction action : this.actions ) {
       if ( action.isEnabled() ) {
@@ -116,7 +119,11 @@ public class VisualisationActions extends ActionGroup {
           Method met = cl.getMethod( "getResourceFileExtension" ); //$NON-NLS-1$
           String resourceFileExt = ( String )met.invoke( null, null );
           if ( resourceFileExt.compareTo( action.getFileExt() ) == 0 ) {
-            mgr.appendToGroup( ICommonMenuConstants.GROUP_BUILD, action );
+            if (submenu == null) {
+              submenu = new MenuManager("Render");
+              mgr.appendToGroup( ICommonMenuConstants.GROUP_BUILD, submenu );
+            }
+            submenu.add( action );
           }
         } catch( SecurityException e ) {
           Activator.logException( e );

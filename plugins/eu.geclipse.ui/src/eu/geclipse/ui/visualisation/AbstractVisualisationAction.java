@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchSite;
 import org.eclipse.ui.PartInitException;
@@ -26,6 +27,7 @@ import org.eclipse.ui.actions.SelectionListenerAction;
 import eu.geclipse.core.model.IGridVisualisation;
 import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.ui.dialogs.ProblemDialog;
+import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.internal.actions.Messages;
 import eu.geclipse.ui.views.VisualisationView;
 
@@ -69,6 +71,10 @@ public class AbstractVisualisationAction extends SelectionListenerAction {
    */
   public static final String EXT_ACTION_FILE_EXTENSION = "fileExtension"; //$NON-NLS-1$
 
+  public static final String EXT_ACTION_TYPE = "type";
+
+  protected String type;
+
   private String fileExt = null;
 
   private ArrayList< IGridVisualisation > vis;
@@ -87,15 +93,18 @@ public class AbstractVisualisationAction extends SelectionListenerAction {
    * @param actionTooltip
    * @param fileExtension
    * @param site
+   * @param visType 
    */
   public void init( final String actionText,
                     final String actionTooltip,
                     final String fileExtension,
-                    final IWorkbenchSite site ) {
+                    final IWorkbenchSite site,
+                    final String visType ) {
     super.setText( actionText );
     super.setToolTipText( actionTooltip );
     this.fileExt = fileExtension;
     this.workbenchSite = site;
+    this.type = visType;
   }
 
   protected boolean isVisualizable( final Object element ) {
@@ -113,8 +122,16 @@ public class AbstractVisualisationAction extends SelectionListenerAction {
         ( ( IGridVisualisation )element ).validate();
         IViewPart view = this.workbenchSite.getPage().showView( "eu.geclipse.ui.views.visualisationview" ); //$NON-NLS-1$
         ( ( VisualisationView )view ).setVisResource( ( IGridVisualisation )element );
-        ( ( VisualisationView )view ).render( ( ( IGridVisualisation )element).getResourceFileNameExtension() );
-        view.setFocus();
+        ( ( VisualisationView )view ).render( ( ( IGridVisualisation )element).getResourceFileNameExtension(), type );
+        Display.getDefault().asyncExec( new Runnable() {
+          public void run() {
+            try {
+              workbenchSite.getPage().showView( "eu.geclipse.ui.views.visualisationview" );
+            } catch( PartInitException e ) {
+              Activator.logException( e );
+            }
+          }
+        } );
       } catch( PartInitException pie ) {
         ProblemDialog.openProblem( null,
                                    Messages.getString( "AbstractVisualisationAction.errorDialogTitle" ), //$NON-NLS-1$
