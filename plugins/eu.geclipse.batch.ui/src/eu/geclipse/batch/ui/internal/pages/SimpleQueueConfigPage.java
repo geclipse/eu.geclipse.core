@@ -16,8 +16,13 @@
  *****************************************************************************/
 package eu.geclipse.batch.ui.internal.pages;
 
+import java.net.URL;
+
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.edit.provider.INotifyChangedListener;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -25,6 +30,7 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
@@ -37,6 +43,7 @@ import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -46,6 +53,7 @@ import org.eclipse.ui.forms.widgets.TableWrapData;
 import eu.geclipse.batch.model.qdl.QueueType;
 import eu.geclipse.batch.ui.dialogs.AllowedVOsDialog;
 import eu.geclipse.batch.ui.editors.QueueEditor;
+import eu.geclipse.batch.ui.internal.Activator;
 import eu.geclipse.batch.ui.internal.Messages;
 import eu.geclipse.batch.ui.internal.adapters.QueueAdapter;
 import eu.geclipse.batch.ui.internal.providers.QueueContentProvider;
@@ -93,7 +101,8 @@ public class SimpleQueueConfigPage extends FormPage implements INotifyChangedLis
   protected Button btnDel = null; 
   protected QueueAdapter queueAdapter = null;
   protected Object value = null;
-
+  
+  private ImageDescriptor helpDesc = null;
   private boolean contentRefreshed = false;
   private boolean dirtyFlag = false;
   private final int WIDGET_HEIGHT = 100;
@@ -208,7 +217,7 @@ public class SimpleQueueConfigPage extends FormPage implements INotifyChangedLis
      this.queueAdapter.load();
      
      /* Also add the help system */
-//     addFormPageHelp( form );
+     addFormPageHelp( form );
 
    }
                                           
@@ -504,6 +513,37 @@ public class SimpleQueueConfigPage extends FormPage implements INotifyChangedLis
     
     
   } // end void handleAddDialog
+  
+  
+  protected void addFormPageHelp( final ScrolledForm form ) {
+    
+    final String href = getHelpResource();
+    if ( href != null ) {
+        IToolBarManager manager = form.getToolBarManager();
+        Action helpAction = new Action( "help" ) { //$NON-NLS-1$
+            @Override
+            public void run() {
+                BusyIndicator.showWhile(form.getDisplay(), new Runnable() {
+                    public void run() {
+                        PlatformUI.getWorkbench().getHelpSystem().displayHelpResource( href );
+                    }
+                });
+            }
+        };
+        helpAction.setToolTipText( Messages.getString( "QdlEditorPage_HelpToolTip" ) );  //$NON-NLS-1$
+        URL stageInURL = Activator.getDefault().getBundle().getEntry( "icons/help.gif" ); //$NON-NLS-1$       
+        this.helpDesc = ImageDescriptor.createFromURL( stageInURL ) ;   
+        helpAction.setImageDescriptor( this.helpDesc );
+        manager.add( helpAction );
+        form.updateToolBar();
+    }
+    
+  }
+  
+  
+  protected String getHelpResource() {
+    return "/eu.geclipse.doc.user/html/concepts/siteadministration/editorpages/SimpleParametersPage.html"; //$NON-NLS-1$
+  }
   
   
 }

@@ -16,9 +16,15 @@
  *****************************************************************************/
 package eu.geclipse.batch.ui.internal.pages;
 
+import java.net.URL;
+
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.edit.provider.INotifyChangedListener;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -27,6 +33,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -35,6 +42,7 @@ import org.eclipse.ui.forms.widgets.TableWrapData;
 
 import eu.geclipse.batch.model.qdl.QueueType;
 import eu.geclipse.batch.ui.editors.QueueEditor;
+import eu.geclipse.batch.ui.internal.Activator;
 import eu.geclipse.batch.ui.internal.Messages;
 import eu.geclipse.batch.ui.internal.adapters.AdvancedQueueAdapter;
 
@@ -64,6 +72,7 @@ public class AdvancedQueueConfigPage extends FormPage implements INotifyChangedL
   protected AdvancedQueueAdapter advancedQueueAdapter = null;  
   private boolean contentRefreshed = false;
   private boolean dirtyFlag = false;
+  private ImageDescriptor helpDesc = null;
 
 
   
@@ -146,7 +155,7 @@ public class AdvancedQueueConfigPage extends FormPage implements INotifyChangedL
      this.advancedQueueAdapter.load();
      
      /* Also add the help system */
-//     addFormPageHelp( form );
+     addFormPageHelp( form );
 
   }
   
@@ -330,6 +339,36 @@ public class AdvancedQueueConfigPage extends FormPage implements INotifyChangedL
    */
   public void notifyChanged( final Notification notification ) {
     setDirty( true );
+  }
+  
+  protected void addFormPageHelp( final ScrolledForm form ) {
+    
+    final String href = getHelpResource();
+    if ( href != null ) {
+        IToolBarManager manager = form.getToolBarManager();
+        Action helpAction = new Action( "help" ) { //$NON-NLS-1$
+            @Override
+            public void run() {
+                BusyIndicator.showWhile(form.getDisplay(), new Runnable() {
+                    public void run() {
+                        PlatformUI.getWorkbench().getHelpSystem().displayHelpResource( href );
+                    }
+                });
+            }
+        };
+        helpAction.setToolTipText( Messages.getString( "QdlEditorPage_HelpToolTip" ) );  //$NON-NLS-1$
+        URL stageInURL = Activator.getDefault().getBundle().getEntry( "icons/help.gif" ); //$NON-NLS-1$       
+        this.helpDesc = ImageDescriptor.createFromURL( stageInURL ) ;   
+        helpAction.setImageDescriptor( this.helpDesc );
+        manager.add( helpAction );
+        form.updateToolBar();
+    }
+    
+  }
+  
+  
+  protected String getHelpResource() {
+    return "/eu.geclipse.doc.user/html/concepts/siteadministration/editorpages/AdvancedParametersPage.html"; //$NON-NLS-1$
   }
   
 }
