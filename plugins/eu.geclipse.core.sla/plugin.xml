@@ -76,7 +76,7 @@
             elementClass="eu.geclipse.core.sla.SLATemplateFile"
             id="eu.geclipse.core.sla.templates"
             label="SLA Templates"
-            name="eu.geclipse.core.sla.templates">
+            name="SLA Templates Folder">
       </folder>
    </extension>
    <extension
