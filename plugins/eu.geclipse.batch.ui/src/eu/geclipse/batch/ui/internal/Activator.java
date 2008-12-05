@@ -130,6 +130,10 @@ public class Activator extends AbstractUIPlugin {
    */
   public static final String IMG_BUSY_ARROW4 = "busyArrow4Icon"; //$NON-NLS-1$
 
+  public static final String IMG_SORT_ALPHAB = "sortAlphab";
+
+  public static final String IMG_SORT_STATE = "sortState";
+
   /** Single plugin instance. */
   private static Activator singleton;
 
@@ -225,6 +229,8 @@ public class Activator extends AbstractUIPlugin {
       { IMG_HOLDJOB, prefix + "holdJob.gif" }, //$NON-NLS-1$
       { IMG_RELEASEJOB, prefix + "releaseJob.gif" }, //$NON-NLS-1$
       { IMG_ENABLE, prefix + "enableCL16.gif" }, //$NON-NLS-1$
+      { IMG_SORT_ALPHAB, prefix + "alphab_sort_co.gif" }, //$NON-NLS-1$
+      { IMG_SORT_STATE, prefix + "state_sort_co.gif" }, //$NON-NLS-1$
       { IMG_DRAIN, prefix + "drain_mix_yy.gif" }, //$NON-NLS-1$
       { IMG_NEWQUEUE, prefix + "queueCL16.gif" }, //$NON-NLS-1$
       { IMG_START, prefix + "start.gif" }, //$NON-NLS-1$

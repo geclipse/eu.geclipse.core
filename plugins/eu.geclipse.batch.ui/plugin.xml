@@ -16,7 +16,7 @@
        class="eu.geclipse.batch.ui.editors.QueueEditor"
        default="true"
        extensions="qdl"
-       icon="icons/queue16.gif"
+       icon="icons/queueConf16.gif"
        id="eu.geclipse.batch.ui.editors.QueueEditor"
        name="%editor.queueEditor"/> 
    </extension>
@@ -28,7 +28,7 @@
             class="eu.geclipse.batch.ui.wizards.BatchCreationWizard"
             finalPerspective="eu.geclipse.ui.gEclipsePerspective"
             hasPages="true"
-            icon="icons/batchCL16.gif"
+            icon="icons/newBatchCL16.gif"
             id="eu.geclipse.batch.ui.wizards.BatchCreationWizard"
             name="%wizard.batchService"
             preferredPerspectives="eu.geclipse.ui.gEclipsePerspective"/>            
@@ -38,7 +38,7 @@
             class="eu.geclipse.batch.ui.wizards.QueueCreationWizard"
             finalPerspective="eu.geclipse.ui.gEclipsePerspective"
             hasPages="true"
-            icon="icons/batchCL16.gif"
+            icon="icons/newBatchConfCL16.gif"
             id="eu.geclipse.batch.ui.wizards.QueueCreationWizard"
             name="%wizard.newQueueConf"
             preferredPerspectives="eu.geclipse.ui.gEclipsePerspective"/>

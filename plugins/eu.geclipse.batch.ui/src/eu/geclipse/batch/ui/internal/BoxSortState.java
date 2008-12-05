@@ -31,7 +31,7 @@ public class BoxSortState extends SelectionAction {
     this.setToolTipText( Messages.getString( "BoxSortByState" ) ); //$NON-NLS-1$
     this.setImageDescriptor( Activator.getDefault()
       .getImageRegistry()
-      .getDescriptor( Activator.IMG_ENABLE ) );
+      .getDescriptor( Activator.IMG_SORT_STATE ) );
     this.setText( Messages.getString( "BoxSortByState" ) ); //$NON-NLS-1$
     this.editor = editor;
   }

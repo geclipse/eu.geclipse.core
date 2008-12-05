@@ -36,7 +36,7 @@ public class BoxSortName extends SelectionAction {
     this.setToolTipText( Messages.getString( "BoxSortByName" ) );//$NON-NLS-1$
     this.setImageDescriptor( Activator.getDefault()
       .getImageRegistry()
-      .getDescriptor( Activator.IMG_ENABLE ) );
+      .getDescriptor( Activator.IMG_SORT_ALPHAB ) );
     this.setText( Messages.getString( "BoxSortByName" ) ); //$NON-NLS-1$
     this.editor =editor;
   }
