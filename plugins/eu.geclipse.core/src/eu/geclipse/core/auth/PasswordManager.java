@@ -57,7 +57,6 @@ public abstract class PasswordManager {
   private static boolean useSecureStorage = true;
 
   /**
-   * 
    * The internal list of managed passwords.
    */
   private static Hashtable< String, String > registeredPasswords
@@ -86,7 +85,7 @@ public abstract class PasswordManager {
   public static String getPassword( final String pwuid ) {
     String result = null;
 
-    if ( useSecureStorage == true ) {
+    if ( useSecureStorage ) {
       ISecurePreferences securePreferences = SecurePreferencesFactory.getDefault();
       ISecurePreferences node = securePreferences.node( pwuid );
 
@@ -96,8 +95,8 @@ public abstract class PasswordManager {
         handleStorageException( storageEx );
       }
     }
-
-    if ( useSecureStorage == false ) {
+    
+    else {
       result = registeredPasswords.get( pwuid );
     }
 
@@ -114,7 +113,7 @@ public abstract class PasswordManager {
    */
   public static void registerPassword( final String pwuid, final String pw ) {
 
-    if ( useSecureStorage == true ) {
+    if ( useSecureStorage ) {
       ISecurePreferences securePreferences = SecurePreferencesFactory.getDefault();
       ISecurePreferences node = securePreferences.node( pwuid );
 
@@ -124,8 +123,8 @@ public abstract class PasswordManager {
         handleStorageException( storageEx );
       }
     }
-
-    if ( useSecureStorage == false ) {
+    
+    else {
       registeredPasswords.put( pwuid, pw );
     }
 
@@ -139,7 +138,7 @@ public abstract class PasswordManager {
    */
   public static void erasePassword( final String pwuid ) {
 
-    if ( useSecureStorage == true ) {
+    if ( useSecureStorage ) {
       ISecurePreferences securePreferences = SecurePreferencesFactory.getDefault();
       ISecurePreferences node = securePreferences.node( pwuid );
       node.remove( PasswordManager.PASSWORD );
