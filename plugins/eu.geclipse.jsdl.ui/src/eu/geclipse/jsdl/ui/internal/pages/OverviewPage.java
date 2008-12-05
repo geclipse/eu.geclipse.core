@@ -264,6 +264,10 @@ public final class OverviewPage extends JsdlFormPage implements IHyperlinkListen
   }
   
   
+  /**
+   * @param jobDefinitionRoot
+   * @param refreshStatus
+   */
   public void setPageContent( final JobDefinitionType jobDefinitionRoot, final boolean refreshStatus ) {
     
     if( refreshStatus ) {
