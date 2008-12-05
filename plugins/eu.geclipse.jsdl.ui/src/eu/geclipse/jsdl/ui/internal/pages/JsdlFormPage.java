@@ -31,16 +31,34 @@ import org.eclipse.ui.forms.widgets.ScrolledForm;
 
 import eu.geclipse.jsdl.ui.internal.Activator;
 
+/**
+ * The JSDL Form Page base class.
+ *
+ */
 public class JsdlFormPage extends FormPage implements INotifyChangedListener {
 
   protected boolean contentRefreshed = false;
   private ImageDescriptor helpDesc = null;  
   private boolean dirtyFlag = false;
 
+  /**
+   * Class constructor.
+   * 
+   * @param id The Page ID
+   * @param title The Page Title
+   */
   public JsdlFormPage( final String id, final String title ) {
     super( id, title );
   }
 
+  /**
+   *
+   * Class Constructor.
+   *
+   * @param editor The FormEditor
+   * @param id The Page ID
+   * @param title The Page Title
+   */
   public JsdlFormPage( final FormEditor editor, final String id, final String title ) {
     super( editor, id, title );
   }
