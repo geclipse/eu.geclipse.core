@@ -164,7 +164,13 @@
       label="Batch System Configuration"
       href="html/concepts/siteadministration/batchSystemConfiguration.html">
     </topic>
-    <topic href="html/concepts/siteadministration/creatingQDL.html" label="Queue Configuration Description Wizard">
+    <topic href="html/concepts/siteadministration/creatingQDL.html" label="Queue Configuration Wizard">
+    </topic>
+    <topic href="html/concepts/siteadministration/editingQDL.html" label="Queue Configuration Editor">
+       <topic href="html/concepts/siteadministration/editorpages/SimpleParametersPage.html" label="Simple Parameters Page">
+       </topic>
+       <topic href="html/concepts/siteadministration/editorpages/AdvancedParametersPage.html" label="Advanced Parameters Page">
+       </topic>
     </topic>
 
     <topic
