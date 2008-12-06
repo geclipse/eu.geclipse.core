@@ -129,21 +129,21 @@ public class UpdateJobPortsCommand extends AbstractTransactionalCommand {
     for ( Iterator< String > i = s.iterator(); i.hasNext(); ) {
       String filename = i.next();
       String uri = m.get( filename );
-      cmd.add( createInputPortCommand( uri ) );
+      cmd.add( createInputPortCommand( filename, uri ) );
     }      
     m = this.jsdl.getDataStagingOutStrings();
     s = m.keySet();
     for (Iterator<String> i = s.iterator(); i.hasNext(); ) {
       String filename = i.next();
       String uri = m.get( filename );
-      cmd.add( createOutputPortCommand(uri) );
+      cmd.add( createOutputPortCommand( filename, uri ) );
     }
     cmd.execute(); 
     return CommandResult.newOKCommandResult();
   }
   
   @SuppressWarnings("unchecked")
-  private org.eclipse.gef.commands.Command createInputPortCommand(String uri) {
+  private org.eclipse.gef.commands.Command createInputPortCommand(String filename, String uri) {
     IElementType type = WorkflowElementTypes.IInputPort_2002;
     ViewAndElementDescriptor viewDescriptor = new ViewAndElementDescriptor( new CreateElementRequestAdapter( new CreateElementRequest( type ) ),
                                                                             Node.class,
@@ -151,12 +151,12 @@ public class UpdateJobPortsCommand extends AbstractTransactionalCommand {
                                                                             this.editPart.getDiagramPreferencesHint() );
     CreateViewAndElementRequest createRequest = new CreateViewAndElementRequest( viewDescriptor );
     org.eclipse.gef.commands.Command cmd = this.editPart.getCommand( createRequest );
-    cmd = cmd.chain( new InputPortAfterCreateCommand( ( ( Collection< IAdaptable > )createRequest.getNewObject() ).iterator().next(), uri, this.editPart.getEditingDomain() ) );
+    cmd = cmd.chain( new InputPortAfterCreateCommand( ( ( Collection< IAdaptable > )createRequest.getNewObject() ).iterator().next(), filename, uri, this.editPart.getEditingDomain() ) );
     return cmd;
   }
   
   @SuppressWarnings("unchecked")
-  private org.eclipse.gef.commands.Command createOutputPortCommand(String uri) {
+  private org.eclipse.gef.commands.Command createOutputPortCommand(String filename, String uri) {
     IElementType type = WorkflowElementTypes.IOutputPort_2001;
     ViewAndElementDescriptor viewDescriptor = new ViewAndElementDescriptor( new CreateElementRequestAdapter( new CreateElementRequest( type ) ),
                                                                             Node.class,
@@ -165,7 +165,7 @@ public class UpdateJobPortsCommand extends AbstractTransactionalCommand {
     
     CreateViewAndElementRequest createRequest = new CreateViewAndElementRequest(viewDescriptor);
     org.eclipse.gef.commands.Command cmd = this.editPart.getCommand( createRequest );
-    cmd = cmd.chain( new OutputPortAfterCreateCommand( ( ( Collection< IAdaptable > )createRequest.getNewObject() ).iterator().next(), uri, this.editPart.getEditingDomain() ) );
+    cmd = cmd.chain( new OutputPortAfterCreateCommand( ( ( Collection< IAdaptable > )createRequest.getNewObject() ).iterator().next(), filename, uri, this.editPart.getEditingDomain() ) );
     return cmd;
   }   
   

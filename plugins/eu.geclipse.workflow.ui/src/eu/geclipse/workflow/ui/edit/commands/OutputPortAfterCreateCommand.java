@@ -37,6 +37,7 @@ import eu.geclipse.workflow.ui.part.Messages;
 public class OutputPortAfterCreateCommand extends Command {
   
   private IAdaptable adapter;
+  String filename;
   String uri;
   private TransactionalEditingDomain domain;
   IOutputPort newPort;
@@ -46,8 +47,9 @@ public class OutputPortAfterCreateCommand extends Command {
    * @param uri URI to add to port
    * @param domain Transactional editing domain
    */
-  public OutputPortAfterCreateCommand(IAdaptable adapter, String uri, TransactionalEditingDomain domain) {
+  public OutputPortAfterCreateCommand(IAdaptable adapter, String filename, String uri, TransactionalEditingDomain domain) {
     this.adapter = adapter;
+    this.filename = filename;
     this.uri = uri;
     this.domain = domain;
   }
@@ -67,6 +69,7 @@ public class OutputPortAfterCreateCommand extends Command {
                                                      IAdaptable info )
         {
           OutputPortAfterCreateCommand.this.newPort.setName( OutputPortAfterCreateCommand.this.uri );
+          OutputPortAfterCreateCommand.this.newPort.setFileName( OutputPortAfterCreateCommand.this.filename );
           return CommandResult.newOKCommandResult();
         }
       };
