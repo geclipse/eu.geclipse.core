@@ -95,8 +95,9 @@ public abstract class PasswordManager {
         handleStorageException( storageEx );
       }
     }
-    
-    else {
+
+    // Be careful, handleStorageException() above could have switched back to the internal store
+    if ( ! useSecureStorage ) {
       result = registeredPasswords.get( pwuid );
     }
 
@@ -123,8 +124,9 @@ public abstract class PasswordManager {
         handleStorageException( storageEx );
       }
     }
-    
-    else {
+
+    // Be careful, handleStorageException() above could have switched back to the internal store
+    if ( ! useSecureStorage ) {
       registeredPasswords.put( pwuid, pw );
     }
 
