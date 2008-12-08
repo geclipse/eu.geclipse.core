@@ -61,6 +61,8 @@ public class CertificateManager
    */
   private List< X509CertificateHandle > untrusted;
   
+  private IPath certificateLocation;
+  
   /**
    * Private constructor.
    */
@@ -82,13 +84,7 @@ public class CertificateManager
     return singleton;
   }
   
-  /**
-   * Get the location where this certificate manager stores its trusted
-   * certificates.
-   * 
-   * @return The certificate location.
-   */
-  public static IPath getCertificateLocation() {
+  public static IPath getDefaultCertificateLocation() {
     IPath location = Activator.getDefault().getStateLocation();
     if ( !location.hasTrailingSeparator() ) {
       location = location.addTrailingSeparator();
@@ -107,6 +103,19 @@ public class CertificateManager
       }
     }
     return location;
+  }
+  
+  /**
+   * Get the location where this certificate manager stores its trusted
+   * certificates.
+   * 
+   * @return The certificate location.
+   */
+  public IPath getCertificateLocation() {
+    if ( this.certificateLocation == null ) {
+      this.certificateLocation = getDefaultCertificateLocation();
+    }
+    return this.certificateLocation;
   }
   
   /* (non-Javadoc)
@@ -234,6 +243,11 @@ public class CertificateManager
       fireContentChanged();
     }
     
+  }
+  
+  public void setCertificateLocation( final IPath location ) {
+    this.certificateLocation = location;
+    update();
   }
   
   /**

@@ -61,7 +61,7 @@ public class Security {
    * @return The certificate path in the local file system.
    */
   public static IPath getCertificateLocation() {
-    return CertificateManager.getCertificateLocation();
+    return CertificateManager.getManager().getCertificateLocation();
   }
   
   /**
@@ -130,6 +130,10 @@ public class Security {
     
     return socketFactory;
     
+  }
+  
+  public static void setCertificateLocation( final IPath location ) {
+    CertificateManager.getManager().setCertificateLocation( location );
   }
   
 }

@@ -33,6 +33,7 @@ import eu.geclipse.core.ICoreProblems;
 import eu.geclipse.core.internal.Activator;
 import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.core.security.ICertificateHandle;
+import eu.geclipse.core.security.Security;
 import eu.geclipse.core.security.X509Util;
 import eu.geclipse.core.security.ICertificateManager.CertTrust;
 
@@ -173,7 +174,7 @@ public class X509CertificateHandle
     }
     
     String name = String.format( "%08x", Integer.valueOf( hash ) ); //$NON-NLS-1$
-    IPath filepath = CertificateManager.getCertificateLocation().append( name );
+    IPath filepath = Security.getCertificateLocation().append( name );
     
     for ( int i = 0 ; i <= 9 ; i++ ) {
       result = filepath.addFileExtension( String.valueOf( i ) ).toFile();
