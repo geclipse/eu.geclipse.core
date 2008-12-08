@@ -41,10 +41,10 @@ public class DetailsContentProvider implements ITreeContentProvider {
   public Object[] getChildren( final Object parentElement ) {
     Object[] result = null;
     if( parentElement instanceof IServiceJob ) {
-      result = ( ( IServiceJob )parentElement ).getTestedResourcesNames()
+      result = ( ( IServiceJob )parentElement ).getServiceJobResourcesNames()
         .toArray();
     } else if( parentElement instanceof String ) {
-      result = this.root.getTestResultsForResourceForDate( ( String )parentElement )
+      result = this.root.getServiceJobResultsForResourceForDate( ( String )parentElement )
         .toArray();
     }
     return result;
@@ -65,7 +65,7 @@ public class DetailsContentProvider implements ITreeContentProvider {
   public Object[] getElements( final Object inputElement ) {
     Object[] result = null;
     if( inputElement instanceof IServiceJob ) {
-      result = ( ( IServiceJob )inputElement ).getTestedResourcesNames()
+      result = ( ( IServiceJob )inputElement ).getServiceJobResourcesNames()
         .toArray();
     }
     return result;

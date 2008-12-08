@@ -44,7 +44,7 @@ public class ServiceJobCreator extends AbstractGridElementCreator {
     IFile file = ( IFile )getSource();
     try {
       String plugIn = GTDLParser.getPluginId( file.getRawLocation().toFile() );
-      result = Extensions.getTestInstance( plugIn );
+      result = Extensions.getServiceJobInstance( plugIn );
       result.internalInit( file );
     } catch( ParserConfigurationException parserExc ) {
       Activator.logException( parserExc );

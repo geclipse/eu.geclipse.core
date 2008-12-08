@@ -68,7 +68,7 @@ public class ResourcesSelectionPage extends WizardPage {
   private Button selectAllButton;
   private Button revertSelectionButton;
   private Button deselectAllButton;
-  private List<IGridResource> selectedResources;
+//  private List<IGridResource> selectedResources;
 
   /**
    * Constructor of ResourceSelectionPage objects.
@@ -83,8 +83,8 @@ public class ResourcesSelectionPage extends WizardPage {
   {
     super( pageName );
     this.projectProvider = selectionProvider;
-    this.setTitle( "Resource selection" );
-    this.setDescription( "Choose services to perform operator's job on." );
+    setTitle( "Resource selection" );
+    setDescription( "Choose services to perform operator's job on." );
     this.oldVO = null;
     this.visibleCategories.add( GridResourceCategoryFactory.getCategory( GridResourceCategoryFactory.ID_COMPUTING ) );
     this.visibleCategories.add( GridResourceCategoryFactory.getCategory( GridResourceCategoryFactory.ID_STORAGE ) );
@@ -106,16 +106,16 @@ public class ResourcesSelectionPage extends WizardPage {
   public void setVisible( final boolean visible ) {
     super.setVisible( visible );
     if( visible ) {
-      if( this.oldVO != null
-          && !this.oldVO.equals( this.projectProvider.getGridProject().getVO() ) )
-      {
-        this.selectedResources = new ArrayList<IGridResource>();
-      }
+//      if( this.oldVO != null
+//          && !this.oldVO.equals( this.projectProvider.getGridProject().getVO() ) )
+//      {
+//        this.selectedResources = new ArrayList<IGridResource>();
+//      }
       setSelectedVO( this.projectProvider.getGridProject().getVO() );
     } else {
       this.oldVO = this.projectProvider.getGridProject().getVO();
     }
-    this.updateButtons();
+    updateButtons();
   }
 
   @Override
@@ -207,8 +207,8 @@ public class ResourcesSelectionPage extends WizardPage {
   private void changeStateAllTreeItems( final boolean checked ) {
     CategoryContainer[] input = ( CategoryContainer[] )this.viewer.getInput();
     for( CategoryContainer category : input ) {
-      viewer.setChecked( category, checked );
-      viewer.setSubtreeChecked( category, checked );
+      this.viewer.setChecked( category, checked );
+      this.viewer.setSubtreeChecked( category, checked );
       updateButtons();
     }
   }
@@ -219,8 +219,8 @@ public class ResourcesSelectionPage extends WizardPage {
       IGridResource childRef = null;
       boolean child = true;
       for( IGridResource resource : category.getContainedResources() ) {
-        child = viewer.getChecked( resource );
-        viewer.setChecked( resource, !child );
+        child = this.viewer.getChecked( resource );
+        this.viewer.setChecked( resource, !child );
         if( child ) {
           childRef = resource;
         }
@@ -272,7 +272,7 @@ public class ResourcesSelectionPage extends WizardPage {
       }
       if( parent != null ) {
         // we've got the parent :)
-        if( viewer.getChecked( element ) ) {
+        if( this.viewer.getChecked( element ) ) {
           boolean childrenChecked = true;
           for( IGridResource child : parent.getContainedResources() ) {
             if( !this.viewer.getChecked( child ) ) {
@@ -289,7 +289,7 @@ public class ResourcesSelectionPage extends WizardPage {
   }
 
   protected void updateButtons() {
-    this.getContainer().updateButtons();
+    getContainer().updateButtons();
   }
 
   /**

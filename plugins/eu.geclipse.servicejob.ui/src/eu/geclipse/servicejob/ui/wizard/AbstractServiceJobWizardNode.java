@@ -28,13 +28,13 @@ import eu.geclipse.servicejob.ui.internal.WizardInitObject;
 import eu.geclipse.ui.wizards.IProjectSelectionProvider;
 
 /**
- * Abstract class of the ITestWizardNode. It should be used instead of
- * ITestWizardNode if there should be created file containing informations about
- * the test during finishing wizard.
- * <p>
+ * Abstract class of the {@link IServiceJobWizardNode}. It should be used
+ * instead of {@link IServiceJobWizardNode} if there should be created file
+ * containing informations about the service job during finishing wizard.
+ *
  */
 public abstract class AbstractServiceJobWizardNode extends Wizard 
-implements IServiceJobWizardNode, IProjectSelectionProvider
+  implements IServiceJobWizardNode, IProjectSelectionProvider
 {
 
   protected IProjectSelectionProvider projectProvider;
@@ -83,15 +83,12 @@ implements IServiceJobWizardNode, IProjectSelectionProvider
     return this.resources;
   }
 
-  public String getTestName() {
+  public String getServiceJobName() {
     return this.name;
   }
 
-  
   public IGridProject getGridProject(){
     return getSelectedProject();
   }
-  
-  
-  
+
 }

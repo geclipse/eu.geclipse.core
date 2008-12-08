@@ -32,7 +32,7 @@ import eu.geclipse.servicejob.ui.wizard.ServiceJobWizard;
 
 
 /**
- * Action for testing grid service element.
+ * Action for running service job on grid service element.
  * 
  */
 public class ServiceJobServiceAction implements IObjectActionDelegate {

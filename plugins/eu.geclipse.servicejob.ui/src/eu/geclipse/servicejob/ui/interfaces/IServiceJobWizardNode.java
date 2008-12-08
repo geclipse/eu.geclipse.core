@@ -25,29 +25,30 @@ import eu.geclipse.ui.wizards.wizardselection.IInitializableWizard;
 import eu.geclipse.ui.wizards.wizardselection.IWizardSelectionNode;
 
 /**
- * Plug-ins contributing to structural test wizard should provide wizard's
- * content through this interface.
+ * Plug-ins contributing to structural service job wizard should provide
+ * wizard's content through this interface.
  */
 public interface IServiceJobWizardNode
   extends IWizardSelectionNode, IInitializableWizard
 {
 
   /**
-   * Method to access file input stream for newly created structural test.
+   * Method to access file input stream for newly created structural service
+   * job.
    * 
-   * @return input stream which corresponds to XML content of structural test
+   * @return Input stream which corresponds to XML content of service job.
    */
-  public InputStream getTestInputData();
+  public InputStream getServiceJobInputData();
 
   /**
-   * Method to access structural test's name which is created by this wizard.
+   * Method to access structural service job's name which is created by this wizard.
    * 
-   * @return name of the structural test
+   * @return Name of the structural service job.
    */
-  String getTestName();
+  String getServiceJobName();
 
   /**
-   * Gets selected project for this test.
+   * Gets selected project for this service job.
    * 
    * @return IVirtualOrganization selected in VO selection page.
    */
@@ -57,7 +58,7 @@ public interface IServiceJobWizardNode
    * Method to access ID of plug-in that extends the
    * eu.geclipse.servicejob.servicejobProvider extension point.
    * 
-   * @return plug-in id in form of String
+   * @return Plug-in id in form of String.
    */
   String getPluginID();
 
@@ -74,7 +75,7 @@ public interface IServiceJobWizardNode
    * @return list of names representing resources that are object of this
    *         service job
    */
-  List<String> getResourcesToTestNames();
+  List<String> getResourcesNames();
 
   /**
    * Method to access instances of {@link IGridResource}s that were passed to
@@ -87,25 +88,4 @@ public interface IServiceJobWizardNode
    *         this list will be empty.
    */
   List<IGridResource> getPreselectedResources();
-  // /**
-  // * Implementation should return grid test description XML document that will
-  // * be translated to JSDL and submitted as a test job on the grid.
-  // *
-  // * @return XML document
-  // */
-  // Document getDocument();
-  //
-  // String getTestName();
-  //
-  // public InputStream getStructuralTestInput();
-  //  
-  // public IGridProject getProject();
-  //  
-  //  
-  // /**
-  // * Gets selected resources.
-  // * @return List<IGridResource>
-  // */
-  // public List<IGridResource> getResources();
-  //  
 }

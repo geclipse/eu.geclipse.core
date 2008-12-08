@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<test xmlns="http://www.example.org/GTDL_schema" 
+<serviceJob xmlns="http://www.example.org/GTDL_schema" 
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 xsi:schemaLocation="http://www.example.org/GTDL_schema GTDL_schema.xsd ">
   <input>
-  	<testedResources></testedResources>
+  	<targetResources></targetResources>
   	<pluginId></pluginId>
   	<inputData></inputData>
   </input>
-</test>
+</serviceJob>

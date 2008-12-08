@@ -14,13 +14,13 @@
  *      - Katarzyna Bylec (katis@man.poznan.pl)
  *           
  *****************************************************************************/
-package eu.geclipse.servicejob.model.tests.access;
+package eu.geclipse.servicejob.model.access;
 
 import eu.geclipse.servicejob.model.AbstractServiceJob;
 
 /**
- * Abstract implementation of base class for all tests that test some resources
- * by contacting them directly (e.g. through SSL connection) or accessing test
+ * Abstract implementation of base class for all service jobs that contact 
+ * resources directly (e.g. through SSL connection) or accessing service job
  * results from remote services (portals, databases, etc.).
  */
 public abstract class GridAccessServiceJob extends AbstractServiceJob {
@@ -28,7 +28,4 @@ public abstract class GridAccessServiceJob extends AbstractServiceJob {
   public boolean isLocal() {
     return true;
   }
-
-  
-  
 }

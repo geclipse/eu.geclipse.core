@@ -38,7 +38,7 @@ import eu.geclipse.core.model.IServiceJob;
 import eu.geclipse.core.model.IServiceJobResult;
 import eu.geclipse.servicejob.Activator;
 import eu.geclipse.servicejob.model.impl.ServiceJobResult;
-import eu.geclipse.servicejob.model.tests.job.SubmittableServiceJobResult;
+import eu.geclipse.servicejob.model.submittable.job.SubmittableServiceJobResult;
 
 
 /**
@@ -67,9 +67,9 @@ public class GTDLJobParser {
   public static final String OUTPUT_RESULT_DATE = "date"; //$NON-NLS-1$
   
   /**
-   * XML node - simple test name
+   * XML node - simple service job name
    */
-  public static final String OUTPUT_RESULT_TEST = "simpleTest"; //$NON-NLS-1$
+  public static final String OUTPUT_RESULT_SERVICE_JOB = "simpleServiceJob"; //$NON-NLS-1$
   
   /**
    * XML node - result data
@@ -92,24 +92,25 @@ public class GTDLJobParser {
   public static final String OUTPUT_RESULT_TYPE = "resultType"; //$NON-NLS-1$
 
   /**
-   * Parses GTDL (grid test description language) file for test results. List of
-   * results that were found and parsed is returned. List elements are instances
-   * of {@link ServiceJobResult} - which means that they have String taken
-   * directly from XML as a test's result. Only plug-in calling this method
-   * knows what to do with this String (available also as a InputStream -
+   * Parses GTDL (grid test description language) file for service job results.
+   * List of results that were found and parsed is returned. List elements are
+   * instances of {@link ServiceJobResult} - which means that they have String
+   * taken directly from XML as a service job's result. Only plug-in calling
+   * this method knows what to do with this String (available also as a
+   * InputStream -
    * {@link IServiceJob#getInputStreamForResult(IServiceJobResult)}). This all
    * means that data returned by this method has to modified by plug-in that
    * called this method!
    * 
-   * @param file XML file (GTDL)
-   * @return List of {@link ServiceJobResult} representing data in XML file
+   * @param file XML file (GTDL).
+   * @return List of {@link ServiceJobResult} representing data in XML file.
    * @throws ParserConfigurationException
    * @throws SAXException
    * @throws IOException
    * @throws DOMException
    * @throws ParseException
    */
-  public static List<SubmittableServiceJobResult> getTestResults( final File file )
+  public static List<SubmittableServiceJobResult> getServiceJobResults( final File file )
     throws ParserConfigurationException, SAXException, IOException,
     DOMException, ParseException
   {
@@ -125,11 +126,11 @@ public class GTDLJobParser {
         .parse( ( ( Element )singleResult.getElementsByTagName( OUTPUT_RESULT_DATE )
           .item( 0 ) ).getTextContent() );
       
-      SubmittableServiceJobResult testResult = 
+      SubmittableServiceJobResult serviceJobResult = 
         new SubmittableServiceJobResult( date,
                            ( ( Element )singleResult.getElementsByTagName( OUTPUT_RESULT_RESOURCE )
                              .item( 0 ) ).getTextContent(),
-                           ( ( Element )singleResult.getElementsByTagName( OUTPUT_RESULT_TEST )
+                           ( ( Element )singleResult.getElementsByTagName( OUTPUT_RESULT_SERVICE_JOB )
                              .item( 0 ) ).getTextContent(),
                            ( ( Element )singleResult.getElementsByTagName( OUTPUT_RESULT_DATA )
                              .item( 0 ) ).getTextContent(),
@@ -139,15 +140,17 @@ public class GTDLJobParser {
                              .item( 0 ) ).getTextContent(),
                            ( ( Element )singleResult.getElementsByTagName( OUTPUT_RESULT_ENUM )
                              .item( 0 ) ).getTextContent() );
-      result.add( testResult );
+      result.add( serviceJobResult );
     }
     return result;
   }
   
   /**
-   * Method to parse part of XML file in which tested resources are described. 
-   * @param stream input stream of XML to parse
-   * @return list of resources 
+   * Method to parse part of XML file in which resources are described for this
+   * service job.
+   * 
+   * @param stream Input stream of XML to parse.
+   * @return List of resources.
    */
   public static List<String> parseGeneralPartForResources( final InputStream stream ) {
     List<String> result = new ArrayList<String>();

@@ -29,9 +29,9 @@ import eu.geclipse.core.model.IServiceJob;
  */
 public class ServiceJobLabelProvider implements ITableLabelProvider {
 
-  private static final String DEFAULT_ERROR = Messages.getString("TestsLabelProvider.default_error"); //$NON-NLS-1$
+  private static final String DEFAULT_ERROR = Messages.getString("ServiceJobsLabelProvider.default_error"); //$NON-NLS-1$
   
-  private static final String DEFAULT_N_A = Messages.getString("TestsLabelProvider.default_n_a"); //$NON-NLS-1$
+  private static final String DEFAULT_N_A = Messages.getString("ServiceJobsLabelProvider.default_n_a"); //$NON-NLS-1$
   
   public Image getColumnImage( final Object element, final int columnIndex ) {
     Image result = null;
@@ -41,27 +41,27 @@ public class ServiceJobLabelProvider implements ITableLabelProvider {
   public String getColumnText( final Object element, final int columnIndex ) {
     String result = DEFAULT_ERROR;
     if( element instanceof IServiceJob ) {
-      IServiceJob test = ( IServiceJob )element;
+      IServiceJob serviceJob = ( IServiceJob )element;
       switch( columnIndex ) {
         case 0:
-          result = test.getName();
+          result = serviceJob.getName();
         break;
         case 1:
-          result = test.getProject().getName();
+          result = serviceJob.getProject().getName();
         break;
         case 2:
-          result = test.getSummary().toString();
+          result = serviceJob.getSummary().toString();
         break;
         case 3:
-          if( test.getLastUpdate() != null ) {
+          if( serviceJob.getLastUpdate() != null ) {
             result = DateFormat.getDateTimeInstance()
-              .format( test.getLastUpdate() );
+              .format( serviceJob.getLastUpdate() );
           } else {
             result = DEFAULT_N_A;
           }
         break;
         case 4:
-          result = test.getTestDescription();
+          result = serviceJob.getServiceJobDescription();
         break;
       }
     }

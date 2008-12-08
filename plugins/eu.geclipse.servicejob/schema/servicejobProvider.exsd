@@ -1,19 +1,24 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
-<schema targetNamespace="eu.geclipse.servicejob">
+<schema targetNamespace="eu.geclipse.servicejob" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
-      <appInfo>
+      <appinfo>
          <meta.schema plugin="eu.geclipse.servicejob" id="servicejobProvider" name="Service Job Provider"/>
-      </appInfo>
+      </appinfo>
       <documentation>
-         [Enter description of this extension point.]
+         This extension point is used to define new operator&apos;s job. Operator&apos;s job is a special kind of task dedicated mainly for grid operators which want to test, manage and benchmark their grid resources.
       </documentation>
    </annotation>
 
    <element name="extension">
+      <annotation>
+         <appinfo>
+            <meta.element />
+         </appinfo>
+      </annotation>
       <complexType>
          <sequence minOccurs="1" maxOccurs="unbounded">
-            <element ref="test"/>
+            <element ref="serviceJob"/>
             <element ref="wizard"/>
          </sequence>
          <attribute name="point" type="string" use="required">
@@ -35,31 +40,31 @@
                <documentation>
                   
                </documentation>
-               <appInfo>
+               <appinfo>
                   <meta.attribute translatable="true"/>
-               </appInfo>
+               </appinfo>
             </annotation>
          </attribute>
       </complexType>
    </element>
 
-   <element name="test">
+   <element name="serviceJob">
       <complexType>
-         <attribute name="testClass" type="string" use="required">
-            <annotation>
-               <documentation>
-                  
-               </documentation>
-               <appInfo>
-                  <meta.attribute kind="java" basedOn="eu.geclipse.servicejob.model.AbstractServiceJob:"/>
-               </appInfo>
-            </annotation>
-         </attribute>
          <attribute name="id" type="string" use="required">
             <annotation>
                <documentation>
                   
                </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="servicejobClass" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java" basedOn=":eu.geclipse.core.model.IServiceJob"/>
+               </appinfo>
             </annotation>
          </attribute>
       </complexType>
@@ -86,56 +91,77 @@
                <documentation>
                   
                </documentation>
-               <appInfo>
+               <appinfo>
                   <meta.attribute kind="java" basedOn="eu.geclipse.servicejob.ui.wizard.AbstractServiceJobWizardNode:eu.geclipse.servicejob.ui.interfaces.IServiceJobWizardNode"/>
-               </appInfo>
+               </appinfo>
             </annotation>
          </attribute>
       </complexType>
    </element>
 
    <annotation>
-      <appInfo>
+      <appinfo>
          <meta.section type="since"/>
-      </appInfo>
+      </appinfo>
       <documentation>
-         [Enter the first release in which this extension point appears.]
+         1.0M7
       </documentation>
    </annotation>
 
    <annotation>
-      <appInfo>
-         <meta.section type="examples"/>
-      </appInfo>
-      <documentation>
-         [Enter extension point usage example here.]
-      </documentation>
-   </annotation>
-
-   <annotation>
-      <appInfo>
+      <appinfo>
          <meta.section type="apiInfo"/>
-      </appInfo>
+      </appinfo>
       <documentation>
-         [Enter API information here.]
+         See the &lt;code&gt;eu.geclipse.core.model.IServiceJob&lt;/code&gt; for the main service job interface. Also see &lt;code&gt;eu.geclipse.servicejob.model.AbstractServiceJob&lt;/code&gt; and &lt;code&gt;eu.geclipse.servicejob.submittable.job.AbstractSubmittableServiceJob&lt;/code&gt; for abstract implementations of the &lt;code&gt;IServiceJob&lt;/code&gt; implementations for the basic and job-based service jobs respectively.
+
+Also see &lt;code&gt;eu.geclipse.servicejob.ui.interfaces.IServiceJobWizardNode&lt;/code&gt; and its abstract implementation &lt;code&gt;eu.geclipse.servicejob.ui.wizard.AbstractServiceJobWizardNode&lt;/code&gt; for the service job wizard API.
       </documentation>
    </annotation>
 
    <annotation>
-      <appInfo>
+      <appinfo>
+         <meta.section type="examples"/>
+      </appinfo>
+      <documentation>
+         Please note that serviceJob and wizard nodes can be defined in separate plug-ins. In this case ids of both nodes must be identical.
+
+&lt;pre&gt;
+  &lt;extension
+         point=&quot;eu.geclipse.servicejob.servicejobProvider&quot;&gt;
+      &lt;serviceJob
+            id=&quot;eu.geclipse.benchmarking.benchmark&quot;
+            servicejobClass=&quot;eu.geclipse.benchmarking.model.service.BenchmarkServiceJob&quot;&gt;
+      &lt;/serviceJob&gt;
+      &lt;wizard
+            class=&quot;eu.geclipse.gbdl.ui.wizards.BenchmarkWizard&quot;
+            id=&quot;eu.geclipse.benchmarking.benchmark&quot;
+            name=&quot;Benchmark&quot;
+      &lt;/wizard&gt;
+  &lt;/extension&gt;
+&lt;/pre&gt;
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appinfo>
          <meta.section type="implementation"/>
-      </appInfo>
+      </appinfo>
       <documentation>
-         [Enter information about supplied implementation of this extension point.]
+         Please take a look at &lt;code&gt;eu.geclipse.servicejob.impl&lt;/code&gt; for some basic implementations of the service job framework. In this plug-in middleware-independent certificate lifetime test is defined.
       </documentation>
    </annotation>
 
    <annotation>
-      <appInfo>
+      <appinfo>
          <meta.section type="copyright"/>
-      </appInfo>
+      </appinfo>
       <documentation>
-         
+         Copyright (c) 2008 g-Eclipse Consortium
+&lt;br&gt;&lt;br&gt;
+All rights reserved. This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0 which accompanies this distribution, and is available at &lt;a href=&quot;http://www.eclipse.org/legal/epl-v10.html&quot;&gt;http://www.eclipse.org/legal/epl-v10.html&lt;/a&gt;.
+&lt;br&gt;&lt;br&gt;
+Initial development of the original code was made for the g-Eclipse project founded by European Union project number: FP6-IST-034327 &lt;a href=&quot;http://www.geclipse.eu&quot;&gt;http://www.geclipse.eu&lt;/a&gt;.
       </documentation>
    </annotation>
 

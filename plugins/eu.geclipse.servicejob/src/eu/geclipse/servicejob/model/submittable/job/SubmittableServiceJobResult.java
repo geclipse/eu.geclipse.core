@@ -12,7 +12,7 @@
  * Contributors:
  *    Szymon Mueller - PSNC - Initial API and implementation
  *****************************************************************************/
-package eu.geclipse.servicejob.model.tests.job;
+package eu.geclipse.servicejob.model.submittable.job;
 
 import java.util.Date;
 
@@ -20,7 +20,7 @@ import eu.geclipse.core.model.IGridJobID;
 import eu.geclipse.servicejob.model.impl.ServiceJobResult;
 
 /**
- * Abstract class for test result of the job based test. Contains important jobID field, 
+ * Abstract class for submittable service result. Contains important jobID field, 
  * which corresponds to the jobID of the submitted job.
  *
  */
@@ -31,38 +31,37 @@ public class SubmittableServiceJobResult extends ServiceJobResult {
   /**
    * Simple constructor.
    * 
-   * @param runDate when this result was created
-   * @param resource name of tested resource
-   * @param subTest name of performed sub-test
-   * @param resultRawData content of Output > Result > ResultData GTDL element
-   * @param resultSummary textual interpretation of test's result
-   * @param resultType type of the result
-   * @param resultEnum BES status result
+   * @param runDate When this result was created.
+   * @param resource Name of resource where service job should be run.
+   * @param subJob Name of performed sub-job.
+   * @param resultRawData Content of Output > Result > ResultData GTDL element.
+   * @param resultSummary Textual interpretation of service job's result.
+   * @param resultType Type of the result.
+   * @param resultEnum BES status result.
    */
   public SubmittableServiceJobResult( final Date runDate,
-                         final String resource,
-                         final String subTest,
-                         final String resultRawData,
-                         final String resultSummary,
-                         final String resultType,
-                         final String resultEnum )
+                                      final String resource,
+                                      final String subJob,
+                                      final String resultRawData,
+                                      final String resultSummary,
+                                      final String resultType,
+                                      final String resultEnum )
   {
-    super( runDate,resource,subTest,resultRawData,resultSummary,resultType,resultEnum );
+    super( runDate,resource,subJob,resultRawData,resultSummary,resultType,resultEnum );
     this.jobID = null;
   }
   
   /**
-   * Setter of jobID for this job test result. If possible, this should be middleware specific
-   * jobID.
-   * @param jobID
-   *            jobID which should be set
+   * Setter of jobID for this service job result. If possible, this should be 
+   * middleware specific jobID.
+   * @param jobID {@link IGridJobID} which should be set.
    */
   public void setJobID( final IGridJobID jobID ) {
     this.jobID = jobID;
   }
    
   /**
-   * Updates job test results. This method should be invoked after each 
+   * Updates job service job results. This method should be invoked after each 
    * fetching of the status from the job service.
    * 
    * @param date 
@@ -82,17 +81,17 @@ public class SubmittableServiceJobResult extends ServiceJobResult {
   
   /**
    * Getter of jobID.
-   * @return
-   *            job ID associated with this test result
+   * @return ID of the job associated with this service job result.
    */
   public IGridJobID getJobID() {
     return this.jobID;
   }
-  
+
   /**
-   * Gets the jobID String representation of job associated with this test result. 
-   * @return jobID
-   *                string representation of this job's ID
+   * Gets the jobID String representation of job associated with this service
+   * job result.
+   * 
+   * @return jobID string representation of this job's ID.
    */
   public String getJobIDString() {
     return this.jobID.getJobID();

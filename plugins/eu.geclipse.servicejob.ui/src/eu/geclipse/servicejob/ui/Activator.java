@@ -1,3 +1,20 @@
+/******************************************************************************
+ * Copyright (c) 2008 g-Eclipse consortium 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Initial development of the original code was made for
+ * project g-Eclipse founded by European Union
+ * project number: FP6-IST-034327  http://www.geclipse.eu/
+ *
+ * Contributor(s):
+ *     PSNC: 
+ *      - Katarzyna Bylec (katis@man.poznan.pl)
+ *      - Szymon Mueller
+ *           
+ *****************************************************************************/
 package eu.geclipse.servicejob.ui;
 
 import java.io.File;
@@ -30,7 +47,7 @@ public class Activator extends AbstractUIPlugin {
    * The shared instance
    */
   private static Activator plugin;
-  private static Map<IServiceJobResult, File> testResultsVsExternalFiles = new HashMap<IServiceJobResult, File>();
+  private static Map<IServiceJobResult, File> serviceJobResultsVsExternalFiles = new HashMap<IServiceJobResult, File>();
 
   /**
    * The constructor
@@ -48,13 +65,13 @@ public class Activator extends AbstractUIPlugin {
   public void start( final BundleContext context ) throws Exception {
     super.start( context );
     plugin = this;
-    File testFiles = getDefault().getStateLocation()
-      .append( ServiceJobDetailsView.TEST_FILES_FOLDER )
+    File serviceJobsFiles = getDefault().getStateLocation()
+      .append( ServiceJobDetailsView.SERVICE_JOB_FILES_FOLDER )
       .toFile();
-    if( testFiles.exists() && testFiles.isDirectory() ) {
+    if( serviceJobsFiles.exists() && serviceJobsFiles.isDirectory() ) {
       boolean isEmpty = true;
-      for( String fileName : testFiles.list() ) {
-        IPath path = new Path( testFiles.getAbsolutePath() );
+      for( String fileName : serviceJobsFiles.list() ) {
+        IPath path = new Path( serviceJobsFiles.getAbsolutePath() );
         path = path.append( fileName );
         if( !path.toFile().delete() ) {
           isEmpty = false;
@@ -62,7 +79,7 @@ public class Activator extends AbstractUIPlugin {
         }
       }
       if( isEmpty ) {
-        testFiles.delete();
+        serviceJobsFiles.delete();
       }
     }
     Platform.getAdapterManager().registerAdapters( new Factory(),
@@ -96,8 +113,9 @@ public class Activator extends AbstractUIPlugin {
    */
   public static void logException( final Throwable exc ) {
     String message = exc.getLocalizedMessage();
-    if( message == null )
+    if( message == null ) {
       message = exc.getClass().getName();
+    }
     IStatus status = new Status( IStatus.ERROR,
                                  PLUGIN_ID,
                                  IStatus.OK,
@@ -112,10 +130,10 @@ public class Activator extends AbstractUIPlugin {
    * @param result
    * @param file
    */
-  public static void addFileForTestResult( final IServiceJobResult result,
-                                           final File file )
+  public static void addFileForServiceJobResult( final IServiceJobResult result,
+                                                 final File file )
   {
-    testResultsVsExternalFiles.put( result, file );
+    serviceJobResultsVsExternalFiles.put( result, file );
   }
 
   /**
@@ -124,7 +142,7 @@ public class Activator extends AbstractUIPlugin {
    * @param result
    * @return file
    */
-  public static File getFileForTestResult( final IServiceJobResult result ) {
-    return testResultsVsExternalFiles.get( result );
+  public static File getFileForServiceJobResult( final IServiceJobResult result ) {
+    return serviceJobResultsVsExternalFiles.get( result );
   }
 }

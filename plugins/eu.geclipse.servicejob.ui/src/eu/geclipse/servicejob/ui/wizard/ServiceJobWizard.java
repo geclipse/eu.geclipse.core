@@ -53,10 +53,10 @@ import eu.geclipse.ui.wizards.wizardselection.IWizardSelectionNode;
 import eu.geclipse.ui.wizards.wizardselection.WizardSelectionListPage;
 
 /**
- * Wizard for creating grid test for grid resources. First page of it is wizard
- * selection page and its content is created from tests providers. Wizard nodes
- * for this page are defined through eu.geclipse.servicejob.servicejobProvider
- * extension point.
+ * Wizard for creating service job for grid resources. First page of it is
+ * wizard selection page and its content is created from service jobs providers.
+ * Wizard nodes for this page are defined through
+ * eu.geclipse.servicejob.servicejobProvider extension point.
  * 
  * @author Katarzyna Bylec
  */
@@ -64,12 +64,12 @@ public class ServiceJobWizard extends Wizard
   implements INewWizard, IProjectSelectionProvider
 {
 
-  static final String TEST_FOLDER = ".tests"; //$NON-NLS-1$
-  static final String TEST_EXTENSION = ".gtdl"; //$NON-NLS-1$
+  static final String SERVICE_JOBS_FOLDER = ".serviceJobs"; //$NON-NLS-1$
+  static final String SERVICE_JOB_EXTENSION = ".gtdl"; //$NON-NLS-1$
   private IGridProject project;
   private ProjectSelectionPage projectPage;
-  private List<IGridResource> testedResources;
-  private WizardSelectionListPage testTypeSelectionPage;
+  private List<IGridResource> serviceJobResources;
+  private WizardSelectionListPage serviceJobTypeSelectionPage;
 
   /**
    * Constructor for wizard.
@@ -77,19 +77,19 @@ public class ServiceJobWizard extends Wizard
    * @param project if wizard was run through resource's context menu this
    *            object represents grid project to which selected resource
    *            belongs.
-   * @param resource grid resource for which new test will be created
+   * @param resource grid resource for which new service job will be created
    */
   public ServiceJobWizard( final IGridProject project,
                            final List<IGridResource> resource )
   {
     setForcePreviousAndNextButtons( true );
     this.project = project;
-    this.testedResources = resource;
+    this.serviceJobResources = resource;
   }
 
   /**
    * Constructor for wizard. Does the same as
-   * <code>TestWizard((IGridProject) null,
+   * <code>ServiceJobWizard((IGridProject) null,
    * (IGridResource) null)</code>.
    */
   public ServiceJobWizard() {
@@ -106,48 +106,47 @@ public class ServiceJobWizard extends Wizard
     this.projectPage = new ProjectSelectionPage( "Project selection page",
                                                  this.project );
     addPage( this.projectPage );
-    this.testTypeSelectionPage = new ExtPointWizardSelectionListPage( "Operator's jobs' type selection page",
+    this.serviceJobTypeSelectionPage = new ExtPointWizardSelectionListPage( "Operator's jobs' type selection page",
                                                                       "eu.geclipse.servicejob.servicejobProvider",
                                                                       "Operator's job type selection page",
                                                                       "Select type of operator's job you want to perform",
                                                                       "No jobs to choose from",
                                                                       false );
-    addPage( this.testTypeSelectionPage );
+    addPage( this.serviceJobTypeSelectionPage );
   }
 
   @Override
   public IWizardPage getNextPage( final IWizardPage page ) {
-    this.testTypeSelectionPage.setInitData( new WizardInitObject( this.projectPage.getJobName(),
+    this.serviceJobTypeSelectionPage.setInitData( new WizardInitObject( this.projectPage.getJobName(),
                                                                   this,
-                                                                  this.testedResources ) );
-//    this.testTypeSelectionPage.forceUpdate( );
+                                                                  this.serviceJobResources ) );
     return super.getNextPage( page );
   }
 
   @Override
   public boolean performFinish() {
     boolean result = true;
-    IWizard selectedNode = this.testTypeSelectionPage.getSelectedNode()
+    IWizard selectedNode = this.serviceJobTypeSelectionPage.getSelectedNode()
       .getWizard();
     if( selectedNode instanceof IServiceJobWizardNode ) {
-      IServiceJobWizardNode testNode = ( IServiceJobWizardNode )selectedNode;
-      IGridProject destinationProject = testNode.getSelectedProject();
-      String testName = testNode.getTestName();
-      InputStream testInputData = testNode.getTestInputData();
-      String testPluginId = testNode.getPluginID();
-      List<String> testedResources1 = testNode.getResourcesToTestNames();
-      createTest( testName,
+      IServiceJobWizardNode serviceJobNode = ( IServiceJobWizardNode )selectedNode;
+      IGridProject destinationProject = serviceJobNode.getSelectedProject();
+      String serviceJobName = serviceJobNode.getServiceJobName();
+      InputStream serviceJobInputData = serviceJobNode.getServiceJobInputData();
+      String serviceJobPluginId = serviceJobNode.getPluginID();
+      List<String> serviceJobResources1 = serviceJobNode.getResourcesNames();
+      createServiceJob( serviceJobName,
                   destinationProject,
-                  testInputData,
-                  testPluginId,
-                  testedResources1 );
+                  serviceJobInputData,
+                  serviceJobPluginId,
+                  serviceJobResources1 );
     }
     if( result ) {
       try {
         PlatformUI.getWorkbench()
           .getActiveWorkbenchWindow()
           .getActivePage()
-          .showView( "eu.geclipse.servicejob.views.testsView" ); //$NON-NLS-1$
+          .showView( "eu.geclipse.servicejob.views.serviceJobsView" ); //$NON-NLS-1$
       } catch( PartInitException partExc ) {
         Activator.logException( partExc );
       }
@@ -155,25 +154,25 @@ public class ServiceJobWizard extends Wizard
     return result;
   }
 
-  private void createTest( final String testName,
-                           final IGridProject gProject,
-                           final InputStream inputStream,
-                           final String plugInID,
-                           final List<String> testedResources1 )
+  private void createServiceJob( final String serviceJobName,
+                                 final IGridProject gProject,
+                                 final InputStream inputStream,
+                                 final String plugInID,
+                                 final List<String> serviceJobResources1 )
   {
     IPath projectPath = gProject.getPath();
-    IPath testsFolderPath = projectPath.append( "/" + TEST_FOLDER + "/" ); //$NON-NLS-1$ //$NON-NLS-2$
+    IPath serviceJobsFolderPath = projectPath.append( "/" + SERVICE_JOBS_FOLDER + "/" ); //$NON-NLS-1$ //$NON-NLS-2$
     IWorkspaceRoot workspaceRoot = ( IWorkspaceRoot )GridModel.getRoot()
       .getResource();
     try {
-      IFolder testsFolder = workspaceRoot.getFolder( testsFolderPath );
-      if( !testsFolder.exists() ) {
-        testsFolder.create( true, true, null );
+      IFolder serviceJobsFolder = workspaceRoot.getFolder( serviceJobsFolderPath );
+      if( !serviceJobsFolder.exists() ) {
+        serviceJobsFolder.create( true, true, null );
       }
-      IFile testFile = testsFolder.getFile( testName + TEST_EXTENSION );
-      if( !testFile.exists() ) {
-        testFile.create( GTDLWriter.getInitialInputStream( plugInID,
-                                                           testedResources1,
+      IFile serviceJobFile = serviceJobsFolder.getFile( serviceJobName + SERVICE_JOB_EXTENSION );
+      if( !serviceJobFile.exists() ) {
+        serviceJobFile.create( GTDLWriter.getInitialInputStream( plugInID,
+                                                           serviceJobResources1,
                                                            inputStream ),
                          true,
                          new NullProgressMonitor() );
@@ -181,7 +180,6 @@ public class ServiceJobWizard extends Wizard
     } catch( CoreException coreExc ) {
       Activator.logException( coreExc );
     }
-    // return test;
     catch( IOException e ) {
       // TODO Auto-generated catch block
       Activator.logException( e );
@@ -204,10 +202,8 @@ public class ServiceJobWizard extends Wizard
   }
 
   public List<IGridResource> getInitResources() {
-    return this.testedResources;
+    return this.serviceJobResources;
   }
-
-  
 
   public IGridProject getGridProject() {
     IGridProject result = null;
@@ -216,7 +212,5 @@ public class ServiceJobWizard extends Wizard
     }
     return result;
   }
-  
- 
   
 }

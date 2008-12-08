@@ -29,45 +29,49 @@ import eu.geclipse.core.model.IServiceJob;
 import eu.geclipse.servicejob.Activator;
 
 /**
- * Class for easily accessing extensions of Test Provider extension point
+ * Class for easily accessing extensions of servicejobProvider extension point.
  */
 public class Extensions {
 
   /**
-   * Name of the test element
+   * Name of the service job element.
    */
-  public static final String TEST_ELEMENT = "test"; //$NON-NLS-1$
+  public static final String SERVICE_JOB_ELEMENT = "serviceJob"; //$NON-NLS-1$
+  
   /**
-   * Test's name attribute element
+   * Service job's name attribute element.
    */
-  public static final String TEST_NAME_ATTRIBUTE = "name"; //$NON-NLS-1$
+  public static final String SERVICEJOB_NAME_ATTRIBUTE = "name"; //$NON-NLS-1$
+  
   /**
-   * ID of the Test Provider extension point
+   * ID of the Service Job Provider extension point.
    */
-  public static final String TEST_PROVIDER_EP_ID = "eu.geclipse.servicejob.servicejobProvider"; //$NON-NLS-1$
+  public static final String SERVICEJOB_PROVIDER_EP_ID 
+    = "eu.geclipse.servicejob.servicejobProvider"; //$NON-NLS-1$
+  
   /**
-   * Name of the wizard node attribute
+   * Name of the wizard node attribute.
    */
-  public static final String TEST_WIZARD_NODE_ATTRIBUTE = "class"; //$NON-NLS-1$
-  private static final String TEST_ID_ATTRIBUTE = "id"; //$NON-NLS-1$
-  private static final String TEST_CLASS = "testClass"; //$NON-NLS-1$
+  public static final String SERVICE_JOB_WIZARD_NODE_ATTRIBUTE = "class"; //$NON-NLS-1$
+  private static final String SERVICE_JOB_ID_ATTRIBUTE = "id"; //$NON-NLS-1$
+  private static final String SERVICE_JOB_CLASS = "servicejobClass"; //$NON-NLS-1$
 
   /**
    * Finds and creates instance of {@link IServiceJob} declared by contributor's
    * plug-in.
    * 
-   * @param testExtensionId id of contributor's plug-in
+   * @param servicejobExtensionId id of contributor's plug-in
    * @return instance of {@link IServiceJob} used by contributor's plug-in or
    *         <code>null</code> if this class/plug-in cannot be found or
    *         created
    */
-  public static IServiceJob getTestInstance( final String testExtensionId ) {
+  public static IServiceJob getServiceJobInstance( final String servicejobExtensionId ) {
     IServiceJob result = null;
-    IConfigurationElement[] elements = getElementsOfTestProvider( testExtensionId );
+    IConfigurationElement[] elements = getElementsOfServiceJobProvider( servicejobExtensionId );
     for( IConfigurationElement element : elements ) {
-      if( element.getName().equals( TEST_ELEMENT ) ) {
+      if( element.getName().equals( SERVICE_JOB_ELEMENT ) ) {
         try {
-          result = ( IServiceJob )element.createExecutableExtension( TEST_CLASS );
+          result = ( IServiceJob )element.createExecutableExtension( SERVICE_JOB_CLASS );
         } catch( CoreException coreExc ) {
           Activator.logException( coreExc );
         }
@@ -87,15 +91,15 @@ public class Extensions {
     return result;
   }
 
-  private static IConfigurationElement[] getElementsOfTestProvider( final String testId )
+  private static IConfigurationElement[] getElementsOfServiceJobProvider( final String serviceJobId )
   {
     List<IConfigurationElement> result = new ArrayList<IConfigurationElement>();
-    for( IExtension extension : getExtensions( Extensions.TEST_PROVIDER_EP_ID ) )
+    for( IExtension extension : getExtensions( Extensions.SERVICEJOB_PROVIDER_EP_ID ) )
     {
       for( IConfigurationElement confElement : extension.getConfigurationElements() )
       {
-        if( confElement.getAttribute( TEST_ID_ATTRIBUTE )
-          .equalsIgnoreCase( testId ) )
+        if( confElement.getAttribute( SERVICE_JOB_ID_ATTRIBUTE )
+          .equalsIgnoreCase( serviceJobId ) )
         {
           result.add( confElement );
         }

@@ -52,7 +52,7 @@ public class ShowDetailsAction implements IObjectActionDelegate {
       PlatformUI.getWorkbench()
         .getActiveWorkbenchWindow()
         .getActivePage()
-        .showView( "eu.geclipse.servicejob.views.testDetailsView", //$NON-NLS-1$
+        .showView( "eu.geclipse.servicejob.views.serviceJobsDetailsView", //$NON-NLS-1$
                    null,
                    IWorkbenchPage.VIEW_ACTIVATE );
     } catch( PartInitException e ) {

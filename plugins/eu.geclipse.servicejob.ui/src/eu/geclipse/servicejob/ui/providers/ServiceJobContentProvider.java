@@ -43,12 +43,12 @@ public class ServiceJobContentProvider implements ITreeContentProvider {
   }
 
   public Object[] getElements( final Object inputElement ) {
-    Object[] tests = null;
+    Object[] serviceJobs = null;
     if( inputElement instanceof IServiceJobManager ) {
-      tests = ( ( IServiceJobManager )inputElement ).getTests().toArray();
+      serviceJobs = ( ( IServiceJobManager )inputElement ).getServiceJobs().toArray();
     }
-    return tests != null
-                        ? tests
+    return serviceJobs != null
+                        ? serviceJobs
                         : new Object[ 0 ];
   }
 

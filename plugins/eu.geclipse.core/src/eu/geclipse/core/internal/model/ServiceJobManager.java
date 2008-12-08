@@ -81,11 +81,11 @@ public class ServiceJobManager
     //TODO
   }
   
-  public void addTestStatusListener( final IServiceJobStatusListener listener ) {
+  public void addServiceJobStatusListener( final IServiceJobStatusListener listener ) {
     this.listeners.add( listener );
   }
   
-  public void addTest( final IServiceJob test ) {
+  public void addServiceJob( final IServiceJob test ) {
     this.tests.add( test );
   }
   
@@ -136,7 +136,7 @@ public class ServiceJobManager
     return this.tests;
   }
   
-  public IServiceJob getTest( final String name, final IGridProject project ) {
+  public IServiceJob getServiceJob( final String name, final IGridProject project ) {
     IServiceJob result = null;
     for ( IServiceJob test: this.tests ) {
       if ( test.getName().equalsIgnoreCase( name ) && test.getProject().equals( project )) {
@@ -147,7 +147,7 @@ public class ServiceJobManager
     return result;
   }
   
-  public List< IServiceJob > getTests() {
+  public List< IServiceJob > getServiceJobs() {
     return this.tests;
   }
 

@@ -41,19 +41,19 @@ import eu.geclipse.ui.dialogs.ProblemDialog;
  */
 public class DeleteServiceJobAction implements IObjectActionDelegate {
 
-  private List<IServiceJob> test;
+  private List<IServiceJob> serviceJobList;
 
   public void run( final IAction action ) {
-    if ( this.test != null ) {
+    if ( this.serviceJobList != null ) {
       IContainer cont = null;
       try {
-        for ( IServiceJob test1 : this.test ) {
-          if ( test1.getResource() != null ) {
-            cont = test1.getResource().getParent();
+        for ( IServiceJob sjToDelete : this.serviceJobList ) {
+          if ( sjToDelete.getResource() != null ) {
+            cont = sjToDelete.getResource().getParent();
           }
           if ( cont != null ) {
-            test1.getResource().refreshLocal( 1, null );
-            test1.dispose();
+            sjToDelete.getResource().refreshLocal( 1, null );
+            sjToDelete.dispose();
             cont.refreshLocal( 1, null );
             cont.delete( true, new NullProgressMonitor() );
           }
@@ -62,8 +62,8 @@ public class DeleteServiceJobAction implements IObjectActionDelegate {
         ProblemDialog.openProblem( PlatformUI.getWorkbench()
                                    .getActiveWorkbenchWindow()
                                    .getShell(),
-                                   "Error when deleting test",
-                                   "Error when deleting test files",
+                                   "Error when deleting service job",
+                                   "Error when deleting service job's files",
                                    e );
       }
     }
@@ -71,12 +71,12 @@ public class DeleteServiceJobAction implements IObjectActionDelegate {
 
   public void selectionChanged( final IAction action, final ISelection selection )
   {
-    this.test = new ArrayList<IServiceJob>();
+    this.serviceJobList = new ArrayList<IServiceJob>();
     if( selection instanceof IStructuredSelection ) {
       IStructuredSelection sselection = ( IStructuredSelection )selection;
       for( Object obj : sselection.toArray() ) {
         if( obj instanceof IServiceJob ) {
-          this.test.add( ( IServiceJob )obj );
+          this.serviceJobList.add( ( IServiceJob )obj );
         }
       }
     }

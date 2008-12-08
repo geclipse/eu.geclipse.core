@@ -60,13 +60,16 @@ public class ServiceJobPreferences extends PreferencePage
     mainComp.setLayout( new GridLayout( 2, false ) );
     GridData gData = new GridData();
     Label infoText = new Label( mainComp, SWT.LEAD );
-    infoText.setText( Messages.getString( "TestsViewGeneralPreferences.preferences_title" ) ); //$NON-NLS-1$
+    infoText.setText( Messages.getString( "OperatorJobsViewGeneralPreferences.preferences_title" ) ); //$NON-NLS-1$
     gData.horizontalSpan = 2;
     infoText.setLayoutData( gData );
     for( ServiceJobStates value : ServiceJobStates.values() ) {
       if( !value.equals( ServiceJobStates.NULL ) ) {
         Label labelValue = new Label( mainComp, SWT.LEAD );
-        labelValue.setText( Messages.getString("TestsViewGeneralPreferences.color_for") + " &" + value.getAlias() + Messages.getString( "TestsViewGeneralPreferences.result" ) );  //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
+        labelValue.setText( Messages.getString( "OperatorJobsViewGeneralPreferences.color_for" ) //$NON-NLS-1$
+                            + " &" //$NON-NLS-1$
+                            + value.getAlias()
+                            + Messages.getString( "OperatorJobsViewGeneralPreferences.result" ) ); //$NON-NLS-1$
         gData = new GridData();
         labelValue.setLayoutData( gData );
         Button newButton = new Button( mainComp, SWT.PUSH );
@@ -81,9 +84,9 @@ public class ServiceJobPreferences extends PreferencePage
           @Override
           public void widgetSelected( final SelectionEvent e ) {
             ColorDialog dialog = new ColorDialog( parent.getShell() );
-            dialog.setText( Messages.getString( "TestsViewGeneralPreferences.select_color" ) //$NON-NLS-1$
+            dialog.setText( Messages.getString( "OperatorJobsViewGeneralPreferences.select_color" ) //$NON-NLS-1$
                             + valFinal.getAlias()
-                            + Messages.getString( "TestsViewGeneralPreferences.result" ) ); //$NON-NLS-1$
+                            + Messages.getString( "OperatorJobsViewGeneralPreferences.result" ) ); //$NON-NLS-1$
             RGB chosenColor = dialog.open();
             if( chosenColor != null ) {
               Color newColor = new Color( Display.getCurrent(), chosenColor );

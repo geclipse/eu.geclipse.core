@@ -40,7 +40,7 @@ public class DetailsLabelProvider
 
   Map<Integer, String> indexVsNames = new HashMap<Integer, String>();
   IServiceJob root;
-  String name;
+//  String name;
 
   public Image getColumnImage( final Object element, final int columnIndex ) {
     return null;
@@ -57,20 +57,20 @@ public class DetailsLabelProvider
           .format( ( ( IServiceJobResult )( ( List )element ).get( 0 ) ).getRunDate() );
       }
     } else if( element instanceof String ) {
-      IServiceJobResult testResult = this.root.getSingleTestResult( this.indexVsNames.get( Integer.valueOf( columnIndex ) ),
+      IServiceJobResult serviceJobResult = this.root.getSingleServiceJobResult( this.indexVsNames.get( Integer.valueOf( columnIndex ) ),
                                                                   ( String )element,
                                                                   this.root.getLastUpdate( ( String )element ) );
-      if( testResult == null ) {
+      if( serviceJobResult == null ) {
         result = "N/A"; //$NON-NLS-1$
       } else {
-        result = testResult.getResultEnum();
+        result = serviceJobResult.getResultEnum();
       }
     } else if( element instanceof List ) {
-      for( IServiceJobResult testResult : ( List<IServiceJobResult> )element ) {
-        if( testResult.getSubTestName()
+      for( IServiceJobResult serviceJobResult : ( List<IServiceJobResult> )element ) {
+        if( serviceJobResult.getSubServiceJobName()
           .equals( this.indexVsNames.get( Integer.valueOf( columnIndex ) ) ) )
         {
-          result = testResult.getResultSummary();
+          result = serviceJobResult.getResultSummary();
           break;
         }
       }
@@ -107,8 +107,8 @@ public class DetailsLabelProvider
     this.indexVsNames = new HashMap<Integer, String>();
     int i = 1;
     if( newInput != null ) {
-      for( String testName : this.root.getSingleTestsNames() ) {
-        this.indexVsNames.put( Integer.valueOf( i ), testName );
+      for( String serviceJobName : this.root.getSingleServiceJobNames() ) {
+        this.indexVsNames.put( Integer.valueOf( i ), serviceJobName );
         i++;
       }
     }
@@ -123,22 +123,22 @@ public class DetailsLabelProvider
   public Color getForeground( final Object element, final int columnIndex ) {
     Color result = null;
     if( columnIndex != 0 && element instanceof List ) {
-      List<IServiceJobResult> testResultList = ( List<IServiceJobResult> )element;
-      if( columnIndex - 1 < testResultList.size() ) {
-        IServiceJobResult testResult = testResultList.get( columnIndex - 1 );
-        if( testResult != null
-            && testResult.getSubTestName()
-              .equals( this.indexVsNames.get( new Integer( columnIndex ) ) ) )
+      List<IServiceJobResult> serviceJobResultList = ( List<IServiceJobResult> )element;
+      if( columnIndex - 1 < serviceJobResultList.size() ) {
+        IServiceJobResult serviceJobResult = serviceJobResultList.get( columnIndex - 1 );
+        if( serviceJobResult != null
+            && serviceJobResult.getSubServiceJobName()
+              .equals( this.indexVsNames.get( Integer.valueOf( columnIndex ) ) ) )
         {
           result = PreferencesManager.getManager()
-            .getColor( testResult.getResultEnum() );
-        } else if( testResult != null ) {
-          for( IServiceJobResult testRes : testResultList ) {
-            if( this.indexVsNames.get( new Integer( columnIndex ) )
-              .equals( testRes.getSubTestName() ) )
+            .getColor( serviceJobResult.getResultEnum() );
+        } else if( serviceJobResult != null ) {
+          for( IServiceJobResult serviceJobRes : serviceJobResultList ) {
+            if( this.indexVsNames.get( Integer.valueOf( columnIndex ) )
+              .equals( serviceJobRes.getSubServiceJobName() ) )
             {
               result = PreferencesManager.getManager()
-                .getColor( testRes.getResultEnum() );
+                .getColor( serviceJobRes.getResultEnum() );
               break;
             }
           }
@@ -148,14 +148,14 @@ public class DetailsLabelProvider
       result = PreferencesManager.getManager().getColor( "N/A" ); //$NON-NLS-1$
     }
     if( columnIndex != 0 && element instanceof String ) {
-      IServiceJobResult testResult = this.root.getSingleTestResult( this.indexVsNames.get( Integer.valueOf( columnIndex ) ),
+      IServiceJobResult serviceJobResult = this.root.getSingleServiceJobResult( this.indexVsNames.get( Integer.valueOf( columnIndex ) ),
                                                                   ( String )element,
                                                                   this.root.getLastUpdate( ( String )element ) );
-      if( testResult == null ) {
+      if( serviceJobResult == null ) {
         result = PreferencesManager.getManager().getColor( "N/A" ); //$NON-NLS-1$
       } else {
         result = PreferencesManager.getManager()
-          .getColor( testResult.getResultEnum() );
+          .getColor( serviceJobResult.getResultEnum() );
       }
     }
     return result;

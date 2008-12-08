@@ -58,7 +58,7 @@ public class ServiceJobView extends ElementManagerViewPart
 
   @Override
   protected IGridElementManager getManager() {
-    return GridModel.getTestManager();
+    return GridModel.getServiceJobManager();
   }
 
   @Override
@@ -72,15 +72,15 @@ public class ServiceJobView extends ElementManagerViewPart
     projectColumn.setAlignment( SWT.LEFT );
     projectColumn.setWidth( 100 );
     TreeColumn statusColumn = new TreeColumn( tree, SWT.NONE );
-    statusColumn.setText( Messages.getString( "TestsView.status" ) ); //$NON-NLS-1$
+    statusColumn.setText( Messages.getString( "ServiceJobsView.status" ) ); //$NON-NLS-1$
     statusColumn.setAlignment( SWT.LEFT );
     statusColumn.setWidth( 130 );
     TreeColumn dateColumn = new TreeColumn( tree, SWT.NONE );
-    dateColumn.setText( Messages.getString( "TestsView.operator_job_date" ) ); //$NON-NLS-1$
+    dateColumn.setText( Messages.getString( "ServiceJobsView.operator_job_date" ) ); //$NON-NLS-1$
     dateColumn.setAlignment( SWT.LEFT );
     dateColumn.setWidth( 130 );
     TreeColumn typeColumn = new TreeColumn( tree, SWT.NONE );
-    typeColumn.setText( Messages.getString( "TestsView.type" ) ); //$NON-NLS-1$
+    typeColumn.setText( Messages.getString( "ServiceJobsView.type" ) ); //$NON-NLS-1$
     typeColumn.setAlignment( SWT.LEFT );
     typeColumn.setWidth( 60 );
     return true;
@@ -130,7 +130,7 @@ public class ServiceJobView extends ElementManagerViewPart
   @Override
   public void init( final IViewSite site ) throws PartInitException {
     super.init( site );
-    GridModel.getTestManager().addTestStatusListener( this );
+    GridModel.getServiceJobManager().addServiceJobStatusListener( this );
   }
 
   @Override
@@ -151,7 +151,7 @@ public class ServiceJobView extends ElementManagerViewPart
   private void createButtons() {
     IToolBarManager mgr = getViewSite().getActionBars().getToolBarManager();
     this.wizardAction = new OpenServiceJobDialogAction();
-    this.wizardAction.setToolTipText( Messages.getString( "TestsView.new_operators_job_wizard" ) ); //$NON-NLS-1$
+    this.wizardAction.setToolTipText( Messages.getString( "ServiceJobsView.new_operators_job_wizard" ) ); //$NON-NLS-1$
     ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
     this.wizardAction.setImageDescriptor( sharedImages.getImageDescriptor( ISharedImages.IMG_TOOL_NEW_WIZARD ) );
     mgr.add( this.wizardAction );
@@ -159,11 +159,11 @@ public class ServiceJobView extends ElementManagerViewPart
   }
 
   private void createMenu() {
-    // actions = new TestsViewActions();
+    //Empty
   }
 
-  public void statusChanged( final IServiceJob test ) {
-    refreshViewer( test );
+  public void statusChanged( final IServiceJob serviceJob ) {
+    refreshViewer( serviceJob );
   }
 
   public void addSelectionChangedListener( final ISelectionChangedListener listener )

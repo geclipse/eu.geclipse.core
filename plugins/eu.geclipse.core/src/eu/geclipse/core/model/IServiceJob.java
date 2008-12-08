@@ -24,7 +24,7 @@ import java.util.Map;
 import org.eclipse.core.resources.IFile;
 
 /**
- * Interface for structural tests and simple tests.
+ * Interface for structural service job.
  */
 public interface IServiceJob extends IGridElement, IManageable {
 
@@ -39,53 +39,48 @@ public interface IServiceJob extends IGridElement, IManageable {
    */
   public void internalInit( final IFile initInputData );
 
+  /**
+   * 
+   */
   public void init();
 
   /**
-   * Method to access all single tests that are run as a one IGridTest
-   * implementation.
+   * Method to access all single service job's names that are run as a one 
+   * IServiceJob implementation.
    * 
-   * @return list of single tests names
+   * @return list of single service job's names.
    */
-  public List<String> getSingleTestsNames();
+  public List<String> getSingleServiceJobNames();
 
   /**
-   * Method to access names of tested resources.
+   * Method to access names of the resources on which service job is operating.
    * 
-   * @return List of names of tested resources
+   * @return List of resources' names.
    */
-  public List<String> getTestedResourcesNames();
+  public List<String> getServiceJobResourcesNames();
 
-  // /**
-  // * Method to access dates of all submissions for given resource for this
-  // test
-  // *
-  // * @param resourceName name of the tested resources
-  // * @return List of dates of test submission
-  // */
-  // public List<Date> getTestSubmissionDates( final String resourceName );
   /**
-   * Method to access text interpretation of single test for given single test's
-   * name, tested resources and date of this test.
+   * Method to access text interpretation of single service job for given 
+   * single service job's name performed on target resource at given date.
    * 
-   * @param testName name of single test
-   * @param resourceName name of tested resources
-   * @param date date of test submission
-   * @return String that is representation of single test result
+   * @param singleServiceJobName name of single service job
+   * @param resourceName name of resource service job is performing on
+   * @param date date of the submission
+   * @return String that is representation of single service job result
    */
-  public IServiceJobResult getSingleTestResult( final String testName,
+  public IServiceJobResult getSingleServiceJobResult( final String singleServiceJobName,
                                                 final String resourceName,
                                                 final Date date );
 
   /**
-   * Short user friendly description of this test (the whole structural test).
+   * Short, user friendly description of this service job.
    * 
-   * @return String with test's description
+   * @return String with service job's description.
    */
-  public String getTestDescription();
+  public String getServiceJobDescription();
 
   /**
-   * Method returning test name.
+   * Method returning service job name.
    * 
    * @return String
    */
@@ -99,14 +94,14 @@ public interface IServiceJob extends IGridElement, IManageable {
   public Map<String, String> getProperties();
 
   /**
-   * Method to access list of single tests results
+   * Method to access list of single service job's results
    * 
-   * @return List of single test results
+   * @return List of single service job's results
    */
   public List<IServiceJobResult> getResults();
 
   /**
-   * Method to run a test
+   * Method to run a service job
    */
   public void run();
 
@@ -114,66 +109,74 @@ public interface IServiceJob extends IGridElement, IManageable {
   public Object getStatus();
 
   /**
-   * Method returning result of the test - as a summary of single tests.
+   * Method returning result of the service job - as a summary of 
+   * single service jobs.
    * 
-   * @return Test's result
+   * @return Service job's result.
    */
   public Object getSummary();
 
   /**
-   * Method to access date of last test submission
+   * Method to access date of last service job submission.
    * 
-   * @return date of last test submission
+   * @return date of last service job submission.
    */
   public Date getLastUpdate();
 
   /**
    * The same as {@link IServiceJob#getLastUpdate()}, but should be used in case
-   * there can be difference in number of test runs for each tested resource.
+   * there can be difference in number of service job's runs for each resource.
    * 
-   * @param testedResourceName name of a tested resource
-   * @return date of last successful test run for given resource
+   * @param remoteResourceName Name of a resource where service job should run.
+   * @return date Date of last successful service job run for given resource.
    */
-  public Date getLastUpdate( final String testedResourceName );
+  public Date getLastUpdate( final String remoteResourceName );
 
   /**
-   * This method gives access to ordered collection of sub tests result. All
-   * test results returned by this method are results for given resource. Those
-   * results are grouped by date - which means that collection itself is divided
-   * into another collections, each of which keeps test result for given
-   * resource and date. In other words this method returns collection of
-   * collections. Those internal collections keep test result for given resource
-   * and date.<br>
+   * This method gives access to ordered collection of sub service jobs' results. 
+   * All service jobs' results returned by this method are results for 
+   * given resource. Those results are grouped by date - which means that 
+   * collection itself is divided into another collections, each of which keeps
+   * service job's result for given resource and date. In other words this 
+   * method returns collection of collections. Those internal collections keep
+   * service job's result for given resource and date.<br>
    * <br>
-   * Method used by providers for Test Details View.
+   * Method used by providers for Operator's Job History.
    * 
-   * @param resourceName name of tested resource (e.g. host name)
-   * @return List of List of
+   * @param resourceName Name of resource (e.g. host name).
+   * @return List of list of service job's results. 
    */
-  public List<List<IServiceJobResult>> getTestResultsForResourceForDate( final String resourceName );
+  public List<List<IServiceJobResult>> getServiceJobResultsForResourceForDate( final String resourceName );
 
   /**
-   * This method should be called each time when test was run and new results
-   * are available. Calling this method results in serialization of new results
-   * - they are written to test's GTDL file - this is how exemplary
-   * implementation available in test framework works.
+   * This method should be called each time when service job was run and new results
+   * are available. Calling this method results in serialisation of new results
+   * - they are written to service job's GTDL file - this is how exemplary
+   * implementation available in service job framework works.
    * 
    * @param newResults list of new results that should be added to set of
-   *          results maintained by this test's class
+   *          results maintained by this service job's class
    */
-  public void addTestResult( final List<IServiceJobResult> newResults );
+  public void addServiceJobResult( final List<IServiceJobResult> newResults );
 
   /**
    * Given the instance of {@link IServiceJobResult} class should return input
    * stream of result's specific data (the type of data is determined by method
    * {@link IServiceJobResult#getResultType()}
    * 
-   * @param result single test result
-   * @return input stream for result's data
+   * @param result Single service job result.
+   * @return Input stream for result's data.
    */
   public InputStream getInputStreamForResult( final IServiceJobResult result );
 
-  public int getColumnWidth( final String singleTestName );
+  /**
+   * This method sets column width for  single service job with a name 
+   * specified as parameter.
+   * 
+   * @param singleServiceJobName Name of the single service job.
+   * @return Width of the column.
+   */
+  public int getColumnWidth( final String singleServiceJobName );
 
   /**
    * This method is to obtain information whether service job implementation

@@ -8,7 +8,7 @@
             category="eu.geclipse.ui.viewcategory"
             class="eu.geclipse.servicejob.ui.views.ServiceJobView"
             icon="icons/geclipse16.gif"
-            id="eu.geclipse.servicejob.views.testsView"
+            id="eu.geclipse.servicejob.views.serviceJobsView"
             name="Operator&apos;s Jobs">
       </view>
       <view
@@ -16,7 +16,7 @@
             category="eu.geclipse.ui.viewcategory"
             class="eu.geclipse.servicejob.ui.views.ServiceJobDetailsView"
             icon="icons/geclipse16.gif"
-            id="eu.geclipse.servicejob.views.testDetailsView"
+            id="eu.geclipse.servicejob.views.serviceJobsDetailsView"
             name="Operator&apos;s Job History">
       </view>
    </extension>
@@ -25,7 +25,7 @@
       <page
             category="eu.geclipse.ui.internal.preference.GEclipsePreferencePage"
             class="eu.geclipse.servicejob.ui.preferences.ServiceJobPreferences"
-            id="eu.geclipse.servicejob.testViewGeneral"
+            id="eu.geclipse.servicejob.serviceJobsViewGeneral"
             name="Operator&apos;s Jobs">
       </page>
    </extension>
@@ -36,7 +36,7 @@
             class="eu.geclipse.servicejob.ui.wizard.ServiceJobWizard"
             finalPerspective="eu.geclipse.ui.operatorPerspective"
             icon="icons/geclipse16.gif"
-            id="eu.geclipse.servicejob.testWizard"
+            id="eu.geclipse.servicejob.serviceJobsWizard"
             name="Operator&apos;s Job">
       </wizard>
    </extension>

@@ -39,7 +39,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import eu.geclipse.servicejob.model.tests.job.SubmittableServiceJobResult;
+import eu.geclipse.servicejob.model.submittable.job.SubmittableServiceJobResult;
 
 
 /**
@@ -65,8 +65,8 @@ public class GTDLJobWriter {
    * @throws TransformerFactoryConfigurationError
    * @throws TransformerException
    */
-  public static void addTestResults( final File file,
-                                     final List<SubmittableServiceJobResult> newResults )
+  public static void addServiceJobResults( final File file,
+                                           final List<SubmittableServiceJobResult> newResults )
     throws ParserConfigurationException, SAXException, IOException,
     TransformerFactoryConfigurationError, TransformerException
   {
@@ -95,8 +95,8 @@ public class GTDLJobWriter {
       Element updateElement = document.createElement( GTDLParser.OUTPUT_RESULT_DATE ); 
       updateElement.setTextContent( DateFormat.getDateTimeInstance()
         .format( result.getRunDate() ) );
-      Element testNameElement = document.createElement( GTDLParser.OUTPUT_RESULT_TEST ); 
-      testNameElement.setTextContent( result.getSubTestName() );
+      Element serviceJobNameElement = document.createElement( GTDLParser.OUTPUT_RESULT_SERVICE_JOB ); 
+      serviceJobNameElement.setTextContent( result.getSubServiceJobName() );
       Element outputResultDataElement = document.createElement( GTDLParser.OUTPUT_RESULT_DATA ); 
       outputResultDataElement.setTextContent( result.getResultRawData() );
       Element statusEnumElement = document.createElement(GTDLParser.OUTPUT_RESULT_ENUM);
@@ -108,7 +108,7 @@ public class GTDLJobWriter {
       
       newElement.appendChild( resourceElement );
       newElement.appendChild( updateElement );
-      newElement.appendChild( testNameElement );
+      newElement.appendChild( serviceJobNameElement );
       newElement.appendChild( outputResultDataElement );
       newElement.appendChild( statusEnumElement );
       newElement.appendChild( summaryElement );

@@ -29,7 +29,7 @@ public class ServiceJobResult implements IServiceJobResult {
 
   private Date runDate;
   private String resource;
-  private String subTest;
+  private String subJob;
   private String resultType;
   private String resutlRawData;
   private String resultSummary;
@@ -38,26 +38,26 @@ public class ServiceJobResult implements IServiceJobResult {
   /**
    * Simple constructor.
    * 
-   * @param runDate when this result was created
-   * @param resource name of tested resource
-   * @param subTest name of performed sub-test
-   * @param resultRawData content of Output > Result > ResultData GTDL element
-   * @param resultSummary textual interpretation of test's result
-   * @param resultType type describing kind of detailed job's result - usually a
-   *            file extension of a file that can contain such a result
-   * @param resultEnum short string describing state of Operator's Job
+   * @param runDate When this result was created.
+   * @param resource Name of resource to run service job on.
+   * @param subJob Name of performed sub-job.
+   * @param resultRawData Content of Output > Result > ResultData GTDL element.
+   * @param resultSummary Textual interpretation of service job's result.
+   * @param resultType Type describing kind of detailed job's result - usually a
+   *            file extension of a file that can contain such a result.
+   * @param resultEnum Short string describing state of service job.
    */
   public ServiceJobResult( final Date runDate,
-                         final String resource,
-                         final String subTest,
-                         final String resultRawData,
-                         final String resultSummary,
-                         final String resultType,
-                         final String resultEnum )
+                           final String resource,
+                           final String subJob,
+                           final String resultRawData,
+                           final String resultSummary,
+                           final String resultType,
+                           final String resultEnum )
   {
     this.runDate = runDate;
     this.resource = resource;
-    this.subTest = subTest;
+    this.subJob = subJob;
     this.resutlRawData = resultRawData;
     this.resultSummary = resultSummary;
     this.resultType = resultType;
@@ -84,8 +84,8 @@ public class ServiceJobResult implements IServiceJobResult {
     return this.runDate;
   }
 
-  public String getSubTestName() {
-    return this.subTest;
+  public String getSubServiceJobName() {
+    return this.subJob;
   }
 
   public String getResultEnum() {
@@ -131,7 +131,8 @@ public class ServiceJobResult implements IServiceJobResult {
   /**
    * Simple getter.
    * 
-   * @return raw data of test (the same as written in "input" node of GTDL file)
+   * @return raw data of service job (the same as written in "input" node of
+   *         GTDL file)
    */
   public String getResutlRawData() {
     return this.resutlRawData;

@@ -25,19 +25,19 @@ import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 import eu.geclipse.core.model.IServiceJob;
 
 /**
- * Class responsible for handling test's ({@link IServiceJob}) properties.
+ * Class responsible for handling service job's ({@link IServiceJob}) properties.
  */
 public class ServiceJobResultProperties implements IPropertySource {
 
-  private IServiceJob gridTest;
+  private IServiceJob serviceJob;
 
   /**
    * Creates instance of this class for given source object.
    * 
-   * @param gridTest test object for which properties should be shown
+   * @param serviceJob Service job object for which properties should be shown.
    */
-  public ServiceJobResultProperties( final IServiceJob gridTest ) {
-    this.gridTest = gridTest;
+  public ServiceJobResultProperties( final IServiceJob serviceJob ) {
+    this.serviceJob = serviceJob;
   }
 
   public Object getEditableValue() {
@@ -45,10 +45,10 @@ public class ServiceJobResultProperties implements IPropertySource {
   }
 
   public IPropertyDescriptor[] getPropertyDescriptors() {
-    IPropertyDescriptor[] result = new IPropertyDescriptor[ this.gridTest.getProperties()
+    IPropertyDescriptor[] result = new IPropertyDescriptor[ this.serviceJob.getProperties()
       .size() ];
     int i = 0;
-    Map<String, String> desc = this.gridTest.getProperties();
+    Map<String, String> desc = this.serviceJob.getProperties();
     for( String key : desc.keySet() ) {
       result[ i ] = new TextPropertyDescriptor( key, key );
       i++;
@@ -57,12 +57,12 @@ public class ServiceJobResultProperties implements IPropertySource {
   }
 
   public Object getPropertyValue( final Object id ) {
-    return getPropertyForTests( id );
+    return getPropertyForServiceJob( id );
   }
 
-  private Object getPropertyForTests( final Object id ) {
+  private Object getPropertyForServiceJob( final Object id ) {
     Object result = "N/A"; //$NON-NLS-1$
-    Map<String, String> desc = this.gridTest.getProperties();
+    Map<String, String> desc = this.serviceJob.getProperties();
     result = desc.get( id );
     return result;
   }

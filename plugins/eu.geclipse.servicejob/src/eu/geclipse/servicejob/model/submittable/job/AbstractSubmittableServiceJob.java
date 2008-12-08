@@ -1,13 +1,18 @@
 /*****************************************************************************
- * Copyright (c) 2008, g-Eclipse Consortium All rights reserved. This program
- * and the accompanying materials are made available under the terms of the
- * Eclipse Public License v1.0 which accompanies this distribution, and is
- * available at http://www.eclipse.org/legal/epl-v10.html Initial development of
- * the original code was made for the g-Eclipse project founded by European
- * Union project number: FP6-IST-034327 http://www.geclipse.eu/ Contributors:
- * Szymon Mueller - PSNC - Initial API and implementation
+ * Copyright (c) 2008, g-Eclipse Consortium 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Initial development of the original code was made for the
+ * g-Eclipse project founded by European Union
+ * project number: FP6-IST-034327  http://www.geclipse.eu/
+ *
+ * Contributors:
+ *    Szymon Mueller - PSNC - Initial API and implementation
  *****************************************************************************/
-package eu.geclipse.servicejob.model.tests.job;
+package eu.geclipse.servicejob.model.submittable.job;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -62,32 +67,36 @@ import eu.geclipse.servicejob.parsers.GTDLJobWriter;
 
 /**
  * Abstract class implementing basic {@link IServiceJob} methods for job based
- * tests. The implementation follows this specified workflow:
+ * service jobs. The implementation follows this specified workflow:
  * <ul>
  * <li>1. For each target resource single JSDL is created.
  * <li>2. Each JSDL is submitted using submission service.
  * <li>3. Jobs are monitored for their termination.
  * <li>4. When all of the submitted jobs are finished some additional actions
- * are performed by main test.
+ * are performed by main service job.
  * </ul>
- * If the test varies from the above workflow, some of the methods should be
- * overwritten.
+ * If the service job varies from the above workflow, some of the methods should
+ * be overwritten.
  */
 public abstract class AbstractSubmittableServiceJob extends AbstractServiceJob {
 
   /**
-   * File name for storing info of the test
+   * File name for storing info of the service job.
    */
-  public static final String TEST_INFO_FILENAME = ".testinfo"; //$NON-NLS-1$
+  public static final String SERVICE_JOB_INFO_FILENAME 
+    = ".servicejobinfo"; //$NON-NLS-1$
+  
   /**
    * XML charset
    */
   public static final String XML_CHARSET = "ISO-8859-1"; //$NON-NLS-1$
   /**
-   * Extension of the file storing info of the test results for the specified
-   * nodes
+   * Extension of the file storing info of the service job results for the
+   * specified nodes
    */
-  public static final String TEST_STATUS_FILENAME = ".teststatus"; //$NON-NLS-1$
+  public static final String SERVICE_JOB_STATUS_FILENAME 
+    = ".servicejobstatus"; //$NON-NLS-1$
+  
   protected Map<String, String> jobIDResourceNameMap = new HashMap<String, String>();
   protected ServiceJobUpdater updater;
 
@@ -101,7 +110,7 @@ public abstract class AbstractSubmittableServiceJob extends AbstractServiceJob {
                                                      .lastIndexOf( "." ) ); //$NON-NLS-1$
     IFile file = ( IFile )getResource();
     try {
-      List<SubmittableServiceJobResult> tempRes = GTDLJobParser.getTestResults( file.getRawLocation()
+      List<SubmittableServiceJobResult> tempRes = GTDLJobParser.getServiceJobResults( file.getRawLocation()
         .toFile() );
       this.results = new ArrayList<IServiceJobResult>();
       for( SubmittableServiceJobResult result : tempRes ) {
@@ -109,18 +118,18 @@ public abstract class AbstractSubmittableServiceJob extends AbstractServiceJob {
         result.setJobID( createJobID( result ) );
       }
       List<IGridJobID> jobIDsToRun = new ArrayList<IGridJobID>();
-      for( SubmittableServiceJobResult testResult : tempRes ) {
-        if( testResult.getResultEnum()
-          .equals( Messages.getString( "AbstractJobTest.running_status" ) ) //$NON-NLS-1$
-            || testResult.getResultEnum()
-              .equals( Messages.getString( "AbstractJobTest.pending_status" ) ) ) { //$NON-NLS-1$
-          jobIDsToRun.add( testResult.getJobID() );
+      for( SubmittableServiceJobResult serviceJobResult : tempRes ) {
+        if( serviceJobResult.getResultEnum()
+          .equals( Messages.getString( "AbstractSubmittableJob.running_status" ) ) //$NON-NLS-1$
+            || serviceJobResult.getResultEnum()
+              .equals( Messages.getString( "AbstractSubmittableJob.pending_status" ) ) ) { //$NON-NLS-1$
+          jobIDsToRun.add( serviceJobResult.getJobID() );
         }
       }
       if( jobIDsToRun.size() > 0 ) {
-        ServiceJobUpdater testUpdater = getUpdater();
-        testUpdater.addSubTests( jobIDsToRun );
-        testUpdater.schedule( 30000 );
+        ServiceJobUpdater serviceJobUpdater = getUpdater();
+        serviceJobUpdater.addSubJobs( jobIDsToRun );
+        serviceJobUpdater.schedule( 30000 );
       }
     } catch( ParserConfigurationException e ) {
       // TODO szymon proper error handling
@@ -145,25 +154,27 @@ public abstract class AbstractSubmittableServiceJob extends AbstractServiceJob {
    * Implementations of this method should create and return proper,
    * middleware-specific job id. This usually will require some additional
    * informations (e.g. job ID). Clients should use
-   * <code>JobTestResult.getResultRawData()</code> and parse needed information.
+   * <code>ServiceJobResult.getResultRawData()</code> and parse needed
+   * information.
    * 
-   * @param jobTestResult job result for which job ID should be created
-   * @return IGridJobID representing the test. If no middleware specific id can
-   *         be returned this should return generic GridJobID class.
+   * @param serviceJobResult Job result for which job ID should be created.
+   * @return IGridJobID representing the service job. If no middleware specific
+   *         id can be returned this should return generic GridJobID class.
    */
-  public abstract IGridJobID createJobID( final SubmittableServiceJobResult jobTestResult );
+  public abstract IGridJobID createJobID( 
+    final SubmittableServiceJobResult serviceJobResult );
 
   /**
-   * Perform additional, test specific tasks at the start of the test. If
-   * needed, <code>inputString</code> representing input part of XML may be
-   * parsed for additional informations about the test.
+   * Perform additional, service job specific tasks at the start of the service
+   * job. If needed, <code>inputString</code> representing input part of XML may
+   * be parsed for additional informations about the service job.
    */
   public abstract void initData();
 
   /**
    * Getter of this service job updater.
    * 
-   * @return job test updater for this service job
+   * @return Service job updater for this service job.
    */
   public ServiceJobUpdater getUpdater() {
     if( this.updater == null ) {
@@ -173,11 +184,11 @@ public abstract class AbstractSubmittableServiceJob extends AbstractServiceJob {
   }
 
   public void run() {
-    Job runJob = new Job( Messages.getString( "AbstractJobTest.submitting" ) //$NON-NLS-1$
+    Job runJob = new Job( Messages.getString( "AbstractSubmittableJob.submitting" ) //$NON-NLS-1$
                           + " " //$NON-NLS-1$
                           + getName()
                           + " " //$NON-NLS-1$
-                          + Messages.getString( "AbstractJobTest.job" ) ) { //$NON-NLS-1$
+                          + Messages.getString( "AbstractSubmittableJob.job" ) ) { //$NON-NLS-1$
 
       @Override
       protected IStatus run( final IProgressMonitor uMonitor ) {
@@ -186,7 +197,7 @@ public abstract class AbstractSubmittableServiceJob extends AbstractServiceJob {
                                                    ? uMonitor
                                                    : new NullProgressMonitor();
         List<IGridJobID> jobIDsToAdd = new ArrayList<IGridJobID>();
-        for( String resourceName : getTestedResourcesNames() ) {
+        for( String resourceName : getServiceJobResourcesNames() ) {
           IGridJobDescription description = getJSDLForSubmission( resourceName );
           IGridJobService jobService = getSubmissionService();
           if( description != null && jobService != null ) {
@@ -200,15 +211,15 @@ public abstract class AbstractSubmittableServiceJob extends AbstractServiceJob {
             } catch( ProblemException exc ) {
               status = new Status( IStatus.ERROR,
                                    Activator.PLUGIN_ID,
-                                   Messages.getString( "AbstractJobTest.Error_submitting_job" ), //$NON-NLS-1$
+                                   Messages.getString( "AbstractSubmittableJob.Error_submitting_job" ), //$NON-NLS-1$
                                    exc );
             }
           }
         }
         if( jobIDsToAdd.size() > 0 ) {
-          ServiceJobUpdater testUpdater = getUpdater();
-          testUpdater.addSubTests( jobIDsToAdd );
-          testUpdater.schedule( 30000 );
+          ServiceJobUpdater serviceJobUpdater = getUpdater();
+          serviceJobUpdater.addSubJobs( jobIDsToAdd );
+          serviceJobUpdater.schedule( 30000 );
         }
         return status;
       }
@@ -227,11 +238,11 @@ public abstract class AbstractSubmittableServiceJob extends AbstractServiceJob {
   // public abstract IGridJobService getSubmissionService( final String
   // resourceName );
   /**
-   * Gets the JSDL for submission to test specified resource name.
+   * Gets the JSDL which will be submitted to resource with name.
    * 
    * @param resourceName
    * @return JSDLJobDescription if the JSDL is ready for submission or null if
-   *         it is not/
+   *         it is not
    */
   public abstract IGridJobDescription getJSDLForSubmission( final String resourceName );
 
@@ -256,21 +267,21 @@ public abstract class AbstractSubmittableServiceJob extends AbstractServiceJob {
                             final String status,
                             final String besStatus )
   {
-    SubmittableServiceJobResult jobTestResult = null;
+    SubmittableServiceJobResult serviceJobResult = null;
     for( IServiceJobResult tempResult1 : this.results ) {
       SubmittableServiceJobResult tempResult = ( SubmittableServiceJobResult )tempResult1;
       if( tempResult.getJobIDString().equals( jobID.getJobID() ) ) {
-        jobTestResult = tempResult;
+        serviceJobResult = tempResult;
       }
     }
-    if( jobTestResult != null ) {
-      jobTestResult.updateStatus( lastRefreshDate, status, besStatus );
+    if( serviceJobResult != null ) {
+      serviceJobResult.updateStatus( lastRefreshDate, status, besStatus );
       List<SubmittableServiceJobResult> ress = new ArrayList<SubmittableServiceJobResult>();
-      ress.add( jobTestResult );
+      ress.add( serviceJobResult );
       try {
-        GTDLJobWriter.addTestResults( getResource().getRawLocation().toFile(),
+        GTDLJobWriter.addServiceJobResults( getResource().getRawLocation().toFile(),
                                       ress );
-        this.lastResult = jobTestResult;
+        this.lastResult = serviceJobResult;
         if( !getResource().isSynchronized( IResource.DEPTH_ZERO ) ) {
           try {
             getResource().refreshLocal( IResource.DEPTH_ZERO, null );
@@ -294,31 +305,33 @@ public abstract class AbstractSubmittableServiceJob extends AbstractServiceJob {
   }
 
   /**
-   * Create new result for this test.
+   * Create new result for this service job.
    * 
-   * @param jobID ID of the job for which test result should be created
-   * @param resourceName name of the tested resource by the job
-   * @param submissionDate date of the job submission
+   * @param jobID ID of the job for which service job's result should be
+   *          created.
+   * @param resourceName Name of the resource on which service job should run.
+   * @param submissionDate Date of the job submission.
    */
   public void createNewResult( final IGridJobID jobID,
                                final String resourceName,
                                final Date submissionDate )
   {
-    for( String singleTestName : getSingleTestsNames() ) {
-      SubmittableServiceJobResult testResult = new SubmittableServiceJobResult( submissionDate,
-                                                                                resourceName,
-                                                                                singleTestName,
-                                                                                getRawDataInput( jobID,
-                                                                                                 resourceName ),
-                                                                                Messages.getString( "AbstractJobTest.pending_status" ), //$NON-NLS-1$
-                                                                                getResultType( singleTestName ),
-                                                                                Messages.getString( "AbstractJobTest.pending_status" ) ); //$NON-NLS-1$
-      testResult.setJobID( jobID );
-      this.results.add( testResult );
+    for( String singleServiceJobName : getSingleServiceJobNames() ) {
+      SubmittableServiceJobResult serviceJobResult 
+        = new SubmittableServiceJobResult( submissionDate,
+                                           resourceName,
+                                           singleServiceJobName,
+                                           getRawDataInput( jobID,
+                                                            resourceName ),
+                                           Messages.getString( "AbstractSubmittableJob.pending_status" ), //$NON-NLS-1$
+                                           getResultType( singleServiceJobName ),
+                                           Messages.getString( "AbstractSubmittableJob.pending_status" ) ); //$NON-NLS-1$
+      serviceJobResult.setJobID( jobID );
+      this.results.add( serviceJobResult );
       List<SubmittableServiceJobResult> ress = new ArrayList<SubmittableServiceJobResult>();
-      ress.add( testResult );
+      ress.add( serviceJobResult );
       try {
-        GTDLJobWriter.addTestResults( getResource().getRawLocation().toFile(),
+        GTDLJobWriter.addServiceJobResults( getResource().getRawLocation().toFile(),
                                       ress );
         if( !getResource().isSynchronized( IResource.DEPTH_ZERO ) ) {
           try {
@@ -348,27 +361,29 @@ public abstract class AbstractSubmittableServiceJob extends AbstractServiceJob {
   }
 
   /**
-   * This method should return type of the result data returned by single test.
+   * This method should return type of the result data returned by single
+   * service job.
    * 
-   * @param singleTestName name of the single test
+   * @param singleServiceJobName Name of the single service job (sub-job). 
    * @return String representing type of the result data (extension).
    */
-  public abstract String getResultType( final String singleTestName );
+  public abstract String getResultType( final String singleServiceJobName );
 
   /**
    * This method should return starting string XML structure of raw data node of
    * the given <code>jobID</code> associated with the <code>resourceName</code>.
    * 
    * @param jobID ID of the job for which the node should be created
-   * @param resourceName Name of the tested resource
-   * @return String representing starting XML of raw data for the test result.
+   * @param resourceName Name of the resource.
+   * @return String representing starting XML of raw data for the service job
+   *         result.
    */
   public abstract String getRawDataInput( final IGridJobID jobID,
                                           final String resourceName );
 
   /**
-   * This method is invoked by job test updater when one of the running jobs is
-   * finished. Implementation should compute result of the test or sub-test(s)
+   * This method is invoked by service job updater when one of the running jobs is
+   * finished. Implementation should compute result of the service job or sub-job(s)
    * accordingly to the outcome of job with <code>jobID</code>.
    * 
    * @param jobID ID of job which finished running
@@ -378,11 +393,11 @@ public abstract class AbstractSubmittableServiceJob extends AbstractServiceJob {
                                          final IGridJobStatus jobStatus );
 
   /**
-   * This method is invoked by job test updater after last job of this test
-   * finished and its result was computed by
+   * This method is invoked by service job updater after last job of this 
+   * service job is finished and its result was computed by
    * {@link #computeJobResult(IGridJobID, IGridJobStatus)}.
    */
-  public abstract void computeTestResult();
+  public abstract void computeServiceJobResult();
 
   protected InputStream getContentsStream( final String path,
                                            final String bundle )
@@ -417,9 +432,9 @@ public abstract class AbstractSubmittableServiceJob extends AbstractServiceJob {
   }
 
   /**
-   * Getter of the tested project's VO.
+   * Getter of the project's VO for this service job.
    * 
-   * @return This test's VO or
+   * @return This serviceJob's VO or null if cannot fetch VO.
    */
   public IVirtualOrganization getSelectedJobsVO() {
     return getProject() != null
@@ -468,7 +483,7 @@ public abstract class AbstractSubmittableServiceJob extends AbstractServiceJob {
   }
 
   @Override
-  public int getColumnWidth( final String singleTestName ) {
+  public int getColumnWidth( final String singleServiceJobName ) {
     return 200;
   }
 

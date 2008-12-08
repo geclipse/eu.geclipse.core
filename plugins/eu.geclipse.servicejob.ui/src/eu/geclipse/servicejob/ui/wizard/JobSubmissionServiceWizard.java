@@ -30,6 +30,7 @@ import org.eclipse.ui.PlatformUI;
 import eu.geclipse.core.model.IGridJobService;
 import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.core.reporting.ProblemException;
+import eu.geclipse.ui.dialogs.ProblemDialog;
 import eu.geclipse.ui.wizards.jobsubmission.JobServiceSelectionWizardPage;
 
 public class JobSubmissionServiceWizard extends Wizard {
@@ -37,7 +38,7 @@ public class JobSubmissionServiceWizard extends Wizard {
   private JobServiceSelectionWizardPage selectionPage;
   private IVirtualOrganization vo;
   private IGridJobService selectedService;
-  private ArrayList<IGridJobService> jobServices;
+//  private ArrayList<IGridJobService> jobServices;
 
   public JobSubmissionServiceWizard( final IVirtualOrganization vo ) {
     this.vo = vo;
@@ -48,7 +49,7 @@ public class JobSubmissionServiceWizard extends Wizard {
     this.selectionPage = new JobServiceSelectionWizardPage( "Select job submission service",
                                                             null );
     this.selectionPage.setTitle( "Submitting Operator's Job" );
-    this.jobServices = new ArrayList<IGridJobService>();
+//    this.jobServices = new ArrayList<IGridJobService>();
     Job job = new Job( "Retrieving list of job services" ) {
 
       @Override
@@ -59,7 +60,7 @@ public class JobSubmissionServiceWizard extends Wizard {
         display.syncExec( new Runnable() {
 
           public void run() {
-            selectionPage.setServices( getJobServices() );
+            JobSubmissionServiceWizard.this.selectionPage.setServices( getJobServices() );
           }
         } );
         return Status.OK_STATUS;
@@ -85,7 +86,10 @@ public class JobSubmissionServiceWizard extends Wizard {
       }
     } catch( ProblemException e ) {
       // TODO Auto-generated catch block
-      e.printStackTrace();
+      ProblemDialog.openProblem( getShell(),
+                                 "Failed to submit job", 
+                                 "Fetching of the submission services failed",
+                                 e );
     }
     return result;
   }

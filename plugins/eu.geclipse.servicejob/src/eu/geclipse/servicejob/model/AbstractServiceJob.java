@@ -60,13 +60,13 @@ public abstract class AbstractServiceJob extends AbstractGridElement
 {
 
   protected IGridJobService submissionService;
-  protected String testInputData;
+  protected String serviceJobInputData;
   protected String name;
   protected List<IServiceJobResult> results = new ArrayList<IServiceJobResult>();
   protected List<Date> submissionDates = new ArrayList<Date>();
   protected IServiceJobResult lastResult;
-  protected List<String> testNames = new ArrayList<String>();
-  protected List<String> testedResources = new ArrayList<String>();
+  protected List<String> serviceJobNames = new ArrayList<String>();
+  protected List<String> serviceJobResources = new ArrayList<String>();
   private IFile resource = null;
 
   public String getName() {
@@ -77,21 +77,21 @@ public abstract class AbstractServiceJob extends AbstractGridElement
     return this.results;
   }
 
-  public List<String> getTestedResourcesNames() {
-    return this.testedResources;
+  public List<String> getServiceJobResourcesNames() {
+    return this.serviceJobResources;
   }
 
-  public IServiceJobResult getSingleTestResult( final String testName,
+  public IServiceJobResult getSingleServiceJobResult( final String serviceJobName,
                                               final String resourceName,
                                               final Date date )
   {
     IServiceJobResult result1 = null;
-    for( IServiceJobResult subTest : this.results ) {
-      if( subTest.getResourceName().equals( resourceName )
-          && testName.equalsIgnoreCase( subTest.getSubTestName() )
-          && date.equals( subTest.getRunDate() ) )
+    for( IServiceJobResult subServiceJob : this.results ) {
+      if( subServiceJob.getResourceName().equals( resourceName )
+          && serviceJobName.equalsIgnoreCase( subServiceJob.getSubServiceJobName() )
+          && date.equals( subServiceJob.getRunDate() ) )
       {
-        result1 = subTest;
+        result1 = subServiceJob;
       }
     }
     return result1;
@@ -111,12 +111,12 @@ public abstract class AbstractServiceJob extends AbstractGridElement
                                                    this.resource.getName()
                                                      .lastIndexOf( "." ) ); //$NON-NLS-1$
     try {
-      this.testedResources = GTDLParser.getTestedResources( this.resource.getRawLocation()
+      this.serviceJobResources = GTDLParser.getServiceJobResources( this.resource.getRawLocation()
         .toFile() );
-      this.testInputData = GTDLParser.getInputTestData( this.resource.getRawLocation()
+      this.serviceJobInputData = GTDLParser.getInputServiceJobData( this.resource.getRawLocation()
         .toFile() );
       this.results = new ArrayList<IServiceJobResult>();
-      List<ServiceJobResult> resultsTemp = GTDLParser.getTestResults( this.resource.getRawLocation()
+      List<ServiceJobResult> resultsTemp = GTDLParser.getServiceJobResults( this.resource.getRawLocation()
         .toFile() );
       this.results.addAll( resultsTemp );
       this.lastResult = computeLastResult( this.results );
@@ -158,14 +158,14 @@ public abstract class AbstractServiceJob extends AbstractGridElement
     return res;
   }
 
-  public List<List<IServiceJobResult>> getTestResultsForResourceForDate( final String resourceName )
+  public List<List<IServiceJobResult>> getServiceJobResultsForResourceForDate( final String resourceName )
   {
     List<List<IServiceJobResult>> resultL = new ArrayList<List<IServiceJobResult>>();
     Map<Date, List<IServiceJobResult>> tempDatesMap = new HashMap<Date, List<IServiceJobResult>>();
     for( IServiceJobResult singleResult : this.results ) {
-      // 1. choose test for given resource name...
+      // 1. choose service job for given resource name...
       if( singleResult.getResourceName().equalsIgnoreCase( resourceName ) ) {
-        // 2. from those tests choose elements with the same date
+        // 2. from those service jobs choose elements with the same date
         if( !tempDatesMap.containsKey( singleResult.getRunDate() ) ) {
           tempDatesMap.put( singleResult.getRunDate(),
                             new ArrayList<IServiceJobResult>() );
@@ -196,12 +196,12 @@ public abstract class AbstractServiceJob extends AbstractGridElement
   }
 
   public IGridElementManager getManager() {
-    return GridModel.getTestManager();
+    return GridModel.getServiceJobManager();
   }
 
-  public void addTestResult( final List<IServiceJobResult> newResults ) {
+  public void addServiceJobResult( final List<IServiceJobResult> newResults ) {
     try {
-      GTDLWriter.addTestResults( this.resource.getRawLocation().toFile(),
+      GTDLWriter.addServiceJobResults( this.resource.getRawLocation().toFile(),
                                  newResults );
       if( !this.resource.isSynchronized( IResource.DEPTH_ZERO ) ) {
         try {
@@ -231,15 +231,15 @@ public abstract class AbstractServiceJob extends AbstractGridElement
     }
   }
 
-  public Date getLastUpdate( final String testedResourceName ) {
+  public Date getLastUpdate( final String serviceJobResourceName ) {
     Date res = null;
     if( this.results != null && !this.results.isEmpty() ) {
       res = new Date( 0 );
-      for( IServiceJobResult testResult : this.results ) {
-        if( testResult.getResourceName().equalsIgnoreCase( testedResourceName )
-            && testResult.getRunDate().after( res ) )
+      for( IServiceJobResult sjResult : this.results ) {
+        if( sjResult.getResourceName().equalsIgnoreCase( serviceJobResourceName )
+            && sjResult.getRunDate().after( res ) )
         {
-          res = testResult.getRunDate();
+          res = sjResult.getRunDate();
         }
       }
     }
@@ -261,8 +261,8 @@ public abstract class AbstractServiceJob extends AbstractGridElement
 
   public Map<String, String> getProperties() {
     Map<String, String> res = new HashMap<String, String>();
-    res.put( Messages.getString( "AbstractGridTest.test_name_property" ), this.name ); //$NON-NLS-1$
-    res.put( Messages.getString( "AbstractGridTest.description_property" ), this.getTestDescription() ); //$NON-NLS-1$
+    res.put( Messages.getString( "AbstractServiceJob.service_job_name_property" ), this.name ); //$NON-NLS-1$
+    res.put( Messages.getString( "AbstractServiceJob.description_property" ), getServiceJobDescription() ); //$NON-NLS-1$
     return res;
   }
 
@@ -285,9 +285,9 @@ public abstract class AbstractServiceJob extends AbstractGridElement
    * service job. This folder should be used to store all files used by a
    * service job.
    * 
-   * @return Folder specific for this service job.  
+   * @return Folder specific for this service job.
    */
-  public IFolder getTestFolder() {
+  public IFolder getServiceJobFolder() {
     IFolder folder = getResource().getParent()
       .getFolder( new Path( this.name + "_files" ) ); //$NON-NLS-1$
     if( !folder.exists() ) {
@@ -301,7 +301,7 @@ public abstract class AbstractServiceJob extends AbstractGridElement
     return folder;
   }
 
-  public int getColumnWidth( final String singleTestName ) {
+  public int getColumnWidth( final String singleServiceJobName ) {
     return 200;
   }
 

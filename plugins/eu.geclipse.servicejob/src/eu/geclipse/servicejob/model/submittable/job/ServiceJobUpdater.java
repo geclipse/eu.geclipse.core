@@ -8,7 +8,7 @@
  * Contributors:
  *     Szymon Mueller - PSNC - Initial API and implementation
  ******************************************************************************/
-package eu.geclipse.servicejob.model.tests.job;
+package eu.geclipse.servicejob.model.submittable.job;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -33,24 +33,24 @@ import eu.geclipse.servicejob.Activator;
 import eu.geclipse.servicejob.model.ServiceJobStates;
 
 /**
- * Updater for the job based test.
+ * Updater for the job based service jobs.
  */
 public class ServiceJobUpdater extends Job {
 
   private Set<IGridJobID> jobIDs = new HashSet<IGridJobID>();
   private List<IServiceJobStatusListener> listeners = new ArrayList<IServiceJobStatusListener>();
-  private AbstractSubmittableServiceJob test;
+  private AbstractSubmittableServiceJob serviceJob;
 
   /**
-   * Constructor of the JobTestUpdater class.
+   * Constructor of the ServiceJobUpdater class.
    * 
    * @param name Name of the updater.
-   * @param test Parent test for this updater.
+   * @param serviceJob Parent service job for this updater.
    */
-  public ServiceJobUpdater( final String name, final AbstractSubmittableServiceJob test ) {
+  public ServiceJobUpdater( final String name, final AbstractSubmittableServiceJob serviceJob ) {
     super( name );
-    this.test = test;
-    this.listeners.add( ( IServiceJobStatusListener )GridModel.getTestManager() );
+    this.serviceJob = serviceJob;
+    this.listeners.add( ( IServiceJobStatusListener )GridModel.getServiceJobManager() );
   }
 
   /**
@@ -58,7 +58,7 @@ public class ServiceJobUpdater extends Job {
    * 
    * @param jobIDsToAdd IDs of the jobs to be checked by this updater.
    */
-  public void addSubTests( final List<IGridJobID> jobIDsToAdd ) {
+  public void addSubJobs( final List<IGridJobID> jobIDsToAdd ) {
     for( IGridJobID jobID : jobIDsToAdd ) {
       this.jobIDs.add( jobID );
     }
@@ -76,25 +76,25 @@ public class ServiceJobUpdater extends Job {
           try {
             IGridJobService jobService = ( IGridJobService )srvCreator.create( null );
             IVirtualOrganization vo = null;
-            if( this.test != null && this.test.getProject() != null ) {
-              vo = this.test.getProject().getVO();
+            if( this.serviceJob != null && this.serviceJob.getProject() != null ) {
+              vo = this.serviceJob.getProject().getVO();
             }
             IGridJobStatus newStatus = jobService.getJobStatus( jobID, vo, false, monitor );
             lastRefreshTime = newStatus.getLastUpdateTime();
             if( newStatus.canChange() ) {
-              this.test.setJobResult( jobID,
+              this.serviceJob.setJobResult( jobID,
                                       lastRefreshTime,
-                                      Messages.getString("JobTestUpdater.running_status"), //$NON-NLS-1$
+                                      Messages.getString("SubmittableJobUpdater.running_status"), //$NON-NLS-1$
                                       ServiceJobStates.RUNNING.getAlias() );
             } else {
               jobIDsToDelete.add( jobID );
-              this.test.setJobResult( jobID,
+              this.serviceJob.setJobResult( jobID,
                                       lastRefreshTime,
-                                      Messages.getString("JobTestUpdater.finished_status"), //$NON-NLS-1$
+                                      Messages.getString("SubmittableJobUpdater.finished_status"), //$NON-NLS-1$
                                       newStatus.isSuccessful()?
                                          ServiceJobStates.OK.getAlias():
                                          ServiceJobStates.WARNING.getAlias());
-              this.test.computeJobResult( jobID, newStatus );
+              this.serviceJob.computeJobResult( jobID, newStatus );
             }
           } catch( ProblemException exc ) {
             Activator.logException( exc );
@@ -111,10 +111,10 @@ public class ServiceJobUpdater extends Job {
     if( this.jobIDs.size() > 0 ) {
       this.schedule( 60000 );
     } else {
-      this.test.computeTestResult();
+      this.serviceJob.computeServiceJobResult();
     }
     for( IServiceJobStatusListener listener : this.listeners ) {
-      listener.statusChanged( this.test );
+      listener.statusChanged( this.serviceJob );
     }
     return status;
   }

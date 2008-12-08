@@ -81,20 +81,20 @@ import eu.geclipse.servicejob.ui.providers.DetailsContentProvider;
 import eu.geclipse.servicejob.ui.providers.DetailsLabelProvider;
 
 /**
- * View that is called "Test history". It displays single test with more
- * details, such as: tested resources list, sub test list and results for each
- * test and each resource.
+ * View that is called "Operator's Job History". It displays detailed information
+ * about single service job, such as: list of resources on which this service 
+ * job was run, sub-jobs list and results for each sub-job and each resource.
  */
 public class ServiceJobDetailsView extends ViewPart
   implements ISelectionListener, SelectionListener, IGridModelListener
 {
 
   /**
-   * Name of folder (in state location of this plug-in) where test's result data
-   * is being serialized to files when needed (e.g. when this data can be opened
-   * only with external - system - editor).
+   * Name of folder (in state location of this plug-in) where service jobs's 
+   * result data is being serialized to files when needed (e.g. when this data
+   * can be opened only with external - system - editor).
    */
-  public static final String TEST_FILES_FOLDER = "./testFiles"; //$NON-NLS-1$
+  public static final String SERVICE_JOB_FILES_FOLDER = "./serviceJobFiles"; //$NON-NLS-1$
   protected Point pt = new Point( 0, 0 );
   int selectedColumnIndex;
   String selectedColumnText;
@@ -105,7 +105,7 @@ public class ServiceJobDetailsView extends ViewPart
   private Composite parent;
 
   /**
-   * Constructs instance of
+   * Constructs instance of this view.
    */
   public ServiceJobDetailsView() {
     GridModel.addGridModelListener( this );
@@ -116,14 +116,14 @@ public class ServiceJobDetailsView extends ViewPart
   @Override
   public void createPartControl( final Composite parent1 ) {
     this.parent = parent1;
-    this.rootElement = findSelectedTest();
+    this.rootElement = findSelectedServiceJob();
     if( this.rootElement != null ) {
       updateViewer( this.rootElement );
     } else {
       Composite mainComp = new Composite( parent1, SWT.NONE );
       mainComp.setLayout( new GridLayout( 1, false ) );
       Label label = new Label( mainComp, SWT.LEAD );
-      label.setText( Messages.getString( "TestDetailsView.no_test_selected" ) ); //$NON-NLS-1$
+      label.setText( Messages.getString( "ServiceJobsDetailsView.no_service_job_selected" ) ); //$NON-NLS-1$
       label.setLayoutData( new GridData() );
     }
     getSite().getPage().addSelectionListener( this );
@@ -137,15 +137,15 @@ public class ServiceJobDetailsView extends ViewPart
     nameColumn.setAlignment( SWT.LEFT );
     nameColumn.setWidth( 200 );
     if( newInput != null ) {
-      String[] properties = new String[ newInput.getSingleTestsNames().size() + 1 ];
-      properties[ 0 ] = Messages.getString( "TestDetailsView.name" ); //$NON-NLS-1$
+      String[] properties = new String[ newInput.getSingleServiceJobNames().size() + 1 ];
+      properties[ 0 ] = Messages.getString( "ServiceJobsDetailsView.name" ); //$NON-NLS-1$
       int i = 0;
-      for( String subTest : newInput.getSingleTestsNames() ) {
+      for( String subServiceJob : newInput.getSingleServiceJobNames() ) {
         columns.add( new TreeColumn( this.viewer.getTree(), SWT.NONE ) );
-        columns.get( i ).setText( subTest );
+        columns.get( i ).setText( subServiceJob );
         columns.get( i ).setAlignment( SWT.LEFT );
-        columns.get( i ).setWidth( newInput.getColumnWidth( subTest ) );
-        properties[ i ] = subTest;
+        columns.get( i ).setWidth( newInput.getColumnWidth( subServiceJob ) );
+        properties[ i ] = subServiceJob;
         i++;
       }
     }
@@ -162,6 +162,7 @@ public class ServiceJobDetailsView extends ViewPart
   private void addSelectionListenerForEditor() {
     this.viewer.addDoubleClickListener( new IDoubleClickListener() {
 
+      @SuppressWarnings("unchecked")
       public void doubleClick( final DoubleClickEvent event ) {
         ISelection sel = event.getSelection();
         if( sel instanceof TreeSelection ) {
@@ -171,7 +172,7 @@ public class ServiceJobDetailsView extends ViewPart
           {
             List<IServiceJobResult> list = ( List<IServiceJobResult> )structured.getFirstElement();
             for( IServiceJobResult result : list ) {
-              if( result.getSubTestName()
+              if( result.getSubServiceJobName()
                 .equals( ServiceJobDetailsView.this.selectedColumnText )
                   && ServiceJobDetailsView.this.rootElement.getInputStreamForResult( result ) != null )
               {
@@ -189,7 +190,7 @@ public class ServiceJobDetailsView extends ViewPart
                       .getDefaultEditor( "name." + extension ); //$NON-NLS-1$
                     if( desc != null ) {
                       IStorage storage = new StreamStorage( ServiceJobDetailsView.this.rootElement.getInputStreamForResult( result ),
-                                                            result.getSubTestName()
+                                                            result.getSubServiceJobName()
                                                                 + " - " //$NON-NLS-1$
                                                                 + result.getResourceName() );
                       IStorageEditorInput editorInput = new StreamInput( storage,
@@ -197,11 +198,11 @@ public class ServiceJobDetailsView extends ViewPart
                       page.openEditor( editorInput, desc.getId() );
                     } else {
                       File fileForEditor = null;
-                      if( ( fileForEditor = Activator.getFileForTestResult( result ) ) == null )
+                      if( ( fileForEditor = Activator.getFileForServiceJobResult( result ) ) == null )
                       {
                         fileForEditor = serializeInputStream( ServiceJobDetailsView.this.rootElement.getInputStreamForResult( result ),
                                                               extension );
-                        Activator.addFileForTestResult( result, fileForEditor );
+                        Activator.addFileForServiceJobResult( result, fileForEditor );
                       }
                       IFileStore fileStore = EFS.getLocalFileSystem()
                         .getStore( fileForEditor.toURI() );
@@ -240,8 +241,9 @@ public class ServiceJobDetailsView extends ViewPart
             }
           }
           gc.setAdvanced( true );
-          if( gc.getAdvanced() )
+          if( gc.getAdvanced() ) {
             gc.setAlpha( 127 );
+          }
           Rectangle rect = event.getBounds();
           TreeItem item = ServiceJobDetailsView.this.viewer.getTree()
             .getItem( ServiceJobDetailsView.this.pt );
@@ -327,7 +329,7 @@ public class ServiceJobDetailsView extends ViewPart
     }
 
     public String getToolTipText() {
-      return Messages.getString( "TestDetailsView.string_based_file" ) + ": " + this.storage.getName(); //$NON-NLS-1$ //$NON-NLS-2$
+      return Messages.getString( "ServiceJobsDetailsView.string_based_file" ) + ": " + this.storage.getName(); //$NON-NLS-1$ //$NON-NLS-2$
     }
   }
 
@@ -370,8 +372,6 @@ public class ServiceJobDetailsView extends ViewPart
               } else {
                 // TODO katis
                 // do nothing
-                // TestsView.this.selectedColumnText = "";
-                // TestsView.this.selectedColumnIndex = -1;
               }
             } else {
               ServiceJobDetailsView.this.selectedColumnText = ""; //$NON-NLS-1$
@@ -386,12 +386,12 @@ public class ServiceJobDetailsView extends ViewPart
   File serializeInputStream( final InputStream inputStream, final String type )
   {
     File res = null;
-    File testFolder = Activator.getDefault()
+    File serviceJobFolder = Activator.getDefault()
       .getStateLocation()
-      .append( TEST_FILES_FOLDER )
+      .append( SERVICE_JOB_FILES_FOLDER )
       .toFile();
-    if( !testFolder.exists() ) {
-      testFolder.mkdir();
+    if( !serviceJobFolder.exists() ) {
+      serviceJobFolder.mkdir();
     }
     boolean fileCreated = false;
     String fileNameBase = "file"; //$NON-NLS-1$
@@ -399,37 +399,45 @@ public class ServiceJobDetailsView extends ViewPart
     int i = 0;
     while( !fileCreated ) {
       String fileName = fileNameBase + fileNameSufix + "." + type; //$NON-NLS-1$
-      Path filePath = new Path( testFolder.getAbsolutePath() );
+      Path filePath = new Path( serviceJobFolder.getAbsolutePath() );
       if( filePath.append( fileName ).toFile().exists() ) {
-        fileNameSufix = ( new Integer( i ) ).toString();
+        fileNameSufix = Integer.toString( i );
         i++;
         if( i == 100 ) {
           break;
         }
       } else {
+        DataOutputStream out = null;
         try {
           File newFile = filePath.append( fileName ).toFile();
           fileCreated = true;
           if( newFile.createNewFile() ) {
-            DataOutputStream out = new DataOutputStream( new BufferedOutputStream( new FileOutputStream( newFile ) ) );
+            out = new DataOutputStream( new BufferedOutputStream( new FileOutputStream( newFile ) ) );
             int c;
             while( ( c = inputStream.read() ) != -1 ) {
               out.writeByte( c );
             }
-            inputStream.close();
-            out.close();
             res = newFile;
           }
         } catch( IOException e ) {
           // TODO Auto-generated catch block
           Activator.logException( e );
+        } finally {
+          try {
+            inputStream.close();
+            if( out != null ) {
+              out.close();
+            }
+          } catch( IOException e ) {
+            //Ignore
+          }
         }
       }
     }
     return res;
   }
 
-  protected IServiceJob findSelectedTest() {
+  protected IServiceJob findSelectedServiceJob() {
     IServiceJob result = null;
     ISelection selection = getSite().getPage().getSelection();
     if( selection != null && selection instanceof IStructuredSelection ) {
@@ -470,9 +478,6 @@ public class ServiceJobDetailsView extends ViewPart
     super.dispose();
   }
 
-  // private void updateRoot( final IGridTest obj ) {
-  // this.rootElement = obj;
-  // }
   public void widgetDefaultSelected( final SelectionEvent e ) {
     // empty
   }
@@ -559,7 +564,7 @@ public class ServiceJobDetailsView extends ViewPart
     }
 
     public String getToolTipText() {
-      return Messages.getString( "TestDetailsView.results" ) + ":" + this.storage.getName(); //$NON-NLS-1$ //$NON-NLS-2$
+      return Messages.getString( "ServiceJobsDetailsView.results" ) + ":" + this.storage.getName(); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     @Override
@@ -570,5 +575,11 @@ public class ServiceJobDetailsView extends ViewPart
       }
       return res;
     }
+    
+    @Override
+    public int hashCode() {
+      return this.result.hashCode();
+    }
+    
   }
 }

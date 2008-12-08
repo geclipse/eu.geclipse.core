@@ -54,12 +54,12 @@ import eu.geclipse.servicejob.ui.Activator;
 import eu.geclipse.ui.dialogs.ProblemDialog;
 
 /**
- * Wizard page for selecting project in which should test be created.
+ * Wizard page for selecting project in which should service job be created.
  */
 public class ProjectSelectionPage extends WizardPage {
 
   static IGridProject selectedProject;
-  String testName;
+  String serviceJobName;
   Text nameText;
   private Tree tree;
   private IGridProject initialProject;
@@ -71,8 +71,8 @@ public class ProjectSelectionPage extends WizardPage {
    */
   public ProjectSelectionPage( final String pageName ) {
     super( pageName );
-    this.setTitle( "Project selection page" );
-    this.setDescription( "Choose project that contains services you want to perform operator's job on." );
+    setTitle( "Project selection page" );
+    setDescription( "Choose project that contains services you want to perform operator's job on." );
   }
 
   public ProjectSelectionPage( final String pageName,
@@ -86,7 +86,7 @@ public class ProjectSelectionPage extends WizardPage {
   }
 
   protected void updateButtons() {
-    this.getContainer().updateButtons();
+    getContainer().updateButtons();
   }
 
   @Override
@@ -94,19 +94,21 @@ public class ProjectSelectionPage extends WizardPage {
     boolean flag = false;
     setErrorMessage( null );
     if( this.selectedProject != null
-        && this.testName != null
-        && !this.testName.equals( "" ) )
+        && this.serviceJobName != null
+        && !this.serviceJobName.equals( "" ) )
     {
       flag = true;
       IPath projectPath = this.selectedProject.getPath();
-      IPath testsFolderPath = projectPath.append( "/" + ServiceJobWizard.TEST_FOLDER + "/" ); //$NON-NLS-1$ //$NON-NLS-2$
+      IPath serviceJobsFolderPath = projectPath.append( "/" //$NON-NLS-1$
+                                                        + ServiceJobWizard.SERVICE_JOBS_FOLDER 
+                                                        + "/" ); //$NON-NLS-1$
       IWorkspaceRoot workspaceRoot = ( IWorkspaceRoot )GridModel.getRoot()
         .getResource();
-      IFolder testsFolder = workspaceRoot.getFolder( testsFolderPath );
-      if( testsFolder.exists() ) {
-        IFile testFile = testsFolder.getFile( this.testName
-                                              + ServiceJobWizard.TEST_EXTENSION );
-        if( testFile.exists() ) {
+      IFolder serviceJobsFolder = workspaceRoot.getFolder( serviceJobsFolderPath );
+      if( serviceJobsFolder.exists() ) {
+        IFile serviceJobFile = serviceJobsFolder.getFile( this.serviceJobName
+                                              + ServiceJobWizard.SERVICE_JOB_EXTENSION );
+        if( serviceJobFile.exists() ) {
           setErrorMessage( "Operator's Job with this name already exists." );
           flag = false;
         }
@@ -130,17 +132,15 @@ public class ProjectSelectionPage extends WizardPage {
     treeViewer.setContentProvider( new CProvider() );
     treeViewer.setLabelProvider( new LProvider() );
     treeViewer.setInput( GridModel.getRoot() );
-    this.setTree( treeViewer.getTree() );
-    this.getTree().setLayoutData( gd );
-    this.getTree().addSelectionListener( new SelectionAdapter() {
+    setTree( treeViewer.getTree() );
+    getTree().setLayoutData( gd );
+    getTree().addSelectionListener( new SelectionAdapter() {
 
       @Override
       public void widgetSelected( final SelectionEvent e ) {
         getTree().getSelection();
         Object selectedData = ( ( ( Tree )e.getSource() ).getSelection()[ 0 ] ).getData();
         if( selectedData instanceof IGridProject ) {
-          // ((TestWizard)getWizard()).setSelectedProject( ( IGridProject
-          // )selectedData );
           ProjectSelectionPage.selectedProject = ( IGridProject )selectedData;
           ProjectSelectionPage.this.updateButtons();
         }
@@ -169,7 +169,7 @@ public class ProjectSelectionPage extends WizardPage {
     this.nameText.addModifyListener( new ModifyListener() {
 
       public void modifyText( final ModifyEvent e ) {
-        ProjectSelectionPage.this.testName = ProjectSelectionPage.this.nameText.getText();
+        ProjectSelectionPage.this.serviceJobName = ProjectSelectionPage.this.nameText.getText();
         ProjectSelectionPage.this.updateButtons();
       }
     } );
@@ -190,7 +190,7 @@ public class ProjectSelectionPage extends WizardPage {
   }
 
   private Tree getTree() {
-    return tree;
+    return this.tree;
   }
   class LProvider implements ILabelProvider {
 
@@ -290,6 +290,6 @@ public class ProjectSelectionPage extends WizardPage {
    *         as a name of GTDL file.
    */
   public String getJobName() {
-    return this.testName;
+    return this.serviceJobName;
   }
 }

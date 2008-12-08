@@ -16,8 +16,8 @@ Require-Bundle: org.eclipse.core.filesystem,
  eu.geclipse.jsdl
 Bundle-ActivationPolicy: lazy
 Export-Package: eu.geclipse.servicejob.model,
+ eu.geclipse.servicejob.model.access,
  eu.geclipse.servicejob.model.impl,
- eu.geclipse.servicejob.model.tests.access,
- eu.geclipse.servicejob.model.tests.job,
+ eu.geclipse.servicejob.model.submittable.job,
  eu.geclipse.servicejob.parsers
 Bundle-RequiredExecutionEnvironment: J2SE-1.5

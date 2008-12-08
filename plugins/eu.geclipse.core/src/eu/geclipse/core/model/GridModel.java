@@ -73,7 +73,7 @@ public class GridModel {
    * @return The core implementation of the {@link IServiceJobManager}
    * interface. 
    */
-  public static IServiceJobManager getTestManager() {
+  public static IServiceJobManager getServiceJobManager() {
     return ServiceJobManager.getManager();
   }
 

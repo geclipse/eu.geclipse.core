@@ -16,8 +16,18 @@
 package eu.geclipse.core.model;
 
 
+/**
+ * Status listener for service jobs. This status listener will be notified when 
+ * status of the service job changes.
+ *
+ */
 public interface IServiceJobStatusListener {
   
-  public void statusChanged ( IServiceJob test );
+  /**
+   * Method invoked when status of the service job changes.
+   * 
+   * @param serviceJob {@link IServiceJob} for which status has changed.
+   */
+  public void statusChanged ( IServiceJob serviceJob );
   
 }

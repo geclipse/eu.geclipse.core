@@ -29,7 +29,7 @@ import eu.geclipse.servicejob.ui.wizard.JobSubmissionServiceWizard;
  */
 public class RunServiceJobAction implements IObjectActionDelegate {
 
-  private ArrayList<IServiceJob> tests = new ArrayList<IServiceJob>();
+  private ArrayList<IServiceJob> serviceJobList = new ArrayList<IServiceJob>();
 
   public void setActivePart( final IAction action,
                              final IWorkbenchPart targetPart )
@@ -38,32 +38,32 @@ public class RunServiceJobAction implements IObjectActionDelegate {
   }
 
   public void run( final IAction action ) {
-    for( IServiceJob test : this.tests ) {
-      if( test.needsSubmissionWizard() ) {
-        JobSubmissionServiceWizard serviceWizard = new JobSubmissionServiceWizard( test.getParent()
+    for( IServiceJob serviceJob : this.serviceJobList ) {
+      if( serviceJob.needsSubmissionWizard() ) {
+        JobSubmissionServiceWizard serviceWizard = new JobSubmissionServiceWizard( serviceJob.getParent()
           .getProject()
           .getVO() );
         WizardDialog dialog = new WizardDialog( PlatformUI.getWorkbench()
           .getActiveWorkbenchWindow()
           .getShell(), serviceWizard );
         if( dialog.open() == WizardDialog.OK ) {
-          test.setSubmissionService( serviceWizard.getSelectedService() );
-          test.run();
+          serviceJob.setSubmissionService( serviceWizard.getSelectedService() );
+          serviceJob.run();
         }
       } else {
-        test.run();
+        serviceJob.run();
       }
     }
   }
 
   public void selectionChanged( final IAction action, final ISelection selection )
   {
-    this.tests = new ArrayList<IServiceJob>();
+    this.serviceJobList = new ArrayList<IServiceJob>();
     if( selection instanceof IStructuredSelection ) {
       IStructuredSelection sselection = ( IStructuredSelection )selection;
       for( Object obj : sselection.toArray() ) {
         if( obj instanceof IServiceJob ) {
-          this.tests.add( ( IServiceJob )obj );
+          this.serviceJobList.add( ( IServiceJob )obj );
         }
       }
     }

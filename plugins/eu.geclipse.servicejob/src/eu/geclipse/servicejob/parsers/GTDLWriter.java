@@ -65,26 +65,26 @@ public class GTDLWriter {
 
   /**
    * Method that takes empty GTDL skeleton, files it out with plug-in specific
-   * content (plug-in id and initial test's data) and transforms it to input
+   * content (plug-in id and initial service job's data) and transforms it to input
    * stream. Method transforms GTDL skeleton file (file containing GTDL XML
    * structure)
    * 
-   * @param plugInID id of a plug-in that provides test's data
-   * @param testedResources list of names of resources to test
-   * @param testInputData initial test data (will be set as a text content of
-   *            input > pluginData element)
-   * @return input stream of a GTDL file filled up with plug-in specific data
-   * @throws IOException in case there were problems with accessing the GTDL
-   *             skeleton file or with input streams
-   * @throws ParserConfigurationException in case parser could not be
-   *             initialized
-   * @throws SAXException in case GTDL skeleton file could not be parsed
-   * @throws TransformerException in case there were problems transforming
-   *             skeleton source to input stream
+   * @param plugInID Id of a plug-in that provides service job's data.
+   * @param serviceJobResources List of resource's names on which this service job should run. 
+   * @param serviceJobInputData Initial service job data (will be set as a text content of
+   *            input > pluginData element).
+   * @return Input stream of a GTDL file filled up with plug-in specific data.
+   * @throws IOException In case there were problems with accessing the GTDL
+   *             skeleton file or with input streams.
+   * @throws ParserConfigurationException In case parser could not be
+   *             initialized.
+   * @throws SAXException In case GTDL skeleton file could not be parsed.
+   * @throws TransformerException In case there were problems transforming
+   *             skeleton source to input stream.
    */
   public static InputStream getInitialInputStream( final String plugInID,
-                                                   final List<String> testedResources,
-                                                   final InputStream testInputData )
+                                                   final List<String> serviceJobResources,
+                                                   final InputStream serviceJobInputData )
     throws IOException, ParserConfigurationException, SAXException,
     TransformerException
   {
@@ -127,14 +127,14 @@ public class GTDLWriter {
         && resourcesElement != null )
     {
       pluginElement.setTextContent( plugInID );
-      BufferedReader in = new BufferedReader( new InputStreamReader( testInputData ) );
+      BufferedReader in = new BufferedReader( new InputStreamReader( serviceJobInputData ) );
       StringBuffer buffer = new StringBuffer();
       String line;
       while( ( line = in.readLine() ) != null ) {
         buffer.append( line );
       }
       inputDataElement.setTextContent( buffer.toString() );
-      for( String resourceName : testedResources ) {
+      for( String resourceName : serviceJobResources ) {
         Element resourceElement = doc.createElement( GTDLParser.INPUT_RESOURCE );
         resourceElement.setTextContent( resourceName );
         resourcesElement.appendChild( resourceElement );
@@ -157,7 +157,7 @@ public class GTDLWriter {
   }
 
   /**
-   * Method to put test result into GTDL file (to add new element output >
+   * Method to put service job's result into GTDL file (to add new element output >
    * result)
    * 
    * @param file GTDL file to write to
@@ -171,8 +171,8 @@ public class GTDLWriter {
    * @throws TransformerException in case results could not be transformed to
    *             XML file
    */
-  public static void addTestResults( final File file,
-                                     final List<IServiceJobResult> newResults )
+  public static void addServiceJobResults( final File file,
+                                           final List<IServiceJobResult> newResults )
     throws ParserConfigurationException, SAXException, IOException,
     TransformerFactoryConfigurationError, TransformerException
   {
@@ -187,8 +187,8 @@ public class GTDLWriter {
       Element updateElement = document.createElement( GTDLParser.OUTPUT_RESULT_DATE );
       updateElement.setTextContent( DateFormat.getDateTimeInstance()
         .format( result.getRunDate() ) );
-      Element testNameElement = document.createElement( GTDLParser.OUTPUT_RESULT_TEST );
-      testNameElement.setTextContent( result.getSubTestName() );
+      Element serviceJobNameElement = document.createElement( GTDLParser.OUTPUT_RESULT_SERVICE_JOB );
+      serviceJobNameElement.setTextContent( result.getSubServiceJobName() );
       Element notAfterElement = document.createElement( GTDLParser.OUTPUT_RESULT_DATA );
       notAfterElement.setTextContent( result.getResultRawData() );
       Element statusEnumElement = document.createElement( GTDLParser.OUTPUT_RESULT_ENUM );
@@ -199,7 +199,7 @@ public class GTDLWriter {
       typeElement.setTextContent( result.getResultType() );
       newElement.appendChild( resourceElement );
       newElement.appendChild( updateElement );
-      newElement.appendChild( testNameElement );
+      newElement.appendChild( serviceJobNameElement );
       newElement.appendChild( notAfterElement );
       newElement.appendChild( statusEnumElement );
       newElement.appendChild( summaryElement );

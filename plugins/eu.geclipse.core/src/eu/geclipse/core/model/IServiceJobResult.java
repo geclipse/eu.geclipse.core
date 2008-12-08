@@ -22,31 +22,33 @@ import java.util.Date;
  * Interface for single service job result.<br>
  * <br>
  * Basic implementation of this interface (in form of SOJO bean) is in
- * eu.geclipse.servicejob plug-in (<code>ServiceJobResult</code> class).
+ * {@link eu.geclipse.servicejob.model.impl.ServiceJobResult}.
  */
 public interface IServiceJobResult {
 
   /**
-   * Method to access information when this test was run.
+   * Method to access information when corresponding service job was run.
    * 
-   * @return date of test's run
+   * @return Date when service job was run.
    */
   Date getRunDate();
 
   /**
-   * Method to access name of the tested resource (e.g. host's URL).
+   * Method to access name of the resource (e.g. host's URL) on which service 
+   * job was run.
    * 
-   * @return name of tested resource in form of String
+   * @return Name of resource on which service job was run in form of String.
    */
   String getResourceName();
 
   /**
-   * In case of complex tests this method returns sub-test name. If test was
-   * simple test returned value will be name of the test.
+   * In case of complex service jobs this method returns sub-job's name. If 
+   * service job is simple, then returned value should be it's name.
    * 
-   * @return sub-test name
+   * @return Name of the sub-service job which was run or name of the simple
+   *         service job which was run.
    */
-  String getSubTestName();
+  String getSubServiceJobName();
 
   /**
    * Method to access type of result's data. Preferably this should be file
@@ -54,33 +56,33 @@ public interface IServiceJobResult {
    * opened. See also {@link IServiceJob#getInputStreamForResult(IServiceJobResult)}
    * and {@link IServiceJobResult#getResultRawData()}.
    * 
-   * @return extension of file to which test result's input stream may be saved
-   *         (preferably without "." at the beginning, e.g. "TXT", not ".TXT")
+   * @return Extension of file to which service job result's input stream may be
+   *    saved (preferably without "." at the beginning, e.g. "TXT", not ".TXT").
    */
   String getResultType();
 
   /**
    * Method to access content of Output > Result > ResultData GTDL element
-   * corresponding to this test result instance. Returned String is unmodified
-   * content taken from GTDL file.
+   * corresponding to this service job result instance. Returned String is 
+   * unmodified content taken from GTDL file.
    * 
-   * @return string content of Output > Result > ResultData GTDL element
+   * @return String content of Output > Result > ResultData GTDL element.
    */
   String getResultRawData();
 
   /**
-   * Textual interpretation of test's result.
+   * Textual interpretation of service job's result.
    * 
-   * @return String representing human-readable summary of test's result
+   * @return String representing human-readable summary of service job's result.
    */
   String getResultSummary();
 
   /**
-   * Human-readable test's result. Represents either the state in which test is
-   * (pending, running...) or - in case when test was finished - test's result
-   * in form of String (OK, ERROR, WARRNING...).
+   * Human-readable service job's result. Represents either the state in which 
+   * service job is (pending, running...) or - in case when service job was 
+   * finished - service job's result in form of String (OK, ERROR, WARRNING...).
    * 
-   * @return String representing human-readable summary of test's result
+   * @return String representing human-readable summary of service job's result.
    */
   String getResultEnum();
 }

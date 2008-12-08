@@ -24,13 +24,14 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
+
 import eu.geclipse.core.model.IGridComputing;
 import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.model.IGridResource;
 import eu.geclipse.servicejob.ui.wizard.ServiceJobWizard;
 
 /**
- * Action for testing grid computing element
+ * Action for running service job on grid computing element.
  */
 public class ServiceJobComputingAction implements IObjectActionDelegate {
 
@@ -64,6 +65,7 @@ public class ServiceJobComputingAction implements IObjectActionDelegate {
           this.selectedProject = ( ( IGridComputing )sselection.getFirstElement() ).getProject();
           for( Object selObj : sselection.toList() ) {
             if( selObj instanceof IGridComputing
+                && ( ( IGridComputing )selObj ).getProject() != null
                 && ( ( IGridComputing )selObj ).getProject()
                   .equals( this.selectedProject ) )
             {
