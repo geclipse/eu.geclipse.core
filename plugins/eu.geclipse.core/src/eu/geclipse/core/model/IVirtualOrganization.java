@@ -79,6 +79,12 @@ public interface IVirtualOrganization
    */
   public IGridJobService[] getJobSubmissionServices( final IProgressMonitor monitor ) throws ProblemException;
   
+  /**
+   * Returns the {@link IGridApplicationManager} associated to this VO.
+   * 
+   * @return An {@link IGridApplicationManager} or <code>null</code> if this
+   * VO does not support application deployment.
+   */
   public IGridApplicationManager getApplicationManager();
   
   /**

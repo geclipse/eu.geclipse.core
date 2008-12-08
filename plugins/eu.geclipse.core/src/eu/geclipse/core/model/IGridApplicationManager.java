@@ -24,7 +24,7 @@ import eu.geclipse.core.reporting.ProblemException;
  * An application manager is responsible for installing and
  * uninstalling applications for a specific VO. Middleware-specific
  * implementations should rather extend {@link AbstractApplicationManager}
- * than implementing this interface-
+ * than implementing this interface.
  */
 public interface IGridApplicationManager
     extends IGridElement {
