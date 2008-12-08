@@ -79,7 +79,7 @@ import eu.geclipse.jsdl.ui.wizards.specific.IApplicationSpecificPage;
 import eu.geclipse.ui.dialogs.GridFileDialog;
 import eu.geclipse.ui.dialogs.ProblemDialog;
 import eu.geclipse.ui.widgets.StoredCombo;
-import eu.geclipse.ui.wizards.IVOSelectionProvider;
+import eu.geclipse.ui.wizards.IProjectSelectionProvider;
 
 /**
  * Wizard page that allows user to choose an executable for the grid job, name
@@ -731,7 +731,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
 
   @Override
   public void setVisible( final boolean visible ) {
-    final IVirtualOrganization vo = ( ( IVOSelectionProvider )getWizard() ).getVirtualOrganization();
+    final IVirtualOrganization vo = ( ( IProjectSelectionProvider )getWizard() ).getGridProject().getVO();
     if( this.virtualOrg == null || this.virtualOrg != vo ) {
       this.firstTime = true;
       if( this.applicationName != null ) {

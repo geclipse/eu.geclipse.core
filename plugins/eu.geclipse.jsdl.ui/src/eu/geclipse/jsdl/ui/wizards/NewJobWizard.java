@@ -73,7 +73,7 @@ import eu.geclipse.jsdl.ui.internal.wizards.FileType;
 import eu.geclipse.jsdl.ui.preference.ApplicationParametersRegistry;
 import eu.geclipse.jsdl.ui.wizards.specific.IApplicationSpecificPage;
 import eu.geclipse.ui.dialogs.ProblemDialog;
-import eu.geclipse.ui.wizards.IVOSelectionProvider;
+import eu.geclipse.ui.wizards.IProjectSelectionProvider;
 
 /**
  * Wizard for creating new JSDL file
@@ -81,7 +81,7 @@ import eu.geclipse.ui.wizards.IVOSelectionProvider;
  * @author katis
  */
 public class NewJobWizard extends Wizard
-  implements INewWizard, IVOSelectionProvider
+  implements INewWizard, IProjectSelectionProvider
 {
 
   private IStructuredSelection selection;
@@ -668,5 +668,19 @@ public class NewJobWizard extends Wizard
    */
   public boolean getIsFinished() {
     return this.hasFinished;
+  }
+
+  public IGridProject getGridProject() {
+    IGridProject result = null;
+    if( this.firstPage != null ) {
+      IPath path = this.firstPage.getContainerFullPath();
+      path = path.removeLastSegments( path.segmentCount() - 1 );
+      IGridElement project = GridModel.getRoot().findElement( path );
+      if( project instanceof IGridProject ) {
+        result =  ( IGridProject )project ;
+        
+      }
+    }
+    return result;
   }
 }
