@@ -25,7 +25,7 @@ import eu.geclipse.core.model.IGridResource;
 import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.servicejob.ui.interfaces.IServiceJobWizardNode;
 import eu.geclipse.servicejob.ui.internal.WizardInitObject;
-import eu.geclipse.ui.wizards.IVOSelectionProvider;
+import eu.geclipse.ui.wizards.IProjectSelectionProvider;
 
 /**
  * Abstract class of the ITestWizardNode. It should be used instead of
@@ -34,9 +34,10 @@ import eu.geclipse.ui.wizards.IVOSelectionProvider;
  * <p>
  */
 public abstract class AbstractServiceJobWizardNode extends Wizard 
-implements IServiceJobWizardNode, IVOSelectionProvider
+implements IServiceJobWizardNode, IProjectSelectionProvider
 {
 
+  protected IProjectSelectionProvider projectProvider;
   protected IGridProject project;
   protected List<IGridResource> resources;
   private String name;
@@ -52,7 +53,8 @@ implements IServiceJobWizardNode, IVOSelectionProvider
     if( data instanceof WizardInitObject ) {
       WizardInitObject initObject = ( WizardInitObject )data;
       this.resources = initObject.getResources();
-      this.project = initObject.getProject();
+//      this.project = initObject.getProject();
+      this.projectProvider = initObject.getVOProvider();
       this.name = initObject.getName();
       result = true;
     }
@@ -74,7 +76,7 @@ implements IServiceJobWizardNode, IVOSelectionProvider
   }
 
   public IGridProject getSelectedProject() {
-    return this.project;
+    return this.projectProvider.getGridProject();
   }
 
   public List<IGridResource> getPreselectedResources() {
@@ -85,8 +87,9 @@ implements IServiceJobWizardNode, IVOSelectionProvider
     return this.name;
   }
 
-  public IVirtualOrganization getVirtualOrganization() {
-    return getSelectedProject().getVO();
+  
+  public IGridProject getGridProject(){
+    return getSelectedProject();
   }
   
   

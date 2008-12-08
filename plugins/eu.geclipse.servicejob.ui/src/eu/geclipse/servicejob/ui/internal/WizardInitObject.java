@@ -21,6 +21,7 @@ import java.util.List;
 
 import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.model.IGridResource;
+import eu.geclipse.ui.wizards.IProjectSelectionProvider;
 
 /**
  * Wrapper object for passing IGridProject and IGridResources list to services
@@ -33,22 +34,23 @@ public class WizardInitObject {
   private String name;
   private IGridProject project;
   private List<IGridResource> resources = new ArrayList<IGridResource>();
+  private IProjectSelectionProvider voProvider;
 
   /**
    * Creates instance of {@link WizardInitObject}. Be aware that resources list
    * may be empty, while project reference should never be <code>null</code>.
    * 
    * @param name String name of service job that will be used in all views
-   *            showing this job as well as a name for GTDL file
+   *          showing this job as well as a name for GTDL file
    * @param project reference to {@link IGridProject} for which wizard is run
    * @param resources list of {@link IGridResource}s for which wizard is run
    */
   public WizardInitObject( final String name,
-                           final IGridProject project,
+                           final IProjectSelectionProvider voProvider,
                            final List<IGridResource> resources )
   {
     this.name = name;
-    this.project = project;
+    this.voProvider = voProvider;
     this.resources = resources;
   }
 
@@ -68,6 +70,10 @@ public class WizardInitObject {
    */
   public List<IGridResource> getResources() {
     return this.resources;
+  }
+
+  public IProjectSelectionProvider getVOProvider() {
+    return this.voProvider;
   }
 
   /**

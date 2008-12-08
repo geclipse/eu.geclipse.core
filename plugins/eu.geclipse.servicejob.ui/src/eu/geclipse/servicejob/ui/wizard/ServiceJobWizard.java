@@ -47,8 +47,9 @@ import eu.geclipse.servicejob.parsers.GTDLWriter;
 import eu.geclipse.servicejob.ui.Activator;
 import eu.geclipse.servicejob.ui.interfaces.IServiceJobWizardNode;
 import eu.geclipse.servicejob.ui.internal.WizardInitObject;
-import eu.geclipse.ui.wizards.IVOSelectionProvider;
+import eu.geclipse.ui.wizards.IProjectSelectionProvider;
 import eu.geclipse.ui.wizards.wizardselection.ExtPointWizardSelectionListPage;
+import eu.geclipse.ui.wizards.wizardselection.IWizardSelectionNode;
 import eu.geclipse.ui.wizards.wizardselection.WizardSelectionListPage;
 
 /**
@@ -60,7 +61,7 @@ import eu.geclipse.ui.wizards.wizardselection.WizardSelectionListPage;
  * @author Katarzyna Bylec
  */
 public class ServiceJobWizard extends Wizard
-  implements INewWizard, IVOSelectionProvider
+  implements INewWizard, IProjectSelectionProvider
 {
 
   static final String TEST_FOLDER = ".tests"; //$NON-NLS-1$
@@ -117,8 +118,9 @@ public class ServiceJobWizard extends Wizard
   @Override
   public IWizardPage getNextPage( final IWizardPage page ) {
     this.testTypeSelectionPage.setInitData( new WizardInitObject( this.projectPage.getJobName(),
-                                                                  this.projectPage.getProject(),
+                                                                  this,
                                                                   this.testedResources ) );
+//    this.testTypeSelectionPage.forceUpdate( );
     return super.getNextPage( page );
   }
 
@@ -205,11 +207,16 @@ public class ServiceJobWizard extends Wizard
     return this.testedResources;
   }
 
-  public IVirtualOrganization getVirtualOrganization() {
-    IVirtualOrganization result = null;
-    if( this.projectPage != null ) {
-      result = this.projectPage.getProject().getVO();
+  
+
+  public IGridProject getGridProject() {
+    IGridProject result = null;
+    if (this.projectPage != null){
+      result = this.projectPage.getProject();
     }
     return result;
   }
+  
+ 
+  
 }

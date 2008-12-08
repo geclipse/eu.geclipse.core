@@ -53,7 +53,7 @@ import eu.geclipse.servicejob.ui.Activator;
 import eu.geclipse.servicejob.ui.internal.CategoryContainer;
 import eu.geclipse.servicejob.ui.internal.CategoryResourcesTreeCProvider;
 import eu.geclipse.servicejob.ui.internal.CategoryResourcesTreeLProvider;
-import eu.geclipse.ui.wizards.IVOSelectionProvider;
+import eu.geclipse.ui.wizards.IProjectSelectionProvider;
 
 /**
  * Wizard page on which all resources (also services) taken form info system are
@@ -62,7 +62,7 @@ import eu.geclipse.ui.wizards.IVOSelectionProvider;
 public class ResourcesSelectionPage extends WizardPage {
 
   CheckboxTreeViewer viewer;
-  private IVOSelectionProvider voProvider;
+  private IProjectSelectionProvider projectProvider;
   private IVirtualOrganization oldVO;
   private List<IGridResourceCategory> visibleCategories = new ArrayList<IGridResourceCategory>();
   private Button selectAllButton;
@@ -73,16 +73,16 @@ public class ResourcesSelectionPage extends WizardPage {
   /**
    * Constructor of ResourceSelectionPage objects.
    * 
-   * @param selectionProvider object implementing {@link IVOSelectionProvider}
+   * @param selectionProvider object implementing {@link IProjectSelectionProvider}
    *            interface. This object is a source of information for which VO
    *            resources should be presented.
    * @param pageName name of this wizard page
    */
-  public ResourcesSelectionPage( final IVOSelectionProvider selectionProvider,
+  public ResourcesSelectionPage( final IProjectSelectionProvider selectionProvider,
                                  final String pageName )
   {
     super( pageName );
-    this.voProvider = selectionProvider;
+    this.projectProvider = selectionProvider;
     this.setTitle( "Resource selection" );
     this.setDescription( "Choose services to perform operator's job on." );
     this.oldVO = null;
@@ -107,13 +107,13 @@ public class ResourcesSelectionPage extends WizardPage {
     super.setVisible( visible );
     if( visible ) {
       if( this.oldVO != null
-          && !this.oldVO.equals( this.voProvider.getVirtualOrganization() ) )
+          && !this.oldVO.equals( this.projectProvider.getGridProject().getVO() ) )
       {
         this.selectedResources = new ArrayList<IGridResource>();
       }
-      setSelectedVO( this.voProvider.getVirtualOrganization() );
+      setSelectedVO( this.projectProvider.getGridProject().getVO() );
     } else {
-      this.oldVO = this.voProvider.getVirtualOrganization();
+      this.oldVO = this.projectProvider.getGridProject().getVO();
     }
     this.updateButtons();
   }
