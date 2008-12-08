@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+<head>
+<meta
+  http-equiv="Content-Type"
+  content="text/html; charset=UTF-8">
+<META
+  HTTP-EQUIV="Content-Style-Type"
+  CONTENT="text/css">
+<LINK
+  REL="STYLESHEET"
+  HREF="PLUGINS_ROOT/eu.geclipse.doc.user/book.css"
+  CHARSET="UTF-8"
+  TYPE="text/css">
+<title>Implementing an additional Information Service</title>
+</head>
+
+<body BGCOLOR="#ffffff">
+
+<h1>Implementing an additional Information Service</h1>
+
+In order to create a new information service a new class that extends
+<i>AbstractGridInfoService</i> class and implements
+the interfaces <i>IExtendedGridInfoService, IStorableElement</i> should be
+implemented. Exemplary classes are
+<i>eu.geclipse.gria.info.GriaInfoService</i> and
+<i>eu.geclipse.glite.info.bdii.BDIIService</i>. 
+
+The most important method of an information service is 
+<pre>
+public IGridResource[] fetchResources( final IGridContainer parent,
+                                       final IVirtualOrganization vo,
+                                       final IGridResourceCategory category,
+                                       final IProgressMonitor monitor ) 
+throws ProblemException;
+</pre>
+
+that is defined in <i>eu.geclipse.core.model.IGridInfoService</i> interface.
+This method should return IGridResource for the categories shown in the following
+table. Other resources can be added if it is needed.
+
+<p>
+In order for the information service to able to contribute to the GLUE
+information view the methods defined in <i>IExtendedGridInfoService</i>
+interface should be implemented.
+ </p>
+ 
+ <table>
+ <tr> <td> GridResourceCategoryFactory.ID_COMPUTING </td> </tr>
+ <tr> <td> GridResourceCategoryFactory.ID_APPLICATIONS </td> </tr>
+ <tr> <td> GridResourceCategoryFactory.ID_DATA_SERVICES </td> </tr>
+ <tr> <td> GridResourceCategoryFactory.ID_JOB_SERVICES </td> </tr>
+ <tr> <td> GridResourceCategoryFactory.ID_INFO_SERVICES </td> </tr>
+ <tr> <td> GridResourceCategoryFactory.ID_OTHER_SERVICES </td> </tr>
+ <tr> <td> GridResourceCategoryFactory.ID_STORAGE </td> </tr>
+ <tr> <td> GridResourceCategoryFactory.ID_SERVICES </td> </tr>
+ </table>
+
+</body>
+</html>\ No newline at end of file

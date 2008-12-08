@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+<head>
+<meta
+  http-equiv="Content-Type"
+  content="text/html; charset=UTF-8">
+<META
+  HTTP-EQUIV="Content-Style-Type"
+  CONTENT="text/css">
+<LINK
+  REL="STYLESHEET"
+  HREF="PLUGINS_ROOT/eu.geclipse.doc.user/book.css"
+  CHARSET="UTF-8"
+  TYPE="text/css">
+<title>Adding categories in GLUE information view</title>
+</head>
+
+<body BGCOLOR="#ffffff">
+
+<h1>Adding categories in GLUE information view</h1>
+
+GLUE Information View creates its categories dynamicaly from the information
+services of the existing grid projects. Each information service defines the 
+categories that should exist in GLUE information view in the method 
+<i>public ArrayList<InfoTopTreeElement> getTopTreeElements()</i> defined in
+the interface <i>IExtendedGridInfoService</i>.
+
+In order to add a category a similar code to the following should be used in
+method getTopTreeElements().
+
+<pre>
+ArrayList<InfoTopTreeElement> list = new ArrayList<InfoTopTreeElement>();
+InfoTopTreeCategory glueInfoTopTreeCategory = new InfoTopTreeCategory();
+ArrayList<InfoTopTreeCategory> glueInfoTopTreeCategoryArray = null;
+    
+glueInfoTopTreeCategoryArray = new ArrayList<InfoTopTreeCategory>();
+glueInfoTopTreeCategory = new InfoTopTreeCategory();
+glueInfoTopTreeCategory.setObjectTableName( "GlueService" );
+glueInfoTopTreeCategory.setGlueObjectName( "GlueService" );
+glueInfoTopTreeCategoryArray.add( glueInfoTopTreeCategory );
+    
+topTreeElement = new InfoTopTreeElement(glueInfoTopTreeCategoryArray,
+                                        "Services");
+</pre>
+
+In the above code a category "Computing Elements" is added. In this category the
+objects that have a GLUE object name "GlueCE" and a object table name "GlueCE"
+as well. The reason why there is a GLUE object name as well as an Object Table
+Name is that we want to be able to distinguish entries with the same GLUE object
+name in order to be able to have the same GLUE object in different categories.
+This way we can add a GlueService element in another category using the GLUE 
+object attribute. This is shown in the code bellow.
+
+<pre>
+glueInfoTopTreeCategory.setObjectTableName( "GriaDataService" );
+glueInfoTopTreeCategory.setGlueObjectName( "GlueService" ); 
+glueInfoTopTreeCategoryArray.add( glueInfoTopTreeCategory );
+topTreeElement = new InfoTopTreeElement(glueInfoTopTreeCategoryArray,
+                                        "Storage Elements");
+list.add(topTreeElement);
+</pre>
+
+<p>
+The objects that are shown in the GLUE information view are the ones gathered
+by the method <i>public void scheduleFetch(final IProgressMonitor monitor)</i>
+that is defined in the interface <i>IExtendedGridInfoService</i>.
+</p>
+
+<p> The existing categories are shown in the following image </p>
+<img src="images/glueCategories.png">
+
+</body>
+</html>\ No newline at end of file

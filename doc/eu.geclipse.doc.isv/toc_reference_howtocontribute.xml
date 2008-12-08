@@ -4,9 +4,8 @@
 <toc
   label="g-Eclipse Programmer's Guide"
   link_to="toc.xml#geclipse_reference_howtocontribute">
-  <topic
-    label="Overview"
-    href="html/how_to_contribute/overview.html" />
+  <topic href="html/how_to_contribute/overview.html" label="Overview">
+  </topic>
   <topic
     label="Authentication"
     href="html/how_to_contribute/gridAuthentication.html" />
@@ -30,5 +29,15 @@
   <topic
     label="Batch Systems"
     href="html/how_to_contribute/gridBatchSystems.html" />
+  <topic label="Information System">
+     <topic href="html/how_to_contribute/impementingInfoService.html" label="Implementing an additional Information Service">
+     </topic>
+     <topic href="html/how_to_contribute/addingCategories.html" label="Adding categories in GLUE information view">
+     </topic>
+     <topic href="html/how_to_contribute/addingFilters.html" label="Adding Filters in GLUE information view">
+     </topic>
+     <topic href="html/how_to_contribute/supportedService.html" label="Marking a service as supported by g-Eclipse">
+     </topic>
+  </topic>
   <anchor id="geclipse_reference_howtocontribute_ext" />
 </toc>

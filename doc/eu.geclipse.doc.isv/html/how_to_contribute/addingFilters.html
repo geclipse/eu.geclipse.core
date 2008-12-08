@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+<head>
+<meta
+  http-equiv="Content-Type"
+  content="text/html; charset=UTF-8">
+<META
+  HTTP-EQUIV="Content-Style-Type"
+  CONTENT="text/css">
+<LINK
+  REL="STYLESHEET"
+  HREF="PLUGINS_ROOT/eu.geclipse.doc.user/book.css"
+  CHARSET="UTF-8"
+  TYPE="text/css">
+<title>Adding Filters in GLUE information view</title>
+</head>
+
+<body BGCOLOR="#ffffff">
+
+<h1>Adding Filters in GLUE information view</h1>
+<p>
+In order to add a new filter in the GLUE information view the extension point
+<i>eu.geclipse.info.infoViewerFilter</i> should be extended. Exemplary classes
+that extend this extension point are
+<i>eu.geclipse.glite.ui.info.GLiteInfoViewFilter</i> and
+<i>eu.geclipse.gria.ui.info.GriaInfoViewFilter</i>. These two classes filter
+GLUE information view in order to show only g-Lite or only GRIA resources
+respectively.
+</p>
+
+<pre>
+&nbsp;&nbsp; &lt;extension
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; point=&quot;eu.geclipse.info.infoViewerFilter&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;infoViewerFilter
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; class=&quot;eu.geclipse.glite.info.ui.GLiteInfoViewFilter&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; id=&quot;eu.geclipse.glite.info.ui.GLiteInfoViewFilter&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/infoViewerFilter&gt;
+&nbsp;&nbsp; &lt;/extension&gt;
+</pre>
+
+<p> The existing filters are shown in the following image </p>
+<img src="images/glueFilters.png">
+
+</body>
+</html>\ No newline at end of file

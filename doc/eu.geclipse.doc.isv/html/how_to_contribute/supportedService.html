@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+<head>
+<meta
+  http-equiv="Content-Type"
+  content="text/html; charset=UTF-8">
+<META
+  HTTP-EQUIV="Content-Style-Type"
+  CONTENT="text/css">
+<LINK
+  REL="STYLESHEET"
+  HREF="PLUGINS_ROOT/eu.geclipse.doc.user/book.css"
+  CHARSET="UTF-8"
+  TYPE="text/css">
+<title>Marking a service as supported by g-Eclipse</title>
+</head>
+
+<body BGCOLOR="#ffffff">
+
+<h1>Marking a service as supported by g-Eclipse</h1>
+
+In order to mark a service as supported by g-Eclipse (this is shown in the
+properties of a service when it is selected in the Grid project view) the
+extension point <i>eu.geclipse.info.supportedServices</i> should be used.
+Exemplary classes are <i>eu.geclipse.glite.info.glue.SupportServiceSRM</i> and
+<i>eu.geclipse.glite.info.glue.SupportServiceCE</i>. The classes that extend
+<i>eu.geclipse.info.supportedServices</i> should also extend the
+<i>eu.geclipse.info.model.IGridSupportedService interface</i> interface.
+
+<pre>
+&nbsp;&nbsp;&nbsp; &lt;extension
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; point=&quot;eu.geclipse.info.supportedServices&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;supportedServices
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; class=&quot;eu.geclipse.glite.info.glue.SupportServiceSRM&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; id=&quot;eu.geclipse.glite.info.glue.SupportServiceSRM&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/supportedServices&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;supportedServices
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; class=&quot;eu.geclipse.glite.info.glue.SupportServiceCE&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; id=&quot;eu.geclipse.glite.info.glue.SupportServiceCE&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/supportedServices&gt;
+&nbsp;&nbsp; &lt;/extension&gt;
+</pre>
+
+<p> An example of a supported service is shown in the following image </p>
+<img src="images/supportedService.png">
+
+</body>
+</html>\ No newline at end of file
