@@ -16,9 +16,10 @@
  *****************************************************************************/
 package eu.geclipse.ui.wizards;
 
+import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.model.IVirtualOrganization;
 
-public interface IVOSelectionProvider {
+public interface IProjectSelectionProvider {
 
-  public IVirtualOrganization getVirtualOrganization();
+  public IGridProject getGridProject();
 }
