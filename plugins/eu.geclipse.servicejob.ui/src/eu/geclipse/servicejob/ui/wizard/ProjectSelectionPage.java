@@ -138,7 +138,6 @@ public class ProjectSelectionPage extends WizardPage {
 
       @Override
       public void widgetSelected( final SelectionEvent e ) {
-        getTree().getSelection();
         Object selectedData = ( ( ( Tree )e.getSource() ).getSelection()[ 0 ] ).getData();
         if( selectedData instanceof IGridProject ) {
           ProjectSelectionPage.selectedProject = ( IGridProject )selectedData;
@@ -146,6 +145,11 @@ public class ProjectSelectionPage extends WizardPage {
         }
       }
     } );
+    this.tree.deselectAll();
+    this.tree.update();
+    treeViewer.refresh();
+//    this.tree.layout();
+    treeViewer.refresh( true );
     for( TreeItem item : this.tree.getItems() ) {
       if( item.getData() instanceof IGridProject ) {
         if( item.getData().equals( this.initialProject ) ) {
@@ -263,7 +267,7 @@ public class ProjectSelectionPage extends WizardPage {
       }
       for( IGridElement elem : elements ) {
         if( elem instanceof IGridProject
-            && !( ( IGridProject )elem ).isHidden() )
+            && !( ( IGridProject )elem ).isHidden() && ((IGridProject)elem).hasGridNature() && ((IGridProject)elem).isOpen() )
         {
           projects.add( ( IGridProject )elem );
         }
