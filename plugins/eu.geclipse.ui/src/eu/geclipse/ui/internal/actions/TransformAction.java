@@ -40,6 +40,7 @@ import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.jsdl.JSDLJobDescription;
 import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.internal.dialogs.FileOverwriteDialog;
+import eu.geclipse.workflow.resources.GridWorkflow;
 
 
 public class TransformAction extends Action {
@@ -168,13 +169,9 @@ public class TransformAction extends Action {
   private IFile getFile( final IGridJobDescription inputDescr ){
     
     IFile returnFile = null;
-    JSDLJobDescription jsdl = null;
     
-    if ( inputDescr instanceof JSDLJobDescription ){
-      jsdl = (JSDLJobDescription) inputDescr;
-    }
-    IPath jdlName = new Path( jsdl.getName() ).removeFileExtension().addFileExtension( "jdl" ); //$NON-NLS-1$
-    IFile jdlFile = ( ( IContainer ) jsdl.getParent().getResource() ).getFile( jdlName );
+    IPath jdlName = new Path( inputDescr.getName() ).removeFileExtension().addFileExtension( "jdl" ); //$NON-NLS-1$
+    IFile jdlFile = ( ( IContainer ) inputDescr.getParent().getResource() ).getFile( jdlName );
     
     returnFile = jdlFile;
     
