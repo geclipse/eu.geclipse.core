@@ -80,17 +80,26 @@ method is given below:
 </li>
 
 <li> In the <i>eu.geclipse.jsdl.ui.editors.JsdlEditor</i> class do the following:
-<ol type="10">
+<ol type="a">
+<li> Create a new instance of the newly created page as follows: 
+<pre>NewPage newJsdlEditorPage = new NewPage(this);</pre>
+</li>
 <li>In the <i>addPages()</i> method add the newly created page by calling the 
 <i>addPage()</i> method.</li>
+<li>Set the dirty state of the new page to false in the <i>cleanDirtyState()</i>
+method.</li>
+<li> In <i>pushContentToPages()</i> method call the <i>setPageContent()</i> 
+method of the new page as follows:
+<pre>
+ if( this.newJsdlEditorPage != null ) {
+      this.newJsdlEditorPage.setPageContent( this.jobDefType, isModelRefreshed() );
+    }
+</pre>
+</li>
 </ol>
 </li>
 
 </ol>
 
-
-<p> The existing filters are shown in the following image </p>
-<img src="images/glueFilters.png">
-
 </body>
-</html>\ No newline at end of file
+</html>
