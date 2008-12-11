@@ -10,14 +10,10 @@
     <anchor id="geclipse_concepts_setup" />
 	<topic label="VO Settings"
   			href="html/concepts/setup/vosettings/vosettings.html">
-  			<topic label="Creating a new VO"
+  			<topic label="Add/Edit/Delete a VO"
   				href="html/concepts/setup/vosettings/createVO.html"/>
-  			<topic label="Importing VO"
+  			<topic label="Importing a VO"
   				href="html/concepts/setup/vosettings/importVO.html"/>  				
-  			<topic label="Editing a VO"
-  				href="html/concepts/setup/vosettings/editVO.html"/>
-  			<topic label="Deleting VOs"
-  				href="html/concepts/setup/vosettings/deleteVO.html"/>
   		</topic>
     <topic href="html/concepts/setup/security/security.html" label="Security Settings">
        <topic href="html/concepts/setup/security/preferencePage.html" label="The Security Preference Page">
