@@ -8,9 +8,7 @@
     href="html/overview.html">
     <anchor id="geclipse_overview" />
   </topic>
-  <topic
-    label="Getting Started"
-    href="html/index.html">
+  <topic href="html/gettingstarted/maintopic.html" label="Getting Started">
     <anchor id="geclipse_gettingstarted" />
   </topic>
 

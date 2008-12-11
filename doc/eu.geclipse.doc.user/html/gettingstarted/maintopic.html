@@ -10,18 +10,69 @@
 
 <body BGCOLOR="#ffffff">
 <h1>g-Eclipse - Getting started </h1>
-When you start the g-Eclipse framework, you will see an Eclipse window similar to the following:  
+<p>After you downloaded and started the g-Eclipse framework, you will see the 
+common Eclipe welcome page. You can use documentation links there to get more 
+information, or you just close the welcome menu by clicking on the tab.
+<br>
+<a href="images/welcome_page.jpg"><img src="images/welcome_page.jpg" alt="Eclipse Welcome Window" width=600></a>
+</p>
+
+<p> You get clean workspace and the Eclipse workbench looks probably like the 
+next picture - you got a perspective containing different views. <br><br>
+<a href="images/workspace_clean.jpg"><img src="images/workspace_clean.jpg" alt="Eclipse Welcome Window" width=600></a>
+</p>
+
+<h2>Create the first Grid project</h2>
+
+<p>
+In order to create a first Grid project, you select 
+<b>File &gt; New &gt; Project..." </b>and get the New Projects Wizard. Select under the
+folder "g-Eclipse" the item "New Grid Project". Then click "Next" and 
+you enter the name of your Grid Project and click on <b>Next</b>.<br><br>
+<a href="images/gridproject_wizard_name.jpg"><img src="images/gridproject_wizard_name.jpg" alt="Eclipse Welcome Window"></a>
+</p>
+
+<p>
+On the next page the wizard asks you to select the <b>Virtual Organisation 
+(VO)</b> for your project. The Grid model of the g-Eclipse framework requires
+a Virtual Organisation for every Grid Project. You can not continue with a Grid
+project without the definition of a <b>Virtual Organisation</b>. Find more 
+information about the idea and the management of VOs in the g-Eclipse framework
+at the  
+<a href="../concepts/setup/vosettings/vosettings.html">concept section</a> and 
+in the help system under the topic Middlewares.  
+As we start from a plain workspace there is no VO at the beginning so we define
+the VO first by selecting <b>Edit VOs...</b>. You will be directed to the 
+VO preference page of the g-Eclipse framework where you then enter the 
+parameters of your VO.  Assuming that you define the VO 
+for the infrastructure you want to use, the user come back with at least one VO. 
+and the wizards shows at least one VO (i.e. the AmazonWebServices). Select the 
+VO with the Checkbox and click <b>Next</b><br><br>
+<a href="images/gridproject_wizard_vo2.jpg"><img src="images/gridproject_wizard_vo2.jpg" alt="Eclipse Welcome Window"></a>
+</p>
+<p>
+On the last page of the Wizard you can define the structure of your Grid project, 
+but for the first start just click <b>Finish</b>.<br><br<>
+<a href="images/gridproject_wizard_folders.jpg"><img src="images/gridproject_wizard_folders.jpg" alt="g-Eclipse Project Wizard Folders"></a>
 <br><br>
-<img src="images/g-Eclipse started.gif" alt="Eclipse Window" width="600">
-<p>You can open the g-Eclipse User Perspective by choosing it from 
-<b>Window &gt; Open Perspective &gt; Other &gt; g-Eclipse (User)</b>. The Eclipse
-Workbench will now look similar to the following:
+Then the Grid project is created and the g-Eclipse frameworks changes to the 
+<b>Grid user perspective</b> with the following dialog. Click <b>Yes</b> and the 
+Grid user perspective will opened. 
+<br><br<>
+<a href="images/gridperspective_question.jpg"><img src="images/gridperspective_question.jpg" alt="g-Eclipse Project Wizard Folders"></a>
 <br><br>
-<img src="images/perspective_user.jpg" alt="g-Eclipse Window" width="600"></p>
-In the top left, you see the Grid Project View with the Grid Resource View below it.
-In the lower part, additional Grid access views are available such as the Connections,
-Jobs and Authentication Tokens Views. To the right is the Properties View. 
-You can add additional views by choosing them from <b>Window &gt; Show View &gt; Other &gt; g-Eclipse</b>. </p>
+<h2> The Grid use perspective </h2>
+The main view in the Grid user perspective is the Grid project View, which is 
+shown on the left side of the next image. It provides the logical view to the 
+virtualised infrastructure of any Grid project. It contains the standard folders 
+defined above and the node representing the Virtual Organisation (in our example
+it is called AmazonWebServies).At startup, the central part of the workbench, the editor, is empty. Depending on the action you start, 
+you will get the corresponding editor in the Editor area.  
+<br>
+<a href="images/gridperspective_1.jpg"><img src="images/gridperspective_1.jpg" alt="g-Eclipse Project Wizard Folders"></a>
+<br>
+You can unfold the created project like every other Eclipse project. The project contains 
+</p>
 
 <p>At startup, the central part of the workbench, the editor, is empty. Depending on the action you start, 
 you will get the corresponding editor in the Editor area.</p>
@@ -29,7 +80,7 @@ you will get the corresponding editor in the Editor area.</p>
  <p>Before you can start interacting with the Grid, you need to set up your g-Eclipse 
  environment. The following configuration is necessary:</p>
  <ul>
-   <li> <a href="PLUGINS_ROOT/eu.geclipse.doc.user/html/concepts/setup/cacertificates.html">Download the certificates of the approved 
+   <li> <a href="PLUGINS_ROOT/eu.geclipse.doc.user/html/concepts/setup/cacertifitcates.html">Download the certificates of the approved 
   Certificate Authorities</a>. </li>
    <li> <a href="PLUGINS_ROOT/eu.geclipse.doc.user/html/concepts/setup/vosettings.html">Declare the Virtual Organisation(s), of which you 
  are a member</a>. </li>
