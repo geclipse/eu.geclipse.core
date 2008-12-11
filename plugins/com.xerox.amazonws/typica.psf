@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<psf version="2.0">
+<provider id="org.tigris.subversion.subclipse.core.svnnature">
+<project reference="0.9.3,svn+ssh://dev.eclipse.org/svnroot/rt/org.eclipse.smila/trunk/com.sun.jaxb,com.sun.jaxb"/>
+<project reference="0.9.3,svn+ssh://dev.eclipse.org/svnroot/technology/eu.geclipse/trunk/plugins/com.xerox.amazonws,com.xerox.amazonws"/>
+<project reference="0.9.3,svn+ssh://dev.eclipse.org/svnroot/rt/org.eclipse.smila/trunk/javax.xml.bind,javax.xml.bind"/>
+<project reference="0.9.3,svn+ssh://dev.eclipse.org/svnroot/rt/org.eclipse.smila/trunk/javax.xml.stream,javax.xml.stream"/>
+</provider>
+<provider id="org.eclipse.team.cvs.core.cvsnature">
+<project reference="1.0,:pserver:dev.eclipse.org:/cvsroot/tools,org.eclipse.orbit/org.apache.commons.codec,org.apache.commons.codec_1.3.0,v20080530-1600"/>
+<project reference="1.0,:pserver:dev.eclipse.org:/cvsroot/tools,org.eclipse.orbit/org.apache.commons.httpclient,org.apache.commons.httpclient_3.1.0,v20080605-1935"/>
+<project reference="1.0,:pserver:dev.eclipse.org:/cvsroot/tools,org.eclipse.orbit/org.apache.commons.logging,org.apache.commons.logging_1.1.1,v20080605-1935"/>
+</provider>
+</psf>

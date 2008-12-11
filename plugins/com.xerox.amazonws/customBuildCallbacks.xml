@@ -39,6 +39,8 @@
 		     verbose="true"
 		     usetimestamp="true"/>
 		     -->
+		
+		<!--
 		<get src="http://typica.googlecode.com/svn/tags/v1.3/lib/jaxb-api.jar" 
 		     dest="lib/jaxb-api.jar" 
 		     verbose="true"
@@ -51,6 +53,7 @@
 		     dest="lib/jsr173_1.0_api.jar" 
 		     verbose="true"
 		     usetimestamp="true"/>
+		     -->
 
 		<mkdir dir="repo/lib"/>
 		<get src="http://typica.googlecode.com/svn/tags/v1.3/lib/activation.jar" 
