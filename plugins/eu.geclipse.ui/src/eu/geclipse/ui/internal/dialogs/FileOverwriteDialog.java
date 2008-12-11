@@ -29,7 +29,7 @@ import org.eclipse.swt.widgets.Shell;
 public class FileOverwriteDialog {
 
  protected Shell shell = null;  
- protected boolean returnValue = false; 
+ protected int returnValue = -1; 
  protected String fileName = null;
  
  /**
@@ -48,7 +48,7 @@ public class FileOverwriteDialog {
    * @return the ID of the button that was selected to dismiss the
    *         message box (e.g. SWT.OK, SWT.CANCEL, etc.)
    */
-  public boolean open(){
+  public int open(){
 //      
     Display.getDefault().syncExec (new Runnable () {
       public void run() {
@@ -57,9 +57,11 @@ public class FileOverwriteDialog {
                                           | SWT.YES | SWT.NO);
            
            mb.setMessage( FileOverwriteDialog.this.fileName + " already exists. Do you want to replace it?"); //$NON-NLS-1$
-           if ( mb.open() == SWT.YES ){
-             FileOverwriteDialog.this.returnValue = true;
-           }           
+           
+           FileOverwriteDialog.this.returnValue = mb.open();
+//           if ( mb.open() == SWT.YES ){
+//             FileOverwriteDialog.this.returnValue = true;
+//           }           
         }
 
       }
