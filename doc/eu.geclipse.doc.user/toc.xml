@@ -4,6 +4,11 @@
 <toc label="g-Eclipse User Guide">
 
   <topic
+    label="Overview"
+    href="html/overview.html">
+    <anchor id="geclipse_overview" />
+  </topic>
+  <topic
     label="Getting Started"
     href="html/index.html">
     <anchor id="geclipse_gettingstarted" />
