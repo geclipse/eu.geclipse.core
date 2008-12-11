@@ -345,6 +345,10 @@
             description="Transfer operation failed"
             id="eu.geclipse.ui.problem.tranfserOperationFailed">
       </problem>
+      <problem
+            description="Mount already exists"
+            id="eu.geclipse.ui.problem.mountAlreadyExists">
+      </problem>
    </extension>
    <extension
          point="eu.geclipse.ui.efs">
