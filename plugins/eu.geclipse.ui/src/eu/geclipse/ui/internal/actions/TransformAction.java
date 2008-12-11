@@ -64,6 +64,7 @@ public class TransformAction extends Action {
   public void run() {
     
  for (IGridJobDescription description : this.input ){
+   boolean runJob = true;
       
       IFile file = getFile( description );
       
@@ -72,25 +73,28 @@ public class TransformAction extends Action {
         if (dialog.open() == SWT.YES ){        
           try {
             file.delete( true, null );
-            
-            WorkspaceJob job = new WorkspaceJob( "transformer" ) { //$NON-NLS-1$
-              @Override
-              public IStatus runInWorkspace( final IProgressMonitor monitor )
-                  throws CoreException {
-                return transform( TransformAction.this.creator, TransformAction.this.input, monitor );
-              }
-            };
-            job.setUser( true );
-            job.schedule();
+
           } catch( CoreException e ) {
             Activator.logException( e );
         }
+      } else {
+        runJob = false;
       }
     }
- }
     
-
-     
+    if (true == runJob) {
+      WorkspaceJob job = new WorkspaceJob( "transformer" ) { //$NON-NLS-1$
+        @Override
+        public IStatus runInWorkspace( final IProgressMonitor monitor )
+            throws CoreException {
+          return transform( TransformAction.this.creator, TransformAction.this.input, monitor );
+        }
+      };
+      job.setUser( true );
+      job.schedule();
+     }
+   }
+         
   }
   
   protected IStatus transform( final IGridElementCreator creator,
@@ -137,77 +141,7 @@ public class TransformAction extends Action {
     return result;
   }
   
-  protected IStatus transform2( final IGridElementCreator creator,
-                               final IGridJobDescription[] input,
-                               final IProgressMonitor monitor ) {
-
-    IStatus result = Status.OK_STATUS;
-    List< IStatus > errors = new ArrayList< IStatus >();
-    
-    for (IGridJobDescription description : input ){
-      
-      IFile file = getFile( description );
-      
-      if ( file.exists() ){
-        FileOverwriteDialog dialog = new FileOverwriteDialog( this.site.getShell(), file.getName() );
-        if (dialog.open() == SWT.YES){        
-          try {
-            file.delete( true, null );
-            
-            IProgressMonitor lMonitor
-            = monitor == null
-            ? new NullProgressMonitor()
-            : monitor;
-            
-          lMonitor.beginTask( "Transforming job descriptions", input.length ); //$NON-NLS-1$
-          
-          try {
-            for ( IGridJobDescription descr : input ) {
-              
-              lMonitor.subTask( descr.getName() );
-              IStatus status = transform( creator, descr );
-              if ( ! status.isOK() ) {
-                errors.add( status );
-              }
-              lMonitor.worked( 1 );
-            }
-          } finally {
-            lMonitor.done();
-          }
-          
-          if ( ( errors != null ) && ( errors.size() > 0 ) ) {
-            if ( errors.size() == 1 ) {
-              result = errors.get( 0 );
-            } else {
-              result = new MultiStatus(
-                  Activator.PLUGIN_ID,
-                  0,
-                  errors.toArray( new IStatus[ errors.size() ] ),
-                  "Transformation problems", //$NON-NLS-1$
-                  null
-              );
-            }
-          }
-            
-          } catch( CoreException e ) {
-            Activator.logException( e );
-          }
-        }
-        else {
-          result = new Status(
-                              IStatus.OK,
-                              Activator.PLUGIN_ID,
-                              String.format( "Transformation canceleled for %s", file.getName() )); //$NON-NLS-1$
-        }
-      }
-    }
-    
-    
-    
-    return result;
-    
-  }
-  
+   
   private IStatus transform( final IGridElementCreator creator,
                              final IGridJobDescription input ) {
     
