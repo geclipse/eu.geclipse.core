@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+<head>
+<meta
+  http-equiv="Content-Type"
+  content="text/html; charset=UTF-8">
+<META
+  HTTP-EQUIV="Content-Style-Type"
+  CONTENT="text/css">
+<LINK
+  REL="STYLESHEET"
+  HREF="PLUGINS_ROOT/eu.geclipse.doc.user/book.css"
+  CHARSET="UTF-8"
+  TYPE="text/css">
+<title>Adding Pages to the JSDL Editor</title>
+</head>
+
+<body BGCOLOR="#ffffff">
+
+<h1>Adding Pages to the JSDL Editor</h1>
+<p>
+In order to add a new page to the the JSDL editor the following steps should be
+performed:
+
+<ol type="1">
+<li>Create a new class under <i>eu.geclipse.ui.internal.pages</i> that extends
+the <i>eu.geclipse.jsdl.ui.internal.page.JsdlFormPage</i> class. </li>
+
+
+<li>Create a protected static final string variable called <i>PAGE_ID</i> that 
+provides a human readable ID of the new page as follows:
+<pre>protected static final String PAGE_ID = "NEW_PAGE";</pre>
+</li>
+
+<li>The class constructor must call the super class constructor as follows:
+<pre>public NewPage( final FormEditor editor ) {
+      super( editor, PAGE_ID, Messages.getString( "New_PageTitle" ) );
+     }</pre>
+</li>
+
+<li>Override the <i> dispose()</i> method for disposing any page specific objects.
+<b>Note:</b> The super class dispose method should be called before any page specific
+objects are disposed. </li>
+
+<li>Override the <i>setActive()</i> method for performing any necessary operations
+when the new page becomes active.</li>
+
+<li>Override the <i>getHelpResource()</i>method for linking the page with 
+help system as follows:
+<pre>
+  @Override
+  protected String getHelpResource() {
+    return "/eu.geclipse.doc.user/html/concepts/jobmanagement/editorpages/newpage.html";
+  }
+</pre>
+</li>
+
+<li>Override the <i>createFormContent( final IManagedForm managedForm )</i> method
+for creating sections on the JSDL page. Go to <a href="addingJSDLsection.html">"Adding
+Sections to a JSDL Editor page"</a> for more information on this.
+</li>
+
+<li>Create a <i>protected Composite</i> variable for the form body composite.</li>
+
+<li>Create a public <i>setPageContent()</i> method which takes as parameters objects 
+belonging to class <i>eu.geclipse.jsdl.model.base.JobDefinitionType</i> and 
+a boolean variable indicating whether the page has been refreshed. An exemplary
+method is given below: 
+<pre>public void setPageContent( final JobDefinitionType jobDefinitionRoot,
+                                 final boolean refreshStatus )
+  {
+    if( refreshStatus ) {
+      this.contentRefreshed = true;
+      this.jobDefinitionType = jobDefinitionRoot;
+    }
+    this.jobDefinitionType = jobDefinitionRoot;      
+  }
+</pre>
+</li>
+
+<li> In the <i>eu.geclipse.jsdl.ui.editors.JsdlEditor</i> class do the following:
+<ol type="10">
+<li>In the <i>addPages()</i> method add the newly created page by calling the 
+<i>addPage()</i> method.</li>
+</ol>
+</li>
+
+</ol>
+
+
+<p> The existing filters are shown in the following image </p>
+<img src="images/glueFilters.png">
+
+</body>
+</html>\ No newline at end of file

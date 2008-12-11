@@ -23,9 +23,14 @@
      <topic href="html/how_to_contribute/jobManagement/statusUpdate.html" label="Implementing Job Status Update">
      </topic>
   </topic>
-  <topic
-    label="Job Details View"
-    href="html/how_to_contribute/gridJobDetails.html" />    
+  <topic href="html/how_to_contribute/gridJobDetails.html" label="Job Details View">
+  </topic>
+  <topic label="JSDL Editor">
+     <topic href="html/how_to_contribute/addingJSDLpage.html" label="Adding a new page.">
+     </topic>
+     <topic href="html/how_to_contribute/addingJSDLsection.html" label="Adding a new section">
+     </topic>
+  </topic>    
   <topic
     label="Batch Systems"
     href="html/how_to_contribute/gridBatchSystems.html" />
