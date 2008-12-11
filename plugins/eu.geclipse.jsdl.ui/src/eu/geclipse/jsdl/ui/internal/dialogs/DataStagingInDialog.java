@@ -145,7 +145,11 @@ public class DataStagingInDialog extends Dialog {
 
       public void modifyText( final ModifyEvent e ) {
         if ( DataStagingInDialog.this.editMode == true){
+          try{
            DataStagingInDialog.this.uris[0] = URI.create( DataStagingInDialog.this.pathText.getText() );
+          } catch (IllegalArgumentException exc){
+            //ignore
+          }
         }
         
       }

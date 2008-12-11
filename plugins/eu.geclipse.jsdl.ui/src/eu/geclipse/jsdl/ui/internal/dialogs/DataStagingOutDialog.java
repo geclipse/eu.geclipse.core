@@ -54,7 +54,8 @@ import eu.geclipse.jsdl.ui.widgets.Messages;
 import eu.geclipse.ui.dialogs.GridFileDialog;
 
 /**
- * @author nloulloud
+ * Dialog class for providing information (entering new one or editing existing
+ * one) of data staging out entries in JSDL.
  */
 public class DataStagingOutDialog extends Dialog {
 
@@ -158,15 +159,22 @@ public class DataStagingOutDialog extends Dialog {
 
       public void modifyText( final ModifyEvent e ) {
         if( DataStagingOutDialog.this.editMode == true ) {
+          try{
           DataStagingOutDialog.this.uris[ 0 ] = URI.create( DataStagingOutDialog.this.pathText.getText() );
+          }catch (IllegalArgumentException exc){
+//            ignore
+          }
         }
       }
     } );
     gd = new GridData( GridData.FILL_HORIZONTAL );
     this.pathText.setLayoutData( gd );
     Button browseButton = new Button( panel, SWT.PUSH );
-    URL openFileIcon = Activator.getDefault().getBundle().getEntry( "icons/obj16/open_file.gif" ); //$NON-NLS-1$
-    Image openFileImage = ImageDescriptor.createFromURL( openFileIcon ).createImage();
+    URL openFileIcon = Activator.getDefault()
+      .getBundle()
+      .getEntry( "icons/obj16/open_file.gif" ); //$NON-NLS-1$
+    Image openFileImage = ImageDescriptor.createFromURL( openFileIcon )
+      .createImage();
     browseButton.setImage( openFileImage );
     browseButton.addSelectionListener( new SelectionAdapter() {
 
@@ -175,18 +183,18 @@ public class DataStagingOutDialog extends Dialog {
         String currentURI = null;
         GridFileDialog dialog = new GridFileDialog( PlatformUI.getWorkbench()
           .getActiveWorkbenchWindow()
-          .getShell(), GridFileDialog.STYLE_ALLOW_ONLY_FILES  | GridFileDialog.STYLE_MULTI_SELECTION);
+          .getShell(), GridFileDialog.STYLE_ALLOW_ONLY_FILES );
         if( dialog.open() == Window.OK ) {
           DataStagingOutDialog.this.uris = dialog.getSelectedURIs();
           for( int j = 0; j < DataStagingOutDialog.this.uris.length; j++ ) {
-            URI uri = DataStagingOutDialog.this.uris[j];
+            URI uri = DataStagingOutDialog.this.uris[ j ];
             String query = uri.getQuery();
             if( query != null && query.trim().length() > 0 ) {
               String[] qParts = query.split( "&" ); //$NON-NLS-1$
               query = ""; //$NON-NLS-1$
-              for( int i=0; i < qParts.length; i++ ) {
-                String qPart = qParts[i];
-                if( !qPart.startsWith( "vo" ) ){ //$NON-NLS-1$
+              for( int i = 0; i < qParts.length; i++ ) {
+                String qPart = qParts[ i ];
+                if( !qPart.startsWith( "vo" ) ) { //$NON-NLS-1$
                   if( query.trim().length() > 0 ) {
                     query += "&"; //$NON-NLS-1$
                   }
@@ -197,7 +205,6 @@ public class DataStagingOutDialog extends Dialog {
                 query = null;
               }
             }
-            
             try {
               uri = new URI( uri.getScheme(),
                              uri.getUserInfo(),
@@ -206,9 +213,9 @@ public class DataStagingOutDialog extends Dialog {
                              uri.getPath(),
                              query,
                              uri.getFragment() );
-              DataStagingOutDialog.this.uris[j] = uri;
+              DataStagingOutDialog.this.uris[ j ] = uri;
             } catch( URISyntaxException e1 ) {
-              //TODO
+              // TODO
               Activator.logException( e1 );
             }
           }
@@ -221,12 +228,11 @@ public class DataStagingOutDialog extends Dialog {
               URI uri;
               try {
                 uri = new URI( currentURI );
-                DataStagingOutDialog.this.filename[i] = new Path( uri.getPath() ).lastSegment();
+                DataStagingOutDialog.this.filename[ i ] = new Path( uri.getPath() ).lastSegment();
               } catch( URISyntaxException e1 ) {
-                //TODO
+                // TODO
                 Activator.logException( e1 );
               }
-              
               if( i == 0 ) {
                 DataStagingOutDialog.this.pathText.setText( DataStagingOutDialog.this.uris[ i ].toString() );
                 /*
@@ -356,8 +362,8 @@ public class DataStagingOutDialog extends Dialog {
 
   void updateButtons() {
     if( !this.nameText.getText().equals( "" ) )//$NON-NLS-1$
-// Commented-out for Gria..refer to Bug#: 241940
-//        && !this.pathText.getText().equals( "" ) ) //$NON-NLS-1$
+    // Commented-out for Gria..refer to Bug#: 241940
+    //        && !this.pathText.getText().equals( "" ) ) //$NON-NLS-1$
     {
       super.getButton( IDialogConstants.OK_ID ).setEnabled( true );
     } else {
