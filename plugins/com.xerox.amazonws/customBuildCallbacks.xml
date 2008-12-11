@@ -31,30 +31,9 @@
 	<!--   build.result.folder - folder to contain the build results           -->
 	<!-- ===================================================================== -->
 	<target name="pre.build.jars">
-
+<!--
 		<antcall target="proxy" />
-		<!--
-		<get src="http://typica.googlecode.com/svn/tags/v1.3/lib/activation.jar" 
-		     dest="lib/activation.jar" 
-		     verbose="true"
-		     usetimestamp="true"/>
-		     -->
-		
-		<!--
-		<get src="http://typica.googlecode.com/svn/tags/v1.3/lib/jaxb-api.jar" 
-		     dest="lib/jaxb-api.jar" 
-		     verbose="true"
-		     usetimestamp="true"/>
-		<get src="http://typica.googlecode.com/svn/tags/v1.3/lib/jaxb-impl.jar" 
-		     dest="lib/jaxb-impl.jar" 
-		     verbose="true"
-		     usetimestamp="true"/>
-		<get src="http://typica.googlecode.com/svn/tags/v1.3/lib/jsr173_1.0_api.jar" 
-		     dest="lib/jsr173_1.0_api.jar" 
-		     verbose="true"
-		     usetimestamp="true"/>
-		     -->
-
+-->
 		<mkdir dir="repo/lib"/>
 		<get src="http://typica.googlecode.com/svn/tags/v1.3/lib/activation.jar" 
 		     dest="repo/lib/activation.jar" 
