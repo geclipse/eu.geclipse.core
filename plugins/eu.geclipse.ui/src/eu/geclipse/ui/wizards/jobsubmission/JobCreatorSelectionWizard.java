@@ -24,6 +24,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -41,8 +42,12 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IEditorDescriptor;
 import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.part.FileEditorInput;
 
 import eu.geclipse.core.jobs.GridJob;
 import eu.geclipse.core.jobs.GridJobCreator;
@@ -61,7 +66,6 @@ import eu.geclipse.jsdl.JSDLJobDescription;
 import eu.geclipse.ui.dialogs.ProblemDialog;
 import eu.geclipse.ui.internal.Activator;
 
-
 public class JobCreatorSelectionWizard extends Wizard {
 
   protected List<IGridJobDescription> jobDescriptions;
@@ -71,7 +75,7 @@ public class JobCreatorSelectionWizard extends Wizard {
 
   public JobCreatorSelectionWizard( final List<IGridJobDescription> jobDescriptions )
   {
-    this.jobDescriptions = new ArrayList<IGridJobDescription>(jobDescriptions);
+    this.jobDescriptions = new ArrayList<IGridJobDescription>( jobDescriptions );
     setNeedsProgressMonitor( true );
     setForcePreviousAndNextButtons( true );
     setWindowTitle( Messages.getString( "JobCreatorSelectionWizard.title" ) ); //$NON-NLS-1$
@@ -107,21 +111,22 @@ public class JobCreatorSelectionWizard extends Wizard {
         assert JobCreatorSelectionWizard.this.jobDescriptions != null;
         assert JobCreatorSelectionWizard.this.jobDescriptions.get( 0 ) != null;
         IGridJobService[] allServices = null;
-        IGridProject project = JobCreatorSelectionWizard.this.jobDescriptions.get( 0 ).getProject();
+        IGridProject project = JobCreatorSelectionWizard.this.jobDescriptions.get( 0 )
+          .getProject();
         assert project != null;
         assert project.getVO() != null;
         try {
           allServices = project.getVO().getJobSubmissionServices( null );
           boolean valid;
-          for ( IGridJobService service : allServices ) {
+          for( IGridJobService service : allServices ) {
             Iterator<IGridJobDescription> iter = JobCreatorSelectionWizard.this.jobDescriptions.iterator();
             valid = true;
-            while ( iter.hasNext() ) {
+            while( iter.hasNext() ) {
               IGridJobDescription jobDescription = iter.next();
-              if ( ! service.canSubmit( jobDescription ) )
+              if( !service.canSubmit( jobDescription ) )
                 valid = false;
             }
-            if ( valid == true ) {
+            if( valid == true ) {
               JobCreatorSelectionWizard.this.jobServices.add( service );
             }
           }
@@ -130,16 +135,15 @@ public class JobCreatorSelectionWizard extends Wizard {
           display.syncExec( new Runnable() {
 
             public void run() {
-//              List<IGridJobService> synchronizedList = Collections.synchronizedList( jobServices );
-              JobCreatorSelectionWizard.this.selectionPage.setServices( JobCreatorSelectionWizard.this.jobServices ) ;
+              // List<IGridJobService> synchronizedList =
+              // Collections.synchronizedList( jobServices );
+              JobCreatorSelectionWizard.this.selectionPage.setServices( JobCreatorSelectionWizard.this.jobServices );
             }
           } );
-        } catch ( ProblemException e ) {
+        } catch( ProblemException e ) {
           // TODO pawelw - handle error
           return Status.CANCEL_STATUS;
         }
-        
-
         return Status.OK_STATUS;
       }
     };
@@ -155,7 +159,6 @@ public class JobCreatorSelectionWizard extends Wizard {
 
   /*
    * This it the routine were the sub-submission is started. (non-Javadoc)
-   * 
    * @see org.eclipse.jface.wizard.Wizard#performFinish()
    */
   @Override
@@ -262,6 +265,49 @@ public class JobCreatorSelectionWizard extends Wizard {
       } );
     }
   }
+
+  protected void addOpenEditorSolution( final Throwable exc ) {
+    if( exc instanceof ProblemException ) {
+      ProblemException problemExc = ( ProblemException )exc;
+      IProblem problem = problemExc.getProblem();
+      problem.addSolution( new ISolution() {
+
+        public String getDescription() {
+          return Messages.getString( "JobSubmissionWizardBase.solutionOpenEditor" ); //$NON-NLS-1$
+        }
+
+        public String getID() {
+          return null;
+        }
+
+        public boolean isActive() {
+          return true;
+        }
+
+        public void solve() throws InvocationTargetException {
+          for( IGridJobDescription descr : JobCreatorSelectionWizard.this.jobDescriptions )
+          {
+            IResource res = descr.getResource();
+            if( res instanceof IFile ) {
+              IFile desFile = ( IFile )res;
+              IWorkbenchPage page = PlatformUI.getWorkbench()
+                .getActiveWorkbenchWindow()
+                .getActivePage();
+              IEditorDescriptor desc = PlatformUI.getWorkbench()
+                .getEditorRegistry()
+                .getDefaultEditor( desFile.getName() );
+              try {
+                page.openEditor( new FileEditorInput( desFile ), desc.getId() );
+              } catch( PartInitException e ) {
+                // just ignore
+              }
+            }
+          }
+        }
+      } );
+      problem.addReason( Messages.getString( "JobSubmissionWizardBase.submissionFailedReasonNotEnoughInput" ) );
+    }
+  }
   private class JobSubmissionJob extends Job {
 
     // create the service for the job submission
@@ -305,10 +351,12 @@ public class JobCreatorSelectionWizard extends Wizard {
           IGridContainer parent = buildTargetFolder( description,
                                                      this.destinationFolder );
           IGridJobID jobId = null;
-          
-          if( isParametric( description ) ) {      
+          if( isParametric( description ) ) {
             ParametricJobService paramService = new ParametricJobService( this.service );
-            paramService.submitJob( description, betterMonitor.newChild( 1 ), parent, namesIterator.next() );
+            paramService.submitJob( description,
+                                    betterMonitor.newChild( 1 ),
+                                    parent,
+                                    namesIterator.next() );
           } else {
             jobId = this.service.submitJob( description,
                                             betterMonitor.newChild( 1 ) );
@@ -317,7 +365,6 @@ public class JobCreatorSelectionWizard extends Wizard {
             creator.canCreate( description );
             creator.create( parent, jobId, this.service, namesIterator.next() );
           }
-
           testCancelled( betterMonitor );
           // don't submit this job again during again submission after error
           iterator.remove();
@@ -347,21 +394,19 @@ public class JobCreatorSelectionWizard extends Wizard {
         } else {
           // check if parent is parametric job
           IGridContainer parent = jsdl.getParent();
-          
           while( parent != null ) {
             if( parent instanceof GridJob ) {
               GridJob parentJob = ( GridJob )parent;
               IGridJobDescription parentDescription = parentJob.getJobDescription();
               if( parentDescription instanceof JSDLJobDescription ) {
                 parametric = ( ( JSDLJobDescription )parentDescription ).isParametric();
-              }              
+              }
               break;
             }
             parent = parent.getParent();
           }
         }
       }
-      
       return parametric;
     }
 
@@ -429,6 +474,7 @@ public class JobCreatorSelectionWizard extends Wizard {
 
         public void run() {
           addShowWizardSolution( exc );
+          addOpenEditorSolution( exc );
           ProblemDialog.openProblem( getShell(),
                                      Messages.getString( "JobSubmissionWizardBase.errSubmissionFailed" ), //$NON-NLS-1$
                                      null,
