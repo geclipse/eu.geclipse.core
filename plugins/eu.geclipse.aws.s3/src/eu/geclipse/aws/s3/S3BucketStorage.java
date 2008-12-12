@@ -57,6 +57,15 @@ public class S3BucketStorage extends AbstractGridElement
   /** The {@link S3Bucket} contains the bucket data from the S3 system. */
   private S3Bucket s3Bucket;
 
+  /**
+   * A getter for the wrapped bucket.
+   * 
+   * @return the s3Bucket wrapped by this class
+   */
+  public S3Bucket getS3Bucket() {
+    return this.s3Bucket;
+  }
+
   /** The parent of this {@link IGridElement} in the vo tree. */
   private IGridContainer parent;
 
