@@ -38,7 +38,8 @@ public class CreateBucketAction extends AbstractAWSProjectAction {
   @Override
   public void run( final IAction action ) {
     if( getAwsVo() != null ) {
-      CreateBucketWizard createbucketWizard = new CreateBucketWizard( getAwsVo() );
+      CreateBucketWizard createbucketWizard = new CreateBucketWizard( getAwsVo(),
+                                                                      getProject() );
 
       WizardDialog wizardDialog = new WizardDialog( getWorkbenchPart().getSite()
                                                       .getShell(),

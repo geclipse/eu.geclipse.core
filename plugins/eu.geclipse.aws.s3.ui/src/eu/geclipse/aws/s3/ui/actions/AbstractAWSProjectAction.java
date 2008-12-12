@@ -55,6 +55,18 @@ public abstract class AbstractAWSProjectAction implements IObjectActionDelegate
    */
   private AWSVirtualOrganization awsVo;
 
+  /** The grid project the selected element belonged to. */
+  private IGridProject project;
+
+  /**
+   * A getter for an extracted projected.
+   * 
+   * @return the extracted project
+   */
+  public IGridProject getProject() {
+    return this.project;
+  }
+
   abstract public void run( final IAction action );
 
   public void setActivePart( final IAction action,
@@ -80,11 +92,11 @@ public abstract class AbstractAWSProjectAction implements IObjectActionDelegate
       if( firstElement instanceof IGridElement ) {
         IGridElement resourceCat = ( IGridElement )firstElement;
 
-        IGridProject project = resourceCat.getProject();
+        this.project = resourceCat.getProject();
 
         // if the selection is not a category the project might be null
-        if( project != null ) {
-          Object vo = project.getVO();
+        if( this.project != null ) {
+          Object vo = this.project.getVO();
 
           if( vo instanceof IWrappedElement ) {
             IWrappedElement wrappedElement = ( IWrappedElement )vo;
@@ -166,7 +178,7 @@ public abstract class AbstractAWSProjectAction implements IObjectActionDelegate
         IWorkbenchWindow workbenchWindow = PlatformUI.getWorkbench()
           .getActiveWorkbenchWindow();
         ProblemDialog.openProblem( workbenchWindow.getShell(),
-                                   Messages.getString("AbstractAWSProjectAction.s3error_message"), //$NON-NLS-1$
+                                   Messages.getString( "AbstractAWSProjectAction.s3error_message" ), //$NON-NLS-1$
                                    description,
                                    exception );
       }

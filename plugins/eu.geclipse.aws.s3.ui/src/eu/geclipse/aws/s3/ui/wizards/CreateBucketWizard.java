@@ -25,14 +25,13 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.jets3t.service.S3Service;
-import org.jets3t.service.S3ServiceException;
 
 import eu.geclipse.aws.s3.IS3Problems;
 import eu.geclipse.aws.s3.S3ProblemException;
 import eu.geclipse.aws.s3.internal.S3ServiceRegistry;
 import eu.geclipse.aws.s3.ui.internal.Activator;
 import eu.geclipse.aws.vo.AWSVirtualOrganization;
-import eu.geclipse.core.reporting.ProblemException;
+import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.ui.dialogs.ProblemDialog;
 
 /**
@@ -52,13 +51,20 @@ public class CreateBucketWizard extends Wizard {
   /** The wizard page providing the form elements. */
   private CreateBucketWizardPage wizardPage;
 
+  /** The grid project related to the action. */
+  private final IGridProject gridProject;
+
   /**
    * Creates a new {@link WizardPage} with the aws access id in the aws vo.
    * 
    * @param awsVo the container of the aws access id
+   * @param gridProject the project initiating the action
    */
-  public CreateBucketWizard( final AWSVirtualOrganization awsVo ) {
+  public CreateBucketWizard( final AWSVirtualOrganization awsVo,
+                             final IGridProject gridProject )
+  {
     this.awsVo = awsVo;
+    this.gridProject = gridProject;
     setNeedsProgressMonitor( true );
     setHelpAvailable( false );
   }
@@ -100,44 +106,59 @@ public class CreateBucketWizard extends Wizard {
               if( service != null ) {
                 service.createBucket( bucketName, location );
               }
-            } catch( ProblemException e ) {
-              new InvocationTargetException( e,
-                                             "Could not obtain the s3 registry" ); //$NON-NLS-1$
-            } catch( S3ServiceException e ) {
-              new InvocationTargetException( e,
-                                             "Could not create s3 bucket via the S3Service" ); //$NON-NLS-1$
+
+              // refresh category in VO tree
+              // TODO correct error with ui threading for the update
+
+              // CreateBucketWizard.this.gridProject.getVO()
+              // .refreshResources( GridResourceCategoryFactory.getCategory(
+              // IS3Categories.CATEGORY_S3_STORAGE ),
+              // monitor );
+
+            } catch( Exception ex ) {
+              ex.printStackTrace();
+              showErrorDialog( ex );
             } finally {
               monitor.done();
             }
+
           }
 
         } );
       } catch( Exception ex ) {
-        Activator.log( "A problem occured while creating a s3 bucket", ex ); //$NON-NLS-1$
-        // process any errors
-        final S3ProblemException exception = new S3ProblemException( IS3Problems.S3_BUCKET_CREATION_FAILED,
-                                                                     ex.getCause()
-                                                                       .getLocalizedMessage(),
-                                                                     ex,
-                                                                     Activator.PLUGIN_ID );
-
-        Display display = PlatformUI.getWorkbench().getDisplay();
-        display.asyncExec( new Runnable() {
-
-          public void run() {
-            IWorkbenchWindow workbenchWindow = PlatformUI.getWorkbench()
-              .getActiveWorkbenchWindow();
-            ProblemDialog.openProblem( workbenchWindow.getShell(),
-                                       Messages.getString( "CreateBucketWizard.errorCreatingBucket_title" ), //$NON-NLS-1$
-                                       Messages.getString( "CreateBucketWizard.errorCreatingBucket_description" ) //$NON-NLS-1$
-                                           + CreateBucketWizard.this.wizardPage.getBucketName(),
-                                       exception );
-          }
-        } );
-        return false;
+        showErrorDialog( ex );
       }
       return true;
     }
     return false;
+  }
+
+  /**
+   * Shows an error dialog with.
+   * 
+   * @param ex the reason for the error
+   */
+  private void showErrorDialog( final Exception ex ) {
+    Activator.log( "A problem occured while creating a s3 bucket", ex ); //$NON-NLS-1$
+    // process any errors
+    final S3ProblemException exception = new S3ProblemException( IS3Problems.S3_BUCKET_CREATION_FAILED,
+                                                                 ex.getCause()
+                                                                   .getLocalizedMessage(),
+                                                                 ex,
+                                                                 Activator.PLUGIN_ID );
+
+    Display display = PlatformUI.getWorkbench().getDisplay();
+    display.asyncExec( new Runnable() {
+
+      public void run() {
+        IWorkbenchWindow workbenchWindow = PlatformUI.getWorkbench()
+          .getActiveWorkbenchWindow();
+        ProblemDialog.openProblem( workbenchWindow.getShell(),
+                                   Messages.getString( "CreateBucketWizard.errorCreatingBucket_title" ), //$NON-NLS-1$
+                                   Messages.getString( "CreateBucketWizard.errorCreatingBucket_description" ) //$NON-NLS-1$
+                                       + CreateBucketWizard.this.wizardPage.getBucketName(),
+                                   exception );
+      }
+    } );
   }
 }

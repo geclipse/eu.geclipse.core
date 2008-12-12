@@ -15,7 +15,6 @@
 
 package eu.geclipse.aws.s3.ui.actions;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,12 +25,16 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
 import org.jets3t.service.S3Service;
-import org.jets3t.service.S3ServiceException;
 
+import eu.geclipse.aws.s3.IS3Categories;
 import eu.geclipse.aws.s3.S3BucketStorage;
 import eu.geclipse.aws.s3.internal.S3ServiceRegistry;
-import eu.geclipse.core.reporting.ProblemException;
+import eu.geclipse.core.model.IVirtualOrganization;
+import eu.geclipse.core.model.impl.GridResourceCategoryFactory;
+import eu.geclipse.ui.dialogs.ProblemDialog;
 
 /**
  * This action deletes a selected bucket.
@@ -54,12 +57,12 @@ public class DeleteBucketAction extends AbstractAWSProjectAction {
   public void run( final IAction action ) {
     if( action.isEnabled() ) {
 
-      Job job = new Job( Messages.getString( Messages.getString("DeleteBucketAction.jobDeleteBucket_title") ) ) { //$NON-NLS-1$
+      Job job = new Job( Messages.getString( Messages.getString( "DeleteBucketAction.jobDeleteBucket_title" ) ) ) { //$NON-NLS-1$
 
         @Override
         protected IStatus run( final IProgressMonitor monitor ) {
           try {
-            monitor.beginTask( Messages.getString("DeleteBucketAction.taskTitleDeleteBucket_text"), IProgressMonitor.UNKNOWN ); //$NON-NLS-1$
+            monitor.beginTask( Messages.getString( "DeleteBucketAction.taskTitleDeleteBucket_text" ), IProgressMonitor.UNKNOWN ); //$NON-NLS-1$
 
             S3ServiceRegistry s3ServiceRegistry = S3ServiceRegistry.getRegistry();
 
@@ -67,19 +70,27 @@ public class DeleteBucketAction extends AbstractAWSProjectAction {
             service = s3ServiceRegistry.getService( getAwsVo().getProperties()
               .getAwsAccessId() );
 
+            IVirtualOrganization projectVo = null;
+
             if( service != null ) {
               for( S3BucketStorage bucket : DeleteBucketAction.this.bucketList )
               {
                 service.deleteBucket( bucket.getS3Bucket() );
+                projectVo = ( IVirtualOrganization )bucket.getParent();
               }
             }
+            if( projectVo != null ) {
+              projectVo.refreshResources( GridResourceCategoryFactory.getCategory( IS3Categories.CATEGORY_S3_STORAGE ),
+                                          monitor );
+            }
 
-          } catch( ProblemException e ) {
-            new InvocationTargetException( e,
-                                           "Could not obtain the s3 registry" ); //$NON-NLS-1$
-          } catch( S3ServiceException e ) {
-            new InvocationTargetException( e,
-                                           "Could not delete s3 bucket via the S3Service" ); //$NON-NLS-1$
+          } catch( Exception ex ) {
+            IWorkbenchWindow workbenchWindow = PlatformUI.getWorkbench()
+              .getActiveWorkbenchWindow();
+            ProblemDialog.openProblem( workbenchWindow.getShell(),
+                                       Messages.getString( "DeleteBucketAction.errorCreateBucket_title" ), //$NON-NLS-1$
+                                       Messages.getString( "DeleteBucketAction.errorCreateBucket_description" ), //$NON-NLS-1$
+                                       ex );
           } finally {
             monitor.done();
           }
