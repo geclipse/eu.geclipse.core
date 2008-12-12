@@ -60,4 +60,9 @@ public interface IS3Problems {
    */
   public static final String S3_DELETE_FAILED = "eu.geclipse.aws.s3.problem.deleteFailed"; //$NON-NLS-1$
 
+  /**
+   * ID for general interaction failure.
+   */
+  public static final String S3_INTERACTION = "eu.geclipse.aws.s3.problem.interactionFailed"; //$NON-NLS-1$
+
 }

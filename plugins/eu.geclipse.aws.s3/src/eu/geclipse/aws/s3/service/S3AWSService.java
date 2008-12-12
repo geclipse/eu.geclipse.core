@@ -26,6 +26,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
 import eu.geclipse.aws.IAWSService;
+import eu.geclipse.aws.s3.IS3Categories;
 import eu.geclipse.aws.s3.internal.Activator;
 import eu.geclipse.aws.vo.AWSVirtualOrganization;
 import eu.geclipse.core.ICoreProblems;
@@ -35,6 +36,7 @@ import eu.geclipse.core.model.IGridInfoService;
 import eu.geclipse.core.model.IGridResourceCategory;
 import eu.geclipse.core.model.IStorableElement;
 import eu.geclipse.core.model.impl.AbstractGridContainer;
+import eu.geclipse.core.model.impl.GridResourceCategoryFactory;
 import eu.geclipse.core.reporting.ProblemException;
 
 /**
@@ -50,6 +52,11 @@ public class S3AWSService extends AbstractGridContainer
 
   /** Name to reference the service. */
   public static final String STORAGE_NAME = "eu.geclipse.aws.s3.service.s3AWSServiceCreator"; //$NON-NLS-1$
+
+  /** The categories introduced by this {@link IAWSService}. */
+  public static IGridResourceCategory[] categories = new IGridResourceCategory[]{
+    GridResourceCategoryFactory.getCategory( IS3Categories.CATEGORY_S3_STORAGE )
+  };
 
   /** The {@link AWSVirtualOrganization} this service is based on. */
   private AWSVirtualOrganization awsVo;
@@ -118,7 +125,7 @@ public class S3AWSService extends AbstractGridContainer
   }
 
   public IGridResourceCategory[] getSupportedResources() {
-    return null;
+    return S3AWSService.categories;
   }
 
   public String getHostName() {

@@ -28,7 +28,7 @@ import org.jets3t.service.S3ServiceException;
 import org.jets3t.service.model.S3Bucket;
 
 import eu.geclipse.aws.AWSInfoService;
-import eu.geclipse.aws.IAWSCategories;
+import eu.geclipse.aws.s3.IS3Categories;
 import eu.geclipse.aws.s3.S3BucketStorage;
 import eu.geclipse.aws.s3.internal.Activator;
 import eu.geclipse.aws.s3.internal.S3ServiceRegistry;
@@ -75,7 +75,7 @@ public class S3InfoService extends AbstractGridInfoService {
                                          final IProgressMonitor monitor )
   {
     IGridResource[] result = null;
-    if( category.equals( GridResourceCategoryFactory.getCategory( IAWSCategories.CATEGORY_AWS_STORAGE ) ) )
+    if( category.equals( GridResourceCategoryFactory.getCategory( IS3Categories.CATEGORY_S3_STORAGE ) ) )
     {
       result = fetchBuckets( parent, vo, monitor );
     }
@@ -85,10 +85,10 @@ public class S3InfoService extends AbstractGridInfoService {
   /**
    * Fetches the buckets of the S3 infrastructure.
    * 
-   * @param parent the parten
-   * @param vo
-   * @param monitor
-   * @return
+   * @param parent the parent
+   * @param vo the vo to use
+   * @param monitor a monitor to track progress
+   * @return the created {@link IGridResource}s
    */
   public IGridResource[] fetchBuckets( final IGridContainer parent,
                                        final IVirtualOrganization vo,
@@ -113,7 +113,7 @@ public class S3InfoService extends AbstractGridInfoService {
 
       if( service != null ) {
         S3Bucket[] buckets = service.listAllBuckets();
-        monitor.worked( 1 );
+        monitor.worked( 2 );
 
         if( buckets != null ) {
           s3BucketStorages = new S3BucketStorage[ buckets.length ];
@@ -129,7 +129,7 @@ public class S3InfoService extends AbstractGridInfoService {
     } catch( ProblemException probEx ) {
       Activator.log( "Could not obtain S3Service", probEx ); //$NON-NLS-1$
     } catch( S3ServiceException s3ServEx ) {
-      Activator.log( "Could fetch list of buckets from S3Service", s3ServEx ); //$NON-NLS-1$
+      Activator.log( "Could not fetch list of buckets from S3Service", s3ServEx ); //$NON-NLS-1$
     } finally {
       monitor.done();
     }

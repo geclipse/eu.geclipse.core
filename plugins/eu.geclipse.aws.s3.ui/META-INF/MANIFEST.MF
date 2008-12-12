@@ -15,5 +15,7 @@ Require-Bundle: eu.geclipse.aws.s3,
  org.eclipse.ui,
  org.eclipse.core.resources,
  eu.geclipse.core.filesystem,
- org.eclipse.ui.views
+ org.eclipse.ui.views,
+ eu.geclipse.aws,
+ org.jets3t;bundle-version="0.6.1"
 Bundle-ActivationPolicy: lazy

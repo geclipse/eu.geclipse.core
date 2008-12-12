@@ -25,6 +25,14 @@
       </creator>
    </extension>
    <extension
+         point="eu.geclipse.core.gridResourceCategory">
+      <category
+            id="eu.geclipse.aws.storage.s3"
+            name="S3"
+            parent="eu.geclipse.aws.storage">
+      </category>
+   </extension>
+   <extension
          point="eu.geclipse.core.reporting.problemReporting">
       <problem
             description="Failed to create the Rest-Service to access S3"

@@ -19,14 +19,14 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 /**
- * This class uses the bundle mechanism with the message.properties file located
- * in the root of the project for i18n.
+ * This class uses the bundle mechanism with the message.properties file in the
+ * same package as this class.
  * 
  * @author Moritz Post
  */
 public class Messages {
 
-  /** Name of the bundle file in the project root */
+  /** Name of the bundle file. */
   private static final String BUNDLE_NAME = "eu.geclipse.aws.s3.ui.internal.messages"; //$NON-NLS-1$
 
   /** Bundle to work with. */

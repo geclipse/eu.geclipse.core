@@ -15,7 +15,6 @@
 
 package eu.geclipse.aws.s3.service;
 
-import org.eclipse.core.filesystem.IFileInfo;
 import org.eclipse.core.filesystem.IFileStore;
 
 import eu.geclipse.aws.IAWSServiceCreator;
@@ -26,7 +25,6 @@ import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridElementCreator;
 import eu.geclipse.core.model.impl.AbstractGridElementCreator;
 import eu.geclipse.core.reporting.ProblemException;
-
 
 /**
  * This element creator is able to construct {@link S3AWSService} objects.
@@ -67,6 +65,11 @@ public class S3AWSServiceCreator extends AbstractGridElementCreator
     return s3awsService;
   }
 
+  /**
+   * A getter for the extension id as declared in the <code>plugin.xml</code>.
+   * 
+   * @return the extension id
+   */
   public String getExtensionID() {
     return S3AWSServiceCreator.EXTENSION_ID;
   }
