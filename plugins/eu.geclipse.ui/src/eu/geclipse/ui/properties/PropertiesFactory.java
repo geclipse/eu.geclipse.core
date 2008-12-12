@@ -27,6 +27,7 @@ import eu.geclipse.core.model.IGridJob;
 import eu.geclipse.core.model.IGridJobDescription;
 import eu.geclipse.core.model.IGridJobService;
 import eu.geclipse.core.model.IGridProject;
+import eu.geclipse.core.model.IGridService;
 import eu.geclipse.core.model.IGridStorage;
 import eu.geclipse.core.model.IPropertiesProvider;
 import eu.geclipse.core.model.IVirtualOrganization;
@@ -53,73 +54,77 @@ public class PropertiesFactory implements IPropertiesFactory {
       sourcesList.add( new VOPropertySource( ( IVirtualOrganization ) sourceObject ) );
     }
     
-    if ( sourceObject instanceof URI ) {
+    else if ( sourceObject instanceof URI ) {
       sourcesList.add( new URIPropertySource( ( URI ) sourceObject ) );
     }
     
-    if ( ( sourceObject instanceof IGridJobDescription ) && !( sourceObject instanceof IGridWorkflowDescription ) ) {
+    else if ( ( sourceObject instanceof IGridJobDescription ) && !( sourceObject instanceof IGridWorkflowDescription ) ) {
       sourcesList.add( new GridJobDescSource( ( IGridJobDescription ) sourceObject ) );
     }
     
-    if (sourceObject instanceof IGridWorkflowDescription) {
+    else if (sourceObject instanceof IGridWorkflowDescription) {
       sourcesList.add( new GridWorkflowDescSource ( (IGridWorkflowDescription) sourceObject ) );
     }
     
-    if ( sourceObject instanceof IGridProject ) {
+    else if ( sourceObject instanceof IGridProject ) {
       sourcesList.add( new GridProjectSource( ( IGridProject ) sourceObject ) );
     }
     
-    if ( sourceObject instanceof IGridConnection ) {
+    else if ( sourceObject instanceof IGridConnection ) {
       sourcesList.add( new ConnectionPropertySource( ( IGridConnection ) sourceObject ) );
     }
     
-    if ( sourceObject instanceof IGridJob ) {
+    else if ( sourceObject instanceof IGridJob ) {
       sourcesList.add( new GridJobSource( ( IGridJob ) sourceObject ) );
     }
     
-    if ( sourceObject instanceof IGridConnectionElement ) {
+    else if ( sourceObject instanceof IGridConnectionElement ) {
       sourcesList.add( new GridConnectionElementSource( ( IGridConnectionElement ) sourceObject ) );
     }
     
-    if ( sourceObject instanceof IPropertiesProvider ) {
+    else if ( sourceObject instanceof IPropertiesProvider ) {
       sourcesList.add( new PropertiesProviderSource( ( IPropertiesProvider ) sourceObject ) );
     }
     
-    if ( sourceObject instanceof GridGlueComputing ) {
+    else if ( sourceObject instanceof GridGlueComputing ) {
       sourcesList.add( new GridGlueComputingSource( ( GridGlueComputing ) sourceObject ) );
     }
     
-    if ( sourceObject instanceof GridGlueStorage ) {
+    else if ( sourceObject instanceof GridGlueStorage ) {
       sourcesList.add( new GridGlueStorageSource( ( GridGlueStorage ) sourceObject ) );
     }
     
-    if ( sourceObject instanceof GridGlueService ) {
+    else if ( sourceObject instanceof GridGlueService ) {
       sourcesList.add( new GridGlueServiceSource( ( GridGlueService ) sourceObject ) );
     }
     
-    if ( sourceObject instanceof GridApplication ) {
+    else if ( sourceObject instanceof GridApplication ) {
       sourcesList.add( new GridApplicationSource( ( GridApplication ) sourceObject ) );
     }
     
-    if ( sourceObject instanceof AbstractGridInfoService)
+    else if ( sourceObject instanceof AbstractGridInfoService)
     {
       sourcesList.add( new AbstractGridInfoServiceSource( ( AbstractGridInfoService ) sourceObject ) );
     }
     
-    if (sourceObject instanceof IGridJobService)
+    else if (sourceObject instanceof IGridJobService)
     {
       sourcesList.add( new IGridJobServiceSource( ( IGridJobService ) sourceObject ) );
     }
     
-    if (sourceObject instanceof GridGlueServiceApplication)
+    else if (sourceObject instanceof GridGlueServiceApplication)
     {
       sourcesList.add( new GridGlueServiceApplicationSource( ( GridGlueServiceApplication )sourceObject ) );
     }
     
-    if (sourceObject instanceof IGridStorage
+    else if (sourceObject instanceof IGridStorage
         && !(sourceObject instanceof GridGlueStorage))
     {
       sourcesList.add( new IGridStorageSource( ( IGridStorage )sourceObject ) );
+    }
+    
+    else if ( sourceObject instanceof IGridService ) {
+      sourcesList.add( new IGridServiceSource( ( IGridService )sourceObject ) );
     }
     return sourcesList;
   }
