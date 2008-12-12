@@ -142,11 +142,6 @@ public class Extensions {
   public static final String SIMPLE_TEST_FACTORY_EXECUTABLE = "class"; //$NON-NLS-1$
   
   /**
-   * The ID of the wizard extension extension point.
-   */
-  public static final String WIZARD_EXTENSION_POINT = "eu.geclipse.ui.wizardExtension"; //$NON-NLS-1$
-  
-  /**
    * The ID of the wizard extension wizard element.
    */
   public static final String WIZARD_EXTENSION_ELEMENT = "wizard"; //$NON-NLS-1$
@@ -406,30 +401,5 @@ public class Extensions {
     }
     return resultList;
   }
-  
-  /**
-   * Get the wizard extension for the specified reference ID.
-   * 
-   * @param refID The reference ID of the wizard extensions.
-   * @return The wizard extension or <code>null</code> if no extension for the
-   * specified ID could be found.
-   */
-  public static IInitializableWizard getWizardExtension( final String refID ) {
-    IInitializableWizard result = null;
-    ExtensionManager browser = new ExtensionManager();
-    List< IConfigurationElement > elements
-      = browser.getConfigurationElements( WIZARD_EXTENSION_POINT, WIZARD_EXTENSION_ELEMENT );
-    for ( IConfigurationElement element : elements ) {
-      String rid = element.getAttribute( WIZARD_EXTENSION_REFID_ATTRIBUTE );
-      if ( refID.equals( rid ) ) {
-        try {
-          result = ( IInitializableWizard ) element.createExecutableExtension( WIZARD_EXTENSION_EXECUTABLE );
-          break;
-        } catch ( CoreException cExc ) {
-          Activator.logException( cExc );
-        }
-      }
-    }
-    return result;
-  }
+
 }
