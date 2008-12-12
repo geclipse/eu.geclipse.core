@@ -2,5 +2,5 @@
 <?eclipse version="3.2"?>
 <plugin>
    <extension-point id="infoViewerFilter" name="infoViewerFilter" schema="schema/infoViewerFilter.exsd"/>
-   <extension-point id="eu.geclipse.info.supportedServices" name="supportedServices" schema="schema/eu.geclipse.info.supportedServices.exsd"/>
+   <extension-point id="supportedServices" name="supportedServices" schema="schema/supportedServices.exsd"/>
 </plugin>

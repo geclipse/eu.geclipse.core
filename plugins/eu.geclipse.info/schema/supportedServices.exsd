@@ -3,7 +3,7 @@
 <schema targetNamespace="eu.geclipse.info" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appinfo>
-         <meta.schema plugin="eu.geclipse.info" id="eu.geclipse.info.supportedServices" name="supportedServices"/>
+         <meta.schema plugin="eu.geclipse.info" id="supportedServices" name="supportedServices"/>
       </appinfo>
       <documentation>
          Defines a service as supported. This will be shown in the properties of a service when the user selects a service in the grid project view
@@ -52,14 +52,14 @@
          <attribute name="id" type="string">
             <annotation>
                <documentation>
-                  
+                  A unique id
                </documentation>
             </annotation>
          </attribute>
          <attribute name="class" type="string">
             <annotation>
                <documentation>
-                  
+                  A class that implements eu.geclipse.info.model.IGridSupportedService interface
                </documentation>
                <appinfo>
                   <meta.attribute kind="java" basedOn=":eu.geclipse.info.model.IGridSupportedService"/>
@@ -70,6 +70,36 @@
    </element>
 
 
+   <annotation>
+      <appinfo>
+         <meta.section type="examples"/>
+      </appinfo>
+      <documentation>
+         &lt;extension
+         point=&quot;eu.geclipse.info.supportedServices&quot;&gt;
+      &lt;supportedServices
+            class=&quot;eu.geclipse.glite.info.glue.SupportServiceSRM&quot;
+            id=&quot;eu.geclipse.glite.info.glue.SupportServiceSRM&quot;&gt;
+      &lt;/supportedServices&gt;
+      &lt;supportedServices
+            class=&quot;eu.geclipse.glite.info.glue.SupportServiceCE&quot;
+            id=&quot;eu.geclipse.glite.info.glue.SupportServiceCE&quot;&gt;
+      &lt;/supportedServices&gt;
+      &lt;supportedServices
+            class=&quot;eu.geclipse.glite.info.glue.SupportServiceLcgFileCatalog&quot;
+            id=&quot;eu.geclipse.glite.info.glue.SupportServiceLcgFileCatalog&quot;&gt;
+      &lt;/supportedServices&gt;
+      &lt;supportedServices
+            class=&quot;eu.geclipse.glite.info.glue.SupportServiceLcgLocalFileCatalog&quot;
+            id=&quot;eu.geclipse.glite.info.glue.SupportServiceLcgLocalFileCatalog&quot;&gt;
+      &lt;/supportedServices&gt;
+      &lt;supportedServices
+            class=&quot;eu.geclipse.glite.info.glue.SupportServiceWMS&quot;
+            id=&quot;eu.geclipse.glite.info.glue.SupportServiceWMS&quot;&gt;
+      &lt;/supportedServices&gt;
+   &lt;/extension&gt;
+      </documentation>
+   </annotation>
 
 
 
