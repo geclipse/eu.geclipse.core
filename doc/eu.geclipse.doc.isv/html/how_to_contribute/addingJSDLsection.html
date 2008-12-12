@@ -20,27 +20,93 @@
 
 <h1>Adding Sections to a JSDL Editor page.</h1>
 <p>
-In order to add a new filter in the GLUE information view the extension point
-<i>eu.geclipse.info.infoViewerFilter</i> should be extended. Exemplary classes
-that extend this extension point are
-<i>eu.geclipse.glite.ui.info.GLiteInfoViewFilter</i> and
-<i>eu.geclipse.gria.ui.info.GriaInfoViewFilter</i>. These two classes filter
-GLUE information view in order to show only g-Lite or only GRIA resources
-respectively.
-</p>
+In order to add a new section to a new or existing page of the JSDL editor the 
+following steps should be performed:
 
+<ol type="1">
+
+  <li>Create a new class under <i>eu.geclipse.ui.internal.pages.sections</i> that
+  extends the <i>eu.geclipse.jsdl.ui.internal.page.sections.JsdlFormPageSection</i>
+   class. </li>
+   
+   <li>The class constructor must be defined and call the <i>createSection()</i>
+   method as follows:
+    <pre>
+    public NewPageSection( final Composite parent, final FormToolkit toolkit ){
+      createSection( parent, toolkit );
+    }
+    </pre>
+   </li>
+   <li>Implement the <i>createSection()</i> method.</li>
+   <li>Create the section as follows:
+	   <pre>
+  private void createSection( final Composite parent, final FormToolkit toolkit ) {	    
+    String sectionTitle = Messages.getString( "Page_NewPageSectionTitle" );
+    String sectionDescription = Messages.getString( "Page_SectionDescription" );
+  
+    Composite client = FormSectionFactory.createGridStaticSection( toolkit,
+                                                                   parent,
+                                                                   sectionTitle,
+                                                                   sectionDescription,
+                                                                   2 );
+    ...
+    toolkit.paintBordersFor( client );
+  }
+		   </pre>
+    </li>
+    
+  <li>Create the necessary widgets for the section in the <i>createSection()</i>
+  method. Make sure that <i>toolkit.paintBordersFor( client )</i> is the last
+  call in the method. </li>
+  
+  <li>Implement the public <i>setInput()</i> method for providing input to the
+  section. This method finally must call the <i>fillFields()</i> method of the section 
+  class. (See Below)</li>
+  
+  <li>Implement the private <i>fillFields()</i> method for filling widgets created
+  earlier with values. Proper error handling must be ensured for fields with
+  null values</li>
+  
+
+  <li> In the page of the JSDL editor where the section will be created perform the 
+  following:
+    <ol type="a">
+      <li>Create a <i>private Composite</i> variable for the new section composite.</li>
+      <li>Create a new instance variable for the new section class.</li>
+      <li>Overwrite the <i>createFormContent()</i> method and create the form 
+      body as follows:
 <pre>
-&nbsp;&nbsp; &lt;extension
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; point=&quot;eu.geclipse.info.infoViewerFilter&quot;&gt;
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;infoViewerFilter
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; class=&quot;eu.geclipse.glite.info.ui.GLiteInfoViewFilter&quot;
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; id=&quot;eu.geclipse.glite.info.ui.GLiteInfoViewFilter&quot;&gt;
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/infoViewerFilter&gt;
-&nbsp;&nbsp; &lt;/extension&gt;
+@Override
+  protected void createFormContent( final IManagedForm managedForm ) {
+    
+    ScrolledForm form = managedForm.getForm();
+    FormToolkit toolkit = managedForm.getToolkit();
+    
+    form.setText( Messages.getString( "Page_Title" ) );
+    this.body = form.getBody();
+    this.body.setLayout( FormLayoutFactory.createFormTableWrapLayout( false, 2 ) );
+    
+    ...    
+    }
 </pre>
-
-<p> The existing filters are shown in the following image </p>
-<img src="images/glueFilters.png">
+      
+      </li>
+      
+      <li>In the <i>createFormContent()</i> method, after creating the body layout
+       create the new section, set the input and register a change listener as 
+       follows:
+<pre>
+ this.newSectionComposit = toolkit.createComposite( this.body );
+ this.newSectionComposit.setLayout( FormLayoutFactory.createFormPaneTableWrapLayout( false, 1 ) );
+ this.newSectionComposit.setLayoutData( new TableWrapData( TableWrapData.FILL_GRAB ) );
+ this.newSection = new ApplicationSection( this.newSectionComposit, toolkit);
+ this.newSection.setInput( this.jobDefinitionType );
+ this.newSection.addListener( this );
+</pre>
+    </ol>
+  </li>
+</ol>
 
 </body>
 </html>
+
