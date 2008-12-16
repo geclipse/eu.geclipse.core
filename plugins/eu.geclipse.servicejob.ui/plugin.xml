@@ -85,7 +85,7 @@
                class="eu.geclipse.servicejob.ui.actions.ShowDetailsAction"
                enablesFor="?"
                id="Details"
-               label="Show details">
+               label="Show Operator's Job History">
          </action>
          <action
                class="eu.geclipse.servicejob.ui.actions.RunServiceJobAction"
@@ -94,5 +94,6 @@
          </action>
       </objectContribution>
    </extension>
+   
 
 </plugin>

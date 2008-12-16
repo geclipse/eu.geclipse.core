@@ -16,13 +16,22 @@
  *****************************************************************************/
 package eu.geclipse.servicejob.ui.views;
 
+import java.net.URL;
+
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.viewers.DecoratingLabelProvider;
 import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.IContentProvider;
+import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredViewer;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -40,21 +49,27 @@ import eu.geclipse.core.model.IGridElementManager;
 import eu.geclipse.core.model.IGridModelEvent;
 import eu.geclipse.core.model.IServiceJob;
 import eu.geclipse.core.model.IServiceJobStatusListener;
+import eu.geclipse.servicejob.ui.Activator;
 import eu.geclipse.servicejob.ui.actions.OpenServiceJobDialogAction;
+import eu.geclipse.servicejob.ui.decorators.ServiceJobDecorator;
+import eu.geclipse.servicejob.ui.providers.NewServiceJobLabelProvider;
 import eu.geclipse.servicejob.ui.providers.ServiceJobContentProvider;
 import eu.geclipse.servicejob.ui.providers.ServiceJobLabelProvider;
+import eu.geclipse.servicejob.ui.wizard.JobSubmissionServiceWizard;
 import eu.geclipse.ui.views.ElementManagerViewPart;
 
 /**
  * View responsible for displaying managed Operator's Jobs.
  */
 public class ServiceJobView extends ElementManagerViewPart
-  implements IServiceJobStatusListener, ISelectionProvider
+  implements IServiceJobStatusListener, ISelectionProvider,
+  ISelectionChangedListener
 {
 
   boolean refreshedFirstTime;
   private OpenServiceJobDialogAction wizardAction;
   private StructuredViewer myViewer;
+  private Action runJobAction;
 
   @Override
   protected IGridElementManager getManager() {
@@ -131,12 +146,14 @@ public class ServiceJobView extends ElementManagerViewPart
   public void init( final IViewSite site ) throws PartInitException {
     super.init( site );
     GridModel.getServiceJobManager().addServiceJobStatusListener( this );
+    addSelectionChangedListener( this );
   }
 
   @Override
   protected void initViewer( final StructuredViewer viewer ) {
     super.initViewer( viewer );
     this.myViewer = viewer;
+    this.myViewer.addSelectionChangedListener( this );
   }
 
   @Override
@@ -154,15 +171,64 @@ public class ServiceJobView extends ElementManagerViewPart
     this.wizardAction.setToolTipText( Messages.getString( "ServiceJobsView.new_operators_job_wizard" ) ); //$NON-NLS-1$
     ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
     this.wizardAction.setImageDescriptor( sharedImages.getImageDescriptor( ISharedImages.IMG_TOOL_NEW_WIZARD ) );
+    URL runURL = Activator.getDefault()
+      .getBundle()
+      .getEntry( "icons/obj16/debugt_obj.gif" ); //$NON-NLS-1$
+    ImageDescriptor runDesc = ImageDescriptor.createFromURL( runURL );
+    URL runDisabledURL = Activator.getDefault()
+      .getBundle()
+      .getEntry( "icons/obj16/debugt_obj_disabled1.gif" ); //$NON-NLS-1$
+    ImageDescriptor runDisabledDesc = ImageDescriptor.createFromURL( runDisabledURL );
+    this.runJobAction = new Action() {
+
+      @Override
+      public void run() {
+        ISelection sel = ServiceJobView.this.getSelection();
+        if( !sel.isEmpty() ) {
+          if( sel instanceof IStructuredSelection ) {
+            IStructuredSelection sSel = ( IStructuredSelection )sel;
+            for( Object obj : sSel.toList() ) {
+              if( obj instanceof IServiceJob ) {
+                IServiceJob serviceJob = ( IServiceJob )obj;
+                if( serviceJob.needsSubmissionWizard() ) {
+                  JobSubmissionServiceWizard serviceWizard = new JobSubmissionServiceWizard( serviceJob.getParent()
+                    .getProject()
+                    .getVO() );
+                  WizardDialog dialog = new WizardDialog( PlatformUI.getWorkbench()
+                                                            .getActiveWorkbenchWindow()
+                                                            .getShell(),
+                                                          serviceWizard );
+                  if( dialog.open() == WizardDialog.OK ) {
+                    serviceJob.setSubmissionService( serviceWizard.getSelectedService() );
+                    serviceJob.run();
+                  }
+                } else {
+                  serviceJob.run();
+                }
+              }
+            }
+          }
+        }
+        super.run();
+      }
+    };
+    this.runJobAction.setImageDescriptor( runDesc );
+    this.runJobAction.setDisabledImageDescriptor( runDisabledDesc );
+    this.runJobAction.setEnabled( !getSelection().isEmpty() );
+    mgr.add( this.runJobAction );
     mgr.add( this.wizardAction );
     refreshViewer();
   }
 
   private void createMenu() {
-    //Empty
+    // Empty
   }
 
   public void statusChanged( final IServiceJob serviceJob ) {
+    ServiceJobDecorator decorator = ServiceJobDecorator.getDecorator();
+    if( decorator != null ) {
+      decorator.refresh( serviceJob );
+    }
     refreshViewer( serviceJob );
   }
 
@@ -182,5 +248,9 @@ public class ServiceJobView extends ElementManagerViewPart
 
   public void setSelection( final ISelection selection ) {
     this.myViewer.setSelection( selection );
+  }
+
+  public void selectionChanged( final SelectionChangedEvent event ) {
+    this.runJobAction.setEnabled( !getSelection().isEmpty() );
   }
 }
