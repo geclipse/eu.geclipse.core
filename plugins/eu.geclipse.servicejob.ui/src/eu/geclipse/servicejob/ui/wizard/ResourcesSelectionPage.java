@@ -305,11 +305,14 @@ public class ResourcesSelectionPage extends WizardPage {
         for( IGridResourceCategory category : this.visibleCategories ) {
           CategoryContainer catContainer = new CategoryContainer( category );
           categories.add( catContainer );
-          for( IGridResource res : vo.getAvailableResources( category,
-                                                             false,
-                                                             new NullProgressMonitor() ) )
+          IGridResource[] resources = vo.getAvailableResources( category,
+                                                                false,
+                                                                new NullProgressMonitor() );
+          if (resources != null){
+          for( IGridResource res :  resources)
           {
             catContainer.addResource( res );
+          }
           }
         }
         CategoryContainer[] input = new CategoryContainer[ categories.size() ];
