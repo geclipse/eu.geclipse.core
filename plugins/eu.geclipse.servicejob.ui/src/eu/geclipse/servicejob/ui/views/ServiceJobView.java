@@ -21,10 +21,8 @@ import java.net.URL;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.viewers.DecoratingLabelProvider;
 import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.IContentProvider;
-import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
@@ -51,8 +49,6 @@ import eu.geclipse.core.model.IServiceJob;
 import eu.geclipse.core.model.IServiceJobStatusListener;
 import eu.geclipse.servicejob.ui.Activator;
 import eu.geclipse.servicejob.ui.actions.OpenServiceJobDialogAction;
-import eu.geclipse.servicejob.ui.decorators.ServiceJobDecorator;
-import eu.geclipse.servicejob.ui.providers.NewServiceJobLabelProvider;
 import eu.geclipse.servicejob.ui.providers.ServiceJobContentProvider;
 import eu.geclipse.servicejob.ui.providers.ServiceJobLabelProvider;
 import eu.geclipse.servicejob.ui.wizard.JobSubmissionServiceWizard;
@@ -225,10 +221,10 @@ public class ServiceJobView extends ElementManagerViewPart
   }
 
   public void statusChanged( final IServiceJob serviceJob ) {
-    ServiceJobDecorator decorator = ServiceJobDecorator.getDecorator();
-    if( decorator != null ) {
-      decorator.refresh( serviceJob );
-    }
+//    ServiceJobDecorator decorator = ServiceJobDecorator.getDecorator();
+//    if( decorator != null ) {
+//      decorator.refresh( serviceJob );
+//    }
     refreshViewer( serviceJob );
   }
 
