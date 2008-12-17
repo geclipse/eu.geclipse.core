@@ -14,6 +14,11 @@
  *****************************************************************************/
 package eu.geclipse.ui.wizards.wizardselection;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.eclipse.jface.dialogs.IPageChangedListener;
 import org.eclipse.jface.dialogs.PageChangedEvent;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -35,12 +40,13 @@ import org.eclipse.ui.cheatsheets.ICheatSheetManager;
  * Wizard page for providing a list of other wizards which can be used for the
  * next steps in the wizard.
  */
-public class WizardSelectionListPage
-    extends WizardSelectionPage
-    implements IPageChangedListener {
+public class WizardSelectionListPage extends WizardSelectionPage
+  implements IPageChangedListener
+{
 
   protected ICheatSheetManager cheatSheetManager = null;
   protected IWizardSelectionNode[] wizardSelectionNodes;
+  Map<IWizardSelectionNode, Boolean> visibilityMap = new HashMap<IWizardSelectionNode, Boolean>();
   IWizardNode preselectedNode;
   private String title;
   private String desc;
@@ -53,11 +59,11 @@ public class WizardSelectionListPage
    * 
    * @param pageName Name of the wizard page.
    * @param wizardSelectionNodes list of the IWizardSelectionNodes to be
-   *            displayed in the WizardSelectionListPage.
+   *          displayed in the WizardSelectionListPage.
    * @param title Title of the page.
    * @param desc Description text of the page.
    * @param emptyListErrMsg error message that should be displayed if the list
-   *            is empty
+   *          is empty
    */
   public WizardSelectionListPage( final String pageName,
                                   final IWizardSelectionNode[] wizardSelectionNodes,
@@ -81,15 +87,15 @@ public class WizardSelectionListPage
    * 
    * @param pageName Name of the wizard page.
    * @param wizardSelectionNodes list of the IWizardSelectionNodes to be
-   *            displayed in the WizardSelectionListPage.
+   *          displayed in the WizardSelectionListPage.
    * @param title Title of the page.
    * @param desc Description text of the page.
    * @param emptyListErrMsg error message that should be displayed if the list
-   *            is empty
+   *          is empty
    * @param quickSelection flag to define wizard behavior in case there is only
-   *            one wizard to select. If <code>true</code> wizard should skip
-   *            this (wizard selection) page. If <code>false</code> wizard
-   *            should stop on this page (the normal wizard behavior).
+   *          one wizard to select. If <code>true</code> wizard should skip this
+   *          (wizard selection) page. If <code>false</code> wizard should stop
+   *          on this page (the normal wizard behavior).
    */
   public WizardSelectionListPage( final String pageName,
                                   final IWizardSelectionNode[] wizardSelectionNodes,
@@ -102,9 +108,9 @@ public class WizardSelectionListPage
     this.wizardSelectionNodes = wizardSelectionNodes;
     this.title = title;
     this.desc = desc;
-    if (quickSelection && wizardSelectionNodes.length == 1){
+    if( quickSelection && wizardSelectionNodes.length == 1 ) {
       this.preselectedNode = wizardSelectionNodes[ 0 ];
-    } else if (wizardSelectionNodes.length == 0){
+    } else if( wizardSelectionNodes.length == 0 ) {
       setErrorMessage( emptyListErrMsg );
     }
   }
@@ -126,8 +132,7 @@ public class WizardSelectionListPage
    * 
    * @param node IWizardNode representing the wizard to be preselected.
    * @param hidePrevPage true if it should not be possible to go back to the
-   *            WizardSelectionListPage to select another wizard, false
-   *            otherwise.
+   *          WizardSelectionListPage to select another wizard, false otherwise.
    */
   public void setPreselectedNode( final IWizardNode node,
                                   final boolean hidePrevPage )
@@ -146,7 +151,6 @@ public class WizardSelectionListPage
 
   /*
    * (non-Javadoc)
-   * 
    * @see org.eclipse.jface.dialogs.DialogPage#getTitle()
    */
   @Override
@@ -156,7 +160,6 @@ public class WizardSelectionListPage
 
   /*
    * (non-Javadoc)
-   * 
    * @see org.eclipse.jface.dialogs.DialogPage#getDescription()
    */
   @Override
@@ -166,8 +169,9 @@ public class WizardSelectionListPage
 
   /*
    * (non-Javadoc)
-   * 
-   * @see org.eclipse.jface.dialogs.IDialogPage#createControl(org.eclipse.swt.widgets.Composite)
+   * @see
+   * org.eclipse.jface.dialogs.IDialogPage#createControl(org.eclipse.swt.widgets
+   * .Composite)
    */
   public void createControl( final Composite parent ) {
     ( ( WizardDialog )getContainer() ).addPageChangedListener( this );
@@ -193,6 +197,9 @@ public class WizardSelectionListPage
       }
     } );
     this.composite.fillWizardList( this.wizardSelectionNodes );
+    for( IWizardSelectionNode node : this.wizardSelectionNodes ) {
+      this.visibilityMap.put( node, true );
+    }
   }
 
   private IWizard initWizard( final IWizardNode node ) {
@@ -219,8 +226,9 @@ public class WizardSelectionListPage
 
   /*
    * (non-Javadoc)
-   * 
-   * @see org.eclipse.jface.dialogs.IPageChangedListener#pageChanged(org.eclipse.jface.dialogs.PageChangedEvent)
+   * @see
+   * org.eclipse.jface.dialogs.IPageChangedListener#pageChanged(org.eclipse.
+   * jface.dialogs.PageChangedEvent)
    */
   public void pageChanged( final PageChangedEvent event ) {
     ( ( WizardDialog )getContainer() ).removePageChangedListener( this );
@@ -228,12 +236,12 @@ public class WizardSelectionListPage
 
       @SuppressWarnings("synthetic-access")
       public void run() {
-        if ( WizardSelectionListPage.this.preselectedNode != null
-             && event.getSelectedPage() == WizardSelectionListPage.this )
+        if( WizardSelectionListPage.this.preselectedNode != null
+            && event.getSelectedPage() == WizardSelectionListPage.this )
         {
           setSelectedNode( WizardSelectionListPage.this.preselectedNode );
           getContainer().showPage( getNextPage() );
-          if ( WizardSelectionListPage.this.hidePrev ) {
+          if( WizardSelectionListPage.this.hidePrev ) {
             getContainer().getCurrentPage().setPreviousPage( null );
           }
           getContainer().updateButtons();
@@ -249,18 +257,57 @@ public class WizardSelectionListPage
    * 
    * @param cheatSheetManager the cheat sheet manager.
    */
-  public void setCheatSheetManager( final ICheatSheetManager cheatSheetManager ) {
+  public void setCheatSheetManager( final ICheatSheetManager cheatSheetManager )
+  {
     this.cheatSheetManager = cheatSheetManager;
     updateCheatSheetManager( getWizard() );
   }
-  
+
   private void updateCheatSheetManager( final IWizard wizard ) {
-    if ( ( this.cheatSheetManager != null ) && ( wizard != null ) ) {
+    if( ( this.cheatSheetManager != null ) && ( wizard != null ) ) {
       IWizardPage startingPage = wizard.getStartingPage();
-      if ( startingPage != null ) {
+      if( startingPage != null ) {
         this.cheatSheetManager.setData( "startingPageName", startingPage.getName() ); //$NON-NLS-1$
       }
     }
   }
-  
+
+  public IWizardSelectionNode[] getNodes() {
+    return this.wizardSelectionNodes;
+  }
+
+  public void removeSelectionNode( final IWizardSelectionNode nodeToRemove ) {
+    List<IWizardSelectionNode> visibleList = new ArrayList<IWizardSelectionNode>();
+    for( IWizardSelectionNode node : this.wizardSelectionNodes ) {
+      if( node.equals( nodeToRemove ) ) {
+        if( this.visibilityMap.keySet().contains( node ) ) {
+          this.visibilityMap.put( node, new Boolean( false ) );
+        }
+      }
+    }
+    if( this.composite != null ) {
+      
+      for (IWizardSelectionNode node: this.visibilityMap.keySet()){
+        if (this.visibilityMap.get( node ).booleanValue()){
+          visibleList.add( node );
+        }
+      }
+      IWizardSelectionNode[] newInput = new IWizardSelectionNode[visibleList.size()];
+      int i = 0;
+      for (IWizardSelectionNode node: visibleList){
+        newInput[i] = node;
+        i++;
+      }
+      this.composite.refreshList( newInput );
+    }
+  }
+
+  public void resetNodesVisibility() {
+    for( IWizardSelectionNode node : this.visibilityMap.keySet() ) {
+      this.visibilityMap.put( node, new Boolean( true ) );
+    }
+    if (this.composite != null){
+      this.composite.refreshList( this.wizardSelectionNodes );
+    }
+  }
 }

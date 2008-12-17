@@ -112,6 +112,7 @@ public class ServiceJobWizard extends Wizard
                                                                       "Select type of operator's job you want to perform",
                                                                       "No jobs to choose from",
                                                                       false );
+    
     addPage( this.serviceJobTypeSelectionPage );
   }
 
@@ -120,7 +121,19 @@ public class ServiceJobWizard extends Wizard
     this.serviceJobTypeSelectionPage.setInitData( new WizardInitObject( this.projectPage.getJobName(),
                                                                   this,
                                                                   this.serviceJobResources ) );
-    return super.getNextPage( page );
+    IWizardPage result = super.getNextPage( page );
+    this.serviceJobTypeSelectionPage.resetNodesVisibility();
+    if (result instanceof ExtPointWizardSelectionListPage){
+      for (IWizardSelectionNode node: this.serviceJobTypeSelectionPage.getNodes()){
+        
+        if (node.getWizard() instanceof IServiceJobWizardNode){
+          if (!((IServiceJobWizardNode)node.getWizard()).canHandle( this.projectPage.getProject().getVO() )){
+            this.serviceJobTypeSelectionPage.removeSelectionNode( node );
+          }
+        }
+      }
+    }
+    return result;
   }
 
   @Override

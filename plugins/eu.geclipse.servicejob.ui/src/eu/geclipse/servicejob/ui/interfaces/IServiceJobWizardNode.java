@@ -21,6 +21,7 @@ import java.util.List;
 
 import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.model.IGridResource;
+import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.ui.wizards.wizardselection.IInitializableWizard;
 import eu.geclipse.ui.wizards.wizardselection.IWizardSelectionNode;
 
@@ -88,4 +89,12 @@ public interface IServiceJobWizardNode
    *         this list will be empty.
    */
   List<IGridResource> getPreselectedResources();
+  
+  /**
+   * Method to determine if it makes sense to create service job for given virtual organisation.
+   * @param vo virtual organisation
+   * @return <code>true</code> if service job can be created for resources in given VO, <code>false</code> otherwise.
+   */
+  boolean canHandle(final IVirtualOrganization vo);
+  
 }

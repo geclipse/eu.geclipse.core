@@ -31,6 +31,7 @@ class WizardSelectionListComposite extends Composite {
 
   private Table table = null;
   private TableViewer tableViewer;
+  private IWizardSelectionNode[] input;
 
   WizardSelectionListComposite( final Composite parent, final int style ) {
     super( parent, style );
@@ -80,6 +81,14 @@ class WizardSelectionListComposite extends Composite {
   }
 
   void fillWizardList( final IWizardSelectionNode[] wizardSelectionNodes ) {
+    this.input = wizardSelectionNodes;
     this.tableViewer.add( wizardSelectionNodes );
+  }
+  
+  
+  
+  void refreshList(final IWizardSelectionNode[] newContent){
+    this.tableViewer.remove( this.input );
+    fillWizardList( newContent );
   }
 }

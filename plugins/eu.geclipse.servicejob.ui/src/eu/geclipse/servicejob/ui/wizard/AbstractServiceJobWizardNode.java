@@ -37,6 +37,8 @@ public abstract class AbstractServiceJobWizardNode extends Wizard
   implements IServiceJobWizardNode, IProjectSelectionProvider
 {
 
+  
+
   protected IProjectSelectionProvider projectProvider;
   protected IGridProject project;
   protected List<IGridResource> resources;
@@ -89,6 +91,10 @@ public abstract class AbstractServiceJobWizardNode extends Wizard
 
   public IGridProject getGridProject(){
     return getSelectedProject();
+  }
+  
+  public boolean canHandle( final IVirtualOrganization vo ) {
+    return true;
   }
 
 }
