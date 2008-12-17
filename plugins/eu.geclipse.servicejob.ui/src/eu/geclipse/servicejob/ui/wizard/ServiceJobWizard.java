@@ -126,8 +126,8 @@ public class ServiceJobWizard extends Wizard
     if (result instanceof ExtPointWizardSelectionListPage){
       for (IWizardSelectionNode node: this.serviceJobTypeSelectionPage.getNodes()){
         
-        if (node.getWizard() instanceof IServiceJobWizardNode){
-          if (!((IServiceJobWizardNode)node.getWizard()).canHandle( this.projectPage.getProject().getVO() )){
+        if (node.getTempWizard() instanceof IServiceJobWizardNode){
+          if (!((IServiceJobWizardNode)node.getTempWizard()).canHandle( this.projectPage.getProject().getVO() )){
             this.serviceJobTypeSelectionPage.removeSelectionNode( node );
           }
         }

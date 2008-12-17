@@ -16,6 +16,7 @@ package eu.geclipse.servicejob.ui.wizard;
 
 import java.util.List;
 
+import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
@@ -36,6 +37,8 @@ import eu.geclipse.ui.wizards.IProjectSelectionProvider;
 public abstract class AbstractServiceJobWizardNode extends Wizard 
   implements IServiceJobWizardNode, IProjectSelectionProvider
 {
+
+  
 
   
 
@@ -95,6 +98,11 @@ public abstract class AbstractServiceJobWizardNode extends Wizard
   
   public boolean canHandle( final IVirtualOrganization vo ) {
     return true;
+  }
+  
+  public IWizard getTempWizard() {
+    IWizard result = getWizard();
+    return result;
   }
 
 }
