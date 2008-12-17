@@ -88,7 +88,7 @@ class WizardSelectionListComposite extends Composite {
   
   
   void refreshList(final IWizardSelectionNode[] newContent){
-    this.tableViewer.remove( this.input );
+    this.table.removeAll();
     fillWizardList( newContent );
   }
 }
