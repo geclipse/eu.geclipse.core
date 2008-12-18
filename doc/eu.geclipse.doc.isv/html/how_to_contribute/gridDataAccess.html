@@ -13,53 +13,138 @@
   HREF="PLUGINS_ROOT/eu.geclipse.doc.user/book.css"
   CHARSET="UTF-8"
   TYPE="text/css">
-<title>g-Eclipse - Concepts</title>
+<title>g-Eclipse - Grid data access</title>
 </head>
 
 <body BGCOLOR="#ffffff">
 <h1>Grid Data Access</h1>
-<p>How to implement MY Grid data access system?</p>
+<p>How to implement my Grid data access system?</p>
 
-<ul>
-  <li>Access to data on the Grid is offered by services. These
-  services allows the user to browse directories and list files on
-  remote Grid systems. Current implementations for</li>
+
+Access to data on the Grid is offered by services. These
+services allows the user to browse directories and list files on
+remote Grid systems. Currently g-Eclipse has implementation for:</li>
   <ul>
-    <li>GridFTP services</li>
-    <li>SRM 2.0 services</li>
+    <li>gLite middleware:
+    <ul>  <li>GridFTP services
+          <li>SRM 2.0 services
+          <li>LFC service
+    </ul>
+    <li>GRIA middleware:
+    <ul>
+          <li>Gria data service
+    </ul>
+    <li>Amazon Web Service:
+    <ul>
+          <li>S3 service
+    </ul>
+    <li>Others:
+    <ul>
+          <li>Sftp
   </ul>
 </ul>
 
 <h2>UI Components</h2>
 
-<p>The Connection Wizard allows to define new remote connection.
-tokens.</p>
+<p>The Connection Wizard allows to define new remote connection.</p>
 <img
   src="images/newConnectionWizard.png" />
 
 
 <h2>Important Extension points</h2>
 
-<h3>UI extension point</h3>
+<h3>Core extension points</h3>
 
 <dl>
   <dt><code>org.eclipse.core.filesystem.filesystems</code></dt>
-  <dd>Provides a scheme for defining new  type of filesystem</dd>
+  <dd>This extension point provides implementation of the Eclipse File System 
+  (EFS) API. Developer needs to specify file system's URI scheme tag and 
+  file system class extending 
+  <code>org.eclipse.core.filesystem.provider.FileSystem</code>
+  (see <a href="#filesystem">below</a>). </dd>
+  
+  <dt><code>eu.geclipse.core.filesystem.transferService</code></dt>
+  <dd>Extension point for defining new transfer service for specified 
+  data services. If there exists service-specific transfer type, then it
+  should be implemented using this extension point.</dd>
 </dl>
 
-<h3>Core extension point</h3>
+<h3>UI extension point</h3>
 
 <dl>
   <dt><code>eu.geclipse.ui.efs</code></dt>
-  <dd>Allows to define efs ui extension for implemented filesystem</dd>
+  <dd>This extension point is used to split URI of the connection into 
+  tokens( host, port, path etc. ) important for given connection. This 
+  description is then used in g-Eclipse new connection wizard to present the 
+  user all requested and optional fields when creating new connection.</dd>
 </dl>
 
 
 <h2>Interfaces to implement</h2>
 <dl>
-  <dt><code>eu.geclipse.org.eclipse.core.filesystem.provider.FileSystem</code></dt>
-  <dd>Implement this to define new type of filesystem</dd>
+  <dt><code>
+    <a name="filesystem">org.eclipse.core.filesystem.provider.FileSystem</a>
+  </code></dt>
+  <dd>Since g-Eclipse file system mechanism bases on EFS, 
+  to implement Grid access you need to extend <code>FileSystem</code> 
+  abstract class.</dd>
+  
+  <dt><code>org.eclipse.core.filesystem.provider.FileStore</code></dt>
+  <dd>Abstract Eclipse class you should extend when implementing new Grid data
+  access service. File store represents single file in target file system.</dd>
+  
+  <dt><code>eu.geclipse.core.model.ITransferService</code></dt>
+  <dd>If you decide to provide your file system with dedicated transfer service,
+  you will need to create a transfer service class implementing this 
+  interface.</dd>
 </dl>
+
+<h2>Sample implementations</h2>
+As stated in the beginning g-Eclipse already contains several implementations of
+Grid data access services. They can be used as examples for future developers of 
+different file system in g-Eclipse. Below you can find references to each 
+implementation of <code>org.eclipse.core.filesystem.provider.FileStore</code>
+and, if it exists, to dedicated transfer service for given file system.
+
+<ul>
+  <li>GridFTP service - implementation of basic grid access service for gLite, 
+   similar to basic File Transfer Protocol. Uses globus proxy to authenticate. 
+   Also gridFTP dedicated transfer was created, which speeds up transferring of 
+   data between two gridFTP connections.
+  <p><ul>
+    <li><code>eu.geclipse.efs.gridftp.GridFile</code> - gridFTP file store
+    <li><code>eu.geclipse.efs.gridftp.TransferParty</code> - gridFTP file transfer
+  </ul></p> 
+  <li>SRM service - Storage Resource Management (SRM) implementation for 
+  gLite middleware. g-Eclipse currently supports version 2 of the SRM services.
+  <p><ul>
+    <li><code>eu.geclipse.efs.srm.SRMStore</code> - SRM file store
+  </ul></p>
+  <li>LFC service - implementation of LCG (Large Hadron Collidor Computing Grid)
+   File Catalog (LFC) for gLite middleware. This file system uses information 
+   about replicas (see <code>eu.geclipse.efs.lgp.IReplicableFileSystem</code> 
+   and <code>eu.geclipse.efs.lgp.IReplicableStore</code>) to show available 
+   resources to the user. User can manage his replicas using g-Eclipse.
+  <p><ul>
+    <li><code>eu.geclipse.efs.lgp.LFCStore</code> - LFC file store
+  </ul></p>
+  <li>GRIA data service - implementation of the GRIA data service for GRIA 
+   middleware. GRIA data service consists of several data stagers, which can 
+   contain a blob of data or be empty. You can manage permissions for your data
+   stagers.   
+  <p><ul>
+    <li><code>eu.geclipse.efs.gria.GriaStore</code> - GRIA file store
+  </ul></p>
+  <li>S3 data service - access for Amazon Web Service data services. 
+  <p><ul>
+    <li><code>eu.geclipse.aws.s3.internal.fileSystem.S3FileStore</code>
+  </ul></p>
+  <li>Sftp service - SSH File Transfer Protocol implementation. Allows to access
+   remote data using reliable data stream. 
+  <p><ul>
+    <li><code>eu.geclipse.efs.sftp.SFTPFileStore</code> - Sftp file store 
+  </ul></p>
+</ul>  
 
 </body>
 

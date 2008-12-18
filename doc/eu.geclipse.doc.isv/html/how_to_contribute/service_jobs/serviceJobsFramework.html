@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+<head>
+<meta
+  http-equiv="Content-Type"
+  content="text/html; charset=UTF-8">
+<META
+  HTTP-EQUIV="Content-Style-Type"
+  CONTENT="text/css">
+<LINK
+  REL="STYLESHEET"
+  HREF="PLUGINS_ROOT/eu.geclipse.doc.user/book.css"
+  CHARSET="UTF-8"
+  TYPE="text/css">
+<title>g-Eclipse - Service Jobs Framework</title>
+</head>
+
+<body BGCOLOR="#ffffff">
+<h1>Service job framework concepts</h1>
+
+<h2>Introduction</h2>
+Service job framework was created mainly to simplify work of grid operators and 
+advanced users. These actors are in various interactions with grid - from 
+submitting standard jobs and accessing data, through benchmarking and testing 
+grid resources to deploying new applications on computing elements. Service job
+framework's responsibility is to gather all of the more complicated grid 
+interactions in one common view and provide all needed resources to run and see
+results of such tasks.
+<p>g-Eclipse service job framework introduces two new views: 
+<b>Operator's Job</b> and <b>Operator's Job History</b> with actions similar
+to <b>Job's View</b>. User can create new Operator's Jobs, submit them, resubmit 
+existing jobs and see detailed informations about them, such as all results of 
+this service job executions on each of the target resources. To see how running
+service jobs and their results are presented, please consult the screenshot below.  
+</p>
+<p>
+<img src="images/ServiceJob.PNG" alt="Service Job Framework" title="Running Service Jobs">
+</p>
+<p>We distinguish two types of service jobs based on how the job is executed. 
+If the service job is executed as a grid job, we will call it submittable
+service job, while the rest of the service jobs will be called basic service 
+jobs. Framework provides two abstract classes for this two cases:
+<code>eu.geclipse.servicejob.model.AbstractServiceJob</code> and
+<code>eu.geclipse.servicejob.model.submittable.job.AbstractSubmittableServiceJob</code>.
+When using mentioned abstraction developer is asked to implement only few 
+methods needed to perform the service job and get the results 
+</p>
+<p>We encourage all service job providers to use service job framework to 
+introduce their grid tasks into g-Eclipse. As can be see in the examples provided
+by g-Eclipse, this integration was successful for application deployment/uninstall,
+grid resources benchmarking and few others.
+</p>
+
+<h2>UI components</h2>
+<p>The UI part of the Service Job Framework is hidden from the developer. For proper 
+implementation you only need to implement model classes of the Service 
+Job Framework - all views and informations about your job will be presented to
+the user using this model classes.</p>
+<p>Only UI part you should consider to extend is wizard for your service job. 
+To add your service job to the service job wizard (see screenshot below) you need
+to contribute to the <code>eu.geclipse.servicejob.servicejobProvider</code>
+extension point by creating <i>wizard</i> extension. You will also need to provide
+implementation of the 
+<code>eu.geclipse.servicejob.ui.wizard.AbstractServiceJobWizardNode</code> abstraction. See
+section <a href="sjWizard.html">MISSING LINK</a>
+</p>
+<p>
+<img src="images/selectingServiceJob.PNG" alt="Selecting Service Job" title="Selecting Service Job">
+</p>
+ 
+<h2>Submittable service jobs</h2>
+Submittable service jobs are all grid tasks that need to submit grid job to 
+get results. The usual steps are as follows:
+<ul>
+  <li>1. Get all requested and optional data about the service job using wizard.
+  <li>2. Create job description for each target resource.
+  <li>3. Submit the job descriptions to proper job submission service.
+  <li>4. Monitor submitted grid jobs.
+  <li>5. When grid job finishes, download it's output and compute result.
+  <li>6. When all grid jobs finish, compute the result of service job. 
+</ul> 
+<p>
+When writing new submittable service job developer is not required to create 
+implementations of all of the above steps from the scratch. In fact, service job
+framework provides you with the job submission and monitoring, and it invokes
+appropriate methods from the underlying implementations when each grid job finishes.
+You are only asked to provide service-specific informations needed to perform
+your task on the grid. 
+</p>
+<p>For further detail, how can you implement new submittable service job, please
+proceed to  
+<a href="sjImplementation.html">How to implement submittable service job</a>.
+
+
+</body>
+
+</html>\ No newline at end of file

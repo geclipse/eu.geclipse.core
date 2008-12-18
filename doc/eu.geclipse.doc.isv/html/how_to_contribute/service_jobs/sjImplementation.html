@@ -1,0 +1,283 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+<head>
+<meta
+  http-equiv="Content-Type"
+  content="text/html; charset=UTF-8">
+<META
+  HTTP-EQUIV="Content-Style-Type"
+  CONTENT="text/css">
+<LINK
+  REL="STYLESHEET"
+  HREF="PLUGINS_ROOT/eu.geclipse.doc.user/book.css"
+  CHARSET="UTF-8"
+  TYPE="text/css">
+<title>g-Eclipse - How to implement a submittable service job</title>
+</head>
+
+<body BGCOLOR="#ffffff">
+<h1>Implementing a submittable service job</h1>
+<p>Implementing a new service job in g-Eclipse is quite easy. Service Jobs
+framework provides abstract implementations for the most common use cases:
+<ul>
+  <li><i>1.</i> Sending JSDL representing a service job.</li>
+  <li><i>2.</i> Monitoring job status.</li>
+  <li><i>3.</i> When job finishes, downloading job output and initiating 
+  computing job's result.</li>
+</ul> 
+</p>
+<p>What is left to the developer is to provide few methods, mainly the ones 
+which will:
+<ul>
+  <li>provide JSDL(s) for submission</li>
+  <li>provide information needed to store and check job's status</li>
+  <li>compute the result of the service job when grid job
+  finishes</li>
+</ul>
+</p>
+
+<h2>Interfaces and abstract implementations</h2>
+<dl>
+  <dt><code>eu.geclipse.core.model.IServiceJob</code></dt>
+  <dd>This is the basic interface for all service implementations in 
+  service job framework. However, developers of the service job should use 
+  abstract implementation described below.</dd>
+  <dt><code>eu.geclipse.servicejob.model.tests.job.AbstractSubmittableServiceJob</code></dt>
+  <dd>This abstract implementation of the <code>IServiceJob</code> interface 
+  provides useful implementation for the most common use cases: submitting a JSDL,
+  starting service job status updater and monitor status of the job, 
+  initialize computing of the result when service job finishes. Also see 
+  <code>eu.geclipse.servicejob.model.AbstractServiceJob</code>, which
+  is used by <code>AbstractSubmittableServiceJob</code>, for useful methods 
+  and fields.<br> 
+  When extending this abstract class, developer is required to implement 
+  several abstract methods, which will provide all informations needed to submit,
+  monitor and download outputs of the jobs. Below you can find a list of all 
+  required and optional methods to overwrite.
+  </dd>
+  
+</dl>
+
+<h2>Abstract methods</h2> 
+<p>Also see 
+<code>eu.geclipse.servicejob.model.submittable.job.
+AbstractSubmittableServiceJob</code> abstract class for documentation.
+</p>
+
+<h3>Initializing service job data</h3> 
+<p>This is a very important step. When service job is submitted using Service 
+Job Framework several methods of the service job implementation are used to get
+needed information about the service job. Below are the methods you need to
+implement.</p>
+<p>
+<dl>
+  <dt><code>public void initData()</code></dt>
+   <dd>This method is invoked when service job is created. If the service job 
+   requires to run some piece of code, this is a good place to perform that 
+   operation.</dd>
+  <dt><code>public List<String> getServiceJobResourcesNames()</code></dt>
+   <dd>Returns list of names of the resources where service job should be run.
+   If you don't want to implement this method, the abstract implementation 
+   returns value of the <code>serviceJobResources</code> field of the 
+   <code>AbstractServiceJob</code>.
+   </dd>
+  <dt><code>public String getResultType( final String singleServiceJobName )
+      </code></dt>
+   <dd>Each service job can provide different kinds of results: text, 
+   images, charts etc. This method specifies name ( extension ) of the 
+   type of result which is returned by this service job.
+   </dd>
+  <dt><code>public String getRawDataInput( final IGridJobID jobID,
+                                      final String resourceName )</dt></code>
+   <dd>Every service job, especially the ones which use submission mechanism, 
+   need some informations to access the job and its results.
+   When implementing this method developer needs to provide string XML 
+   containing all of the needed information, for example: ID of the job,
+   job service URI which you need to ask about job status, VO used for job 
+   submission etc. Developer then need to provide service job specific parsers and
+   writers to read and update the informations he needs.<br>
+   Also see 
+   <code>eu.geclipse.benchmarking.model.service.BenchmarkServiceJob</code> for 
+   exemplary XML in case of benchmarking services in gLite, and 
+   <code>eu.geclipse.benchmarking.model.service.BenchmarkServiceJobParser</code>
+   for XML parser in this case.   
+   </dd>
+</dl>
+</p>
+
+<h3>Providing JSDL for submission</h3>
+<p>Submittable service jobs are started by submitting appropriate job 
+  description to run on specified resource. Developer which will extend 
+  <code>AbstractSubmittableServiceJob</code> needs to provide such job 
+  description by implementing following method:
+
+<dl>
+  <dt><code>public IGridJobDescription getJSDLForSubmission( 
+  final String resourceName )</code></dt>
+  <dd>
+  This method should provide a submittable job description which will be run on 
+  <code>resourceName</code>.
+  </dd>
+</dl>  
+
+Provided job description will be then submitted to a submission service specified
+by the <code>submissionService</code> field of the 
+<code>AbstractSubmittableServiceJob</code>. If you need to provide submission 
+service in different way, you can overwrite 
+<code>public IGridJobService getSubmissionService()</code> method.
+</p>
+<p><i>Note:</i> When using gEclipse UI the standard action "Run Service Job" 
+will fetch list of available job submission services of this service job's VO.
+User selects one of them and the job is submitted using this submission 
+service.</i>
+</p>
+
+<h3>Creating middleware specific job ID instance</h3>
+<p>Service jobs are middleware-dependant. Since job implementations are quite
+different between each middleware, it's service job developer duty to know how
+to construct such job ID. To construct such middleware specific job you 
+often need additional informations( for example string representing job ID, name
+of the VO, etc. ). It's often good idea to get XML containing service job 
+specific information by invoking <code>getResultRawData()</code> and parsing
+the results.
+
+<dl><dt><code>public IGridJobID createJobID( 
+    final SubmittableServiceJobResult serviceJobResult )</code></dt>
+    <dd>Method which creates middleware-specific instance of 
+    <code>IGridJobID</code> implementation, given the 
+    <code>serviceJobResult</code>.
+    </dd>
+</dl>
+</p>
+
+<h3>Computing service job result</h3>
+<p>After job associated with a service job finishes the corresponding service 
+job's implementation of the method <code>computeJobResult( final IGridJobID jobID, 
+final IGridJobStatus jobStatus )</code> is invoked. The usual implementation
+proceeds as follows:
+<ul>
+  <li><i>1.</i> Check the <code>jobStatus</code> of the job. For jobs which were not 
+  successful go to point number <i>4</i>.</li>
+  <li><i>2.</i> Download output(s) of the job.</li>
+  <li><i>3.</i> Parse the job results for service job result.</li>
+  <li><i>4.</i> Set the result of the service job.</li>
+</ul>
+When job finishes Service Job Framework sets status of the job as the service
+job result. This often is not correct: failed jobs don't necessarily mean that
+the service job also fails. Thats why setting the service job result at the
+end of <code>computeJobResult</code> method is advised. To set result of the 
+job use:
+
+<dl><dt><code>public void setJobResult( final IGridJobID jobID,
+                            final Date lastRefreshDate,
+                            final String status,
+                            final String besStatus )</code>
+    </dt>
+    <dd>Method used to set <code>status</code> for job with the given 
+    <code>jobID</code>, which was read from job service at 
+    <code>lastRefreshDate</code>. Last parameter, <code>besStatus</code>,
+    should be one of the global job statuses. See 
+    <code>eu.geclipse.servicejob.model.ServiceJobStates</code> enumeration class
+    for list of available statuses.
+    </dd>
+</dl>   
+</p>
+<p><i>Note:</i>Downloading outputs of the job is specific for each middleware. 
+Because Service Job Framework is middleware-independent developers need to know 
+how to download output of the job having middleware-specific implementation of 
+the <code>IGridJobID</code>. For example you can check 
+<code>eu.geclipse.benchmarking.model.service.BenchmarkServiceJob</code> class
+and <code>protected IFile getOutput( final IGridJobID jobID,
+                             final IFolder folder,
+                             final String fileName )</code> method how this is 
+done in gLite middleware case.
+</p>
+
+<h3>Computing test result</h3>   
+<p>After the last job of the service job has finished, then whole service job 
+result can be computed. This can mean checking if all sub-jobs were finished 
+successfully or checking all outputs generated by the sub-jobs. Developer need
+to handle this case to compute whole service job result and proceed with the 
+result.
+
+<dl><dt><code></code>
+  </dt>public void computeServiceJobResult()
+    <dd>Method which is invoked after last job of this service job finishes 
+    and it's results are computed using 
+    <code>computeJobResult(IGridJobID, IGridJobStatus)</code>. This is a method
+    which should be used to store the results of the service job in a database 
+    or in another modules.
+    </dd>
+</dl>
+
+</p>
+
+<h2>Exemplary implementations</h2>
+All of the current implementations of the submittable service jobs are for 
+gLite middleware. Below you can find list of all implementations with references
+to the most important classes.
+
+  <h3>Benchmarking of the grid resources</h3>
+    <p>This service job is used to benchmark various resources on the grid. 
+    User needs to provide file used for benchmarking (you can find 2 benchmarks
+    in the <code>eu.geclipse.benchmarking/xml</code> - <i>bonnie.bsx</i> and
+    <i>flops.bsx</i>) and additional parameters, if needed. Results are stored
+    in local database, and can be viewed using <b>Benchmark View</b>.
+    </p>
+    <p><dl>
+      <dt><code>eu.geclipse.benchmarking.model.service.BenchmarkServiceJob</code></dt>
+      <dd>Class extending submittable service job abstraction. You can see
+      how does raw input data in either <code>getRawInputData</code> method 
+      look like. Also you can check how you can download job output using 
+      <code>eu.geclipse.glite.resources.GliteWMSJobID</code> in the method
+      <code>IFile getOutput( final IGridJobID jobID,
+                             final IFolder folder,
+                             final String fileName )</code>.</dd>
+      <dt><code>eu.geclipse.benchmarking.model.service.BenchmarkServiceJobParser</code></dt>
+      <dd>Parser dedicated to benchmarking. It creates <code>GliteWMSJobID</code>
+      from the raw input data XML stored in the service job status file.</dd>
+      <dt><code>eu.geclipse.gbdl.ui.wizards.BenchmarkWizard</code></dt>
+      <dd>Implementation of 
+      <code>eu.geclipse.servicejob.ui.wizard.AbstractServiceJobWizardNode</code>,
+      adding benchmarking pages to service job wizard.
+    </dl></p>
+  <h3>Application deployment and uninstall</h3>
+    <p>Application deployment deals with cases of software installation on 
+     computing elements(CEs), while uninstall is the reverse problem. User is 
+     asked to select target CEs and the appropriate application (in form of a 
+     file) he wants to deploy or uninstall.
+    </p>
+    <p><dl>
+      <dt><code>eu.geclipse.glite.servicejob.deployment.DeploymentServiceJob</code></dt>
+      <dd>Class extending submittable service job abstraction. Main task is to
+      create proper JDL file. You can check also the overwritten 
+      <code>run()</code> action to perform some additional tasks just before 
+      job submission.</dd>
+      <dt><code>eu.geclipse.glite.servicejob.deployment.UninstallServiceJob</code></dt>
+      <dd>Similar to previous class, but takes care of uninstalling of the 
+      application.</dd>
+      <dt><code>eu.geclipse.glite.servicejob.deployment.DeploymentParser</code></dt>
+      <dd>Parser for both deployment and uninstall tasks. Beside usual creation
+      of job ID from the XML stored on file also parses several other data and
+      informations.</dd>
+      <dt><code>
+        eu.geclipse.glite.ui.servicejob.deployment.GliteDeploymentWizard/GliteUninstallWizard
+      </code></dt>
+      <dd>Wizard nodes for deployment and uninstall, extending service job wizard
+      node abstraction.</dd>
+    </dl></p>
+  <h3>gLite version</h3>
+    <p>This service job was the first implementation of the g-Eclipse service job
+     framework. It tests selected resources for installed gLite version.
+    </p>
+    <p><dl>
+      <dt><code>eu.geclipse.glite.servicejob.gliteversion.GliteVersionJobTest</code></dt>
+      <dd>Class extending submittable service job abstraction.</dd>
+      <dt><code>eu.geclipse.glite.servicejob.gliteversion.GTDLGliteVersionParser</code></dt>
+      <dd>Parser for gLite version test.</dd>
+    </dl></p>
+
+</body>
+
+</html>\ No newline at end of file

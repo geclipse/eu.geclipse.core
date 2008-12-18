@@ -44,5 +44,11 @@
      <topic href="html/how_to_contribute/supportedService.html" label="Marking a service as supported by g-Eclipse">
      </topic>
   </topic>
+  <topic label="Service Job Framework">
+     <topic href="html/how_to_contribute/service_jobs/serviceJobsFramework.html" label="Service job framework concepts">
+     </topic>
+     <topic href="html/how_to_contribute/service_jobs/sjImplementation.html" label="Submittable Service Jobs">
+     </topic>
+  </topic>
   <anchor id="geclipse_reference_howtocontribute_ext" />
 </toc>
