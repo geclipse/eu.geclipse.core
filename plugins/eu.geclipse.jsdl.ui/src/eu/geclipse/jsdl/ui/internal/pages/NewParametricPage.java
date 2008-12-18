@@ -57,7 +57,9 @@ public class NewParametricPage extends JsdlFormPage {
   @Override
   protected void createFormContent( final IManagedForm managedForm ) {
     ScrolledForm form = managedForm.getForm();
+    
     FormToolkit toolkit = managedForm.getToolkit();
+    
     form.setText( "Parameters Sweep" ); //$NON-NLS-1$
     this.body = form.getBody();
     this.body.setLayout( FormLayoutFactory.createFormTableWrapLayout( false, 1 ) );
@@ -75,14 +77,14 @@ public class NewParametricPage extends JsdlFormPage {
 
   public void setPageContent( final JobDefinitionType jobDefinitionRoot,
                               final boolean refreshStatus,
-                              final JSDLJobDescription jsdlJobDescription)
+                              final JSDLJobDescription jsdlJobDescr)
   {
-    this.adapter = new ParametricJobAdapter( jobDefinitionRoot );
+    this.adapter = new ParametricJobAdapter( jobDefinitionRoot, jsdlJobDescr );
     if( refreshStatus ) {
       this.contentRefreshed = true;
       this.jobDefinitionType = jobDefinitionRoot;
     }
     this.jobDefinitionType = jobDefinitionRoot;
-    this.jsdlJobDescription = jsdlJobDescription;
+    this.jsdlJobDescription = jsdlJobDescr;
   }
 }
