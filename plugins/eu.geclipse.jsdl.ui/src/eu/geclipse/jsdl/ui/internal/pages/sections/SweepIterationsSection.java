@@ -57,11 +57,11 @@ import eu.geclipse.ui.dialogs.ProblemDialog;
  */
 public class SweepIterationsSection extends JsdlFormPageSection {
 
-  private ParametricJobAdapter adapter;
+  // private ParametricJobAdapter adapter;
   private Shell shell;
   private Table table;
   private JobDefinitionType jobDefinitionType;
-  private FormToolkit formToolkit;
+  // private FormToolkit formToolkit;
   private TableViewer viewer;
   private IterationsLProvider labelProvider;
   private JSDLJobDescription jsdlJobDescription;
@@ -79,23 +79,23 @@ public class SweepIterationsSection extends JsdlFormPageSection {
                                  final FormToolkit toolkit,
                                  final ParametricJobAdapter adapter )
   {
-    this.adapter = adapter;
+    // this.adapter = adapter;
     createSection( parent, toolkit );
   }
 
   private void createSection( final Composite parent, final FormToolkit toolkit )
   {
     this.shell = parent.getShell();
-    String sectionDescription = "Values of each parameter for every iteration of parameters sweep."; //$NON-NLS-1$
-    this.formToolkit = toolkit;
+    String sectionDescription = "Values of each parameter for every iteration of parameters sweep.";
+    // this.formToolkit = toolkit;
     this.client = FormSectionFactory.createExpandableSection( toolkit,
                                                               parent,
-                                                              "Iterations preview", //$NON-NLS-1$
+                                                              "Iterations preview",
                                                               sectionDescription,
                                                               1,
                                                               false );
     Hyperlink link = toolkit.createHyperlink( this.client,
-                                              "Calculate iterations (refresh)", //$NON-NLS-1$
+                                              "Calculate iterations (refresh)",
                                               SWT.LEAD );
     link.addMouseListener( new MouseListener() {
 
@@ -121,8 +121,8 @@ public class SweepIterationsSection extends JsdlFormPageSection {
     this.viewer.setInput( handler );
     this.viewer.setContentProvider( handler );
     final JSDLJobDescription jsdl = this.jsdlJobDescription;
-    final SweepIterationsSection section = this;
-    Job job = new Job( "Generating sweep for iterations" ) { //$NON-NLS-1$
+    // final SweepIterationsSection section = this;
+    Job job = new Job( "Generating sweep for iterations" ) {
 
       @Override
       protected IStatus run( final IProgressMonitor monitor ) {
@@ -131,13 +131,13 @@ public class SweepIterationsSection extends JsdlFormPageSection {
           generator.generate( handler, monitor );
         } catch( ProblemException exception ) {
           final ProblemException pexc = exception;
-          final Shell fShell = shell;
+          final Shell fShell = SweepIterationsSection.this.shell;
           fShell.getDisplay().asyncExec( new Runnable() {
 
             public void run() {
               ProblemDialog.openProblem( fShell,
-                                         "JSDLs preview", //$NON-NLS-1$
-                                         "Generation JSDLs for preview failed", //$NON-NLS-1$
+                                         "JSDLs preview",
+                                         "Generation JSDLs for preview failed",
                                          pexc );
             }
           } );
@@ -187,8 +187,11 @@ public class SweepIterationsSection extends JsdlFormPageSection {
   }
 
   /**
-   * @param jobDefinition
-   * @param jsdlJobDescr
+   * Sets input JSDL for this section.
+   * 
+   * @param jobDefinition job definition element from JSDL document
+   * @param jsdlJobDescr {@link JSDLJobDescription} object representing JSDL
+   *          document
    */
   public void setInput( final JobDefinitionType jobDefinition,
                         final JSDLJobDescription jsdlJobDescr )
@@ -212,7 +215,7 @@ public class SweepIterationsSection extends JsdlFormPageSection {
 
   private List<String> getColumnNamesForTable() {
     List<String> columnNames = new ArrayList<String>();
-    columnNames.add( "Iteration" ); //$NON-NLS-1$
+    columnNames.add( "Iteration" );
     for( String paramName : getInerSweepNames( getInnerList() ) ) {
       columnNames.add( paramName );
     }
@@ -275,9 +278,6 @@ public class SweepIterationsSection extends JsdlFormPageSection {
     return result;
   }
 
-  /**
-   * @return the Label Provider.
-   */
   public IterationsLProvider getLabelProvider() {
     return this.labelProvider;
   }
