@@ -81,7 +81,7 @@ import eu.geclipse.jsdl.ui.providers.parameters.SweepOrderCProvider;
 import eu.geclipse.jsdl.ui.providers.parameters.SweepOrderLProvider;
 import eu.geclipse.jsdl.ui.widgets.ParametersDialog;
 import eu.geclipse.jsdl.ui.widgets.SweepDeleteDialog;
-import eu.geclipse.jsdl.ui.widgets.SweepFunctionDialog;
+import eu.geclipse.jsdl.ui.widgets.SweepLoopDialog;
 
 public class SweepOrderSection extends JsdlFormPageSection {
 
@@ -327,7 +327,7 @@ public class SweepOrderSection extends JsdlFormPageSection {
 
       @Override
       public void widgetSelected( final SelectionEvent e ) {
-        SweepFunctionDialog dialog = new SweepFunctionDialog( SweepOrderSection.this.shell );
+        SweepLoopDialog dialog = new SweepLoopDialog( SweepOrderSection.this.shell );
         if( dialog.open() == Window.OK ) {
           List<BigInteger> exceptions = new ArrayList<BigInteger>();
           if( dialog.getExceptionsReturn() != null ) {
@@ -542,7 +542,7 @@ public class SweepOrderSection extends JsdlFormPageSection {
                                                         adapterList,
                                                         getInerSweepNames(),
                                                         getNameForSweep( type ),
-                                                        ParametersDialog.EDIT_ELEMENT );
+                                                        ParametersDialog.WITH_REF );
         // dialog.setTitle( "Add inner sweep" );
         if( dialog.open() == Window.OK ) {
           performAddChangesForEachChange( dialog.getElementReturn(),
@@ -626,7 +626,7 @@ public class SweepOrderSection extends JsdlFormPageSection {
                                                         adapterList,
                                                         getInerSweepNames(),
                                                         getNameForSweep( type ),
-                                                        ParametersDialog.EDIT_ELEMENT );
+                                                        ParametersDialog.WITH_REF );
         // dialog.setTitle( "Add sweep on the same level" );
         if( dialog.open() == Dialog.OK ) {
           performAddChangesWith( dialog.getElementReturn(),
@@ -772,7 +772,7 @@ public class SweepOrderSection extends JsdlFormPageSection {
                                                         adapterList,
                                                         getInerSweepNames(),
                                                         getNameForSweep( type ),
-                                                        ParametersDialog.EDIT_ELEMENT );
+                                                        ParametersDialog.WITH_REF );
         // dialog.setTitle( "Add independent sweep" );
         if( dialog.open() == Window.OK ) {
           performAddIndependent( dialog.getElementReturn(),
@@ -792,7 +792,7 @@ public class SweepOrderSection extends JsdlFormPageSection {
                                                     "", //$NON-NLS-1$
                                                     ParametersDialog.NEW_ELEMENT );
     // dialog.setTitle( "Add new sweep" );
-    if( dialog.open() == Dialog.OK ) {
+    if( dialog.open() == Window.OK ) {
       performAddIndependent( dialog.getElementReturn(),
                              dialog.getRefElementReturn(),
                              dialog.getValuesReturn() );
