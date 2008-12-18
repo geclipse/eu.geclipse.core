@@ -34,8 +34,12 @@ import org.eclipse.swt.widgets.Text;
 
 import eu.geclipse.ui.widgets.NumberVerifier;
 
-public class SweepFunctionDialog extends Dialog implements ModifyListener {
+/**
+ * Dialog or defining loop function for parameter sweep.
+ */
+public class SweepLoopDialog extends Dialog implements ModifyListener {
 
+  private static final String SEPARATOR_PROPERTY = "line.separator"; //$NON-NLS-1$
   private Text startValueText;
   private Text endValueText;
   private Text stepValueText;
@@ -43,9 +47,14 @@ public class SweepFunctionDialog extends Dialog implements ModifyListener {
   private String startReturn;
   private String endReturn;
   private String stepReturn;
-  private String[] exceptionsReturn;
+  private String[] exceptionsReturn = new String[ 0 ];
 
-  public SweepFunctionDialog( final Shell parentShell ) {
+  /**
+   * Creates new instance of SweepLoopDialog class.
+   * 
+   * @param parentShell shell of a parent widget
+   */
+  public SweepLoopDialog( final Shell parentShell ) {
     super( parentShell );
   }
 
@@ -55,7 +64,7 @@ public class SweepFunctionDialog extends Dialog implements ModifyListener {
     dialogComp.setLayout( new GridLayout( 2, false ) );
     GridData gData = new GridData();
     Label startLabel = new Label( dialogComp, SWT.LEAD );
-    startLabel.setText( "Start value" );
+    startLabel.setText( Messages.getString( "SweepLoopDialog.start_label" ) ); //$NON-NLS-1$
     startLabel.setLayoutData( new GridData() );
     this.startValueText = new Text( dialogComp, SWT.BORDER | SWT.LEAD );
     this.startValueText.setLayoutData( new GridData( GridData.FILL_BOTH
@@ -63,7 +72,7 @@ public class SweepFunctionDialog extends Dialog implements ModifyListener {
     this.startValueText.addListener( SWT.Verify, new NegativeVerifier() );
     this.startValueText.addModifyListener( this );
     Label endLabel = new Label( dialogComp, SWT.LEAD );
-    endLabel.setText( "End value" );
+    endLabel.setText( Messages.getString( "SweepLoopDialog.end_label" ) ); //$NON-NLS-1$
     endLabel.setLayoutData( new GridData() );
     this.endValueText = new Text( dialogComp, SWT.BORDER | SWT.LEAD );
     this.endValueText.setLayoutData( new GridData( GridData.FILL_BOTH
@@ -71,16 +80,16 @@ public class SweepFunctionDialog extends Dialog implements ModifyListener {
     this.endValueText.addModifyListener( this );
     this.endValueText.addListener( SWT.Verify, new NegativeVerifier() );
     Label stepLabel = new Label( dialogComp, SWT.LEAD );
-    stepLabel.setText( "Step value" );
+    stepLabel.setText( Messages.getString( "SweepLoopDialog.step_label" ) ); //$NON-NLS-1$
     stepLabel.setLayoutData( new GridData() );
     this.stepValueText = new Text( dialogComp, SWT.BORDER | SWT.LEAD );
     this.stepValueText.setLayoutData( new GridData( GridData.FILL_BOTH
                                                     | GridData.GRAB_HORIZONTAL ) );
-    this.stepValueText.setText( "1" );
+    this.stepValueText.setText( "1" ); //$NON-NLS-1$
     this.stepValueText.addModifyListener( this );
     this.stepValueText.addListener( SWT.Verify, new NumberVerifier() );
     Label exceptLabel = new Label( dialogComp, SWT.LEAD );
-    exceptLabel.setText( "Excluded values" );
+    exceptLabel.setText( Messages.getString( "SweepLoopDialog.excluded_values_label" ) ); //$NON-NLS-1$
     exceptLabel.setLayoutData( new GridData() );
     this.exceptionsText = new Text( dialogComp, SWT.MULTI
                                                 | SWT.WRAP
@@ -102,16 +111,16 @@ public class SweepFunctionDialog extends Dialog implements ModifyListener {
     BigInteger end = new BigInteger( this.endValueText.getText() );
     if( start.compareTo( end ) > -1 ) {
       MessageBox box = new MessageBox( getShell(), SWT.ICON_ERROR | SWT.OK );
-      box.setMessage( "Start value must not be smaller than the end one." );
-      box.setText( "Error" );
+      box.setMessage( Messages.getString( "SweepLoopDialog.end_smaller_than_start_error_message" ) ); //$NON-NLS-1$
+      box.setText( Messages.getString( "SweepLoopDialog.error_title" ) ); //$NON-NLS-1$
       box.open();
     } else {
       this.startReturn = this.startValueText.getText();
       this.endReturn = this.endValueText.getText();
       this.stepReturn = this.stepValueText.getText();
-      if( !this.exceptionsText.getText().equals( "" ) ) {
+      if( !this.exceptionsText.getText().equals( "" ) ) { //$NON-NLS-1$
         this.exceptionsReturn = this.exceptionsText.getText()
-          .split( System.getProperty( "line.separator" ) );
+          .split( System.getProperty( SEPARATOR_PROPERTY ) );
       }
       super.okPressed();
     }
@@ -122,9 +131,9 @@ public class SweepFunctionDialog extends Dialog implements ModifyListener {
   }
 
   private void updateButtons() {
-    if( !this.startValueText.getText().equals( "" )
-        && !this.endValueText.getText().equals( "" )
-        && !this.stepValueText.getText().equals( "" ) )
+    if( !this.startValueText.getText().equals( "" ) //$NON-NLS-1$
+        && !this.endValueText.getText().equals( "" ) //$NON-NLS-1$
+        && !this.stepValueText.getText().equals( "" ) ) //$NON-NLS-1$
     {
       super.getButton( IDialogConstants.OK_ID ).setEnabled( true );
     } else {
@@ -139,37 +148,63 @@ public class SweepFunctionDialog extends Dialog implements ModifyListener {
     return result;
   }
 
+  /**
+   * Method to access loop's start value as entered in dialog when user pressed
+   * OK.
+   * 
+   * @return String representation of BigInteger loop's start value.
+   */
   public String getStartReturn() {
-    return startReturn;
+    return this.startReturn;
   }
 
+  /**
+   * Method to access loop's end value as entered in dialog when user pressed
+   * OK.
+   * 
+   * @return String representation of BigInteger loop's end value.
+   */
   public String getEndReturn() {
-    return endReturn;
+    return this.endReturn;
   }
 
+  /**
+   * Method to access loop's step value as entered in dialog when user pressed
+   * OK.
+   * 
+   * @return String representation of BigInteger step value
+   */
   public String getStepReturn() {
-    return stepReturn;
+    return this.stepReturn;
   }
 
+  /**
+   * Method to access list of exceptions values for loop, as entered in dialog
+   * when user pressed OK.
+   * 
+   * @return table with String values which should be excluded from values
+   *         generated by loop
+   */
   public String[] getExceptionsReturn() {
-    return exceptionsReturn;
+    return this.exceptionsReturn;
   }
   // also for multi-line Text fields
   class NegativeVerifier implements Listener {
 
     public void handleEvent( final Event event ) {
-      String eventText = event.text;
+      // String eventText = event.text;
       Text text = ( Text )event.widget;
       String value = text.getText().substring( 0, event.start )
                      + event.text
                      + text.getText().substring( event.end );
-      String[] values = value.split( System.getProperty( "line.separator" ) );
-      for( String val : value.split( System.getProperty( "line.separator" ) ) )
+      // String[] values = value.split( System.getProperty( SEPARATOR_PROPERTY )
+      // );
+      for( String val : value.split( System.getProperty( SEPARATOR_PROPERTY ) ) )
       {
         try {
           new BigInteger( val );
         } catch( NumberFormatException exc ) {
-          if( !val.equals( "-" ) && !(val.equals( "" ))) {
+          if( !val.equals( "-" ) && !( val.equals( "" ) ) ) { //$NON-NLS-1$ //$NON-NLS-2$
             event.doit = false;
             break;
           }

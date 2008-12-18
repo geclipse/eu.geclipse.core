@@ -21,7 +21,6 @@ import java.util.List;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
-import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -31,23 +30,27 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 
-import eu.geclipse.jsdl.model.sweep.SweepType;
-
+/**
+ * Dialog for handling deletion of sweeped parameters in case there is more than
+ * one parameter on the same sweep level.
+ */
 public class SweepDeleteDialog extends Dialog {
 
   private TableViewer viewer;
   private List<String> input;
   private List<String> outputReturn;
-  private Button deleteAllButton;
-  private Button deleteSelectedButton;
-  private Button cancelButton;
 
+  /**
+   * Creates new instance of SweepDeleteDialog class.
+   * 
+   * @param parentShell shell of parent widget
+   * @param input list of parameters from the same sweep level of deletion
+   */
   public SweepDeleteDialog( final Shell parentShell, final List<String> input )
   {
     super( parentShell );
@@ -56,8 +59,9 @@ public class SweepDeleteDialog extends Dialog {
 
   /*
    * (non-Javadoc)
-   * 
-   * @see org.eclipse.jface.dialogs.Dialog#createDialogArea(org.eclipse.swt.widgets.Composite)
+   * @see
+   * org.eclipse.jface.dialogs.Dialog#createDialogArea(org.eclipse.swt.widgets
+   * .Composite)
    */
   @Override
   protected Control createDialogArea( final Composite parent ) {
@@ -67,9 +71,9 @@ public class SweepDeleteDialog extends Dialog {
     Label description = new Label( mainComp, SWT.LEAD );
     gData.horizontalSpan = 2;
     description.setLayoutData( gData );
-    description.setText( "There is more than one sweep on this level." );
+    description.setText( Messages.getString( "SweepDeleteDialog.info_message_part1" ) ); //$NON-NLS-1$
     Label descr1 = new Label( mainComp, SWT.LEAD );
-    descr1.setText( "Which one do you want to remove?" );
+    descr1.setText( Messages.getString( "SweepDeleteDialog.info_message_part2" ) ); //$NON-NLS-1$
     gData = new GridData();
     gData.horizontalSpan = 2;
     descr1.setLayoutData( gData );
@@ -78,7 +82,9 @@ public class SweepDeleteDialog extends Dialog {
                           | GridData.GRAB_VERTICAL );
     gData.horizontalSpan = 2;
     gData.heightHint = 100;
-    this.viewer = new TableViewer( mainComp, SWT.V_SCROLL | SWT.BORDER | SWT.MULTI);
+    this.viewer = new TableViewer( mainComp, SWT.V_SCROLL
+                                             | SWT.BORDER
+                                             | SWT.MULTI );
     this.viewer.setLabelProvider( new LabelProvider() );
     this.viewer.setContentProvider( new cProvider() );
     this.viewer.setInput( this.input );
@@ -88,7 +94,6 @@ public class SweepDeleteDialog extends Dialog {
 
   /*
    * (non-Javadoc)
-   * 
    * @see org.eclipse.jface.dialogs.Dialog#buttonPressed(int)
    */
   @Override
@@ -104,6 +109,7 @@ public class SweepDeleteDialog extends Dialog {
     }
   }
 
+  @SuppressWarnings("unchecked")
   private List<String> getSelection() {
     List<String> result = new ArrayList<String>();
     ISelection sel = this.viewer.getSelection();
@@ -116,8 +122,9 @@ public class SweepDeleteDialog extends Dialog {
 
   /*
    * (non-Javadoc)
-   * 
-   * @see org.eclipse.jface.dialogs.Dialog#createButtonBar(org.eclipse.swt.widgets.Composite)
+   * @see
+   * org.eclipse.jface.dialogs.Dialog#createButtonBar(org.eclipse.swt.widgets
+   * .Composite)
    */
   @Override
   protected Control createButtonBar( final Composite parent ) {
@@ -129,11 +136,11 @@ public class SweepDeleteDialog extends Dialog {
     buttonsComp.setLayoutData( gData );
     createButton( buttonsComp,
                   IDialogConstants.SELECT_ALL_ID,
-                  "Delete all",
+                  Messages.getString( "SweepDeleteDialog.delete_all_button" ), //$NON-NLS-1$
                   true );
     createButton( buttonsComp,
                   IDialogConstants.PROCEED_ID,
-                  "Delete selected",
+                  Messages.getString( "SweepDeleteDialog.delete_all_selected" ), //$NON-NLS-1$
                   false );
     createButton( buttonsComp,
                   IDialogConstants.CANCEL_ID,
@@ -142,11 +149,18 @@ public class SweepDeleteDialog extends Dialog {
     return buttonsComp;
   }
 
+  /**
+   * Method to access list of elements to remove as selected in dialog when user
+   * confirmed exit.
+   * 
+   * @return list of parameters to delete from the same sweep level of deletion
+   */
   public List<String> getElementsToRemove() {
     return this.outputReturn;
   }
   class cProvider implements IStructuredContentProvider {
 
+    @SuppressWarnings("unchecked")
     public Object[] getElements( final Object inputElement ) {
       String[] result = null;
       if( inputElement instanceof List ) {
