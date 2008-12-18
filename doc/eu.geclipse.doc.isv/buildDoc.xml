@@ -51,6 +51,8 @@
   	<pde.convertSchemaToHTML manifest="../${repositoryStructure}eu.geclipse.jsdl.model/plugin.xml" destination="${dest}" />
   	<pde.convertSchemaToHTML manifest="../${repositoryStructure}eu.geclipse.jsdl/plugin.xml" destination="${dest}" />
   	<pde.convertSchemaToHTML manifest="../${repositoryStructure}eu.geclipse.jsdl.ui/plugin.xml" destination="${dest}" />
+  	<pde.convertSchemaToHTML manifest="../${repositoryStructure}eu.geclipse.servicejob/plugin.xml" destination="${dest}" />
+  	<pde.convertSchemaToHTML manifest="../${repositoryStructure}eu.geclipse.servicejob.ui/plugin.xml" destination="${dest}" />
   	<pde.convertSchemaToHTML manifest="../${repositoryStructure}eu.geclipse.terminal/plugin.xml" destination="${dest}" />
   	<pde.convertSchemaToHTML manifest="../${repositoryStructure}eu.geclipse.terminal.ssh/plugin.xml" destination="${dest}" />
   	<pde.convertSchemaToHTML manifest="../${repositoryStructure}eu.geclipse.ui/plugin.xml" destination="${dest}" />

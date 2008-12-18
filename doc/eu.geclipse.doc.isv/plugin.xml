@@ -36,6 +36,9 @@
         <plugin id="eu.geclipse.workflow.edit"></plugin>
         <plugin id="eu.geclipse.workflow.model"></plugin>
         <plugin id="eu.geclipse.workflow.ui"></plugin>
+        <plugin
+              id="eu.geclipse.servicejob">
+        </plugin>
       </javadoc>
    </extension>
 
