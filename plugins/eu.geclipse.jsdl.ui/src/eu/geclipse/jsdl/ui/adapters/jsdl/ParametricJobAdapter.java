@@ -18,8 +18,15 @@ package eu.geclipse.jsdl.ui.adapters.jsdl;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
@@ -28,10 +35,13 @@ import org.eclipse.emf.ecore.util.ExtendedMetaData;
 import org.eclipse.emf.ecore.util.FeatureMap;
 import org.eclipse.emf.ecore.util.FeatureMapUtil;
 import org.eclipse.emf.ecore.util.FeatureMap.Entry;
+import org.w3c.dom.Document;
 
+import eu.geclipse.jsdl.JSDLJobDescription;
 import eu.geclipse.jsdl.model.base.ApplicationType;
 import eu.geclipse.jsdl.model.base.DataStagingType;
 import eu.geclipse.jsdl.model.base.ExactType;
+import eu.geclipse.jsdl.model.base.FileSystemType;
 import eu.geclipse.jsdl.model.base.JobDefinitionType;
 import eu.geclipse.jsdl.model.base.JobDescriptionType;
 import eu.geclipse.jsdl.model.base.JobIdentificationType;
@@ -56,6 +66,7 @@ public class ParametricJobAdapter extends JsdlAdaptersFactory {
   private JobDescriptionType jobDescriptionType;
   private boolean isNotifyAllowed;
   private boolean adapterRefreshed;
+  private JSDLJobDescription JSDLJobDescr;
 
   /**
    * Constructs a new <code> {@link DataStageTypeAdapter} </code>
@@ -63,22 +74,25 @@ public class ParametricJobAdapter extends JsdlAdaptersFactory {
    * @param jobDefinitionRoot . The root element of a JSDL document (
    *          {@link JobDefinitionType}).
    */
-  public ParametricJobAdapter( final JobDefinitionType jobDefinitionRoot ) {
+  public ParametricJobAdapter( final JobDefinitionType jobDefinitionRoot,
+                               final JSDLJobDescription jobDescr )
+  {
     getTypeForAdapter( jobDefinitionRoot );
-  } // End Constructor
+    this.JSDLJobDescr = jobDescr;
+  }
 
   protected void contentChanged() {
     if( this.isNotifyAllowed ) {
       fireNotifyChanged( null );
     }
-  } // End void contenctChanged()
+  }
 
   /*
    * Get the DataStage Type Element from the root Jsdl Element.
    */
   private void getTypeForAdapter( final JobDefinitionType jobDefinitionRoot ) {
     this.jobDescriptionType = jobDefinitionRoot.getJobDescription();
-  } // End void getTypeforAdapter()
+  }
 
   /**
    * Allows to set the adapter's content on demand and not through the
@@ -89,7 +103,7 @@ public class ParametricJobAdapter extends JsdlAdaptersFactory {
   public void setContent( final JobDefinitionType jobDefinitionRoot ) {
     this.adapterRefreshed = true;
     getTypeForAdapter( jobDefinitionRoot );
-  } // End void setContent()
+  }
 
   public List<String> getElementsList() {
     List<String> result = new ArrayList<String>();
@@ -222,18 +236,20 @@ public class ParametricJobAdapter extends JsdlAdaptersFactory {
         result.add( baseCandidate + "jsdl:HostName" );
       }
     }
-    // if (resources.getFileSystem() != null){
-    // String baseFileSystem = baseString + "jsdl:CandidateHosts/";
-    // if( resources.getCandidateHosts().getHostName().size() > 1 ) {
-    // int i = 1;
-    // for( Object host : resources.getCandidateHosts().getHostName() ) {
-    // result.add( baseCandidate + "jsdl:HostName[" + i + "]" );
-    // i++;
-    // }
-    // } else {
-    // result.add( baseCandidate + "jsdl:HostName" );
-    // }
-    // }
+    if( resources.getFileSystem() != null ) {
+      if( resources.getFileSystem().size() > 1 ) {
+        int i = 1;
+        for( Object fsType : resources.getFileSystem() ) {
+          String fsBase = baseString + "jsdl:FileSystem[" + i + "]";
+          parseFileSystem( ( FileSystemType )fsType, fsBase );
+          i++;
+        }
+      } else {
+        String fsBase = baseString + "jsdl:FileSystem";
+        parseFileSystem( ( FileSystemType )resources.getFileSystem().get( 0 ),
+                         fsBase );
+      }
+    }
     if( resources.isSetExclusiveExecution() ) {
       result.add( baseString + "jsdl:ExclusiveExecution" );
     }
@@ -255,38 +271,62 @@ public class ParametricJobAdapter extends JsdlAdaptersFactory {
       }
     }
     result.addAll( parseRangeValueType( resources.getIndividualCPUSpeed(),
-                                        baseString + "jsdl:IndividualCPUSpeed/" ) );
+                                        baseString + "jsdl:IndividualCPUSpeed/" ) ); //$NON-NLS-1$
     result.addAll( parseRangeValueType( resources.getIndividualCPUTime(),
-                                        baseString + "jsdl:IndividualCPUTime/" ) );
+                                        baseString + "jsdl:IndividualCPUTime/" ) ); //$NON-NLS-1$
     result.addAll( parseRangeValueType( resources.getIndividualCPUCount(),
-                                        baseString + "jsdl:IndividualCPUCount/" ) );
+                                        baseString + "jsdl:IndividualCPUCount/" ) ); //$NON-NLS-1$
     result.addAll( parseRangeValueType( resources.getIndividualNetworkBandwidth(),
                                         baseString
-                                            + "jsdl:IndividualNetworkBandwidth/" ) );
+                                            + "jsdl:IndividualNetworkBandwidth/" ) ); //$NON-NLS-1$
     result.addAll( parseRangeValueType( resources.getIndividualPhysicalMemory(),
                                         baseString
-                                            + "jsdl:IndividualPhysicalMemory/" ) );
+                                            + "jsdl:IndividualPhysicalMemory/" ) ); //$NON-NLS-1$
     result.addAll( parseRangeValueType( resources.getIndividualVirtualMemory(),
                                         baseString
-                                            + "jsdl:IndividualVirtualMemory/" ) );
+                                            + "jsdl:IndividualVirtualMemory/" ) ); //$NON-NLS-1$
     result.addAll( parseRangeValueType( resources.getIndividualCPUTime(),
-                                        baseString + "jsdl:IndividualCPUTime/" ) );
+                                        baseString + "jsdl:IndividualCPUTime/" ) ); //$NON-NLS-1$
     result.addAll( parseRangeValueType( resources.getIndividualDiskSpace(),
                                         baseString
-                                            + "jsdl:IndividualDiskSpace/" ) );
+                                            + "jsdl:IndividualDiskSpace/" ) ); //$NON-NLS-1$
     result.addAll( parseRangeValueType( resources.getTotalCPUTime(),
-                                        baseString + "jsdl:TotalCPUTime/" ) );
+                                        baseString + "jsdl:TotalCPUTime/" ) ); //$NON-NLS-1$
     result.addAll( parseRangeValueType( resources.getTotalCPUCount(),
-                                        baseString + "jsdl:TotalCPUCount/" ) );
+                                        baseString + "jsdl:TotalCPUCount/" ) ); //$NON-NLS-1$
     result.addAll( parseRangeValueType( resources.getTotalPhysicalMemory(),
                                         baseString
-                                            + "jsdl:TotalPhysicalMemory/" ) );
+                                            + "jsdl:TotalPhysicalMemory/" ) ); //$NON-NLS-1$
     result.addAll( parseRangeValueType( resources.getTotalVirtualMemory(),
-                                        baseString + "jsdl:TotalVirtualMemory/" ) );
+                                        baseString + "jsdl:TotalVirtualMemory/" ) ); //$NON-NLS-1$
     result.addAll( parseRangeValueType( resources.getTotalDiskSpace(),
-                                        baseString + "jsdl:TotalDiskSpace/" ) );
+                                        baseString + "jsdl:TotalDiskSpace/" ) ); //$NON-NLS-1$
     result.addAll( parseRangeValueType( resources.getTotalResourceCount(),
-                                        baseString + "jsdl:TotalResourceCount/" ) );
+                                        baseString + "jsdl:TotalResourceCount/" ) ); //$NON-NLS-1$
+    return result;
+  }
+
+  private List<String> parseFileSystem( final FileSystemType fileSystem,
+                                        final String fsString )
+  {
+    List<String> result = new ArrayList<String>();
+    if( fileSystem.getDescription() != null ) {
+      result.add( fsString + "/jsdl:Description" ); //$NON-NLS-1$
+    }
+    if( fileSystem.getMountPoint() != null ) {
+      result.add( fsString + "/jsdl:MountPoint" ); //$NON-NLS-1$
+    }
+    // TODO katis - missing definition of MountSource in JSDL XSD - bug!
+    if( fileSystem.getDiskSpace() != null ) {
+      result.addAll( parseRangeValueType( fileSystem.getDiskSpace(),
+                                          fsString + "/jsdl:DiskSpace/" ) ); //$NON-NLS-1$
+    }
+    if( fileSystem.getFileSystemType() != null ) {
+      result.add( fsString + "/jsdl:FileSystemType" ); //$NON-NLS-1$
+    }
+    if( fileSystem.getName() != null ) {
+      result.add( fsString + "@name" ); //$NON-NLS-1$
+    }
     return result;
   }
 
@@ -296,32 +336,32 @@ public class ParametricJobAdapter extends JsdlAdaptersFactory {
     List<String> result = new ArrayList<String>();
     if( rangeType != null ) {
       if( rangeType.getUpperBound() != null ) {
-        result.add( baseString + "jsdl:UpperBoundedRange" );
+        result.add( baseString + "jsdl:UpperBoundedRange" ); //$NON-NLS-1$
         if( rangeType.getUpperBound().isSetExclusiveBound() ) {
-          result.add( baseString + "jsdl:UpperBoundedRange@exclusiveBound" );
+          result.add( baseString + "jsdl:UpperBoundedRange@exclusiveBound" ); //$NON-NLS-1$
         }
       }
       if( rangeType.getLowerBound() != null ) {
-        result.add( baseString + "jsdl:UpperLowerRange" );
+        result.add( baseString + "jsdl:UpperLowerRange" ); //$NON-NLS-1$
         if( rangeType.getLowerBound().isSetExclusiveBound() ) {
-          result.add( baseString + "jsdl:UpperLowerRange@exclusiveBound" );
+          result.add( baseString + "jsdl:UpperLowerRange@exclusiveBound" ); //$NON-NLS-1$
         }
       }
       if( rangeType.getExact() != null ) {
         if( rangeType.getExact().size() > 1 ) {
           int i = 1;
           for( Object obj : rangeType.getExact() ) {
-            String baseExact = baseString + "jsdl:Exact[" + i + "]";
+            String baseExact = baseString + "jsdl:Exact[" + i + "]"; //$NON-NLS-1$//$NON-NLS-2$
             result.add( baseExact );
             if( ( ( ExactType )obj ).isSetEpsilon() ) {
-              result.add( baseExact + "@epsilon" );
+              result.add( baseExact + "@epsilon" ); //$NON-NLS-1$
             }
             i++;
           }
         } else {
-          result.add( baseString + "jsdl:Exact" );
+          result.add( baseString + "jsdl:Exact" ); //$NON-NLS-1$
           if( ( ( ExactType )rangeType.getExact().get( 0 ) ).isSetEpsilon() ) {
-            result.add( baseString + "jsdl:Exact@epsilon" );
+            result.add( baseString + "jsdl:Exact@epsilon" ); //$NON-NLS-1$
           }
         }
       }
@@ -330,13 +370,13 @@ public class ParametricJobAdapter extends JsdlAdaptersFactory {
           int i = 1;
           for( Object obj : rangeType.getRange() ) {
             result.addAll( parseRangeType( ( RangeType )obj, baseString
-                                                             + "jsdl:Range["
+                                                             + "jsdl:Range[" //$NON-NLS-1$
                                                              + i
-                                                             + "]/" ) );
+                                                             + "]/" ) ); //$NON-NLS-1$
           }
         } else {
           result.addAll( parseRangeType( ( RangeType )rangeType.getRange()
-            .get( 0 ), baseString + "jsdl:Range/" ) );
+            .get( 0 ), baseString + "jsdl:Range/" ) ); //$NON-NLS-1$
         }
       }
     }
@@ -348,15 +388,15 @@ public class ParametricJobAdapter extends JsdlAdaptersFactory {
   {
     List<String> result = new ArrayList<String>();
     if( range.getLowerBound() != null ) {
-      result.add( baseString + "jsdl:LowerBound" );
+      result.add( baseString + "jsdl:LowerBound" ); //$NON-NLS-1$
       if( range.getLowerBound().isSetExclusiveBound() ) {
-        result.add( baseString + "jsdl:LowerBound@ExclusiveBound" );
+        result.add( baseString + "jsdl:LowerBound@ExclusiveBound" ); //$NON-NLS-1$
       }
     }
     if( range.getUpperBound() != null ) {
-      result.add( baseString + "jsdl:UpperBound" );
+      result.add( baseString + "jsdl:UpperBound" ); //$NON-NLS-1$
       if( range.getUpperBound().isSetExclusiveBound() ) {
-        result.add( baseString + "jsdl:UpperBound@ExclusiveBound" );
+        result.add( baseString + "jsdl:UpperBound@ExclusiveBound" ); //$NON-NLS-1$
       }
     }
     return result;
@@ -367,33 +407,33 @@ public class ParametricJobAdapter extends JsdlAdaptersFactory {
   {
     List<String> result = new ArrayList<String>();
     if( dataStaging.getFileName() != null
-        && !dataStaging.getFileName().equals( "" ) )
+        && !dataStaging.getFileName().equals( "" ) ) //$NON-NLS-1$
     {
-      result.add( baseString + "/jsdl:FileName" );
+      result.add( baseString + "/jsdl:FileName" ); //$NON-NLS-1$
     }
     if( dataStaging.getFilesystemName() != null
-        && !dataStaging.getFilesystemName().equals( "" ) )
+        && !dataStaging.getFilesystemName().equals( "" ) ) //$NON-NLS-1$
     {
-      result.add( baseString + "/jsdl:FilesystemName" );
+      result.add( baseString + "/jsdl:FilesystemName" ); //$NON-NLS-1$
     }
     if( dataStaging.isSetCreationFlag() ) {
-      result.add( baseString + "/jsdl:CreationFlag" );
+      result.add( baseString + "/jsdl:CreationFlag" ); //$NON-NLS-1$
     }
     if( dataStaging.isSetDeleteOnTermination() ) {
-      result.add( baseString + "/jsdl:DeleteOnTermination" );
+      result.add( baseString + "/jsdl:DeleteOnTermination" ); //$NON-NLS-1$
     }
     if( dataStaging.getSource() != null ) {
       if( dataStaging.getSource().getURI() != null
-          && !dataStaging.getSource().getURI().equals( "" ) )
+          && !dataStaging.getSource().getURI().equals( "" ) ) //$NON-NLS-1$
       {
-        result.add( baseString + "/jsdl:Source/jsdl:URI" );
+        result.add( baseString + "/jsdl:Source/jsdl:URI" ); //$NON-NLS-1$
       }
     }
     if( dataStaging.getTarget() != null ) {
       if( dataStaging.getTarget().getURI() != null
-          && !dataStaging.getTarget().getURI().equals( "" ) )
+          && !dataStaging.getTarget().getURI().equals( "" ) ) //$NON-NLS-1$
       {
-        result.add( baseString + "/jsdl:Target/jsdl:URI" );
+        result.add( baseString + "/jsdl:Target/jsdl:URI" ); //$NON-NLS-1$
       }
     }
     return result;
@@ -485,67 +525,67 @@ public class ParametricJobAdapter extends JsdlAdaptersFactory {
    *         the following structure: "LOOP( start = startValue, end = endValue,
    *         step = stepValue) \ { exception1, exception2, ... }"
    */
-  public String createLOOPString( final BigInteger startValue,
-                                  final BigInteger endValue,
-                                  final BigInteger stepValue,
-                                  final List<BigInteger> exceptionsValues )
+  public static String createLOOPString( final BigInteger startValue,
+                                         final BigInteger endValue,
+                                         final BigInteger stepValue,
+                                         final List<BigInteger> exceptionsValues )
   {
-    String result = "LOOP";
-    result = result + "( start = " + startValue.toString() + "; ";
-    result = result + "end = " + endValue.toString() + "; ";
-    result = result + "step = " + stepValue.toString() + " )";
+    String result = "LOOP"; //$NON-NLS-1$
+    result = result + "( start = " + startValue.toString() + "; "; //$NON-NLS-1$ //$NON-NLS-2$
+    result = result + "end = " + endValue.toString() + "; "; //$NON-NLS-1$ //$NON-NLS-2$
+    result = result + "step = " + stepValue.toString() + " )"; //$NON-NLS-1$ //$NON-NLS-2$
     if( exceptionsValues != null & exceptionsValues.size() > 0 ) {
-      result = result + " \\ { ";
+      result = result + " \\ { "; //$NON-NLS-1$
       for( BigInteger exc : exceptionsValues ) {
-        result = result + exc.toString() + "; ";
+        result = result + exc.toString() + "; "; //$NON-NLS-1$
       }
       result = result.substring( 0, result.length() - 2 );
-      result = result + " }";
+      result = result + " }"; //$NON-NLS-1$
     }
     parseLOOPStringForEnd( result );
     parseLOOPStringForStep( result );
     return result;
   }
 
-  public BigInteger parseLOOPStringForStart( final String loopString ) {
+  public static BigInteger parseLOOPStringForStart( final String loopString ) {
     BigInteger result = null;
-    String[] splited = loopString.split( "start\\s*=\\s*" );
+    String[] splited = loopString.split( "start\\s*=\\s*" ); //$NON-NLS-1$
     if( splited.length > 1 ) {
-      result = new BigInteger( splited[ 1 ].split( "\\s*;" )[ 0 ] );
+      result = new BigInteger( splited[ 1 ].split( "\\s*;" )[ 0 ] ); //$NON-NLS-1$
     }
     return result;
   }
 
-  public BigInteger parseLOOPStringForEnd( final String loopString ) {
+  public static BigInteger parseLOOPStringForEnd( final String loopString ) {
     BigInteger result = null;
-    String[] splited = loopString.split( "end\\s*=\\s*" );
+    String[] splited = loopString.split( "end\\s*=\\s*" ); //$NON-NLS-1$
     if( splited.length > 1 ) {
-      result = new BigInteger( splited[ 1 ].split( "\\s*;" )[ 0 ] );
+      result = new BigInteger( splited[ 1 ].split( "\\s*;" )[ 0 ] ); //$NON-NLS-1$
     }
     return result;
   }
 
-  public BigInteger parseLOOPStringForStep( final String loopString ) {
+  public static BigInteger parseLOOPStringForStep( final String loopString ) {
     BigInteger result = null;
-    String[] splited = loopString.split( "step\\s*=\\s*" );
+    String[] splited = loopString.split( "step\\s*=\\s*" ); //$NON-NLS-1$
     if( splited.length > 1 ) {
-      result = new BigInteger( splited[ 1 ].split( "\\s*\\)" )[ 0 ] );
+      result = new BigInteger( splited[ 1 ].split( "\\s*\\)" )[ 0 ] ); //$NON-NLS-1$
     }
     return result;
   }
 
-  public List<ExceptionType> parseLOOPStringForExceptions( final String loopString )
+  public static List<ExceptionType> parseLOOPStringForExceptions( final String loopString )
   {
     List<ExceptionType> result = new ArrayList<ExceptionType>();
     FunctionsPackage pak = FunctionsPackageImpl.eINSTANCE;
     FunctionsFactory factory = pak.getFunctionsFactory();
-    String[] splited = loopString.split( "\\s*\\\\\\s*\\{\\s*" );
+    String[] splited = loopString.split( "\\s*\\\\\\s*\\{\\s*" ); //$NON-NLS-1$
     if( splited.length > 1 ) {
-      splited = splited[ 1 ].split( "\\s*;\\s*" );
+      splited = splited[ 1 ].split( "\\s*;\\s*" ); //$NON-NLS-1$
       for( String split : splited ) {
         try {
-          if( split.endsWith( " }" ) ) {
-            split = split.split( "\\s*\\}" )[ 0 ];
+          if( split.endsWith( " }" ) ) { //$NON-NLS-1$
+            split = split.split( "\\s*\\}" )[ 0 ]; //$NON-NLS-1$
           }
           ExceptionType exc = factory.createExceptionType();
           exc.setValue( new BigInteger( split ) );
@@ -608,12 +648,14 @@ public class ParametricJobAdapter extends JsdlAdaptersFactory {
   {
     List<String> loops = new ArrayList<String>();
     for( String value : values ) {
-      if( value.startsWith( "LOOP" ) ) {
+      if( value.startsWith( "LOOP" ) ) { //$NON-NLS-1$
         loops.add( value );
       }
     }
     values.removeAll( loops );
-    assignment.getFunctionGroup().clear();
+    if( assignment.getFunctionGroup() != null ) {
+      assignment.getFunctionGroup().clear();
+    }
     if( values.size() > 0 ) {
       setEnumValues( assignment, values );
     } else {
@@ -638,6 +680,20 @@ public class ParametricJobAdapter extends JsdlAdaptersFactory {
     SweepFactory factory = pak.getSweepFactory();
     result = factory.createAssignmentType();
     result.getParameter().add( parameter );
+    return result;
+  }
+
+  public String getDefaultValueForParam( final String paramXPath ) {
+    String result = ""; //$NON-NLS-1$
+    Document xmlDoc = this.JSDLJobDescr.getXml();
+    XPath xpathEngine = XPathFactory.newInstance().newXPath();
+    try {
+      XPathExpression expression = xpathEngine.compile( paramXPath );
+      expression.evaluate( xmlDoc.getFirstChild(), XPathConstants.NODE );
+    } catch( XPathExpressionException e ) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
     return result;
   }
 }
