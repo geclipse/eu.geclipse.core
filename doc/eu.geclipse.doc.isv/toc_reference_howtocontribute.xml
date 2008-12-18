@@ -47,7 +47,11 @@
   <topic label="Service Job Framework">
      <topic href="html/how_to_contribute/service_jobs/serviceJobsFramework.html" label="Service job framework concepts">
      </topic>
+     <topic href="html/how_to_contribute/service_jobs/sjGridAccess.html" label="Direct Grid Access service jobs">
+     </topic>
      <topic href="html/how_to_contribute/service_jobs/sjImplementation.html" label="Submittable Service Jobs">
+     </topic>
+     <topic href="html/how_to_contribute/service_jobs/sjUIImplementations.html" label="Service jobs UI part contribution">
      </topic>
   </topic>
   <anchor id="geclipse_reference_howtocontribute_ext" />
