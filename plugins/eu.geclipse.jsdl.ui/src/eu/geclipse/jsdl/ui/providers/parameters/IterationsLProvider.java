@@ -20,9 +20,19 @@ import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.swt.graphics.Image;
 
+/**
+ * Label provider for sweep iterations table.
+ */
 public class IterationsLProvider implements ITableLabelProvider {
+
   private List<String> columns;
-  
+
+  /**
+   * Sets list with column names which are then mapped to column indexes.
+   * 
+   * @param newColumns Lit with names of columns in table for which this label
+   *          provider used.
+   */
   public void setColumnNames( final List<String> newColumns ) {
     this.columns = newColumns;
   }
@@ -34,12 +44,10 @@ public class IterationsLProvider implements ITableLabelProvider {
   @SuppressWarnings("unchecked")
   public String getColumnText( final Object element, final int columnIndex ) {
     String result = ""; //$NON-NLS-1$
-    
     if( element instanceof List ) {
       List<String> contentValues = ( List<String> )element;
       result = contentValues.get( columnIndex );
     }
-    
     return result;
   }
 
@@ -60,7 +68,12 @@ public class IterationsLProvider implements ITableLabelProvider {
   public void removeListener( final ILabelProviderListener listener ) {
     // empty implementation
   }
-  
+
+  /**
+   * Method for accessing list of columns names set for this label provider.
+   * 
+   * @return list of column names from table for which this provider is used
+   */
   public List<String> getColumnNames() {
     return this.columns;
   }

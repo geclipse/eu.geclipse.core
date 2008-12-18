@@ -22,11 +22,15 @@ import org.eclipse.jface.viewers.LabelProvider;
 import eu.geclipse.jsdl.model.sweep.AssignmentType;
 import eu.geclipse.jsdl.model.sweep.SweepType;
 
+/**
+ * Label provider for tree table presenting order of sweeping of parameters.
+ */
 public class SweepOrderLProvider extends LabelProvider {
 
+  @SuppressWarnings("unchecked")
   @Override
   public String getText( final Object element ) {
-    String result = "";
+    String result = ""; //$NON-NLS-1$
     if( element instanceof SweepType ) {
       SweepType sweep = ( SweepType )element;
       EList list = sweep.getAssignment();
@@ -37,7 +41,7 @@ public class SweepOrderLProvider extends LabelProvider {
           EList paramList = assignment.getParameter();
           for( int j = 0; j < paramList.size(); j++ ) {
             String name = ( String )paramList.get( j );
-            int index = name.lastIndexOf( ":" );
+            int index = name.lastIndexOf( ":" ); //$NON-NLS-1$
             if( index != -1 ) {
               name = name.substring( index + 1, name.length() );
             }
