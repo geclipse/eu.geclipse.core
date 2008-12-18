@@ -211,6 +211,7 @@ public class ServiceJobView extends ElementManagerViewPart
     this.runJobAction.setImageDescriptor( runDesc );
     this.runJobAction.setDisabledImageDescriptor( runDisabledDesc );
     this.runJobAction.setEnabled( !getSelection().isEmpty() );
+    this.runJobAction.setToolTipText( Messages.getString( "ServiceJobsView.run_button_tooltip" ) );
     mgr.add( this.runJobAction );
     mgr.add( this.wizardAction );
     refreshViewer();
@@ -221,10 +222,10 @@ public class ServiceJobView extends ElementManagerViewPart
   }
 
   public void statusChanged( final IServiceJob serviceJob ) {
-//    ServiceJobDecorator decorator = ServiceJobDecorator.getDecorator();
-//    if( decorator != null ) {
-//      decorator.refresh( serviceJob );
-//    }
+    // ServiceJobDecorator decorator = ServiceJobDecorator.getDecorator();
+    // if( decorator != null ) {
+    // decorator.refresh( serviceJob );
+    // }
     refreshViewer( serviceJob );
   }
 
