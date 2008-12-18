@@ -25,11 +25,14 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
@@ -48,6 +51,7 @@ import eu.geclipse.jsdl.parametric.ParametricJsdlGeneratorFactory;
 import eu.geclipse.jsdl.ui.adapters.jsdl.ParametricJobAdapter;
 import eu.geclipse.jsdl.ui.internal.EditorParametricJsdlHandler;
 import eu.geclipse.jsdl.ui.internal.pages.FormSectionFactory;
+import eu.geclipse.jsdl.ui.internal.pages.NewParametricPage;
 import eu.geclipse.jsdl.ui.providers.parameters.IterationsLProvider;
 import eu.geclipse.ui.dialogs.ProblemDialog;
 
@@ -104,6 +108,13 @@ public class SweepIterationsSection extends JsdlFormPageSection {
       }
 
       public void mouseDown( final MouseEvent e ) {
+        if( SweepIterationsSection.this.parentPage != null
+            && SweepIterationsSection.this.parentPage.isDirty() )
+        {
+          MessageDialog.openWarning( SweepIterationsSection.this.shell,
+                                     "Unsaved JSDL",
+                                     "JSDL file was modified, but changes were not saved. If you would like to see iterations preview taking into account changes made to JSDL model, please save the file and generate iterations one more time." );
+        }
         updateTable();
       }
 
@@ -280,5 +291,9 @@ public class SweepIterationsSection extends JsdlFormPageSection {
 
   public IterationsLProvider getLabelProvider() {
     return this.labelProvider;
+  }
+
+  public void setParentPage( final NewParametricPage newParametricPage ) {
+    this.parentPage = newParametricPage;
   }
 }

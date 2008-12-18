@@ -71,6 +71,7 @@ public class NewParametricPage extends JsdlFormPage {
     this.sweepIterationsSection = new SweepIterationsSection(this.body, toolkit, this.adapter);
     this.sweepIterationsSection.setInput( this.jobDefinitionType, this.jsdlJobDescription );
     this.sweepIterationsSection.addListener( this );
+    this.sweepIterationsSection.setParentPage(this);
 //    this.sweepValuesSection = new SweepValuesSection( this.body, toolkit, adapter);
 //    this.sweepValuesSection.setInput(jobDefinitionType);
   }
