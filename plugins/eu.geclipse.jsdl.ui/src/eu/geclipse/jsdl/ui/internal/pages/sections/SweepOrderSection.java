@@ -19,7 +19,6 @@ package eu.geclipse.jsdl.ui.internal.pages.sections;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -27,7 +26,6 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.impl.EStructuralFeatureImpl.ContainmentUpdatingFeatureMapEntry;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.ExtendedMetaData;
 import org.eclipse.emf.ecore.util.FeatureMapUtil;
@@ -48,8 +46,6 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -64,15 +60,7 @@ import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import eu.geclipse.jsdl.model.base.JobDefinitionType;
-import eu.geclipse.jsdl.model.functions.ExceptionType;
-import eu.geclipse.jsdl.model.functions.FunctionsFactory;
-import eu.geclipse.jsdl.model.functions.FunctionsPackage;
-import eu.geclipse.jsdl.model.functions.LoopType;
-import eu.geclipse.jsdl.model.functions.ValuesType;
-import eu.geclipse.jsdl.model.functions.impl.FunctionsPackageImpl;
 import eu.geclipse.jsdl.model.sweep.AssignmentType;
-import eu.geclipse.jsdl.model.sweep.SweepFactory;
-import eu.geclipse.jsdl.model.sweep.SweepPackage;
 import eu.geclipse.jsdl.model.sweep.SweepType;
 import eu.geclipse.jsdl.model.sweep.impl.SweepPackageImpl;
 import eu.geclipse.jsdl.ui.adapters.jsdl.ParametricJobAdapter;
@@ -117,8 +105,8 @@ public class SweepOrderSection extends JsdlFormPageSection {
   }
 
   /**
-   * Set the Input of this section. The input of this section is the 
-   * ResourcesType contained in the JobDefinitionType. 
+   * Set the Input of this section. The input of this section is the
+   * ResourcesType contained in the JobDefinitionType.
    * 
    * @param jobDefinitionType The Job Definition type of the JSDL Document.
    */
@@ -248,8 +236,7 @@ public class SweepOrderSection extends JsdlFormPageSection {
                                                  "Sweep on the same level...", //$NON-NLS-1$
                                                  SWT.PUSH );
     this.sameLevelButton.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ) );
-    this.innerButton = toolkit.createButton( buttonComp,
-                                             "Inner sweep...", //$NON-NLS-1$
+    this.innerButton = toolkit.createButton( buttonComp, "Inner sweep...", //$NON-NLS-1$
                                              SWT.PUSH );
     this.innerButton.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ) );
     this.deleteButton = toolkit.createButton( buttonComp, "Delete", SWT.PUSH ); //$NON-NLS-1$
@@ -311,8 +298,10 @@ public class SweepOrderSection extends JsdlFormPageSection {
             }
           }
         }
-        SweepOrderSection.this.adapter.setFunctionValues( assignment, val );
-        contentChanged();
+        if( assignment != null ) {
+          SweepOrderSection.this.adapter.setFunctionValues( assignment, val );
+          contentChanged();
+        }
         updateButtons();
       }
     } );
