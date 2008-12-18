@@ -41,13 +41,14 @@ service jobs and their results are presented, please consult the screenshot belo
 If the service job is executed as a grid job, we will call it submittable
 service job, while the rest of the service jobs will be called basic service 
 jobs. Framework provides two abstract classes for this two cases:
-<code>eu.geclipse.servicejob.model.AbstractServiceJob</code> and
-<code>eu.geclipse.servicejob.model.submittable.job.AbstractSubmittableServiceJob</code>.
+<code>eu.geclipse.servicejob.model.access.GridAccessServiceJob</code> and
+<code>eu.geclipse.servicejob.model.submittable.job.AbstractSubmittableServiceJob</code>, as well
+as the abstract class for both of them - <code>eu.geclipse.servicejob.model.AbstractServiceJob</code>.
 When using mentioned abstraction developer is asked to implement only few 
-methods needed to perform the service job and get the results 
+methods needed to perform the service job and get the results. 
 </p>
 <p>We encourage all service job providers to use service job framework to 
-introduce their grid tasks into g-Eclipse. As can be see in the examples provided
+introduce their grid tasks into g-Eclipse. As can be seen in the examples provided
 by g-Eclipse, this integration was successful for application deployment/uninstall,
 grid resources benchmarking and few others.
 </p>
@@ -57,13 +58,13 @@ grid resources benchmarking and few others.
 implementation you only need to implement model classes of the Service 
 Job Framework - all views and informations about your job will be presented to
 the user using this model classes.</p>
-<p>Only UI part you should consider to extend is wizard for your service job. 
+<p>The only UI part you should consider to extend is wizard for your service job. 
 To add your service job to the service job wizard (see screenshot below) you need
 to contribute to the <code>eu.geclipse.servicejob.servicejobProvider</code>
 extension point by creating <i>wizard</i> extension. You will also need to provide
 implementation of the 
 <code>eu.geclipse.servicejob.ui.wizard.AbstractServiceJobWizardNode</code> abstraction. See
-section <a href="sjWizard.html">MISSING LINK</a>
+section <a href="sjUIImplementations.html">Servce Job UI parts contribution</a>.
 </p>
 <p>
 <img src="images/selectingServiceJob.PNG" alt="Selecting Service Job" title="Selecting Service Job">
@@ -92,7 +93,24 @@ your task on the grid.
 proceed to  
 <a href="sjImplementation.html">How to implement submittable service job</a>.
 
-
+<h2>Direct Grid Access service jobs</h2>
+<p>
+In fact Direct Grid Access service jobs and their model representation 
+<code>eu.geclipse.servicejob.model.access.GridAccessServiceJob</code> were introduced
+to provide distinguish from <a href="sjImplementation.html">Submittable service jobs</a>.
+Basically this category covers all use cases that doesn't fit to submittable services.
+</p>
+<p>
+Common steps of those jobs are:
+<ul>
+  <li>1. Get all requested and optional data about the service job using wizard.
+  <li>2. Prepare the model classes containing all gathered information.
+  <li>3. Contact the Grid and perform the desired operation.
+  <li>4. When above operation finishes - compute the result of service job. 
+</ul>
+</p>
+<p>For more detials on how to implement Grid Access service job please consult 
+<a href="sjGridAccess.html">Direct Grid Access Service Jobs</a> section.</p>
 </body>
 
-</html>\ No newline at end of file
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+<head>
+<meta
+  http-equiv="Content-Type"
+  content="text/html; charset=UTF-8">
+<META
+  HTTP-EQUIV="Content-Style-Type"
+  CONTENT="text/css">
+<LINK
+  REL="STYLESHEET"
+  HREF="PLUGINS_ROOT/eu.geclipse.doc.user/book.css"
+  CHARSET="UTF-8"
+  TYPE="text/css">
+<title>g-Eclipse - How to implement a direct Grid access service job</title>
+</head>
+
+<body BGCOLOR="#ffffff">
+<h1>Implementing a direct Grid access service job</h1>
+<p>Implementing a new service job in g-Eclipse is quite easy. Providers have to 
+implement abstract methods of <code>eu.geclipse.servicejob.model.access.GridAccessServiceJob</code>. 
+This abstract class covers most common
+use cases and handles the integration of service job's model classes into Service Job
+Framework. The methods essential for ensuring proper functionality of newly developed
+services are described in this section.
+Before proceeding to interfaces' description below, please make sure that you are familiar
+with the common flow of processing service jobs in framework:
+  <ul>
+  <li>1. Get all requested and optional data about the service job using wizard.
+  <li>2. Prepare the model classes containing all gathered information.
+  <li>3. Contact the Grid and perform the desired operation.
+  <li>4. When above operation finishes - compute the result of service job. 
+</ul>
+</p>
+
+
+<h2>Interfaces and abstract implementations</h2>
+<dl>
+  <p><dt><code>eu.geclipse.core.model.IServiceJob</code></dt>
+  <dd>This is the basic interface for all service implementations in 
+  service job framework. However, developers of the service job should use 
+  abstract implementation described below.</dd></p>
+  <p><dt><code>eu.geclipse.servicejob.model.access.GridAccessServiceJob</code></dt>
+  <dd>This class was introduced to provide distinguish from <a href="sjImplementation.html"> submittable
+  service jobs</a> and in fact it doesn't add any interfaces or implementation to 
+  base abstract class for all service jobs, i.e. <code>eu.geclipse.servicejob.model.AbstractServiceJob</code>.
+  </br>The abstract implementation's role is to integrate providers' implementations of service jobs
+  into common Framework's model. This is done with usage of additional information, specific
+  for different extensions and those information is accessed through abstract methods that are
+  left for developers to implement.
+  </dd></p>
+  
+</dl>
+
+<h2>Abstract methods</h2> 
+<p>See also 
+<code>eu.geclipse.servicejob.model.AbstractServiceJob</code> and
+<code>eu.geclipse.servicejob.model.access.GridAccessServiceJob</code>
+ abstract classes for documentation.
+</p>
+
+
+<p>
+<dl>
+  <dt><code>public void init()</code></dt>
+   <dd>This method is invoked when service job is created. If the service job 
+   requires to run some piece of code, this is a good place to perform that 
+   operation.</dd>
+  <dt><code>public String getServiceJobDescription()</code></dt>
+  <dd>Method returns short, user-friendly description of this service job.</dd>
+  <dt><code>public List<String> getSingleServiceJobNames()</code></dt>
+  <dd>Service Job may consist of many single service jobs. This method should
+  return their names in human-readable form.</dd>
+  <dt><code>public void run()</code></dt>
+  <dd>This is method called by framework when service job is run. All processing
+  essential for service should be performed here.</dd>
+  <dt><code>public InputStream getInputStreamForResult( IServiceJobResult result )</code></dt>
+  <dd>This method should return input stream for more detailed results of single <code>IServiceJobResult</code> object.
+  InputStream will be used to prepare content that will be show in appropriate editor/viewer.</dd>
+</dl>  
+</p>
+
+
+
+
+
+<h2>Exemplary implementations</h2>
+
+
+  <h3>Certificate lifetime check</h3>
+    <p>This service job is used to check if host's certificate is still valid. For the same host
+    machine different services may be tested (distinguished by port numbers).
+    </p>
+    <p><dl>
+      <dt><code>eu.geclipse.servicejob.impl.cert.model.CertGridTest</code></dt>
+      <dd>Class extending GridAccessServiceJob - model implementation of service.</dd>
+      <dt><code>eu.geclipse.servicejob.impl.cert.model.parsers.CertResultsParser</code></dt>
+      <dd>Parser dedicated to parsing data specific for certificates test service job.
+      It is used to put results to file and to parse them back, e.g. for use of <code>getInputStreamForResult( IServiceJobResult result )</code> method.</dd>
+      <dt><code>eu.geclipse.servicejob.impl.cert.ui.CertTestWizardNode</code></dt>
+      <dd>Implementation of 
+      <code>eu.geclipse.servicejob.ui.wizard.AbstractServiceJobWizardNode</code>,
+      adding certificates test's wizard pages to service job wizard. Please consult 
+      <a href="sjUIImplementations.html">Service job UI part contribution</a> section for details.
+    </dl></p>
+  
+
+</body>
+
+</html>

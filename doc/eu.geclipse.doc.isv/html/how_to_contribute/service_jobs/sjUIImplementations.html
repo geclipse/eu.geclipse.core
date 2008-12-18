@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+<head>
+<meta
+  http-equiv="Content-Type"
+  content="text/html; charset=UTF-8">
+<META
+  HTTP-EQUIV="Content-Style-Type"
+  CONTENT="text/css">
+<LINK
+  REL="STYLESHEET"
+  HREF="PLUGINS_ROOT/eu.geclipse.doc.user/book.css"
+  CHARSET="UTF-8"
+  TYPE="text/css">
+<title>g-Eclipse - How to contribute to Service Job's UI</title>
+</head>
+
+<body BGCOLOR="#ffffff">
+<h1>Contributing to Service Job's UI</h1>
+<h2>Introduction</h2>
+<p>
+As stated in basic concepts of <a href="serviceJobsFramework.html">Service Jobs Framework</a> 
+integration with Eclipse's workbench is provided by framework itself. 
+All service jobs created by user are listed in <b>Operator's Job View</b> and 
+their details can be seen in <b>Operator's Job Details View</b>.  
+</p>
+<p>The only UI part that service job providers have to take care of when preparing their implementation is <b>Operator's Job Wizard</b>.</p>
+<p>
+<img src="images/selectingServiceJob.PNG" alt="Selecting Service Job" title="Selecting Service Job">
+</p>
+<p>
+Service Job Framework comes in with wizard container for other Service Job's wizard nodes implementations. It makes use of
+Eclipse's WizardSelectionPage and IWizardNode mechanisms. This means that the framework takes the responsibility for opening a general wizard for service jobs and then queries
+all available providers' extension points for wizard nodes that will be plugged in into this general wizard. 
+This extension point is <b><code>eu.geclipse.servicejob.servicejobProvider</code></b> and information about class implementing
+wizard node's functionality is kept in <b><code>wizard</code></b> element of this extension point.
+</p>
+<h2>Extension point</h2>
+<p><dl>
+<dt><code>eu.geclipse.servicejob.servicejobProvider</code></dt>
+<dd>Please refer to description <a href="../../extension-points/eu_geclipse_servicejob_servicejobProvider.html">here</a>.</dd>
+</dl></p>
+<h2>Interfaces and abstract implementations</h2>
+<p><dl>
+<dt><code>eu.geclipse.servicejob.ui.interfaces.IServiceJobWizardNode</code></dt>
+<dd>This is basic interface for nodes to be plugged into general Service Job Wizard. Developers are free to implement it, but for
+convenience also abstract implementation of this interface was introduced (see below).</dd>
+</dl></p>
+<p><dl>
+<dt><code>eu.geclipse.servicejob.ui.wizard.AbstractServiceJobWizardNode<code></dt>
+<dd>This class provides abstract implementation of <code>IServiceJobWizardNode</code> interface. 
+It is recommended to extend this class rather then implement <code>IServiceJobWizardNode</code>
+especially in cases when wizard should finish with creation of service job's files, as this functionality 
+is pre-implemented.</dd>
+</dl></p>
+<h2>Abstract methods</h2>
+<p> Please refer also to <code>eu.geclipse.servicejob.ui.interfaces.IServiceJobWizardNode</code> and 
+<code>eu.geclipse.servicejob.ui.wizard.AbstractServiceJobWizardNode</code> for documentation.</p>
+<p><dl>
+<dt><code>public String getPluginID()</code></dt>
+<dd>Method to access ID of plug-in that extends the  eu.geclipse.servicejob.servicejobProvider extension point.</dd>
+</dl></p>
+<p><dl>
+<dt><code>public List<String> getResourcesNames()</code></dt>
+<dd>Method to access names of <code>IGridResources</code> that will be objects of
+this service jobs. Those names are serialized in .gtdl file. Please note
+that after g-Eclipse's restart those names are the only "handlers" to which
+contributor has access (names, not <code>IGridResource</code> objects) - so this
+list should be constructed this way that names carry all the information
+needed to perform service job by contributor's plug-in. This method is
+called by main service job framework's plug-in when .gtdl file is being
+</dd>
+</dl></p>
+<p><dl>
+<dt><code>public InputStream getServiceJobInputData()</code></dt>
+<dd>Method to access file input stream for newly created structural service job.</dd>
+</dl></p>
+<p><dl>
+<dt><code> public String getName()</code></dt>
+<dd>Returns name displayed in general Service Job Wizard</dd>
+</dl></p>
+<p><dl>
+<dt><code>public IWizard getWizard()</code></dt>
+<dd>Returns the wizard this node stands for.</dd>
+</dl></p>
+<p><dl>
+<dt><code>public boolean isContentCreated()</code></dt>
+<dd>Returns whether a wizard has been created for this node.</dd>
+</body>
+
+<h2>Implementing the wizard</h2>
+<p>Providing implementation of <code>eu.geclipse.servicejob.ui.interfaces.IServiceJobWizardNode</code> 
+through service job's extension point is one thing - another is to implement the wizard's part.
+It is out of scope of this documentation to describe Eclipse's wizards mechanism. Please refer to
+Eclipse Developers Guide for more technical details of this soultion. Below only the outline of what needs
+to be done is presented.
+</p>
+
+<p>First of all it is essential to mention that Wizard that will be displayed in general service job wizard is in fact
+the object returned by <code>getWizard()</code> method of <code>IServiceJobWizardNode</code> implementation. 
+Nevertheless the service job framework architecture requires that this object is the <code>IServiceJobWizardNode</code> implementation 
+itself, which is also a convenient solution from developer's point of view. </p>
+
+<p>The above implies that wizard node implementation is at the same time the essential wizard object, so 
+it should override <code>addPages()</code> method from Eclipse's Wizard class, as well as any 
+other methods of wizard that are essential to ensure functionality to realise provider's use cases.
+In <code>addPages()</code> method all necessary wizard pages should be added. As a ready to use wizard page's example
+Service Job UI plug-in comes in with <code>eu.geclipse.servicejob.ui.wizard.ResourcesSelectionPage</code> (this will allows
+user to select target Grid resources for service job).  
+</p>
+
+</html>
