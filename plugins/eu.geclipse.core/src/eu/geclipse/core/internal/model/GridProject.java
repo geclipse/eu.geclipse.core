@@ -165,12 +165,16 @@ public class GridProject
         }
         
         if( elementClass != null ) {
-          if ( elementClass.isAssignableFrom( elementType ) ) {
+          if ( elementClass.equals( elementType ) ) {
             result = getProjectFolder( label );
             break;
+          } else if ( elementClass.isAssignableFrom( elementType ) ) {
+            result = getProjectFolder( label );
           }
-        }        
-      }      
+        }
+        
+      }
+      
     }
     
     return result;
