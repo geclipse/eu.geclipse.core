@@ -18,17 +18,20 @@
          point="org.eclipse.pde.core.javadoc">
       <javadoc
             path="html/api_reference">
+        <plugin id="eu.geclipse.batch"></plugin>
+        <plugin id="eu.geclipse.batch.model"></plugin>
+        <plugin id="eu.geclipse.batch.ui"></plugin>
         <plugin id="eu.geclipse.core"></plugin>
         <plugin id="eu.geclipse.core.filesystem"></plugin>
         <plugin id="eu.geclipse.core.jobs"></plugin>
-        <plugin id="eu.geclipse.glite.editor"></plugin>
-        <plugin id="eu.geclipse.gvid"></plugin>
-        <plugin id="eu.geclipse.gvid.uncompressed"></plugin>
+        <plugin id="eu.geclipse.core.reporting"></plugin>
         <plugin id="eu.geclipse.info"></plugin>
+        <plugin id="eu.geclipse.info.ui"></plugin>
         <plugin id="eu.geclipse.jsdl"></plugin>
-        <plugin id="eu.geclipse.jsdl.edit"></plugin>
         <plugin id="eu.geclipse.jsdl.model"></plugin>
         <plugin id="eu.geclipse.jsdl.ui"></plugin>
+        <plugin id="eu.geclipse.servicejob"></plugin>
+        <plugin id="eu.geclipse.servicejob.ui"></plugin>
         <plugin id="eu.geclipse.terminal"></plugin>
         <plugin id="eu.geclipse.terminal.ssh"></plugin>
         <plugin id="eu.geclipse.ui"></plugin>
@@ -36,9 +39,6 @@
         <plugin id="eu.geclipse.workflow.edit"></plugin>
         <plugin id="eu.geclipse.workflow.model"></plugin>
         <plugin id="eu.geclipse.workflow.ui"></plugin>
-        <plugin
-              id="eu.geclipse.servicejob">
-        </plugin>
       </javadoc>
    </extension>
 
