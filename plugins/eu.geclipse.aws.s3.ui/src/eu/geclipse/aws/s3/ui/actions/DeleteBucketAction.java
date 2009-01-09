@@ -25,9 +25,11 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.jets3t.service.S3Service;
+import org.jets3t.service.S3ServiceException;
 
 import eu.geclipse.aws.s3.IS3Categories;
 import eu.geclipse.aws.s3.S3BucketStorage;
@@ -84,13 +86,29 @@ public class DeleteBucketAction extends AbstractAWSProjectAction {
                                           monitor );
             }
 
-          } catch( Exception ex ) {
-            IWorkbenchWindow workbenchWindow = PlatformUI.getWorkbench()
-              .getActiveWorkbenchWindow();
-            ProblemDialog.openProblem( workbenchWindow.getShell(),
-                                       Messages.getString( "DeleteBucketAction.errorCreateBucket_title" ), //$NON-NLS-1$
-                                       Messages.getString( "DeleteBucketAction.errorCreateBucket_description" ), //$NON-NLS-1$
-                                       ex );
+          } catch( final Exception ex ) {
+            Display.getDefault().asyncExec( new Runnable() {
+
+              public void run() {
+                IWorkbenchWindow workbenchWindow = PlatformUI.getWorkbench()
+                  .getActiveWorkbenchWindow();
+
+                String message = null;
+                Exception exToDisplay = null;
+                if( ex instanceof S3ServiceException ) {
+                  S3ServiceException s3ServiceEx = ( S3ServiceException )ex;
+                  message = s3ServiceEx.getS3ErrorMessage();
+                } else {
+                  Messages.getString( "DeleteBucketAction.errorCreateBucket_description" ); //$NON-NLS-1$
+                  exToDisplay = ex;
+                }
+                ProblemDialog.openProblem( workbenchWindow.getShell(),
+                                           Messages.getString( "DeleteBucketAction.errorCreateBucket_title" ), //$NON-NLS-1$
+                                           message,
+                                           exToDisplay );
+              }
+
+            } );
           } finally {
             monitor.done();
           }

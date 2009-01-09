@@ -116,14 +116,12 @@ public class S3FileStore extends FileStore implements IFileStore {
         S3Bucket bucket = getBucket();
         service.deleteObject( bucket, getName() );
       }
+      internalFetchInfo().setExists( false );
     } catch( S3ServiceException s3Exc ) {
       throw new ProblemException( IS3Problems.S3_DELETE_FAILED,
                                   s3Exc,
                                   Activator.PLUGIN_ID );
-    } finally {
-      internalFetchInfo().setExists( false );
     }
-
   }
 
   @Override
@@ -215,7 +213,7 @@ public class S3FileStore extends FileStore implements IFileStore {
         final PipedOutputStream pos = result;
         final PipedInputStream pis = new PipedInputStream( result );
 
-        final S3Object object = new S3Object( getName() );
+        final S3Object object = new S3Object( bucket, getName() );
         object.setDataInputStream( pis );
 
         Thread worker = new Thread( new Runnable() {
@@ -238,7 +236,6 @@ public class S3FileStore extends FileStore implements IFileStore {
           }
         } );
         worker.start();
-        internalFetchInfo().setExists( true );
 
       } catch( IOException ioExc ) {
         throw new ProblemException( IS3Problems.S3_OUTPUT_FAILED,
@@ -382,8 +379,8 @@ public class S3FileStore extends FileStore implements IFileStore {
   /**
    * Get the objects details and metadata corresponding to this node.
    * 
-   * @return The object or <code>null</code> if this node represents a root or
-   *         a bucket.
+   * @return The object or <code>null</code> if this node represents a root or a
+   *         bucket.
    * @throws ProblemException If the object could not be retrieved.
    */
   private S3Object getObjectDetails() throws ProblemException {
@@ -408,8 +405,8 @@ public class S3FileStore extends FileStore implements IFileStore {
   /**
    * Get the object corresponding to this node.
    * 
-   * @return The object or <code>null</code> if this node represents a root or
-   *         a bucket.
+   * @return The object or <code>null</code> if this node represents a root or a
+   *         bucket.
    * @throws ProblemException If the object could not be retrieved.
    */
   private S3Object getObject() throws ProblemException {
@@ -438,7 +435,7 @@ public class S3FileStore extends FileStore implements IFileStore {
    * 
    * @return This node's service.
    * @throws ProblemException If the service was not already in the cache and
-   *             its creation failed.
+   *           its creation failed.
    */
   private S3Service getService() throws ProblemException {
     S3Service service = S3ServiceRegistry.getRegistry()
