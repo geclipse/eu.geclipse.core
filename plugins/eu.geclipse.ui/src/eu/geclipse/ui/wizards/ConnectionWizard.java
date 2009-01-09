@@ -41,9 +41,9 @@ import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.reporting.ProblemException;
+import eu.geclipse.ui.actions.MountAction;
 import eu.geclipse.ui.dialogs.ProblemDialog;
 import eu.geclipse.ui.internal.Activator;
-import eu.geclipse.ui.internal.actions.MountAction;
 
 
 /**

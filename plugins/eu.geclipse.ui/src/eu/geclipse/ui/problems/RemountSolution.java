@@ -24,7 +24,7 @@ import org.eclipse.ui.PlatformUI;
 import eu.geclipse.core.model.IMountable;
 import eu.geclipse.core.model.IMountable.MountPointID;
 import eu.geclipse.core.reporting.ISolution;
-import eu.geclipse.ui.internal.actions.MountAction;
+import eu.geclipse.ui.actions.MountAction;
 
 
 /**

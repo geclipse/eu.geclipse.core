@@ -19,6 +19,7 @@ import org.eclipse.ui.actions.CompoundContributionItem;
 import eu.geclipse.core.Extensions;
 import eu.geclipse.core.model.IMountable;
 import eu.geclipse.core.model.IMountable.MountPointID;
+import eu.geclipse.ui.actions.MountAction;
 
 public class MountMenu
     extends CompoundContributionItem

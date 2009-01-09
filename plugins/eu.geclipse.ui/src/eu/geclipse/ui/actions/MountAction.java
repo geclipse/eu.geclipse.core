@@ -13,7 +13,7 @@
  *    Mathias Stuempert - initial API and implementation
  *****************************************************************************/
 
-package eu.geclipse.ui.internal.actions;
+package eu.geclipse.ui.actions;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -56,6 +56,7 @@ import eu.geclipse.core.reporting.IProblem;
 import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.ui.dialogs.ProblemDialog;
 import eu.geclipse.ui.internal.Activator;
+import eu.geclipse.ui.internal.actions.Messages;
 import eu.geclipse.ui.problems.RemountSolution;
 import eu.geclipse.ui.wizards.ConnectionWizard;
 
