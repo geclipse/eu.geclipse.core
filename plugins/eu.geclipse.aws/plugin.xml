@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         point="eu.geclipse.core.gridElementCreator" 
+         id="eu.geclipse.aws.vo.awsVoCreator">
+      <creator
+            class="eu.geclipse.aws.vo.AWSVoCreator"
+            name="%awsVoCreator.name"
+            wizard="eu.geclipse.aws.ui.wizard.awsVoWizard"
+            id="eu.geclipse.aws.vo.awsVoCreator">
+         <source
+               class="org.eclipse.core.filesystem.IFileStore"
+               matcher="eu.geclipse.aws.vo.AWSVoCreator">
+         </source>
+         <target
+               class="eu.geclipse.aws.vo.AWSVirtualOrganization"
+               name="%awsVoCreator.target.name">
+         </target>
+      </creator>
+   </extension>
+   <extension
+         point="eu.geclipse.core.authTokens">
+      <token
+            description="eu.geclipse.aws.auth.AWSAuthTokenDescription"
+            id="eu.geclipse.aws.authToken"
+            name="%authToken.name"
+            wizard="eu.geclipse.aws.ui.wizards.awsAuthTokenWizard">
+      </token>
+   </extension>
+   <extension
+         point="eu.geclipse.core.gridResourceCategory">
+      <category
+            id="eu.geclipse.aws.computing"
+            name="Computing">
+      </category>
+      <category
+            id="eu.geclipse.aws.service"
+            name="Services"
+            active="false">
+      </category>
+      <category
+            id="eu.geclipse.aws.ec2.storage"
+            name="Storage">
+      </category>
+   </extension>
+</plugin>

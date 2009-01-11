@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+
+<toc
+  label="g-Eclipse gLite User Guide"
+  link_to="../eu.geclipse.doc.user/toc.xml#geclipse_knownissues">
+
+  <topic
+    label="Known Issues - AWS"
+    href="html/known-issues.html" />
+
+</toc>

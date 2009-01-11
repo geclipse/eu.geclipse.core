@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: %Bundle-Name
+Bundle-Vendor: %Bundle-Vendor
+Bundle-Localization: plugin
+Bundle-SymbolicName: eu.geclipse.aws.ec2.test
+Bundle-Version: 1.0.0.qualifier
+Fragment-Host: eu.geclipse.aws.ec2;bundle-version="1.0.0"
+Require-Bundle: org.junit4,
+ eu.geclipse.core.filesystem
+Bundle-RequiredExecutionEnvironment: J2SE-1.5

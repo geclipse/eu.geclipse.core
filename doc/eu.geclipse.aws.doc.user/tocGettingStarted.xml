@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+
+<toc label="g-Eclipse Amazon Webservices User Guide" 
+	link_to="../eu.geclipse.doc.user/toc.xml#geclipse_gettingstarted">
+
+	<topic label="AWS"> 
+		<topic label="Setting Up AWS Support" 
+				href="html/getting-started/setting-up-aws-support.html"  />
+		<topic label="Using the EC2 Service" 
+				href="html/getting-started/using-ec2-service.html"  />
+		<anchor id="geclipse_aws_getting_started" />
+	</topic>
+		   
+</toc>

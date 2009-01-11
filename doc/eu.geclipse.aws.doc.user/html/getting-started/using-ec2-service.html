@@ -1,0 +1,211 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+<link rel="stylesheet"
+	href="PLUGINS_ROOT/eu.geclipse.aws.doc.user/book.css"
+	charset="ISO-8859-1" type="text/css" />
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>Using the EC2 Service</title>
+</head>
+
+<body>
+<h1>Using the EC2 Service</h1>
+
+<p>After we have created an <a href="setting-up-aws-support.html">AWS
+Virtual Organization</a> we can now use these facilities to interact with
+the Amazon Elastic Compute Cloud (EC2).</p>
+<p>The main entry point to working with the EC2 Service is the Grid
+Project found in the "Grid Project" view. The Grid Project displays all
+the physically existing folders on the local computer as well as a
+virtual view of the information provided by the underlying Virtual
+Organization.</p>
+<p><img src="images/grid-project-view-with-aws-project.jpg"
+	border="0" alt="Grid Project view containing a Grid Project"></p>
+
+
+<h2>Finding the Available Amazon Machine Images (AMIs)</h2>
+
+<p>When working with the EC2 service it is desirable to be informed
+about the available Amazon Machine Images. To display a list of AMIs,
+which can be started, we select <code>Services -> Images</code> in our
+AWS VO. Via this tree branch we can choose to display a list of all
+available Amazon machine images, a list of images which we are given
+explicit access to (eg. another user has given us access to his image)
+or a list of image we have created.</p>
+
+<p><img src="images/grid-project-view-expanded-ami-list.jpg"
+	border="0" alt="Grid Project showing a list of available AMIs"></p>
+
+<h2>Running an AMI</h2>
+<p>To launch any of the AMIs in the provided lists, right-click on
+the AMI and select "Launch AMI". This opens the launch dialog with the
+main tab active.</p>
+
+<p><img src="images/ami-launch-dialog-tab-main.jpg" border="0"
+	alt="The Launch dialog with the Main tab active"></p>
+
+<p>The AMI configuration is ready to be launched with its default
+configuration. Most likely you will want to customize several of the
+options presented in the Main tab. The following options can be set:</p>
+
+<table border="1">
+	<tr>
+		<td>AWS Access ID</td>
+		<td>The access id specifies the AWS account to launch the AMI
+		with.</td>
+	</tr>
+	<tr>
+		<td>AMI ID</td>
+		<td>The ID of the AMI to launch. Is taken from the context of the
+		selected AMI but can be any valid AMI ID.</td>
+	</tr>
+	<tr>
+		<td>Min</td>
+		<td>The minimum number of AMIs to launch. If EC2 can not provide
+		the required number, the launch is cancelled.</td>
+	</tr>
+	<tr>
+		<td>Max</td>
+		<td>The maximum number of launched AMIs desired.</td>
+	</tr>
+	<tr>
+		<td>Key</td>
+		<td>The key specifies the login credentials on the launched
+		instance.</td>
+	</tr>
+	<tr>
+		<td>Security Group</td>
+		<td>The security group allows or denies access to certain
+		communication channels (e.g. ports).</td>
+	</tr>
+	<tr>
+		<td>Zone</td>
+		<td>The geographical zone where to place the EC2 instance.</td>
+	</tr>
+	<tr>
+		<td>Instance Type</td>
+		<td>The instance type denotes the hardware configuration of the
+		instance to launch.</td>
+	</tr>
+</table>
+
+<p>Since some of these options are sensitive to the EC2
+configuration associated with the AWS credentials, it is possible to
+fetch the possible values of the Key, Zone and Instance Type fields.
+Clicking on the "Populate from EC2" button in the lower right contacts
+the EC2 Service to obtain these values.</p>
+
+<p>Also of particular interest is the "Parameter" tab. It allows to
+send instance specific details to the set of launched AMIs. The so
+called User Data can either be send via plain text or by providing a
+binary file. The binary file is not allowed to exceed a limit of 16KB.</p>
+<p>The User Data can be retrieved from within a running instance via
+a HTTP call to an EC2 internal server. A common scenario is to use the
+user data to setup instance specific configuration details like starting
+services, modifying/providing configuration files etc. The
+interpretation of the provided User Data is up to the running instance
+and beyond the scope of the EC2 infrastructure.</p>
+<p>For further information regarding the configuration process refer
+to: <a
+	href="http://developer.amazonwebservices.com/connect/entry.jspa?externalID=1085">Using
+Parameterized Launches to Customize Your AMIs</a>.
+<p><img src="images/ami-launch-dialog-tab-parameter.jpg" border="0"
+	alt="The Launch dialog with the Parameter tab active"></p>
+
+
+<p>As with any other launch dialog, it is possible to save the
+settings by clicking "Apply" or to physically launch the entity by
+clicking the "Launch" button.</p>
+
+<h2>Displaying all Running Instances</h2>
+
+<p>Once an instance is launched it is enlisted in the list of all
+running instances belonging to the particular user. The list is found in
+the AWS VO under the <code>Computing</code> branch. The list displays
+the id of the running instance, the AMI id from which the instance
+originated and its current status. The status can have one of the
+following values:</p>
+
+<table border="1">
+	<tr>
+		<td>pending</td>
+		<td>The instance is booting up.</td>
+	</tr>
+	<tr>
+		<td>running</td>
+		<td>The instance is running and can be accessed</td>
+	</tr>
+	<tr>
+		<td>shutting-down</td>
+		<td>The instance is shutting down</td>
+	</tr>
+	<tr>
+		<td>terminated</td>
+		<td>The instance has been shut down and can not be accessed
+		anymore</td>
+	</tr>
+</table>
+
+<p><img src="images/grid-project-view-expanded-instances.jpg"
+	border="0" alt="The grid project view with running instances"></p>
+
+<h2>Obtaining Information</h2>
+
+<p>The EC2 elements listed in the AWS VO are able provide some
+configuration details. To view these details, the "Properties" view is
+used. The following figure shows the "Properties" view displaying static
+metadata information for a launched EC2 instance. A similar layout
+exists for AMI properties, Security Groups, Keypairs, Elastic IPs etc.</p>
+
+<p><img src="images/properties-view-instance.jpg" border="0"
+	alt="The properties view showing details of running instance"></p>
+
+<h2>Logging in via SSH</h2>
+
+<p>Once an instance is launched g-Eclipse offers the possibility to
+access this machine via a SSH shell. In order to use this connection
+method, the security group used to launch the AMI has to open the port
+22 (ssh default port). Because the ssh connection method uses the
+eclipse connection infrastructure, the ssh private key has to be
+inserted into the list of available keys. Therefore the preference page
+<code>General -> Network Connections -> SSH2</code> is used to insert
+the private key which has been obtained when creating the key.</p>
+
+<p><img src="images/preferences-ssh.jpg" border="0"
+	alt="The preferences page of the SSH2 details"></p>
+
+<p>To connect to the running instance choose "Open SSH terminal..."
+in the context menu of an instance. This opens the SSH login data
+dialog, with the correct external DNS name inserted into the form. The
+only thing to be provided is the login name which is "<code>root</code>".
+There is no need for a password, since it is contained within the ssh
+private key.</p>
+
+<p><img src="images/dialog-ssh-credentials.jpg" border="0"
+	alt="Dialog for ssh login details"></p>
+
+<p>Clicking "Finish" opens the "Terminal" view and starts the login
+sequence.</p>
+
+<p><img src="images/ssh-terminal.jpg" border="0"
+	alt="The ssh terminal after login"></p>
+
+<h2>Terminating an Instance</h2>
+
+Once a running instance is no longer needed, it can be shut down. To
+terminate an instance, the "Terminate Instance" menu entry from the
+context menu of a running EC2 instance is used. This sends a shutdown
+signal to the running instance, initiating the shutdown sequence. In
+conclusion the state of the instance transitions into "shutting-down",
+followed by "terminated" once the shutdown procedure has finished.
+
+
+<h2>What's next?</h2>
+There is much more to explore in the world of gEclipse and the AWS
+infrastructure. Explore the AWS VO tree, and use the context menu actions
+to use and administer your EC2 and S3 system.
+</body>
+
+</html>
