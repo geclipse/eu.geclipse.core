@@ -30,6 +30,6 @@ public interface IAWSCategories {
   public static final String CATEGORY_AWS_SERVICE = "eu.geclipse.aws.service"; //$NON-NLS-1$
 
   /** A category for service storage. */
-  public static final String CATEGORY_AWS_STORAGE = "eu.geclipse.aws.ec2.storage"; //$NON-NLS-1$
+  public static final String CATEGORY_AWS_STORAGE = "eu.geclipse.aws.storage"; //$NON-NLS-1$
 
 }

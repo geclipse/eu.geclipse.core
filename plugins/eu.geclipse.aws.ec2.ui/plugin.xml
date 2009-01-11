@@ -28,6 +28,19 @@
 		</objectContribution>
 	</extension>
 	<extension
+    point="org.eclipse.ui.popupMenus">
+    <objectContribution
+      id="eu.geclipse.aws.ec2.ui.action.objectContribution.iGridComputing"
+      objectClass="eu.geclipse.aws.ec2.EC2Instance">
+      <action
+        class="eu.geclipse.aws.ec2.ui.actions.CreateConnectionInstance"
+        enablesFor="+"
+        id="eu.geclipse.aws.ec2.ui.actions.createConnectionInstance"
+        label="Create Grid Connection to Instance">
+      </action>
+    </objectContribution>
+  </extension>
+	<extension
 		point="org.eclipse.ui.popupMenus">
 		<objectContribution
 			id="eu.geclipse.aws.ec2.ui.action.objectContribution.iGridComputing"

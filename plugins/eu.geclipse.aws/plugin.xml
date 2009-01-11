@@ -40,8 +40,9 @@
             active="false">
       </category>
       <category
-            id="eu.geclipse.aws.ec2.storage"
-            name="Storage">
+            id="eu.geclipse.aws.storage"
+            name="Storage"
+            active="false">
       </category>
    </extension>
 </plugin>

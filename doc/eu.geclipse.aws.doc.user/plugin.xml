@@ -4,13 +4,6 @@
    <extension point="org.eclipse.help.toc">
 		<toc
 			category="geclipse"
-			file="tocGettingStarted.xml"
-			primary="false">
-		</toc>
-   </extension>
-   <extension point="org.eclipse.help.toc">
-		<toc
-			category="geclipse"
 			file="tocMiddleware.xml"
 			primary="false">
 		</toc>

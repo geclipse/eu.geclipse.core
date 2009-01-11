@@ -12,11 +12,30 @@
 
 <body>
 <h1>g-Eclipse - AWS Known Issues</h1>
-<h2>Simple Storage Service (S3)</h2>
+
 <ul>
-	<li>When choosing a proxy server in the Eclipse preferences, it is not
-	possible to unset this proxy. This means, once the proxy is set it is
-	always used for S3 until g-Eclipse is restarted.</li>
+  <li><h4>Unsetting the Proxy:</h4>
+	When choosing a proxy server in the Eclipse preferences, the AWS component
+	doesn't allow to unset it. This means, once the proxy is set it is
+	always used for accessing AWS services until g-Eclipse is restarted.
+	</li>
+  <li><h4>Simple Storage Service (S3) bucket naming:</h4>
+  Bucket names in S3 live in a flat namespace and have to follow some rules.
+  g-Eclipse currently doesn't check these rules when you ask to create a new
+  bucket. This means:
+  <ul>
+    <li>Bucket names are global, you will not be able to name a bucket "test"
+    if another S3-user already used that name! (even if you cannot see nor
+    access his/her bucket). It is recommended that you prepend your bucket
+    names with your Amazon ID or your name to avoid collisions.
+    </li>
+    <li>When creating a bucket which is not located in the US but in Europe,
+    then its name has to be DNS compatible: that means that the name must be
+    longer than 3 and shorter than 256 characters, and must contain only
+    <b>lower-case</b> letters, hyphens ("-") or full-stops (".").
+    </li>
+  </ul> 
+	</li>
 </ul>
 </body>
 </html>

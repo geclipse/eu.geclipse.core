@@ -47,12 +47,11 @@ import eu.geclipse.core.model.impl.AbstractVirtualOrganization;
 import eu.geclipse.core.model.impl.GridResourceCategoryFactory;
 import eu.geclipse.core.reporting.ProblemException;
 
-
 /**
  * This {@link AWSVirtualOrganization} is an {@link IVirtualOrganization}
- * implementation for the Amazon Webservices ({@link http://www.amazonaws.com/}).
- * The VO encapsulates the {@link URL} to the webservice address and provides an
- * entry point to provide services to interact with the AWS technologies.
+ * implementation for the Amazon Webservices ({@link http://www.amazonaws.com/}
+ * ). The VO encapsulates the {@link URL} to the webservice address and provides
+ * an entry point to provide services to interact with the AWS technologies.
  * <p>
  * The {@link AWSVirtualOrganization} is created by the {@link IVoManager} and a
  * corresponding {@link AWSVoCreator}.
@@ -106,13 +105,13 @@ public class AWSVirtualOrganization extends AbstractVirtualOrganization {
    * @param fileStore the {@link AWSVoCreator} to obtain the data from
    */
   public AWSVirtualOrganization( final IFileStore fileStore ) {
-    if ( fileStore != null ) {
+    if( fileStore != null ) {
 
       this.voName = fileStore.getName();
       try {
         load();
         addElement( new AWSInfoService( this ) );
-      } catch ( ProblemException e ) {
+      } catch( ProblemException e ) {
         Activator.log( "Could not load the awsVo details from the filestore", e ); //$NON-NLS-1$
       }
     } else {
@@ -124,9 +123,8 @@ public class AWSVirtualOrganization extends AbstractVirtualOrganization {
   /**
    * This constructor takes an {@link AWSVoCreator} with the
    * {@link AWSVirtualOrganization} specific data. The details of the
-   * {@linkplain AWSVoCreator creator} are
-   * {@linkplain #apply(AWSVoCreator) applied} to this
-   * {@link AWSVirtualOrganization}.
+   * {@linkplain AWSVoCreator creator} are {@linkplain #apply(AWSVoCreator)
+   * applied} to this {@link AWSVirtualOrganization}.
    * 
    * @param voCreator the {@link AWSVoCreator} to get the data from
    */
@@ -134,7 +132,7 @@ public class AWSVirtualOrganization extends AbstractVirtualOrganization {
     try {
       apply( voCreator );
       addElement( new AWSInfoService( this ) );
-    } catch ( ProblemException e ) {
+    } catch( ProblemException e ) {
       Activator.log( "Could not populate awsVo with data from provided AWSVo creator", //$NON-NLS-1$
                      e );
     }
@@ -146,7 +144,7 @@ public class AWSVirtualOrganization extends AbstractVirtualOrganization {
    * 
    * @param voCreator the {@link AWSVoCreator} to apply the data from
    * @throws GridModelExc8eption arises when interaction with the
-   *             {@link GridModel} fails
+   *           {@link GridModel} fails
    */
   void apply( final AWSVoCreator voCreator ) throws ProblemException {
     this.voName = voCreator.getVoName();
@@ -155,7 +153,7 @@ public class AWSVirtualOrganization extends AbstractVirtualOrganization {
     addElement( voProperties );
 
     List<IAWSServiceCreator> serviceCreators = AWSVoCreator.getAWSServiceCreators();
-    for ( IAWSServiceCreator serviceCreator : serviceCreators ) {
+    for( IAWSServiceCreator serviceCreator : serviceCreators ) {
       create( serviceCreator );
     }
   }
@@ -164,37 +162,37 @@ public class AWSVirtualOrganization extends AbstractVirtualOrganization {
   public void load() throws ProblemException {
     deleteAll();
     IFileStore fileStore = getFileStore();
-    List<IConfigurationElement> configurationElements
-      = GridModel.getCreatorRegistry().getConfigurations( null, IAWSService.class );
+    List<IConfigurationElement> configurationElements = GridModel.getCreatorRegistry()
+      .getConfigurations( null, IAWSService.class );
     try {
       IFileStore[] childStores = fileStore.childStores( EFS.NONE, null );
 
-      for ( IFileStore child : childStores ) {
+      for( IFileStore child : childStores ) {
         IGridElement gridElement = null;
         String childName = child.getName();
 
-        if ( childName.equals( AWSVoProperties.STORAGE_NAME ) ) {
+        if( childName.equals( AWSVoProperties.STORAGE_NAME ) ) {
           AWSVoProperties properties = new AWSVoProperties( this );
           properties.load();
           gridElement = properties;
         } else {
-          for ( IConfigurationElement configElement : configurationElements ) {
+          for( IConfigurationElement configElement : configurationElements ) {
             String creatorId = configElement.getAttribute( Extensions.GRID_ELEMENT_CREATOR_ID_ATTRIBUTE );
-            if ( childName.equals( creatorId ) ) {
+            if( childName.equals( creatorId ) ) {
               IGridElementCreator serviceCreator = ( IGridElementCreator )configElement.createExecutableExtension( Extensions.GRID_ELEMENT_CREATOR_EXECUTABLE );
               gridElement = serviceCreator.create( this );
-              if ( gridElement instanceof IStorableElement ) {
+              if( gridElement instanceof IStorableElement ) {
                 ( ( IStorableElement )gridElement ).load();
               }
             }
           }
         }
 
-        if ( gridElement != null ) {
+        if( gridElement != null ) {
           addElement( gridElement );
         }
       }
-    } catch ( CoreException cExc ) {
+    } catch( CoreException cExc ) {
       throw new ProblemException( ICoreProblems.MODEL_ELEMENT_LOAD_FAILED,
                                   cExc,
                                   Activator.PLUGIN_ID );
@@ -208,13 +206,13 @@ public class AWSVirtualOrganization extends AbstractVirtualOrganization {
       List<IAWSService> awsServices = getChildren( new NullProgressMonitor(),
                                                    IAWSService.class );
 
-      for ( IAWSService service : awsServices ) {
+      for( IAWSService service : awsServices ) {
         IGridResourceCategory[] supportedResources = service.getSupportedResources();
-        if ( supportedResources != null ) {
+        if( supportedResources != null ) {
           Collections.addAll( categoriesList, supportedResources );
         }
       }
-    } catch ( ProblemException problemEx ) {
+    } catch( ProblemException problemEx ) {
       Activator.log( "Could not fetch the AWSServices from the AWS VO", //$NON-NLS-1$
                      problemEx );
     }
@@ -278,15 +276,15 @@ public class AWSVirtualOrganization extends AbstractVirtualOrganization {
    * Find the {@link AWSVoProperties} in the list of children of this VO.
    * 
    * @return This VO's properties.
-   * @throws ProblemException if an error occurs while fetching the
-   *             list of children.
+   * @throws ProblemException if an error occurs while fetching the list of
+   *           children.
    */
   public AWSVoProperties getProperties() throws ProblemException {
     AWSVoProperties properties = null;
     IGridElement[] children = getChildren( null );
 
-    for ( IGridElement child : children ) {
-      if ( child instanceof AWSVoProperties ) {
+    for( IGridElement child : children ) {
+      if( child instanceof AWSVoProperties ) {
         properties = ( AWSVoProperties )child;
         break;
       }
@@ -295,8 +293,8 @@ public class AWSVirtualOrganization extends AbstractVirtualOrganization {
   }
 
   /**
-   * Gets all the children in this {@link IGridContainer}, which are an
-   * instance of the passed elementType.
+   * Gets all the children in this {@link IGridContainer}, which are an instance
+   * of the passed elementType.
    * <p>
    * Method is defined not to check type conversions because it is ensured via
    * {@link Class#isInstance(Object)}.
@@ -305,9 +303,10 @@ public class AWSVirtualOrganization extends AbstractVirtualOrganization {
    * @param monitor the monitor to track progress
    * @param elementType the element type to filter by
    * @return a list of {@link IGridElement}s which are an implementation of
-   *         <code>&lt;T&gt;</code> or an empty {@link List}<code>&lt;T&gt;</code>
+   *         <code>&lt;T&gt;</code> or an empty {@link List}
+   *         <code>&lt;T&gt;</code>
    * @throws ProblemException when the extraction of the children was not
-   *             successful
+   *           successful
    */
   @SuppressWarnings("unchecked")
   public <T extends IGridElement> List<T> getChildren( final IProgressMonitor monitor,
@@ -316,9 +315,9 @@ public class AWSVirtualOrganization extends AbstractVirtualOrganization {
   {
     IGridElement[] children = getChildren( monitor );
     List<T> childrenList = new ArrayList<T>();
-    if ( elementType != null ) {
-      for ( IGridElement gridElement : children ) {
-        if ( elementType.isInstance( gridElement ) ) {
+    if( elementType != null ) {
+      for( IGridElement gridElement : children ) {
+        if( elementType.isInstance( gridElement ) ) {
           childrenList.add( ( T )gridElement );
         }
       }
