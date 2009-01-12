@@ -110,7 +110,7 @@
          <meta.section type="apiinfo"/>
       </appinfo>
       <documentation>
-         See the &lt;code&gt;eu.geclipse.ui.internal.actions.VisualisationActions&lt;/code&gt; class.
+         See the &lt;code&gt;eu.geclipse.ui.visualisation.AbstractVisualisationAction&lt;/code&gt; class.
       </documentation>
    </annotation>
 
