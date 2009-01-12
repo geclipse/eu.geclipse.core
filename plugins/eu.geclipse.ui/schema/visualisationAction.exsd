@@ -6,7 +6,7 @@
          <meta.schema plugin="eu.geclipse.ui" id="eu.geclipse.ui.visualisationaction" name="Visualisation Action"/>
       </appinfo>
       <documentation>
-         [Enter description of this extension point.]
+         This extension point is used to define actions for rendering an IGridVisualisation resource.
       </documentation>
    </annotation>
 
@@ -52,28 +52,28 @@
          <attribute name="text" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  The value of this element will appear as the lable of the action.
                </documentation>
             </annotation>
          </attribute>
          <attribute name="tooltip" type="string">
             <annotation>
                <documentation>
-                  
+                  This element can be used to provide an additional hint to the user hovering on the action about what will happen after invocation.
                </documentation>
             </annotation>
          </attribute>
          <attribute name="fileExtension" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  This element defines the extension of the visualisation resource which this particular action applies to and can be invoked on.
                </documentation>
             </annotation>
          </attribute>
          <attribute name="type" type="string">
             <annotation>
                <documentation>
-                  
+                  This element is used to distinquish between the available types of visualisations that can be run on the specific visualisation resourse. For example, in the VTK visualisation support, there is the local and the remote type available. This element can be omitted or used to distinquish between any other categories of rendering on a given resource.
                </documentation>
             </annotation>
          </attribute>
@@ -85,7 +85,7 @@
          <meta.section type="since"/>
       </appinfo>
       <documentation>
-         [Enter the first release in which this extension point appears.]
+         1.0.0 M10
       </documentation>
    </annotation>
 
@@ -94,7 +94,14 @@
          <meta.section type="examples"/>
       </appinfo>
       <documentation>
-         [Enter extension point usage example here.]
+         &lt;extension
+         point=&quot;eu.geclipse.ui.visualisationAction&quot;&gt;
+      &lt;action
+            fileExtension=&quot;pharma&quot;
+            text=&quot;SRS3D&quot;
+            tooltip=&quot;Invokes the SRS3D viewer and visualises the selected resource.&quot;&gt;
+      &lt;/action&gt;
+   &lt;/extension&gt;
       </documentation>
    </annotation>
 
@@ -103,7 +110,7 @@
          <meta.section type="apiinfo"/>
       </appinfo>
       <documentation>
-         [Enter API information here.]
+         See the &lt;code&gt;eu.geclipse.ui.internal.actions.VisualisationActions&lt;/code&gt; class.
       </documentation>
    </annotation>
 
@@ -112,9 +119,21 @@
          <meta.section type="implementation"/>
       </appinfo>
       <documentation>
-         [Enter information about supplied implementation of this extension point.]
+         VTK based visualisation as well as the SRS3DViewer based visualisation implement this extension for their specific render action needs.
       </documentation>
    </annotation>
 
+   <annotation>
+      <appinfo>
+         <meta.section type="copyright"/>
+      </appinfo>
+      <documentation>
+         Copyright (c) 2008 g-Eclipse Consortium
+&lt;br&gt;&lt;br&gt;
+All rights reserved. This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0 which accompanies this distribution, and is available at &lt;a href=&quot;http://www.eclipse.org/legal/epl-v10.html&quot;&gt;http://www.eclipse.org/legal/epl-v10.html&lt;/a&gt;.
+&lt;br&gt;&lt;br&gt;
+Initial development of the original code was made for the g-Eclipse project founded by European Union project number: FP6-IST-034327 &lt;a href=&quot;http://www.geclipse.eu&quot;&gt;http://www.geclipse.eu&lt;/a&gt;.
+      </documentation>
+   </annotation>
 
 </schema>
