@@ -64,15 +64,47 @@ Grid user perspective will opened.
 <h2> The Grid use perspective </h2>
 The main view in the Grid user perspective is the Grid project View, which is 
 shown on the left side of the next image. It provides the logical view to the 
-virtualised infrastructure of any Grid project. It contains the standard folders 
+virtualized infrastructure of any Grid project. It contains the standard folders 
 defined above and the node representing the Virtual Organisation (in our example
-it is called AmazonWebServies).At startup, the central part of the workbench, the editor, is empty. Depending on the action you start, 
-you will get the corresponding editor in the Editor area.  
-<br>
+it is called AmazonWebServies).At startup, the central part of the workbench, the 
+editor, is empty. But depending on the edit action you start, you will get the 
+corresponding editor in the Editor area. 
+<br><br>
 <a href="images/gridperspective_1.jpg"><img src="images/gridperspective_1.jpg" alt="g-Eclipse Project Wizard Folders"></a>
-<br>
-You can unfold the created project like every other Eclipse project. The project contains 
+<br><br>
+More details about Grid and Cloud projects can be found under in the 
+<a href="../concepts/gridproject/creating.html">concept section</a>
+and under the middleware specific sections. 
 </p>
+<h2> The Grid Project View</h2>
+The center of each Grid project is the Grid projects is the Grid project view. 
+The vitualized structure of the Project View contains local and remote resources. 
+One of the tree items in the view is the Virtual Organisation of the project. 
+Under that tree item the available Grid and Cloud resources are shown to the 
+user. I.e. a Virtual Organisation for AWS services contains the children 
+Computing, Services and Storage. These children are common for each VO 
+independent of the middleware used. But the interactions might slightly differ. 
+<br><br>
+<a href="images/gridproject_view_1.jpg"><img src="images/gridproject_view_1.jpg" alt="g-Eclipse Project Wizard Folders"></a>
+<br><br>
+<h2> Security on Grids and Clouds</h2>
+Grid and Cloud infrastructures are remote resources on which a user must 
+authenticate himself. Furthermore, an authorisation framework manages the 
+access rights of the user. In order to interact with a remote service, the user 
+must possess a valid authentication token. The g-Eclipse framework has a smart
+framework to manage these tokens. Whenever the user access a Grid/Cloud service, 
+the framework checks if such a service exists. If not, then the input page for 
+the according token pops up. I.e. if the user opens the <b>Storage</b> item the
+following input page pops-up. Enter the security information for the 
+used middleware (i.e. enter the AWS access key).  
+<br><br>
+<a href="images/gridtoken_input.jpg"><img src="images/gridtoken_input.jpg" alt="g-Eclipse Project Wizard Folders"></a>
+<br><br>
+More Information about the g-Eclipse Security and Authentication framework can 
+be found in the 
+<a href="../concepts/gridauthentication/creating.html">concept section</a>
+and in the middleware specific sections. 
+
 
 <p>At startup, the central part of the workbench, the editor, is empty. Depending on the action you start, 
 you will get the corresponding editor in the Editor area.</p>
