@@ -134,11 +134,14 @@
   </topic>
 
   <topic label="Application Development">
-  	<anchor id="geclipse_concepts_applicationdevelopment" />
-  	<topic label="Web Services"
-  		href="html/concepts/applicationdevelopment/webservices/webservices.html">
-  		<anchor id="geclipse_webservices" />
+  	<topic label="Web Services in g-Eclipse"
+  		   href="html/concepts/applicationdevelopment/webservices/gEclipseWebserviceSupport.html">
+  		<topic href="html/concepts/applicationdevelopment/webservices/webservices.html"
+  		       label="Web Services with WTP">
+       	</topic>
+  	<anchor id="geclipse_webservices" />
   	</topic>
+  	<anchor id="geclipse_concepts_applicationdevelopment" />
   </topic>
 
   <topic
@@ -168,17 +171,14 @@
        <topic href="html/concepts/siteadministration/editorpages/AdvancedParametersPage.html" label="Advanced Parameters Page">
        </topic>
     </topic>
-
     <topic
       label="Simple Physical Resource Tests"
       href="html/concepts/siteadministration/simpleTests.html">
     </topic>
-
     <topic
       label="Service Job Framework"
       href="html/concepts/siteadministration/serviceJobs.html">
     </topic>
-    
     <topic
       label="The Terminal View"
       href="html/concepts/siteadministration/terminalView.html">
@@ -189,6 +189,7 @@
     <anchor id="geclipse_concepts_sla" /> 
     <topic href="html/concepts/sla/sla_process.html" label="Service Level Agreement Support" /> 
   </topic>
+  
   <topic
     label="Visualisation">
     <topic
