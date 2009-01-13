@@ -22,47 +22,94 @@
 <body BGCOLOR="#ffffff">
 
 <h1>Batch System Configuration</h1>
+
+<ul>
+<li><a href="#overview">Overview</a>
+<li><a href="#wizard">New Batch Service Wizard</a>
+<li><a href="#batchEditor">The Batch Editor</a>
+<li><a href="#batchJobView">The Batch Job View</a>
+</ul>
+
+<h2><a name="overview">Overview</a></h2>
+<p> The Batch Editor allows a system administrator of a batch based Grid middleware to monitor and maintain her site.
+The resources of the Grid site are depicted in the editor using color coding to show their status/state. 
+Various operations can be applied to the resources from their context menu. The current implementation supports
+the PBS batch service, support for other batch services can be added (see g-Eclipse development documentation).
+</p>
+
+<h2><a name="wizard">New Batch Service Wizard</a></h2>
 <p>In order to connect to a Batch Service you first have to specify the end-point by using the New Batch Service Wizard. 
 In order to activate this wizard you go to <a class="command-link" 
 href='javascript:executeCommand("org.eclipse.ui.newWizard(newWizardId=eu.geclipse.batch.ui.wizards.BatchCreationWizard)")'>
 <img src="PLUGINS_ROOT/org.eclipse.help/command_link.png">
 <b>File &gt; New &gt; Batch Service</b></a>. a dialog opens up where you specify the name of the batch service 
 and which project it should belong to.
-<img src="images/newBatchServiceWizardPage1.png" alt="New BatchService Wizard pg1" width="495">
+<img border="0" src="images/newBatchServiceWizardPage1.png" alt="New BatchService Wizard pg1" width="495">
 <p>Clicking <b>Next</b> will take you to a page where you specify the address of the machine where batch service
 is running and the user name of your account on that machine. 
 </p>
-<img src="images/newBatchServiceWizardPage2.png" alt="New BatchService Wizard pg2" width="499">
+<img border="0" src="images/newBatchServiceWizardPage2.png" alt="New BatchService Wizard pg2" width="499">
 
 <p> Clicking <b>Finish</b> will create the batch service holder file and the Batch editor will open.</p>
-<img src="images/batchEditorView.png" alt="Batch Editor" width="913">
+<img border="0" src="images/batchEditorView.png" alt="Batch Editor" width="800">
 
-<p> By clicking on a resource (e.g. Queue, Computing Element, Worker Node) in the Batch editor the jobs
-that are currently present in that resource will be listed in the Batch Job View </p>
-<img src="images/batchJobView.png" alt="Batch Job View" width="541">
+<h2><a name="batchEditor">The Batch Editor</a></h2>
+<p> All the resources of the Grid site are displayed in the Batch editor as well as listed (by category) in 
+the <b>Outline View</b>. By clicking on a resource (e.g. Queue, Computing Element, Worker Node) in the 
+Batch editor or in the Outline View the properties 
+of the specific resource are shown in the <b>Properties View</b> in addition the jobs
+that are currently present in that resource will be listed in the <b>Batch Job View</b>. </p>
+<p>
+In case you are accessing a large Grid site you can zoom in/out using the size drop-down combo-box in the
+menu bar or using the context menu option from anywhere within the editor. From the context menu you can 
+choose to <b>Zoom In</b> or <b>Zoom Out</b>.    
+</p>
+<p>
+Within each of the groups of the Queues and Nodes the user can choose to sort the elements. This is done from the 
+context menu within the group box. In the context menu the user is given to option to sort by <b>Sort by name</b> or
+<b>Sort by state</b>. The sorting property used, is then shown in the frame of the group box. 
+</p>
+<img border="0" src="images/sortingContextMenu.png" alt="Sorting Context Menu Options">
 
-<p>From the context menu of a Computing Element you can (given you have administration rights): </p>
+<h4>Computing Element Context Menu</h4>
+<p>From the context menu of a Computing Element you can (given you have administration rights):
+<ul>
 <li>Create a new queue using the New Queue Wizard</li>
-<img src="images/newQueueWizardPage.png" alt="New Queue Wizard" width="580">
+</ul></p>
+<img border="0" src="images/newQueueWizardPage1.png" alt="New Queue Wizard">
 
-
-<p>From the context menu of a Worker Node you can (given you have administration rights): </p>
+<h4>Worker Nodes Context Menu</h4>
+<p>From the context menu of a selection of Worker Nodes you can (given you have administration rights):
+<ul>
 <li>Disable the worker node if currently enabled</li>
 <li>Enable the worker node if currently</li>
+</ul></p>
 
-<p>From the context menu of a Queue you can (given you have administration rights): </p>
+<h4>Queue Context Menu</h4>
+<p>From the context menu of a selection of Queues you can (given you have administration rights): 
+<ul>
 <li>Drain(disable) the queue if it is currently enabled</li>
 <li>Enable the queue if it is currently disabled</li>
 <li>Stop the queue if it is currently running</li>
 <li>Start the queue if it is currently stopped</li>
 <li>Delete the queue if it is currently disabled and stopped and no jobs remain in the queue</li>
+</ul></p>
 
-<p>From the context menu of a batch job in the Batch Job View you can (given you have administration rights): </p>
+<h2><a name="batchJobView">The Batch Job View</a></h2>
+<p> In the Batch Jobs View displays all the batch jobs residing on the selected resource in the Batch 
+editor. From the menu bar of the view or from the context menu of selected jobs various actions can be 
+applied to the jobs.  
+   
+</p>
+<h4>Batch Job Context Menu</h4>
+<p>From the menu bar or context menu of a batch job in the Batch Job View you can (given you have administration rights): 
+<ul>
 <li>Delete the job(s)</li>
 <li>Change the state of a waiting job(s) to <i>hold</i> then it cannot be scheduled to run</li>
 <li>Change the state of job(s) in the state <i>hold</i> to <i>waiting</i></li>
 <li>Activate a wizard to move the selected job(s) to another queue or batch service</li>
 <li>Re-run the selected running job(s)</li>
-
+</ul></p>
+<img src="images/batchJobView.png" alt="Batch Job View" width="541">
 </body>
 </html>

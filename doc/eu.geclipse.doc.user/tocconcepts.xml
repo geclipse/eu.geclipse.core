@@ -124,15 +124,6 @@
     <anchor id="geclipse_concepts_jobmanagement" />
   </topic>
 
-  <topic
-    label="Info System">
-    <topic
-      label="Browsing the Info System"
-      href="html/concepts/infosystem/browsing.html">
-    </topic>
-    <anchor id="geclipse_concepts_infosystem" />
-  </topic>
-
   <topic label="Application Development">
   	<topic label="Web Services in g-Eclipse"
   		   href="html/concepts/applicationdevelopment/webservices/gEclipseWebserviceSupport.html">
@@ -160,6 +151,14 @@
   <topic
     label="Site Administration">
     <topic
+      label="Browsing the Info System"
+      href="html/concepts/siteadministration/glueInfoSystem.html">
+    </topic>
+    <topic
+      label="Simple Physical Resource Tests"
+      href="html/concepts/siteadministration/simpleTests.html">
+    </topic>
+    <topic
       label="Batch System Configuration"
       href="html/concepts/siteadministration/batchSystemConfiguration.html">
     </topic>
@@ -170,10 +169,6 @@
        </topic>
        <topic href="html/concepts/siteadministration/editorpages/AdvancedParametersPage.html" label="Advanced Parameters Page">
        </topic>
-    </topic>
-    <topic
-      label="Simple Physical Resource Tests"
-      href="html/concepts/siteadministration/simpleTests.html">
     </topic>
     <topic
       label="Service Job Framework"

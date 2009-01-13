@@ -23,24 +23,46 @@
 
 <h1>Simple Physical Resource Tests</h1>
 
-<h2>Introduction</h2>
+<ul>
+<li><a href="#introduction">Introduction</a>
+<li><a href="#reachability">The Reachability Test</a>
+<li><a href="#lookup">The DNS Lookup Test</a>
+<li><a href="#portScan">The Port Scan Test</a>
+</ul>
+
+<h2><a name="introduction">Introduction</a></h2>
 <p>In the virtual folder named after the VO that is tied to your Grid Project you can browse the 
 various resources belonging to the VO. From the context menu of all resources that represent a 
-physical computer you will be presented with all the simple tests available. 
-<img src="images/simpleTests.png" alt="Simple Tests" width="300">
+physical computer you will be presented with all the simple tests available. </p>
+<img src="images/simpleTests.png" alt="Simple Tests" width="461">
 
-<h2>The Ping test dialog </h2>
+<h2><a name="reachability">The Reachability Test</a></h2>
 <p>In this dialog you can set how many pings you want to perform and the delay between the ping 
 messages. When the <b>"Start"</b> button is clicked all the resources are pinged concurrently. You 
 can stop this by clicking on the <b>"Stop"</b> button. In the  <b>"Logging"</b> tab you can see 
 the status of each individual ping messages sent. </p>
-<img src="images/pingTestDialog.png" alt="Simple Tests" width="300">
+<img border="0" src="images/reachabilityTestDialog.png" alt="The Reachability Test" width="701">
 
-<h2>The DNS Lookup test dialog </h2>
+<h2><a name="lookup">The DNS Lookup Test</a></h2>
 <p>In this dialog you can get the IP address of the selected resources. When the <b>"Lookup"</b> 
 button is clicked all the resources are queried concurrently. You can stop this 
 by clicking on the <b>"Stop"</b> button. </p>
-<img src="images/dnsTestDialog.png" alt="Simple Tests" width="300">
+<img border="0" src="images/dnsTestDialog.png" alt="The DNS Lookup Test" width="563">
+
+<h2><a name="portScan">The Port Scan Test</a></h2>
+<p>In this dialog you can test which ports are open on the selected resources. First you have to select 
+and add various ports that you want to test. There are three ways to add ports that you want to scan. In the 
+first you can select from the "standard" ports, like 21, and click <b>"Add Selected"</b>. In the second way
+you can add rages of ports and click <b>"Add range"</b>. In the final way you can add specific ports and click
+<b>"Add Port"</b>. The added ports will appear in the <b>"Selected Ports"</b>, in case you accidentally added 
+some ports, these can be removed by selecting them and clicking <b>"Remove Port"</b> or click <b>"Remove All"</b> 
+to remove all the ports in the list. </p>
+<p>Once you have selected the ports that you want to scan, you click on <b>"Scan"</b>. Each of the hosts are 
+scanned in parallel, and the result are shown as they are evaluated. If at any time during the scan you 
+would like to abort it you just click on <b>"Stop"</b>. The result are shown in the <b>"Open Ports List"</b>
+and you can click on the name of the various resources to see which ports are open for the specific 
+resource. </p> 
+<img border="0" src="images/portScanTestDialog.png" alt="The Port Scan Test" width="696">
 
 </body>
 </html>
