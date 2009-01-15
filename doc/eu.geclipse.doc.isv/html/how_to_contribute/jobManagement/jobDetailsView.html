@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="Content-Style-Type" content="text/css">
+    <link rel="STYLESHEET" href="PLUGINS_ROOT/eu.geclipse.doc.user/book.css" charset="UTF-8" type="text/css">
+    <title>
+      g-Eclipse - Implementing middleware specified details on Job Details view
+    </title>
+  </head>
+  <body bgcolor="white">
+    <h1>Implementing middleware specified details on Job Details view</h1>  
+    <h2>
+      Overview
+    </h2>Jobs view show only basic information about job like: id, status, submission date. All other information
+about the job can be found on view Job Details. When you are implementing job for new middleware you may notice that view "Job Details" for that job display two sections: "General" and "Applications". These sections appears for all instances of <code>IGridJob</code> and <code>IGridJobStatus</code> so you have it for your new middleware without any line of code. But if your middleware support more information about the job, you have to contribute to "Job Details" view, what is described below.
+<h2>Structure of Job Details view</h2>
+<img src="images/JobDetailsView.png" alt="Job Details view" width="443" height="397" />
+<p><i>Details</i> on the view are grouped in <i>sections</i>. Currently g-Eclipse offer two implementations of single detail:
+<ul><li>simple detail - consist of pair: detail name, value (1-line). This is
+intended for details having short value fitting in one line of text.
+<li>complex detail - consist of: detail name, value (first 3 lines) and button.
+Intended for details having longer text value. To keep the view readable those longer details cannot
+be shown in whole, so only first 3 lines are shown. There is also a button, which can be used to
+open editor showing the whole value. Specialised editor can be opened like: JSDL, RSL or just
+plain text editor.
+</ul>
+<h2>Implemention of IJobDetailsFactory</h2>
+Details specified for given middleware should be created in the plugin containing this middleware. 
+So we have to implement factory and register it by contributing to the extension point:
+<ol>
+<li>
+Create new class implementing interface <code>eu.geclipse.ui.views.jobdetails.IJobDetailsFactory</code>
+</li>
+<li>
+Contribute to extension point <code>eu.geclipse.ui.jobDetailsFactory</code> with the following values:
+	<ul>
+		<li>class - class created above</li>
+		<li>sourceJobClass - class, which represents your job in g-Eclipse model. In most cases: <code>eu.geclipse.core.model.IGridJob</code></li>
+		<li>sourceJobStatusClass - class, in which you implemented <code>IGridJobStatus</code> for your middleware.</li>
+	</ul>
+</li>
+</ol>
+
+<h2>Create IJobDetail objects</h2>
+Main method of <code>IJobDetailsFactory</code> is:
+<pre>List<IJobDetail> getDetails( final IGridJob gridJob,
+	        final JobDetailSectionsManager sectionManager );</pre>
+For passed <code>gridJob</code> it should return list of <code>IJobDetail</code> objects. Each object provide information about one detail.<br/> 
+<p>For <b>simple detail</b> just return instance of <code>eu.geclipse.ui.views.jobdetails.JobTextDetail</code>.<br/>
+This is an abstract class, so for every instance you have to implement method returning string representing detail value:
+<pre>String getValue( final IGridJob gridJob )</pre>
+<p>For <b>complex detail</b> return instance of <code>eu.geclipse.ui.views.jobdetails.JobComplexDetail</code>. Pass into contructor id of editor, which will be opened when user click on button "Glasses". For standard text editor use id <code>org.eclipse.ui.DefaultTextEditor</code>.
+<p>If you would like to implement <b>more complicated detail</b>, then create new class extending <code>eu.geclipse.ui.views.jobdetails.JobDetail</code>. But in this case you have to create widgets representing the details. For examples see class <code>eu.geclipse.glite.ui.jobdetails.LoggingEventsDetail</code>.
+<h2>IJobDetailsSection objects passed to the details</h2>
+During creation instance of <code>IJobDetail</code> you have to pass to the constructor section, onto which detail will be placed (object implementing <code>IJobDetailsSection</code>).<br/>
+<p>If you want to add your detail to standard section "General" or "Application", just get object <code>sectionManager</code> passed in IJobDetailsFactory#getDetails and call it method: <code>getSectionGeneral</code> or <code>getSectionApplication</code>.<br/>
+<p>If you would like to place your detail on new section (specific for your middleware), just call on <code>sectionManager</code>:
+<pre>Integer createSection( final String name, final int order )</pre> and then: <pre>IJobDetailsSection getSection( final Integer sectionId )</pre>
+<p>Section may be created as lazy. Lazy sections are collapsed after creation (doesn't show any detail - methods <code>JobTextDetail#getValue</code> are not called) and during expanding they force refreshing the view. Lazy sections are useful, when values on some details have to be computed, what causes that view is refreshed much slower. Thanks of lazy section view works smoothly when section is collapsed, but user still has possibility so see all details.
+<h2>Forcing downloading job status in full version</h2>
+Method <code>IGridJobService#getJobStatus</code> allow to download job status with different amount of data: in short version and full version. Full version is needed to show Job Details view.
+Therefore view is responsible for forcing updating job status in full version. In order to avoid updating job status before every refreshing, view calls method <code>IJobDetailsFactory#shouldUpdateJobStatus</code>. 
+So details factory should decide if selected job has valid long status. If not, then view schedule status update for that job.
+</body>
+</html>
