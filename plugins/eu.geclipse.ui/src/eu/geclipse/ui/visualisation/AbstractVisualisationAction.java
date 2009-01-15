@@ -79,7 +79,7 @@ public class AbstractVisualisationAction extends SelectionListenerAction {
 
   private ArrayList< IGridVisualisation > vis;
 
-  private IWorkbenchSite workbenchSite;
+  IWorkbenchSite workbenchSite;
 
   /**
    *
@@ -93,7 +93,7 @@ public class AbstractVisualisationAction extends SelectionListenerAction {
    * @param actionTooltip
    * @param fileExtension
    * @param site
-   * @param visType 
+   * @param visType
    */
   public void init( final String actionText,
                     final String actionTooltip,
@@ -122,11 +122,11 @@ public class AbstractVisualisationAction extends SelectionListenerAction {
         ( ( IGridVisualisation )element ).validate();
         IViewPart view = this.workbenchSite.getPage().showView( "eu.geclipse.ui.views.visualisationview" ); //$NON-NLS-1$
         ( ( VisualisationView )view ).setVisResource( ( IGridVisualisation )element );
-        ( ( VisualisationView )view ).render( ( ( IGridVisualisation )element).getResourceFileNameExtension(), type );
+        ( ( VisualisationView )view ).render( ( ( IGridVisualisation )element).getResourceFileNameExtension(), this.type );
         Display.getDefault().asyncExec( new Runnable() {
           public void run() {
             try {
-              workbenchSite.getPage().showView( "eu.geclipse.ui.views.visualisationview" );
+              AbstractVisualisationAction.this.workbenchSite.getPage().showView( "eu.geclipse.ui.views.visualisationview" ); //$NON-NLS-1$
             } catch( PartInitException e ) {
               Activator.logException( e );
             }

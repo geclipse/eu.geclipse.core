@@ -12,12 +12,11 @@
  * Contributors:
  *    Sylva Girtelschmid GUP, JKU - initial API and implementation
  *****************************************************************************/
-package eu.geclipse.ui.visualisation;
+package eu.geclipse.core.model.impl;
 
 import org.eclipse.core.resources.IResource;
 
 import eu.geclipse.core.model.IGridVisualisation;
-import eu.geclipse.core.model.impl.ResourceGridContainer;
 import eu.geclipse.core.reporting.ProblemException;
 
 
@@ -44,7 +43,6 @@ public abstract class AbstractGridVisualisationResource
 
   public abstract void render( final String fileExtention, final String visType );
 
-  public void validate() throws ProblemException {
-    // TODO Auto-generated method stub
-  }
+  public void validate() throws ProblemException {}
 }
+

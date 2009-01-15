@@ -245,6 +245,7 @@ public class VisualisationView extends ViewPart {
    * Sets the right window composite for the visualisation view and
    * invokes the rendering process for the given resource.
    * @param resFileNameExt
+   * @param visType Remote or Local
    *
    */
   public void render( final String resFileNameExt, final String visType ) {

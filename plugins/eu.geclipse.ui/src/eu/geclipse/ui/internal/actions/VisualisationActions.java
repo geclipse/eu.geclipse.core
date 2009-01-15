@@ -31,8 +31,8 @@ import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.actions.ActionGroup;
 import org.eclipse.ui.navigator.ICommonMenuConstants;
 
+import eu.geclipse.core.model.impl.AbstractGridVisualisationResource;
 import eu.geclipse.ui.internal.Activator;
-import eu.geclipse.ui.visualisation.AbstractGridVisualisationResource;
 import eu.geclipse.ui.visualisation.AbstractVisualisationAction;
 
 
