@@ -22,43 +22,48 @@
 <body BGCOLOR="#ffffff">
 
 <h1>Creating a Grid Workflow</h1>
-<p>g-Eclipse comes with a graphical workflow builder that allows the building of complex 
+<p>g-Eclipse comes with a graphical workflow builder that enables the creation of complex 
 workflows. These workflows can then be submitted for execution to different workflow engines
-supported by the various grid middleware. </p>
+supported by the various supported grid middleware. </p>
 
-<p>To get started with creating a workflow, right-click on the 'Workflows' folder in a 
-Grid Project and choose <b>New &gt; Workflow Diagram</b>. This will open up the New Workflow
-Wizard page where you will be prompted to enter a name for your workflow. The name should
-have an extension of <i>.workflow</i>. On clicking <b>Finish</b>, the the newly created workflow is 
-opened in the workflow editor. </p>
+<p>To get started with creating a workflow, go to <a class="command-link" 
+href='javascript:executeCommand("org.eclipse.ui.newWizard(newWizardId=eu.geclipse.workflow.ui.wizards.WorkflowCreationWizard)")'>
+<img src="PLUGINS_ROOT/org.eclipse.help/command_link.png">
+<b>File &gt; New &gt; Workflow Diagram</b></a>.
+(Alternatively, you could right-click on the <i>Workflows</i> folder in a Grid Project and choose <b>New &gt; Workflow Diagram</b>.) 
+This will open up the New Workflow Wizard page where you will be prompted to enter a name for your workflow. The name should have an 
+extension of <i>.workflow</i>. On clicking <b>Finish</b>, the the newly created workflow is opened in the graphical workflow editor. </p>
 
-<p>A Workflow in g-Eclipse is stored in a dedicated folder that holds the .workflow file and any 
-associated JSDL files that correspond to WorkflowJobs. In the 'Workflows' folder in your Grid Project, 
+<p>A Workflow in g-Eclipse is stored in a dedicated folder that holds a .workflow file and 
+associated JSDL files that correspond to the individual jobs in the workflow. In the <i>Workflows</i> folder of the Grid Project, 
 you can see the folder corresponding to your newly created workflow and, upon expanding it, you can 
-see the '.workflow' file inside it. Any JSDL files you associate with Workflow Jobs will appear in this 
+see the .workflow file inside it. Any JSDL files you associate with Workflow Jobs will appear in this 
 folder too.</p>
 
-<p>You can add a workflow job by selecting <b>Workflow Job</b> from the Palette on the right and
-clicking in the empty editor area. A rectangular box (representing a job) appears in the editor 
-and you can give the job a name by typing it in the text area. Next, you can add an Output
-port to the workflow job by selecting <b>Output Port</b> from the Palette and then clicking 
-in the workflow job. A little blue box with an outward pointing arrowhead appears, showing that your 
-job now has an Output Port. Following the same procedure, you can add another job to the workflow and 
-add an Input Port to it, which is a little blue box with an inward pointing arrowhead. Then, select 
-<b>Link</b> from the palette, click on the Output Port of the first job, drag 
-the pointer until you reach the Input Port of the second job and release. The two so far 
-independent jobs are now linked to form a simple workflow.</p>
+<p>You can add jobs to your workflow in more than one way. The easiest method is to drag and drop an existing JSDL file from the Grid Projects View
+directly into the editor area. This will create a Workflow Job in the editor, and populate it with Input and Output Ports corresponding to the input 
+and output data stagers defined in the JSDL file. The Workflow Job is named after the JSDL file and a copy of this file appears
+ in the .workflow folder in the Grid Projects View. (Note that this JSDL file is a copy and can be edited and used independently of the original.) 
+ Multiple JSDL files can be selected, dragged and dropped at once.</p>
 
-<img src="images/workfloweditor_inaction.png" alt="Workflow Editor with workflow" width="640">
+<img src="images/workflow-editorwith4linkedjobs.png" alt="Workflow Editor with workflow" width="648">
 
-<p>In order to associate your Workflow Jobs with JSDL files, you can right-click on any workflow job and
-select 'Add Job Description'. You will be presented with a File dialog that will enable you to locate 
-and choose a JSDL of your choice and select it. Alternatively, you could drag a JSDL file from the Grid
-Projects View and drop it directly onto your workflow job. Notice that the JSDL file appears in the 
-folder corresponding to the workflow in the Grid Projects View. (This JSDL file is a copy of the 
-original and can be edited and used independently of the original.) If you feel the need to edit the 
-JSDL file associated with any workflow job, you can right-click on the workflow job and select 
-'Open Job in JSDL Editor'.</p>
+<p>Another approach is to use the palette on the right side of the editor. From the palette, select <b>Workflow Job</b> and
+click anywhere in the empty editor area. A rectangular box (representing a job) appears in the editor 
+and you can give the job a name by typing in the text area. Next, you can add an Output Port to the workflow job by selecting 
+<b>Output Port</b> from the Palette and then clicking on your workflow job. A little blue box with an outward pointing arrowhead 
+- <img src="images/workflow-OutputPort.png"> - appears, showing that your job now has an Output Port. Following a similar procedure, 
+you can add another job to the workflow and add an Input Port to it, which appears as a little blue box with an inward pointing arrowhead 
+- <img src="images/workflow-InputPort.png">. Then, select <b>Link</b> from the palette, click on the Output Port of the first job, drag 
+the pointer until you reach the Input Port of the second job and release. The two (so far independent) jobs are now linked to form a simple workflow.</p>
+
+<p>Associating your Workflow Jobs with JSDL files can also be accomplished in more than one way. The easiest is to drag and drop an existing JSDL file 
+from the Grid Projects View directly onto the Workflow Job. This sets up the association and creates a copy of the JSDL file in the .workflow folder. If the JSDL 
+file you want to use is not in your workspace, you can right-click on the workflow job in the editor and select <b>Add Job Description</b>. You will then 
+be presented with a File dialog that will enable you to browse and choose the JSDL file. If you would like to create a new JSDL file to associate with
+a Workflow Job, then simply double-click on it and this will fire up the New Job Description Wizard that will lead you through the process. If you feel the need 
+to edit the JSDL file associated with any workflow job, you can right-click on the workflow job and select <b>Open Job in JSDL Editor</b>.</p> 
+
 
 
 </body>
