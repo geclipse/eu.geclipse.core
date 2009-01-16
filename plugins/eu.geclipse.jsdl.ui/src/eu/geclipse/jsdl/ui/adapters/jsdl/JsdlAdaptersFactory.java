@@ -64,7 +64,6 @@ public class JsdlAdaptersFactory extends AdapterImpl implements ComposeableAdapt
   
   
   public ComposeableAdapterFactory getRootAdapterFactory() {
-    //  Auto-generated method stub
     return null;
   }
 
@@ -96,38 +95,32 @@ public class JsdlAdaptersFactory extends AdapterImpl implements ComposeableAdapt
 
 
   public Object adapt( final Object object, final Object type ) {
-    // TODO Auto-generated method stub
     return null;
   }
 
 
   public Adapter adapt( final Notifier targ, final Object type ) {
-    // TODO Auto-generated method stub
     return null;
   }
 
 
   public void adaptAllNew( final Notifier notifier ) {
-    // TODO Auto-generated method stub
-    
+    // Auto-generated method stub    
   }
 
 
   public Adapter adaptNew( final Notifier targ, final Object type ) {
-    // TODO Auto-generated method stub
     return null;
   }
 
 
   public boolean isFactoryForType( final Object type ) {
-    // TODO Auto-generated method stub
     return false;
   }
 
 
   @Override
   public void notifyChanged( final Notification msg ) {
-    // TODO Auto-generated method stub
     return;
   }
   

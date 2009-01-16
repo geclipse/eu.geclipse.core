@@ -66,7 +66,7 @@ public final class JobApplicationPage extends JsdlFormPage  {
       if( isContentRefreshed() ) {
         this.applicationSection.setInput( this.jobDefinitionType );
         this.posixApplicationSection.setInput( this.jobDefinitionType );
-        this.additionalPosixElementSection.setInput( this.jobDefinitionType );        
+//        this..setInput( this.jobDefinitionType );        
       }// end_if isContentRefreshed
     } // end_if active
   } // End void setActive()

@@ -166,8 +166,9 @@ public class PosixApplicationSection extends JsdlFormPageSection {
                                                                                         .this.txtPosixName.getText() );
         }
         else{
-          
-          PosixApplicationSection.this.posixApplicationType.setName( null );
+          if ( null != PosixApplicationSection.this.posixApplicationType.getName() ){
+            PosixApplicationSection.this.posixApplicationType.setName( null );
+          }
         }
         contentChanged();
         
@@ -201,14 +202,14 @@ public class PosixApplicationSection extends JsdlFormPageSection {
           this.fileName = (FileNameType) checkProxy( this.fileName );
           this.fileName = null;
         }
-        PosixApplicationSection.this.posixApplicationType.setExecutable(null);
+        if (null != PosixApplicationSection.this.posixApplicationType.getExecutable() ){
+          PosixApplicationSection.this.posixApplicationType.setExecutable(null);
+        }
       }
       contentChanged();
       
       }
     } );
-
-    
     
     gd = new GridData();
     gd.widthHint = 330;
@@ -355,7 +356,9 @@ public class PosixApplicationSection extends JsdlFormPageSection {
             this.fileName = (FileNameType) checkProxy( this.fileName );
             this.fileName = null;
           }
-          PosixApplicationSection.this.posixApplicationType.setInput(null);
+          if (null != PosixApplicationSection.this.posixApplicationType.getInput() ){
+            PosixApplicationSection.this.posixApplicationType.setInput(null);
+          }
         }
         contentChanged();
         
@@ -387,7 +390,9 @@ public class PosixApplicationSection extends JsdlFormPageSection {
             this.fileName = (FileNameType) checkProxy( this.fileName );
             this.fileName = null;
           }
-          PosixApplicationSection.this.posixApplicationType.setOutput(null);
+          if ( null != PosixApplicationSection.this.posixApplicationType.getOutput() ){
+            PosixApplicationSection.this.posixApplicationType.setOutput(null);
+          }
         }
         contentChanged();
         
@@ -427,7 +432,9 @@ public class PosixApplicationSection extends JsdlFormPageSection {
             this.fileName = (FileNameType) checkProxy( this.fileName );
             this.fileName = null;
           }
-          PosixApplicationSection.this.posixApplicationType.setError(null);
+          if ( null != PosixApplicationSection.this.posixApplicationType.getError() ){
+            PosixApplicationSection.this.posixApplicationType.setError(null);
+          }
         }
         contentChanged();
         
@@ -658,11 +665,16 @@ public class PosixApplicationSection extends JsdlFormPageSection {
         }
         else if (testType instanceof ApplicationType) {
           this.applicationType = (ApplicationType) testType;
+          if ( false == this.applicationType.eAdapters().contains( this ) ){
+            this.applicationType.eAdapters().add( this );
+          }
            
         }
         else if ( testType instanceof POSIXApplicationType ) {
           this.posixApplicationType = (POSIXApplicationType) testType;
-          this.posixApplicationType.eAdapters().add( this );
+          if ( false == this.posixApplicationType.eAdapters().contains( this ) ){
+            this.posixApplicationType.eAdapters().add( this );
+          }
          
         } 
         
@@ -673,7 +685,7 @@ public class PosixApplicationSection extends JsdlFormPageSection {
     
   }
   
-  
+   
   
   /* 
    * If the POSIX Application Element is set, check for any possible contents which may
@@ -682,7 +694,9 @@ public class PosixApplicationSection extends JsdlFormPageSection {
    */
   @Override
   public void notifyChanged(final Notification msg){
-     
+    
+//    Enable Line Below to debug event notifications from JSDL model types.
+//    System.out.println("Message: " + msg.toString());
     if ( this.isNotifyAllowed ){
       if ( null != this.posixApplicationType && this.posixApplicationType.eContents().size() == 0) {
           EcoreUtil.remove( this.posixApplicationType );
@@ -698,7 +712,7 @@ public class PosixApplicationSection extends JsdlFormPageSection {
     this.isNotifyAllowed = false;
     
     if( null != this.posixApplicationType ) {
-      if( null != this.posixApplicationType.getName() ){
+      if( null != this.posixApplicationType.getName() ){  
         this.txtPosixName.setText( this.posixApplicationType.getName() );
       }else{
         this.txtPosixName.setText( EMPTY_STRING );
@@ -745,7 +759,7 @@ public class PosixApplicationSection extends JsdlFormPageSection {
     
     EObject eObject = refEObject;
     
-    if (eObject != null && eObject.eIsProxy() ) {
+    if ( (eObject != null) && (eObject.eIsProxy()) ) {
      
       eObject =  EcoreUtil.resolve( eObject, this.posixApplicationType );
     }
@@ -781,12 +795,12 @@ public class PosixApplicationSection extends JsdlFormPageSection {
     
     checkApplicationElement();
         
-    if ( !this.applicationType.eIsSet( eStructuralFeature ) ){  
+    if ( !this.applicationType.eIsSet( eStructuralFeature ) ){ 
       if ( null == this.posixApplicationType){
         this.posixApplicationType = PosixFactory.eINSTANCE.createPOSIXApplicationType();
         Collection<POSIXApplicationType> collection = new ArrayList<POSIXApplicationType>();
         collection.add( this.posixApplicationType );
-//        this.applicationType = (ApplicationType) checkProxy( this.applicationType );
+        this.applicationType = (ApplicationType) checkProxy( this.applicationType );
         this.applicationType.eSet( eStructuralFeature, collection );
       }      
 
@@ -836,7 +850,12 @@ public class PosixApplicationSection extends JsdlFormPageSection {
       newInputList.add( this.argumentType );
         
       /* Add the Argument to PosixApplication */
+      
+      this.applicationType = (ApplicationType) checkProxy( this.applicationType );
+      this.posixApplicationType = (POSIXApplicationType) checkProxy( this.posixApplicationType );
+      this.argumentType = (ArgumentType) checkProxy( this.argumentType );
       this.posixApplicationType.getArgument().addAll( newInputList );
+      
       tableViewer.setInput( this.posixApplicationType.getArgument() );
     
       tableViewer.refresh();   
@@ -847,7 +866,6 @@ public class PosixApplicationSection extends JsdlFormPageSection {
                               Messages.getString( "Arguments_DuplicateEntryDialog_Title" ), //$NON-NLS-1$
                               Messages.getString( "Arguments_New_DuplicateEntryDialog_Message" ) ); //$NON-NLS-1$
     }
-    newInputList = null;
   }
   
   
@@ -907,9 +925,7 @@ public class PosixApplicationSection extends JsdlFormPageSection {
   
   
   protected void deleteElement( final int featureID ) {
-    
-    EStructuralFeature eStructuralFeature = this.posixApplicationType.eClass().getEStructuralFeature( featureID );
-    
+    EStructuralFeature eStructuralFeature = this.posixApplicationType.eClass().getEStructuralFeature( featureID );    
     EcoreUtil.remove( eStructuralFeature );
     
   }
