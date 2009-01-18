@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+<head>
+<meta
+  http-equiv="Content-Type"
+  content="text/html; charset=UTF-8">
+<META
+  HTTP-EQUIV="Content-Style-Type"
+  CONTENT="text/css">
+<LINK
+  REL="STYLESHEET"
+  HREF="PLUGINS_ROOT/eu.geclipse.doc.user/book.css"
+  CHARSET="UTF-8"
+  TYPE="text/css">
+<title>g-Eclipse - Information System Concepts</title>
+</head>
+
+<body BGCOLOR="#ffffff">
+<h1>Information System Concepts</h1>
+
+<h2>Introduction</h2>
+<p>Monitoring is essential for the smooth operation of the Grid and trouble-shooting of problems as they arise. 
+Monitoring the Grid allows the user to have a clearer view of the current state of the Grid. The GLUE Information Viewer
+provides a user with such a view. In addition the information is provided for the VO folder in the Grid Project View.</p>
+
+<p>Current implementations for
+</li>
+  <ul>
+    <li>gLite: information gathered from the BDII service.</li>
+    <li>GRIA: information gathered from the end-points stored in the VO declaration and the GRIA registry service.</li>
+  </ul>
+</ul>
+</p>
+
+
+<h2>UI components</h2>
+<p>The UI part of the Information System Framework is hidden from the developer. For proper 
+implementation you only need to implement model classes of the Information System Framework 
+- all views and informations about the Grid will be presented to
+the user using classes from this model.</p>
+
+<p>The Glue Information Viewer</p>
+<img
+  width="383"
+  height="345"
+  src="images/infoview.png" />
+  
+<h2>Implementation Details</h2>
+<p>The links below provides specifics of how to extend or add support for a new middleware for the 
+information system.
+</p>
+<ul>
+<li><a href="implementingInfoService.html"> Implementing an additional Information Service</a>
+<li><a href="addingCategories.html"> Adding Categories in GLUE Information View</a>
+<li><a href="addingFilters.html"> Adding Filters in GLUE Information View</a>
+<li><a href="supportedService.html"> Marking a Service as Supported by g-Eclipse</a>
+</ul>
+
+
+
+</body>
+</html>

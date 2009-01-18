@@ -9,11 +9,6 @@
   <topic
     label="Authentication"
     href="html/how_to_contribute/gridAuthentication.html" />
-<!--
-  <topic
-    label="Grid Information System"
-    href="html/how_to_contribute/gridInformationSystem.html" />
--->
   <topic
     label="Grid Data Access"
     href="html/how_to_contribute/gridDataAccess.html" />
@@ -33,27 +28,32 @@
      <topic href="html/how_to_contribute/addingJSDLsection.html" label="Adding a new section">
      </topic>
   </topic>    
+  <topic label="Information System">
+     <topic href="html/how_to_contribute/infoSystem/informationSystem.html" label="Information System Concepts">
+     </topic>
+     <topic href="html/how_to_contribute/infoSystem/implementingInfoService.html" label="Implementing an additional Information Service">
+     </topic>
+     <topic href="html/how_to_contribute/infoSystem/addingCategories.html" label="Adding Categories in GLUE Information View">
+     </topic>
+     <topic href="html/how_to_contribute/infoSystem/addingFilters.html" label="Adding Filters in GLUE Information View">
+     </topic>
+     <topic href="html/how_to_contribute/infoSystem/supportedService.html" label="Marking a Service as Supported by g-Eclipse">
+     </topic>
+  </topic>
   <topic
     label="Batch Systems"
     href="html/how_to_contribute/gridBatchSystems.html" />
-  <topic label="Information System">
-     <topic href="html/how_to_contribute/impementingInfoService.html" label="Implementing an additional Information Service">
-     </topic>
-     <topic href="html/how_to_contribute/addingCategories.html" label="Adding categories in GLUE information view">
-     </topic>
-     <topic href="html/how_to_contribute/addingFilters.html" label="Adding Filters in GLUE information view">
-     </topic>
-     <topic href="html/how_to_contribute/supportedService.html" label="Marking a service as supported by g-Eclipse">
-     </topic>
-  </topic>
+  <topic
+    label="Simple Tests"
+    href="html/how_to_contribute/simpleTestFramework.html" />
   <topic label="Service Job Framework">
-     <topic href="html/how_to_contribute/service_jobs/serviceJobsFramework.html" label="Service job framework concepts">
+     <topic href="html/how_to_contribute/service_jobs/serviceJobsFramework.html" label="Service Job Framework Concepts">
      </topic>
-     <topic href="html/how_to_contribute/service_jobs/sjGridAccess.html" label="Direct Grid Access service jobs">
+     <topic href="html/how_to_contribute/service_jobs/sjGridAccess.html" label="Direct Grid Access Service Jobs">
      </topic>
      <topic href="html/how_to_contribute/service_jobs/sjImplementation.html" label="Submittable Service Jobs">
      </topic>
-     <topic href="html/how_to_contribute/service_jobs/sjUIImplementations.html" label="Service jobs UI part contribution">
+     <topic href="html/how_to_contribute/service_jobs/sjUIImplementations.html" label="Service Jobs UI Part Contribution">
      </topic>
   </topic>
   <anchor id="geclipse_reference_howtocontribute_ext" />

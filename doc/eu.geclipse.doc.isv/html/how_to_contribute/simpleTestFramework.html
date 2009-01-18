@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+<head>
+<meta
+  http-equiv="Content-Type"
+  content="text/html; charset=UTF-8">
+<META
+  HTTP-EQUIV="Content-Style-Type"
+  CONTENT="text/css">
+<LINK
+  REL="STYLESHEET"
+  HREF="../../book.css"
+  CHARSET="UTF-8"
+  TYPE="text/css">
+<title>g-Eclipse - Simple Test Framework</title>
+</head>
+
+<body BGCOLOR="#ffffff">
+<h1>Simple Test Framework</h1>
+<p>How to implement support for a new Simple Test?</p>
+
+<ul>
+  <li>A framework to perform simple tests on physical resource are provided. Current implementations
+  provides the following exemplary tests</li>
+  <ul>
+    <li>Host Reachability Test</li>
+    <li>DNS lookup Test</li>
+    <li>Port Scan Test</li>
+  </ul>
+</ul>
+
+<h2>UI Components</h2>
+<p>Each of the tests will have their own GUI, but they will be activated through the 
+context menu from physical resources in the Grid Project view. </p>
+
+<p>The context menu with the simple tests</p>
+<img
+  width="461"
+  height="298"
+  src="images/simpleTests.png" />
+
+<h2>Important Extension points</h2>
+<h3>Core extension point</h3>
+<dl>
+  <dt><code>eu.geclipse.core.simpleTests</code></dt>
+  <dd>Provides a scheme for defining new test (non GUI part) 
+  by descriptor, id, and name</dd>
+</dl>
+
+<h3>UI extension point</h3>
+<dl>
+  <dt><code>eu.geclipse.ui.simpleTestUI</code></dt>
+  <dd>Provides a scheme for defining new test (the GUI part) 
+  by id, name, and class.</dd>
+</dl>
+
+<h2>Interfaces to implement</h2>
+<dl>
+  <dt><code>eu.geclipse.core.simpleTest.ISimpleTest</code></dt>
+  <dd>Implement this to represent your test.</dd>
+  <dt><code>eu.geclipse.core.simpleTest.ISimpleTestDescription</code></dt>
+  <dd>Implement this in order to hold all parameters that are
+  needed to create a test.</dd>
+  <dt><code>eu.geclipse.ui.ISimpleTestUIFactory</code></dt>
+  <dd>Implement this to represent the GUI for your test.</dd>
+</dl>
+
+<h3>Base classes that can be extended</h3>
+<dl>
+  <dt><code>eu.geclipse.ui.AbstractSimpleTestUIFactory</code></dt>
+  <dd>A base class that can be extended for the UI factory of your test.</dd>
+</dl>
+
+</body>
+</html>

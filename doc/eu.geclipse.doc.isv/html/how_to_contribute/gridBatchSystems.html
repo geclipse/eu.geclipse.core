@@ -13,7 +13,7 @@
   HREF="../../book.css"
   CHARSET="UTF-8"
   TYPE="text/css">
-<title>g-Eclipse - Concepts</title>
+<title>g-Eclipse - Batch Systems</title>
 </head>
 
 <body BGCOLOR="#ffffff">
@@ -30,6 +30,11 @@
 </ul>
 
 <h2>UI Components</h2>
+<p>The UI part of the Batch System Framework is hidden from the developer. For proper 
+implementation you only need to extend the <b>batchService</b> extension point of the Batch Service 
+Framework - all views, wizards, and editors are generic as long as the underlying Batch Service 
+interfaces are implemented.</p>
+
 <p>The new Batch Service Wizard creates new SSH tunnel into batch service</p>
 <img
   width="499"
@@ -38,24 +43,24 @@
 
 <p>The Batch Editor displays the current state of a batch service and provides for interaction with the service</p>
 <img
-  width="876"
-  height="528"
+  width="1061"
+  height="587"
   src="images/batchEditorView.png" />
 
 <p>The Batch Job View displays all the batch jobs residing in the selected resource in the Batch Editor</p>
 <img
-  width="541"
-  height="211"
+  width="741"
+  height="281"
   src="images/batchJobView.png" />
 
 <p>The new Queue Wizard helps to specify a new queue in the batch service</p>
 <img
-  width="580"
-  height="494"
+  width="613"
+  height="514"
   src="images/newQueueWizardPage.png" />
 
-
-<h3>Extension point</h3>
+<h2>Important Extension points</h2>
+<h3>Core Extension point</h3>
 <dl>
   <dt><code>eu.geclipse.batch.batchService</code></dt>
   <dd>Provides a scheme for defining new batch service 
@@ -71,6 +76,11 @@
   needed for a successful batch service creation</dd>
 </dl>
 
-</body>
+<h3>Base classes that can be extended</h3>
+<dl>
+  <dt><code>eu.geclipse.batch.AbstractBatchService</code></dt>
+  <dd>Extend this to represent your batch service </dd>
+</dl>
 
+</body>
 </html>
