@@ -2,7 +2,6 @@
 <?eclipse version="3.2"?>
 <plugin>
    <extension-point id="batchService" name="Batch Service" schema="schema/batchService.exsd"/>
-   <extension-point id="batchServiceProvider" name="Batch Service Provider" schema="schema/batchServiceProvider.exsd"/>
    <extension
          id="eu.geclipse.batch.batchCreator"
          name="Batch creator"

@@ -30,9 +30,7 @@ import eu.geclipse.core.reporting.ProblemException;
 
 /**
  * The <code>BatchServiceManager</code> manages all types of batch services.
- * It holds an internal list of all currently available batch services. Although the
- * batch service manager is the base class of the batch service system, non-core
- * classes should use an {@link eu.geclipse.batch.IBatchServiceProvider} to request a service.
+ * It holds an internal list of all currently available batch services. A
 
  * @author harald
  *
