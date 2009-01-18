@@ -1,0 +1,100 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+<meta
+  http-equiv="Content-Type"
+  content="text/html; charset=iso-8859-1">
+<META
+  HTTP-EQUIV="Content-Style-Type"
+  CONTENT="text/css">
+<LINK
+  REL="STYLESHEET"
+  HREF="PLUGINS_ROOT/eu.geclipse.doc.user/book.css"
+  CHARSET="ISO-8859-1"
+  TYPE="text/css">
+<title>g-Eclipse - Known Issues</title>
+</head>
+
+<body BGCOLOR="#ffffff">
+
+<h1>g-Eclipse - Known Issues</h1>
+
+<ul>
+<li><h4>Firewalls:</h4>
+g-Eclipse has the same connectivity requirements as any other client
+software for a specific grid middleware. Therefore you will need to be able
+to establish outgoing TCP connections to a series of ports, and in a
+few cases also allow some incoming open ports. Check the middleware
+specific documentation for more details.
+</li>
+
+<li><h4>PKCS#12 keystores loading:</h4>
+If you want to be able to use PKCS#12 formated keystores (<b>.p12</b> files)
+then you may need to install the JCE unrestricted policy files in your Java
+installation:
+  <ul>
+  <li>
+  download the "Java Cryptography Extension Unlimited Strength Jurisdiction
+  Policy Files" from
+  <a href="http://java.sun.com/javase/downloads">http://java.sun.com/javase/downloads</a>
+  (or the corresponding site if you have another Java version)
+  </li>
+  <li>
+  unpack that file and follow the instructions in the README. You only need to copy
+  the two policy files into the right path in your Java installation, namely:
+  <b>$JAVA_HOME/jre/lib/security</b>
+  </li>
+  </ul>
+See also <a href="http://www.bouncycastle.org/documentation.html">the
+Bouncycastle documentation</a> for more information.
+</li>
+
+<li><h4>JSDL Editor Issues:</h4>
+<h5>Input field validations:</h5>
+The current implementation of the JSDL editor does not provide input field validation
+therefore, the user must provide correct input as per the JSDL Specification v.1.0.
+Input guidelines are given on the <a href="concepts/jobmanagement/editingJSDL.html"> help pages</a>
+of the respective JSDL editor pages.
+<h5>Additional Resources Sections Functionality:</h5>
+The Additional Resources Elements section of the Resources Page provides
+limited functionality.
+</li>
+
+<li><h4>Workflow Component:</h4>
+There are some known synchronisation issues when performing actions on the
+workflow subjobs, folders, job-descriptions, etc. from different sides:
+  <ul>
+  <li>
+  Adding and removing data-staging in workflow JSDLs have any changes
+  reflected in the graphical workflow job's ports, however this behaviour is
+  does not happen in reverse, i.e., changes in workflow ports (added or
+  removed) are not reflected by changes in the related JSDL's data-staging
+  information.
+  </li>
+  <li>
+  Updating a workflow JSDL will cause existing links between jobs to be
+  broken. However, they can easily be re-connected again through using the
+  'Calculate Job Dependencies' action.
+  </li>
+  <li>
+  Renaming of workflow JSDLs that are linked to a graphical workflow job
+  will cause the graphical job's reference to the JSDL file to be removed.
+  </li>
+  <li>
+  Renaming the .workflow folder or enclosed .workflow file will cause errors
+  if both folder and file are of different names.
+  </li>
+  </ul>
+</li>
+
+<li><h4>Putting Grid Projects into Subversion:</h4>
+If you want to share your grid projects using Subversion we recommend to
+use Subclipse as SVN plugin. Subversive tries to handle linked filesystems
+(e.g. grid filesystem connections) like local resources and fails in
+accessing them. 
+</li>
+</ul>
+
+</body>
+</html>

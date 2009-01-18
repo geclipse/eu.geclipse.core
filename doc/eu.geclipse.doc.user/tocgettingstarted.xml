@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+
+<toc
+  label="Getting Started"
+  link_to="toc.xml#geclipse_gettingstarted">
+  <topic
+    label="Prerequisites"
+    href="html/prerequisites/prerequisites.html" />
+</toc>

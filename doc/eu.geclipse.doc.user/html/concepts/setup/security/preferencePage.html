@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+<meta
+  http-equiv="Content-Type"
+  content="text/html; charset=iso-8859-1">
+<META
+  HTTP-EQUIV="Content-Style-Type"
+  CONTENT="text/css">
+<LINK
+  REL="STYLESHEET"
+  HREF="PLUGINS_ROOT/eu.geclipse.doc.user/book.css"
+  CHARSET="ISO-8859-1"
+  TYPE="text/css">
+<title>CA Certificates</title>
+<script
+  language="JavaScript"
+  src="PLUGINS_ROOT/org.eclipse.help/livehelp.js"> </script>
+</head>
+
+<body BGCOLOR="#ffffff">
+
+<h1>The Security Preference Page</h1>
+
+<p>
+The Security Preference Page contains a list of all trusted or untrusted
+certificates. Furthermore, it provides functionalities for managing this list.
+
+<ul>
+<li><a href="#overview">Overview</a>
+<li><a href="#customization">Customizing the certificate table</a>
+<li><a href="#operations">Certificate operations</a>
+</ul>
+
+<h2><a name="overview">Overview</a></h2>
+<p>
+The following screenshot shows the Security Preference Page containing a
+standard set of trusted CA certificates.
+
+<p>
+<img border="0" src="images/PreferencePage.png" alt="The g-Eclipse Security Preference Page">
+</p>
+
+<p>
+The certificates are displayed in a table with three columns. The first column
+is used to group the certificates and displays the Common Name (CN) of each
+certificate, the second column shows the trust state for each certificate and
+the third column shows the date until the certificate is valid.
+
+<p>
+Each certificate can have one of three trust states, i.e.
+<ul>
+<li><img border="0" src="images/cert_trust_never_obj.gif" alt="Untrusted"> <b>Untrusted</b> -
+These certificates are assumed to be untrusted. Whenever the certificate management
+is asked to trust such a certificate or certificates signed by such a certificate
+the trust is rejected. Untrusted certificates have priority over trusted certificates.
+Untrusted certificates are not stored across sessions.
+<li><img border="0" src="images/cert_trust_session_obj.gif" alt="Untrusted"> <b>Trusted</b> -
+These certificates or certificates signed by such a certificate are assumed to
+be trusted. Trusted certificates are not stored across sessions. So
+when restarting g-Eclipse the trusted certificates will not be available any more.
+<li><img border="0" src="images/cert_trust_permanent_obj.gif" alt="Untrusted"> <b>Always Trusted</b> -
+These certificates or certificates signed by such a certificate are assumed to
+be always trusted. Such certificates are stored across sessions.
+</ul>
+
+<h2><a name="customization">Customizing the certificate table</a></h2>
+<p>
+As stated before, the certificates can be grouped in the certificate table or
+can be shown as a plain list. If they are grouped, you can choose the criteria
+for grouping the certificates. All this can be done from the pop-up menu in the
+upper right corner just above the certificate table. This pop-up menu has two
+sub-menus that are explained as follows:
+<ul>
+<li><b>Mode</b>
+  <ul>
+  <li><b>Flat</b> All certificates are shown in a flat list without sub-structures.
+  <li><b>Grouped</b> All certificates are grouped by a specific criteria. The criteria
+  used for grouping the certificates can be chosen from the "Group by" sub-menu.
+  </ul>
+<li><b>Group by</b>
+  <ul>
+  <li><b>Trust</b> The certificates are grouped by their trust state.
+  <li><b>Country (C)</b> The certificates are grouped by their Subject DN's "C" tag.
+  <li><b>State (ST)</b> The certificates are grouped by their Subject DN's "ST" tag.
+  <li><b>Locality (L)</b> The certificates are grouped by their Subject DN's "L" tag.
+  <li><b>Organization (O)</b> The certificates are grouped by their Subject DN's "O" tag.
+  <li><b>Organizational Unit (OU)</b> The certificates are grouped by their Subject DN's "OU" tag.
+  </ul>
+</ul>
+
+<h2><a name="operations">Certificate operations</a></h2>
+<p>
+The Security Preference Page offers various operations to be performed on the
+certificates. These operations are accessible via the buttons on the right-hand
+side of the certificate table:
+<ul>
+<li><b><a href="addingCerts.html">Add...</a></b>: Add one or more certificates from
+a locally or remotely available certificates file.
+<li><b><a href="importingCerts.html">Import...</a></b>: Import one or more
+certificates from a certificate repository.
+<li><b><a href="certInfoDialog.html">Info...</a></b>: Show detailed information
+for the selected certificate.
+<li><b>Delete</b>: Remove the selected certificate(s) from the list of managed
+certificates.
+</ul>
+
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+<meta
+  http-equiv="Content-Type"
+  content="text/html; charset=iso-8859-1">
+<META
+  HTTP-EQUIV="Content-Style-Type"
+  CONTENT="text/css">
+<LINK
+  REL="STYLESHEET"
+  HREF="PLUGINS_ROOT/eu.geclipse.doc.user/book.css"
+  CHARSET="ISO-8859-1"
+  TYPE="text/css">
+<title>Application Deployment</title>
+<script
+  language="JavaScript"
+  src="PLUGINS_ROOT/org.eclipse.help/livehelp.js"> </script>
+</head>
+
+<body BGCOLOR="#ffffff">
+
+<h1>Application Deployment -- Install software</h1>
+
+<ul>
+<li><a href="#overview">Overview</a>
+<li><a href="#install">Installation</a>
+</ul>
+
+<h2><a name="overview">Overview</a></h2>
+<p>Application deployment deals with cases of software installation on computing elements. 
+The software can be binary or source codes in a tar or other archive form, or just a few 
+programs in a certain programming language. The task of a deployment is to make the software 
+ready on the CEs (i.e. all work nodes of a CE) for use of later. This means, the software is 
+installed on a specific directory which is stored in an environment variable. In some cases, the 
+software can be invoked using web services. To deploy, a user usually has to give instructions 
+how to install or build the software on the CEs.
+</p>
+
+<p> After installation, the deployed application will be published: there is an Application 
+folder combined with the VO where all applications for the VO are presented; an application is also 
+shown on the CE in the Computing folder.
+</p>
+
+<p>Only users who have got a role of deployer in his VO can deploy applications. To get this role, please
+contact your VO manager. For using the deployment functionality, this role must be specified during the
+ creation of an authentication token. 
+</p>
+
+<p>The deployment functionality is implemented using the g-Eclipse service job infrastructure. This means, every 
+deployment job is regarded as an operator's job. This job can be created, run, and traced. An uncompleted deployment 
+job will be continued after g-Eclipse is restarted again.
+</p>
+
+<h2><a name="install">Install a software</a></h2>
+
+<p>
+First the Deployment Wizard has to be invoked. As the deployment feature is combined with the service job framework, 
+this wizard can only be started via the New Operator's Job Wizard. There are two positions to start the operator's job wizard: either in the Operator's Jobs view 
+or at a Computing Element in the Computing folder of a VO. In the first case, there is a button for creating a new operator's job 
+and in the later case a context menu "Run Operator's Job..." can be used.
+</p>
+<img border="0" src="images/start.png" alt="Deployment Context Menu">
+
+<p>
+The first page for deployment is the project selection page. Deployers need to specify a grid project as a deployment location. 
+This project must hold the VO where the software installation will be performed. It is also a location to store related information 
+collected during the deployment process.
+</p>
+
+<img border="0" src="images/project.png" alt="Project seletion page">
+
+<p>
+For deployment, users have to provide the target, the source and the tag. The next wizard page  
+allows the deployer to specify the installation target. Users can select one or many CE(s). 
+The application will be deployed on all work nodes of all selected CEs. 
+</p>
+<img border="0" src="images/ce-select.png" alt="Deploy target selection">
+
+<p> 
+The following wizard page allows the user to give the install source: a software packet. The packet can 
+be some on-line created files contained in any project in the runtime workspace like the "cproject" 
+in the example; or some software packages or files already stored in the local disk or any storage 
+element. In the first case, the project must be linked to a grid project. In the second case, a file 
+dialog will be provided for deployers to select files from an existing Grid connection.
+</p>
+<img border="0" src="images/source-select.png" alt="Deploy source selection">
+
+<p>
+The last wizard page allows the user to specify a tag for identifying the installed software. 
+This tag will be used later to look for the application or to uninstall it. The tag can be just a name or 
+a combination of the name, the version, and the created date, time, etc.
+</p>
+<img border="0" src="images/tag.png" alt="Deployment tag setting">
+<p>
+After the last wizard page, additional pages may be shown depending on the underlying middleware. Please refer to 
+the concept part in the middleware category for more details.
+</p>
+
+<p> 
+After all information is provided, a service job is created. This job can be seen in the Operator's jobs view. 
+The job can be run via the context menu "Run Operator's Job". The status of the job can be observed in the Operator's
+job history view. In case of a successful deploy job, the status will be OK and the tag of the application (the installed software)
+will appear in both the folder Applications and the CE of a VO. 
+</p> 
+
+</body>
+</html>

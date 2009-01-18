@@ -1,0 +1,79 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css"> 
+	<LINK REL="STYLESHEET" HREF="PLUGINS_ROOT/eu.geclipse.globus.doc.user/book.css" CHARSET="ISO-8859-1" TYPE="text/css"> 
+	<title>Support for Web Services in g-Eclipse</title>
+    <script language="JavaScript" src="PLUGINS_ROOT/org.eclipse.help/livehelp.js"> </script>
+</head>
+
+<body BGCOLOR="#ffffff">
+
+<h1>Web Services support in g-Eclipse</h1>
+
+<p>
+g-Eclipse provides a basic support for Web Services (WS) and further relies on another Eclipse project
+- the Web Tools Platform (WTP) - which already provides a thorough WS support for Eclipse.
+
+<br><br>
+This page describes the WS usage within g-Eclipse and links to a brief introduction of WTP from where the user
+can continue to the WPT help pages for further study.
+
+<br><br>
+g-Eclipse provides a code stub generation wizard that assists in the generation of java code from <i>wsdl</i> files.<br>
+Before you start with the wizard, verify that you are in the Developer's Perspective and that you have a Java project in your
+workspace where you want the generated code to be saved to.
+Then you may start by invoking the g-Eclipse WS wizard by simply clicking on an available Data Service within your project
+as depicted in the figure bellow.
+<br><br>
+<img src="images/invocationOfWSWizard.png" alt="Invoking g-Eclipse Web Service Wizard">
+<br>Figure 1: Invoking the action to create a Web service client.
+<br><br>
+
+<br><br>
+The first part of the wizard will show a dialog box where you enter (or verify in case it has been filled out for you)
+the URI to your WSDL. Refer to Figure 2 to see an example.
+<br><br>
+<img src="images/firstWSWizardPage.png" alt="Specifying the WSDL URI">
+<br>Figure 2: Specifying the WSDL URI on the first page of the WS Wizard.
+<br><br>
+
+<br><br>
+Clicking Next will bring up the second page of the wizard. Here you should enter the path to the 
+directory where Axis2 is installed on your computer. Figure 3 shows this dialog box.
+<br><br>
+<img src="images/secondWSWizardPage.png" alt="Specifying the Axis2 home directory">
+<br>Figure 3: Specifying the Axis2 home directory on the second page of the WS Wizard.
+<br><br>
+
+<br><br>
+Once again, click Next and you will be taken to the last page of the wizard. 
+Here you are asked to enter the name of the Java project, where you want the generated code to
+be written into, and also the desired name of the plugin that will appear under the src folder of
+your project. Refer to Figures 4 and 5 to see an example of the filled out entries on the
+last page of the wizard and their effect on the created project.
+<br><br>
+<img src="images/thirdWSWizardPage.png" alt="Specifying the project and plugin names">
+<br>Figure 4: Specifying the project and plugin names on the last page of the WS Wizard.
+<br><br>
+<img src="images/generatedWSProjectStructure.png" alt="View of the workbench with the generated WS project">
+<br>Figure 5: View of the workbench with the WS wizard generated project.
+<br><br>
+
+As Figure 5 shows, the Java project you specified now contains all required dependencies and a plugin 
+with the generated code, which you can readily make use of or adjust to your additional needs.
+</p>
+
+<p>
+Additional Eclipse support for production and consumption of Web services is briefly described
+<a href="webservices.html">here</a>.
+</p>
+
+<br><ul>
+   <li> <a href="webservices.html">Web Services with Web Tools Platform</a></li>
+</ul><br>
+
+</body>
+</html>

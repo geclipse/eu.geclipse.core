@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cheatsheet title="Application Deployment -- install and uninstall a software">
+   <intro href="/eu.geclipse.doc.user/html/concepts/applicationdeployment/install.html">
+      <description>
+         This cheat sheet will show you how to install a software package on computing elements and how to remove them
+      </description>
+   </intro>
+   <item title="Open the g-Eclipse user perspective" dialog="true" skip="true">
+      <description>
+         If you are not already in the g-Eclipse user perspective, in the main menu
+          select <b>Window &gt; Open Perspective &gt; g-Eclipse (User)</b> or click
+          on the &quot;Click to Perform&quot; link below.
+      </description>
+   </item>
+   <item title="Lauch the deployment wizard" dialog="true" skip="true">
+      <description>
+         Right-click on the CE(s) in the <b>Computing</b> folder and choose <b>Operator&apos;s job</b> or open a <b>Operator&apos;s job</b> view and start a new test.
+      </description>
+   </item>
+   <item title="Select the deployment target" dialog="true" skip="true">
+      <description>
+         Select one or more computing elements on which the software will be installed.
+      </description>
+   </item>
+   <item title="Select the deployment source" dialog="true" skip="false">
+      <description>
+         Choose the software to install from referenced project or from a Grid connection
+      </description>
+   </item>
+   <item title="Specify a tag" dialog="true" skip="false">
+      <description>
+         Give the installed software a tag for identification
+      </description>
+   </item>
+   <item title="Uninstall an application" dialog="true" skip="true">
+      <description>
+         Strat the Test Wizard as described previoursly.
+Select <b>Application Uninstall</b> and give the script that describes how to remove the software.
+      </description>
+   </item>
+</cheatsheet>
