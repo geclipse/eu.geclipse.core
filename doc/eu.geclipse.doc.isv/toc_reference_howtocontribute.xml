@@ -22,6 +22,8 @@
      </topic>
      <topic href="html/how_to_contribute/jobManagement/statusUpdate.html" label="Implementing Job Status Update">
      </topic>
+     <topic href="html/how_to_contribute/jobManagement/jobDetailsView.html" label="Implementing details on Job Details View">
+     </topic>
   </topic>
   <topic href="html/how_to_contribute/gridJobDetails.html" label="Job Details View">
   </topic>
