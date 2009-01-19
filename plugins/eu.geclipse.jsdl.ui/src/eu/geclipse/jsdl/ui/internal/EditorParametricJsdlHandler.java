@@ -19,12 +19,13 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
-import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.jsdl.parametric.IGeneratedJsdl;
 import eu.geclipse.jsdl.parametric.IParametricJsdlHandler;
+import eu.geclipse.jsdl.parametric.ParametricJsdlException;
 import eu.geclipse.jsdl.ui.internal.pages.sections.SweepIterationsSection;
 
 /**
@@ -33,6 +34,7 @@ import eu.geclipse.jsdl.ui.internal.pages.sections.SweepIterationsSection;
 public class EditorParametricJsdlHandler implements IParametricJsdlHandler, IStructuredContentProvider {
   private List<List<String>> content = Collections.emptyList();
   private SweepIterationsSection section;
+  private SubMonitor monitor;
 
   /**
    * @param section
@@ -41,19 +43,20 @@ public class EditorParametricJsdlHandler implements IParametricJsdlHandler, IStr
     this.section = section;    
   }
 
-  public void generationFinished() throws ProblemException {
-    // empty implementation
+  public void generationFinished() throws ParametricJsdlException {
+    this.monitor.done();
   }
 
   public void generationStarted( final int generatedJsdls, final List<String> paramNames )
-    throws ProblemException
+    throws ParametricJsdlException
   {
     this.content = new ArrayList<List<String>>( generatedJsdls );
+    this.monitor.subTask( "Generating non-parametric JSDLs" );
+    this.monitor.setWorkRemaining( generatedJsdls );
   }
 
-  public void newJsdlGenerated( final IGeneratedJsdl generatedJsdl,
-                                final IProgressMonitor monitor )
-    throws ProblemException
+  public void newJsdlGenerated( final IGeneratedJsdl generatedJsdl )
+    throws ParametricJsdlException
   {
     List<String> columnNames = this.section.getLabelProvider().getColumnNames();
     List<String> values = null;
@@ -65,11 +68,12 @@ public class EditorParametricJsdlHandler implements IParametricJsdlHandler, IStr
         values.add( generatedJsdl.getIterationName() );
       } else {
         values.add( generatedJsdl.getParamValue( paramName ) );
-      }
+      }      
     }
     
     this.content.add( values );
     this.section.iterationGenerated( values );
+    this.monitor.worked( 1 );
   }
 
   public Object[] getElements( final Object inputElement ) {
@@ -82,5 +86,16 @@ public class EditorParametricJsdlHandler implements IParametricJsdlHandler, IStr
 
   public void inputChanged( final Viewer viewer, final Object oldInput, final Object newInput ) {
     // empty implementation
+  }
+
+  /**
+   * @param monitor progress monitor using during generation
+   */
+  public void setMonitor( final IProgressMonitor monitor ) {
+    this.monitor = SubMonitor.convert( monitor );    
+  }
+
+  public boolean isCanceled() {
+    return this.monitor.isCanceled();
   }
 }

@@ -20,6 +20,7 @@ import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.emf.common.util.EList;
@@ -27,12 +28,10 @@ import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
@@ -41,12 +40,12 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Hyperlink;
 import org.eclipse.ui.forms.widgets.TableWrapData;
 
-import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.jsdl.JSDLJobDescription;
 import eu.geclipse.jsdl.model.base.JobDefinitionType;
 import eu.geclipse.jsdl.model.sweep.AssignmentType;
 import eu.geclipse.jsdl.model.sweep.SweepType;
 import eu.geclipse.jsdl.parametric.IParametricJsdlGenerator;
+import eu.geclipse.jsdl.parametric.ParametricGenerationCanceled;
 import eu.geclipse.jsdl.parametric.ParametricJsdlGeneratorFactory;
 import eu.geclipse.jsdl.ui.adapters.jsdl.ParametricJobAdapter;
 import eu.geclipse.jsdl.ui.internal.EditorParametricJsdlHandler;
@@ -136,12 +135,15 @@ public class SweepIterationsSection extends JsdlFormPageSection {
     Job job = new Job( "Generating sweep for iterations" ) {
 
       @Override
-      protected IStatus run( final IProgressMonitor monitor ) {
-        IParametricJsdlGenerator generator = ParametricJsdlGeneratorFactory.getGenerator( jsdl );
+      protected IStatus run( final IProgressMonitor monitor ) {        
         try {
-          generator.generate( handler, monitor );
-        } catch( ProblemException exception ) {
-          final ProblemException pexc = exception;
+          IParametricJsdlGenerator generator = ParametricJsdlGeneratorFactory.getGenerator( jsdl.getAsString() );
+          handler.setMonitor( monitor );
+          generator.generate( handler );
+        } catch( ParametricGenerationCanceled canceledException ) {
+          throw new OperationCanceledException();
+        } catch( Exception exception ) {
+          final Exception pexc = exception;
           final Shell fShell = SweepIterationsSection.this.shell;
           fShell.getDisplay().asyncExec( new Runnable() {
 

@@ -19,12 +19,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.core.runtime.SubMonitor;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import eu.geclipse.core.reporting.ProblemException;
-import eu.geclipse.jsdl.internal.Activator;
+import eu.geclipse.jsdl.parametric.ParametricJsdlException;
 import eu.geclipse.jsdl.xpath.XPathDocument;
 
 class Assignment {
@@ -35,22 +34,23 @@ class Assignment {
    * @param pathDocument 
    * @param parameters which values will be substituted
    * @param function which describes values for parameters over iterations
+   * @throws ParametricJsdlException 
    * @throws ProblemException 
    */
-  public Assignment( final XPathDocument pathDocument,
+  Assignment( final XPathDocument pathDocument,
                                final NodeList parameters,
-                               final IFunction function ) throws ProblemException
+                               final IFunction function ) throws ParametricJsdlException
   {    
     this.function = function;
     initXpathExpressions( parameters );
     
     if( function == null ) {      
-        String msg = String.format( Messages.Assignment_errParameterWithoutFunction, this.xPathQueries.isEmpty() ? "" : this.xPathQueries.get( 0 ) ); //$NON-NLS-1$
-        throw new ProblemException( "eu.geclipse.jsdl.problem.sweepExtensionSyntaxError", msg, Activator.PLUGIN_ID );                  //$NON-NLS-1$
+        String msg = String.format( "Parameter: %s\nhas not defined any Value or Loop", this.xPathQueries.isEmpty() ? "" : this.xPathQueries.get( 0 ) ); //$NON-NLS-1$ //$NON-NLS-2$
+        throw new ParametricJsdlException( msg );
     }
   }
 
-  private void initXpathExpressions( final NodeList parameters ) throws ProblemException {
+  private void initXpathExpressions( final NodeList parameters ) throws ParametricJsdlException {
     this.xPathQueries = new ArrayList<String>( parameters.getLength() );
       for( int index = 0; index < parameters.getLength(); index++ ) {
         Node item = parameters.item( index );
@@ -58,8 +58,7 @@ class Assignment {
         
         if( textContent == null
             || textContent.length() == 0 ) {
-          String msg = Messages.Assignment_errParameterEmpty;
-          throw new ProblemException( "eu.geclipse.jsdl.problem.sweepExtensionSyntaxError", msg, Activator.PLUGIN_ID ); //$NON-NLS-1$
+          throw new ParametricJsdlException( "<sweep:Parameter> should contain XPath query selecting node in JSDL" ); //$NON-NLS-1$
         }
         this.xPathQueries.add( textContent );
       }   
@@ -69,16 +68,14 @@ class Assignment {
    * @param currentJsdl jsdl in which parameter value should be subtituted
    * @param functionIterator iterator, which return next value from function associated with with assignment
    * @param generationContext 
-   * @param monitor progress monitor
    * @throws ProblemException 
    */
-  public void setParamValue( final Iterator<String> functionIterator,
-                             final IGenerationContext generationContext,
-                             final SubMonitor monitor ) throws ProblemException
+  void setParamValue( final Iterator<String> functionIterator,
+                             final IGenerationContext generationContext ) throws ParametricJsdlException
   {
     String value = functionIterator.next();
     for( String xpathQuery : this.xPathQueries ) {
-      generationContext.setValue( xpathQuery, value, monitor );
+      generationContext.setValue( xpathQuery, value );
     }
   }
   
@@ -87,7 +84,7 @@ class Assignment {
   }
   
   
-  public List<String> getXPathQueries() {
-    return xPathQueries;
+  List<String> getXPathQueries() {
+    return this.xPathQueries;
   }
 }

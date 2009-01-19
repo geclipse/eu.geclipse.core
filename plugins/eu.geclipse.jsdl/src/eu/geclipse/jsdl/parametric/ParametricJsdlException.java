@@ -15,20 +15,32 @@
  *****************************************************************************/
 package eu.geclipse.jsdl.parametric;
 
-import eu.geclipse.jsdl.parametric.internal.ParametricJsdlGenerator;
 
 
 /**
- * Factory producing generator of non parametric JSDL based on parametric JSDL (containing sweep extension)
+ * Exception thrown in case of error occured during generating JSDL from parametric JSDL
  */
-public class ParametricJsdlGeneratorFactory {
-  
+public class ParametricJsdlException extends Exception {
+
   /**
-   * @param parametricJsdl JSDL with sweep-extensions, for which generator should be obtained 
-   * @return object generating non parametric JSDL
+   * 
    */
-  static public IParametricJsdlGenerator getGenerator( final String parametricJsdl ) {
-    return new ParametricJsdlGenerator( parametricJsdl );
+  private static final long serialVersionUID = -3771003389992793660L;
+
+  /**
+   * @param message
+   */
+  public ParametricJsdlException( final String message ) {
+    super( message );
   }
-  
+
+  /**
+   * @param message
+   * @param cause other exception, which causes that generation cannot be done
+   */
+  public ParametricJsdlException( final String message,
+                                  final Exception cause )
+  {
+    super( message, cause );
+  }
 }

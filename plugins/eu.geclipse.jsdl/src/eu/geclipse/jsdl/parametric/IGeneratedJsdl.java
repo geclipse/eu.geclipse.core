@@ -17,8 +17,6 @@ package eu.geclipse.jsdl.parametric;
 
 import org.w3c.dom.Document;
 
-import eu.geclipse.core.reporting.ProblemException;
-
 
 /**
  * Jsdl generated from parametric JSDL
@@ -33,9 +31,9 @@ public interface IGeneratedJsdl {
    * Returns value from any node in the generated Jsdl. It returns also values from nodes, which aren't parametrized 
    * @param paramName XPath query selecting XML node, from which value will be returned
    * @return value from Node
-   * @throws ProblemException
+   * @throws ParametricJsdlException exception thrown when value cannot be read
    */
-  String getParamValue( String paramName ) throws ProblemException;
+  String getParamValue( String paramName ) throws ParametricJsdlException;
   
   /**
    * @return String representing current iteration during generation process

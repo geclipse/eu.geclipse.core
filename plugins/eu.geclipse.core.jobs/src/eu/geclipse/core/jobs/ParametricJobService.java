@@ -50,8 +50,10 @@ import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.jsdl.JSDLJobDescription;
 import eu.geclipse.jsdl.parametric.IParametricJsdlGenerator;
+import eu.geclipse.jsdl.parametric.ParametricGenerationCanceled;
+import eu.geclipse.jsdl.parametric.ParametricJsdlException;
 import eu.geclipse.jsdl.parametric.ParametricJsdlGeneratorFactory;
-import eu.geclipse.jsdl.parametric.ParametricJsdlSaver;
+import eu.geclipse.jsdl.parametric.eclipse.ParametricJsdlSaver;
 
 
 /**
@@ -222,10 +224,16 @@ public class ParametricJobService implements IGridJobService {
       subMonitor.setWorkRemaining( 10 );
       subMonitor.subTask( Messages.getString("ParametricJobService.taskNameGeneratingJsdl") ); //$NON-NLS-1$
       IGridJob parametricGridJob = createParamJobStructure( jsdl, parent, jobName );
-      IParametricJsdlGenerator generator = ParametricJsdlGeneratorFactory.getGenerator( jsdl );
+      IParametricJsdlGenerator generator = ParametricJsdlGeneratorFactory.getGenerator( jsdl.getAsString() );
       IFolder generationTargetfolder = ((IFolder)parametricGridJob.getResource()).getFolder( Messages.getString("ParametricJobService.generatedJsdlFolder") ); //$NON-NLS-1$
-      ParametricJsdlSaver saver = new ParametricJsdlSaver( jsdl, generationTargetfolder );
-      generator.generate( saver, subMonitor.newChild( 1 ) );
+      ParametricJsdlSaver saver = new ParametricJsdlSaver( jsdl, generationTargetfolder, subMonitor.newChild( 1 ) );
+      try {
+        generator.generate( saver );
+      } catch( ParametricGenerationCanceled exception ) {
+        throw new OperationCanceledException();
+      } catch( ParametricJsdlException exception ) {
+        throw new ProblemException( "eu.geclipse.core.jobs.problem.generateParamJsdlFailed", exception, Activator.PLUGIN_ID ); //$NON-NLS-1$
+      }
       List<JSDLJobDescription> generatedJsdls = saver.getGeneratedJsdl();    
       submitGeneratedJsdl( parametricGridJob, generatedJsdls, subMonitor.newChild( 9 ), jobName );
       cleanupSubmission( generationTargetfolder );

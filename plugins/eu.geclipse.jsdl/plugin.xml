@@ -49,6 +49,10 @@
             description="Sweep parameters defined on the same level doesn&apos;t contain the same number of values."
             id="eu.geclipse.jsdl.problem.wrongNumberValues">
       </problem>
+      <problem
+            description="Unable to read JSDL content as string"
+            id="eu.geclipse.jsdl.problem.getAsStringFailed">
+      </problem>
    </extension>
 
 </plugin>

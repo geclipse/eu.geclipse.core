@@ -23,9 +23,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import eu.geclipse.core.reporting.ProblemException;
-import eu.geclipse.jsdl.internal.Activator;
-
 /**
  * Class simplifying querying of XML {@link Document} using XPath language.
  * Handle such things like namespaces, caching compiled expressions etc.
@@ -49,24 +46,20 @@ public class XPathDocument {
    * @param parentNode XML node, from which query will be executed.
    * @param xpathQuery
    * @return nodes selected by query
-   * @throws ProblemException
+   * @throws XPathExpressionException
    */
-  public NodeList getNodes( final Node parentNode, final String xpathQuery ) throws ProblemException {
-    try {
-      NodeList nodes = ( NodeList )getExpression( xpathQuery ).evaluate( parentNode, XPathConstants.NODESET );
-      return nodes;
-    } catch( XPathExpressionException exception ) {
-      throw new ProblemException( "eu.geclipse.jsdl.problem.getXpathNodesFailed", exception, Activator.PLUGIN_ID ); //$NON-NLS-1$
-    }
+  public NodeList getNodes( final Node parentNode, final String xpathQuery ) throws XPathExpressionException  {
+    NodeList nodes = ( NodeList )getExpression( xpathQuery ).evaluate( parentNode, XPathConstants.NODESET );
+    return nodes;
   }
   
   /**
    * Makes the same as {@link XPathDocument#getNodes(Node, String)} starting from document root
    * @param xpathQuery
    * @return nodes selected by query
-   * @throws ProblemException
+   * @throws XPathExpressionException
    */
-  public NodeList getNodes( final String xpathQuery ) throws ProblemException {
+  public NodeList getNodes( final String xpathQuery ) throws XPathExpressionException {
     return getNodes( this.document.getDocumentElement(), xpathQuery );
   }
   
@@ -74,16 +67,11 @@ public class XPathDocument {
    * Get String value from node selected by query.
    * @param parentNode
    * @param xpathQuery
-   * @return text value from selected node 
-   * @throws ProblemException
+   * @return text value from selected node
+   * @throws XPathExpressionException 
    */
-  public String getValue( final Node parentNode, final String xpathQuery ) throws ProblemException {
-    try {
-      return getExpression( xpathQuery ).evaluate( parentNode );
-    } catch( XPathExpressionException exception ) {
-      throw new ProblemException( "eu.geclipse.jsdl.problem.getXpathNodesFailed", exception, Activator.PLUGIN_ID ); //$NON-NLS-1$
-    }
-    
+  public String getValue( final Node parentNode, final String xpathQuery ) throws XPathExpressionException {
+    return getExpression( xpathQuery ).evaluate( parentNode );    
   }
   
 
@@ -95,16 +83,12 @@ public class XPathDocument {
     return xpathEngine;    
   }
   
-  private XPathExpression getExpression( final String xpathQuery ) throws ProblemException {
+  private XPathExpression getExpression( final String xpathQuery ) throws XPathExpressionException {
     XPathExpression expression = this.expressionsMap.get( xpathQuery );
     
     if( expression == null ) {
-      try {
-        expression = getXPathEngine().compile( xpathQuery );
-        this.expressionsMap.put( xpathQuery, expression );
-      } catch( XPathExpressionException exception ) {
-        throw new ProblemException( "eu.geclipse.jsdl.problem.createXPathQueryFailed", exception, Activator.PLUGIN_ID ); //$NON-NLS-1$
-      }      
+      expression = getXPathEngine().compile( xpathQuery );
+      this.expressionsMap.put( xpathQuery, expression );
     }    
     
     return expression;

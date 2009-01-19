@@ -13,7 +13,7 @@
  *     Mariusz Wojtysiak - initial API and implementation
  *     
  *****************************************************************************/
-package eu.geclipse.jsdl.parametric;
+package eu.geclipse.jsdl.parametric.eclipse;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -35,42 +35,55 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.SubMonitor;
 
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.jsdl.JSDLJobDescription;
 import eu.geclipse.jsdl.internal.Activator;
-
+import eu.geclipse.jsdl.parametric.IGeneratedJsdl;
+import eu.geclipse.jsdl.parametric.IParametricJsdlHandler;
+import eu.geclipse.jsdl.parametric.ParametricJsdlException;
 
 /**
- * Handler, which stores generated JSDLs in the workspace
+ * Handler, which stores generated JSDLs in the workspace. This class is placed
+ * in special package eu.geclipse.jsdl.parametric.eclipse, because it uses
+ * eclipse and g-eclipse libraries (e.g. ProblemException).<br>
+ * Please notice that package eu.geclipse.jsdl.parametric doesn't contain
+ * dependencies to eclipse in order to be used as standalone library!
  */
 public class ParametricJsdlSaver implements IParametricJsdlHandler {
 
   private JSDLJobDescription parametricJsdl;
   private IFolder targetFolder;
   private List<JSDLJobDescription> generatedJsdlList;
+  private SubMonitor monitor;
 
   /**
    * @param parametricJsdl
    * @param targetFolder
+   * @param subMonitor 
    */
-  public ParametricJsdlSaver( final JSDLJobDescription parametricJsdl, final IFolder targetFolder ) {
+  public ParametricJsdlSaver( final JSDLJobDescription parametricJsdl, final IFolder targetFolder, final SubMonitor subMonitor ) {
     super();
     this.parametricJsdl = parametricJsdl;
     this.targetFolder = targetFolder;
+    this.monitor = subMonitor;
   }
 
   /* (non-Javadoc)
    * @see eu.geclipse.jsdl.parametric.IParametricJsdlHandler#newJsdlGenerated(org.w3c.dom.Document, java.util.List)
    */
-  public void newJsdlGenerated( final IGeneratedJsdl generatedJsdl,
-                                final IProgressMonitor monitor ) throws ProblemException
+  public void newJsdlGenerated( final IGeneratedJsdl generatedJsdl ) throws ParametricJsdlException
   {
-    saveJsdl( generatedJsdl );
+    try {
+      saveJsdl( generatedJsdl );
+    } catch( ProblemException exception ) {
+      throw new ParametricJsdlException( Messages.ParametricJsdlSaver_errUnableToSaveGeneratedJsdl, exception );
+    }
+    this.monitor.worked( 1 );
   }
   
   private void saveJsdl( final IGeneratedJsdl generatedJsdl ) throws ProblemException
@@ -112,15 +125,20 @@ public class ParametricJsdlSaver implements IParametricJsdlHandler {
     return String.format( "%s%s.jsdl", new Path( this.parametricJsdl.getName() ).lastSegment(), generatedJsdl.getIterationName() );     //$NON-NLS-1$
   }
 
-  public void generationFinished() throws ProblemException {
-    // empty implementation
+  public void generationFinished() throws ParametricJsdlException {
+    this.monitor.done();
   }
 
-  public void generationStarted( final int generatedJsdl, final List<String> paramNames ) throws ProblemException {
-    this.generatedJsdlList = new ArrayList<JSDLJobDescription>();
-    
-    deleteTargetFolder();
-    createTargetFolder();      
+  public void generationStarted( final int generatedJsdl, final List<String> paramNames ) throws ParametricJsdlException {
+    try {
+      this.monitor.subTask( Messages.ParametricJsdlSaver_taskGeneratingJsdl );
+      this.generatedJsdlList = new ArrayList<JSDLJobDescription>();
+      this.monitor.setWorkRemaining( generatedJsdl );
+      deleteTargetFolder();
+      createTargetFolder();
+    } catch( ProblemException exception ) {
+      throw new ParametricJsdlException( Messages.ParametricJsdlSaver_errUnableToPrepareFolder, exception );
+    }
   }
   
   private void deleteTargetFolder() throws ProblemException {
@@ -128,7 +146,7 @@ public class ParametricJsdlSaver implements IParametricJsdlHandler {
       try {
         this.targetFolder.delete( true, null );
       } catch ( CoreException exception ) {
-        String msg = String.format( Messages.ParametricJsdlSaver_deleteExistingFolderFailed, this.targetFolder.getLocation().toString() );
+        String msg = String.format( Messages.ParametricJsdlSaver_errCannotDeleteFolder, this.targetFolder.getLocation().toString() );
         throw new ProblemException( "eu.geclipse.jsdl.problem.deleteExistingFolderFailed", msg, exception, Activator.PLUGIN_ID ); //$NON-NLS-1$
       }
     }
@@ -153,7 +171,7 @@ public class ParametricJsdlSaver implements IParametricJsdlHandler {
         try {
           folder.create( true, true, null );
         } catch ( CoreException exception ) {
-          String msg = String.format( Messages.ParametricJsdlSaver_createFolderFailed, folder.getLocation().toString() );
+          String msg = String.format( Messages.ParametricJsdlSaver_errCannotCreateFolder, folder.getLocation().toString() );
           throw new ProblemException( "eu.geclipse.jsdl.problem.createFolderFailed", msg, exception, Activator.PLUGIN_ID ); //$NON-NLS-1$
         }
       }      
@@ -165,6 +183,10 @@ public class ParametricJsdlSaver implements IParametricJsdlHandler {
    */
   public List<JSDLJobDescription> getGeneratedJsdl() {
     return this.generatedJsdlList;
+  }
+
+  public boolean isCanceled() {
+    return this.monitor.isCanceled();
   }
 
 }

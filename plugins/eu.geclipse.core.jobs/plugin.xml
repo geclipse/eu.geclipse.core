@@ -69,6 +69,10 @@
             description="Unable to tranform string to xml document"
             id="eu.geclipse.core.jobs.problem.string2XmlFailed">
       </problem>
+      <problem
+            description="Generation of JSDLs from parametric JSDL failed"
+            id="eu.geclipse.core.jobs.problem.generateParamJsdlFailed">
+      </problem>
    </extension>
    <extension
          point="eu.geclipse.core.jobs.jobStatus">

@@ -18,10 +18,6 @@ package eu.geclipse.jsdl.parametric;
 
 import java.util.List;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
-import eu.geclipse.core.reporting.ProblemException;
-
 /**
  * Handler passed to {@link IParametricJsdlGenerator}. Methods from that
  * interface are called during generation JSDLs for Parametric JSDL.<br>
@@ -37,16 +33,16 @@ public interface IParametricJsdlHandler {
    * @param generatedJsdls number of JSDLs, which will be generated (number of
    *          iterations)
    * @param paramNames list of XPath queries selecting nodes, which values will be replaced during generation
-   * @throws ProblemException
+   * @throws ParametricJsdlException may be thrown in case on error in order to interrupt generation process
    */
-  void generationStarted( int generatedJsdls, List<String> paramNames ) throws ProblemException;
+  void generationStarted( int generatedJsdls, List<String> paramNames ) throws ParametricJsdlException;
 
   /**
    * Called after last JSDL was generated
+   * @throws ParametricJsdlException may be thrown in case on error in order to interrupt generation process
    * 
-   * @throws ProblemException
    */
-  void generationFinished() throws ProblemException;
+  void generationFinished() throws ParametricJsdlException;
 
   /**
    * Called, when all parameters were substituted and new generated jsdl is
@@ -54,8 +50,12 @@ public interface IParametricJsdlHandler {
    * 
    * @param generatedJsdl new instance of jsdl
    * @param monitor progress monitor
-   * @throws ProblemException 
+   * @throws ParametricJsdlException may be thrown in case on error in order to interrupt generation process
    */
-  void newJsdlGenerated( IGeneratedJsdl generatedJsdl,
-                         IProgressMonitor monitor ) throws ProblemException;
+  void newJsdlGenerated( IGeneratedJsdl generatedJsdl ) throws ParametricJsdlException;
+  
+  /**
+   * @return <code>true</code> if generation process is cancelled and should be interrupted 
+   */
+  boolean isCanceled();
 }

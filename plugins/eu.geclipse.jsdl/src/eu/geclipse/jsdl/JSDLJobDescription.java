@@ -16,8 +16,11 @@
  *****************************************************************************/
 package eu.geclipse.jsdl;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -460,6 +463,29 @@ public class JSDLJobDescription extends ResourceGridContainer
       Activator.logException( exception );
     }
     return doc;
+  }
+
+  public String getAsString() throws ProblemException {
+    StringBuilder builder = new StringBuilder();
+
+    try {
+      InputStream inputStream = ( ( IFile )getResource() ).getContents();
+      BufferedReader reader = new BufferedReader( new InputStreamReader( inputStream ) );      
+      char buffer[] = new char[1024];
+      int readChars;
+
+      while( ( readChars = reader.read( buffer ) ) > 0 ) {
+        builder.append( buffer, 0, readChars );
+      }
+      
+    } catch( CoreException exception ) {
+      // TODO mariusz Auto-generated catch block
+      exception.printStackTrace();
+    } catch( IOException exception ) {
+      throw new ProblemException( "eu.geclipse.jsdl.problem.getAsStringFailed", exception, Activator.PLUGIN_ID );
+    }
+       
+    return builder.toString();
   }
 
   /**

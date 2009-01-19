@@ -4,13 +4,14 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import javax.xml.xpath.XPathExpressionException;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import eu.geclipse.core.reporting.ProblemException;
-import eu.geclipse.jsdl.internal.Activator;
+import eu.geclipse.jsdl.parametric.ParametricJsdlException;
 import eu.geclipse.jsdl.xpath.XPathDocument;
 
 
@@ -24,7 +25,7 @@ class FunctionIntegerLoop implements IFunction {
   int step;
   Set<Integer> exceptions;
 
-  FunctionIntegerLoop( final NodeList nodes, final XPathDocument xpath ) throws ProblemException {    
+  FunctionIntegerLoop( final NodeList nodes, final XPathDocument xpath ) throws ParametricJsdlException {    
     if( nodes.getLength() == 1 ) {
       Node item = nodes.item( 0 );      
       this.start = getIntAttribute( item, "sweepfunc:start", true, 0 ); //$NON-NLS-1$
@@ -32,18 +33,16 @@ class FunctionIntegerLoop implements IFunction {
       this.step = getIntAttribute( item, "sweepfunc:step", false, 1 ); //$NON-NLS-1$
       
       if( this.step == 0 ) {
-        String msg = Messages.FunctionIntegerLoop_errStepIsZero;
-        throw new ProblemException( "eu.geclipse.jsdl.problem.sweepExtensionSyntaxError", msg, Activator.PLUGIN_ID ); //$NON-NLS-1$
+        throw new ParametricJsdlException( "<sweepfunc:Loop> cannot has step equal to 0." ); //$NON-NLS-1$
       }
       
       this.exceptions = readExceptions( item, xpath );
-    } else {      
-      String msg = String.format( Messages.FunctionIntegerLoop_errOnlyOneLoopIsAllowed, Integer.valueOf( nodes.getLength() ) );
-      throw new ProblemException( "eu.geclipse.jsdl.problem.sweepExtensionSyntaxError", msg, Activator.PLUGIN_ID );       //$NON-NLS-1$
+    } else {
+      throw new ParametricJsdlException( "<sweep:Assignment> can contain only one <sweepfunc:Loop>, whilst contain %d loops." );       //$NON-NLS-1$
     }
   }
   
-  private int getIntAttribute( final Node item, final String attrName, final boolean mandatory, final int defaultValue ) throws ProblemException {
+  private int getIntAttribute( final Node item, final String attrName, final boolean mandatory, final int defaultValue ) throws ParametricJsdlException {
     int value = defaultValue;
     String textContent = null;
     
@@ -54,12 +53,12 @@ class FunctionIntegerLoop implements IFunction {
         textContent = attr.getTextContent();
         value = Integer.parseInt( textContent );
       } else if( mandatory ) {
-        String msg = String.format( Messages.FunctionIntegerLoop_errAttrIsMissing, attrName );
-        throw new ProblemException( "eu.geclipse.jsdl.problem.sweepExtensionSyntaxError", msg, Activator.PLUGIN_ID ); //$NON-NLS-1$
+        String msg = String.format( "Attribute <%s> is missing", attrName ); //$NON-NLS-1$
+        throw new ParametricJsdlException( msg );
       }
     } catch( NumberFormatException exception ) {
-      String msg = String.format( Messages.FunctionIntegerLoop_errIntegerExpected, attrName, textContent == null ? "" : textContent ); //$NON-NLS-1$
-      throw new ProblemException( "eu.geclipse.jsdl.problem.sweepExtensionSyntaxError", msg, exception, Activator.PLUGIN_ID ); //$NON-NLS-1$
+      String msg = String.format( "<%s> should contain integer number, whilst it contain value '%s'", attrName, textContent == null ? "" : textContent ); //$NON-NLS-1$ //$NON-NLS-2$
+      throw new ParametricJsdlException( msg, exception );
     }
     
     return value;
@@ -67,18 +66,25 @@ class FunctionIntegerLoop implements IFunction {
 
   private Set<Integer> readExceptions( final Node loopNode,
                                        final XPathDocument xpath )
-    throws ProblemException
+    throws ParametricJsdlException
   {
-    Set<Integer> exceptionsSet = new HashSet<Integer>();
-    if( loopNode instanceof Element ) {
-      Element loopElement = ( Element )loopNode;
-      NodeList nodeList = xpath.getNodes( loopElement, "./sweepfunc:Exception" ); //$NON-NLS-1$
-      for( int index = 0; index < nodeList.getLength(); index++ ) {
-        Node exceptionNode = nodeList.item( index );
-        exceptionsSet.add( Integer.valueOf( getIntAttribute( exceptionNode, "sweepfunc:value", false, 0 ) ) ); //$NON-NLS-1$
+    try {
+      Set<Integer> exceptionsSet = new HashSet<Integer>();
+      if( loopNode instanceof Element ) {
+        Element loopElement = ( Element )loopNode;
+        NodeList nodeList;
+        nodeList = xpath.getNodes( loopElement, "./sweepfunc:Exception" ); //$NON-NLS-1$
+        for( int index = 0; index < nodeList.getLength(); index++ ) {
+          Node exceptionNode = nodeList.item( index );
+          exceptionsSet.add( Integer.valueOf( getIntAttribute( exceptionNode,
+                                                               "sweepfunc:value", false, 0 ) ) ); //$NON-NLS-1$
+        }
       }
-    }
-    return exceptionsSet;
+      
+      return exceptionsSet;
+    } catch( XPathExpressionException exception ) {
+      throw new ParametricJsdlException( "Error occured during calling XPath query", exception ); //$NON-NLS-1$
+    }    
   }
   
   public Iterator<String> iterator() {

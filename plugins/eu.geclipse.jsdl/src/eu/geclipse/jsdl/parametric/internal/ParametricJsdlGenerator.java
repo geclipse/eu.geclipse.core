@@ -15,23 +15,23 @@
  *****************************************************************************/
 package eu.geclipse.jsdl.parametric.internal;
 
+import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.OperationCanceledException;
-import org.eclipse.core.runtime.SubMonitor;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.xpath.XPathExpressionException;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import eu.geclipse.core.reporting.ProblemException;
-import eu.geclipse.jsdl.JSDLJobDescription;
-import eu.geclipse.jsdl.internal.Activator;
 import eu.geclipse.jsdl.parametric.IParametricJsdlGenerator;
 import eu.geclipse.jsdl.parametric.IParametricJsdlHandler;
+import eu.geclipse.jsdl.parametric.ParametricGenerationCanceled;
+import eu.geclipse.jsdl.parametric.ParametricJsdlException;
 import eu.geclipse.jsdl.xpath.XPathDocument;
 
 
@@ -40,17 +40,18 @@ import eu.geclipse.jsdl.xpath.XPathDocument;
  */
 public class ParametricJsdlGenerator implements IParametricJsdlGenerator {
   private XPathDocument xpath;
-  private JSDLJobDescription parametricJsdl;
+  private String parametricJsdl;
 
   /**
    * @param parametricJsdl
    */
-  public ParametricJsdlGenerator( final JSDLJobDescription parametricJsdl ) {
-    this.parametricJsdl = parametricJsdl;
-    this.xpath = new XPathDocument( parametricJsdl.getXml() );
+  public ParametricJsdlGenerator( final String parametricJsdl ) {
+    this.parametricJsdl = parametricJsdl;    
   }
 
-  private void processSweeps( final NodeList sweeps, final IGenerationContext generationContext, final List<Integer> iterationsStack, final SubMonitor monitor ) throws ProblemException {    
+  private void processSweeps( final NodeList sweeps, final IGenerationContext generationContext, final List<Integer> iterationsStack ) throws ParametricJsdlException {    
+    
+    try {
     iterationsStack.add( new Integer( 0 ) );
     
     for( int index = 0; index < sweeps.getLength(); index++ ) {
@@ -60,32 +61,33 @@ public class ParametricJsdlGenerator implements IParametricJsdlGenerator {
       if( sweepItem instanceof Element ) {
         Element currentSweep = ( Element )sweepItem;
         
-        processAssignments( this.xpath.getNodes( currentSweep, "./sweep:Assignment" ), assignmentList, monitor ); //$NON-NLS-1$
+        processAssignments( this.xpath.getNodes( currentSweep, "./sweep:Assignment" ), assignmentList, generationContext ); //$NON-NLS-1$
         NodeList childSweeps = this.xpath.getNodes( currentSweep, "./sweep:Sweep" ); //$NON-NLS-1$
         List<Iterator<String>> iterators = getIterators( assignmentList );
         
         while( hasNext( iterators ) ) {
-          testCancelled( monitor );
+          testCanceled( generationContext );
           // we will modify copy of jsdl
           IGenerationContext newContext = generationContext.clone();
-          setParamsValue( assignmentList, iterators, newContext, monitor );   
+          setParamsValue( assignmentList, iterators, newContext );
           
           if( childSweeps.getLength() > 0 ) {
-            processSweeps( childSweeps, newContext, iterationsStack, monitor );
+            processSweeps( childSweeps, newContext, iterationsStack );
           } else {            
-            newContext.storeGeneratedJsdl( iterationsStack, monitor );
-            monitor.worked( 1 );
+            newContext.storeGeneratedJsdl( iterationsStack );
           }
           
           increaseCurrentIteration( iterationsStack );
         }        
       } else {
-        String msg = String.format( Messages.ParametricJsdlGenerator_errSweepShouldBeElement );
-        throw new ProblemException( "eu.geclipse.jsdl.problem.sweepExtensionSyntaxError", msg, Activator.PLUGIN_ID ); //$NON-NLS-1$
+        throw new ParametricJsdlException( "<sweep:Sweep> should be instance of XML Element" ); //$NON-NLS-1$
       }
     }
     
     iterationsStack.remove( iterationsStack.size() - 1 );
+    } catch( XPathExpressionException exception ) {
+      throw new ParametricJsdlException( "Error occured during calling XPath query", exception ); //$NON-NLS-1$
+    }
   }
 
   private boolean hasNext( final List<Iterator<String>> iterators ) {
@@ -120,77 +122,76 @@ public class ParametricJsdlGenerator implements IParametricJsdlGenerator {
 
   private void setParamsValue( final List<Assignment> assignmentList,
                                     final List<Iterator<String>> functionIterators,
-                                    final IGenerationContext generationContext, final SubMonitor monitor ) throws ProblemException  {
+                                    final IGenerationContext generationContext ) throws ParametricJsdlException  {
     Iterator<Iterator<String>> fIterator = functionIterators.iterator();
     Iterator<Assignment> aIterator = assignmentList.iterator();
     while( fIterator.hasNext() && aIterator.hasNext() ) {
-      testCancelled( monitor );
+      testCanceled( generationContext );
       Assignment assignment = aIterator.next();
       Iterator<String> functionIterator = fIterator.next();
       
       if( functionIterator.hasNext() ) {
-        assignment.setParamValue( functionIterator, generationContext, monitor );
+        assignment.setParamValue( functionIterator, generationContext );
       } else {
         throw createWrongNrValueException( assignmentList );
       }
     }
   }
 
-  private ProblemException createWrongNrValueException( final List<Assignment> assignmentList )
+  private ParametricJsdlException createWrongNrValueException( final List<Assignment> assignmentList )
   {
-    ProblemException problemException = new ProblemException( "eu.geclipse.jsdl.problem.wrongNumberValues", Activator.PLUGIN_ID ); //$NON-NLS-1$
-    String desc = Messages.ParametricJsdlGenerator_descParametersWithWrongNr;
+    StringBuilder builder = new StringBuilder( "Following parameters should contain the same number of values:" ); //$NON-NLS-1$
    
     for( Assignment assignment : assignmentList ) {
       for( String query : assignment.getXPathQueries() ) {
-        desc = desc + "\n" + query; //$NON-NLS-1$
+        builder.append( "\n" ); //$NON-NLS-1$
+        builder.append( query );
       }
     }
-    
-    problemException.getProblem().addReason( desc );
-    
-    return problemException;
+
+    return new ParametricJsdlException( builder.toString() );
   }
 
   private void processAssignments( final NodeList assignmentsList,
-                                   final List<Assignment> assignmentList, final SubMonitor monitor ) throws ProblemException
+                                   final List<Assignment> assignmentList, final IGenerationContext context ) throws ParametricJsdlException 
   {
-    for( int index = 0; index < assignmentsList.getLength(); index++ ) {
-      testCancelled( monitor );
-      Node item = assignmentsList.item( index );
-      
-      if( item instanceof Element ) {
-        Element assignment = ( Element )item;
+    try {
+      for( int index = 0; index < assignmentsList.getLength(); index++ ) {
+        testCanceled( context );
+        Node item = assignmentsList.item( index );
         
-        NodeList parameters = this.xpath.getNodes( assignment, "./sweep:Parameter" ); //$NON-NLS-1$
-        NodeList values = this.xpath.getNodes( assignment, "./sweepfunc:Values/sweepfunc:Value" ); //$NON-NLS-1$
-        NodeList loops = this.xpath.getNodes( assignment, "./sweepfunc:Loop" ); //$NON-NLS-1$
-
-        if( values.getLength() > 0
-            && loops.getLength() > 0 ) {
-          String msg = Messages.ParametricJsdlGenerator_errTwoFunctionsDefined;
-          throw new ProblemException( "eu.geclipse.jsdl.problem.sweepExtensionSyntaxError", msg, Activator.PLUGIN_ID );  //$NON-NLS-1$
+        if( item instanceof Element ) {
+          Element assignment = ( Element )item;
+          
+          NodeList parameters = this.xpath.getNodes( assignment, "./sweep:Parameter" ); //$NON-NLS-1$
+          NodeList values = this.xpath.getNodes( assignment, "./sweepfunc:Values/sweepfunc:Value" ); //$NON-NLS-1$
+          NodeList loops = this.xpath.getNodes( assignment, "./sweepfunc:Loop" ); //$NON-NLS-1$
+  
+          if( values.getLength() > 0
+              && loops.getLength() > 0 ) {
+            throw new ParametricJsdlException( "<sweepfunc:Values> and <sweepfunc:Loop> cannot be defined both at the same time in one <sweep:Assignment>" ); //$NON-NLS-1$
+          }
+  
+          IFunction function = null;
+          
+          if( values.getLength() > 0 ) {
+            function = new FunctionValues( values );
+          } else if( loops.getLength() > 0 ) {
+            function = new FunctionIntegerLoop( loops, this.xpath );
+          }
+          
+          assignmentList.add( new Assignment( this.xpath, parameters, function ) );
+                  
+        }else {
+          throw new ParametricJsdlException( "<sweep:Assignment> should be instance of XML Element" ); //$NON-NLS-1$
         }
-
-        IFunction function = null;
-        
-        if( values.getLength() > 0 ) {
-          function = new FunctionValues( values );
-        } else if( loops.getLength() > 0 ) {
-          function = new FunctionIntegerLoop( loops, this.xpath );
-        }
-        
-        assignmentList.add( new Assignment( this.xpath, parameters, function ) );
-                
-      }else {
-        String msg = Messages.ParametricJsdlGenerator_errAssignmentShouldBeElement;
-        throw new ProblemException( "eu.geclipse.jsdl.problem.sweepExtensionSyntaxError", msg, Activator.PLUGIN_ID ); //$NON-NLS-1$
       }
-    }
-    
-    if( assignmentList.isEmpty() ) {      
-      String msg = Messages.ParametricJsdlGenerator_errSweepShouldContainAssignment;
-      throw new ProblemException( "eu.geclipse.jsdl.problem.sweepExtensionSyntaxError", msg, Activator.PLUGIN_ID );       //$NON-NLS-1$
+      
+      if( assignmentList.isEmpty() ) {
+        throw new ParametricJsdlException( "<sweep:Sweep> should contain at least one <sweep:Assignment> as a child." ); //$NON-NLS-1$
+      }
+    } catch( XPathExpressionException exception ) {
+      throw new ParametricJsdlException( "Error occured during calling XPath query", exception ); //$NON-NLS-1$
     }
   }
 
@@ -204,31 +205,42 @@ public class ParametricJsdlGenerator implements IParametricJsdlGenerator {
     return changedDocument;
   }
   
-  public void generate( final IParametricJsdlHandler handler,
-                        final IProgressMonitor monitor ) throws ProblemException
+  public void generate( final IParametricJsdlHandler handler ) throws ParametricJsdlException, ParametricGenerationCanceled
   {
-    SubMonitor subMonitor = SubMonitor.convert( monitor );
-    
-    Document parametricXml = this.parametricJsdl.getXml();
-    Document baseJsdl = removeSweepNodes( parametricXml );
-    IGenerationContext generationContext = new GenerationContext( this.parametricJsdl, baseJsdl, handler, this.xpath );
-
-    NodeList sweeps = this.xpath.getNodes( parametricXml.getDocumentElement(), "./sweep:Sweep" ); //$NON-NLS-1$
-    
-    // first generation only for validation and gathering information
-    CounterGenerationContext counter = new CounterGenerationContext();      
-    processSweeps( sweeps, counter, new ArrayList<Integer>(), subMonitor.newChild( 0 ) );    
-    handler.generationStarted( counter.getIterations(), counter.getParameters() );
-    
-    subMonitor.subTask( Messages.ParametricJsdlGenerator_taskGeneratingJsdl );
-    subMonitor.setWorkRemaining( counter.getIterations() );
-    processSweeps( sweeps, generationContext, new ArrayList<Integer>(), subMonitor );
-    handler.generationFinished();
+    try {
+      Document parametricXml = createDomDocument();
+      this.xpath = new XPathDocument( parametricXml );      
+      Document baseJsdl = removeSweepNodes( parametricXml );
+      IGenerationContext generationContext = new GenerationContext( baseJsdl, handler, this.xpath );
+  
+      NodeList sweeps = this.xpath.getNodes( parametricXml.getDocumentElement(), "./sweep:Sweep" ); //$NON-NLS-1$
+      
+      // first generation only for validation and gathering information
+      CounterGenerationContext counter = new CounterGenerationContext( handler );
+      processSweeps( sweeps, counter, new ArrayList<Integer>() );    
+      handler.generationStarted( counter.getIterations(), counter.getParameters() );
+      
+      processSweeps( sweeps, generationContext, new ArrayList<Integer>() );
+    } catch( XPathExpressionException exception ) {
+      throw new ParametricJsdlException( "Error occured during calling XPath query", exception ); //$NON-NLS-1$
+    } finally {
+      handler.generationFinished();
+    }
   }
 
-  private void testCancelled( final IProgressMonitor monitor ) {
-    if( monitor.isCanceled() ) {
-      throw new OperationCanceledException();
+  private Document createDomDocument() throws ParametricJsdlException {    
+    try {
+      DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+      factory.setNamespaceAware( true );      
+      return factory.newDocumentBuilder().parse( new ByteArrayInputStream( this.parametricJsdl.getBytes() ) );
+    } catch( Exception exception ) {
+      throw new ParametricJsdlException( "Unable to parse parametric JSDL as xml file", exception ); //$NON-NLS-1$
+    }    
+  }
+
+  private void testCanceled( final IGenerationContext context ) throws ParametricGenerationCanceled {
+    if( context.getHandler().isCanceled() ) {
+      throw new ParametricGenerationCanceled();
     }
   }
 

@@ -20,17 +20,23 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.eclipse.core.runtime.SubMonitor;
-
-import eu.geclipse.core.reporting.ProblemException;
+import eu.geclipse.jsdl.parametric.IParametricJsdlHandler;
+import eu.geclipse.jsdl.parametric.ParametricJsdlException;
 
 /**
  * Context, which just calculate how many jsdl will be generated and ignore
  * parameters substitution and storing jsdl.
  */
-public class CounterGenerationContext implements IGenerationContext {
+class CounterGenerationContext implements IGenerationContext {
   private int iterations = 0;
   private Set<String> parameters = new TreeSet<String>();
+  private IParametricJsdlHandler handler;
+
+  
+  public CounterGenerationContext( final IParametricJsdlHandler handler ) {
+    super();
+    this.handler = handler;
+  }
 
   /*
    * (non-Javadoc)
@@ -40,8 +46,7 @@ public class CounterGenerationContext implements IGenerationContext {
    * org.eclipse.core.runtime.SubMonitor)
    */
   public void setValue( final String xpathQuery,
-                        final String value,
-                        final SubMonitor subMonitor ) throws ProblemException
+                        final String value ) throws ParametricJsdlException
   {
     this.parameters.add( xpathQuery );
   }
@@ -52,9 +57,8 @@ public class CounterGenerationContext implements IGenerationContext {
    * eu.geclipse.jsdl.parametric.IGenerationContext#storeGeneratedJsdl(java.
    * util.List, org.eclipse.core.runtime.SubMonitor)
    */
-  public void storeGeneratedJsdl( final List<Integer> iterationsStack,
-                                  final SubMonitor subMonitor )
-    throws ProblemException
+  public void storeGeneratedJsdl( final List<Integer> iterationsStack )
+    throws ParametricJsdlException
   {
     this.iterations++;
   }
@@ -75,5 +79,9 @@ public class CounterGenerationContext implements IGenerationContext {
     List<String> list = new ArrayList<String>( this.parameters.size() );
     list.addAll( this.parameters );
     return list;
+  }
+
+  public IParametricJsdlHandler getHandler() {
+    return this.handler;
   }
 }

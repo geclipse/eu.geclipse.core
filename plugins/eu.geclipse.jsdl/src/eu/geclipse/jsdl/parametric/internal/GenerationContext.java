@@ -17,23 +17,22 @@ package eu.geclipse.jsdl.parametric.internal;
 
 import java.util.List;
 
-import org.eclipse.core.runtime.SubMonitor;
+import javax.xml.xpath.XPathExpressionException;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import eu.geclipse.core.reporting.ProblemException;
-import eu.geclipse.jsdl.JSDLJobDescription;
 import eu.geclipse.jsdl.parametric.IGeneratedJsdl;
 import eu.geclipse.jsdl.parametric.IParametricJsdlHandler;
+import eu.geclipse.jsdl.parametric.ParametricJsdlException;
 import eu.geclipse.jsdl.xpath.XPathDocument;
 
 /**
  * This context replaces values in DOM Document containing jsdl and pass serialization to handler  
  */
 public class GenerationContext implements IGenerationContext, IGeneratedJsdl {
-  private JSDLJobDescription parametricJsdl;
   private IParametricJsdlHandler handler;
   private Document currentJsdl;
   private String currentJsdlName;  
@@ -45,16 +44,15 @@ public class GenerationContext implements IGenerationContext, IGeneratedJsdl {
    * @param handler
    * @param xpathDocument 
    */
-  GenerationContext( final JSDLJobDescription parametricJsdl, final Document baseJsdl, final IParametricJsdlHandler handler, final XPathDocument xpathDocument ) {        
+  GenerationContext( final Document baseJsdl, final IParametricJsdlHandler handler, final XPathDocument xpathDocument ) {        
     this.handler = handler;
     this.currentJsdl = baseJsdl;
-    this.parametricJsdl = parametricJsdl;
     this.xpath = xpathDocument;
   }  
 
   @Override
   public IGenerationContext clone() {
-    GenerationContext newContext = new GenerationContext( this.parametricJsdl, ( Document )this.currentJsdl.cloneNode( true ), this.handler, this.xpath );
+    GenerationContext newContext = new GenerationContext( ( Document )this.currentJsdl.cloneNode( true ), this.handler, this.xpath );
     return newContext;
   }
 
@@ -62,20 +60,23 @@ public class GenerationContext implements IGenerationContext, IGeneratedJsdl {
    * @see eu.geclipse.jsdl.parametric.IGenerationContext#setValue(java.lang.String, javax.xml.xpath.XPathExpression, java.lang.String, org.eclipse.core.runtime.SubMonitor)
    */
   public void setValue( final String xpathQuery,
-                        final String value,
-                        final SubMonitor subMonitor ) throws ProblemException
+                        final String value ) throws ParametricJsdlException
   {
-    NodeList nodeList = this.xpath.getNodes( this.currentJsdl, xpathQuery );
-    for( int index = 0; index < nodeList.getLength(); index++ ) {
-      Node item = nodeList.item( index );
-      item.setTextContent( value );      
+    try {
+      NodeList nodeList = this.xpath.getNodes( this.currentJsdl, xpathQuery );
+      for( int index = 0; index < nodeList.getLength(); index++ ) {
+        Node item = nodeList.item( index );
+        item.setTextContent( value );      
+      }
+      updateJsdlDescription( xpathQuery, value );
+    } catch( XPathExpressionException exception ){
+      throw new ParametricJsdlException( "Error occured during calling XPath query" ); //$NON-NLS-1$
     }
-    updateJsdlDescription( xpathQuery, value );
   }
 
-  public void storeGeneratedJsdl( final List<Integer> iterationsStack, final SubMonitor subMonitor ) throws ProblemException {
+  public void storeGeneratedJsdl( final List<Integer> iterationsStack ) throws ParametricJsdlException {
     this.currentJsdlName = createIterationName( iterationsStack );
-    this.handler.newJsdlGenerated( this, subMonitor );
+    this.handler.newJsdlGenerated( this );
   }
   
   private String createIterationName( final List<Integer> iterationsStack ) {
@@ -86,7 +87,7 @@ public class GenerationContext implements IGenerationContext, IGeneratedJsdl {
     return builder.toString();
   }
  
-  private void updateJsdlDescription( final String paramName, final String value ) throws ProblemException {
+  private void updateJsdlDescription( final String paramName, final String value ) throws XPathExpressionException {
     NodeList nodes = this.xpath.getNodes( this.currentJsdl.getDocumentElement(), "jsdl:JobDescription/jsdl:JobIdentification/jsdl:Description" ); //$NON-NLS-1$
     Element description = null;
     if( nodes == null 
@@ -112,11 +113,17 @@ public class GenerationContext implements IGenerationContext, IGeneratedJsdl {
     return this.currentJsdlName;
   }
 
-  public String getParamValue( final String paramName ) throws ProblemException {
-    return this.xpath.getValue( this.currentJsdl, paramName );
+  public String getParamValue( final String paramName )
+    throws ParametricJsdlException
+  {
+    try {
+      return this.xpath.getValue( this.currentJsdl, paramName );
+    } catch( XPathExpressionException exception ) {
+      throw new ParametricJsdlException( "Error occured during calling XPath query" ); //$NON-NLS-1$
+    }
   }
   
-  private Element createXmlElement( final Element parent, final String pathString ) throws ProblemException {
+  private Element createXmlElement( final Element parent, final String pathString ) throws XPathExpressionException {
     Element element = parent;    
     
     for( String currentNodeName : pathString.split( "/" ) ) { //$NON-NLS-1$
@@ -137,6 +144,10 @@ public class GenerationContext implements IGenerationContext, IGeneratedJsdl {
     }
     
     return element;
+  }
+
+  public IParametricJsdlHandler getHandler() {
+    return this.handler;
   }
   
 
