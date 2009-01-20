@@ -74,19 +74,22 @@ Please refer to XSD document for detailed information.
     also <code>label</code> and <code>paramName</code> elements should be created. The
     first of them represents <code>org.eclipse.swt.widgets.Label</code> widget that
     will precede text component with field description. <code>paramName</code> stands
-    for JSDL element to which value of this text field will be written.
+    for JSDL element to which value of this text field will be written.</li>
+    
     <li><code>textWithFileChooser</code> - the same as <code>text</code> element
     (including children of it), but has additional
     <code>org.eclipse.swt.widgets.Button</code> coming after SWT's text field.
     Pressing this button will result in opening
     <code>eu.geclipse.ui.dialogs.GridFileDialog</code>. Selection made in this dialog
-    will be passed to SWT's text field.
+    will be passed to SWT's text field.</li>
+    
     <li><code>list</code> - represents <code>org.eclipse.swt.widgets.Combo</code> widget.
     It extends <code>text</code> element, which means that it inherits all his
     children elements, but in addition has its own <code>value</code> and
     <code>writeable</code> sub-elements. In <code>value</code>s elements list content
     should be defined. <code>writeable</code> decides whether user will be able to
-    edit SWT's combo's entries. 
+    edit SWT's combo's entries. </li>
+    
     <li><code>multipleArguments</code> - control used to keep multiple values of
     one parameter. Values are kept in table
     (<code>org.eclipse.swt.widgets.Table</code>) - in which their String values are
@@ -96,17 +99,19 @@ Please refer to XSD document for detailed information.
     also for this one <code>paramName</code> should be defined to associate this
     control with JSDL element. Also the range of number of parameter's values
     can be determied - using <code>minArgumentsCount</code> and
-    <code>maxArgumentsCount</code> elements.
+    <code>maxArgumentsCount</code> elements.</li>
+    
     <li><code>textDataStaging</code> - the same as <code>textWithFileChooser</code>, but
     for chosen file also the <code>DataStaging</code> element in JSDL will be
     created. There is possibility to determine if this file should be staged in
     or out onto Grid by giving element <code>file</code> values ``in'' or ``out''
-    respectively.
+    respectively.</li>
+    
     <li><code>multipleDataStaging</code> - this is intended to combine
     textDataStaging with multipleArguments, but as for release 1.0 there's no
-    support for this element.
-  </ui> 
- </ui> 
+    support for this element.</li>
+  </ul> 
+ </ul> 
 
 <p><b>NOTE</b>: <code>paramName</code> element which must be defined for all of
   the components' element is the name of parameter that will be passed to
