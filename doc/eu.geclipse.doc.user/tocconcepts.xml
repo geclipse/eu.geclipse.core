@@ -122,6 +122,8 @@
       href="html/concepts/jobmanagement/creatingWorkflows.html">
     </topic>
     <anchor id="geclipse_concepts_jobmanagement" />
+    <topic href="html/concepts/jobmanagement/appsParam/creatingAppsParam.html" label="Application Parameters Wizard Extension">
+    </topic>
   </topic>
 
   <topic label="Application Development">

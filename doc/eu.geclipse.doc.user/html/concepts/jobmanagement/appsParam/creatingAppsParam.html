@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+<LINK REL="STYLESHEET" HREF="PLUGINS_ROOT/eu.geclipse.doc.user/book.css"
+	CHARSET="ISO-8859-1" TYPE="text/css">
+<title>g-Eclipse - Create a Job</title>
+<script language="JavaScript"
+	src="PLUGINS_ROOT/org.eclipse.help/livehelp.js"> </script>
+</head>
+
+<body BGCOLOR="#ffffff">
+
+<h1>g-Eclipse - Defining Application Parameters</h1>
+
+<h3>Introduction</h3>
+<p>Application Parameters allow user to define extension of New Job
+Wizard in form of additional wizard's pages without writing even single
+line of programming code. From user's point of view this is declarative
+mechanism based on XML files.</p>
+<p>If any Application Parameters are defined they will be displayed
+on Executable page in New Job Wizard in <i>Application name</i> list (by
+application name parameter). Choosing one of the applications from the
+list will result in adding new pages to wizard (defined by XML file
+associated with Application Parameters). If not empty JSDL file is set
+for Application Parameters it will be used as a base for creating new
+job description by Wizard.</p>
+
+<h3>Defining Application Parameters</h3>
+<p>Application Parameters can be defined using <i>Window >
+Preferences > g-Eclipse > Application Parameters</i> menu, by providing the
+following information:
+<ul>
+	<li><i>Application Name</i> - name of the application, it will be
+	listed on Executable page in New Job Wizard in the <i>Application
+	name</i> list
+	<li><i>Application Path</i> - path to the executable file of the
+	application. This should be absolute path on the host on which
+	application is to be launched. This parameter is optional.
+	<li><i>XML Path</i> - absolute path to the local XML file
+	describing additional New Job Wizard content. This XML is defined by <code>ui_definition.xsd"</code>
+	schema file located in <code>eu.geclipse.jsdl.ui</code> plug-in in <code>xml</code>
+	subdirectory.
+	<li><i>JSDL Path</i> - path to the local JSDL file. This file is
+	used as a base file when creating new JSDL file in New Job Wizard. If
+	some of the fields for which Wizard's fields provide input are defined
+	in this file the corresponding fields in Wizard will be pre-populated
+	with values taken from this JSDL file.</li>
+</ul>
+</p>
+
+<p><img src="../images/application_parameters_menu.png"
+	alt="Application Parameters menu" /></p>
+
+<h3>Additional wizard's pages definition</h3>
+<p>Any extra wizard's pages should be defined in XML file passed to application
+parameters through <i>XML Path</i> field in Preferences dialog. This XML is
+described by <code>ui_definition</code> (this file can be found in
+<code>eu.geclipse.jsdl.ui/xml/</code>) XSD document.</p>
+<p>The basic document structure, listing main XML elements is described below.
+Please refer to XSD document for detailed information.
+<ul>
+  <li><code>pluginPages</code> - XML document root element, within it <code>page</code>
+  elements are contained
+  <li><code>page</code> - each <code>page</code> element defines new wizard's page.
+  Graphical components of page should be defined inside this element.
+  Elements components supported by parametric wizard extensions are the
+  following:
+  <ul>
+    <li><code>text</code> - defines simple text filed
+    (<code>org.eclipse.swt.widgets.Text</code>). As a children of this XML element
+    also <code>label</code> and <code>paramName</code> elements should be created. The
+    first of them represents <code>org.eclipse.swt.widgets.Label</code> widget that
+    will precede text component with field description. <code>paramName</code> stands
+    for JSDL element to which value of this text field will be written.
+    <li><code>textWithFileChooser</code> - the same as <code>text</code> element
+    (including children of it), but has additional
+    <code>org.eclipse.swt.widgets.Button</code> coming after SWT's text field.
+    Pressing this button will result in opening
+    <code>eu.geclipse.ui.dialogs.GridFileDialog</code>. Selection made in this dialog
+    will be passed to SWT's text field.
+    <li><code>list</code> - represents <code>org.eclipse.swt.widgets.Combo</code> widget.
+    It extends <code>text</code> element, which means that it inherits all his
+    children elements, but in addition has its own <code>value</code> and
+    <code>writeable</code> sub-elements. In <code>value</code>s elements list content
+    should be defined. <code>writeable</code> decides whether user will be able to
+    edit SWT's combo's entries. 
+    <li><code>multipleArguments</code> - control used to keep multiple values of
+    one parameter. Values are kept in table
+    (<code>org.eclipse.swt.widgets.Table</code>) - in which their String values are
+    presented (because of the LabelProvider used). This table comes in together
+    with 3 buttons: ``Add'' for adding new value and ``Edit'' and ``Remove''
+    respectively for editing and deleting selected item. As for all components
+    also for this one <code>paramName</code> should be defined to associate this
+    control with JSDL element. Also the range of number of parameter's values
+    can be determied - using <code>minArgumentsCount</code> and
+    <code>maxArgumentsCount</code> elements.
+    <li><code>textDataStaging</code> - the same as <code>textWithFileChooser</code>, but
+    for chosen file also the <code>DataStaging</code> element in JSDL will be
+    created. There is possibility to determine if this file should be staged in
+    or out onto Grid by giving element <code>file</code> values ``in'' or ``out''
+    respectively.
+    <li><code>multipleDataStaging</code> - this is intended to combine
+    textDataStaging with multipleArguments, but as for release 1.0 there's no
+    support for this element.
+  </ui> 
+ </ui> 
+
+<p><b>NOTE</b>: <code>paramName</code> element which must be defined for all of
+  the components' element is the name of parameter that will be passed to
+  application. This is done by adding name of the parameter to executable call
+  of the application. In JSDL those values are represented by
+  <code>jsdl-posix:Argument</code> elements.
+  </p>
+</body>
+</html>
