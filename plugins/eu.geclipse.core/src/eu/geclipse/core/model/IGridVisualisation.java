@@ -14,8 +14,8 @@
  *****************************************************************************/
 package eu.geclipse.core.model;
 
+import eu.geclipse.core.IGridVisualisationWindow;
 import eu.geclipse.core.reporting.ProblemException;
-
 
 
 /**
@@ -29,10 +29,12 @@ public interface IGridVisualisation extends IGridContainer {
   String getResourceFileNameExtension();
 
   /**
-   * @param fileExtention
+   * @param visType
+   * @param window
    *
    */
-  void render( String fileExtention, String visType );
+  void render( final String visType,
+               final IGridVisualisationWindow window );
 
   /**
    * @throws ProblemException

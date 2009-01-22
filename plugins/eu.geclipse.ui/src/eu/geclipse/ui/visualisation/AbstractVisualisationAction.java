@@ -71,15 +71,18 @@ public class AbstractVisualisationAction extends SelectionListenerAction {
    */
   public static final String EXT_ACTION_FILE_EXTENSION = "fileExtension"; //$NON-NLS-1$
 
-  public static final String EXT_ACTION_TYPE = "type";
+  /**
+   *
+   */
+  public static final String EXT_ACTION_TYPE = "type"; //$NON-NLS-1$
 
-  protected String type;
+  protected IWorkbenchSite workbenchSite;
+
+  private String type = null;
 
   private String fileExt = null;
 
   private ArrayList< IGridVisualisation > vis;
-
-  IWorkbenchSite workbenchSite;
 
   /**
    *

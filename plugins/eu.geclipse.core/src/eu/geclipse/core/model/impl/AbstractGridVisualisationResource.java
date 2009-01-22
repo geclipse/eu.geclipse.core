@@ -16,6 +16,7 @@ package eu.geclipse.core.model.impl;
 
 import org.eclipse.core.resources.IResource;
 
+import eu.geclipse.core.IGridVisualisationWindow;
 import eu.geclipse.core.model.IGridVisualisation;
 import eu.geclipse.core.reporting.ProblemException;
 
@@ -41,7 +42,8 @@ public abstract class AbstractGridVisualisationResource
 
   public abstract String getResourceFileNameExtension();
 
-  public abstract void render( final String fileExtention, final String visType );
+  public abstract void render( final String visType,
+                               final IGridVisualisationWindow visualisationWindow);
 
   public void validate() throws ProblemException {}
 }

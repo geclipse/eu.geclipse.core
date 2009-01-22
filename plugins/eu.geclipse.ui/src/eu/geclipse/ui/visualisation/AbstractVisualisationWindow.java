@@ -14,53 +14,81 @@
  *****************************************************************************/
 package eu.geclipse.ui.visualisation;
 
+import java.awt.Canvas;
+import java.awt.Component;
+
 import org.eclipse.swt.widgets.Composite;
 
-
-
-
+import eu.geclipse.core.IGridVisualisationWindow;
 
 /**
  * @author sgirtel
  *
  */
-public abstract class AbstractVisualisationWindow {
+public abstract class AbstractVisualisationWindow implements IGridVisualisationWindow {
+
+  /**
+   * Extension point which has to be implemented to provide customized visualisation windows for
+   * visualisable elements (i.e. elements that extend the IGridVisualisation interface).
+   */
+  public static final String WINDOW_EXTENSION_POINT = "eu.geclipse.ui.visualisationWindow"; //$NON-NLS-1$
 
   /**
    * The file extension of the resource that this visualisation window knows how to render.
    */
-  public static final String EXT_FILE_EXTENSION = "fileExt"; //$NON-NLS-1$
+  public static final String EXT_FILE_EXTENSION = "fileExtension"; //$NON-NLS-1$
 
   /**
-   * Name of the attribute which specifies the name of the visualisation page implementation.
+   * Name of the attribute which specifies the name of the visualisation window implementation.
    */
   public static final String EXT_NAME = "name"; //$NON-NLS-1$
 
   /**
-   *
+   * Name of the attribute which specifies the type of visualisation, e.g. local or remote.
    */
-  public static final String EXT_SITE = "remote"; //$NON-NLS-1$
+  public static final String EXT_TYPE = "type"; //$NON-NLS-1$
 
   /**
    * Name of the attribute which specifies the class name of the AbstractVisualisationWindow
    * implementation.
    */
-  public static final String EXT_VISUALISATION_PAGE_CLASS = "class"; //$NON-NLS-1$
+  public static final String EXT_VISUALISATION_WINDOW_CLASS = "class"; //$NON-NLS-1$
 
   /**
-   * The name of the element which contains the visualisation page specification.
+   * The name of the element which contains the visualisation window specification.
    */
-  public static final String EXT_VISUALISATION_PAGE_ELEMENT = "window"; //$NON-NLS-1$
+  public static final String EXT_VISUALISATION_WIDNOW_ELEMENT = "window"; //$NON-NLS-1$
+
 
   protected VisComposite viscomp = null;
 
   /**
-   * Returns the name of the page's tab.
-   *
-   * @return the name of the page's tab.
+   * @return
    */
-  public abstract String getTabName();
+  public abstract boolean isRemoteSite();
 
+  /**
+   * @param parent
+   * @param style
+   */
+  public void init( final Composite parent, final int style) {
+    this.viscomp = new VisComposite( parent, style );
+  }
+
+
+  /**
+   * @param canvas
+   */
+  public void addToAWTFrame( final Canvas canvas ) {
+    this.viscomp.addToAWTFrame( canvas );
+  }
+
+  /**
+   * @param component
+   */
+  public void addToAWTFrame( final Component component ) {
+    this.viscomp.addToAWTFrame( component );
+  }
 
   /**
    * @return
@@ -77,26 +105,14 @@ public abstract class AbstractVisualisationWindow {
   }
 
   /**
-   * @param parent
-   * @param style
+   * For remote visualisation using GVidClient, this method
+   * should be overwritten calling the stop method of the client
+   * joining the gvid thread and closing opened connection.
+   * See example implementation in the GVidVisWindow class
+   * in eu.geclipse.vtk.ui plugin.
    */
-  public abstract void init( final Composite parent, final int style);
-
-  /**
-   * @return
-   */
-  public abstract boolean isRemoteSite();
-
-  /**
-   * Sets the name of the page's tab.
-   *
-   * @param name new name.
-   */
-  public abstract void setTabName( final String name );
-
-  /**
-   *
-   */
-  public abstract void stopClient();
+  public void stopClient() {
+    //noop
+  }
 
 }

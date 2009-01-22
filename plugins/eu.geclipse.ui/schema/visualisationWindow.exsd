@@ -3,10 +3,10 @@
 <schema targetNamespace="eu.geclipse.ui" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appinfo>
-         <meta.schema plugin="eu.geclipse.ui" id="eu.geclipse.ui.visualisationaction" name="Visualisation Action"/>
+         <meta.schema plugin="eu.geclipse.ui" id="eu.geclipse.ui.visualisationWindow" name="Visualisation Window"/>
       </appinfo>
       <documentation>
-         This extension point is used to define actions for rendering an IGridVisualisation resource.
+         This extension point is used to define visualisation windows which are the containers or the graphical output produced by the IGridVisualisation resource.
       </documentation>
    </annotation>
 
@@ -18,7 +18,7 @@
       </annotation>
       <complexType>
          <sequence>
-            <element ref="action" minOccurs="1" maxOccurs="unbounded"/>
+            <element ref="window" minOccurs="1" maxOccurs="unbounded"/>
          </sequence>
          <attribute name="point" type="string" use="required">
             <annotation>
@@ -47,26 +47,29 @@
       </complexType>
    </element>
 
-   <element name="action">
+   <element name="window">
       <complexType>
-         <attribute name="text" type="string" use="required">
+         <attribute name="class" type="string" use="required">
             <annotation>
                <documentation>
-                  The value of this element will appear as the lable of the action.
+                  An extension of the &lt;code&gt;eu.geclipse.ui.visualisation.AbstractVisualisationWindow&lt;/code&gt; class that is used to specify visualisation specific parameters for initializing a custom visualisation window for the particular resource that has the &lt;code&gt;fileExtension&lt;/code&gt; extension.
                </documentation>
-            </annotation>
-         </attribute>
-         <attribute name="tooltip" type="string">
-            <annotation>
-               <documentation>
-                  This element can be used to provide an additional hint to the user hovering on the action about what will happen after invocation.
-               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java" basedOn="eu.geclipse.ui.visualisation.AbstractVisualisationWindow:"/>
+               </appinfo>
             </annotation>
          </attribute>
          <attribute name="fileExtension" type="string" use="required">
             <annotation>
                <documentation>
-                  This element defines the extension of the visualisation resource which this particular action applies to and can be invoked on.
+                  This element defines the extension of the visualisation resource that this particular window will be used for to hold the graphical output prodused out of the resource.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string">
+            <annotation>
+               <documentation>
+                  The name of the concrete visualisation window.
                </documentation>
             </annotation>
          </attribute>
@@ -95,12 +98,13 @@
       </appinfo>
       <documentation>
          &lt;extension
-         point=&quot;eu.geclipse.ui.visualisationAction&quot;&gt;
-      &lt;action
+         point=&quot;eu.geclipse.ui.visualisationWindow&quot;&gt;
+      &lt;window
+            class=&quot;eu.geclipse.srs3d.viewer.PharmaApplicationVisualisationWindow&quot;
             fileExtension=&quot;pharma&quot;
-            text=&quot;SRS3D&quot;
-            tooltip=&quot;Invokes the SRS3D viewer and visualises the selected resource.&quot;&gt;
-      &lt;/action&gt;
+            name=&quot;SRS3DWindow&quot;
+            type=&quot;local&quot;&gt;
+      &lt;/window&gt;
    &lt;/extension&gt;
       </documentation>
    </annotation>
@@ -110,7 +114,7 @@
          <meta.section type="apiinfo"/>
       </appinfo>
       <documentation>
-         See the &lt;code&gt;eu.geclipse.ui.visualisation.AbstractVisualisationAction&lt;/code&gt; class.
+         See the &lt;code&gt;eu.geclipse.ui.visualisation.AbstractVisualisationWindow&lt;/code&gt; class.
       </documentation>
    </annotation>
 
@@ -119,7 +123,7 @@
          <meta.section type="implementation"/>
       </appinfo>
       <documentation>
-         The remote and local VTK based visualisation as well as the SRS3DViewer based visualisation implement this extension for their specific render action needs.
+         The remote and local VTK based visualisation as well as the SRS3DViewer based visualisation implement this extension to customize the visualisation window according to their individual needs.
       </documentation>
    </annotation>
 

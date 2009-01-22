@@ -14,6 +14,11 @@
  *****************************************************************************/
 package eu.geclipse.ui.views;
 
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtension;
+import org.eclipse.core.runtime.IExtensionPoint;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -30,10 +35,12 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
 
+import eu.geclipse.core.IGridVisualisationWindow;
 import eu.geclipse.core.model.IGridVisualisation;
 import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.ui.dialogs.ProblemDialog;
 import eu.geclipse.ui.internal.Activator;
+import eu.geclipse.ui.visualisation.AbstractVisualisationWindow;
 
 
 /**
@@ -254,7 +261,37 @@ public class VisualisationView extends ViewPart {
       return;
     }
 
-    this.visResource.render( resFileNameExt, visType );
+    // find classes implementing the visualisation window extension point
+    // which match this resource
+    CoreException exception = null;
+    IGridVisualisationWindow winImpl = null;
+    IExtensionPoint p = Platform.getExtensionRegistry()
+      .getExtensionPoint( AbstractVisualisationWindow.WINDOW_EXTENSION_POINT );
+    IExtension[] extensions = p.getExtensions();
+    for( IExtension extension : extensions ) {
+      IConfigurationElement[] elements = extension.getConfigurationElements();
+      for( IConfigurationElement element : elements ) {
+        if( AbstractVisualisationWindow.EXT_VISUALISATION_WIDNOW_ELEMENT.equals( element.getName() ) )
+        {
+          String className = element.getAttribute( AbstractVisualisationWindow.EXT_VISUALISATION_WINDOW_CLASS );
+          if ( element.getAttribute( AbstractVisualisationWindow.EXT_FILE_EXTENSION ).compareTo( resFileNameExt ) == 0
+              && ( element.getAttribute( AbstractVisualisationWindow.EXT_TYPE ) != null
+              ? element.getAttribute( AbstractVisualisationWindow.EXT_TYPE ).compareTo( visType ) == 0 : true ) ) {
+            try {
+              winImpl = ( IGridVisualisationWindow )element.createExecutableExtension(
+                              AbstractVisualisationWindow.EXT_VISUALISATION_WINDOW_CLASS );
+              ( ( AbstractVisualisationWindow )winImpl ).init( VisualisationView.this.cTabFolder, SWT.EMBEDDED );
+              break;
+            } catch( CoreException e ) {
+              Activator.logException( e );
+              return;
+            }
+          }
+        }
+      }
+    }
+
+    this.visResource.render( visType, winImpl );
   }
 
   /**
