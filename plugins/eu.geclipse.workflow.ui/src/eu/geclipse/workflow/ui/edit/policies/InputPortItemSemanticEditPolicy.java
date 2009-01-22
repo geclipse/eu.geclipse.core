@@ -36,7 +36,7 @@ public class InputPortItemSemanticEditPolicy extends WorkflowBaseItemSemanticEdi
    * @generated
    */
   @Override
-  protected Command getDestroyElementCommand( DestroyElementRequest req ) {
+  public Command getDestroyElementCommand( DestroyElementRequest req ) {
     CompoundCommand cc = getDestroyEdgesCommand();
     addDestroyShortcutsCommand( cc );
     cc.add( getGEFWrapper( new DestroyElementCommand( req ) ) );

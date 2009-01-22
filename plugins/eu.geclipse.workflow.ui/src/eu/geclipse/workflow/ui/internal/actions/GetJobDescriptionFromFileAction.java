@@ -56,16 +56,13 @@ public class GetJobDescriptionFromFileAction implements IObjectActionDelegate {
    * The WorkflowJobEditPart that has been selected.
    */
   protected WorkflowJobEditPart mySelectedElement;
-  /**
-   * 
-   */
-  private Shell myShell;
+  protected IFile jsdlTarget;
   String jobDescriptionInJSDL = null;
+  private Shell myShell;
   private IFileStore wfRootFileStore = null;
   private String[] dirs = null;
-  protected IFile jsdlTarget;
 
-  public void setActivePart( IAction action, IWorkbenchPart targetPart ) {
+  public void setActivePart( final IAction action, final IWorkbenchPart targetPart ) {
     this.myShell = targetPart.getSite().getShell();
   }
 
@@ -73,7 +70,7 @@ public class GetJobDescriptionFromFileAction implements IObjectActionDelegate {
    * Fires up a GridFileDialog and fetches the contents of a user-chosen JSDL
    * file.
    */
-  public void run( IAction action ) {
+  public void run( final IAction action ) {
     FileDialog dialog = new FileDialog( this.myShell, SWT.OPEN );
     String[] exts = {"*.jsdl"}; //$NON-NLS-1$
     dialog.setFilterExtensions( exts );
@@ -135,7 +132,7 @@ public class GetJobDescriptionFromFileAction implements IObjectActionDelegate {
     }
   }
 
-  public void selectionChanged( IAction action, ISelection selection ) {
+  public void selectionChanged( final IAction action, final ISelection selection ) {
     this.mySelectedElement = null;
     if( selection instanceof IStructuredSelection ) {
       IStructuredSelection structuredSelection = ( IStructuredSelection )selection;

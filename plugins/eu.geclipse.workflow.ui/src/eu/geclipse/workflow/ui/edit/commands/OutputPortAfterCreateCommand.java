@@ -44,6 +44,7 @@ public class OutputPortAfterCreateCommand extends Command {
 
   /**
    * @param adapter Adapter to get model element from visual part
+   * @param filename Filename to add to port
    * @param uri URI to add to port
    * @param domain Transactional editing domain
    */

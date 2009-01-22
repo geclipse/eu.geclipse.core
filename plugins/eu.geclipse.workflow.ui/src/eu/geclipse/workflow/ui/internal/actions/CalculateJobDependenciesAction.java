@@ -20,9 +20,6 @@ import java.util.List;
 
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.operations.OperationHistoryFactory;
-import org.eclipse.core.filesystem.URIUtil;
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gmf.runtime.diagram.ui.requests.CreateConnectionViewAndElementRequest;
@@ -34,11 +31,10 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
 
-import eu.geclipse.jsdl.JSDLJobDescription;
 import eu.geclipse.workflow.model.IInputPort;
 import eu.geclipse.workflow.model.IOutputPort;
 import eu.geclipse.workflow.model.IWorkflowJob;
-import eu.geclipse.workflow.ui.edit.commands.UpdateJobPortsCommand;
+import eu.geclipse.workflow.ui.edit.commands.ClearLinksCommand;
 import eu.geclipse.workflow.ui.edit.parts.InputPortEditPart;
 import eu.geclipse.workflow.ui.edit.parts.OutputPortEditPart;
 import eu.geclipse.workflow.ui.edit.parts.WorkflowEditPart;
@@ -57,7 +53,7 @@ public class CalculateJobDependenciesAction  implements IObjectActionDelegate {
    */
   protected WorkflowEditPart mySelectedElement;
 
-  public void setActivePart( IAction action, IWorkbenchPart targetPart ) {
+  public void setActivePart( final IAction action, final IWorkbenchPart targetPart ) {
     targetPart.getSite().getShell();
     
   }
@@ -66,23 +62,16 @@ public class CalculateJobDependenciesAction  implements IObjectActionDelegate {
   // iterates through all jobs in diagram with ports and attempts to match
   // inputs to outputs and creates the links between them
   @SuppressWarnings("unchecked")
-  public void run( IAction action ) {
+  public void run( final IAction action ) {
     WorkflowEditPart diagramPart = this.mySelectedElement;
     List<WorkflowJobEditPart> jobParts = diagramPart.getChildren();
  
     // re-analyze ports to disconnect all links first
     for (Iterator<WorkflowJobEditPart> i = jobParts.iterator(); i.hasNext();) {
-      WorkflowJobEditPart jobPart = i.next();
-      IWorkflowJob job = (IWorkflowJob)jobPart.resolveSemanticElement();  
-      String jobDesc = job.getJobDescription();
-      java.net.URI jsdlPathUri = URIUtil.toURI( jobDesc );
-      IFile jsdlFile = ResourcesPlugin.getWorkspace()
-      .getRoot()
-      .findFilesForLocationURI( jsdlPathUri )[ 0 ];
-      JSDLJobDescription jsdl = new JSDLJobDescription( jsdlFile );
-      UpdateJobPortsCommand updatePortsCmd = new UpdateJobPortsCommand(jobPart, jsdl);
+      WorkflowJobEditPart editPart = i.next();
+      ClearLinksCommand clearLinksCmd = new ClearLinksCommand( editPart );
       try {
-        OperationHistoryFactory.getOperationHistory().execute( updatePortsCmd, new NullProgressMonitor(), null );
+        OperationHistoryFactory.getOperationHistory().execute( clearLinksCmd, new NullProgressMonitor(), null );
       } catch( ExecutionException e ) {
         // TODO Auto-generated catch block
         e.printStackTrace();
@@ -123,7 +112,7 @@ public class CalculateJobDependenciesAction  implements IObjectActionDelegate {
     }
   }
 
-  public void selectionChanged( IAction action, ISelection selection ) {
+  public void selectionChanged( final IAction action, final ISelection selection ) {
     this.mySelectedElement = null;
     if( selection instanceof IStructuredSelection ) {
       IStructuredSelection structuredSelection = ( IStructuredSelection )selection;

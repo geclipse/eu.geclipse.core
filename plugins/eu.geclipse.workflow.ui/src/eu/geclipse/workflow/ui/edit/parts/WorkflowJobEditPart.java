@@ -57,8 +57,10 @@ import org.eclipse.gmf.runtime.emf.commands.core.command.AbstractTransactionalCo
 import org.eclipse.gmf.runtime.gef.ui.figures.DefaultSizeNodeFigure;
 import org.eclipse.gmf.runtime.gef.ui.figures.NodeFigure;
 import org.eclipse.gmf.runtime.notation.View;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
@@ -84,6 +86,7 @@ public class WorkflowJobEditPart extends ShapeNodeEditPart {
   protected Collection<Resource> savedResources = new ArrayList<Resource>();
   protected Collection<Resource> removedResources = new ArrayList<Resource>();
   protected Collection<Resource> changedResources = new ArrayList<Resource>();
+  String msg;
   protected IResourceChangeListener resourceChangeListener = new IResourceChangeListener()
   
   {
@@ -143,6 +146,14 @@ public class WorkflowJobEditPart extends ShapeNodeEditPart {
             String jobDesc = job.getJobDescription();
             
             if (loc.equals( jobDesc )) { 
+              // Need to find a better way of doing this...
+//              final Display display = Display.getDefault();
+//              msg =  "Workflow job '" + job.getName() + "' will disconnect its existing links when updating data-staging";
+//              display.syncExec( new Runnable() {
+//                public void run() {
+//                  MessageDialog.openInformation( display.getActiveShell(), "Warning", msg );                  
+//                }
+//              });              
               java.net.URI jsdlPathUri = URIUtil.toURI( jobDesc );
               IFile jsdlFile = ResourcesPlugin.getWorkspace()
               .getRoot()

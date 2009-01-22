@@ -44,6 +44,7 @@ public class InputPortAfterCreateCommand extends Command {
 
   /**
    * @param adapter Adapter to retrieve model part from visual part 
+   * @param filename Filename to add to port
    * @param uri URI to add to port
    * @param domain Transactional editing domain
    */
@@ -56,7 +57,7 @@ public class InputPortAfterCreateCommand extends Command {
   
   @Override
   public void execute() {
-    EObject newVisualElement = (EObject)adapter.getAdapter(EObject.class);
+    EObject newVisualElement = (EObject)this.adapter.getAdapter(EObject.class);
     Object o = newVisualElement.eCrossReferences().get( 0 );
     if (o instanceof IInputPort) {
       this.newPort = ( IInputPort )o;
