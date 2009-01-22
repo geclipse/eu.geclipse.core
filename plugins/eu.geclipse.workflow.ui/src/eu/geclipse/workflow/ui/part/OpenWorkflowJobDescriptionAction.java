@@ -38,7 +38,7 @@ import eu.geclipse.workflow.ui.internal.WorkflowDiagramEditorPlugin;
  * @author athandava
  *
  */
-public class OpenWorkflowJobWithJSDLEditor implements IObjectActionDelegate {
+public class OpenWorkflowJobDescriptionAction implements IObjectActionDelegate {
 
   /**
    * The WorkflowJobEditPart that has been selected.
@@ -55,7 +55,7 @@ public class OpenWorkflowJobWithJSDLEditor implements IObjectActionDelegate {
   }
 
   public void run( IAction action ) {
-    IWorkflowJob job = ( IWorkflowJob )OpenWorkflowJobWithJSDLEditor.this.mySelectedElement.resolveSemanticElement();
+    IWorkflowJob job = ( IWorkflowJob )OpenWorkflowJobDescriptionAction.this.mySelectedElement.resolveSemanticElement();
     String filename = job.getJobDescription();
     if ( filename != null ) {
       URI fileNameURI = URIUtil.toURI( filename );
