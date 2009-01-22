@@ -125,7 +125,7 @@
             id="eu.geclipse.workflow.ui.OpenJSDLEditor"
             objectClass="org.eclipse.gmf.runtime.diagram.ui.editparts.ShapeNodeEditPart">
          <action 
-               class="eu.geclipse.workflow.ui.part.OpenWorkflowJobDescriptionAction"
+               class="eu.geclipse.workflow.ui.internal.actions.OpenWorkflowJobDescriptionAction"
                definitionId="eu.geclipse.workflow.ui.openJSDLEditor"
                enablesFor="1"
                id="eu.geclipse.workflow.ui.popup.openJSDLEditor"

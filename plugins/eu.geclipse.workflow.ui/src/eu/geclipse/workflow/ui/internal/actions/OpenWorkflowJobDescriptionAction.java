@@ -14,7 +14,7 @@
  *     - Ashish Thandavan - initial API and implementation
  *     - David Johnson
  ******************************************************************************/
-package eu.geclipse.workflow.ui.part;
+package eu.geclipse.workflow.ui.internal.actions;
 
 import java.net.URI;
 
