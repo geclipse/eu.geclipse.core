@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008 g-Eclipse Consortium 
+ * Copyright (c) 2008-2009 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials 
  * are made available under the terms of the Eclipse Public License v1.0 
  * which accompanies this distribution, and is available at 
@@ -188,16 +188,15 @@ public class CopyJobDescToWorkflowCommand extends AbstractTransactionalCommand {
     } catch ( CoreException ex ) {
       // ignore for now. naughty!
     }
-    // set Job Description property of workflow job to point to the target JSDL
-    IPath jsdlTargetPath = jsdlTarget.getLocation();
-    String jsdlTargetPathString = jsdlTargetPath.toString();
-    IWorkflowJob workflowJob = (IWorkflowJob) this.domainElt;
-    workflowJob.setJobDescription( jsdlTargetPathString );
+
     
-    // construct a name for the job out of the file name and set name property of JSDL as it
+    // set Job Description property of workflow job to point to the target JSDL
     String jsdlTargetName = jsdlTarget.getName();
     String jsdlTargetExtension = jsdlTarget.getFileExtension();
-    String jsdlTargetSeparatorAndExtension = "." + jsdlTargetExtension; //$NON-NLS-1$
+    String jsdlTargetSeparatorAndExtension = "." + jsdlTargetExtension; //$NON-NLS-1
+    IWorkflowJob workflowJob = (IWorkflowJob) this.domainElt;
+    workflowJob.setJobDescription( jsdlTargetName );
+    // construct a name for the job out of the file name and set name property of JSDL as it
     int jsdlTargetLastPartIndex = jsdlTargetName.indexOf( jsdlTargetSeparatorAndExtension );
     workflowJob.setName( jsdlTarget.getName().substring( 0, jsdlTargetLastPartIndex ) );    
     return CommandResult.newOKCommandResult();

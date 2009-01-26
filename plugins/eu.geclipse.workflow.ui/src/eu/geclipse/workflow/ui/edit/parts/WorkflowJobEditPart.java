@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2006-2008 g-Eclipse Consortium 
+ * Copyright (c) 2006-2009 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials 
  * are made available under the terms of the Eclipse Public License v1.0 
  * which accompanies this distribution, and is available at 
@@ -39,6 +39,7 @@ import org.eclipse.draw2d.StackLayout;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
@@ -57,15 +58,14 @@ import org.eclipse.gmf.runtime.emf.commands.core.command.AbstractTransactionalCo
 import org.eclipse.gmf.runtime.gef.ui.figures.DefaultSizeNodeFigure;
 import org.eclipse.gmf.runtime.gef.ui.figures.NodeFigure;
 import org.eclipse.gmf.runtime.notation.View;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 
 import eu.geclipse.core.model.GridModel;
+import eu.geclipse.core.model.IGridRoot;
 import eu.geclipse.jsdl.JSDLJobDescription;
 import eu.geclipse.jsdl.ui.wizards.NewJobWizard;
 import eu.geclipse.workflow.model.IWorkflowJob;
@@ -133,7 +133,7 @@ public class WorkflowJobEditPart extends ShapeNodeEditPart {
         ResourceDeltaVisitor visitor = new ResourceDeltaVisitor();
         delta.accept( visitor );
         
-        // if a JSDL within the an open .workflow workflow has changed, scan through the
+        // if a JSDL within an open .workflow workflow has changed, scan through the
         // workflow and re-sync it
         EObject o = WorkflowJobEditPart.this.resolveSemanticElement();
         if (o instanceof IWorkflowJob) {
@@ -144,8 +144,16 @@ public class WorkflowJobEditPart extends ShapeNodeEditPart {
             IResource res = i.next();
             String loc = res.getLocation().toString();
             String jobDesc = job.getJobDescription();
-            
-            if (loc.equals( jobDesc )) { 
+            EObject wfContainer = job.eContainer();
+            String wfFileString = EcoreUtil.getURI( wfContainer ).toPlatformString( true ); 
+            IGridRoot gridModelRoot = GridModel.getRoot(); // Grid Model root
+            IFileStore gridModelRootFileStore = gridModelRoot.getFileStore();
+            String gridModelRootFileStoreString = gridModelRootFileStore.toString();
+            URI uri = URIUtil.toURI(gridModelRootFileStoreString + wfFileString);
+            IFile[] workflowIFile = ResourcesPlugin.getWorkspace().getRoot().findFilesForLocationURI( uri );
+            IResource res1 = workflowIFile[0].getParent().findMember( jobDesc );
+            String fileString = res1.getLocation().toString();
+            if (loc.equals( fileString )) { 
               // Need to find a better way of doing this...
 //              final Display display = Display.getDefault();
 //              msg =  "Workflow job '" + job.getName() + "' will disconnect its existing links when updating data-staging";
@@ -154,7 +162,7 @@ public class WorkflowJobEditPart extends ShapeNodeEditPart {
 //                  MessageDialog.openInformation( display.getActiveShell(), "Warning", msg );                  
 //                }
 //              });              
-              java.net.URI jsdlPathUri = URIUtil.toURI( jobDesc );
+              java.net.URI jsdlPathUri = URIUtil.toURI( fileString );
               IFile jsdlFile = ResourcesPlugin.getWorkspace()
               .getRoot()
               .findFilesForLocationURI( jsdlPathUri )[ 0 ];
@@ -165,7 +173,7 @@ public class WorkflowJobEditPart extends ShapeNodeEditPart {
                 OperationHistoryFactory.getOperationHistory()
                 .execute( updatePortsCommand, new NullProgressMonitor(), null );
               } catch ( ExecutionException eE ) {
-                // ignore for now... very naughty!
+                // TODO add problem reporting
               }
             }
           }
@@ -177,13 +185,21 @@ public class WorkflowJobEditPart extends ShapeNodeEditPart {
             IResource res = i.next();
             String loc = res.getLocation().toString();
             String jobDesc = job.getJobDescription();
-            if (loc.equals( jobDesc )) { 
+            String wfFileString = job.getWorkflow().eResource().getURI().toPlatformString( true ); 
+            IGridRoot gridModelRoot = GridModel.getRoot(); // Grid Model root
+            IFileStore gridModelRootFileStore = gridModelRoot.getFileStore();
+            String gridModelRootFileStoreString = gridModelRootFileStore.toString();
+            URI uri = URIUtil.toURI(gridModelRootFileStoreString + wfFileString);
+            IFile[] workflowIFile = ResourcesPlugin.getWorkspace().getRoot().findFilesForLocationURI( uri );
+            IResource res1 = workflowIFile[0].getParent().findMember( jobDesc );
+            IFile[] file = ResourcesPlugin.getWorkspace().getRoot().findFilesForLocation( res1.getLocation() );
+            if (loc.equals( file.toString() )) { 
               AbstractTransactionalCommand clearJobDescCmd = new ClearJobDescPropertyCommand( job );
               try {
                 OperationHistoryFactory.getOperationHistory()
                 .execute( clearJobDescCmd, new NullProgressMonitor(), null );
               } catch( ExecutionException e ) {
-                // TODO Auto-generated catch block, add problem reporting
+                // TODO add problem reporting
                 e.printStackTrace();
               }
             }
@@ -192,6 +208,7 @@ public class WorkflowJobEditPart extends ShapeNodeEditPart {
         }              
       } catch (CoreException exception ) {
         //Activator.logException( exception );
+        // TODO add problem reporting
       }
     }
     
@@ -323,8 +340,14 @@ public class WorkflowJobEditPart extends ShapeNodeEditPart {
       if ( filename!=null ){
         if ( (!"".equals( filename )) ) { //$NON-NLS-1$
           // if something is present in job description property
-          URI fileNameURI = URIUtil.toURI( filename );
-          IFile[] file = ResourcesPlugin.getWorkspace().getRoot().findFilesForLocationURI( fileNameURI ); 
+          String wfFileString = job.getWorkflow().eResource().getURI().toPlatformString( true ); 
+          IGridRoot gridModelRoot = GridModel.getRoot(); // Grid Model root
+          IFileStore gridModelRootFileStore = gridModelRoot.getFileStore();
+          String gridModelRootFileStoreString = gridModelRootFileStore.toString();
+          URI uri = URIUtil.toURI(gridModelRootFileStoreString + wfFileString);
+          IFile[] workflowIFile = ResourcesPlugin.getWorkspace().getRoot().findFilesForLocationURI( uri );
+          IResource res = workflowIFile[0].getParent().findMember( filename );
+          IFile[] file = ResourcesPlugin.getWorkspace().getRoot().findFilesForLocation( res.getLocation() ); 
           try {
             if( (file.length != 0) && file[ 0 ].exists() ) {
               IDE.openEditor( WorkflowDiagramEditorPlugin.getDefault()
@@ -332,7 +355,8 @@ public class WorkflowJobEditPart extends ShapeNodeEditPart {
                 .getActiveWorkbenchWindow()
                 .getActivePage(), file[ 0 ], true );
             } else {
-                // need to handle if file does not exist with problem exception
+                // need to handle if file does not exist - indicates corrupted workflow file or missing JSDL
+                // TODO add problem reporting
             }
           } catch( PartInitException partInitException ) {
             WorkflowDiagramEditorPlugin.logException( partInitException );
