@@ -20,7 +20,6 @@ import java.awt.Frame;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.awt.SWT_AWT;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -38,10 +37,8 @@ import org.eclipse.swt.widgets.Label;
  * @author sgirtel
  */
 public class VisComposite extends Composite {
-
   private Label statsLabel = null;
   private final Frame awtFrame;
-  private Composite SWT_AWT_composite;
 
   /**
    * @param vis
@@ -49,11 +46,9 @@ public class VisComposite extends Composite {
    */
   public VisComposite( final Composite vis,
                        final int style ) {
-    super( vis, style );//SWT.DOUBLE_BUFFERED
+    super( vis, style & SWT.EMBEDDED );//SWT.DOUBLE_BUFFERED
     initSwtAwtComposite();
-    // create a new frame and add it to the composite created with embedded
-    // style
-    this.awtFrame = SWT_AWT.new_Frame( this.SWT_AWT_composite );
+    this.awtFrame = SWT_AWT.new_Frame( this );
   }
 
   private void initSwtAwtComposite() {
@@ -64,9 +59,6 @@ public class VisComposite extends Composite {
     gridData1.grabExcessVerticalSpace = true;
     gridData1.horizontalAlignment = SWT.FILL;
     gridData1.verticalAlignment = SWT.FILL;
-    this.SWT_AWT_composite = new Composite( this, SWT.EMBEDDED );
-    this.SWT_AWT_composite.setLayout( new FillLayout() );
-    this.SWT_AWT_composite.setLayoutData( gridData1 );
 
     gridLayout = new GridLayout();
     gridLayout.horizontalSpacing = 0;
@@ -84,7 +76,6 @@ public class VisComposite extends Composite {
 
     this.setStatsLabel( new Label( this, SWT.NONE ) );
     this.getStatsLabel().setLayoutData(gridData);
-
   }
 
   /**
@@ -127,5 +118,4 @@ public class VisComposite extends Composite {
   public Label getStatsLabel() {
     return this.statsLabel;
   }
-
 }
