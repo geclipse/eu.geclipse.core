@@ -31,9 +31,10 @@ public interface IGridVisualisation extends IGridContainer {
   /**
    * @param visType
    * @param window
+   * @return
    *
    */
-  void render( final String visType,
+  boolean render( final String visType,
                final IGridVisualisationWindow window );
 
   /**

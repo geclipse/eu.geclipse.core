@@ -42,7 +42,7 @@ public abstract class AbstractGridVisualisationResource
 
   public abstract String getResourceFileNameExtension();
 
-  public abstract void render( final String visType,
+  public abstract boolean render( final String visType,
                                final IGridVisualisationWindow visualisationWindow);
 
   public void validate() throws ProblemException {}

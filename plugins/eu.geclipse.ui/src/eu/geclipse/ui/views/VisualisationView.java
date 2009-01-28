@@ -255,15 +255,14 @@ public class VisualisationView extends ViewPart {
    * @param visType Remote or Local
    *
    */
-  public void render( final String resFileNameExt, final String visType ) {
+  public boolean render( final String resFileNameExt, final String visType ) {
 
     if ( this.visResource == null ) {
-      return;
+      return false;
     }
 
     // find classes implementing the visualisation window extension point
     // which match this resource
-    CoreException exception = null;
     IGridVisualisationWindow winImpl = null;
     IExtensionPoint p = Platform.getExtensionRegistry()
       .getExtensionPoint( AbstractVisualisationWindow.WINDOW_EXTENSION_POINT );
@@ -273,7 +272,6 @@ public class VisualisationView extends ViewPart {
       for( IConfigurationElement element : elements ) {
         if( AbstractVisualisationWindow.EXT_VISUALISATION_WIDNOW_ELEMENT.equals( element.getName() ) )
         {
-          String className = element.getAttribute( AbstractVisualisationWindow.EXT_VISUALISATION_WINDOW_CLASS );
           if ( element.getAttribute( AbstractVisualisationWindow.EXT_FILE_EXTENSION ).compareTo( resFileNameExt ) == 0
               && ( element.getAttribute( AbstractVisualisationWindow.EXT_TYPE ) != null
               ? element.getAttribute( AbstractVisualisationWindow.EXT_TYPE ).compareTo( visType ) == 0 : true ) ) {
@@ -284,14 +282,14 @@ public class VisualisationView extends ViewPart {
               break;
             } catch( CoreException e ) {
               Activator.logException( e );
-              return;
+              return false;
             }
           }
         }
       }
     }
 
-    this.visResource.render( visType, winImpl );
+    return this.visResource.render( visType, winImpl );
   }
 
   /**
@@ -309,6 +307,11 @@ public class VisualisationView extends ViewPart {
    */
   public void setVisResource( final IGridVisualisation resource ) {
       this.visResource = resource;
+  }
+
+  public boolean isSuccess() {
+    // TODO Auto-generated method stub
+    return false;
   }
 
 }

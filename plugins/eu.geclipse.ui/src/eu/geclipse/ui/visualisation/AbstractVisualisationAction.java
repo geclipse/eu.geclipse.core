@@ -126,15 +126,18 @@ public class AbstractVisualisationAction extends SelectionListenerAction {
         IViewPart view = this.workbenchSite.getPage().showView( "eu.geclipse.ui.views.visualisationview" ); //$NON-NLS-1$
         ( ( VisualisationView )view ).setVisResource( ( IGridVisualisation )element );
         ( ( VisualisationView )view ).render( ( ( IGridVisualisation )element).getResourceFileNameExtension(), this.type );
-        Display.getDefault().asyncExec( new Runnable() {
-          public void run() {
-            try {
-              AbstractVisualisationAction.this.workbenchSite.getPage().showView( "eu.geclipse.ui.views.visualisationview" ); //$NON-NLS-1$
-            } catch( PartInitException e ) {
-              Activator.logException( e );
+
+        if ( ( ( VisualisationView )view ).isSuccess() ) {
+          Display.getDefault().asyncExec( new Runnable() {
+            public void run() {
+              try {
+                AbstractVisualisationAction.this.workbenchSite.getPage().showView( "eu.geclipse.ui.views.visualisationview" ); //$NON-NLS-1$
+              } catch( PartInitException e ) {
+                Activator.logException( e );
+              }
             }
-          }
-        } );
+          } );
+        }
       } catch( PartInitException pie ) {
         ProblemDialog.openProblem( null,
                                    Messages.getString( "AbstractVisualisationAction.errorDialogTitle" ), //$NON-NLS-1$
