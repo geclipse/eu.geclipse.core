@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+<head>
+<meta
+  http-equiv="Content-Type"
+  content="text/html; charset=UTF-8">
+<META
+  HTTP-EQUIV="Content-Style-Type"
+  CONTENT="text/css">
+<LINK
+  REL="STYLESHEET"
+  HREF="PLUGINS_ROOT/eu.geclipse.doc.user/book.css"
+  CHARSET="UTF-8"
+  TYPE="text/css">
+<title>g-Eclipse - Visualisation</title>
+</head>
+
+<body BGCOLOR="#ffffff">
+<h1>Visualisation</h1>
+<p>How to implement MY Visualisation mechanism?</p>
+
+<h2>UI Components</h2>
+
+<h2>Important Extension points</h2>
+<h3>UI extension point</h3>
+<dl>
+  <dt><code>eu.geclipse.ui.visualisationwindow</code></dt>
+  <dd>Provides a scheme for defining windows for hosting the rendered IGridVisualisation resource.</dd>
+  <dt><code>eu.geclipse.ui.visualisationaction</code></dt>
+  <dd>Provides a scheme for defining actions for rendering an IGridVisualisation resource.</dd>
+</dl>
+
+<h2>Interfaces to implement</h2>
+<dl>
+  <dt><code>eu.geclipse.core.model.IGridVisualisation</code></dt>
+  <dd>Implement this to define a grid resource that can be visualised. It is recommended to
+  extend the <code>eu.geclipse.core.model.impl.AbstractGridVisualisationResource</code></dd>
+  <dt><code>eu.geclipse.ui.visualisation.AbstractVisualisationWindow</code></dt>
+  <dd>Implement this to define a window for a customized view in which the visualisation will take place.</dd>
+  <dt><code>eu.geclipse.ui.visualisation.VisComposite</code></dt>
+  <dd>Implement this to define a customized composite that will be used in the window to hold your visual data.</dd>
+</dl>
+
+</body>
+
+</html>
