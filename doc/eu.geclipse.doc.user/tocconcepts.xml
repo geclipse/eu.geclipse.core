@@ -184,7 +184,9 @@
   </topic>
   <topic label="Service Level Agreements">
     <anchor id="geclipse_concepts_sla" /> 
-    <topic href="html/concepts/sla/sla_process.html" label="Service Level Agreement Support" /> 
+    <topic href="html/concepts/sla/sla_process.html" label="Service Level Agreement Support" />
+    <topic href="html/concepts/sla/sla-preferences.html" label="SLA Preferences">
+    </topic> 
   </topic>
   
   <topic
