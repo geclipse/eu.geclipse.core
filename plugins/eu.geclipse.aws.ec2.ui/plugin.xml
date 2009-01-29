@@ -10,7 +10,7 @@
 				class="eu.geclipse.aws.ec2.ui.actions.LaunchAMI"
 				enablesFor="1"
 				id="eu.geclipse.aws.ec2.ui.actions.launchAMI"
-				label="Launch AMI">
+				label="Launch AMI...">
 			</action>
 		</objectContribution>
 	</extension>
@@ -62,7 +62,7 @@
 				class="eu.geclipse.aws.ec2.ui.actions.CreateSecurityGroupAction"
 				enablesFor="1"
 				id="eu.geclipse.aws.ec2.ui.actions.createSecurityGroup"
-				label="Create Security Group">
+				label="Create Security Group...">
 			</action>
 			<enablement>
 				<test
@@ -81,7 +81,7 @@
 				class="eu.geclipse.aws.ec2.ui.actions.CreateKeypairAction"
 				enablesFor="1"
 				id="eu.geclipse.aws.ec2.ui.actions.createKeypair"
-				label="Create Keypair">
+				label="Create Keypair...">
 			</action>
 			<enablement>
 				<test
@@ -113,7 +113,7 @@
 				class="eu.geclipse.aws.ec2.ui.actions.EditSecurityGroup"
 				enablesFor="1"
 				id="eu.geclipse.aws.ec2.ui.actions.editSecurityGroup"
-				label="Edit Security Group">
+				label="Edit Security Group...">
 			</action>
 		</objectContribution>
 	</extension>
@@ -158,7 +158,7 @@
 				class="eu.geclipse.aws.ec2.ui.actions.AssociateElasticIPAction"
 				enablesFor="1"
 				id="eu.geclipse.aws.ec2.ui.actions.associateElasticIP"
-				label="Associate Elastic IP Address">
+				label="Associate Elastic IP Address...">
 			</action>
 		</objectContribution>
 	</extension>
@@ -217,7 +217,7 @@
 				class="eu.geclipse.aws.ec2.ui.actions.EditAMIAttributesAction"
 				enablesFor="1"
 				id="eu.geclipse.aws.ec2.ui.actions.editImageAttributes"
-				label="Edit AMI Attributes">
+				label="Edit AMI Attributes...">
 			</action>
 		</objectContribution>
 	</extension>

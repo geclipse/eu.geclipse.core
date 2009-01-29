@@ -142,6 +142,7 @@ public class CreateKeypairWizardPage extends WizardPage {
       public void handleEvent( final Event event ) {
         FileDialog fileDialog = new FileDialog( getContainer().getShell(),
                                                 SWT.OPEN );
+        fileDialog.setText( Messages.getString("CreateKeypairWizardPage.save_key_as") ); //$NON-NLS-1$
         String dialogResult = fileDialog.open();
         CreateKeypairWizardPage.this.textKeyPath.setText( dialogResult );
       }
