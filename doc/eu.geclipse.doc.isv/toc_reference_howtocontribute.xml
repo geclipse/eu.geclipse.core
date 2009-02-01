@@ -55,6 +55,8 @@
      </topic>
      <topic href="html/how_to_contribute/service_jobs/sjUIImplementations.html" label="Service Jobs UI Part Contribution">
      </topic>
+     <topic href="html/how_to_contribute/service_jobs/extendingBenchmarking.html" label="Extending the Benchmark Framework">
+     </topic>
   </topic>
   <topic
     label="Visualisation">

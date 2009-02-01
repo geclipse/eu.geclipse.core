@@ -1,0 +1,187 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+<head>
+<meta
+  http-equiv="Content-Type"
+  content="text/html; charset=UTF-8">
+<META
+  HTTP-EQUIV="Content-Style-Type"
+  CONTENT="text/css">
+<LINK
+  REL="STYLESHEET"
+  HREF="PLUGINS_ROOT/eu.geclipse.doc.user/book.css"
+  CHARSET="UTF-8"
+  TYPE="text/css">
+<title>g-Eclipse - Extending the Benchmark Framework</title>
+</head>
+
+<body BGCOLOR="#ffffff">
+<h2>Introduction</h2>
+<p>The Benchmarking framework has been introduced in the
+g-Eclipse Service Job Framework to allow users to benchmark grid
+resources. The framework allows users to a execute a variety of
+benchmarks, hence a protocol of communication between the benchmark
+executable and the g-Eclipse Benchmarking framework was defined, which
+specifies the format of benchmark input and output. This communication
+protocol provides a layer of abstraction that allows the framework
+to interface with any benchmark.</p>
+<p>For the communication between the g-Eclipse Benchmarking
+Framework and the benchmark executable <b>Grid Benchmark Description
+Language (GBDL) files</b> are used for defining both the input and output.
+GBDL is a language created to describe both the configuration and the
+output of the benchmark. Therefore, benchmarks that are destined to be
+used with g-Eclipse should accept input in GBDL format and return their
+output in GBDL format.</p>
+<p>To avoid re-writing and porting existing benchmarks in order to conform
+the g-Eclipse Benchmarking Framework communication protocol, an
+alternative approach was used. This approach wraps existing benchmarks to scripts
+that will provide the required interface interface between the benchmarks and the framework.
+This wrapping scripts perform the following operations:
+
+<ol type=a>
+	<li>Compile the benchmark's source code (if this is required).</li>
+
+	<li>Parse the benchmark parameters from the input GBDL file and
+	translate them to appropriate command line arguments for the benchmark
+	executable.</li>
+	
+	<li>Execute the benchmark with the command line arguments retrieved from the
+	previous step, and record the output produced by the benchmarks.</li>
+	
+	<li>Parse the benchmarks output to extract measured values(metrics).</li>
+	
+	<li>Use information from the input GBDL file and the metrics to
+	create the output GBDL file. </li>
+</ol>
+</p>
+
+<p>Since most of the parts needed to be performed by the wrapper scripts are
+similar, a toolset has been created that performs most of the aforementioned tasks
+and allows the creation of new benchmarks with ease. The toolset includes:
+
+<ul>
+  <li>The complete GBDL Schema as a set of Python classes.</li>
+  <li>A set of Python methods that parse the input GBDL file.</li>
+  <li>Automatic handling of logging and information collection.</li>
+  <li>Python methods to easily execute system commands.</li>
+  <li>A framework to easily define and use benchmark command line arguments.</li>
+  <li>A toolset that wraps the whole benchmark in a single self-extracting file.</li>  
+</ul>
+
+</p>
+
+<h2>Getting Started</h2>
+
+<h3>Obtaining the required components</h3>
+<p>The first step in creating a g-Eclipse benchmark is to download
+the g-Eclipse benchmark toolset from <a
+	href="http://www.geclipse.eu/download/benchmarking/">here</a>. Inside
+the archive file exists a template of a benchmark including the needed
+Python libraries, as well as tools to create self-extractable,
+self-executable benchmark files.</p>
+
+<p>The exact contents of the template are the following:
+
+<ul>
+	<li><code>installer/</code></li>
+	<ul>
+		<li><code>payload/<code></li> This is where the
+		benchmark, files required from the benchmark and Python scripts are
+		put.
+		<ul>
+			<li><code>handlers.py</code>:</li> Python library that provides
+			fuctions to handle various benchmark execution tasks.</li>
+
+			<li><code>models.py</code></li>
+			Python library that describes the GBDL model.
+			<li><code>run.py</code></li>
+			The script executed after auto-extracting the file. This is the file
+			to be modified to provide the functionality of the new benchmark.
+			<li><code>utils.py</code></li> Python library with utility factions</li>
+		</ul>
+		<li><code>builder.sh</code> </li>Shell script that builds the
+		self-extractable, self-executable benchmark file.
+
+		<li><code>Uncompress</code></li> File used by builder.sh
+	</ul>
+</ul>
+</p>
+<h3>Setting the workspace up.</h3>
+<p>The next step in creating a g-Eclipse benchmark is to extract the
+g-Eclipse benchmark toolset. After extracting the file browse to
+<code>toolset/installer/payload/</code> folder. Put the benchmark's source code and
+any files required by the benchmark in this folder. Next, edit the
+<code>run.py</code> file and set the details for the benchmark which is about to be
+create.</p>
+
+<h3>Editing the run.py file</h3>
+
+<p>Inside the benchmark template, the <code>run.py</code> file is
+used to create the Bonnie benchmark is provided. This file provides a
+complete layout of what should be included in the <code>run.py</code>
+file. Below a step-by-step guide indicates what needs to be modified in
+the <code>run.py</code> file.</p>
+
+<h4>Changing the Benchmark Type</h4>
+<p>Change the <code>Bonnie</code> string to the name of the
+benchmark in <code>benchmarker = utils.Benchmarker('input.gbdl',
+'bonnie')</code>. The name is used to distinguish the benchmark from other
+benchmark executables.</p>
+
+<h4>Executing system commands.</h4>
+
+<p>For any system commands, such as source code extracting and
+benchmark compilation, the <code>benchmarker.run_command</code> function
+can be used. This function takes two arguments. The first argument is
+the command and the second is a descriptive name of the command.</p>
+
+<h4>Specifying Benchmark Parameters</h4>
+<p>You can specify command line arguments for the benchmark that
+could be manipulated through the input GBDL using the <code>benchmarker.add_supported_arguments</code>
+function. This function aspects a list of Argument objects. The system
+supports the following two types of Argument objects:
+
+<ul>
+	<li><code>FlagArgument</code> specifies command line arguments
+	that modify the behaviour of the benchmark by there existence or
+	absence. The constructor of the object accepts three arguments. A <code>name</code>
+	that is used to identify the argument, a <code>true_representation</code>
+	that is a Python format string to be used if the flag is true, and an
+	optional <code>false_representation</code> to be used if the flag is
+	false</li>
+
+	<li><code>ValueArgument</code> specifies command line arguments
+	that have an associated value. The constructor accepts two arguments. A
+	<code>name</code> which is used to identify the argument, and a <code>representation</code>
+	that is a Python format string with a string replacement position were
+	the provided value will be substituted.</li>
+</ul>
+</p>
+
+<h4>Executing the Benchmark</h4>
+<p>To run the benchmark use the <code>benchmarker.run_command</code>.
+Append to the command line arguments that you can obtain by using the <code>benchmarker.get_argument_str</code>
+function. The output can be obtained as the returned value of the
+function.</p>
+
+<h4>Parsing the output and record metrics</h4>
+<p>The <a href="http://www.python.org/doc/2.3/lib/module-re.html">regex</a>
+tools provided by Python can be used in order to parse the benchmark
+output and extract the metrics needed. Metrics can be added using the <code>benchmarker.add_metric</code>
+function. The function accepts four arguments. A <code>name</code> for
+the metric, the metrics <code>unit</code>, the metrics <code>data
+type</code> and the metrics <code>value</code>.</p>
+
+<h3>Creating a g-Eclipse Benchmark self-extractable,
+self-executable file.</h3>
+<p>Browse to toolset/installer/ and run the <code>builder.sh</code>.
+This will tar the payload file and create the self-extractable,
+self-executable <code>selfextract.bsx</code> file. This is the final
+step of the g-Eclipse benchmark creation.</p>
+
+
+</body>
+
+</html>
+
