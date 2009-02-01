@@ -127,5 +127,9 @@
     label="eu.geclipse.ui.visualisationaction"
     href="html/extension-points/eu_geclipse_visualisationAction.html">
   </topic>
+  <topic
+    label="eu.geclipse.vtk.ui">
+  	<anchor id="vtk_visualisation_reference_extpoint" />
+  </topic>
   <anchor id="geclipse_reference_extpoint_ext" />
 </toc>

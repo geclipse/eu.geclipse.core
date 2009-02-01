@@ -56,5 +56,17 @@
      <topic href="html/how_to_contribute/service_jobs/sjUIImplementations.html" label="Service Jobs UI Part Contribution">
      </topic>
   </topic>
+  <topic
+    label="Visualisation">
+    <topic
+      label="Visualisation"
+      href="html/how_to_contribute/addingVisualisationSupport.html">
+    </topic>
+    <topic
+      label="VTK Visualisation">
+    	<anchor id="vtk_visualisation_reference_howtocontribute"
+    </topic>
+  </topic>
+  
   <anchor id="geclipse_reference_howtocontribute_ext" />
 </toc>
