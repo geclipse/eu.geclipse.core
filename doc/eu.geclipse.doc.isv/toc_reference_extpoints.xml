@@ -121,11 +121,11 @@
   </topic>
   <topic
     label="eu.geclipse.ui.visualisationWindow"
-    href="html/extension-points/eu_geclipse_visualisationWindow.html">
+    href="html/extension-points/eu_geclipse_ui_visualisationWindow.html">
   </topic>
   <topic
     label="eu.geclipse.ui.visualisationaction"
-    href="html/extension-points/eu_geclipse_visualisationAction.html">
+    href="html/extension-points/eu_geclipse_ui_visualisationAction.html">
   </topic>
   <topic
     label="eu.geclipse.vtk.ui">
