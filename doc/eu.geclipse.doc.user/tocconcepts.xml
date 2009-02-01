@@ -172,6 +172,8 @@
        <topic href="html/concepts/siteadministration/editorpages/AdvancedParametersPage.html" label="Advanced Parameters Page">
        </topic>
     </topic>
+    <topic href="html/concepts/siteadministration/applyingQDL.html" label="Applying a Queue Configuration">
+    </topic>
     <topic
       label="Service Job Framework"
       href="html/concepts/siteadministration/serviceJobs.html">

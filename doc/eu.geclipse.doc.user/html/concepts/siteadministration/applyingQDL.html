@@ -1,0 +1,43 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css"> 
+  <LINK REL="STYLESHEET" HREF="PLUGINS_ROOT/eu.geclipse.doc.user/book.css" CHARSET="ISO-8859-1" 
+  TYPE="text/css"> 
+  <title>g-Eclipse - Applying a Queue Description (QDL) configuration to the Batch Service. </title>
+    <script language="JavaScript" 
+    src="PLUGINS_ROOT/org.eclipse.help/livehelp.js"> </script>
+</head>
+
+<body BGCOLOR="#ffffff">
+
+<h1>g-Eclipse - Applying a Queue Description (QDL) configuration to the Batch Service</h1>
+
+<p>Once created, a QDL file can be applied to the underlying Batch Service in order
+for the queue configuration settings to take effect. The above functionality can
+be invoked by selecting the action button named: <b>Apply Queue Configuration</b> on the
+context menu. This action item is only visible when invoking the context menu
+(right-click) on one or more QDL files in a Grid Project. The action item loads the Batch Service
+Selection Wizard which is comprised of only one wizard page. </p>
+
+<img src="images/BatchServiceSelectionWizard.png" alt="Batch Service Selection Wizard" width="500" >
+
+<p>The wizard page is comprised of a CheckboxTreeViewer that displays
+the running Batch service instances and the Batch Service type they
+belong to in a parent-child style. As depicted on the image, there is
+one batch service instance which is currently running (child) and this
+instance belongs to a PBS Batch Service (parent).</p>
+
+<p>Selecting a parent
+type indicates that the configuration settings included in the selected
+QDL file/s will be applied to all the running instances (children) that
+belong to the specific type. Conversely, selecting a specific running
+instance indicates that the configuration settings included in the
+selected QDL file/s will be applied only to that instance. Selecting one
+or more running instances enables the <b>Finish</b> button. Pressing the Finish
+button applies the QDL configuration/s to the selected Batch Service
+instances</p>
+</body>
+</html>
