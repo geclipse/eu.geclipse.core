@@ -13,19 +13,26 @@
   	<h1>Implementing Job Submission</h1>	
     <h2>
       Overview
-    </h2>Once user created a Job Description, she/he want to submit it to the grid: just click on the job and start action "Submit".
+    </h2>
+    Once user created a Job Description, she/he want to submit it to the 
+    grid: just click on the job and start action "Submit".
+    
     <p>
-      Wizard "Submit job" appears, in which user can select Job Service, to which job will be submitted:<br>
+      Wizard "Submit job" appears, in which user can select Job Service, to 
+      which job will be submitted:<br>
       <img src="images/submitJobWizard.PNG" alt="Submit Job Wizard" title="Submit Job Wizard" height="555" width="438">
     </p>
     <p>
-      In order to submit job to the grid you have to write a class implementing interface <code>IGridJobService</code> and register it by contributing to extension point: <code>eu.geclipse.gria.griaElementCreators</code>.
-	  <br />You have also to identify your job, so you must implement class implementing interface <code>IGridJobID</code>
+      In order to submit job to the grid you have to write a class implementing 
+      interface <code>IGridJobService</code> and register it by contributing to 
+      extension point: <code>eu.geclipse.gria.griaElementCreators</code>.
+	  <br />You have also to identify your job, so you must implement a class 
+	  implementing interface <code>IGridJobID</code>
 	  <br />All these tasks are described below.
     </p>
     <h2>
       Implementing IGridJobService
-    </h1>
+    </h2>
     <ol>
       <li>Generate new class, which implement interface <code>eu.geclipse.core.model.IGridJobService</code><br>
       </li>
@@ -126,7 +133,7 @@ public IGridJobID submitJob( final IGridJobDescription description,
     </ol>
     <h2>
       Implementing IGridJobID
-    </h1>
+    </h2>
     Object implementing <code>eu.geclipse.core.model.IGridJobID</code> is passed to every method, which deal with submitted job. It should contain all information needed to identify particular job on remote service.<br/>
     Following steps have to be done to implement <code>IGridJobID</code>:
 <ol>
@@ -149,7 +156,7 @@ Set following attributes describing contribution to this extension-point:
 </ul> 
 </li>
 </ol>
-<h2>Testing</h1>
+<h2>Testing</h2>
 Now you can test your job service. Don't forget to add URI to your job service to Virtual Organization.
 <br />If you don't have implemented specialized VO for your middleware, just create Generic VO, add to it new service. As service type select your just created job service and type correct URI to the service.   
   </body>

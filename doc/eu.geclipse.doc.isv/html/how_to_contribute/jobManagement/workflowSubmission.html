@@ -1,0 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="Content-Style-Type" content="text/css">
+    <link rel="STYLESHEET" href="PLUGINS_ROOT/eu.geclipse.doc.user/book.css" charset="UTF-8" type="text/css">
+    <title>
+      g-Eclipse - Implementing Workflow Submission
+    </title>
+  </head>
+  <body bgcolor="white">
+    <h1>Implementing Workflow Submission</h1>  
+    <h2>
+      Overview
+    </h2>
+    Once the user has created a workflow, she/he will want to submit it to 
+    the grid for execution. The ideal way for her/him to achieve this is by
+    just right-clicking on the workflow description and selecting the 
+    "Submit" action. This should translate the workflow description to the 
+    appropriate job description language and submit it for execution. 
+    
+    <p>However, this will depend on the grid middleware for which g-Eclipse is 
+    being extended as well as the workflow description language and workflow 
+    engine supported by that grid middleware.</p>
+    
+    <p>In the case of the gLite middleware, it was possible to translate the
+    g-Eclipse workflow description to a JDL-DAG and submit it to the grid as if 
+    it were a regular job. In the case of GRIA however, direct submission of 
+    workflows was not possible. Hence, the workflow description was translated 
+    to XScufl and then deployed to a GRIA Job Service as an application.</p>
+    
+    <p>Therefore, to support workflow execution with a new grid middleware, the
+    workflow engine supported by that grid middleware should be identified and 
+    then a translation mechanism to the workflow description language supported
+    by that engine should be developed. Once this is in place, a mechanism to 
+    submit the workflow for execution can be developed.</p>
+    
+    <p>Once a method to submit a workflow for execution is in place, the 
+    g-Eclipse Jobs and Job Details Views can be used to monitor the status of
+    running workflows.</p>
+  </body>
+</html>

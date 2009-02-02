@@ -19,6 +19,8 @@
      </topic>
      <topic href="html/how_to_contribute/jobManagement/jobDetailsView.html" label="Implementing details on Job Details View">
      </topic>
+     <topic href="html/how_to_contribute/jobManagement/workflowSubmission.html" label="Implementing Workflow Submission">
+     </topic>
   </topic>
   <topic href="html/how_to_contribute/gridJobDetails.html" label="Job Details View">
   </topic>
