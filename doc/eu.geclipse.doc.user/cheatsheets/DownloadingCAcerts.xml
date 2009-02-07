@@ -2,24 +2,36 @@
 <cheatsheet title="Downloading CA Certificates">
    <intro href="/eu.geclipse.doc.user/html/concepts/setup/cacertificates.html">
       <description>
-         This cheat sheet will show you how to download and install 
-          CA certificates into g-Eclipse.<br/>
+         This cheat sheet will show you how to download and install CA certificates into g-Eclipse.<br/>
       </description>
    </intro>
    <item title="Open the CA Certificates Dialog Box" dialog="true" skip="true">
       <description>
-         Go to <b>Window &gt; Preferences</b>, expand the g-Eclipse sub-tree 
-          and select CA Certificates.
-          You can click the <b>Click to Perform</b> button to have the 
-       	  Preferences dialog box open automatically.<br/>
+         Click the <b>Click to Perform</b> link below to get to <b>Window &gt; Preferences &gt; g-Eclipse &gt; Security</b> Preferences dialog. This will embed this cheatsheet in the dialog so that you can continue performing the tasks while following the description in the sheatsheet.<br/>
       </description>
-      <command serialization="org.eclipse.ui.window.preferences(preferencePageId=eu.geclipse.ui.internal.preference.CaCertPreferencePage)" returns="result" confirm="true">
+      <command serialization="org.eclipse.ui.window.preferences(preferencePageId=eu.geclipse.ui.internal.preference.securityPreferencePage)" returns="result" confirm="true">
       </command>
    </item>
-   <item title="Add CA Certificates" dialog="true" skip="true">
+   <item title="Add CA From Repository" dialog="true" skip="false">
       <description>
-         To add certificates from a repository, click on <br/><b>Add from Repository...</b>. This will open the <b>Certificate Import Wizard</b>. There you may select a certificate loader and click <b>Next</b>.   On the next wizard page you may enter the URL of the repository that should be queried for available certificates. After clicking <b>Next</b> the certificates contained in the specified repository are listed and displayed on the next wizard page. There you can select the certificates you would like to import and click <b>Finish</b>.  The various certificates 
-          will be downloaded, unzipped and installed.
+         To import a list of certificates into the g-Eclipse certificate manager, click the <b>Import...</b> button in the Security Preference Page. This opens the <b>Certificate Import Wizard</b>. There, you&apos;ll find a list of certificate repositories available from the Grid Policy Management Authorities and, in addition, the Gilda CA certificate (needed for using the Gilda training infrastructure).<br/><br/>
+Select one of the listed repositories and press <b>Next</b>.  Now this repository is queried for available certificates. After a while, the certificates contained in the specified repository will be listed on the next wizard page.<br/><br/>
+Now select the certificates you would like to import and click <b>Finish</b>.  The various certificates will be downloaded, unzipped and installed.<br/>
+      </description>
+      <command
+            required="false"
+            serialization="org.eclipse.ui.dialogs.openInputDialog"/>
+   </item>
+   <item
+         title="Add CA From File">
+      <description>
+         Alternatively, you may import a CA Certificate from your local or remote location. <br/><br/>To do this, click the <b>Add...</b> button. This will open the Grid File dialog from which you navigate to the desired location where the CA Certificate that you want to have available is stored. <br/><br/>Select the certificate and press OK to exit the dialog. The crtificate will be installed.
+      </description>
+   </item>
+   <item
+         title="Finish">
+      <description>
+         Complete the certificates import by pressing the OK button of the Prefereces window.
       </description>
    </item>
 </cheatsheet>
