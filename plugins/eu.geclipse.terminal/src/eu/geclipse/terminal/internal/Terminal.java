@@ -140,9 +140,13 @@ public class Terminal extends Canvas implements ISelectionProvider {
     });
 
     getVerticalBar().addSelectionListener( new SelectionAdapter() {
+      int prevValue = -1;
       @Override
       public void widgetSelected( final SelectionEvent event ) {
-        triggerRedraw();
+        if (prevValue != getVerticalBar().getSelection()) {
+          prevValue = getVerticalBar().getSelection();
+          triggerRedraw();
+        }
       }
     } );
 
