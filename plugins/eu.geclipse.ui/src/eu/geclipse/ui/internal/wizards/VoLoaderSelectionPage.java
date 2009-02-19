@@ -69,6 +69,13 @@ public class VoLoaderSelectionPage extends WizardPage {
     return this.loaders.size();
   }
 
+  public java.util.List< IConfigurationElement > getAvailableLoaders() {
+    if ( this.loaders == null ) {
+      initVoLoaderList();
+    }
+    return this.loaders;
+  }
+
   public void createControl( final Composite parent ) {
     
     GridData gData;
@@ -108,9 +115,12 @@ public class VoLoaderSelectionPage extends WizardPage {
     
     IVoLoader result = null;
     
-    String[] selection = new String[] {
-        this.loaders.get( 0 ).getAttribute( Extensions.VO_LOADER_NAME_ATTRIBUTE )
-    };
+    String[] selection = null;
+    if ( this.loaders.size() > 0 ) {
+      selection = new String[] {
+          this.loaders.get( 0 ).getAttribute( Extensions.VO_LOADER_NAME_ATTRIBUTE )
+      };
+    }
     
     if ( this.list != null ) { 
       selection = this.list.getSelection();

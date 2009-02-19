@@ -481,16 +481,24 @@ public class VoPreferencePage
   }
   
   protected void importVOs() {
-    VoImportWizard wizard = new VoImportWizard();
-    WizardDialog dialog = new WizardDialog( getShell(), wizard );
-    dialog.open();
-    
-    /*
-     * If no VOs were present before importing, the VoManager will have set
-     * the first new one as default. Thus we have to update the viewer's
-     * checked element.
-     */
-    checkDefaultVo();
+    VoImportWizard wizard;
+    try {
+      wizard = new VoImportWizard();
+      WizardDialog dialog = new WizardDialog( getShell(), wizard );
+      dialog.open();
+      
+      /*
+       * If no VOs were present before importing, the VoManager will have set
+       * the first new one as default. Thus we have to update the viewer's
+       * checked element.
+       */
+      checkDefaultVo();
+    } catch( ProblemException problemException ) {
+      ProblemDialog.openProblem( getShell(),
+                                 Messages.getString("VoPreferencePage.couldNotOpenImportVoWizard"), //$NON-NLS-1$
+                                 Messages.getString("VoPreferencePage.couldNotOpenImportVoWizard"), //$NON-NLS-1$
+                                 problemException );
+    }
   }
   
   /**

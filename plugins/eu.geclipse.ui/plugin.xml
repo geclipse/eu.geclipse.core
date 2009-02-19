@@ -349,6 +349,17 @@
             description="Mount already exists"
             id="eu.geclipse.ui.problem.mountAlreadyExists">
       </problem>
+      <solution
+            description="Install g-Eclipse middleware extensions"
+            id="eu.geclipse.solution.installMiddlewareExtensions">
+      </solution>
+      <problem
+            description="Cannot find any VO loaders"
+            id="eu.geclipse.problem.canNotFindVoLoaders">
+         <reference
+               referenceID="eu.geclipse.solution.installMiddlewareExtensions">
+         </reference>
+      </problem>
    </extension>
    <extension
          point="eu.geclipse.ui.efs">

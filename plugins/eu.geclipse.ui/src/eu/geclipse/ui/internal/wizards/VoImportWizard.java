@@ -99,10 +99,15 @@ public class VoImportWizard extends Wizard {
   
   /**
    * Standard constructor.
+   * @throws ProblemException thrown in case the wizard can not be opened
    */
-  public VoImportWizard() {
+  public VoImportWizard() throws ProblemException {
     super();
     setNeedsProgressMonitor( true );
+    this.selectionPage = new VoLoaderSelectionPage();
+    if ( this.selectionPage.getAvailableLoaders().size() == 0 ) {
+      throw new ProblemException("eu.geclipse.problem.canNotFindVoLoaders", Activator.PLUGIN_ID); //$NON-NLS-1$
+    }
     URL imgUrl = Activator.getDefault().getBundle().getEntry( "icons/wizban/vo_wiz.gif" ); //$NON-NLS-1$
     setDefaultPageImageDescriptor( ImageDescriptor.createFromURL( imgUrl ) );
   }
@@ -110,7 +115,6 @@ public class VoImportWizard extends Wizard {
   @Override
   public void addPages() {
     
-    this.selectionPage = new VoLoaderSelectionPage();
     if ( this.selectionPage.initVoLoaderList() > 1 ) {
       addPage( this.selectionPage );
     }

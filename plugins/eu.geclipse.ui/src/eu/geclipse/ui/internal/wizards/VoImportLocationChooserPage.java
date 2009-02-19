@@ -50,7 +50,7 @@ public class VoImportLocationChooserPage extends WizardPage {
     
     GridData gData;
     IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-    String preferenceID = getLoader().getClass().toString() + "_import_locations";
+    IVoLoader loader = getLoader();
     
     Composite mainComp = new Composite( parent, SWT.NULL );
     mainComp.setLayout( new GridLayout( 1, false ) );
@@ -63,7 +63,10 @@ public class VoImportLocationChooserPage extends WizardPage {
     label.setLayoutData( gData );
     
     this.combo = new StoredCombo( mainComp, SWT.NONE );
-    this.combo.setPreferences( preferenceStore, preferenceID );
+    if ( loader != null ) {
+      String preferenceID = loader.getClass().toString() + "_import_locations";
+      this.combo.setPreferences( preferenceStore, preferenceID );
+    }
     gData = new GridData( GridData.FILL_HORIZONTAL );
     gData.grabExcessHorizontalSpace = true;
     this.combo.setLayoutData( gData );
@@ -76,7 +79,6 @@ public class VoImportLocationChooserPage extends WizardPage {
     
     validatePage();
     setControl( mainComp );
-    
   }
   
   public IVoLoader getLoader() {
