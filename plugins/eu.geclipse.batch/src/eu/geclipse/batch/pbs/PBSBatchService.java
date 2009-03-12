@@ -47,16 +47,16 @@ import eu.geclipse.core.reporting.ProblemException;
 public final class PBSBatchService extends AbstractBatchService {
 
   private String pbsCmdPath;
-  
+
   private String qmgrCmdPath;
-  
-  private List< IBatchJobInfo > tmpJobs = new ArrayList< IBatchJobInfo >();
-  
+
+  private final List< IBatchJobInfo > tmpJobs = new ArrayList< IBatchJobInfo >();
+
   /**
    * Create a new PBSWrapper.
    * @param description The {@link IBatchServiceDescription} from which
    *                    this service should be created.
-   * @param name batch service name, i.e. the configuration file that were 
+   * @param name batch service name, i.e. the configuration file that were
    *             used to instantiate this service
    */
   public PBSBatchService( final IBatchServiceDescription description, final String name ) {
@@ -97,8 +97,9 @@ public final class PBSBatchService extends AbstractBatchService {
       queueName = lineSplit[5];
 
       // Only if all the fields have qualified values.
-      if ( null != status )
+      if ( null != status ) {
         jobInfo = manager.addMerge( jobId, jobName, userAccount, timeUse, status, queueName, this );
+      }
     }
 
     return jobInfo;
@@ -155,8 +156,9 @@ public final class PBSBatchService extends AbstractBatchService {
       }
 
       // Only if all the fields have qualified values.
-      if ( null != state )
+      if ( null != state ) {
         queueInfo = new QueueInfo( queueName, memory, timeCPU, timeWall, node, run, que, lm, state, runState );
+      }
     }
 
     return queueInfo;
@@ -185,19 +187,20 @@ public final class PBSBatchService extends AbstractBatchService {
   private String findJobId( final String jobIdLine ) {
     int beginIndex, endIndex;
     String ret;
-    // NOTE if not found -1 is returned, but with the +1 our index is 
-    // still at 0 so no need to test for no existance 
+    // NOTE if not found -1 is returned, but with the +1 our index is
+    // still at 0 so no need to test for no existance
     beginIndex = jobIdLine.indexOf( '/' ) + 1;
-    
+
     // If there are any text after the second '.', then we want to cut it
     endIndex = jobIdLine.indexOf( '.') + 1;
-    
-    
-    if ( -1 == jobIdLine.indexOf( '.', endIndex ) )
+
+
+    if ( -1 == jobIdLine.indexOf( '.', endIndex ) ) {
       ret = jobIdLine.substring( beginIndex ); // only one '.' so no cutting at the end
-    else
+    } else {
       ret = jobIdLine.substring( beginIndex, jobIdLine.indexOf( '.', endIndex ) );
-    
+    }
+
     return ret;
   }
   /**
@@ -230,8 +233,9 @@ public final class PBSBatchService extends AbstractBatchService {
       }
 
       // Reached the end of the string
-      if ( -1 == endIndex )
+      if ( -1 == endIndex ) {
         break;
+      }
 
       // Get the name of the worker node
       wnFQN = nodeLines.substring( beginIndex, endIndex );
@@ -246,8 +250,9 @@ public final class PBSBatchService extends AbstractBatchService {
         // Sometimes there may be multiple states listed in a comma separated list, we will only get the first
         tmpIdx = line.indexOf( ',' );
 
-        if ( -1 != tmpIdx )
+        if ( -1 != tmpIdx ) {
           line = line.substring( 0, tmpIdx );
+        }
 
         try {
           state = WorkerNodeState.valueOfEnhanced( line );
@@ -266,9 +271,9 @@ public final class PBSBatchService extends AbstractBatchService {
           try {
             np = Integer.parseInt( line );
           } catch ( NumberFormatException NumExp) { np = -1; }
-        }
-        else
+        } else {
           np = -1;
+        }
       }
 
       // Get the properties
@@ -280,9 +285,9 @@ public final class PBSBatchService extends AbstractBatchService {
       }
 
       // Get the type
-      if ( null == properties && null != line )
+      if ( null == properties && null != line ) {
         type = getRightHandSide( line, "ntype = " ); //$NON-NLS-1$
-      else {
+      } else {
         beginIndex = endIndex+1;
         endIndex = nodeLines.indexOf( '\n', beginIndex );
         if ( -1 != endIndex ) {
@@ -300,18 +305,19 @@ public final class PBSBatchService extends AbstractBatchService {
 
           // Add the job to the jobs
           if ( null != job ) {
-            if ( null == jobs )
+            if ( null == jobs ) {
               jobs = new ArrayList< String >();
-            
+            }
+
             // Multiple jobs may be separated with a ',' on the same line
             beginJobIdx = 0;
             endJobIdx = job.indexOf( ',' );
-            
+
             while ( -1 != endJobIdx ) {
               tmpJob = job.substring( beginJobIdx, endJobIdx );
               tmpJob = tmpJob.trim();
               jobs.add( findJobId( tmpJob ) );
-              
+
               beginJobIdx = endJobIdx+1;
               endJobIdx = job.indexOf( ',', beginJobIdx );
             }
@@ -320,9 +326,9 @@ public final class PBSBatchService extends AbstractBatchService {
             tmpJob = job.substring( beginJobIdx );
             tmpJob = tmpJob.trim();
             jobs.add( findJobId( tmpJob ) );
-          }
-          else // We have past the last job, we have moved to the properties
+          } else {
             status = getRightHandSide( line, "status = " ); //$NON-NLS-1$
+          }
         }
       } while ( null != job );
 
@@ -337,14 +343,16 @@ public final class PBSBatchService extends AbstractBatchService {
       properties = null;
       type = null;
       status = null;
-      if ( null != jobs )
+      if ( null != jobs ) {
         jobs = null;
+      }
 
       beginIndex = endIndex+1;
     }
 
-    if ( wns.isEmpty() )
+    if ( wns.isEmpty() ) {
       wns = null;
+    }
 
     return wns;
   }
@@ -362,7 +370,7 @@ public final class PBSBatchService extends AbstractBatchService {
   public synchronized boolean connectToServer( final ISSHConnectionInfo sshConnectionInfo )  throws ProblemException {
     boolean ret;
 
-    ret = super.connectToServer( sshConnectionInfo ); 
+    ret = super.connectToServer( sshConnectionInfo );
 
     if ( ret ) {
       // Find out if the qmgr  command need to set the path explicitly
@@ -371,45 +379,72 @@ public final class PBSBatchService extends AbstractBatchService {
 
         // No path needed
         this.qmgrCmdPath = ""; //$NON-NLS-1$
-      } catch ( ProblemException bexp ) {
+      } catch ( ProblemException bexp1 ) {
 //      if ( bexp.getProblem() == IBatchProblems.COMMAND_FAILED ){
-        String cmd = "find / -xdev -maxdepth 10 -type f -name qmgr 2> /dev/null"; //$NON-NLS-1$
-        this.qmgrCmdPath = this.connection.execCommand( cmd ); 
+        try {
+          String cmd = " /bin/sh -l -c 'which -- qmgr\\\' "; //$NON-NLS-1$
+          this.qmgrCmdPath = this.connection.execCommand( cmd );
+          if ( this.qmgrCmdPath != null ) {
+            int idx = this.qmgrCmdPath.lastIndexOf( "qmgr" ); //$NON-NLS-1$
 
-        if ( null != this.qmgrCmdPath ) {
-          int idx = this.qmgrCmdPath.lastIndexOf( "qmgr" ); //$NON-NLS-1$
+            // The path was found
+            if ( -1 != idx ) {
+              this.qmgrCmdPath = this.qmgrCmdPath.substring( 0, idx );
+            }
+          }
+          } catch ( ProblemException bexp ) {
+            String cmd = "/bin/sh -l -c \"find / -xdev -maxdepth 10 -executable -type f -name qmgr 2> /dev/null\""; //$NON-NLS-1$
+            this.qmgrCmdPath = this.connection.execCommand( cmd );
 
-          // The path was found
-          if ( -1 != idx )
-            this.qmgrCmdPath = this.qmgrCmdPath.substring( 0, idx );
-        }
-//      } else // Something else went wrong 
-//        throw bexp;
+            if ( null != this.qmgrCmdPath ) {
+              int idx = this.qmgrCmdPath.lastIndexOf( "qmgr" ); //$NON-NLS-1$
+
+              // The path was found
+              if ( -1 != idx ) {
+                this.qmgrCmdPath = this.qmgrCmdPath.substring( 0, idx );
+              }
+            }
+  //      } else // Something else went wrong
+  //        throw bexp;
+          }
       }
-      
+
       // Find out if the qmgr command need to set the path explicitly
       try {
         this.pbsCmdPath = this.connection.execCommand( "pbsnodes" ); //$NON-NLS-1$
 
         // No path needed
         this.pbsCmdPath = ""; //$NON-NLS-1$
-      } catch ( ProblemException bexp ) {
+      } catch ( ProblemException bexp2 ) {
+        try {
+          String cmd = "/bin/sh -l -c 'which pbsnodes\\\'"; //$NON-NLS-1$
+          this.pbsCmdPath = this.connection.execCommand( cmd );
+          if ( this.pbsCmdPath != null ) {
+            int idx = this.pbsCmdPath.lastIndexOf( "pbsnodes" ); //$NON-NLS-1$
+
+            // The path was found
+            if ( -1 != idx ) {
+              this.pbsCmdPath = this.pbsCmdPath.substring( 0, idx );
+            }
+          }
+        } catch ( ProblemException bexp ) {
 //      if ( bexp.getProblem() == IBatchProblems.COMMAND_FAILED ){
-        String cmd = "find / -xdev -maxdepth 10 -type f -name pbsnodes 2> /dev/null"; //$NON-NLS-1$
-        this.pbsCmdPath = this.connection.execCommand( cmd ); 
+          String cmd = "/bin/sh -l -c \"find / -xdev -maxdepth 10 -executable -type f -name pbsnodes 2> /dev/null\""; //$NON-NLS-1$
+          this.pbsCmdPath = this.connection.execCommand( cmd );
 
-        if ( null != this.pbsCmdPath ) {
-          int idx = this.pbsCmdPath.lastIndexOf( "pbsnodes" ); //$NON-NLS-1$
+          if ( null != this.pbsCmdPath ) {
+            int idx = this.pbsCmdPath.lastIndexOf( "pbsnodes" ); //$NON-NLS-1$
 
-          // The path was found
-          if ( -1 != idx )
-            this.pbsCmdPath = this.pbsCmdPath.substring( 0, idx );
+            // The path was found
+            if ( -1 != idx ) {
+              this.pbsCmdPath = this.pbsCmdPath.substring( 0, idx );
+            }
+          }
+  //      } else // Something else went wrong
+  //        throw bexp;
         }
-//      } else // Something else went wrong 
-//        throw bexp;
       }
-      
-      
+
     }
 
     return ret;
@@ -424,8 +459,8 @@ public final class PBSBatchService extends AbstractBatchService {
    * ------------------- ---------------- --------------- -------- - -----
    * 968.ce201           blahjob_KJ8465   see001                 0 R see
    * 969.ce201           blahjob_RT8482   see001                 0 R see
-   * 
-   * @param manager The manager where the jobs will be merged into. 
+   *
+   * @param manager The manager where the jobs will be merged into.
    * @throws ProblemException If command is not executed successfully
    */
   public synchronized void getJobs( final IBatchJobManager manager ) throws ProblemException {
@@ -445,8 +480,9 @@ public final class PBSBatchService extends AbstractBatchService {
         // Skip first two lines
         if ( 2 < ++skip ) {
           jobInfo = parseJobLine( line, manager );
-          if ( null != jobInfo )
+          if ( null != jobInfo ) {
             this.tmpJobs.add( jobInfo );
+          }
         }
 
         beginIndex = endIndex+1;
@@ -464,8 +500,9 @@ public final class PBSBatchService extends AbstractBatchService {
    * @throws ProblemException If command is not executed successfully
    */
   public synchronized void delJob( final String jobId ) throws ProblemException {
-    if ( null != jobId )
+    if ( null != jobId ) {
       this.connection.execCommand( this.qmgrCmdPath + "qdel "+ jobId ); //$NON-NLS-1$
+    }
   }
 
   /**
@@ -476,20 +513,21 @@ public final class PBSBatchService extends AbstractBatchService {
    * @param destServer The destination server, <code>null</code> if no destination server.
    * @throws ProblemException If command is not executed successfully
    */
-  public synchronized void moveJob( final String jobId, 
-                                    final String destQueue, 
+  public synchronized void moveJob( final String jobId,
+                                    final String destQueue,
                                     final String destServer ) throws ProblemException {
     String cmd = "qmove "; //$NON-NLS-1$
 
     if ( null != jobId ) {
-      if ( null != destServer && null != destQueue )
+      if ( null != destServer && null != destQueue ) {
         cmd += destQueue + "@" + destServer; //$NON-NLS-1$
-      else if ( null == destServer )
+      } else if ( null == destServer ) {
         cmd += destQueue;
-      else if ( null == destQueue )
+      } else if ( null == destQueue ) {
         cmd += destServer;
-      else
-        assert false; // Not enough arguments 
+      } else {
+        assert false; // Not enough arguments
+      }
 
       this.connection.execCommand( this.qmgrCmdPath + cmd + " " + jobId ); //$NON-NLS-1$
     }
@@ -503,29 +541,31 @@ public final class PBSBatchService extends AbstractBatchService {
    * @param destServer The destination server, <code>null</code> if no destination server.
    * @throws ProblemException If command is not executed successfully
    */
-  public synchronized void moveJobs( final String[] jobIds, 
-                                       final String destQueue, 
+  public synchronized void moveJobs( final String[] jobIds,
+                                       final String destQueue,
                                        final String destServer ) throws ProblemException {
     String strJobs = null;
     String cmd = "qmove "; //$NON-NLS-1$
 
     if ( null != jobIds ) {
-      if ( null != destServer && null != destQueue )
+      if ( null != destServer && null != destQueue ) {
         cmd += destQueue + "@" + destServer; //$NON-NLS-1$
-      else if ( null == destServer )
+      } else if ( null == destServer ) {
         cmd += destQueue;
-      else if ( null == destQueue )
+      } else if ( null == destQueue ) {
         cmd += destServer;
-      else
-        assert false; // Not enough arguments 
+      } else {
+        assert false; // Not enough arguments
+      }
 
-      // Add the jobIds 
-      for ( String str : jobIds )
+      // Add the jobIds
+      for ( String str : jobIds ) {
         strJobs = str + " "; //$NON-NLS-1$
-    
+      }
+
       if ( null != strJobs ) {
         strJobs = strJobs.trim();
-    
+
         this.connection.execCommand( this.qmgrCmdPath + cmd + " " + strJobs ); //$NON-NLS-1$
       }
     }
@@ -544,7 +584,7 @@ public final class PBSBatchService extends AbstractBatchService {
       this.connection.execCommand( this.qmgrCmdPath + cmd );
     }
   }
-  
+
   /**
    * Puts a hold on one or more jobs in the queue of the batch service.
    *
@@ -555,17 +595,18 @@ public final class PBSBatchService extends AbstractBatchService {
     String strJobs = null;
     String cmd = "qhold "; //$NON-NLS-1$
 
-    // Add the jobIds 
-    for ( String str : jobIds )
+    // Add the jobIds
+    for ( String str : jobIds ) {
       strJobs = str + " "; //$NON-NLS-1$
-  
+    }
+
     if ( null != strJobs ) {
       strJobs = strJobs.trim();
-  
+
       this.connection.execCommand( this.qmgrCmdPath + cmd + " " + strJobs ); //$NON-NLS-1$
     }
   }
-  
+
   /**
    * Release a job with a previous hold in queue of the batch system.
    *
@@ -590,17 +631,18 @@ public final class PBSBatchService extends AbstractBatchService {
     String strJobs = null;
     String cmd = "qrls "; //$NON-NLS-1$
 
-    // Add the jobIds 
-    for ( String str : jobIds )
+    // Add the jobIds
+    for ( String str : jobIds ) {
       strJobs = str + " "; //$NON-NLS-1$
-  
+    }
+
     if ( null != strJobs ) {
       strJobs = strJobs.trim();
-  
+
       this.connection.execCommand( this.qmgrCmdPath + cmd + " " + strJobs ); //$NON-NLS-1$
     }
   }
-  
+
   /**
    * Rerun a currently running job.
    *
@@ -625,13 +667,14 @@ public final class PBSBatchService extends AbstractBatchService {
     String strJobs = null;
     String cmd = "qrerun "; //$NON-NLS-1$
 
-    // Add the jobIds 
-    for ( String str : jobIds )
+    // Add the jobIds
+    for ( String str : jobIds ) {
       strJobs = str + " "; //$NON-NLS-1$
-  
+    }
+
     if ( null != strJobs ) {
       strJobs = strJobs.trim();
-  
+
       this.connection.execCommand( this.qmgrCmdPath + cmd + " " + strJobs ); //$NON-NLS-1$
     }
   }
@@ -659,8 +702,9 @@ public final class PBSBatchService extends AbstractBatchService {
 
     outPut = this.connection.execCommand( this.pbsCmdPath + "pbsnodes" ); //$NON-NLS-1$
 
-    if ( null != outPut )
+    if ( null != outPut ) {
       wns = parseNodes ( outPut );
+    }
 
     return wns;
   }
@@ -736,15 +780,17 @@ public final class PBSBatchService extends AbstractBatchService {
         // Skip first five lines
         if ( 5 < ++skip ) {
           queueInfo = parseQueueLine( line );
-          if ( null != queueInfo )
+          if ( null != queueInfo ) {
             queues.add( queueInfo );
+          }
         }
 
         beginIndex = endIndex+1;
       }
 
-      if ( queues.isEmpty() )
+      if ( queues.isEmpty() ) {
         queues = null;
+      }
     }
 
     return queues;
@@ -757,8 +803,9 @@ public final class PBSBatchService extends AbstractBatchService {
    * @throws ProblemException If command is not executed successfully
    */
   public synchronized void disableQueue( final String queueId ) throws ProblemException {
-    if ( null != queueId )
+    if ( null != queueId ) {
       this.connection.execCommand( this.qmgrCmdPath + "qdisable "+ queueId ); //$NON-NLS-1$
+    }
   }
 
   /**
@@ -769,11 +816,12 @@ public final class PBSBatchService extends AbstractBatchService {
    */
   public synchronized void disableQueues( final String[] queueIds ) throws ProblemException {
     if ( null != queueIds ) {
-      if ( 0 < queueIds.length ) { 
+      if ( 0 < queueIds.length ) {
         String queues = ""; //$NON-NLS-1$
 
-        for ( String str : queueIds )
+        for ( String str : queueIds ) {
           queues += str + " "; //$NON-NLS-1$
+        }
 
         this.connection.execCommand( this.qmgrCmdPath + "qdisable "+ queues ); //$NON-NLS-1$
       }
@@ -787,8 +835,9 @@ public final class PBSBatchService extends AbstractBatchService {
    * @throws ProblemException If command is not executed successfully
    */
   public synchronized void enableQueue( final String queueId ) throws ProblemException {
-    if ( null != queueId )
+    if ( null != queueId ) {
       this.connection.execCommand( this.qmgrCmdPath + "qenable "+ queueId ); //$NON-NLS-1$
+    }
   }
 
   /**
@@ -799,11 +848,12 @@ public final class PBSBatchService extends AbstractBatchService {
    */
   public synchronized void enableQueues( final String[] queueIds ) throws ProblemException {
     if ( null != queueIds ) {
-      if ( 0 < queueIds.length ) { 
+      if ( 0 < queueIds.length ) {
         String queues = ""; //$NON-NLS-1$
 
-        for ( String str : queueIds )
+        for ( String str : queueIds ) {
           queues += str + " "; //$NON-NLS-1$
+        }
 
         this.connection.execCommand( this.qmgrCmdPath + "qenable "+ queues ); //$NON-NLS-1$
       }
@@ -817,8 +867,9 @@ public final class PBSBatchService extends AbstractBatchService {
    * @throws ProblemException If command is not executed successfully
    */
   public synchronized void startQueue( final String queueId ) throws ProblemException {
-    if ( null != queueId )
+    if ( null != queueId ) {
       this.connection.execCommand( this.qmgrCmdPath + "qstart "+ queueId ); //$NON-NLS-1$
+    }
   }
 
   /**
@@ -829,17 +880,18 @@ public final class PBSBatchService extends AbstractBatchService {
    */
   public synchronized void startQueues( final String[] queueIds ) throws ProblemException {
     if ( null != queueIds ) {
-      if ( 0 < queueIds.length ) { 
+      if ( 0 < queueIds.length ) {
         String queues = ""; //$NON-NLS-1$
 
-        for ( String str : queueIds )
+        for ( String str : queueIds ) {
           queues += str + " "; //$NON-NLS-1$
+        }
 
         this.connection.execCommand( this.qmgrCmdPath + "qstart "+ queues ); //$NON-NLS-1$
       }
     }
   }
-  
+
   /**
    * Executes qstop to stop a specific queue.
    *
@@ -847,8 +899,9 @@ public final class PBSBatchService extends AbstractBatchService {
    * @throws ProblemException If command is not executed successfully
    */
   public synchronized void stopQueue( final String queueId ) throws ProblemException {
-    if ( null != queueId )
+    if ( null != queueId ) {
       this.connection.execCommand( this.qmgrCmdPath + "qstop "+ queueId ); //$NON-NLS-1$
+    }
   }
 
   /**
@@ -859,11 +912,12 @@ public final class PBSBatchService extends AbstractBatchService {
    */
   public synchronized void stopQueues( final String[] queueIds ) throws ProblemException {
     if ( null != queueIds ) {
-      if ( 0 < queueIds.length ) { 
+      if ( 0 < queueIds.length ) {
         String queues = ""; //$NON-NLS-1$
 
-        for ( String str : queueIds )
+        for ( String str : queueIds ) {
           queues += str + " "; //$NON-NLS-1$
+        }
 
         this.connection.execCommand( this.qmgrCmdPath + "qstop "+ queues ); //$NON-NLS-1$
       }
@@ -876,45 +930,46 @@ public final class PBSBatchService extends AbstractBatchService {
    * @param queueName The name of the new queue.
    * @param type The type of the new queue.
    * @param enabled The state of the new queue.
-   * @param timeCPU Maximum allowed CPU time for any job. 
+   * @param timeCPU Maximum allowed CPU time for any job.
    * @param timeWall Maximum allowed wall time for any job.
    * @param vos Only allow access to the specified vos, <code>null</code> no restriction is applied.
    * @throws ProblemException If command is not executed successfully
    */
-  public synchronized void createQueue( final String queueName, final QueueType type, 
-                                           final boolean enabled, final double timeCPU, 
+  public synchronized void createQueue( final String queueName, final QueueType type,
+                                           final boolean enabled, final double timeCPU,
                                            final double timeWall, final List<String> vos ) throws ProblemException {
 
-    if ( null != queueName && null != type && -1 != timeCPU && -1 != timeWall ) { 
-     
+    if ( null != queueName && null != type && -1 != timeCPU && -1 != timeWall ) {
+
       String adaptedTimeWall, adaptedTimeCPU  = null;
-      double newTimeWallHours = (timeWall / 3600);
-      double newTimeCPUHours = (timeCPU / 3600);
-      
-     
-      
+      double newTimeWallHours = timeWall / 3600;
+      double newTimeCPUHours = timeCPU / 3600;
+
+
+
       adaptedTimeWall = String.format( "%02d:%02d:00", //$NON-NLS-1$
                                             Integer.valueOf( getHoursFromDouble( newTimeWallHours ) ),
                                             Integer.valueOf( getMinutesFromDouble( newTimeWallHours) ) );
-      
-   
+
+
       adaptedTimeCPU = String.format( "%02d:%02d:00", //$NON-NLS-1$
                                             Integer.valueOf( getHoursFromDouble( newTimeCPUHours ) ),
-                                            Integer.valueOf( getMinutesFromDouble( newTimeCPUHours ) ) ); 
-      
-      
+                                            Integer.valueOf( getMinutesFromDouble( newTimeCPUHours ) ) );
+
+
       String cmd = this.qmgrCmdPath + "qmgr -c \"create queue "; //$NON-NLS-1$
       String setAttr = " ; " + this.qmgrCmdPath + "qmgr -c \"set queue " + queueName; //$NON-NLS-1$ //$NON-NLS-2$
-    
+
       // Build up the command
       cmd += queueName;
       cmd += " queue_type=" + type.name() + "\""; //$NON-NLS-1$ //$NON-NLS-2$
 
-      if ( !enabled )
+      if ( !enabled ) {
         cmd += setAttr + " enabled=false\""; //$NON-NLS-1$
+      }
 
       cmd += setAttr + " resources_max.walltime=" + adaptedTimeWall + "\""; //$NON-NLS-1$ //$NON-NLS-2$
-    
+
       cmd += setAttr + " resources_max.cput=" + adaptedTimeCPU + "\""; //$NON-NLS-1$ //$NON-NLS-2$
 
       // If access control on vos, add the allowed vos
@@ -925,12 +980,12 @@ public final class PBSBatchService extends AbstractBatchService {
           cmd += setAttr + " acl_groups= +" + str + "\"" ; //$NON-NLS-1$ //$NON-NLS-2$
         }
       }
-    
+
       // Try to create the queue on the batch service
       this.connection.execCommand( cmd );
-    }  
+    }
   }
-    
+
   /**
    * Executes command that will create a new queue with a "default" number of argument.
    *
@@ -940,68 +995,68 @@ public final class PBSBatchService extends AbstractBatchService {
    * @param enabled The state of the new queue.
    * @param started If the new queue will be started when created.
    * @param maxRunningJobs Maximum running jobs at any given time from the queue.
-   * @param timeCPU Maximum allowed CPU time for any job. 
+   * @param timeCPU Maximum allowed CPU time for any job.
    * @param timeWall Maximum allowed wall time for any job.
    * @param maxJobsInQueue Maximum allowed jobs in the queue
-   * @param assignedResources 
+   * @param assignedResources
    * @param vos Only allow access to the specified vos, <code>null</code> no restriction is applied.
    * @throws ProblemException If command is not executed successfully
    */
-  public synchronized void createQueue( final String queueName, final int priority, final QueueType type, 
+  public synchronized void createQueue( final String queueName, final int priority, final QueueType type,
                                            final boolean enabled, final boolean started, final int maxRunningJobs,
                                            final double timeCPU, final double timeWall, final int maxJobsInQueue,
                                            final int assignedResources, final List<String> vos )
                                       throws ProblemException {
 
-    if ( null != queueName && null != type && -1 != timeCPU && -1 != timeWall ) { 
-      
+    if ( null != queueName && null != type && -1 != timeCPU && -1 != timeWall ) {
+
       String adaptedTimeWall, adaptedTimeCPU  = null;
 //      double newTimeWallHours = (timeWall / 3600);
 //      double newTimeCPUHours = (timeCPU / 3600);
-      
+
       adaptedTimeWall = String.format( "%02d:%02d:00", //$NON-NLS-1$
                                        Integer.valueOf( getHoursFromDouble( timeWall ) ),
                                        Integer.valueOf( getMinutesFromDouble( timeWall) ) );
- 
+
 
       adaptedTimeCPU = String.format( "%02d:%02d:00", //$NON-NLS-1$
                                        Integer.valueOf( getHoursFromDouble( timeCPU ) ),
                                        Integer.valueOf( getMinutesFromDouble( timeCPU ) ) );
-      
-      
+
+
       String cmd = this.qmgrCmdPath + "qmgr -c \"create queue "; //$NON-NLS-1$
       String setAttr = " ; " + this.qmgrCmdPath + "qmgr -c \"set queue " + queueName; //$NON-NLS-1$ //$NON-NLS-2$
 
-      
+
       // Build up the command
       cmd += queueName;
       cmd += " queue_type=" + type.name() + "\""; //$NON-NLS-1$ //$NON-NLS-2$
 
-      
+
       if ( !enabled ){
         cmd += setAttr + " enabled = False\""; //$NON-NLS-1$
       }else {
         cmd += setAttr + " enabled = True\""; //$NON-NLS-1$
       }
-      
+
       if (!started ){
         cmd += setAttr + " started = False\""; //$NON-NLS-1$
       }else {
         cmd += setAttr + " started = True\""; //$NON-NLS-1$
       }
 
-      if ( -1 != priority ) { 
+      if ( -1 != priority ) {
         cmd += setAttr + " priority=" + priority + "\""; //$NON-NLS-1$ //$NON-NLS-2$
       }
-      
+
       cmd += setAttr + " resources_max.walltime=" + adaptedTimeWall + "\""; //$NON-NLS-1$ //$NON-NLS-2$
-    
+
       cmd += setAttr + " resources_max.cput=" + adaptedTimeCPU + "\""; //$NON-NLS-1$ //$NON-NLS-2$
 
       if ( -1 != maxRunningJobs ){
         cmd += setAttr + " max_running=" + maxRunningJobs + "\""; //$NON-NLS-1$ //$NON-NLS-2$
       }
-      
+
       if ( -1 != maxJobsInQueue ){
         cmd += setAttr + " max_queuable=" + maxJobsInQueue + "\""; //$NON-NLS-1$ //$NON-NLS-2$
       }
@@ -1009,7 +1064,7 @@ public final class PBSBatchService extends AbstractBatchService {
 //      if ( -1 !=assignedResources ){
 //        cmd += setAttr + " resources_assigned.nodect=" + assignedResources+"\""; //$NON-NLS-1$ //$NON-NLS-2$
 //      }
-      
+
       // If access control on vos, add the allowed vos
       if ( null != vos ) {
         cmd += setAttr + " acl_group_enable=true\""; //$NON-NLS-1$
@@ -1018,13 +1073,13 @@ public final class PBSBatchService extends AbstractBatchService {
           cmd += setAttr + " acl_groups= +" + str + "\"" ; //$NON-NLS-1$ //$NON-NLS-2$
         }
       }
-    
+
       // Try to create the queue on the batch service
       this.connection.execCommand( cmd );
     }
   }
-  
- 
+
+
   /**
    * Executes command that will change the maximum allowed wall time of a specific queue.
    *
@@ -1040,11 +1095,11 @@ public final class PBSBatchService extends AbstractBatchService {
 
       // Terminate the command
       cmd += "\""; //$NON-NLS-1$
-    
+
       this.connection.execCommand( this.qmgrCmdPath + cmd );
     }
   }
-  
+
   /**
    * Deletes the specified queue.
    *
@@ -1053,7 +1108,7 @@ public final class PBSBatchService extends AbstractBatchService {
    */
   public synchronized void delQueue( final String queueId ) throws ProblemException {
     if ( null != queueId ) {
-      this.connection.execCommand( this.qmgrCmdPath 
+      this.connection.execCommand( this.qmgrCmdPath
                                               + "qmgr -c \"delete queue "  //$NON-NLS-1$
                                               + queueId + "\"" ); //$NON-NLS-1$
     }
@@ -1061,7 +1116,7 @@ public final class PBSBatchService extends AbstractBatchService {
 
 
   public void createQueue( final DocumentRoot documentRoot ) throws ProblemException {
-    
+
     eu.geclipse.batch.model.qdl.QueueType queue;
     QueueType type;
     String queueName = null;
@@ -1074,10 +1129,10 @@ public final class PBSBatchService extends AbstractBatchService {
     int maxJobsInQueue = -1;
     int assignedResources = -1;
     List<String> vos = null;
-    
-    
+
+
     queue = documentRoot.getQueue();
-    
+
     /* Get Queue Type ( EXECUTION || ROUTE ) */
     if(queue.getQueueType().equals( QueueTypeEnumeration.EXECUTION )){
       type = IQueueInfo.QueueType.execution;
@@ -1085,30 +1140,30 @@ public final class PBSBatchService extends AbstractBatchService {
     else {
       type = IQueueInfo.QueueType.route;
     }
-    
+
     /* Get Queue Name */
     queueName = queue.getQueueName();
-    
+
     /* Get Queue Status ( ENABLED || DISABLED )*/
     if(queue.getQueueStatus().equals( QueueStatusEnumeration.ENABLED )){
       queueStatus = true;
-    }   
-    
+    }
+
     /* Get Queue Started ( TRUE || FALSE )*/
     if( queue.isQueueStarted() == true ){
       queueStarted = true;
     }
-    
-    
+
+
     timeCPU = queue.getCPUTimeLimit().getUpperBoundedRange().getValue();
-        
-    /* Get the list of VOs that are allowed to use the queue */ 
+
+    /* Get the list of VOs that are allowed to use the queue */
     if ( queue.getAllowedVirtualOrganizations() != null ) {
       vos = queue.getAllowedVirtualOrganizations().getVOName();
     }
-    
+
     timeWall = queue.getWallTimeLimit().getUpperBoundedRange().getValue();
-   
+
     /* Get QUEUE__TYPE_PRIORITY */
     if ( null != queue.getPriority() ) {
       if (queue.getPriority().getUpperBoundedRange() != null) {
@@ -1118,8 +1173,8 @@ public final class PBSBatchService extends AbstractBatchService {
         priority = queue.getPriority().getLowerBoundedRange().getValue();
       }
     }
-    
-    /* Get QUEUE__TYPE_RUNNING_JOBS */    
+
+    /* Get QUEUE__TYPE_RUNNING_JOBS */
     if ( null != queue.getRunningJobs() ) {
       if (queue.getRunningJobs().getUpperBoundedRange() != null) {
         maxRunningJobs = queue.getRunningJobs().getUpperBoundedRange().getValue();
@@ -1128,7 +1183,7 @@ public final class PBSBatchService extends AbstractBatchService {
         maxRunningJobs = queue.getRunningJobs().getLowerBoundedRange().getValue();
       }
     }
-    
+
     /* Get QUEUE__TYPE_JOBS_IN_QUEUE */
     if ( null != queue.getJobsInQueue() ) {
       if (queue.getJobsInQueue().getUpperBoundedRange() != null) {
@@ -1138,7 +1193,7 @@ public final class PBSBatchService extends AbstractBatchService {
         maxJobsInQueue = queue.getJobsInQueue().getLowerBoundedRange().getValue();
       }
     }
-    
+
     /* Get QUEUE__TYPE_JOBS_ASSIGNED_RESOURCES */
     if ( null != queue.getAssignedResources() ) {
       if (queue.getAssignedResources().getExact() != null) {
@@ -1152,28 +1207,28 @@ public final class PBSBatchService extends AbstractBatchService {
                  maxRunningJobs, timeCPU,
                  timeWall, maxJobsInQueue,
                  assignedResources, vos);
-            
+
   }
-  
-  
+
+
   static int getHoursFromDouble( final double value ) {
-    
+
     BigDecimal b = new BigDecimal( value/3600 );
-    double c = b.longValue();    
+    double c = b.longValue();
     return (int) c;
-    
+
   }
-  
-  
+
+
   static int getMinutesFromDouble( final double value ) {
-    
+
     int result;
-    
-    result = (int)((value %3600)/60);
-     
+
+    result = (int)(value %3600/60);
+
    return result;
   }
-  
+
 }
 
 
