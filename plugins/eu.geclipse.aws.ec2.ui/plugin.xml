@@ -32,12 +32,29 @@
     <objectContribution
       id="eu.geclipse.aws.ec2.ui.action.objectContribution.iGridComputing"
       objectClass="eu.geclipse.aws.ec2.EC2Instance">
+      <menu id="eu.geclipse.aws.ec2.ui.menu.createconnections"
+               label="Create Grid Connection to ..."
+               path="additions">
+            <separator
+                  name="content">
+            </separator>
+            <separator
+                  name="additions">
+            </separator>
+			</menu>
       <action
         class="eu.geclipse.aws.ec2.ui.actions.CreateConnectionInstance"
         enablesFor="+"
+        menubarPath="eu.geclipse.aws.ec2.ui.menu.createconnections/additions"
         id="eu.geclipse.aws.ec2.ui.actions.createConnectionInstance"
-        label="Create Grid Connection to Instance">
+        label="EC2 Instance root">
       </action>
+       <action
+             class="eu.geclipse.aws.ec2.ui.actions.CreateConnectionRepository"
+             id="eu.geclipse.aws.ec2.ui.createConnectionrepository"
+             label="EC2 Instance Repository"
+             menubarPath="eu.geclipse.aws.ec2.ui.menu.createconnections/additions">
+       </action>
     </objectContribution>
   </extension>
 	<extension
