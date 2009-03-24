@@ -31,6 +31,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IObjectActionDelegate;
 
 import eu.geclipse.aws.ec2.EC2Instance;
+import eu.geclipse.aws.ec2.ui.internal.Activator;
 import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.ui.actions.MountAction;
 
@@ -84,11 +85,9 @@ public class CreateConnectionInstance extends AbstractAWSProjectAction {
               System.out.println("URI: " + uri) ; 
               
             } catch( URISyntaxException e ) {
-              // TODO Auto-generated catch block
-              e.printStackTrace();
+              Activator.log( e );
             } catch( CoreException e ) {
-              // TODO Auto-generated catch block
-              e.printStackTrace();
+              Activator.log( e );
             } 
              
            }
