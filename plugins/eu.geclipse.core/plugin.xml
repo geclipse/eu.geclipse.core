@@ -590,7 +590,7 @@
                   description="The GILDA Certification Authority (GILDA CA) issues temporary (two weeks) personal public key certificates (compliant with the X.509 standard) in order to access the GILDA Testbed."
                   id="grid.gilda.infn.dist"
                   name="The GILDA Certification Authority"
-                  url="https://gilda.ct.infn.it/CA/mgt/">
+                  url="https://gilda-security.ct.infn.it/CA/mgt/">
             </distribution>
          </authority>
       </loader>
