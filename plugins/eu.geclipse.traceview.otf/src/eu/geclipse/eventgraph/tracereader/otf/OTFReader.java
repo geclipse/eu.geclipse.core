@@ -72,7 +72,7 @@ public class OTFReader extends AbstractTrace
   }
 
   private void loadStream( final int nr ) throws IOException {
-    String eventsFilename = this.filenameBase + '.' + nr + ".events"; //$NON-NLS-1$
+    String eventsFilename = this.filenameBase + '.' + Integer.toHexString( nr ) + ".events"; //$NON-NLS-1$
     new OTFStreamReader( new File( eventsFilename ), this );
   }
 
