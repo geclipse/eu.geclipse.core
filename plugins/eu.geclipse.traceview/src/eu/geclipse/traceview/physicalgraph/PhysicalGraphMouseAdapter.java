@@ -21,6 +21,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.ui.PartInitException;
 
 import eu.geclipse.traceview.IEvent;
 import eu.geclipse.traceview.IPhysicalEvent;
@@ -110,15 +111,19 @@ public class PhysicalGraphMouseAdapter extends MouseAdapter {
           || obj instanceof ITrace )
       {
         ISelection selection = new StructuredSelection( obj );
-        Activator.getDefault()
-          .getWorkbench()
-          .getActiveWorkbenchWindow()
-          .getActivePage()
-          .getActivePart()
-          .getSite()
-          .getSelectionProvider()
-          .setSelection( selection );
-        this.physicalGraph.redraw();
+        try {
+          Activator.getDefault()
+            .getWorkbench()
+            .getActiveWorkbenchWindow()
+            .getActivePage()
+            .showView( "eu.geclipse.traceview.views.TraceView" )
+            .getSite()
+            .getSelectionProvider()
+            .setSelection( selection );
+          this.physicalGraph.redraw();
+        } catch( PartInitException exception ) {
+          Activator.logException( exception );
+        }
       }
     }
   }

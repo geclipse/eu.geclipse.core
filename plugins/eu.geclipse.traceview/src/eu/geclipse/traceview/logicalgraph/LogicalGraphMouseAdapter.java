@@ -19,6 +19,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.ui.PartInitException;
 
 import eu.geclipse.traceview.IEvent;
 import eu.geclipse.traceview.ILamportProcess;
@@ -54,16 +55,20 @@ public class LogicalGraphMouseAdapter extends MouseAdapter {
     if( e.button == 1 || e.button == 3 ) {
       if( obj instanceof IEvent || obj instanceof IProcess
           || obj instanceof ITrace ) {
-        ISelection selection = new StructuredSelection( obj );
-        Activator.getDefault()
-          .getWorkbench()
-          .getActiveWorkbenchWindow()
-          .getActivePage()
-          .getActivePart()
-          .getSite()
-          .getSelectionProvider()
-          .setSelection( selection );
-        this.logicalGraph.redraw();
+        try {
+          ISelection selection = new StructuredSelection( obj );
+          Activator.getDefault()
+            .getWorkbench()
+            .getActiveWorkbenchWindow()
+            .getActivePage()
+            .showView( "eu.geclipse.traceview.views.TraceView" )
+            .getSite()
+            .getSelectionProvider()
+            .setSelection( selection );
+          this.logicalGraph.redraw();
+        } catch( PartInitException exception ) {
+          Activator.logException( exception );
+        }
       }
     }
   }
