@@ -45,7 +45,7 @@ public class WorkflowJobImpl extends WorkflowNodeImpl implements IWorkflowJob {
    * @generated
    * @ordered
    */
-  protected static final String JOB_DESCRIPTION_EDEFAULT = null;
+  protected static final String JOB_DESCRIPTION_EDEFAULT = ""; //$NON-NLS-1$
   /**
    * The cached value of the '{@link #getJobDescription() <em>Job Description</em>}'
    * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
