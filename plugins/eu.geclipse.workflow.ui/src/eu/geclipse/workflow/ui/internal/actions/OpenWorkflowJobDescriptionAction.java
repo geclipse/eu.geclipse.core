@@ -57,11 +57,11 @@ public class OpenWorkflowJobDescriptionAction implements IObjectActionDelegate {
   private WorkflowJobEditPart mySelectedElement;
   String fileName = null;
   
-  public void setActivePart( IAction action, IWorkbenchPart targetPart ) {
+  public void setActivePart( final IAction action, final IWorkbenchPart targetPart ) {
     targetPart.getSite().getShell();
   }
 
-  public void run( IAction action ) {
+  public void run( final IAction action ) {
     IWorkflowJob job = ( IWorkflowJob )OpenWorkflowJobDescriptionAction.this.mySelectedElement.resolveSemanticElement();    
     String wfFileString = job.getWorkflow().eResource().getURI().toPlatformString( true ); 
     IGridRoot gridModelRoot = GridModel.getRoot(); // Grid Model root
@@ -95,7 +95,7 @@ public class OpenWorkflowJobDescriptionAction implements IObjectActionDelegate {
     }
   }
 
-  public void selectionChanged( IAction action, ISelection selection ) {
+  public void selectionChanged( final IAction action, final ISelection selection ) {
     this.mySelectedElement = null;
     if( selection instanceof IStructuredSelection ) {
       IStructuredSelection structuredSelection = ( IStructuredSelection )selection;
