@@ -273,8 +273,10 @@ public class Process extends AbstractFileCacheProcess {
     throws IndexOutOfBoundsException
   {
     Event result = null;
-    if( index <= this.getMaximumLogicalClock() )
-      result = new Event( index, this ); // TODO use event type
+    if( index <= this.getMaximumLogicalClock() ) {
+      if( this.supportsVectorClocks ) result = new VecEvent( index, this );
+      else result = new Event( index, this );
+    }
     return result;
   }
 
@@ -405,10 +407,12 @@ public class Process extends AbstractFileCacheProcess {
   {
     this.previousLogicalClock++;
     this.checkCacheLimit( this.previousLogicalClock );
-    Event event = new Event( this.previousLogicalClock, this );
+    Event event;
+    if( this.supportsVectorClocks ) event = new VecEvent( this.previousLogicalClock, this );
+    else event = new Event( this.previousLogicalClock, this );
     event.setLamportClock( -1 );
     if( this.supportsVectorClocks )
-      event.setVectorClock( this.initialVectorClock );
+      ((VecEvent)event).setVectorClock( this.initialVectorClock );
     event.setPartnerLamportClock( -1 );
     event.setType( getEventType( traceType ) );
     // blocking
@@ -495,10 +499,12 @@ public class Process extends AbstractFileCacheProcess {
   private Event readEventSubTypeTOnOff() throws IOException {
     // TODO better support for this event type
     this.previousLogicalClock++;
-    Event event = new Event( this.previousLogicalClock, this );
+    Event event;
+    if( this.supportsVectorClocks ) event = new VecEvent( this.previousLogicalClock, this );
+    else event = new Event( this.previousLogicalClock, this );
     event.setLamportClock( -1 );
     if( this.supportsVectorClocks )
-      event.setVectorClock( this.initialVectorClock );
+      ((VecEvent)event).setVectorClock( this.initialVectorClock );
     event.setPartnerLamportClock( -1 );
     event.setType( EventType.OTHER );
     event.setAcceptedPartnerProcess( this.processId );

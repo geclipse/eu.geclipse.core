@@ -25,7 +25,6 @@ import eu.geclipse.traceview.ILamportEvent;
 import eu.geclipse.traceview.IPhysicalEvent;
 import eu.geclipse.traceview.IProcess;
 import eu.geclipse.traceview.ISourceLocation;
-import eu.geclipse.traceview.IVectorEvent;
 import eu.geclipse.traceview.utils.AbstractEvent;
 import eu.geclipse.traceview.utils.ILamportEventClockSetter;
 
@@ -33,7 +32,7 @@ import eu.geclipse.traceview.utils.ILamportEventClockSetter;
  * NOPE (NOndeterministic Program Evaluator) Event
  */
 public class Event extends AbstractEvent
-  implements ILamportEvent, IPhysicalEvent, IVectorEvent, ISourceLocation,
+  implements ILamportEvent, IPhysicalEvent, ISourceLocation,
   ILamportEventClockSetter
 {
 
@@ -71,9 +70,9 @@ public class Event extends AbstractEvent
   private final static int ignoreCountOffset = 14;
   private final static int timeStartOffset = 15;
   private final static int timeStopOffset = 16;
-  private final static int vectorClockOffset = 17;
-  private Process processCache;
-  private int logicalClock;
+
+  protected int logicalClock;
+  protected Process processCache;
 
   /**
    * Creates the Event from the processCache based on the logicalClock.
@@ -97,31 +96,37 @@ public class Event extends AbstractEvent
   @Override
   public IPropertyDescriptor[] getPropertyDescriptors() {
     if( descriptors == null ) {
-      IPropertyDescriptor[] descriptors1 = super.getPropertyDescriptors();
-      IPropertyDescriptor[] descriptors2 = new IPropertyDescriptor[]{
-        new PropertyDescriptor( PROP_SUBTYPE, "Message Subtype" ), //$NON-NLS-1$
-        new PropertyDescriptor( PROP_BLOCKING, "Blocking" ), //$NON-NLS-1$
-        new PropertyDescriptor( PROP_SUPPOSED_PARTNER_PROCESS,
-                                "Supposed Partner Process" ), //$NON-NLS-1$
-        new PropertyDescriptor( PROP_ACCEPTED_MESSAGE_TYPE,
-                                "Accepted Message Type" ), //$NON-NLS-1$
-        new PropertyDescriptor( PROP_SUPPOSED_MESSAGE_TYPE,
-                                "Supposed Message Type" ), //$NON-NLS-1$
-        new PropertyDescriptor( PROP_ACCEPTED_MESSAGE_LENGTH,
-                                "Accepted Message Length" ), //$NON-NLS-1$
-        new PropertyDescriptor( PROP_SUPPOSED_MESSAGE_LENGTH,
-                                "Supposed Message Length" ), //$NON-NLS-1$
-        new PropertyDescriptor( PROP_SOURCE_IGNORE_COUNT, "Ignore Count" )}; //$NON-NLS-1$
-      descriptors = new IPropertyDescriptor[ descriptors1.length
-                                             + descriptors2.length ];
-      System.arraycopy( descriptors1, 0, descriptors, 0, descriptors1.length );
-      System.arraycopy( descriptors2,
-                        0,
-                        descriptors,
-                        descriptors1.length,
-                        descriptors2.length );
+      descriptors = buildPropertyDescriptors();
     }
     return descriptors;
+  }
+
+  protected IPropertyDescriptor[] buildPropertyDescriptors() {
+    IPropertyDescriptor[] desc;
+    IPropertyDescriptor[] descriptors1 = super.getPropertyDescriptors();
+    IPropertyDescriptor[] descriptors2 = new IPropertyDescriptor[]{
+      new PropertyDescriptor( PROP_SUBTYPE, "Message Subtype" ), //$NON-NLS-1$
+      new PropertyDescriptor( PROP_BLOCKING, "Blocking" ), //$NON-NLS-1$
+      new PropertyDescriptor( PROP_SUPPOSED_PARTNER_PROCESS,
+                              "Supposed Partner Process" ), //$NON-NLS-1$
+      new PropertyDescriptor( PROP_ACCEPTED_MESSAGE_TYPE,
+                              "Accepted Message Type" ), //$NON-NLS-1$
+      new PropertyDescriptor( PROP_SUPPOSED_MESSAGE_TYPE,
+                              "Supposed Message Type" ), //$NON-NLS-1$
+      new PropertyDescriptor( PROP_ACCEPTED_MESSAGE_LENGTH,
+                              "Accepted Message Length" ), //$NON-NLS-1$
+      new PropertyDescriptor( PROP_SUPPOSED_MESSAGE_LENGTH,
+                              "Supposed Message Length" ), //$NON-NLS-1$
+      new PropertyDescriptor( PROP_SOURCE_IGNORE_COUNT, "Ignore Count" )}; //$NON-NLS-1$
+    desc = new IPropertyDescriptor[ descriptors1.length
+                                           + descriptors2.length ];
+    System.arraycopy( descriptors1, 0, desc, 0, descriptors1.length );
+    System.arraycopy( descriptors2,
+                      0,
+                      desc,
+                      descriptors1.length,
+                      descriptors2.length );
+    return desc;
   }
 
   public IProcess getProcess() {
@@ -368,32 +373,6 @@ public class Event extends AbstractEvent
       result = partner.getPhysicalStopClock();
     }
     return result;
-  }
-
-  // *****************************************************
-  // * IVectorEvent
-  // *****************************************************
-  /*
-   * (non-Javadoc)
-   *
-   * @see eu.geclipse.traceview.IVectorEvent#getVectorClock()
-   */
-  public int[] getVectorClock() {
-    int[] result = new int[ getProcess().getTrace().getNumberOfProcesses() ];
-    this.processCache.getBuffer().position( this.logicalClock
-                                            * getSize()
-                                            / 4
-                                            + Event.vectorClockOffset );
-    this.processCache.getBuffer().get( result );
-    return result;
-  }
-
-  protected void setVectorClock( final int[] src ) {
-    this.processCache.getBuffer().position( this.logicalClock
-                                            * getSize()
-                                            / 4
-                                            + Event.vectorClockOffset );
-    this.processCache.getBuffer().put( src );
   }
 
   // *****************************************************

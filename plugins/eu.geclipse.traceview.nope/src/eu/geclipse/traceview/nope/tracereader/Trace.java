@@ -74,15 +74,15 @@ public class Trace extends AbstractTrace
   }
 
   private void updateVectorClocks() {
-    TreeSet<Event> events = new TreeSet<Event>( new LamportEventComparator() );
+    TreeSet<VecEvent> events = new TreeSet<VecEvent>( new LamportEventComparator() );
     try {
       // set to first event
       for( int i = 0; i < this.processes.length; i++ ) {
-        events.add( this.processes[ i ].getEventByLogicalClock( 0 ) );
+        events.add( (VecEvent) this.processes[ i ].getEventByLogicalClock( 0 ) );
       }
       while( !events.isEmpty() ) {
-        Event first = events.first();
-        Event next = ( Event )first.getNextEvent();
+        VecEvent first = events.first();
+        VecEvent next = ( VecEvent )first.getNextEvent();
         // increment local clock;
         int[] vectorClock = first.getVectorClock();
         vectorClock[ first.getProcessId() ]++;
@@ -91,7 +91,7 @@ public class Trace extends AbstractTrace
         if( first.getType() == EventType.SEND
             && first.getSubType() != EventSubtype.MPI_BCAST )
         {
-          Event partner = ( Event )first.getPartnerEvent();
+          VecEvent partner = ( VecEvent )first.getPartnerEvent();
           if( partner != null ) {
             int[] partnerVectorClock = partner.getVectorClock();
             // partnerVectorClock[ partner.getProcess() ]++;
@@ -105,7 +105,7 @@ public class Trace extends AbstractTrace
         } else if( first.getType() == EventType.RECV
                    && first.getSubType() == EventSubtype.MPI_BCAST )
         {
-          Event partner = ( Event )first.getPartnerEvent();
+          VecEvent partner = ( VecEvent )first.getPartnerEvent();
           if( partner != null ) {
             int[] partnerVectorClock = partner.getVectorClock();
             for( int i = 0; i < this.getNumberOfProcesses(); i++ ) {
