@@ -225,7 +225,7 @@ public class WorkflowJobEditPart extends ShapeNodeEditPart {
   /**
    * Constructor
    */
-  public WorkflowJobEditPart( View view ) {
+  public WorkflowJobEditPart( final View view ) {
     super( view );
     ResourcesPlugin.getWorkspace()
     .addResourceChangeListener( this.resourceChangeListener,
@@ -293,7 +293,7 @@ public class WorkflowJobEditPart extends ShapeNodeEditPart {
   /**
    * Add children to this edit part 
    */
-  protected boolean addFixedChild( EditPart childEditPart ) {
+  protected boolean addFixedChild( final EditPart childEditPart ) {
     if( childEditPart instanceof WorkflowJobNameEditPart ) {
       ( ( WorkflowJobNameEditPart )childEditPart ).setLabel( getPrimaryShape().getFigureWorkflowJobNameFigure() );
       return true;
@@ -304,7 +304,7 @@ public class WorkflowJobEditPart extends ShapeNodeEditPart {
   /**
    * Remove a fixed child
    */
-  protected boolean removeFixedChild( EditPart childEditPart ) {
+  protected boolean removeFixedChild( final EditPart childEditPart ) {
     return false;
   }
 
@@ -312,7 +312,7 @@ public class WorkflowJobEditPart extends ShapeNodeEditPart {
    * Adds the child's visual
    */
   @Override
-  protected void addChildVisual( EditPart childEditPart, int index ) {
+  protected void addChildVisual( final EditPart childEditPart, final int index ) {
     if( addFixedChild( childEditPart ) ) {
       return;
     }
@@ -330,7 +330,7 @@ public class WorkflowJobEditPart extends ShapeNodeEditPart {
  * @see org.eclipse.gmf.runtime.diagram.ui.editparts.GraphicalEditPart#performRequest(org.eclipse.gef.Request)
  */
   @Override
-  public void performRequest( Request request ) {
+  public void performRequest( final Request request ) {
     
     // on double-click of this edit part
     if (request.getType().equals( RequestConstants.REQ_OPEN )) {
@@ -394,7 +394,7 @@ public class WorkflowJobEditPart extends ShapeNodeEditPart {
    * Removes the child's visual
    */
   @Override
-  protected void removeChildVisual( EditPart childEditPart ) {
+  protected void removeChildVisual( final EditPart childEditPart ) {
     if( removeFixedChild( childEditPart ) ) {
       return;
     }
@@ -405,7 +405,7 @@ public class WorkflowJobEditPart extends ShapeNodeEditPart {
    * @generated
    */
   @Override
-  protected IFigure getContentPaneFor( IGraphicalEditPart editPart ) {
+  protected IFigure getContentPaneFor( final IGraphicalEditPart editPart ) {
     return super.getContentPaneFor( editPart );
   }
 
@@ -438,7 +438,7 @@ public class WorkflowJobEditPart extends ShapeNodeEditPart {
    * @param nodeShape instance of generated figure class
    * @generated
    */
-  protected IFigure setupContentPane( IFigure nodeShape ) {
+  protected IFigure setupContentPane( final IFigure nodeShape ) {
     if( nodeShape.getLayoutManager() == null ) {
       ConstrainedToolbarLayout layout = new ConstrainedToolbarLayout();
       layout.setSpacing( getMapMode().DPtoLP( 5 ) );
