@@ -95,4 +95,13 @@ public class Activator extends Plugin {
     IStatus status = new Status( severity, PLUGIN_ID, IStatus.OK, message, null );
     getDefault().getLog().log( status );
   }
+
+  /**
+   * Logs a status object to the eclipse logger
+   * 
+   * @param status the status to be logged
+   */
+  public static void logStatus( final IStatus status ) {
+    getDefault().getLog().log( status );
+  }
 }
