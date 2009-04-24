@@ -159,7 +159,9 @@ public class CachedInputStream extends InputStream {
    */
   @Override
   public void close() throws IOException {
-    this.buffer.rewind();
+    if ( this.buffer != null ) {
+      this.buffer.rewind();
+    }
   }
   
   /**
