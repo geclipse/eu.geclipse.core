@@ -169,6 +169,7 @@ public class VoServiceSelectionPage extends WizardPage {
       @Override
       public void widgetSelected( final SelectionEvent e ) {
         removeSelectedServices();
+        updateUI();
       }
     } );
     
