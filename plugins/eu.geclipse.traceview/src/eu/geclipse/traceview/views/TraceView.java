@@ -114,11 +114,13 @@ public class TraceView extends ViewPart implements ITraceView {
                     IStatus status = Status.OK_STATUS;
                     try {
                       final ITrace trace = traceReader.openTrace( path, monitor );
-                      Display.getDefault().syncExec( new Runnable() {
-                        public void run() {
-                          addTrace( trace );                        
-                        }
-                      } );
+                      if ( trace != null ) {
+                        Display.getDefault().syncExec( new Runnable() {
+                          public void run() {
+                            addTrace( trace );                        
+                          }
+                        } );
+                      }
                     } catch( IOException exception ) {
                       Activator.logException( exception );
                       status = Status.CANCEL_STATUS;

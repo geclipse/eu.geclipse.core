@@ -167,7 +167,7 @@ public class EventBreakpoint extends AbstractLineBreakpoint {
     if( event instanceof ISourceLocation ) {
       ISourceLocation sourceLocation = ( ISourceLocation )event;
       SortedSet<Integer> ignoreCounts = this.getIgnoreCounts();
-      if( ignoreCounts.add( new Integer( sourceLocation.getOccurrenceCount() ) ) )
+      if( ignoreCounts.add( Integer.valueOf( sourceLocation.getOccurrenceCount() ) ) )
       {
         setIgnoreCounts( ignoreCounts );
       }
@@ -184,7 +184,7 @@ public class EventBreakpoint extends AbstractLineBreakpoint {
     if( event instanceof ISourceLocation ) {
       ISourceLocation sourceLocation = ( ISourceLocation )event;
       SortedSet<Integer> ignoreCounts = getIgnoreCounts();
-      if( ignoreCounts.remove( new Integer( sourceLocation.getOccurrenceCount() ) ) )
+      if( ignoreCounts.remove( Integer.valueOf( sourceLocation.getOccurrenceCount() ) ) )
       {
         setIgnoreCounts( ignoreCounts );
         if( ignoreCounts.isEmpty() ) {

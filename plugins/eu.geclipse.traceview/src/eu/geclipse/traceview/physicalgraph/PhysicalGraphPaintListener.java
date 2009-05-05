@@ -797,7 +797,7 @@ class PhysicalGraphPaintListener implements PaintListener {
     this.procs = new ArrayList<ArrayList<Integer>>();
     for( int i = 0; i < this.numProc; i++ ) {
       ArrayList<Integer> tmp = new ArrayList<Integer>();
-      tmp.add( new Integer( i ) );
+      tmp.add( Integer.valueOf( i ) );
       this.procs.add( tmp );
     }
   }

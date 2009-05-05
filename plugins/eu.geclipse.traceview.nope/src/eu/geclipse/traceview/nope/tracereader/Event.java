@@ -71,18 +71,18 @@ public class Event extends AbstractEvent
   private final static int timeStartOffset = 15;
   private final static int timeStopOffset = 16;
 
-  protected int logicalClock;
-  protected Process processCache;
+  protected final int logicalClock;
+  protected final Process process;
 
   /**
    * Creates the Event from the processCache based on the logicalClock.
    *
    * @param logicalClock
-   * @param processCache
+   * @param process
    */
-  public Event( final int logicalClock, final Process processCache ) {
+  public Event( final int logicalClock, final Process process ) {
     this.logicalClock = logicalClock;
-    this.processCache = processCache;
+    this.process = process;
   }
 
   // *****************************************************
@@ -130,7 +130,7 @@ public class Event extends AbstractEvent
   }
 
   public IProcess getProcess() {
-    return this.processCache;
+    return this.process;
   }
 
   @Override
@@ -140,19 +140,19 @@ public class Event extends AbstractEvent
       if( id.equals( PROP_SUBTYPE ) )
         result = EventSubtype.getCommunicationEventName( getSubType() );
       else if( id.equals( PROP_BLOCKING ) )
-        result = new Integer( getBlocking() );
+        result = Integer.valueOf( getBlocking() );
       else if( id.equals( PROP_SUPPOSED_PARTNER_PROCESS ) )
-        result = new Integer( getSupposedPartnerProcess() );
+        result = Integer.valueOf( getSupposedPartnerProcess() );
       else if( id.equals( PROP_ACCEPTED_MESSAGE_TYPE ) )
-        result = new Integer( getAcceptedMessageType() );
+        result = Integer.valueOf( getAcceptedMessageType() );
       else if( id.equals( PROP_SUPPOSED_MESSAGE_TYPE ) )
-        result = new Integer( getSupposedMessageType() );
+        result = Integer.valueOf( getSupposedMessageType() );
       else if( id.equals( PROP_ACCEPTED_MESSAGE_LENGTH ) )
-        result = new Integer( getAcceptedMessageLength() );
+        result = Integer.valueOf( getAcceptedMessageLength() );
       else if( id.equals( PROP_SUPPOSED_MESSAGE_LENGTH ) )
-        result = new Integer( getSupposedMessageLength() );
+        result = Integer.valueOf( getSupposedMessageLength() );
       else if( id.equals( PROP_SOURCE_IGNORE_COUNT ) )
-        result = new Integer( getIgnoreCount() );
+        result = Integer.valueOf( getIgnoreCount() );
     }
     return result;
   }
@@ -166,16 +166,11 @@ public class Event extends AbstractEvent
    * @see eu.geclipse.traceview.IEvent#getType()
    */
   public EventType getType() {
-    return EventType.getEventType( this.processCache.getBuffer()
-      .get( this.logicalClock * getSize() / 4 + typeOffset ) );
+    return EventType.getEventType( process.read( logicalClock, typeOffset ) );
   }
 
   protected void setType( final EventType type ) {
-    this.processCache.getBuffer().put( this.logicalClock
-                                           * getSize()
-                                           / 4
-                                           + typeOffset,
-                                       type.id );
+    process.write( logicalClock, typeOffset, type.id );
   }
 
   /*
@@ -184,7 +179,7 @@ public class Event extends AbstractEvent
    * @see eu.geclipse.traceview.IEvent#getProcessId()
    */
   public int getProcessId() {
-    return this.processCache.getProcessId();
+    return this.process.getProcessId();
   }
 
   /*
@@ -193,10 +188,7 @@ public class Event extends AbstractEvent
    * @see eu.geclipse.traceview.IEvent#getPartnerProcessId()
    */
   public int getPartnerProcessId() {
-    return this.processCache.getBuffer().get( this.logicalClock
-                                              * getSize()
-                                              / 4
-                                              + acceptedPartnerProcessOffset );
+    return process.read( logicalClock, acceptedPartnerProcessOffset );
   }
 
   /*
@@ -214,18 +206,11 @@ public class Event extends AbstractEvent
    * @see eu.geclipse.traceview.IEvent#getPartnerLogicalClock()
    */
   public int getPartnerLogicalClock() {
-    return this.processCache.getBuffer().get( this.logicalClock
-                                              * getSize()
-                                              / 4
-                                              + partnerLogicalClockOffset );
+    return process.read( logicalClock, partnerLogicalClockOffset );
   }
 
   protected void setPartnerLogicalClock( final int partnerLogicalClock ) {
-    this.processCache.getBuffer().put( this.logicalClock
-                                           * getSize()
-                                           / 4
-                                           + partnerLogicalClockOffset,
-                                       partnerLogicalClock );
+    process.write( logicalClock, partnerLogicalClockOffset, partnerLogicalClock );
   }
 
   /*
@@ -234,7 +219,7 @@ public class Event extends AbstractEvent
    * @see eu.geclipse.traceview.IEvent#getNextEvent()
    */
   public IEvent getNextEvent() {
-    return this.processCache.getEventByLogicalClock( this.getLogicalClock() + 1 );
+    return this.process.getEventByLogicalClock( this.getLogicalClock() + 1 );
   }
 
   /*
@@ -270,18 +255,11 @@ public class Event extends AbstractEvent
    * @see eu.geclipse.traceview.ILamportEvent#getLamportClock()
    */
   public int getLamportClock() {
-    return this.processCache.getBuffer().get( this.logicalClock
-                                              * getSize()
-                                              / 4
-                                              + lamportClockOffset );
+    return process.read( logicalClock, lamportClockOffset );
   }
 
   public void setLamportClock( final int lamportClock ) {
-    this.processCache.getBuffer().put( this.logicalClock
-                                           * getSize()
-                                           / 4
-                                           + lamportClockOffset,
-                                       lamportClock );
+    process.write( logicalClock, lamportClockOffset, lamportClock );
   }
 
   /*
@@ -290,18 +268,11 @@ public class Event extends AbstractEvent
    * @see eu.geclipse.traceview.ILamportEvent#getPartnerLamportClock()
    */
   public int getPartnerLamportClock() {
-    return this.processCache.getBuffer().get( this.logicalClock
-                                              * getSize()
-                                              / 4
-                                              + partnerLamportClockOffset );
+    return process.read( logicalClock, partnerLamportClockOffset );
   }
 
   public void setPartnerLamportClock( final int partnerLamportClock ) {
-    this.processCache.getBuffer().put( this.logicalClock
-                                           * getSize()
-                                           / 4
-                                           + partnerLamportClockOffset,
-                                       partnerLamportClock );
+    process.write( logicalClock, partnerLamportClockOffset, partnerLamportClock );
   }
 
   // *****************************************************
@@ -313,18 +284,11 @@ public class Event extends AbstractEvent
    * @see eu.geclipse.traceview.IPhysicalEvent#getPhysicalStartClock()
    */
   public int getPhysicalStartClock() {
-    return this.processCache.getBuffer().get( this.logicalClock
-                                              * getSize()
-                                              / 4
-                                              + timeStartOffset );
+    return process.read( logicalClock, timeStartOffset );
   }
 
   protected void setPhysicalStartClock( final int timeStart ) {
-    this.processCache.getBuffer().put( this.logicalClock
-                                           * getSize()
-                                           / 4
-                                           + timeStartOffset,
-                                       timeStart );
+    process.write( logicalClock, timeStartOffset, timeStart );
   }
 
   /*
@@ -333,18 +297,11 @@ public class Event extends AbstractEvent
    * @see eu.geclipse.traceview.IPhysicalEvent#getPhysicalStopClock()
    */
   public int getPhysicalStopClock() {
-    return this.processCache.getBuffer().get( this.logicalClock
-                                              * getSize()
-                                              / 4
-                                              + timeStopOffset );
+    return process.read( logicalClock, timeStopOffset );
   }
 
   protected void setPhysicalStopClock( final int timeStop ) {
-    this.processCache.getBuffer().put( this.logicalClock
-                                           * getSize()
-                                           / 4
-                                           + timeStopOffset,
-                                       timeStop );
+    process.write( logicalClock, timeStopOffset, timeStop );
   }
 
   /*
@@ -384,11 +341,8 @@ public class Event extends AbstractEvent
    * @see eu.geclipse.traceview.ISourceLocation#getSourceFilename()
    */
   public String getSourceFilename() {
-    int index = this.processCache.getBuffer().get( this.logicalClock
-                                                   * getSize()
-                                                   / 4
-                                                   + sourceFilenameIndexOffset );
-    return this.processCache.getSourceFilenameForIndex( index );
+    int index = process.read( logicalClock, sourceFilenameIndexOffset );
+    return this.process.getSourceFilenameForIndex( index );
   }
 
   /*
@@ -397,18 +351,11 @@ public class Event extends AbstractEvent
    * @see eu.geclipse.traceview.ISourceLocation#getSourceLineNumber()
    */
   public int getSourceLineNumber() {
-    return this.processCache.getBuffer().get( this.logicalClock
-                                              * getSize()
-                                              / 4
-                                              + sourceLineNrOffset );
+    return process.read( logicalClock, sourceLineNrOffset );
   }
 
   protected void setSourceLineNumber( final int sourceLineNr ) {
-    this.processCache.getBuffer().put( this.logicalClock
-                                           * getSize()
-                                           / 4
-                                           + sourceLineNrOffset,
-                                       sourceLineNr );
+    process.write( logicalClock, sourceLineNrOffset, sourceLineNr );
   }
 
   // *****************************************************
@@ -420,18 +367,11 @@ public class Event extends AbstractEvent
    * @return sub type
    */
   public int getSubType() {
-    return this.processCache.getBuffer().get( this.logicalClock
-                                              * getSize()
-                                              / 4
-                                              + subTypeOffset );
+    return process.read( logicalClock, subTypeOffset );
   }
 
   protected void setSubType( final int subType ) {
-    this.processCache.getBuffer().put( this.logicalClock
-                                           * getSize()
-                                           / 4
-                                           + subTypeOffset,
-                                       subType );
+    process.write( logicalClock, subTypeOffset, subType );
   }
 
   /**
@@ -440,18 +380,11 @@ public class Event extends AbstractEvent
    * @return length of the accepted message
    */
   public int getAcceptedPartnerProcess() {
-    return this.processCache.getBuffer().get( this.logicalClock
-                                              * getSize()
-                                              / 4
-                                              + acceptedPartnerProcessOffset );
+    return process.read( logicalClock, acceptedPartnerProcessOffset );
   }
 
   protected void setAcceptedPartnerProcess( final int acceptedPartnerProcess ) {
-    this.processCache.getBuffer().put( this.logicalClock
-                                           * getSize()
-                                           / 4
-                                           + acceptedPartnerProcessOffset,
-                                       acceptedPartnerProcess );
+    process.write( logicalClock, acceptedPartnerProcessOffset, acceptedPartnerProcess );
   }
 
   /**
@@ -460,18 +393,11 @@ public class Event extends AbstractEvent
    * @return length of the accepted message
    */
   public int getSupposedPartnerProcess() {
-    return this.processCache.getBuffer().get( this.logicalClock
-                                              * getSize()
-                                              / 4
-                                              + supposedPartnerProcessOffset );
+    return process.read( logicalClock, supposedPartnerProcessOffset );
   }
 
   protected void setSupposedPartnerProcess( final int supposedPartnerProcess ) {
-    this.processCache.getBuffer().put( this.logicalClock
-                                           * getSize()
-                                           / 4
-                                           + supposedPartnerProcessOffset,
-                                       supposedPartnerProcess );
+    process.write( logicalClock, supposedPartnerProcessOffset, supposedPartnerProcess );
   }
 
   /**
@@ -480,18 +406,11 @@ public class Event extends AbstractEvent
    * @return length of the accepted message
    */
   public int getAcceptedMessageLength() {
-    return this.processCache.getBuffer().get( this.logicalClock
-                                              * getSize()
-                                              / 4
-                                              + acceptedMessageLengthOffset );
+    return process.read( logicalClock, acceptedMessageLengthOffset );
   }
 
   protected void setAcceptedMessageLength( final int acceptedMessageLength ) {
-    this.processCache.getBuffer().put( this.logicalClock
-                                           * getSize()
-                                           / 4
-                                           + acceptedMessageLengthOffset,
-                                       acceptedMessageLength );
+    process.write( logicalClock, acceptedMessageLengthOffset, acceptedMessageLength );
   }
 
   /**
@@ -500,18 +419,11 @@ public class Event extends AbstractEvent
    * @return supposed length of the message
    */
   public int getSupposedMessageLength() {
-    return this.processCache.getBuffer().get( this.logicalClock
-                                              * getSize()
-                                              / 4
-                                              + supposedMessageLengthOffset );
+    return process.read( logicalClock, supposedMessageLengthOffset );
   }
 
   protected void setSupposedMessageLength( final int supposedMessageLength ) {
-    this.processCache.getBuffer().put( this.logicalClock
-                                           * getSize()
-                                           / 4
-                                           + supposedMessageLengthOffset,
-                                       supposedMessageLength );
+    process.write( logicalClock, supposedMessageLengthOffset, supposedMessageLength );
   }
 
   /**
@@ -520,18 +432,11 @@ public class Event extends AbstractEvent
    * @return type of the accepted message
    */
   public int getAcceptedMessageType() {
-    return this.processCache.getBuffer().get( this.logicalClock
-                                              * getSize()
-                                              / 4
-                                              + acceptedMessageTypeOffset );
+    return process.read( logicalClock, acceptedMessageTypeOffset );
   }
 
   protected void setAcceptedMessageType( final int acceptedMessageType ) {
-    this.processCache.getBuffer().put( this.logicalClock
-                                           * getSize()
-                                           / 4
-                                           + acceptedMessageTypeOffset,
-                                       acceptedMessageType );
+    process.write( logicalClock, acceptedMessageTypeOffset, acceptedMessageType );
   }
 
   /**
@@ -540,18 +445,11 @@ public class Event extends AbstractEvent
    * @return supposed type of the message
    */
   public int getSupposedMessageType() {
-    return this.processCache.getBuffer().get( this.logicalClock
-                                              * getSize()
-                                              / 4
-                                              + supposedMessageTypeOffset );
+    return process.read( logicalClock, supposedMessageTypeOffset );
   }
 
   protected void setSupposedMessageType( final int supposedMessageType ) {
-    this.processCache.getBuffer().put( this.logicalClock
-                                           * getSize()
-                                           / 4
-                                           + supposedMessageTypeOffset,
-                                       supposedMessageType );
+    process.write( logicalClock, supposedMessageTypeOffset, supposedMessageType );
   }
 
   /**
@@ -560,18 +458,11 @@ public class Event extends AbstractEvent
    * @return blocking
    */
   public int getBlocking() {
-    return this.processCache.getBuffer().get( this.logicalClock
-                                              * getSize()
-                                              / 4
-                                              + blockingOffset );
+    return process.read( logicalClock, blockingOffset );
   }
 
   protected void setBlocking( final int blocking ) {
-    this.processCache.getBuffer().put( this.logicalClock
-                                           * getSize()
-                                           / 4
-                                           + blockingOffset,
-                                       blocking );
+    process.write( logicalClock, blockingOffset, blocking );
   }
 
   /**
@@ -580,30 +471,15 @@ public class Event extends AbstractEvent
    * @return event occurrence
    */
   public int getIgnoreCount() {
-    return this.processCache.getBuffer().get( this.logicalClock
-                                              * getSize()
-                                              / 4
-                                              + ignoreCountOffset );
+    return process.read( logicalClock, ignoreCountOffset );
   }
 
   protected void setIgnoreCount( final int ignoreCount ) {
-    this.processCache.getBuffer().put( this.logicalClock
-                                           * getSize()
-                                           / 4
-                                           + ignoreCountOffset,
-                                       ignoreCount );
-  }
-
-  protected int getSize() {
-    return this.processCache.getEventSize();
+    process.write( logicalClock, ignoreCountOffset, ignoreCount );
   }
 
   protected void setSourceFilenameIndex( final int sourceFilenameIndex ) {
-    this.processCache.getBuffer().put( this.logicalClock
-                                           * getSize()
-                                           / 4
-                                           + Event.sourceFilenameIndexOffset,
-                                       sourceFilenameIndex );
+    process.write( logicalClock, sourceFilenameIndexOffset, sourceFilenameIndex );
   }
 
   public int getOccurrenceCount() {

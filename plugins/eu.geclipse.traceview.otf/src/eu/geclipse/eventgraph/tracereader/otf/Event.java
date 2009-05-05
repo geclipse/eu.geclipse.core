@@ -18,22 +18,19 @@ class Event extends AbstractEvent implements ILamportEvent,
   private final static int lamportClockOffset = 4;
   private final static int timestampOffset = 5;
   private int logicalClock;
-  private Process processCache;
+  private Process process;
 
-  Event( final int logicalClock, final Process processCache) {
+  Event( final int logicalClock, final Process process) {
     this.logicalClock = logicalClock;
-    this.processCache = processCache;
+    this.process = process;
   }
 
   public IProcess getProcess() {
-    return this.processCache;
+    return this.process;
   }
 
   public int getLamportClock() {
-    return this.processCache.getBuffer().get( this.logicalClock
-                                              * getSize()
-                                              / 4
-                                              + lamportClockOffset );
+    return process.read( logicalClock, lamportClockOffset );
   }
 
   public int getLogicalClock() {
@@ -41,95 +38,55 @@ class Event extends AbstractEvent implements ILamportEvent,
   }
 
   protected void setPartnerProcess( final int partnerProcess ) {
-    this.processCache.getBuffer().put( this.logicalClock
-                                           * getSize()
-                                           / 4
-                                           + partnerProcessOffset,
-                                       partnerProcess );
+    process.write( logicalClock, partnerProcessOffset, partnerProcess );
   }
 
   public int getPartnerProcessId() {
-    return this.processCache.getBuffer().get( this.logicalClock
-                                              * getSize()
-                                              / 4
-                                              + partnerProcessOffset );
+    return process.read( logicalClock, partnerProcessOffset );
   }
 
   public int getPartnerLamportClock() {
-    return this.processCache.getBuffer().get( this.logicalClock
-                                              * getSize()
-                                              / 4
-                                              + partnerLamportClockOffset );
+    return process.read( logicalClock, partnerLamportClockOffset );
   }
 
   public int getPartnerLogicalClock() {
-    return this.processCache.getBuffer().get( this.logicalClock
-                                              * getSize()
-                                              / 4
-                                              + partnerLogicalClockOffset );
+    return process.read( logicalClock, partnerLogicalClockOffset );
   }
 
   protected void setType( final EventType type ) {
-    this.processCache.getBuffer().put( this.logicalClock
-                                           * getSize()
-                                           / 4
-                                           + typeOffset,
-                                       type.id );
+    process.write( logicalClock, typeOffset, type.id );
   }
 
   public EventType getType() {
-    return EventType.getEventType( this.processCache.getBuffer()
-      .get( this.logicalClock * getSize() / 4 + typeOffset ) );
+    return EventType.getEventType( process.read( logicalClock, typeOffset ) );
   }
 
   public void setLamportClock( final int lamportClock ) {
-    this.processCache.getBuffer().put( this.logicalClock
-                                           * getSize()
-                                           / 4
-                                           + lamportClockOffset,
-                                       lamportClock );
+    process.write( logicalClock, lamportClockOffset, lamportClock );
   }
 
   public void setPartnerLamportClock( final int partnerLamportClock ) {
-    this.processCache.getBuffer().put( this.logicalClock
-                                           * getSize()
-                                           / 4
-                                           + partnerLamportClockOffset,
-                                       partnerLamportClock );
+    process.write( logicalClock, partnerLamportClockOffset, partnerLamportClock );
   }
 
   public void setPartnerLogicalClock( final int partnerLogClock ) {
-    this.processCache.getBuffer().put( this.logicalClock
-                                           * getSize()
-                                           / 4
-                                           + partnerLogicalClockOffset,
-                                       partnerLogClock );
+    process.write( logicalClock, partnerLogicalClockOffset, partnerLogClock );
   }
 
   public int getProcessId() {
-    return this.processCache.getProcessId();
+    return this.process.getProcessId();
   }
 
   public int getPhysicalStartClock() {
-    return this.processCache.getBuffer().get( this.logicalClock
-                                              * getSize()
-                                              / 4
-                                              + timestampOffset );
+    return process.read( logicalClock, timestampOffset );
   }
 
   public int getPhysicalStopClock() {
-    return this.processCache.getBuffer().get( this.logicalClock
-                                              * getSize()
-                                              / 4
-                                              + timestampOffset );
+    return process.read( logicalClock, timestampOffset );
   }
 
   void setTimestamp( final int timestamp ) {
-    this.processCache.getBuffer().put( this.logicalClock
-                                           * getSize()
-                                           / 4
-                                           + timestampOffset,
-                                       timestamp );
+    process.write( logicalClock, timestampOffset, timestamp );
   }
 
   int getSize() {
@@ -144,7 +101,7 @@ class Event extends AbstractEvent implements ILamportEvent,
   public Event getNextEvent() {
     Event result = null;
     try {
-      this.processCache.getEventByLogicalClock( this.logicalClock + 1 );
+      this.process.getEventByLogicalClock( this.logicalClock + 1 );
     } catch( IndexOutOfBoundsException e ) {
       // ignore
     }

@@ -175,10 +175,10 @@ public abstract class AbstractEventBreakpointAction extends Action
             HashMap<String, Object> attributes = new HashMap<String, Object>( 10 );
             attributes.put( IBreakpoint.ID,
                             CDebugCorePlugin.getUniqueIdentifier() );
-            attributes.put( IMarker.LINE_NUMBER, new Integer( lineNumber ) );
+            attributes.put( IMarker.LINE_NUMBER, Integer.valueOf( lineNumber ) );
             attributes.put( IBreakpoint.ENABLED, Boolean.valueOf( enabled ) );
             attributes.put( ICBreakpoint.IGNORE_COUNT,
-                            new Integer( ignoreCount ) );
+                            Integer.valueOf( ignoreCount ) );
             attributes.put( ICBreakpoint.CONDITION, condition );
             attributes.put( ICBreakpoint.SOURCE_HANDLE, sourceHandle );
             attributes.put( EventBreakpoint.PROCESS,

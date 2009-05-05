@@ -23,11 +23,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.RandomAccessFile;
-import java.nio.ByteOrder;
-import java.nio.channels.FileChannel;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Vector;
 
 import org.eclipse.core.runtime.IStatus;
@@ -35,14 +31,13 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 
 import eu.geclipse.traceview.EventType;
-import eu.geclipse.traceview.ITrace;
 import eu.geclipse.traceview.nope.Activator;
-import eu.geclipse.traceview.utils.AbstractFileCacheProcess;
+import eu.geclipse.traceview.utils.AbstractProcessFileCache;
 
 /**
  * NOPE (NOndeterministic Program Evaluator) Process
  */
-public class Process extends AbstractFileCacheProcess {
+public class Process extends AbstractProcessFileCache {
 
   /* StatusByte */
   /** a processors byte ordering */
@@ -147,7 +142,6 @@ public class Process extends AbstractFileCacheProcess {
   private boolean supportsVectorClocks;
   // private FileInputStream fileInputStream = null;
   private DataInputStream dataInputStream = null;
-  private String projectName;
   /** Process */
   static {
     descriptors = new IPropertyDescriptor[]{
@@ -157,51 +151,20 @@ public class Process extends AbstractFileCacheProcess {
 
   protected Process( final File traceFile,
                      final int processId,
-                     final boolean reuseFile,
-                     final File cacheDir,
-                     final List<String> sourceFilenames,
-                     final String projectName,
-                     final ITrace trace,
-                     final int initialSize )
+                     final boolean hasCache,
+                     final Trace trace )
   {
-    super( trace, processId, sourceFilenames, cacheDir );
-    this.projectName = projectName;
+    super( trace, processId );
     // initialise vectorclocks
     this.supportsVectorClocks = ( ( Trace )trace ).supportsVectorClocks();
-    this.initialVectorClock = new int[ trace.getNumberOfProcesses() ];
-    for( int i = 0; i < this.initialVectorClock.length; i++ ) {
-      this.initialVectorClock[ i ] = -1;
-    }
-    // set event size
-    if( ( ( Trace )trace ).supportsVectorClocks() ) {
-      this.eventSize = 17 * 4 + this.trace.getNumberOfProcesses() * 4;
-    } else {
-      this.eventSize = 17 * 4;
+    if ( supportsVectorClocks ) {
+      this.initialVectorClock = new int[ trace.getNumberOfProcesses() ];
+      for( int i = 0; i < this.initialVectorClock.length; i++ ) {
+        this.initialVectorClock[ i ] = -1;
+      }
     }
     try {
-      // in case the cache already exists
-      if( reuseFile ) {
-        this.file = new RandomAccessFile( new File( this.cacheDir,
-                                                    Integer.toString( processId ) ),
-                                          "rw" ); //$NON-NLS-1$
-        this.buffer = this.file.getChannel()
-          .map( FileChannel.MapMode.READ_WRITE, 0, this.file.length() )
-          .order( ByteOrder.nativeOrder() )
-          .asIntBuffer();
-        this.buffer.limit( ( int )this.file.length() / 4 );
-      }
-      // in case the cache already exists
-      else {
-        this.file = new RandomAccessFile( new File( cacheDir,
-                                                    Integer.toString( processId )
-                                                        + "_workaround" ), //$NON-NLS-1$
-                                          "rw" ); //$NON-NLS-1$
-        this.buffer = this.file.getChannel()
-          .map( FileChannel.MapMode.READ_WRITE, 0, this.eventSize * initialSize )
-          .order( ByteOrder.nativeOrder() )
-          .asIntBuffer();
-        this.buffer.limit( 0 );
-      }
+      // in case the cache does not exist
       FileInputStream fileInputStream = new FileInputStream( traceFile );
       InputStream bufferedInputStream = new BufferedInputStream( fileInputStream );
       this.dataInputStream = new DataInputStream( bufferedInputStream );
@@ -220,14 +183,13 @@ public class Process extends AbstractFileCacheProcess {
       /*
        * read the events
        */
-      if( !reuseFile ) {
+      if( !hasCache ) {
         Event event = null;
         while( ( event = readEvent() ) != null ) {
           if( this.debug ) {
             eventInfo( event );
           }
         }
-        this.truncateToTraceSize();
       }
     } catch( EOFException eofException ) {
       // do nothing (because of unsupported event types)
@@ -406,7 +368,7 @@ public class Process extends AbstractFileCacheProcess {
     throws IOException
   {
     this.previousLogicalClock++;
-    this.checkCacheLimit( this.previousLogicalClock );
+    this.setMaximumLogicalClock( this.previousLogicalClock );
     Event event;
     if( this.supportsVectorClocks ) event = new VecEvent( this.previousLogicalClock, this );
     else event = new Event( this.previousLogicalClock, this );
@@ -422,15 +384,15 @@ public class Process extends AbstractFileCacheProcess {
     if( this.source ) {
       event.setSourceFilenameIndex( this.sourceFilenameIndex );
       event.setSourceLineNumber( readInt() );
-      if( this.ignoreCounts.get( new Integer( event.getSourceLineNumber() ) ) != null )
+      if( this.ignoreCounts.get( Integer.valueOf( event.getSourceLineNumber() ) ) != null )
       {
-        event.setIgnoreCount( this.ignoreCounts.get( new Integer( event.getSourceLineNumber() ) )
+        event.setIgnoreCount( this.ignoreCounts.get( Integer.valueOf( event.getSourceLineNumber() ) )
           .intValue() + 1 );
-        this.ignoreCounts.put( new Integer( event.getSourceLineNumber() ),
-                               new Integer( event.getIgnoreCount() ) );
+        this.ignoreCounts.put( Integer.valueOf( event.getSourceLineNumber() ),
+                               Integer.valueOf( event.getIgnoreCount() ) );
       } else {
-        this.ignoreCounts.put( new Integer( event.getSourceLineNumber() ),
-                               new Integer( 0 ) );
+        this.ignoreCounts.put( Integer.valueOf( event.getSourceLineNumber() ),
+                               Integer.valueOf( 0 ) );
         event.setIgnoreCount( 0 );
       }
       // source tab
@@ -468,10 +430,7 @@ public class Process extends AbstractFileCacheProcess {
     byte[] srcfile = new byte[ len ];
     this.dataInputStream.read( srcfile );
     String sourceFilename = new String( srcfile );
-    if( !this.sourceFilenames.contains( sourceFilename ) ) {
-      this.sourceFilenames.add( sourceFilename );
-    }
-    this.sourceFilenameIndex = this.sourceFilenames.indexOf( sourceFilename );
+    this.sourceFilenameIndex = addSourceFilename( sourceFilename );
   }
 
   private Event readTraceEvent() throws IOException {
@@ -499,6 +458,7 @@ public class Process extends AbstractFileCacheProcess {
   private Event readEventSubTypeTOnOff() throws IOException {
     // TODO better support for this event type
     this.previousLogicalClock++;
+    this.setMaximumLogicalClock( this.previousLogicalClock );
     Event event;
     if( this.supportsVectorClocks ) event = new VecEvent( this.previousLogicalClock, this );
     else event = new Event( this.previousLogicalClock, this );
@@ -555,19 +515,19 @@ public class Process extends AbstractFileCacheProcess {
     int numPADims = readInt();
     Vector<Integer> arrSize = new Vector<Integer>();
     for( int v = 0; v < numDims; v++ ) {
-      arrSize.add( new Integer( readInt() ) );
+      arrSize.add( Integer.valueOf( readInt() ) );
     }
     Vector<Integer> paSize = new Vector<Integer>();
     for( int v = 0; v < numDims; v++ ) {
-      paSize.add( new Integer( readInt() ) );
+      paSize.add( Integer.valueOf( readInt() ) );
     }
     Vector<Integer> dist = new Vector<Integer>();
     for( int v = 0; v < numDims; v++ ) {
-      dist.add( new Integer( readInt() ) );
+      dist.add( Integer.valueOf( readInt() ) );
     }
     Vector<Integer> remainder = new Vector<Integer>();
     for( int v = 0; v < numDims; v++ ) {
-      remainder.add( new Integer( readInt() ) );
+      remainder.add( Integer.valueOf( readInt() ) );
     }
     StringBuffer test = new StringBuffer();
     char b = 0;
@@ -600,12 +560,5 @@ public class Process extends AbstractFileCacheProcess {
     else if( type == 4 )
       evType = EventType.OTHER;
     return evType;
-  }
-
-  // *****************************************************
-  // * FileProcessCache
-  // *****************************************************
-  protected String getProjectName() {
-    return this.projectName;
   }
 }

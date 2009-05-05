@@ -78,7 +78,7 @@ public abstract class AbstractTrace implements ITrace {
   public Object getPropertyValue( final Object id ) {
     Object result = null;
     if( id.equals( PROP_NUMPROCS ) ) {
-      result = new Integer( getNumberOfProcesses() );
+      result = Integer.valueOf( getNumberOfProcesses() );
     } else if( id.equals( PROP_NAME ) ) {
       result = getName();
     }

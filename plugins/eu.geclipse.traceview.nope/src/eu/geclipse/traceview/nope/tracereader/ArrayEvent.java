@@ -44,7 +44,6 @@ public class ArrayEvent extends Event {
   /**
    * @return size
    */
-  @Override
   public int getSize() {
     return this.size;
   }

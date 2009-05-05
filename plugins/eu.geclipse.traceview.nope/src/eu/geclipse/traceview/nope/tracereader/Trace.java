@@ -15,15 +15,10 @@
 
 package eu.geclipse.traceview.nope.tracereader;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileFilter;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Arrays;
 import java.util.TreeSet;
 
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -39,14 +34,14 @@ import eu.geclipse.traceview.ITrace;
 import eu.geclipse.traceview.ITraceReader;
 import eu.geclipse.traceview.nope.Activator;
 import eu.geclipse.traceview.nope.preferences.PreferenceConstants;
-import eu.geclipse.traceview.utils.AbstractTrace;
+import eu.geclipse.traceview.utils.AbstractTraceFileCache;
 import eu.geclipse.traceview.utils.ClockCalculator;
 import eu.geclipse.traceview.utils.LamportEventComparator;
 
 /**
  * NOPE (NOndeterministic Program Evaluator) Trace.
  */
-public class Trace extends AbstractTrace
+public class Trace extends AbstractTraceFileCache
   implements ILamportTrace, IPhysicalTrace, ITraceReader
 {
 
@@ -55,9 +50,8 @@ public class Trace extends AbstractTrace
   private Process[] processes;
   private int maximumLamportClock = 0;
   private int maxTimeStop = 0;
-  private List<String> sourceFilenames = new LinkedList<String>();
-  private File tmpDir;
   private boolean supportsVectorClocks;
+  private int eventSize;
 
   private void updatePartnerClocks() {
     for( int procId = 0; procId < getNumberOfProcesses(); procId++ ) {
@@ -143,19 +137,24 @@ public class Trace extends AbstractTrace
    * @throws IOException thrown if a read error occurs.
    */
   public ITrace openTrace( final IPath trace, final IProgressMonitor monitor ) throws IOException {
-    this.supportsVectorClocks = Activator.getDefault()
-      .getPreferenceStore()
-      .getBoolean( PreferenceConstants.vectorClocks );
     this.tracePath = trace.removeLastSegments( 1 );
     File dir = this.tracePath.toFile();
     this.tracedir = this.tracePath.toPortableString();
     File[] files = dir.listFiles( new FileFilter() {
-
       public boolean accept( final File file ) {
         return !file.isDirectory() && file.getName().startsWith( "trace" ) //$NON-NLS-1$
                && file.getName().charAt( file.getName().length() - 4 ) == '.';
       }
     } );
+    this.processes = new Process[ files.length ];
+    this.supportsVectorClocks = Activator.getDefault()
+      .getPreferenceStore()
+      .getBoolean( PreferenceConstants.vectorClocks );
+    if( supportsVectorClocks() ) {
+      this.eventSize = 17 + getNumberOfProcesses();
+    } else {
+      this.eventSize = 17;
+    }
     // part of the workspace ?
     String projectName = ""; //$NON-NLS-1$
     boolean workspace = ResourcesPlugin.getWorkspace()
@@ -173,53 +172,41 @@ public class Trace extends AbstractTrace
         projectName = projectName.substring( device.length() );
       }
     }
-    this.processes = new Process[ files.length ];
+    long modTime = dir.lastModified();
+    for ( File file : files ) {
+      if (file.lastModified() > modTime) modTime = file.lastModified();
+    }
     monitor.beginTask( "Loading trace data", this.processes.length );
-    int dirNr = this.tracedir.hashCode();
-    this.tmpDir = new File( System.getProperty( "java.io.tmpdir" ), //$NON-NLS-1$
-                            "trace_" + Integer.toHexString( dirNr ) ); //$NON-NLS-1$
-    boolean reuseFile = this.tmpDir.exists()
-                        && new File( this.tracedir ).lastModified() < this.tmpDir.lastModified();
-    if( !this.tmpDir.exists() ) {
-      this.tmpDir.mkdir();
-    }
-    File sourceNamesListFile = new File( this.tmpDir, "sourcefiles.txt" ); //$NON-NLS-1$
-    if( sourceNamesListFile.exists() ) {
-      BufferedReader bufferedReader = new BufferedReader( new FileReader( sourceNamesListFile ) );
-      String entry = bufferedReader.readLine();
-      while( entry != null ) {
-        this.sourceFilenames.add( entry );
-        entry = bufferedReader.readLine();
-      }
-      bufferedReader.close();
-    }
-    Process prevProcess = null;
+    monitor.subTask( "Opening trace cache" );
+    boolean hasCache = openCacheDir( dir.getAbsolutePath(), modTime );
+    Arrays.sort( files );
     for( File file : files ) {
+      if (monitor.isCanceled()) return null;
       String filename = file.getName();
       int traceProc = Integer.parseInt( filename.substring( filename.length() - 3 ) );
       monitor.subTask( "Loading process " + traceProc );
       Process processTrace = new Process( new File( this.tracedir, filename ),
                                           traceProc,
-                                          reuseFile,
-                                          this.tmpDir,
-                                          this.sourceFilenames,
-                                          projectName,
-                                          this,
-                                          ( prevProcess == null ) ? 1000 : prevProcess.getMaximumLogicalClock() + 1000
+                                          hasCache,
+                                          this
                                           );
-      prevProcess = processTrace;
       this.processes[ traceProc ] = processTrace;
       monitor.worked( 1 );
     }
-    if( !reuseFile ) {
+    enableMemoryMap();
+    if( !hasCache ) {
+      if (monitor.isCanceled()) return null;
       monitor.subTask( "Updating logical clocks" );
       updatePartnerClocks();
+      if (monitor.isCanceled()) return null;
       monitor.subTask( "Calculating lamport clocks" );
       ClockCalculator.calcLamportClock( this );
       if( this.supportsVectorClocks ) {
+        if (monitor.isCanceled()) return null;
         monitor.subTask( "Calculating vector clocks" );
         updateVectorClocks();
       }
+      saveCacheMetadata();
     }
     for( Process process : this.processes ) {
       if( this.maximumLamportClock < process.getMaximumLamportClock() )
@@ -229,11 +216,6 @@ public class Trace extends AbstractTrace
         this.maxTimeStop = ( ( ( IPhysicalEvent )process.getEventByLogicalClock( process.getMaximumLogicalClock() ) ).getPhysicalStopClock() );
       }
     }
-    BufferedWriter bufferedWriter = new BufferedWriter( new FileWriter( sourceNamesListFile ) );
-    for( String entry : this.sourceFilenames ) {
-      bufferedWriter.write( entry + '\n' );
-    }
-    bufferedWriter.close();
     return this;
   }
 
@@ -268,12 +250,15 @@ public class Trace extends AbstractTrace
     return this.maxTimeStop;
   }
 
-
   protected boolean supportsVectorClocks() {
     return this.supportsVectorClocks;
   }
 
   public IPath getPath() {
     return this.tracePath;
+  }
+
+  public int getEventSize() {
+    return this.eventSize;
   }
 }
