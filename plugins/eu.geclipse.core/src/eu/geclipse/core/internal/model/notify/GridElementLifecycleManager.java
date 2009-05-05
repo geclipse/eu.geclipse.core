@@ -57,7 +57,7 @@ public class GridElementLifecycleManager
    */
   public static IGridElementCreator findCreator( final IResource resource ) {
     
-    IGridElementCreator result = GridModel.getCreatorRegistry().getCreator( resource, null );
+    IGridElementCreator result = GridModel.getCreatorRegistry().getCreator( resource, (Class)null );
     
     if ( result == null ) {
       result = new LocalResourceCreator();

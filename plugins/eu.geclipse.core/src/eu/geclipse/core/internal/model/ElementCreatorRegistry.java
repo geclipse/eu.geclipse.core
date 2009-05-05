@@ -19,14 +19,17 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IRegistryEventListener;
 import org.eclipse.core.runtime.Platform;
+import org.osgi.framework.Bundle;
 
 import eu.geclipse.core.ExtensionManager;
 import eu.geclipse.core.Extensions;
+import eu.geclipse.core.ICoreProblems;
 import eu.geclipse.core.internal.Activator;
 import eu.geclipse.core.model.IElementCreatorRegistry;
 import eu.geclipse.core.model.IGridElement;
@@ -111,6 +114,47 @@ public class ElementCreatorRegistry
     return getCreator( ( Object ) source, target );
   }
   
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IElementCreatorRegistry#getCreator(java.lang.Object, java.lang.String)
+   */
+  public IGridElementCreator getCreator( final Object source,
+                                         final String targetClassName ) throws ProblemException {
+    IGridElementCreator creator = null;
+    List< IConfigurationElement > elements = getConfigurations( source.getClass(), IGridElement.class );
+    
+    try {
+      for ( IConfigurationElement element : elements ) {
+        String contributor = element.getContributor().getName();
+        Bundle bundle = Platform.getBundle( contributor );
+        try {
+          Class< ? > serviceClass = bundle.loadClass( targetClassName );
+          IConfigurationElement[] targetElements = element.getChildren( Extensions.GRID_ELEMENT_CREATOR_TARGET_ELEMENT );
+          for ( IConfigurationElement targetElement : targetElements ) {
+            String targetType = targetElement.getAttribute( Extensions.GRID_ELEMENT_CREATOR_TARGET_CLASS_ATTRIBUTE );
+            Class< ? > targetClass = bundle.loadClass( targetType );
+            if ( targetClass.isAssignableFrom( serviceClass ) ) {
+              creator = ( IGridElementCreator ) element.createExecutableExtension( Extensions.GRID_ELEMENT_CREATOR_EXECUTABLE );
+              creator.setSource( source );
+              break;
+            }
+          }
+          if ( creator != null ) {
+            break;
+          }
+        } catch ( ClassNotFoundException cnfExc ) {
+          // Just ignore and go on
+        }
+      }
+
+      return creator;
+    } catch ( CoreException cExc ) {
+      throw new ProblemException( ICoreProblems.MODEL_ELEMENT_LOAD_FAILED,
+                                  cExc,
+                                  Activator.PLUGIN_ID );
+    }
+    
+  }
+
   /* (non-Javadoc)
    * @see eu.geclipse.core.model.IElementCreatorRegistry#getCreator(java.lang.Object, java.lang.Class)
    */

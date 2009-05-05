@@ -19,6 +19,8 @@ import java.util.List;
 
 import org.eclipse.core.runtime.IConfigurationElement;
 
+import eu.geclipse.core.reporting.ProblemException;
+
 /**
  * The element creator registry keeps track of all currently registered
  * extensions of the <code>eu.geclipse.core.gridElementCreator</code> extension
@@ -73,6 +75,9 @@ public interface IElementCreatorRegistry {
   public IGridElementCreator getCreator( final Object source,
                                          final Class< ? extends IGridElement > target );
   
+  public IGridElementCreator getCreator( final Object source,
+                                         final String targetClassName ) throws ProblemException;
+
   /**
    * Get the first {@link IGridElementCreator} that is able to create an
    * element of the specified type from the specified object type.
@@ -84,7 +89,7 @@ public interface IElementCreatorRegistry {
    */
   public IGridElementCreator getCreator( final Class< ? extends Object > source,
                                          final Class< ? extends IGridElement > target );
-  
+
   /**
    * Get a list of {@link IGridElementCreator} that are able to create an
    * element of the specified type from the specified object. If such creators

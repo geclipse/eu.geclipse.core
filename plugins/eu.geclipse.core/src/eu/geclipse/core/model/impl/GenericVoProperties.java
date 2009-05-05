@@ -25,18 +25,13 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.List;
 
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Platform;
-import org.osgi.framework.Bundle;
 
-import eu.geclipse.core.Extensions;
 import eu.geclipse.core.ICoreProblems;
 import eu.geclipse.core.internal.Activator;
 import eu.geclipse.core.model.GridModel;
@@ -95,18 +90,14 @@ public class GenericVoProperties
   public void load() throws ProblemException {
     
     IFileStore fileStore = getFileStore();
-    List< IConfigurationElement > elements
-      = GridModel.getCreatorRegistry().getConfigurations( URI.class, IGridService.class );
     
     try {
-      
       InputStream iStream = fileStore.openInputStream( EFS.NONE, null );
       InputStreamReader isReader = new InputStreamReader( iStream );
       BufferedReader bReader = new BufferedReader( isReader );
       
       String line;
       for ( ; ; ) {
-        
         line = bReader.readLine();
         
         if ( line == null ) {
@@ -116,42 +107,14 @@ public class GenericVoProperties
         String[] parts = line.split( FIELD_SEPARATOR );
 
         if ( parts.length == 2 ) {
-          
           String serviceType = parts[ 0 ];
           URI serviceURI = new URI( parts[ 1 ] );
-          IGridElementCreator creator = null;
-          
-          for ( IConfigurationElement element : elements ) {
-            String contributor = element.getContributor().getName();
-            Bundle bundle = Platform.getBundle( contributor );
-            try {
-              Class< ? > serviceClass = bundle.loadClass( serviceType );
-              IConfigurationElement[] targetElements = element.getChildren( Extensions.GRID_ELEMENT_CREATOR_TARGET_ELEMENT );
-              for ( IConfigurationElement targetElement : targetElements ) {
-                String targetType = targetElement.getAttribute( Extensions.GRID_ELEMENT_CREATOR_TARGET_CLASS_ATTRIBUTE );
-                Class< ? > targetClass = bundle.loadClass( targetType );
-                if ( targetClass.isAssignableFrom( serviceClass ) ) {
-                  creator = ( IGridElementCreator ) element.createExecutableExtension( Extensions.GRID_ELEMENT_CREATOR_EXECUTABLE );
-                  creator.setSource( serviceURI );
-                  break;
-                }
-              }
-              if ( creator != null ) {
-                break;
-              }
-            } catch ( ClassNotFoundException cnfExc ) {
-              // Just ignore and go on
-            }
-          }
-          
+          IGridElementCreator creator = GridModel.getCreatorRegistry().getCreator( serviceURI, serviceType );
           if ( creator != null ) {
             this.vo.create( creator );
           }
-          
         }
-          
       }
-      
     } catch ( CoreException cExc ) {
       throw new ProblemException( ICoreProblems.MODEL_ELEMENT_LOAD_FAILED,
                                   cExc,
@@ -167,7 +130,7 @@ public class GenericVoProperties
     }
     
   }
-
+  
   public void save() throws ProblemException {
     
     IFileStore fileStore = getFileStore();
