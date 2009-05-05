@@ -62,12 +62,17 @@ public class ServiceDialog
     try {
       this.selectedElement = this.configs.get( this.typeCombo.getText() );
       this.selectedURI = new URI( this.uriCombo.getText() );
-      super.okPressed();
+      if (this.selectedURI.getScheme() == null || this.selectedURI.getPort() == -1) {
+        setErrorMessage( "Please specify a full URI for the service (including scheme and port)" );
+      } else { 
+        super.okPressed();
+      }
     } catch ( Exception exc ) {
       setErrorMessage( exc.getLocalizedMessage() );
     }
   }
   
+  @Override
   protected Control createDialogArea( final Composite parent ) {
     
     IPreferenceStore prefStore = Activator.getDefault().getPreferenceStore();
