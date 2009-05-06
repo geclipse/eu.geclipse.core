@@ -10,9 +10,13 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
+import org.eclipse.jface.preference.IPreferenceStore;
+
+import eu.geclipse.traceview.internal.Activator;
+import eu.geclipse.traceview.preferences.PreferenceConstants;
+
 public abstract class AbstractTraceFileCache extends AbstractTrace {
-  private static File tmpDir = new File( System.getProperty( "java.io.tmpdir" ) );
-  private static String metaDataFilename = "cache.data";
+  private static String metaDataFilename = "cache.data"; //$NON-NLS-1$
   protected TraceCacheFile[] cacheFiles;
   protected File cacheDir;
   protected File dataFile;
@@ -27,6 +31,8 @@ public abstract class AbstractTraceFileCache extends AbstractTrace {
 
   public boolean openCacheDir( final String tracefileName, final long lastModified ) throws IOException {
     boolean cacheLoaded = false;
+    IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+    File tmpDir = new File( store.getString( PreferenceConstants.P_CACHE_DIR ) );
     this.cacheDir = new File(tmpDir, "tracecache_" + Integer.toHexString( tracefileName.hashCode() ) );
     this.dataFile = new File(cacheDir, metaDataFilename);
     this.cacheFileNr = new int[getNumberOfProcesses()];

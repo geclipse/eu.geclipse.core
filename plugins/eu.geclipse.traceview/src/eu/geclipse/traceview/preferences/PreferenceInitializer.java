@@ -119,5 +119,8 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
                                     Display.getCurrent()
                                       .getSystemColor( SWT.COLOR_GRAY )
                                       .getRGB() );
+    
+    // cache dir
+    store.setDefault( PreferenceConstants.P_CACHE_DIR, System.getProperty( "java.io.tmpdir" ) ); //$NON-NLS-1$
   }
 }

@@ -47,6 +47,8 @@ public class PreferenceConstants {
   public static final String P_SELECTION_COLOR = "selectionColorPreference"; //$NON-NLS-1$
   /** anti aliasing */
   public static final String P_ANTI_ALIASING = "antiAliasingPreference"; //$NON-NLS-1$
-  
+  // cache
+  /** cache dir */
+  public static final String P_CACHE_DIR = "cacheDir"; //$NON-NLS-1$
   
 }

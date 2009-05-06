@@ -30,8 +30,10 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
@@ -71,7 +73,41 @@ public class PreferencesPage extends PreferencePage
     createEventsGroup( composite );
     createMessagesGroup( composite );
     createSettingsGroup( composite );
+    createCacheGroup( composite );
     return null;
+  }
+
+  private void createCacheGroup( final Composite composite ) {
+    // group
+    GridLayout layout = new GridLayout();
+    GridData layoutData = new GridData( SWT.FILL, SWT.FILL, true, false );
+    layout.numColumns = 2;
+    Group cacheGroup = new Group( composite, SWT.NONE );
+    cacheGroup.setLayout( layout );
+    cacheGroup.setLayoutData( layoutData );
+    cacheGroup.setText( "Trace cache" );
+    cacheGroup.setLayout( new GridLayout(3, false) );
+    Label cacheDirLabel = new Label(cacheGroup, SWT.NONE);
+    cacheDirLabel.setText( "Cache directory:" );
+    final Text cacheDirText = new Text( cacheGroup, SWT.BORDER | SWT.READ_ONLY );
+    GridData gData = new GridData(SWT.FILL, SWT.FILL, true, false);
+    cacheDirText.setLayoutData( gData );
+    cacheDirText.setText( this.store.getString( PreferenceConstants.P_CACHE_DIR ) );
+    Button cacheDirBrowseButton = new Button(cacheGroup, SWT.NONE);
+    cacheDirBrowseButton.setText( "Browse..." );
+    cacheDirBrowseButton.addSelectionListener( new SelectionAdapter() {
+      @Override
+      public void widgetSelected( final SelectionEvent e ) {
+        DirectoryDialog dialog = new DirectoryDialog(getShell(), SWT.OPEN);
+        dialog.setText("Select trace cache directory");
+        dialog.setFilterPath(cacheDirText.getText());
+        String dir = dialog.open();
+        if (dir != null) {
+          cacheDirText.setText( dir );
+          PreferencesPage.this.store.setValue( PreferenceConstants.P_CACHE_DIR, dir );
+        }
+      }
+    } );
   }
 
   private void createEventsGroup( final Composite composite ) {
