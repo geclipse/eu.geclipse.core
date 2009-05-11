@@ -106,25 +106,26 @@ class SSHConnectionComposite extends Composite {
         IGridProject igp = ( IGridProject )element;
         if( igp.isOpen() && igp.getVO() != null ) {
           IGridInfoService infoService = igp.getVO().getInfoService();
-          elements = infoService.fetchResources( null,
-                                                 igp.getVO(),
-                                                 GridResourceCategoryFactory.getCategory( GridResourceCategoryFactory.ID_COMPUTING ),
-                                                 null );
-
-          for( IGridElement comp : elements ) {
-            if( comp instanceof IGridComputing ) {
-              IGridComputing gridComputing = ( IGridComputing )comp;
-              String host = gridComputing.getHostName();
-              if( host != null && this.hostnameCombo.indexOf( host ) == -1 ) {
-                this.hostnameCombo.add( host );
+          if (infoService != null) {
+            elements = infoService.fetchResources( null,
+                                                   igp.getVO(),
+                                                   GridResourceCategoryFactory.getCategory( GridResourceCategoryFactory.ID_COMPUTING ),
+                                                   null );
+            for( IGridElement comp : elements ) {
+              if( comp instanceof IGridComputing ) {
+                IGridComputing gridComputing = ( IGridComputing )comp;
+                String host = gridComputing.getHostName();
+                if( host != null && this.hostnameCombo.indexOf( host ) == -1 ) {
+                  this.hostnameCombo.add( host );
+                }
               }
             }
-          }
-          String[] items = this.hostnameCombo.getItems();
-          if (items != null && items.length > 0){ 
-            Arrays.sort(items);
-            this.hostnameCombo.removeAll();
-            this.hostnameCombo.setItems(items);
+            String[] items = this.hostnameCombo.getItems();
+            if (items != null && items.length > 0){ 
+              Arrays.sort(items);
+              this.hostnameCombo.removeAll();
+              this.hostnameCombo.setItems(items);
+            }
           }
         }
       }
