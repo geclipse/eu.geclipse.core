@@ -195,12 +195,12 @@ class SSHConnectionComposite extends Composite {
                                  Activator.PLUGIN_ID,
                                  IStatus.OK,
                                  "", null ); //$NON-NLS-1$
-    if( this.usernameCombo.getText().length() == 0 ) {
+    /*if( this.usernameCombo.getText().length() == 0 ) {
       status = new Status( IStatus.ERROR,
                            Activator.PLUGIN_ID,
                            IStatus.OK,
                            Messages.getString( "SSHConnectionComposite.userNameMustNotBeEmpty" ), null ); //$NON-NLS-1$
-    } else if( this.hostnameCombo.getText().length() == 0 ) {
+    } else */if( this.hostnameCombo.getText().length() == 0 ) {
       status = new Status( IStatus.ERROR,
                            Activator.PLUGIN_ID,
                            IStatus.OK,
