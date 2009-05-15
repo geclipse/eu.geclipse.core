@@ -33,6 +33,7 @@ import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
@@ -330,5 +331,10 @@ public class LogicalGraph extends TraceVisualization {
   @Override
   public ITrace getTrace() {
     return this.trace;
+  }
+
+  @Override
+  public void printTrace( final GC gc ) {
+    this.eventGraphPaintListener.print( gc );
   }
 }

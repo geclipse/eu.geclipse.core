@@ -333,4 +333,10 @@ public class StatisticsVisualisation extends TraceVisualization {
     this.cachedImage = null;
     this.chart = chart;
   }
+
+  @Override
+  public void printTrace( final GC gc ) {
+    // TODO Auto-generated method stub
+    
+  }
 }

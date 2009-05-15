@@ -41,13 +41,19 @@ import org.eclipse.swt.custom.CTabFolderEvent;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.printing.PrintDialog;
+import org.eclipse.swt.printing.Printer;
+import org.eclipse.swt.printing.PrinterData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
 
 import eu.geclipse.traceview.ITrace;
@@ -233,6 +239,32 @@ public class TraceView extends ViewPart implements ITraceView {
     // Be sure to register it so that other plug-ins can add actions.
     getSite().registerContextMenu( this.contextMenuMgr,
                                    getSite().getSelectionProvider() );
+    IActionBars actionBars = getViewSite().getActionBars();
+    actionBars.setGlobalActionHandler( ActionFactory.PRINT.getId(), new Action() {
+      @Override
+      public void run() {
+        CTabItem item = TraceView.this.cTabFolder.getSelection();
+        if( item != null && item.getControl() != null ) {
+          PrintDialog printDialog = new PrintDialog(Display.getDefault().getActiveShell());
+          printDialog.setText( "Print Trace" );
+          PrinterData printerData = printDialog.open();
+          //printerData.orientation = PrinterData.LANDSCAPE; // requires version 3.5
+          if (printerData != null) {
+            Printer printer = new Printer(printerData);
+            if(printer.startJob("Trace graph")) {
+              GC gc = new GC(printer);
+              if(printer.startPage()) {
+                ((TraceVisPage)item.getControl()).printTrace(gc);
+                printer.endPage();
+              }
+              gc.dispose();
+              printer.endJob();
+            }
+            printer.dispose();
+          }
+        }
+      }
+    } );
   }
 
   /**

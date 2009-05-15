@@ -24,6 +24,7 @@ import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -180,5 +181,9 @@ public class TraceVisPage extends Composite {
     if( this.visualization != null && !this.visualization.isDisposed() ) {
       this.visualization.redraw();
     }
+  }
+
+  public void printTrace( final GC gc ) {
+    this.visualization.printTrace(gc);
   }
 }

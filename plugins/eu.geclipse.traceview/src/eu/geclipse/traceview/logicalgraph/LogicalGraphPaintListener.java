@@ -28,6 +28,7 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.LineAttributes;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
@@ -1102,5 +1103,14 @@ class LogicalGraphPaintListener implements PaintListener {
 
   protected int getVSpace() {
     return this.vSpace;
+  }
+
+  public void print( final GC gc2 ) {
+    this.gc = gc2;
+    gc.setLineAttributes( new LineAttributes(1) );
+    drawRulers();
+    this.gc.setClipping( 31, 1, this.width - 31, this.height - 31 );
+    drawGrid();
+    drawGraph();
   }
 }

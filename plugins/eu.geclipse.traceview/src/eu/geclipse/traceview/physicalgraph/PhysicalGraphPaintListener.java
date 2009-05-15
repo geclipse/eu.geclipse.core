@@ -33,6 +33,7 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.LineAttributes;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
@@ -890,5 +891,19 @@ class PhysicalGraphPaintListener implements PaintListener {
 
   protected void setNumProc( final int numProc ) {
     this.numProc = numProc;
+  }
+
+  public void print( final GC gc2 ) {
+    this.gc = gc2;
+    gc.setLineAttributes( new LineAttributes(1) );
+    calculateXStep();
+    drawRulers();
+    // set the clipping to the graph area
+    this.gc.setClipping( 31, 1, this.width - 31, this.height - 31 );
+    drawGrid();
+    drawSelection();
+    drawGraph();
+    if( this.drawMessages )
+      drawConnections();
   }
 }
