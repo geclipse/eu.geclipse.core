@@ -79,6 +79,10 @@ public class S3InfoService extends AbstractGridInfoService {
     {
       result = fetchBuckets( parent, vo, monitor );
     }
+
+    if (result == null)
+      result = new IGridResource[0];
+
     return result;
   }
 
