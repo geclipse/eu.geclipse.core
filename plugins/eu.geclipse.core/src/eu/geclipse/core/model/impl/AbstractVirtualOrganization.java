@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006-2008 g-Eclipse Consortium 
+ * Copyright (c) 2006-2009 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -17,7 +17,10 @@
 package eu.geclipse.core.model.impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileInfo;
@@ -108,6 +111,16 @@ public abstract class AbstractVirtualOrganization
                                                 monitor );
       }
     }
+    Set<IGridResource> resourcesSet = new HashSet<IGridResource>();
+/*    if (resources != null) resourcesSet.addAll( Arrays.asList( resources ) );
+    //TODO add local resources, how to filter this by categories?
+    IGridElement[] children = getChildren( null );
+    for ( IGridElement child : children ) {
+      if ( child instanceof IGridResource ) {
+        resourcesSet.add( ( IGridResource )child );
+      }
+    }
+    resources = resourcesSet.toArray( new IGridResource[resourcesSet.size()] );*/
     return resources;
   }
   
@@ -123,9 +136,6 @@ public abstract class AbstractVirtualOrganization
                                                          false,
                                                          IGridComputing.class,
                                                          monitor );
-    }
-    
-    if ( myComputingResources != null ) {
       computing = new IGridComputing[ myComputingResources.length ];
       System.arraycopy( myComputingResources, 0, computing, 0, myComputingResources.length );
     }
@@ -194,30 +204,28 @@ public abstract class AbstractVirtualOrganization
    */
   public IGridService[] getServices( final IProgressMonitor monitor )
       throws ProblemException {
-    IGridService[] result = null;
-    IGridResource[] myGridResources = null;
+    IGridResource[] resources = null;
     IGridInfoService infoService = getInfoService();
     
     if ( infoService != null ) {
-      myGridResources = infoService.fetchResources( this,
-                                                    this,
-                                                    GridResourceCategoryFactory
-                                                      .getCategory( GridResourceCategoryFactory.ID_SERVICES ),
-                                                    false,
-                                                    IGridService.class,
-                                                    monitor );
+      resources = infoService.fetchResources( this,
+                                              this,
+                                              GridResourceCategoryFactory
+                                              .getCategory( GridResourceCategoryFactory.ID_SERVICES ),
+                                              false,
+                                              IGridService.class,
+                                              monitor );
     }
-    
-    if ( myGridResources != null ) {
-      result = new IGridService[ myGridResources.length + 1 ];
-      System.arraycopy( myGridResources, 0, result, 0, myGridResources.length );
-      result[ myGridResources.length ] = infoService;
-    } else {
-      result = new IGridService[ 1 ];
-      result[ 0 ] = infoService;
+    //add local services
+    Set<IGridResource> resourcesSet = new HashSet<IGridResource>();
+    if (resources != null) resourcesSet.addAll( Arrays.asList( resources ) );
+    IGridElement[] children = getChildren( null );
+    for ( IGridElement child : children ) {
+      if ( child instanceof IGridService ) {
+        resourcesSet.add( ( IGridResource )child );
+      }
     }
-    
-    return result;
+    return resourcesSet.toArray( new IGridService[resourcesSet.size()] );    
   }
   
   public IGridStorage[] getStorage( final IProgressMonitor monitor ) throws ProblemException {
@@ -233,9 +241,6 @@ public abstract class AbstractVirtualOrganization
                                                   false,
                                                   IGridStorage.class,
                                                   monitor );
-    }
-    
-    if ( myGridStorage != null ) {
       storage = new IGridStorage[ myGridStorage.length ];
       System.arraycopy( myGridStorage, 0, storage, 0, myGridStorage.length );
     }
@@ -250,29 +255,28 @@ public abstract class AbstractVirtualOrganization
   }
   
   public IGridJobService[] getJobSubmissionServices( final IProgressMonitor monitor ) throws ProblemException {
-    
-    IGridJobService[] myJobServices = null;
-    IGridResource[] myGridJobResources = null;
+    IGridResource[] resources = null;
     
     IGridInfoService infoService = getInfoService();
     if ( infoService != null ) {
-      myGridJobResources = infoService.fetchResources( this,
-                                                       this,
-                                                       GridResourceCategoryFactory
-                                                         .getCategory( GridResourceCategoryFactory.ID_JOB_SERVICES ),
-                                                        false,
-                                                        IGridJobService.class,
-                                                        monitor );
+      resources = infoService.fetchResources( this,
+                                              this,
+                                              GridResourceCategoryFactory
+                                              .getCategory( GridResourceCategoryFactory.ID_JOB_SERVICES ),
+                                              false,
+                                              IGridJobService.class,
+                                              monitor );
     }
-    
-    if ( myGridJobResources != null ) {
-      myJobServices = new IGridJobService[ myGridJobResources.length ];
-      System.arraycopy( myGridJobResources, 0, myJobServices, 0, myGridJobResources.length );
+    //add local services
+    Set<IGridResource> resourcesSet = new HashSet<IGridResource>();
+    if (resources != null) resourcesSet.addAll( Arrays.asList( resources ) );
+    IGridElement[] children = getChildren( null );
+    for ( IGridElement child : children ) {
+      if ( child instanceof IGridJobService ) {
+        resourcesSet.add( ( IGridResource )child );
+      }
     }
-    else 
-      myJobServices = new IGridJobService[ 0 ];
-    
-    return myJobServices;
+    return resourcesSet.toArray( new IGridJobService[resourcesSet.size()] );    
   }
   
   /* (non-Javadoc)

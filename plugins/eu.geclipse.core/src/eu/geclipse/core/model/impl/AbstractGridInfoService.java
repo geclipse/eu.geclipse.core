@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006-2008 g-Eclipse Consortium 
+ * Copyright (c) 2006-2009 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -59,33 +59,4 @@ public abstract class AbstractGridInfoService
 
     return resultList.toArray( new IGridResource[ resultList.size() ] );
   }
-  
-  private IGridResource[] checkThisInfoService( final IGridResource[] resources ) {
-    
-    IGridResource[] result = resources;
-    
-    boolean found = false;
-    if ( resources != null ) {
-      for ( IGridResource resource : resources ) {
-        if ( resource.equals( this ) ) {
-          found = true;
-          break;
-        }
-      }
-    }
-    
-    if ( ! found ) {
-      if ( resources != null ) {
-        result = new IGridResource[ resources.length + 1 ];
-        System.arraycopy( resources, 0, result, 0, resources.length );
-        result[ resources.length ] = this;
-      } else {
-        result = new IGridResource[] { this };
-      }
-    }
-    
-    return result;
-    
-  }
-
 }
