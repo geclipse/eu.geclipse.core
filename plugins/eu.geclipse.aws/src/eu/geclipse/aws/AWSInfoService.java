@@ -109,16 +109,13 @@ public class AWSInfoService extends AbstractGridInfoService
       for( IAWSService service : awsServices ) {
         IGridInfoService infoService = service.getInfoService();
         if( infoService != null ) {
-
           IGridResource[] gridResource = infoService.fetchResources( parent,
                                                                      vo,
                                                                      category,
                                                                      exclusive,
                                                                      typeFilter,
                                                                      monitor );
-          if( gridResource != null ) {
-            Collections.addAll( gridResourcesList, gridResource );
-          }
+          Collections.addAll( gridResourcesList, gridResource );
         }
       }
     }
