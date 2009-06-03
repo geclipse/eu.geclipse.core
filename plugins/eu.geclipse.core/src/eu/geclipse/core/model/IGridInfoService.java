@@ -76,6 +76,7 @@ public interface IGridInfoService extends IGridService {
    * to the filtered type. This parameter may be <code>null</code>.
    * @param monitor A progress monitor used to monitor this operation.
    * @return An array of Grid resources that apply to the specified arguments.
+   * Does not return <code>null</code>.
    * @throws ProblemException A problem Exception
    * @see #fetchResources(IGridContainer, IVirtualOrganization, IGridResourceCategory, IProgressMonitor)
    * @see IGridResourceCategory
