@@ -166,6 +166,10 @@ public class EC2InfoService extends AbstractGridInfoService
     {
       result = fetchElasticIPs( parent, vo, monitor );
     }
+
+    if (result == null)
+      result = new IGridResource[0];
+
     return result;
   }
 
