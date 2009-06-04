@@ -117,8 +117,7 @@ public class VoChooserPage extends WizardPage {
     gData = new GridData( GridData.FILL_BOTH );
     mainComp.setLayoutData( gData );
     
-    this.filterText = new Text( mainComp, SWT.BORDER );
-    this.filterText.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true, false ) );
+    this.filterText = new Text( mainComp, SWT.BORDER | SWT.SEARCH /* | SWT.ICON_CANCEL | SWT.ICON_SEARCH */ );    this.filterText.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true, false ) );
     this.filterText.setText( Messages.getString("VoChooserPage.initial_filter_text") ); //$NON-NLS-1$
     this.filterText.selectAll();
     
