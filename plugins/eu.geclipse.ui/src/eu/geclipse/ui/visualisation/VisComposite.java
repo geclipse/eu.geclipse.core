@@ -20,6 +20,7 @@ import java.awt.Frame;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.awt.SWT_AWT;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -39,6 +40,8 @@ import org.eclipse.swt.widgets.Label;
 public class VisComposite extends Composite {
   private Label statsLabel = null;
   private final Frame awtFrame;
+  private Composite SWT_AWT_composite;
+  String os = System.getProperty("osgi.os"); //$NON-NLS-1$
 
   /**
    * @param vis
@@ -48,7 +51,16 @@ public class VisComposite extends Composite {
                        final int style ) {
     super( vis, style & SWT.EMBEDDED );//SWT.DOUBLE_BUFFERED
     initSwtAwtComposite();
-    this.awtFrame = SWT_AWT.new_Frame( this );
+
+    if ( this.os.contains( "win32" ) ) { //$NON-NLS-1$
+      // create a new frame and add it to the composite created with embedded
+      // style
+      this.awtFrame = SWT_AWT.new_Frame( this.SWT_AWT_composite );
+    }
+    //if linux (or also macosx ?? - must test mac)
+    else {
+      this.awtFrame = SWT_AWT.new_Frame( this );
+    }
   }
 
   private void initSwtAwtComposite() {
@@ -59,6 +71,12 @@ public class VisComposite extends Composite {
     gridData1.grabExcessVerticalSpace = true;
     gridData1.horizontalAlignment = SWT.FILL;
     gridData1.verticalAlignment = SWT.FILL;
+
+    if ( this.os.contains( "win32" ) ) { //$NON-NLS-1$
+      this.SWT_AWT_composite = new Composite( this, SWT.EMBEDDED );
+      this.SWT_AWT_composite.setLayout( new FillLayout() );
+      this.SWT_AWT_composite.setLayoutData( gridData1 );
+    }
 
     gridLayout = new GridLayout();
     gridLayout.horizontalSpacing = 0;
