@@ -15,14 +15,17 @@
 
 package eu.geclipse.gvid.internal;
 
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Panel;
 import java.awt.image.BufferedImage;
+import java.awt.image.ImageObserver;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+
 import javax.swing.event.EventListenerList;
+
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
@@ -43,7 +46,7 @@ import eu.geclipse.ui.dialogs.ProblemDialog;
  * Output client for GVid. Allows to interact with remote rendered interactive
  * visualization applictions.
  */
-public class GVidClient extends Component implements Runnable {
+public class GVidClient extends Panel implements Runnable {
   private static final long serialVersionUID = 1L;
   private Connection connection;
   private IDecoder decoder;
@@ -184,7 +187,7 @@ public class GVidClient extends Component implements Runnable {
             setSize( this.lastImage.getWidth(), this.lastImage.getHeight() );
             initialSizeSet = true;
           }
-          this.graphics.drawImage( this.lastImage, 0, 0, null );
+          imageUpdate( this.lastImage, ImageObserver.FRAMEBITS, 0, 0, this.lastImage.getWidth(), this.lastImage.getHeight() );
         } else {
           Thread.sleep( 10 );
         }
@@ -249,6 +252,11 @@ public class GVidClient extends Component implements Runnable {
     for (int i = 0; i < listeners.length; i++) {
        listeners[i].statsUpdated( event );
     }
+  }
+  
+  @Override
+  public void update( final Graphics g ) {
+    paint(g);
   }
   
   /* (non-Javadoc)
