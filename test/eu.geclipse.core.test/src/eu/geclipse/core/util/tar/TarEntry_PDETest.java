@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2007 g-Eclipse Consortium 
+ * Copyright (c) 2007-2009 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -27,9 +27,9 @@ import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.core.util.tar.TarEntry;
 
 /**
- * Testclass for the {@link TarEntry} class
+ * Testclass for the {@link TarEntry} class.
  * 
- * @author ariel
+ * @author agarcia
  */
 public class TarEntry_PDETest {
 
