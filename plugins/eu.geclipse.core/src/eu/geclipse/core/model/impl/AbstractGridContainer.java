@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006-2008 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -52,13 +52,13 @@ import eu.geclipse.core.util.MasterMonitor;
 public abstract class AbstractGridContainer
     extends AbstractGridElement
     implements IGridContainer {
-  
+
   private static class ChildFetcher extends Job {
 
-    private AbstractGridContainer container;
+    private final AbstractGridContainer container;
     private IProgressMonitor externalMonitor;
     private Throwable exception;
-    
+
     /**
      * true if this cancel was called for that fetcher but run() hasn't finished
      * yet
@@ -67,7 +67,7 @@ public abstract class AbstractGridContainer
 
     /**
      * Construct a new child fetcher for the specified container.
-     * 
+     *
      * @param container The container whose children should be fetched.
      */
     public ChildFetcher( final AbstractGridContainer container ) {
@@ -78,7 +78,7 @@ public abstract class AbstractGridContainer
     /**
      * Get an exception that occurred during child fetching or <code>null</code>
      * of no such exception occurred.
-     * 
+     *
      * @return The exception of <code>null</code> if either the fetcher did not
      *         yet run or no exception occurred.
      */
@@ -89,7 +89,7 @@ public abstract class AbstractGridContainer
     /**
      * True if this fetcher has not yet run, i.e. it is currently scheduled, or
      * if it currently runs.
-     * 
+     *
      * @return True if the job has not yet finished.
      */
     public boolean isFetching() {
@@ -99,12 +99,12 @@ public abstract class AbstractGridContainer
     /**
      * Set a progress monitor that is used in the run method in parallel with
      * the monitor provided by the run method parameter.
-     * 
+     *
      * @param monitor The external monitor.
      */
     public void setExternalMonitor( final IProgressMonitor monitor ) {
       this.externalMonitor = monitor;
-    }    
+    }
 
     /*
      * (non-Javadoc)
@@ -149,18 +149,18 @@ public abstract class AbstractGridContainer
       return this.canceling;
     }
   }
-  
+
   /**
    * List of currently know children.
    */
-  private List< IGridElement > children
+  private final List< IGridElement > children
     = new ArrayList< IGridElement >();
-  
+
   /**
    * Dirty flag of this container.
    */
   private boolean dirty;
-  
+
   /**
    * Job used internally for fetching the containers children.
    */
@@ -169,21 +169,21 @@ public abstract class AbstractGridContainer
   protected AbstractGridContainer() {
     setDirty();
   }
-  
+
   /* (non-Javadoc)
    * @see eu.geclipse.core.model.IGridContainer#canContain(eu.geclipse.core.model.IGridElement)
    */
   public boolean canContain( final IGridElement element ) {
     return false;
   }
-  
+
   /* (non-Javadoc)
    * @see eu.geclipse.core.model.IGridContainer#contains(eu.geclipse.core.model.IGridElement)
    */
   public boolean contains( final IGridElement element ) {
     return this.children.contains( element  );
   }
-  
+
   /* (non-Javadoc)
    * @see eu.geclipse.core.model.IGridContainer#create(eu.geclipse.core.model.IGridElementCreator)
    */
@@ -193,7 +193,7 @@ public abstract class AbstractGridContainer
     element = addElement( element );
     return element;
   }
-  
+
   /* (non-Javadoc)
    * @see eu.geclipse.core.model.IGridContainer#delete(eu.geclipse.core.model.IGridElement)
    */
@@ -211,7 +211,7 @@ public abstract class AbstractGridContainer
       manager.removeElement( child );
     }
   }
-  
+
   /* (non-Javadoc)
    * @see eu.geclipse.core.model.impl.AbstractGridElement#dispose()
    */
@@ -220,7 +220,7 @@ public abstract class AbstractGridContainer
     deleteAll();
     super.dispose();
   }
-  
+
   /* (non-Javadoc)
    * @see eu.geclipse.core.model.IGridContainer#getChildCount()
    */
@@ -258,7 +258,7 @@ public abstract class AbstractGridContainer
   public boolean hasChildren() {
     return isLazy() || !this.children.isEmpty();
   }
-  
+
   /* (non-Javadoc)
    * @see eu.geclipse.core.model.IGridContainer#findChild(java.lang.String)
    */
@@ -268,11 +268,11 @@ public abstract class AbstractGridContainer
       if ( child.getName().equals( name ) ) {
         result = child;
         break;
-      } 
+      }
     }
     return result;
   }
-  
+
   /* (non-Javadoc)
    * @see eu.geclipse.core.model.IGridContainer#findChildWithResource(java.lang.String)
    */
@@ -284,18 +284,18 @@ public abstract class AbstractGridContainer
           result = child;
           break;
         }
-      } 
+      }
     }
     return result;
   }
-  
+
   /* (non-Javadoc)
    * @see eu.geclipse.core.model.IGridContainer#isDirty()
    */
   public boolean isDirty() {
     return this.dirty;
   }
-  
+
   public void refresh( final IProgressMonitor monitor )
       throws ProblemException {
 
@@ -326,30 +326,30 @@ public abstract class AbstractGridContainer
             Activator.PLUGIN_ID );
       }
     }
-    
+
   }
-  
+
   /* (non-Javadoc)
    * @see eu.geclipse.core.model.IGridContainer#setDirty()
    */
   public void setDirty() {
     setDirty( true );
   }
-  
+
   /**
    * Add an element as child to this container. If a child with the same
    * name is already contained in this contained this old child will
    * be deleted.
-   * 
+   *
    * @param element The new child of this container or <code>null</code>
    * if an error occurs.
    * @return The newly added element.
    */
   protected IGridElement addElement( final IGridElement element )
       throws ProblemException {
-    
+
     if ( element != null ) {
-    
+
       testCanContain( element );
       IGridElement oldChild = findChild( element.getName() );
       if ( oldChild != null ) {
@@ -358,7 +358,7 @@ public abstract class AbstractGridContainer
       this.children.add( element );
       GridRoot.registerElement( element );
       fireGridModelEvent( IGridModelEvent.ELEMENTS_ADDED, element );
-      
+
       if ( isLazy() && ! ( element instanceof ContainerMarker ) ) {
         for ( IGridElement child : this.children ) {
           if ( child instanceof ContainerMarker ) {
@@ -367,19 +367,19 @@ public abstract class AbstractGridContainer
           }
         }
       }
-      
+
     }
-    
+
     return element;
-    
+
   }
-  
+
   /**
    * Remove all children from this container and call their
    * {@link #dispose()} methods.
    */
   public void deleteAll() {
-    if ( ( this.children != null ) && !this.children.isEmpty() ) {
+    if ( this.children != null && !this.children.isEmpty() ) {
       for ( IGridElement child : this.children ) {
         unregisterFromManager( child );
         child.dispose();
@@ -390,14 +390,14 @@ public abstract class AbstractGridContainer
       this.children.clear();
     }
   }
-  
+
   /**
    * Fetch the children of this container. For a non-lazy container
    * the children are fetched when the container is constructed. For
    * lazy containers the children are fetched by the
    * {@link #getChildren(IProgressMonitor)} method if the container is
    * dirty.
-   * 
+   *
    * @param monitor A progress monitor to monitor the progress of this
    * maybe long running method.
    * @return True if the operation was successful.
@@ -407,7 +407,7 @@ public abstract class AbstractGridContainer
       throws ProblemException {
     return Status.OK_STATUS;
   }
-  
+
   protected void removeElement( final IGridElement element )
       throws ProblemException {
     boolean result = this.children.remove( element );
@@ -421,17 +421,17 @@ public abstract class AbstractGridContainer
       }
     }
   }
-    
+
   /**
    * Set the dirty flag of this container. If setting to dirty, the
    * flags of all child containers are also set recursively to dirty.
-   * 
+   *
    * @param d The new value of the container's dirty flag.
    */
   protected void setDirty( final boolean d ) {
     this.dirty = d;
     if ( d ) {
-      if ( ( this.fetcher != null ) && ( this.fetcher.isFetching() ) ) {
+      if ( this.fetcher != null && this.fetcher.isFetching() ) {
         this.fetcher.cancel();
       }
       List< IGridElement > synchronizedList = Collections.synchronizedList( this.children );
@@ -444,32 +444,32 @@ public abstract class AbstractGridContainer
       }
     }
   }
-  
+
   protected void lock() {
     getGridNotificationService().lock( this );
   }
-  
+
   protected void unlock() {
     getGridNotificationService().unlock( this );
   }
-  
+
   protected void fireGridModelEvent( final int type,
                                    final IGridElement element ) {
     fireGridModelEvent( type, new IGridElement[] { element } );
   }
-  
+
   protected void fireGridModelEvent( final int type,
                                    final IGridElement[] elements ) {
-    if ( ( elements != null ) && ( elements.length > 0 ) ) {
+    if ( elements != null && elements.length > 0 ) {
       IGridModelEvent event = new GridModelEvent( type, this, elements );
       getGridNotificationService().queueEvent( event );
     }
   }
-  
+
   static private GridNotificationService getGridNotificationService() {
     return GridNotificationService.getInstance();
   }
-  
+
   /**
    * To register IGridModelListener within constructor or static method, I cannot call GridRoot.getInstance().
    * For reason @see bug #209160
@@ -479,40 +479,40 @@ public abstract class AbstractGridContainer
   static protected void staticAddGridModelListener( final IGridModelListener listener ) {
     getGridNotificationService().addListener( listener );
   }
-  
+
   private void startFetch( final IProgressMonitor monitor )
       throws Throwable {
 
     if ( this.fetcher == null ) {
       this.fetcher = new ChildFetcher( this );
-    }    
-    
+    }
+
     this.fetcher.setExternalMonitor( monitor );
-    
+
     // if canceling, then schedule again (don't wait for finish cancelation - scheduler start job again).
     if ( ! this.fetcher.isFetching()
-        || this.fetcher.isCanceling() ) {      
+        || this.fetcher.isCanceling() ) {
       this.fetcher.schedule();
-    }    
-    
+    }
+
     try {
       this.fetcher.join();
     } catch ( InterruptedException intExc ) {
       // Silently ignored
     }
-    
+
     Throwable exc = this.fetcher.getException();
-    
+
     if ( exc != null ) {
       throw exc;
-    }    
+    }
   }
-  
+
   /**
    * Test if this container can contain the specified element
    * and throw a {@link ProblemException} if this is not the
    * case.
-   * 
+   *
    * @param element The element to be tested.
    * @throws ProblemException Thrown if {@link #canContain(IGridElement)}
    * returns false for the specified element.
@@ -527,7 +527,7 @@ public abstract class AbstractGridContainer
           Activator.PLUGIN_ID );
     }
   }
-  
+
   /**
    * @return get current children elements. This method do not
    *         fetchChildren, so for dirty container it return dirty (old)
@@ -536,5 +536,5 @@ public abstract class AbstractGridContainer
    */
   protected List<IGridElement> getCachedChildren() {
     return this.children;
-  }  
+  }
 }
