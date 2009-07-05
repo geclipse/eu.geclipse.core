@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2008 g-Eclipse consortium 
+ * Copyright (c) 2008 g-Eclipse consortium
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -10,15 +10,14 @@
  * project number: FP6-IST-034327  http://www.geclipse.eu/
  *
  * Contributor(s):
- *     PSNC: 
+ *     PSNC:
  *      - Katarzyna Bylec (katis@man.poznan.pl)
- *           
+ *
  *****************************************************************************/
 package eu.geclipse.jsdl.ui.adapters.jsdl;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -66,11 +65,11 @@ public class ParametricJobAdapter extends JsdlAdaptersFactory {
   private JobDescriptionType jobDescriptionType;
   private boolean isNotifyAllowed;
   private boolean adapterRefreshed;
-  private JSDLJobDescription JSDLJobDescr;
+  private final JSDLJobDescription JSDLJobDescr;
 
   /**
    * Constructs a new <code> {@link DataStageTypeAdapter} </code>
-   * 
+   *
    * @param jobDefinitionRoot . The root element of a JSDL document (
    *          {@link JobDefinitionType}).
    */
@@ -97,7 +96,7 @@ public class ParametricJobAdapter extends JsdlAdaptersFactory {
   /**
    * Allows to set the adapter's content on demand and not through the
    * constructor.
-   * 
+   *
    * @param jobDefinitionRoot The root element of a JSDL document.
    */
   public void setContent( final JobDefinitionType jobDefinitionRoot ) {
@@ -246,8 +245,11 @@ public class ParametricJobAdapter extends JsdlAdaptersFactory {
         }
       } else {
         String fsBase = baseString + "jsdl:FileSystem";
-        parseFileSystem( ( FileSystemType )resources.getFileSystem().get( 0 ),
-                         fsBase );
+        if ( resources.getFileSystem().size() != 0 ) {
+          parseFileSystem( ( FileSystemType )resources.getFileSystem().get( 0 ),
+                           fsBase );
+
+        }
       }
     }
     if( resources.isSetExclusiveExecution() ) {
@@ -515,7 +517,7 @@ public class ParametricJobAdapter extends JsdlAdaptersFactory {
   /**
    * Method to create user-friendly string representation of loop function for
    * given values.
-   * 
+   *
    * @param start start value of the loop
    * @param end end value of the loop
    * @param step step value for the loop
