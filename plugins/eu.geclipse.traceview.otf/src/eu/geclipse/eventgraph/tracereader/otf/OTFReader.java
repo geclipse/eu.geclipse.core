@@ -42,7 +42,8 @@ public class OTFReader extends AbstractTraceFileCache
       .substring( 0, file.getAbsolutePath().length() - 4 );
     this.filename = file.getName();
     readOTFMapping( monitor );
-    boolean hasCache = openCacheDir( file.getAbsolutePath(), modTime );
+    String traceOptions = "";
+    boolean hasCache = openCacheDir( file.getAbsolutePath(), traceOptions, modTime );
     if ( !readOTFData( hasCache, monitor ) ) return null;
     enableMemoryMap();
     if (!hasCache) {

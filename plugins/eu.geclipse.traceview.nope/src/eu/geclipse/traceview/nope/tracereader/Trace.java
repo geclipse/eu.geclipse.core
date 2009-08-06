@@ -147,11 +147,13 @@ public class Trace extends AbstractTraceFileCache
       }
     } );
     this.processes = new Process[ files.length ];
+    String traceOptions = "";
     this.supportsVectorClocks = Activator.getDefault()
       .getPreferenceStore()
       .getBoolean( PreferenceConstants.vectorClocks );
     if( supportsVectorClocks() ) {
       this.eventSize = 17 + getNumberOfProcesses();
+      traceOptions += "vectorClocks ";
     } else {
       this.eventSize = 17;
     }
@@ -178,7 +180,7 @@ public class Trace extends AbstractTraceFileCache
     }
     monitor.beginTask( "Loading trace data", this.processes.length );
     monitor.subTask( "Opening trace cache" );
-    boolean hasCache = openCacheDir( dir.getAbsolutePath(), modTime );
+    boolean hasCache = openCacheDir( dir.getAbsolutePath(), traceOptions, modTime );
     Arrays.sort( files );
     for( File file : files ) {
       if (monitor.isCanceled()) return null;

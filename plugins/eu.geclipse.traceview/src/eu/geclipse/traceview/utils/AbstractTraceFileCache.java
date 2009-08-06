@@ -30,11 +30,11 @@ public abstract class AbstractTraceFileCache extends AbstractTrace {
 
   abstract public int getEventSize();
 
-  public boolean openCacheDir( final String tracefileName, final long lastModified ) throws IOException {
+  public boolean openCacheDir( final String tracefileName, final String traceOptions, final long lastModified ) throws IOException {
     boolean cacheLoaded = false;
     IPreferenceStore store = Activator.getDefault().getPreferenceStore();
     File tmpDir = new File( store.getString( PreferenceConstants.P_CACHE_DIR ) );
-    this.cacheDir = new File(tmpDir, "tracecache_" + Integer.toHexString( tracefileName.hashCode() ) );
+    this.cacheDir = new File(tmpDir, "tracecache_" + Integer.toHexString( traceOptions.hashCode() + tracefileName.hashCode() ) );
     this.dataFile = new File(cacheDir, metaDataFilename);
     this.cacheFileNr = new int[getNumberOfProcesses()];
     this.cacheIndex = new int[getNumberOfProcesses()];
