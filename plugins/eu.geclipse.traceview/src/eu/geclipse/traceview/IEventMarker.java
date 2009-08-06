@@ -63,9 +63,17 @@ public interface IEventMarker {
    * event.
    * 
    * @param type the type of the EventMarker
-   * @return the color to mark the event. null for no foreground
+   * @return the color to mark the event. null for no background
    */
   public Color getBackgroundColor( int type );
+
+  /**
+   * Returns the background Color of the canvas for the last marked
+   * event.
+   * 
+   * @return the color to mark the event. null for no canvas background
+   */
+  public Color getCanvasBackgroundColor();
 
   /**
    * Returns the line width for the specified type of the last marked event.

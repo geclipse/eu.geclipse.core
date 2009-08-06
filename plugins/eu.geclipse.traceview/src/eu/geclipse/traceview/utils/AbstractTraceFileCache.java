@@ -18,6 +18,7 @@ import eu.geclipse.traceview.preferences.PreferenceConstants;
 public abstract class AbstractTraceFileCache extends AbstractTrace {
   private static String metaDataFilename = "cache.data"; //$NON-NLS-1$
   protected TraceCacheFile[] cacheFiles;
+  protected int[] procsInFile;
   protected File cacheDir;
   protected File dataFile;
   protected Properties metaData;
@@ -43,6 +44,7 @@ public abstract class AbstractTraceFileCache extends AbstractTrace {
       long modTime = dataFile.lastModified();
       loadCacheMetadata();
       cacheFileCount = Integer.parseInt( ( String )metaData.get( "cachefilecount" ) );
+      this.procsInFile = new int[cacheFileCount];
       for(int fileNr = 0; fileNr < cacheFileCount; fileNr++) {
         long cacheModTime = new File(cacheDir, "cachefile_" + fileNr).lastModified();
         if ( cacheModTime < modTime ) modTime = cacheModTime;
@@ -58,6 +60,7 @@ public abstract class AbstractTraceFileCache extends AbstractTrace {
             cacheFileNr[procNr] = fileNr;
             cacheIndex[procNr] = idx;
             idx++;
+            procsInFile[fileNr] = idx;
           }
         }
         String filename = "";
@@ -83,6 +86,10 @@ public abstract class AbstractTraceFileCache extends AbstractTrace {
     this.cacheIndex = new int[getNumberOfProcesses()];
     for (int i = 0; i < cacheFileNr.length; i++) {
       cacheFileNr[i] = i;
+    }
+    procsInFile = new int[cacheFileCount];
+    for (int fileNr = 0; fileNr < cacheFileCount; fileNr++ ) {
+      procsInFile[fileNr] = 1;
     }
   }
 
@@ -131,8 +138,7 @@ public abstract class AbstractTraceFileCache extends AbstractTrace {
   }
 
   void write( final int processId, final int logicalClock, final int offset, final int value ) {
-    int eventOffset = getEventSize() * ( cacheIndex[processId] 
-                      + getNumberOfProcesses() * logicalClock ) + offset;
+    int eventOffset = calcEventOffset( processId, logicalClock, offset );
     try {
       cacheFiles[cacheFileNr[processId]].write(eventOffset, value);
     } catch( IOException e ) {
@@ -141,10 +147,20 @@ public abstract class AbstractTraceFileCache extends AbstractTrace {
     }
   }
 
+  void write( final int processId, final int logicalClock, final int offset, final int[] value ) {
+    int eventOffset = calcEventOffset( processId, logicalClock, offset );
+    try {
+      cacheFiles[cacheFileNr[processId]].write(eventOffset, value);
+    } catch( IOException e ) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+  }
+
+
   int read( final int processId, final int logicalClock, final int offset ) {
     try {
-      int eventOffset = getEventSize() * (cacheIndex[processId]
-                                                     + getNumberOfProcesses() * logicalClock ) + offset;
+      int eventOffset = calcEventOffset( processId, logicalClock, offset );
       return cacheFiles[cacheFileNr[processId]].read(eventOffset);
     } catch( IOException e ) {
       // TODO Auto-generated catch block
@@ -153,6 +169,20 @@ public abstract class AbstractTraceFileCache extends AbstractTrace {
     return 0;
   }
 
+  void read( final int processId, final int logicalClock, final int offset, int[] data ) {
+    try {
+      int eventOffset = calcEventOffset( processId, logicalClock, offset );
+      cacheFiles[cacheFileNr[processId]].read(eventOffset, data);
+    } catch( IOException e ) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+  }
+
+  private int calcEventOffset( final int processId, final int logicalClock, final int offset ) {
+    return getEventSize() * (this.cacheIndex[processId] + procsInFile[cacheFileNr[processId]] * logicalClock ) + offset;
+  }
+  
   int getMaximumLogicalClock( final int processNr ) {
     return this.maxLogClk[processNr];
   }

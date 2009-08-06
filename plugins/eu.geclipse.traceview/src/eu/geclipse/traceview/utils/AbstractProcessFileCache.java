@@ -39,7 +39,15 @@ public abstract class AbstractProcessFileCache extends AbstractProcess {
     trace.write( processId, logicalClock, offset, value );
   }
 
+  public void write( final int logicalClock, final int offset, final int[] value ) {
+    trace.write( processId, logicalClock, offset, value );
+  }
+
   public int read( final int logicalClock, final int offset ) {
     return trace.read( processId, logicalClock, offset );
+  }
+
+  public void read( final int logicalClock, final int offset, final int[] data ) {
+    trace.read( processId, logicalClock, offset, data );
   }
 }

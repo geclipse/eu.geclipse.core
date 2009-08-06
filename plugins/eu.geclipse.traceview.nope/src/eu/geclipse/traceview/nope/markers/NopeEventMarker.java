@@ -160,4 +160,8 @@ public class NopeEventMarker implements IEventMarker {
   public String getToolTip() {
     return null;
   }
+
+  public Color getCanvasBackgroundColor() {
+    return null;
+  }
 }

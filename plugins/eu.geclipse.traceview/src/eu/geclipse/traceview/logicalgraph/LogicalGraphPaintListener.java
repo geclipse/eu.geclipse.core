@@ -567,6 +567,29 @@ class LogicalGraphPaintListener implements PaintListener {
     // TODO right - because of broadcasts
   }
 
+  private void drawGraphBackground() {
+    for( int i = this.fromProcess, y = 0 - this.yOffset - this.vSpace/2 + this.eventSize/2; i < this.toProcess; i++, y += this.vSpace ) {
+      ILamportEvent[] events = ( ( ILamportProcess )this.eventGraph.getTrace()
+        .getProcess( i ) ).getEventsByLamportClock( this.fromClock, this.toClock );
+      for( ILamportEvent event : events ) {
+        int x = 30 - this.hSpace/2 + this.eventSize/2
+                - this.xOffset
+                + ( event.getLamportClock() - this.fromClock )
+                * this.hSpace;
+        for( IEventMarker eventmarker : this.eventGraph.getEventMarkers() ) {
+          int mark = eventmarker.mark( event );
+          if (mark != IEventMarker.No_Mark) {
+            Color color = eventmarker.getCanvasBackgroundColor();
+            if( color != null ) {
+              this.gc.setBackground( color );
+              this.gc.fillRectangle( x, y, this.hSpace, this.vSpace );
+            }
+          }
+        }
+      }
+    }
+  }
+
   /**
    * Draws all the visible events and their send & receive connections
    */
@@ -935,6 +958,8 @@ class LogicalGraphPaintListener implements PaintListener {
       // set the clipping to the graph area
       this.gc.setClipping( 31, 1, this.width - 31, this.height - 31 );
       // this.gc.setClipping(0, 0, this.width, this.height);
+      // Draw background markers of events
+      drawGraphBackground();
       // draw the grid
       drawGrid();
       // draw selection

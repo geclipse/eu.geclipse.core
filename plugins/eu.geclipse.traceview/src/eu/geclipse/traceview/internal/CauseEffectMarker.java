@@ -88,4 +88,8 @@ public class CauseEffectMarker implements IEventMarker {
   public String getToolTip() {
     return null;
   }
+
+  public Color getCanvasBackgroundColor() {
+    return null;
+  }
 }

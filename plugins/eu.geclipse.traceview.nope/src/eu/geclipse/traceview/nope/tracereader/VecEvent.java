@@ -30,23 +30,12 @@ public class VecEvent extends Event implements IVectorEvent {
    * @see eu.geclipse.traceview.IVectorEvent#getVectorClock()
    */
   public int[] getVectorClock() {
-    /*
     int[] result = new int[ getProcess().getTrace().getNumberOfProcesses() ];
-    this.processCache.getBuffer().position( this.logicalClock
-                                            * getSize()
-                                            / 4
-                                            + VecEvent.vectorClockOffset );
-    this.processCache.getBuffer().get( result );
+    this.process.read( this.logicalClock, vectorClockOffset, result );
     return result;
-    */
-    return null;
   }
 
   protected void setVectorClock( final int[] src ) {
-/*    this.processCache.getBuffer().position( this.logicalClock
-                                            * getSize()
-                                            / 4
-                                            + VecEvent.vectorClockOffset );
-    this.processCache.getBuffer().put( src ); */
+    this.process.write( this.logicalClock, vectorClockOffset, src );
   }
 }

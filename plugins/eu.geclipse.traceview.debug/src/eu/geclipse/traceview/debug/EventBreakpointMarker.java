@@ -103,4 +103,8 @@ public class EventBreakpointMarker implements IEventMarker {
   public String getToolTip() {
     return null;
   }
+
+  public Color getCanvasBackgroundColor() {
+    return null;
+  }
 }
