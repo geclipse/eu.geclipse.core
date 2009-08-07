@@ -581,8 +581,16 @@ class LogicalGraphPaintListener implements PaintListener {
           if (mark != IEventMarker.No_Mark) {
             Color color = eventmarker.getCanvasBackgroundColor();
             if( color != null ) {
+              int bgWidth = this.hSpace;
+              ILamportEvent nextEvent = ( ILamportEvent )event.getNextEvent();
+              if ( nextEvent != null ) {
+                if ( eventmarker.mark( nextEvent ) != IEventMarker.No_Mark &&
+                     color.equals( eventmarker.getCanvasBackgroundColor() )) {
+                  bgWidth *= (nextEvent.getLamportClock() - event.getLamportClock()); 
+                }
+              }
               this.gc.setBackground( color );
-              this.gc.fillRectangle( x, y, this.hSpace, this.vSpace );
+              this.gc.fillRectangle( x, y, bgWidth, this.vSpace );
             }
           }
         }
