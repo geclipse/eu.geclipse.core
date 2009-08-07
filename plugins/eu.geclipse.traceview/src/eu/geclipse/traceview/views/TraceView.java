@@ -294,7 +294,10 @@ public class TraceView extends ViewPart implements ITraceView {
     Display.getDefault().asyncExec( new Runnable() {
 
       public void run() {
-        ( ( TraceVisPage )TraceView.this.cTabFolder.getSelection().getControl() ).redrawVisualisation();
+        CTabItem  item = TraceView.this.cTabFolder.getSelection();
+        if (item != null) {
+          ( ( TraceVisPage )item.getControl() ).redrawVisualisation();
+        }
       }
     } );
   }
