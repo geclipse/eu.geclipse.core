@@ -1,16 +1,32 @@
+/*****************************************************************************
+ * Copyright (c) 2009 g-Eclipse Consortium 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Initial development of the original code was made for the
+ * g-Eclipse project founded by European Union
+ * project number: FP6-IST-034327  http://www.geclipse.eu/
+ *
+ * Contributors:
+ *    Thomas Koeckerbauer MNM-Team, LMU Munich - initial API and implementation
+ *****************************************************************************/
+
 package eu.geclipse.traceview.utils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.nio.ByteOrder;
 import java.nio.IntBuffer;
 import java.nio.channels.FileChannel;
 
+import eu.geclipse.traceview.internal.BufferedRandomAccessFile;
+
 public class TraceCacheFile {
   private IntBuffer buffer;
-  private RandomAccessFile randAccFile;
+  private BufferedRandomAccessFile randAccFile;
 
   public TraceCacheFile( final File dir, final int fileNr ) throws FileNotFoundException {
     openCacheFile( new File(dir, "cachefile_" + fileNr) );
@@ -21,7 +37,7 @@ public class TraceCacheFile {
   }
 
   public void openCacheFile( final File file ) throws FileNotFoundException {
-    randAccFile = new RandomAccessFile( file, "rw" ); //$NON-NLS-1$
+    randAccFile = new BufferedRandomAccessFile( file, "rw" ); //$NON-NLS-1$
   }
   
   public void enableMemoryMap() throws IOException {
