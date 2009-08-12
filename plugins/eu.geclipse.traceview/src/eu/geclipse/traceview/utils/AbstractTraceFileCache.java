@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.StringTokenizer;
+import java.util.Vector;
 
 import org.eclipse.jface.preference.IPreferenceStore;
 
@@ -96,16 +97,37 @@ public abstract class AbstractTraceFileCache extends AbstractTrace {
   }
 
   protected void createCacheFileMapping() {
-    this.cacheFileCount = getNumberOfProcesses();
+    Vector<Integer> factors = factorize( getNumberOfProcesses() );
+    this.cacheFileCount = 1;
+    for (int i = factors.size()-1; i>=0; i--) {
+      int factor = factors.get( i ).intValue();
+      if (this.cacheFileCount * factor <= 32) this.cacheFileCount *= factor;
+    }
+    int procsPerFile = getNumberOfProcesses() / this.cacheFileCount;
+    this.procsInFile = new int[this.cacheFileCount];
+    for (int fileNr = 0; fileNr < this.cacheFileCount; fileNr++ ) {
+      this.procsInFile[fileNr] = procsPerFile;
+    }
     this.cacheFileNr = new int[getNumberOfProcesses()];
     this.cacheIndex = new int[getNumberOfProcesses()];
-    for (int i = 0; i < cacheFileNr.length; i++) {
-      cacheFileNr[i] = i;
+    for (int i = 0; i < getNumberOfProcesses(); i++) {
+      this.cacheFileNr[i] = i / procsPerFile;
+      this.cacheIndex[i] = i % procsPerFile;
     }
-    procsInFile = new int[cacheFileCount];
-    for (int fileNr = 0; fileNr < cacheFileCount; fileNr++ ) {
-      procsInFile[fileNr] = 1;
-    }
+  }
+
+  private Vector<Integer> factorize(int x) {
+    Vector<Integer> resultVector = new Vector<Integer>();
+    int d = 2;
+    do {
+      if (x % d != 0) d++;
+      else {
+        resultVector.add( Integer.valueOf(d) );
+        x /= d;
+        d = 2;
+      }
+    } while (x != 1);
+    return resultVector;
   }
 
   private void openCacheFiles() throws FileNotFoundException {
@@ -223,7 +245,7 @@ public abstract class AbstractTraceFileCache extends AbstractTrace {
   }
 
   protected void enableMemoryMap() throws IOException {
-    for (int fileNr = 0; fileNr < getNumberOfProcesses(); fileNr++ ) {
+    for (int fileNr = 0; fileNr < this.cacheFileCount; fileNr++ ) {
       cacheFiles[fileNr].enableMemoryMap();
     }
   }

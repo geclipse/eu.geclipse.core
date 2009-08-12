@@ -68,6 +68,10 @@ public class BufferedRandomAccessFile {
       flush();
       this.startOffset = pos - PRE_SEEK_BUFFER;
       this.bufferPos = PRE_SEEK_BUFFER;
+      if (this.startOffset < 0) {
+        this.startOffset = 0;
+        this.bufferPos = (int) pos;
+      }
       if ( this.file.length() > this.startOffset ) {
         // startOffset inside of file
         this.file.seek( this.startOffset );
