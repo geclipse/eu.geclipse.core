@@ -15,72 +15,31 @@
 
 package eu.geclipse.traceview.logicalgraph;
 
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.swt.events.MouseAdapter;
-import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.ui.PartInitException;
-
-import eu.geclipse.traceview.IEvent;
 import eu.geclipse.traceview.ILamportProcess;
-import eu.geclipse.traceview.IProcess;
-import eu.geclipse.traceview.ITrace;
-import eu.geclipse.traceview.internal.Activator;
+import eu.geclipse.traceview.internal.AbstractGraphMouseAdapter;
 
 /**
  * A MouseAdapter which handles the mouse events on the LogicalGraph and sets
  * the according selection in the SelectionProvider.
  */
-public class LogicalGraphMouseAdapter extends MouseAdapter {
-
-  private LogicalGraph logicalGraph;
-
+public class LogicalGraphMouseAdapter extends AbstractGraphMouseAdapter {
   /**
    * Creates a new EventGraphMouseAdapter
    *
    * @param eventGraph
    */
   LogicalGraphMouseAdapter( final LogicalGraph logicalGraph ) {
-    this.logicalGraph = logicalGraph;
+    super(logicalGraph);
   }
 
-  /*
-   * (non-Javadoc)
-   *
-   * @see org.eclipse.swt.events.MouseAdapter#mouseDown(org.eclipse.swt.events.MouseEvent)
-   */
-  @Override
-  public void mouseDown( final MouseEvent e ) {
-    Object obj = getObjectForPosition( e.x, e.y );
-    if( e.button == 1 || e.button == 3 ) {
-      if( obj instanceof IEvent || obj instanceof IProcess
-          || obj instanceof ITrace ) {
-        try {
-          ISelection selection = new StructuredSelection( obj );
-          Activator.getDefault()
-            .getWorkbench()
-            .getActiveWorkbenchWindow()
-            .getActivePage()
-            .showView( "eu.geclipse.traceview.views.TraceView" )
-            .getSite()
-            .getSelectionProvider()
-            .setSelection( selection );
-          this.logicalGraph.redraw();
-        } catch( PartInitException exception ) {
-          Activator.logException( exception );
-        }
-      }
-    }
-  }
-
-  Object getObjectForPosition( final int xPos, final int yPos ) {
+  public Object getObjectForPosition( final int xPos, final int yPos ) {
     Object obj = null;
     // horizontal and vertical space between events
-    int hSpace = this.logicalGraph.getEventGraphPaintListener().getHSpace();
-    int vSpace = this.logicalGraph.getEventGraphPaintListener().getVSpace();
+    int hSpace = this.graph.getEventGraphPaintListener().getHSpace();
+    int vSpace = this.graph.getEventGraphPaintListener().getVSpace();
     // scrollbar values
-    int hSelection = this.logicalGraph.getHorizontalBar().getSelection();
-    int vSelection = this.logicalGraph.getVerticalBar().getSelection();
+    int hSelection = this.graph.getHorizontalBar().getSelection();
+    int vSelection = this.graph.getVerticalBar().getSelection();
     // first displayed clock and process
     int firstClock = hSelection / hSpace;
     int firstProc = vSelection / vSpace;
@@ -88,49 +47,49 @@ public class LogicalGraphMouseAdapter extends MouseAdapter {
     int xOffset = hSelection % hSpace - hSpace / 2;
     int yOffset = vSelection % vSpace - vSpace / 2;
     // area get mouse events from
-    int graphWidth = this.logicalGraph.getClientArea().width;
-    int graphHeight = this.logicalGraph.getClientArea().height - 30;
+    int graphWidth = this.graph.getClientArea().width;
+    int graphHeight = this.graph.getClientArea().height - 30;
     int x = -1;
     int y = -1;
     if( xPos > 30 && yPos > 0 && xPos < graphWidth && yPos < graphHeight ) {
       x = ( xPos
             + xOffset
             - 30
-            - this.logicalGraph.getEventGraphPaintListener().getEventSize()
+            - this.graph.getEventGraphPaintListener().getEventSize()
             / 2 + hSpace / 2 )
           / hSpace
           + firstClock;
       y = ( yPos
             + yOffset
-            - this.logicalGraph.getEventGraphPaintListener().getEventSize()
+            - this.graph.getEventGraphPaintListener().getEventSize()
             / 2 + vSpace / 2 )
           / vSpace
           + firstProc;
       if( Math.abs( xPos
-                    - ( ( x - firstClock ) * hSpace + 30 - xOffset + this.logicalGraph.getEventGraphPaintListener()
-                      .getEventSize() / 2 ) ) > this.logicalGraph.getEventGraphPaintListener()
+                    - ( ( x - firstClock ) * hSpace + 30 - xOffset + this.graph.getEventGraphPaintListener()
+                      .getEventSize() / 2 ) ) > this.graph.getEventGraphPaintListener()
         .getEventSize() / 2 )
       {
         x = -1;
       }
       if( Math.abs( yPos
-                    - ( ( y - firstProc ) * vSpace - yOffset + this.logicalGraph.getEventGraphPaintListener()
-                      .getEventSize() / 2 ) ) > this.logicalGraph.getEventGraphPaintListener()
+                    - ( ( y - firstProc ) * vSpace - yOffset + this.graph.getEventGraphPaintListener()
+                      .getEventSize() / 2 ) ) > this.graph.getEventGraphPaintListener()
         .getEventSize() / 2 )
       {
         y = -1;
       }
     }
-    if( y < this.logicalGraph.getTrace().getNumberOfProcesses() ) {
+    if( y < this.graph.getTrace().getNumberOfProcesses() ) {
       if( x != -1 && y != -1 ) {
-        obj = ( ( ILamportProcess )this.logicalGraph.getTrace().getProcess( y ) ).getEventByLamportClock( x );
+        obj = ( ( ILamportProcess )this.graph.getTrace().getProcess( y ) ).getEventByLamportClock( x );
       }
       if( obj == null && y != -1 ) {
-        obj = this.logicalGraph.getTrace().getProcess( y );
+        obj = this.graph.getTrace().getProcess( y );
       }
     }
     if( obj == null )
-      obj = this.logicalGraph.getTrace();
+      obj = this.graph.getTrace();
     return obj;
   }
 }

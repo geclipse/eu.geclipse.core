@@ -20,25 +20,13 @@ package eu.geclipse.traceview.physicalgraph;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.jface.preference.PreferenceConverter;
-import org.eclipse.jface.util.IPropertyChangeListener;
-import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
-import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.LineAttributes;
-import org.eclipse.swt.graphics.RGB;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.ScrollBar;
 
 import eu.geclipse.traceview.EventType;
 import eu.geclipse.traceview.IEvent;
@@ -47,95 +35,30 @@ import eu.geclipse.traceview.IPhysicalEvent;
 import eu.geclipse.traceview.IPhysicalProcess;
 import eu.geclipse.traceview.IPhysicalTrace;
 import eu.geclipse.traceview.IProcess;
+import eu.geclipse.traceview.ITrace;
+import eu.geclipse.traceview.internal.AbstractGraphPaintListener;
 import eu.geclipse.traceview.internal.Activator;
 import eu.geclipse.traceview.internal.LineType;
-import eu.geclipse.traceview.preferences.PreferenceConstants;
 
-class PhysicalGraphPaintListener implements PaintListener {
+class PhysicalGraphPaintListener extends AbstractGraphPaintListener {
 
   // constants
-  private final static int leftRulerWidth = 25;
-  private final static int bottomRulerWidth = 25;
-  private final static int leftMargin = leftRulerWidth + 5;
-  private final static int bottomMargin = bottomRulerWidth + 5;
-  private final static int arc = 6;
-  protected IPropertyChangeListener listener;
   private float hzoomfactor;
   private int vzoomfactor;
-  private ScrollBar horizontalScrollBar;
-  private ScrollBar verticalScrollBar;
-  private int numProc;
   private ArrayList<ArrayList<Integer>> procs;
   private int maxTimeStop;
   private IPhysicalTrace trace;
-  private PhysicalGraph eventGraph = null;
-  private Font smallFont;
-  private int hSpace = 6; // 32
-  private int vSpace = 12; // 32
-  private int eventSize = 2; // 8
-  private int fontsize = 8; // 6
   private int fromTime = 0;
-  private int fromProcess = 0;
   private int toTime = 0;
-  private int toProcess = 0;
-  private int width;
-  private int height;
-  private int yOffset;
   private int xStep;
-  // presentation
-  // event draw
-  private boolean sendEventDraw;
-  private boolean recvEventDraw;
-  private boolean testEventDraw;
-  private boolean otherEventDraw;
-  // event fill
-  private boolean sendEventFill;
-  private boolean recvEventFill;
-  private boolean testEventFill;
-  private boolean otherEventFill;
-  // event color
-  private Color sendEventColor;
-  private Color recvEventColor;
-  private Color testEventColor;
-  private Color otherEventColor;
-  // event fill color
-  private Color sendEventFillColor;
-  private Color recvEventFillColor;
-  private Color testEventFillColor;
-  private Color otherEventFillColor;
-  // message
-  private boolean drawMessages = true;
-  private Color messageColor;
-  private Color selectionColor;
-  // lines
-  private Color line1;
-  private Color line5;
-  private Color line10;
-  private boolean antialiasing;
-  private GC gc;
-  // private ArrayList<ArrayList<IPhysicalEvent>> displayedEvents;
   private IEvent selectedEvent = null;
   private int arrowsize;
+  private boolean drawMessages = true;
 
   PhysicalGraphPaintListener( final PhysicalGraph eventGraph ) {
-    this.listener = new IPropertyChangeListener() {
-
-      public void propertyChange( final PropertyChangeEvent event ) {
-        handleProperyChanged( event );
-      }
-    };
-    IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-    store.addPropertyChangeListener( this.listener );
-    // this.zoomfactor = 1;
+    super(eventGraph);
     this.hzoomfactor = 1;
     this.vzoomfactor = 1;
-    this.eventGraph = eventGraph;
-    updatePropertiesFromPreferences();
-    setHorizontal( 0 );
-    setVertical( 0 );
-    this.line1 = new Color( Display.getDefault(), new RGB( 196, 196, 196 ) );
-    this.line5 = new Color( Display.getDefault(), new RGB( 128, 128, 128 ) );
-    this.line10 = new Color( Display.getDefault(), new RGB( 64, 64, 64 ) );
   }
 
   protected IEvent getSelectedEvent() {
@@ -171,251 +94,8 @@ class PhysicalGraphPaintListener implements PaintListener {
     return this.fromProcess;
   }
 
-  protected void handleResize() {
+  public void handleResize() {
     correctScrollbar();
-  }
-
-  protected void handleProperyChanged( final PropertyChangeEvent event ) {
-    IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-    // settings
-    if( event.getProperty().equals( PreferenceConstants.P_ANTI_ALIASING ) ) {
-      if( event.getNewValue() instanceof String ) {
-        this.antialiasing = Boolean.getBoolean( ( String )event.getNewValue() );
-      } else {
-        this.antialiasing = ( ( Boolean )event.getNewValue() ).booleanValue();
-      }
-      this.eventGraph.redraw();
-    }
-    // draw
-    else if( event.getProperty().equals( PreferenceConstants.P_SEND_EVENT
-                                         + PreferenceConstants.P_DRAW ) )
-    {
-      this.sendEventDraw = store.getBoolean( event.getProperty() );
-      this.eventGraph.redraw();
-    } else if( event.getProperty().equals( PreferenceConstants.P_RECV_EVENT
-                                           + PreferenceConstants.P_DRAW ) )
-    {
-      this.recvEventDraw = store.getBoolean( event.getProperty() );
-      this.eventGraph.redraw();
-    } else if( event.getProperty().equals( PreferenceConstants.P_TEST_EVENT
-                                           + PreferenceConstants.P_DRAW ) )
-    {
-      this.testEventDraw = store.getBoolean( event.getProperty() );
-      this.eventGraph.redraw();
-    } else if( event.getProperty().equals( PreferenceConstants.P_OTHER_EVENT
-                                           + PreferenceConstants.P_DRAW ) )
-    {
-      this.otherEventDraw = store.getBoolean( event.getProperty() );
-      this.eventGraph.redraw();
-    }
-    // Fill
-    else if( event.getProperty().equals( PreferenceConstants.P_SEND_EVENT
-                                         + PreferenceConstants.P_FILL ) )
-    {
-      this.sendEventFill = store.getBoolean( event.getProperty() );
-      this.eventGraph.redraw();
-    } else if( event.getProperty().equals( PreferenceConstants.P_RECV_EVENT
-                                           + PreferenceConstants.P_FILL ) )
-    {
-      this.recvEventFill = store.getBoolean( event.getProperty() );
-      this.eventGraph.redraw();
-    } else if( event.getProperty().equals( PreferenceConstants.P_TEST_EVENT
-                                           + PreferenceConstants.P_FILL ) )
-    {
-      this.testEventFill = store.getBoolean( event.getProperty() );
-      this.eventGraph.redraw();
-    } else if( event.getProperty().equals( PreferenceConstants.P_OTHER_EVENT
-                                           + PreferenceConstants.P_FILL ) )
-    {
-      this.otherEventFill = store.getBoolean( event.getProperty() );
-      this.eventGraph.redraw();
-    }
-    // Message color
-    else if( event.getProperty().equals( PreferenceConstants.P_MESSAGE
-                                         + PreferenceConstants.P_COLOR ) )
-    {
-      this.messageColor.dispose();
-      this.messageColor = new Color( Display.getDefault(),
-                                     PreferenceConverter.getColor( store,
-                                                                   event.getProperty() ) );
-      this.eventGraph.redraw();
-    }
-    // Event Color
-    else if( event.getProperty().equals( PreferenceConstants.P_SEND_EVENT
-                                         + PreferenceConstants.P_COLOR ) )
-    {
-      this.sendEventColor.dispose();
-      this.sendEventColor = new Color( Display.getDefault(),
-                                       PreferenceConverter.getColor( store,
-                                                                     event.getProperty() ) );
-      this.eventGraph.redraw();
-    } else if( event.getProperty().equals( PreferenceConstants.P_RECV_EVENT
-                                           + PreferenceConstants.P_COLOR ) )
-    {
-      this.recvEventColor.dispose();
-      this.recvEventColor = new Color( Display.getDefault(),
-                                       PreferenceConverter.getColor( store,
-                                                                     event.getProperty() ) );
-      this.eventGraph.redraw();
-    } else if( event.getProperty().equals( PreferenceConstants.P_TEST_EVENT
-                                           + PreferenceConstants.P_COLOR ) )
-    {
-      this.testEventColor.dispose();
-      this.testEventColor = new Color( Display.getDefault(),
-                                       PreferenceConverter.getColor( store,
-                                                                     event.getProperty() ) );
-      this.eventGraph.redraw();
-    } else if( event.getProperty().equals( PreferenceConstants.P_OTHER_EVENT
-                                           + PreferenceConstants.P_COLOR ) )
-    {
-      this.otherEventColor.dispose();
-      this.otherEventColor = new Color( Display.getDefault(),
-                                        PreferenceConverter.getColor( store,
-                                                                      event.getProperty() ) );
-      this.eventGraph.redraw();
-    }
-    // Event Fill Color
-    else if( event.getProperty().equals( PreferenceConstants.P_SEND_EVENT
-                                         + PreferenceConstants.P_FILL_COLOR ) )
-    {
-      this.sendEventFillColor.dispose();
-      this.sendEventFillColor = new Color( Display.getDefault(),
-                                           PreferenceConverter.getColor( store,
-                                                                         event.getProperty() ) );
-      this.eventGraph.redraw();
-    } else if( event.getProperty().equals( PreferenceConstants.P_RECV_EVENT
-                                           + PreferenceConstants.P_FILL_COLOR ) )
-    {
-      this.recvEventFillColor.dispose();
-      this.recvEventFillColor = new Color( Display.getDefault(),
-                                           PreferenceConverter.getColor( store,
-                                                                         event.getProperty() ) );
-      this.eventGraph.redraw();
-    } else if( event.getProperty().equals( PreferenceConstants.P_TEST_EVENT
-                                           + PreferenceConstants.P_FILL_COLOR ) )
-    {
-      this.testEventFillColor.dispose();
-      this.testEventFillColor = new Color( Display.getDefault(),
-                                           PreferenceConverter.getColor( store,
-                                                                         event.getProperty() ) );
-      this.eventGraph.redraw();
-    } else if( event.getProperty().equals( PreferenceConstants.P_OTHER_EVENT
-                                           + PreferenceConstants.P_FILL_COLOR ) )
-    {
-      this.otherEventFillColor.dispose();
-      this.otherEventFillColor = new Color( Display.getDefault(),
-                                            PreferenceConverter.getColor( store,
-                                                                          event.getProperty() ) );
-      this.eventGraph.redraw();
-    }
-  }
-
-  void updatePropertiesFromPreferences() {
-    IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-    // settings
-    this.antialiasing = store.getBoolean( PreferenceConstants.P_ANTI_ALIASING );
-    // event draw
-    this.sendEventDraw = store.getBoolean( PreferenceConstants.P_SEND_EVENT
-                                           + PreferenceConstants.P_DRAW );
-    this.recvEventDraw = store.getBoolean( PreferenceConstants.P_RECV_EVENT
-                                           + PreferenceConstants.P_DRAW );
-    this.testEventDraw = store.getBoolean( PreferenceConstants.P_TEST_EVENT
-                                           + PreferenceConstants.P_DRAW );
-    this.otherEventDraw = store.getBoolean( PreferenceConstants.P_RECV_EVENT
-                                            + PreferenceConstants.P_DRAW );
-    // event fill
-    this.sendEventFill = store.getBoolean( PreferenceConstants.P_SEND_EVENT
-                                           + PreferenceConstants.P_FILL );
-    this.recvEventFill = store.getBoolean( PreferenceConstants.P_RECV_EVENT
-                                           + PreferenceConstants.P_FILL );
-    this.testEventFill = store.getBoolean( PreferenceConstants.P_TEST_EVENT
-                                           + PreferenceConstants.P_FILL );
-    this.otherEventFill = store.getBoolean( PreferenceConstants.P_RECV_EVENT
-                                            + PreferenceConstants.P_FILL );
-    // message color
-    this.messageColor = new Color( this.eventGraph.getDisplay(),
-                                   PreferenceConverter.getColor( store,
-                                                                 PreferenceConstants.P_MESSAGE
-                                                                     + PreferenceConstants.P_COLOR ) );
-    // event color
-    this.sendEventColor = new Color( this.eventGraph.getDisplay(),
-                                     PreferenceConverter.getColor( store,
-                                                                   PreferenceConstants.P_SEND_EVENT
-                                                                       + PreferenceConstants.P_COLOR ) );
-    this.recvEventColor = new Color( this.eventGraph.getDisplay(),
-                                     PreferenceConverter.getColor( store,
-                                                                   PreferenceConstants.P_RECV_EVENT
-                                                                       + PreferenceConstants.P_COLOR ) );
-    this.testEventColor = new Color( this.eventGraph.getDisplay(),
-                                     PreferenceConverter.getColor( store,
-                                                                   PreferenceConstants.P_TEST_EVENT
-                                                                       + PreferenceConstants.P_COLOR ) );
-    this.otherEventColor = new Color( this.eventGraph.getDisplay(),
-                                      PreferenceConverter.getColor( store,
-                                                                    PreferenceConstants.P_OTHER_EVENT
-                                                                        + PreferenceConstants.P_COLOR ) );
-    // event fill color
-    this.sendEventFillColor = new Color( this.eventGraph.getDisplay(),
-                                         PreferenceConverter.getColor( store,
-                                                                       PreferenceConstants.P_SEND_EVENT
-                                                                           + PreferenceConstants.P_FILL_COLOR ) );
-    this.recvEventFillColor = new Color( this.eventGraph.getDisplay(),
-                                         PreferenceConverter.getColor( store,
-                                                                       PreferenceConstants.P_RECV_EVENT
-                                                                           + PreferenceConstants.P_FILL_COLOR ) );
-    this.testEventFillColor = new Color( this.eventGraph.getDisplay(),
-                                         PreferenceConverter.getColor( store,
-                                                                       PreferenceConstants.P_TEST_EVENT
-                                                                           + PreferenceConstants.P_FILL_COLOR ) );
-    this.otherEventFillColor = new Color( this.eventGraph.getDisplay(),
-                                          PreferenceConverter.getColor( store,
-                                                                        PreferenceConstants.P_OTHER_EVENT
-                                                                            + PreferenceConstants.P_FILL_COLOR ) );
-    this.selectionColor = new Color( this.eventGraph.getDisplay(),
-                                     PreferenceConverter.getColor( store,
-                                                                   PreferenceConstants.P_SELECTION_COLOR ) );
-  }
-
-  void setFont( final Font font ) {
-    FontData fontData = font.getFontData()[ 0 ];
-    fontData.setHeight( this.fontsize );
-    fontData.setStyle( SWT.NORMAL );
-    this.smallFont = new Font( font.getDevice(), fontData );
-  }
-
-  // draw the controls
-  private void drawBackground() {
-    // color
-    this.gc.setForeground( this.gc.getDevice()
-      .getSystemColor( SWT.COLOR_WIDGET_NORMAL_SHADOW ) );
-    this.gc.setBackground( this.gc.getDevice().getSystemColor( SWT.COLOR_WHITE ) );
-    // main
-    this.gc.fillRectangle( leftMargin,
-                           0,
-                           this.width - leftMargin,
-                           this.height - bottomMargin );
-    this.gc.drawRectangle( leftMargin,
-                           0,
-                           this.width - leftMargin,
-                           this.height - bottomMargin );
-    // bottom
-    this.gc.fillRoundRectangle( leftMargin,
-                                this.height - bottomRulerWidth,
-                                this.width - leftMargin,
-                                bottomRulerWidth,
-                                arc,
-                                arc );
-    this.gc.drawRoundRectangle( leftMargin,
-                                this.height - bottomRulerWidth,
-                                this.width - leftMargin,
-                                bottomRulerWidth,
-                                arc,
-                                arc );
-    // left
-    this.gc.fillRoundRectangle( 0, 0, leftRulerWidth, this.height
-                                                      - bottomMargin, arc, arc );
-    this.gc.drawRoundRectangle( 0, 0, leftRulerWidth, this.height
-                                                      - bottomMargin, arc, arc );
   }
 
   /**
@@ -621,29 +301,8 @@ class PhysicalGraphPaintListener implements PaintListener {
     }
   }
 
-  private void drawGrid() {
+  private void drawGridVLines() {
     this.gc.setForeground( this.line1 );
-    LineType hLines = this.eventGraph.getHLines();
-    // horizontal
-    if( hLines != LineType.Lines_None ) {
-      for( int i = this.fromProcess, y = 0 - this.yOffset + this.eventSize / 2; i < this.toProcess; i++, y += this.vSpace )
-      {
-        if( i % 10 == 0 ) {
-          this.gc.setForeground( this.line10 );
-          this.gc.drawLine( 31, y, this.width - 1, y );
-          this.gc.setForeground( this.line1 );
-        } else if( ( hLines == LineType.Lines_5 || hLines == LineType.Lines_1 )
-                   && i % 5 == 0 )
-        {
-          this.gc.setForeground( this.line5 );
-          this.gc.drawLine( 31, y, this.width - 1, y );
-          this.gc.setForeground( this.line5 );
-        } else if( hLines == LineType.Lines_1 ) {
-          this.gc.drawLine( 31, y, this.width - 1, y );
-        }
-      }
-    }
-    // vertical
     int from = this.fromTime / this.xStep * this.xStep;
     int to = this.toTime
              / this.xStep
@@ -686,7 +345,8 @@ class PhysicalGraphPaintListener implements PaintListener {
       drawRulers();
       // set the clipping to the graph area
       this.gc.setClipping( 31, 1, this.width - 31, this.height - 31 );
-      drawGrid();
+      drawGridHLines();
+      drawGridVLines();
       drawSelection();
       drawGraph();
       if( this.drawMessages )
@@ -784,8 +444,8 @@ class PhysicalGraphPaintListener implements PaintListener {
     return this.toTime - this.fromTime;
   }
 
-  protected void setTrace( final IPhysicalTrace trace ) {
-    this.trace = trace;
+  public void setTrace( final ITrace trace ) {
+    this.trace = ( IPhysicalTrace )trace;
     if( this.trace != null ) {
       this.maxTimeStop = this.trace.getMaximumPhysicalClock();
       this.numProc = this.trace.getNumberOfProcesses();
@@ -803,46 +463,12 @@ class PhysicalGraphPaintListener implements PaintListener {
     }
   }
 
-  protected void handleHorizontalScrollBar() {
-    int selection = this.horizontalScrollBar.getSelection();
-    setHorizontal( selection );
-    this.eventGraph.redraw();
-  }
-
-  protected void handleVerticalScrollBar() {
-    int selection = this.verticalScrollBar.getSelection();
-    setVertical( selection );
-    this.eventGraph.redraw();
-  }
-
   protected int getNumProc() {
     return this.numProc;
   }
 
   protected int getMaxTimeStop() {
     return this.maxTimeStop;
-  }
-
-  protected void setHorizontalScrollBar( final ScrollBar bar ) {
-    this.horizontalScrollBar = bar;
-    this.horizontalScrollBar.setPageIncrement( this.hSpace );
-    this.horizontalScrollBar.addListener( SWT.Selection, new Listener() {
-
-      public void handleEvent( final Event e ) {
-        handleHorizontalScrollBar();
-      }
-    } );
-  }
-
-  protected void setVerticalScrollBar( final ScrollBar bar ) {
-    this.verticalScrollBar = bar;
-    this.verticalScrollBar.setPageIncrement( this.vSpace );
-    this.verticalScrollBar.addListener( SWT.Selection, new Listener() {
-
-      public void handleEvent( final Event e ) {
-        handleVerticalScrollBar();
-      }
-    } );
   }
 
   protected void setZoomfactor( final int zoomfactor ) {
@@ -873,18 +499,6 @@ class PhysicalGraphPaintListener implements PaintListener {
     this.verticalScrollBar.setPageIncrement( this.vSpace );
   }
 
-  protected int getEventSize() {
-    return this.eventSize;
-  }
-
-  protected int getHSpace() {
-    return this.hSpace;
-  }
-
-  protected int getVSpace() {
-    return this.vSpace;
-  }
-
   protected ArrayList<ArrayList<Integer>> getProcs() {
     return this.procs;
   }
@@ -900,7 +514,8 @@ class PhysicalGraphPaintListener implements PaintListener {
     drawRulers();
     // set the clipping to the graph area
     this.gc.setClipping( 31, 1, this.width - 31, this.height - 31 );
-    drawGrid();
+    drawGridHLines();
+    drawGridVLines();
     drawSelection();
     drawGraph();
     if( this.drawMessages )

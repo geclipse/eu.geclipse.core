@@ -17,44 +17,32 @@
 
 package eu.geclipse.traceview.physicalgraph;
 
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.swt.events.MouseAdapter;
-import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.ui.PartInitException;
-
-import eu.geclipse.traceview.IEvent;
 import eu.geclipse.traceview.IPhysicalEvent;
 import eu.geclipse.traceview.IPhysicalProcess;
-import eu.geclipse.traceview.IProcess;
-import eu.geclipse.traceview.ITrace;
-import eu.geclipse.traceview.internal.Activator;
+import eu.geclipse.traceview.internal.AbstractGraphMouseAdapter;
 
 /**
  * A MouseAdapter which handles the mouse events on the PhysicalGraph and sets
  * the according selection in the SelectionProvider.
  */
-public class PhysicalGraphMouseAdapter extends MouseAdapter {
-
-  private PhysicalGraph physicalGraph;
-
+public class PhysicalGraphMouseAdapter extends AbstractGraphMouseAdapter {
   /**
    * Creates a new EventGraphMouseAdapter
    * 
    * @param eventGraph
    */
   PhysicalGraphMouseAdapter( final PhysicalGraph physicalGraph ) {
-    this.physicalGraph = physicalGraph;
+    super(physicalGraph);
   }
 
-  private int getLineNumber( final MouseEvent e ) {
-    int yOffset = this.physicalGraph.getEventGraphPaintListener().getYOffset();
-    int eventSize = this.physicalGraph.getEventGraphPaintListener()
+  private int getLineNumber( final int yPos ) {
+    int yOffset = ((PhysicalGraphPaintListener)this.graph.getEventGraphPaintListener()).getYOffset();
+    int eventSize = this.graph.getEventGraphPaintListener()
       .getEventSize();
-    int vSpace = this.physicalGraph.getEventGraphPaintListener().getVSpace();
-    int numProc = this.physicalGraph.getEventGraphPaintListener().getNumProc();
+    int vSpace = this.graph.getEventGraphPaintListener().getVSpace();
+    int numProc = ((PhysicalGraphPaintListener)this.graph.getEventGraphPaintListener()).getNumProc();
     int process = -1;
-    int tmp = e.y + yOffset - eventSize / 2;
+    int tmp = yPos + yOffset - eventSize / 2;
     if( tmp % vSpace <= eventSize / 2 ) {
       process = tmp / vSpace;
     }
@@ -64,67 +52,47 @@ public class PhysicalGraphMouseAdapter extends MouseAdapter {
     if( process > numProc - 1 ) {
       process = -1;
     } else {
-      process += this.physicalGraph.getEventGraphPaintListener()
+      process += ((PhysicalGraphPaintListener)this.graph.getEventGraphPaintListener())
         .getFromProcess();
     }
     return process;
   }
 
-  private Object getObject( final MouseEvent e ) {
+  private Object getObject( final int xPos, final int yPos ) {
     Object object = null;
-    float hzoomfactor = this.physicalGraph.getHZoomFactor();
-    int hSelection = ( int )( this.physicalGraph.getHorizontalBar()
+    float hzoomfactor = ((PhysicalGraph)this.graph).getHZoomFactor();
+    int hSelection = ( int )( this.graph.getHorizontalBar()
       .getSelection()
                               / hzoomfactor * 10 );
     float x = -1;
-    int y = getLineNumber( e );
-    IPhysicalProcess process = ( IPhysicalProcess )this.physicalGraph.getTrace()
+    int y = getLineNumber( yPos );
+    IPhysicalProcess process = ( IPhysicalProcess )this.graph.getTrace()
       .getProcess( y );
-    x = hSelection + ( ( ( e.x - 30 ) / hzoomfactor ) - ( 20 / hzoomfactor ) );
+    x = hSelection + ( ( ( xPos - 30 ) / hzoomfactor ) - ( 20 / hzoomfactor ) );
     int clock = Math.round( x );
     IPhysicalEvent[] events = process.getEventsByPhysicalClock( clock, clock );
     if( events.length > 0 ) {
       object = events[ 0 ];
     } else {
-      object = this.physicalGraph.getTrace().getProcess( y );
+      object = this.graph.getTrace().getProcess( y );
     }
     return object;
   }
 
   @Override
-  public void mouseDown( final MouseEvent e ) {
+  public Object getObjectForPosition( int xPos, int yPos ) {
     Object obj = null;
-    int graphWidth = this.physicalGraph.getClientArea().width;
-    int graphHeight = this.physicalGraph.getClientArea().height - 30;
+    int graphWidth = this.graph.getClientArea().width;
+    int graphHeight = this.graph.getClientArea().height - 30;
     int y = -1;
-    y = getLineNumber( e );
-    if( e.x > 30 && e.y > 0 && e.x < graphWidth && e.y < graphHeight ) {
+    y = getLineNumber( yPos );
+    if( xPos > 30 && yPos > 0 && xPos < graphWidth && yPos < graphHeight ) {
       if( y != -1 ) {
-        obj = getObject( e );
+        obj = getObject( xPos, yPos );
       } else {
-        obj = this.physicalGraph.getTrace();
+        obj = this.graph.getTrace();
       }
     }
-    if( e.button == 1 || e.button == 3 ) {
-      if( obj instanceof IEvent
-          || obj instanceof IProcess
-          || obj instanceof ITrace )
-      {
-        ISelection selection = new StructuredSelection( obj );
-        try {
-          Activator.getDefault()
-            .getWorkbench()
-            .getActiveWorkbenchWindow()
-            .getActivePage()
-            .showView( "eu.geclipse.traceview.views.TraceView" )
-            .getSite()
-            .getSelectionProvider()
-            .setSelection( selection );
-          this.physicalGraph.redraw();
-        } catch( PartInitException exception ) {
-          Activator.logException( exception );
-        }
-      }
-    }
+    return obj;
   }
 }
