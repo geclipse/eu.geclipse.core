@@ -30,7 +30,6 @@ import org.eclipse.ui.IViewSite;
 import eu.geclipse.traceview.IPhysicalTrace;
 import eu.geclipse.traceview.internal.AbstractGraphVisualization;
 import eu.geclipse.traceview.internal.Activator;
-import eu.geclipse.traceview.internal.LineType;
 import eu.geclipse.traceview.internal.Messages;
 
 /**

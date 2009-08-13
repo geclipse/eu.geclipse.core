@@ -38,7 +38,6 @@ import eu.geclipse.traceview.IProcess;
 import eu.geclipse.traceview.ITrace;
 import eu.geclipse.traceview.internal.AbstractGraphPaintListener;
 import eu.geclipse.traceview.internal.Activator;
-import eu.geclipse.traceview.internal.LineType;
 
 class PhysicalGraphPaintListener extends AbstractGraphPaintListener {
 
@@ -233,7 +232,7 @@ class PhysicalGraphPaintListener extends AbstractGraphPaintListener {
           if( partner != null ) {
             int fromX = ( int )( 50 + ( event.getPhysicalStopClock() - this.fromTime )
                                       * this.hzoomfactor );
-            int toX = ( int )( 50 + ( partner.getPhysicalStartClock() - this.fromTime )
+            int toX = ( int )( 50 + ( partner.getPhysicalStopClock() - this.fromTime )
                                     * this.hzoomfactor );
             connection( fromX,
                         y + this.eventSize / 2,
@@ -250,7 +249,7 @@ class PhysicalGraphPaintListener extends AbstractGraphPaintListener {
           if( partner != null ) {
             int fromX = ( int )( 50 + ( partner.getPhysicalStopClock() - this.fromTime )
                                       * this.hzoomfactor );
-            int toX = ( int )( 50 + ( event.getPhysicalStartClock() - this.fromTime )
+            int toX = ( int )( 50 + ( event.getPhysicalStopClock() - this.fromTime )
                                     * this.hzoomfactor );
             connection( fromX, y
                                + ( partner.getProcessId() - i )
