@@ -27,6 +27,9 @@ import org.eclipse.jface.action.Separator;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IViewSite;
 
+import eu.geclipse.traceview.EventType;
+import eu.geclipse.traceview.IPhysicalEvent;
+import eu.geclipse.traceview.IPhysicalProcess;
 import eu.geclipse.traceview.IPhysicalTrace;
 import eu.geclipse.traceview.internal.AbstractGraphVisualization;
 import eu.geclipse.traceview.internal.Activator;
@@ -82,6 +85,25 @@ public class PhysicalGraph extends AbstractGraphVisualization {
   protected void resetOrdering() {
     this.eventGraphPaintListener.resetOrdering();
     redraw();
+  }
+  
+  protected void calcStartTimeOffset() {
+    for (int i = 0; i < trace.getNumberOfProcesses(); i++) {
+      IPhysicalProcess proc = ( IPhysicalProcess )trace.getProcess( i );
+      for(int j = 0; j < Math.min( 100, proc.getMaximumLogicalClock() ); j++) {
+        IPhysicalEvent event = ( IPhysicalEvent )proc.getEventByLogicalClock( j );
+        if ((event.getType().equals( EventType.SEND ) ||
+             event.getType().equals( EventType.RECV ))
+             && event.getPartnerEvent() != null) {
+          int diff = event.getPhysicalStopClock() - event.getPartnerPhysicalStopClock();
+          if (event.getType() == EventType.RECV) diff *= -1;
+          if (diff > 0) {
+            IPhysicalProcess partnerProc = (IPhysicalProcess)trace.getProcess( event.getPartnerProcessId() );
+            partnerProc.setStartTimeOffset( partnerProc.getStartTimeOffset() + diff );
+          }
+        }
+      }
+    }
   }
 
   protected void toggleMessageDrawing() {
@@ -143,6 +165,15 @@ public class PhysicalGraph extends AbstractGraphVisualization {
         resetOrdering();
       }
     };
+    Action calcStartTimeOffset = new Action( Messages.getString("PhysicalGraph.calcStartTimeOffset"), //$NON-NLS-1$
+                                             Activator.getImageDescriptor( "icons/toggle_messages.gif" ) ) { //$NON-NLS-1$
+
+      @Override
+      public void run() {
+        calcStartTimeOffset();
+        redraw();
+      }
+    };
     Action messages = new Action( Messages.getString( "PhysicalGraph.Toggle_Messages" ), //$NON-NLS-1$
                                   Activator.getImageDescriptor( "icons/toggle_messages.gif" ) ) { //$NON-NLS-1$
 
@@ -162,6 +193,7 @@ public class PhysicalGraph extends AbstractGraphVisualization {
       }
     };
     Vector<IContributionItem> items = new Vector<IContributionItem>();
+    items.add( new ActionContributionItem( calcStartTimeOffset ) );
     items.add( new ActionContributionItem( reset ) );
     items.add( new ActionContributionItem( messages ) );
     items.add( new ActionContributionItem( vzoomin ) );

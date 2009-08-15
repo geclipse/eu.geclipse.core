@@ -29,6 +29,7 @@ import eu.geclipse.traceview.internal.Activator;
 public abstract class AbstractProcess
   implements ILamportProcess, IPhysicalProcess
 {
+  protected int startTimeOffset;
 
   @Override
   public String toString() {
@@ -257,5 +258,13 @@ public abstract class AbstractProcess
       // empty
     }
     return events.toArray( new IPhysicalEvent[ 0 ] );
+  }
+
+  public int getStartTimeOffset() {
+    return startTimeOffset;
+  }
+
+  public void setStartTimeOffset( int startTimeOffset ) {
+    this.startTimeOffset = startTimeOffset;
   }
 }

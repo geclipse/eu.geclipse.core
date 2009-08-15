@@ -78,11 +78,11 @@ class Event extends AbstractEvent implements ILamportEvent,
   }
 
   public int getPhysicalStartClock() {
-    return process.read( logicalClock, timestampOffset );
+    return process.read( logicalClock, timestampOffset ) + process.getStartTimeOffset();
   }
 
   public int getPhysicalStopClock() {
-    return process.read( logicalClock, timestampOffset );
+    return process.read( logicalClock, timestampOffset ) + process.getStartTimeOffset();
   }
 
   void setTimestamp( final int timestamp ) {

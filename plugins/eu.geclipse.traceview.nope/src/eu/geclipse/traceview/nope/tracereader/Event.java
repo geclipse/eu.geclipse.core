@@ -284,7 +284,7 @@ public class Event extends AbstractEvent
    * @see eu.geclipse.traceview.IPhysicalEvent#getPhysicalStartClock()
    */
   public int getPhysicalStartClock() {
-    return process.read( logicalClock, timeStartOffset );
+    return process.read( logicalClock, timeStartOffset ) + process.getStartTimeOffset();
   }
 
   protected void setPhysicalStartClock( final int timeStart ) {
@@ -297,7 +297,7 @@ public class Event extends AbstractEvent
    * @see eu.geclipse.traceview.IPhysicalEvent#getPhysicalStopClock()
    */
   public int getPhysicalStopClock() {
-    return process.read( logicalClock, timeStopOffset );
+    return process.read( logicalClock, timeStopOffset ) + process.getStartTimeOffset();
   }
 
   protected void setPhysicalStopClock( final int timeStop ) {

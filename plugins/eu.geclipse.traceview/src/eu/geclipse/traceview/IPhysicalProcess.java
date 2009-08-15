@@ -35,4 +35,19 @@ public interface IPhysicalProcess extends IProcess {
    * @return events
    */
   IPhysicalEvent[] getEventsByPhysicalClock( int startClock, int stopClock );
+
+  /**
+   * Gets the start time offset (used for compensating clock differences
+   * between the processes)
+   * @return the start time offset
+   */
+  int getStartTimeOffset();
+  
+  /**
+   * Sets the start time offset (used for compensating clock differences
+   * between the processes)
+   * 
+   * @param startTimeOffset
+   */
+  void setStartTimeOffset( int startTimeOffset );
 }
