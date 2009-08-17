@@ -166,7 +166,7 @@ public class PhysicalGraph extends AbstractGraphVisualization {
       }
     };
     Action calcStartTimeOffset = new Action( Messages.getString("PhysicalGraph.calcStartTimeOffset"), //$NON-NLS-1$
-                                             Activator.getImageDescriptor( "icons/toggle_messages.gif" ) ) { //$NON-NLS-1$
+                                             Activator.getImageDescriptor( "icons/calc_clock_offset.gif" ) ) { //$NON-NLS-1$
 
       @Override
       public void run() {
