@@ -452,6 +452,11 @@ class PhysicalGraphPaintListener extends AbstractGraphPaintListener {
     }
   }
 
+  void updateMaxTimeStop() {
+    this.maxTimeStop = this.trace.getMaximumPhysicalClock();
+    correctScrollbar();
+  }
+
   protected void resetOrdering() {
     this.numProc = this.trace.getNumberOfProcesses();
     this.procs = new ArrayList<ArrayList<Integer>>();

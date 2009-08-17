@@ -171,6 +171,7 @@ public class PhysicalGraph extends AbstractGraphVisualization {
       @Override
       public void run() {
         calcStartTimeOffset();
+        PhysicalGraph.this.eventGraphPaintListener.updateMaxTimeStop();
         redraw();
       }
     };

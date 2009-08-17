@@ -49,7 +49,6 @@ public class Trace extends AbstractTraceFileCache
   private String tracedir;
   private Process[] processes;
   private int maximumLamportClock = 0;
-  private int maxTimeStop = 0;
   private boolean supportsVectorClocks;
   private int eventSize;
 
@@ -213,10 +212,6 @@ public class Trace extends AbstractTraceFileCache
     for( Process process : this.processes ) {
       if( this.maximumLamportClock < process.getMaximumLamportClock() )
         this.maximumLamportClock = process.getMaximumLamportClock();
-      if( this.maxTimeStop < ( ( ( IPhysicalEvent )process.getEventByLogicalClock( process.getMaximumLogicalClock() ) ).getPhysicalStopClock() ) )
-      {
-        this.maxTimeStop = ( ( ( IPhysicalEvent )process.getEventByLogicalClock( process.getMaximumLogicalClock() ) ).getPhysicalStopClock() );
-      }
     }
     return this;
   }
@@ -249,7 +244,13 @@ public class Trace extends AbstractTraceFileCache
   }
 
   public int getMaximumPhysicalClock() {
-    return this.maxTimeStop;
+    int maxTimeStop = 0;
+    for( Process process : this.processes ) {
+      if( maxTimeStop  < ( ( ( IPhysicalEvent )process.getEventByLogicalClock( process.getMaximumLogicalClock() ) ).getPhysicalStopClock() ) ) {
+        maxTimeStop = ( ( ( IPhysicalEvent )process.getEventByLogicalClock( process.getMaximumLogicalClock() ) ).getPhysicalStopClock() );
+      }
+    }
+    return maxTimeStop;
   }
 
   protected boolean supportsVectorClocks() {
