@@ -338,6 +338,18 @@ public abstract class AbstractGraphPaintListener implements PaintListener {
     this.smallFont = new Font( font.getDevice(), fontData );
   }
 
+  protected void drawVRuler() {
+    this.gc.setForeground( this.gc.getDevice().getSystemColor( SWT.COLOR_BLACK ) );
+    this.gc.setFont( this.smallFont );
+    this.gc.setClipping( 1, 1, 24, this.height - 31 );
+    for( int i = this.fromProcess, y = 0 - this.yOffset; i < this.toProcess; i++, y += this.vSpace ) {
+      if (this.vSpace > 8 || i % 2 == 0) {
+        this.gc.drawText( Integer.toString( i ), 3, y - 7 + this.eventSize / 2 );
+      }
+      this.gc.drawLine( 20, y + this.eventSize / 2, 22, y + this.eventSize / 2 );
+    }
+  }
+
   protected void drawGridHLines() {
     this.gc.setForeground( this.line1 );
     LineType hLines = this.eventGraph.getHLines();
@@ -397,6 +409,41 @@ public abstract class AbstractGraphPaintListener implements PaintListener {
     this.gc.drawRoundRectangle( 0, 0, leftRulerWidth, this.height
                                                       - bottomMargin, arc, arc );
   }
+
+  /**
+   * Draw a connection with an arrowhead from (x1,y1) to (x2,y2).
+   *
+   * @param x1
+   * @param y1
+   * @param x2
+   * @param y2
+   */
+  protected void connection( final int x1,
+                             final int y1,
+                             final int x2,
+                             final int y2,
+                             final boolean spacing)
+  {
+    int xv = x2 - x1;
+    int yv = y2 - y1;
+    float c = ( float )Math.sqrt( xv * xv + yv * yv );
+    int ex = Math.round( ( xv / c * getArrowSize() ) );
+    int ey = Math.round( ( yv / c * getArrowSize() ) );
+    int ox = spacing ? ex : 0;
+    int oy = spacing ? ey : 0;
+    this.gc.drawLine( x2 - ox, y2 - oy, x1 + ox, y1 + oy );
+    int[] arrowhead = {
+      x2 - ox,
+      y2 - oy,
+      x2 - ox - ex - ey,
+      y2 - oy - ey + ex,
+      x2 - ox - ex + ey,
+      y2 - oy - ey - ex
+    };
+    this.gc.fillPolygon( arrowhead );
+  }
+
+  public abstract int getArrowSize();
 
   public void setHorizontalScrollBar( final ScrollBar bar ) {
     this.horizontalScrollBar = bar;

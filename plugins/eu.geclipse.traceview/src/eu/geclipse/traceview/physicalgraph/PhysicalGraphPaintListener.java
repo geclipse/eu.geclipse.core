@@ -190,23 +190,6 @@ class PhysicalGraphPaintListener extends AbstractGraphPaintListener {
     }
   }
 
-  private void connection( final int x1,
-                           final int y1,
-                           final int x2,
-                           final int y2 )
-  {
-    long xv = x2 - x1;
-    long yv = y2 - y1;
-    float c = ( float )Math.sqrt( xv * xv + yv * yv );
-    int ex = Math.round( ( xv / c * this.arrowsize ) );
-    int ey = Math.round( ( yv / c * this.arrowsize ) );
-    this.gc.drawLine( x2, y2, x1, y1 );
-    int[] arrowhead = {
-      x2, y2, x2 - ex - ey, y2 - ey + ex, x2 - ex + ey, y2 - ey - ex
-    };
-    this.gc.fillPolygon( arrowhead );
-  }
-
   private void drawConnections() {
     this.arrowsize = this.vzoomfactor;
     if( this.arrowsize > 6 ) {
@@ -214,7 +197,7 @@ class PhysicalGraphPaintListener extends AbstractGraphPaintListener {
     }
     this.gc.setBackground( this.messageColor );
     this.gc.setForeground( this.messageColor );
-    for( int i = 0, y = -this.fromProcess * this.vSpace - this.yOffset; i < this.procs.size(); i++, y += this.vSpace )
+    for( int i = 0, y = -this.fromProcess * this.vSpace - this.yOffset; i < this.numProc; i++, y += this.vSpace )
     {
       IPhysicalEvent[] events = ( ( IPhysicalProcess )this.eventGraph.getTrace()
         .getProcess( i ) ).getEventsByPhysicalClock( this.fromTime, this.toTime );
@@ -233,7 +216,7 @@ class PhysicalGraphPaintListener extends AbstractGraphPaintListener {
                             + ( partner.getProcessId() - i )
                             * this.vSpace
                             + this.eventSize
-                            / 2 );
+                            / 2, false );
           }
         }
         if( event.getType() == EventType.RECV ) {
@@ -247,7 +230,7 @@ class PhysicalGraphPaintListener extends AbstractGraphPaintListener {
                                + ( partner.getProcessId() - i )
                                * this.vSpace
                                + this.eventSize
-                               / 2, toX, y + this.eventSize / 2 );
+                               / 2, toX, y + this.eventSize / 2, false );
           }
         }
       }
@@ -261,24 +244,9 @@ class PhysicalGraphPaintListener extends AbstractGraphPaintListener {
     this.xStep = ( int )( midSize / this.hzoomfactor );
   }
 
-  private void drawRulers() {
+  private void drawHRuler() {
     this.gc.setForeground( this.gc.getDevice().getSystemColor( SWT.COLOR_BLACK ) );
     this.gc.setFont( this.smallFont );
-    // vertical
-    this.gc.setClipping( 1, 1, 24, this.height - 31 );
-    for( int i = this.fromProcess, y = 0 - this.yOffset; i < this.toProcess; i++, y += this.vSpace )
-    {
-      StringBuilder sb = new StringBuilder();
-      ArrayList<Integer> processes = this.procs.get( i );
-      for( Integer ii : processes ) {
-        sb.append( ii );
-        sb.append( '\n' );
-      }
-      String text = sb.substring( 0, sb.length() - 1 );
-      this.gc.drawText( text, 3, y );
-      this.gc.drawLine( 20, y + this.eventSize / 2, 22, y + this.eventSize / 2 );
-    }
-    // horizontal
     int y = this.height - 22;
     this.gc.setClipping( 31, this.height - 26, this.width - 31, 26 );
     int from = this.fromTime / this.xStep * this.xStep;
@@ -327,13 +295,14 @@ class PhysicalGraphPaintListener extends AbstractGraphPaintListener {
       this.toTime = Math.min( this.maxTimeStop,
                               ( int )( this.fromTime + this.width
                                                        / this.hzoomfactor ) );
-      this.toProcess = Math.min( this.procs.size(),
+      this.toProcess = Math.min( this.numProc,
                                  this.fromProcess
                                      + ( this.height - 31 + this.eventSize )
                                      / this.vSpace
                                      + 2 );
       calculateXStep();
-      drawRulers();
+      drawVRuler();
+      drawHRuler();
       // set the clipping to the graph area
       this.gc.setClipping( 31, 1, this.width - 31, this.height - 31 );
       drawGridHLines();
@@ -499,7 +468,8 @@ class PhysicalGraphPaintListener extends AbstractGraphPaintListener {
     this.gc = gc2;
     gc.setLineAttributes( new LineAttributes(1) );
     calculateXStep();
-    drawRulers();
+    drawVRuler();
+    drawHRuler();
     // set the clipping to the graph area
     this.gc.setClipping( 31, 1, this.width - 31, this.height - 31 );
     drawGridHLines();
@@ -508,5 +478,10 @@ class PhysicalGraphPaintListener extends AbstractGraphPaintListener {
     drawGraph();
     if( this.drawMessages )
       drawConnections();
+  }
+
+  @Override
+  public int getArrowSize() {
+    return this.arrowsize;
   }
 }

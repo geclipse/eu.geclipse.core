@@ -85,37 +85,6 @@ class LogicalGraphPaintListener extends AbstractGraphPaintListener {
   }
 
   /**
-   * Draw a connection with an arrowhead from (x1,y1) to (x2,y2).
-   *
-   * @param x1
-   * @param y1
-   * @param x2
-   * @param y2
-   */
-  private void connection( final int x1,
-                           final int y1,
-                           final int x2,
-                           final int y2 )
-  {
-    int xv = x2 - x1;
-    int yv = y2 - y1;
-    float c = ( float )Math.sqrt( xv * xv + yv * yv );
-    int ex = Math.round( ( xv / c * this.eventSize / 2 ) );
-    int ey = Math.round( ( yv / c * this.eventSize / 2 ) );
-    this.gc.drawLine( x2 - ex, y2 - ey, x1 + ex, y1 + ey );
-    int[] arrowhead = {
-      x2 - ex,
-      y2 - ey,
-      x2 - ex - ex - ey,
-      y2 - ey - ey + ex,
-      x2 - ex - ex + ey,
-      y2 - ey - ey - ex
-    };
-    this.gc.fillPolygon( arrowhead );
-  }
-
-
-  /**
    * Draws the messages of the currently invisible events (left, right, top,
    * bottom)
    */
@@ -155,7 +124,7 @@ class LogicalGraphPaintListener extends AbstractGraphPaintListener {
                           * this.vSpace
                           - this.yOffset
                           + this.eventSize
-                          / 2 );
+                          / 2, true );
         }
         // }
       }
@@ -190,7 +159,7 @@ class LogicalGraphPaintListener extends AbstractGraphPaintListener {
                           * this.vSpace
                           - this.yOffset
                           + this.eventSize
-                          / 2 );
+                          / 2, true );
         }
       }
     }
@@ -226,7 +195,7 @@ class LogicalGraphPaintListener extends AbstractGraphPaintListener {
                           * this.vSpace
                           - this.yOffset
                           + this.eventSize
-                          / 2 );
+                          / 2, true );
         }
       }
     }
@@ -484,7 +453,7 @@ class LogicalGraphPaintListener extends AbstractGraphPaintListener {
                                 * this.vSpace
                                 - this.yOffset
                                 + this.eventSize
-                                / 2 );
+                                / 2, true );
                 // draw receive messages
               } else { // needed for broadcast ... better idea ??? perhaps add
                 // more information in reader
@@ -500,7 +469,7 @@ class LogicalGraphPaintListener extends AbstractGraphPaintListener {
                                 + this.eventSize
                                 / 2,
                             x + this.eventSize / 2,
-                            y + this.eventSize / 2 );
+                            y + this.eventSize / 2, true );
               }
             }
           }
@@ -514,17 +483,9 @@ class LogicalGraphPaintListener extends AbstractGraphPaintListener {
     this.gc.setLineWidth( 0 );
   }
 
-  private void drawRulers() {
+  private void drawHRuler() {
     this.gc.setForeground( this.gc.getDevice().getSystemColor( SWT.COLOR_BLACK ) );
     this.gc.setFont( this.smallFont );
-    // vertical
-    this.gc.setClipping( 1, 1, 24, this.height - 31 );
-    for( int i = this.fromProcess, y = 0 - this.yOffset; i < this.toProcess; i++, y += this.vSpace )
-    {
-      if (this.vSpace > 8 || i % 2 == 0)  this.gc.drawText( Integer.toString( i ), 3, y - 7 + this.eventSize / 2 );
-      this.gc.drawLine( 20, y + this.eventSize / 2, 22, y + this.eventSize / 2 );
-    }
-    // horizontal
     int y = this.height - 22;
     this.gc.setClipping( 31, this.height - 26, this.width - 31, 26 );
     for( int i = this.fromClock, x = 30 - this.xOffset + this.eventSize / 2; i <= this.toClock; i++, x += this.hSpace )
@@ -607,7 +568,8 @@ class LogicalGraphPaintListener extends AbstractGraphPaintListener {
                                      / this.vSpace
                                      + 2 );
       // draw the rulers to the control
-      drawRulers();
+      drawVRuler();
+      drawHRuler();
       // set the clipping to the graph area
       this.gc.setClipping( 31, 1, this.width - 31, this.height - 31 );
       // this.gc.setClipping(0, 0, this.width, this.height);
@@ -735,10 +697,16 @@ class LogicalGraphPaintListener extends AbstractGraphPaintListener {
   public void print( final GC gc2 ) {
     this.gc = gc2;
     gc.setLineAttributes( new LineAttributes(1) );
-    drawRulers();
+    drawVRuler();
+    drawHRuler();
     this.gc.setClipping( 31, 1, this.width - 31, this.height - 31 );
     drawGridHLines();
     drawGridVLines();
     drawGraph();
+  }
+
+  @Override
+  public int getArrowSize() {
+    return this.eventSize / 2;
   }
 }

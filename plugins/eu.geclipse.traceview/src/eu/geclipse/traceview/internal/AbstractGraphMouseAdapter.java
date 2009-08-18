@@ -74,10 +74,11 @@ public abstract class AbstractGraphMouseAdapter extends MouseAdapter {
     if( vSpace - ( tmp % vSpace ) <= eventSize / 2 ) {
       process = tmp / vSpace + 1;
     }
-    if( process > numProc - 1 ) {
-      process = -1;
-    } else {
+    if ( process != -1 ) {
       process += this.graph.getEventGraphPaintListener().getFromProcess();
+      if( process >= numProc ) {
+        process = -1;
+      }
     }
     return process;
   }
