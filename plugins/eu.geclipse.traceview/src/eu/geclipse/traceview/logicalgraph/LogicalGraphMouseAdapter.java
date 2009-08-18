@@ -32,64 +32,25 @@ public class LogicalGraphMouseAdapter extends AbstractGraphMouseAdapter {
     super(logicalGraph);
   }
 
-  public Object getObjectForPosition( final int xPos, final int yPos ) {
+  @Override
+  public Object getObjectOnProcess( final int xPos, final int procNr ) {
     Object obj = null;
-    // horizontal and vertical space between events
     int hSpace = this.graph.getEventGraphPaintListener().getHSpace();
-    int vSpace = this.graph.getEventGraphPaintListener().getVSpace();
-    // scrollbar values
     int hSelection = this.graph.getHorizontalBar().getSelection();
-    int vSelection = this.graph.getVerticalBar().getSelection();
-    // first displayed clock and process
     int firstClock = hSelection / hSpace;
-    int firstProc = vSelection / vSpace;
-    // x and y offset
+    int eventSize = this.graph.getEventGraphPaintListener().getEventSize();
     int xOffset = hSelection % hSpace - hSpace / 2;
-    int yOffset = vSelection % vSpace - vSpace / 2;
-    // area get mouse events from
-    int graphWidth = this.graph.getClientArea().width;
-    int graphHeight = this.graph.getClientArea().height - 30;
+    ILamportProcess process = ( ILamportProcess )this.graph.getTrace().getProcess( procNr );
     int x = -1;
-    int y = -1;
-    if( xPos > 30 && yPos > 0 && xPos < graphWidth && yPos < graphHeight ) {
-      x = ( xPos
-            + xOffset
-            - 30
-            - this.graph.getEventGraphPaintListener().getEventSize()
-            / 2 + hSpace / 2 )
-          / hSpace
-          + firstClock;
-      y = ( yPos
-            + yOffset
-            - this.graph.getEventGraphPaintListener().getEventSize()
-            / 2 + vSpace / 2 )
-          / vSpace
-          + firstProc;
-      if( Math.abs( xPos
-                    - ( ( x - firstClock ) * hSpace + 30 - xOffset + this.graph.getEventGraphPaintListener()
-                      .getEventSize() / 2 ) ) > this.graph.getEventGraphPaintListener()
-        .getEventSize() / 2 )
-      {
-        x = -1;
-      }
-      if( Math.abs( yPos
-                    - ( ( y - firstProc ) * vSpace - yOffset + this.graph.getEventGraphPaintListener()
-                      .getEventSize() / 2 ) ) > this.graph.getEventGraphPaintListener()
-        .getEventSize() / 2 )
-      {
-        y = -1;
-      }
+    x = ( xPos + xOffset - 30 - eventSize / 2 + hSpace / 2 ) / hSpace + firstClock;
+    if ( Math.abs( xPos - ( ( x - firstClock ) * hSpace + 30 - xOffset + eventSize / 2 ) ) > eventSize / 2 ) {
+      x = -1;
     }
-    if( y < this.graph.getTrace().getNumberOfProcesses() ) {
-      if( x != -1 && y != -1 ) {
-        obj = ( ( ILamportProcess )this.graph.getTrace().getProcess( y ) ).getEventByLamportClock( x );
-      }
-      if( obj == null && y != -1 ) {
-        obj = this.graph.getTrace().getProcess( y );
-      }
+    if( x != -1 ) {
+      obj = process.getEventByLamportClock( x );
+    } else {
+      obj = process;
     }
-    if( obj == null )
-      obj = this.graph.getTrace();
     return obj;
   }
 }

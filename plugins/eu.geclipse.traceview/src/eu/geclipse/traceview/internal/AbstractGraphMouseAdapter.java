@@ -61,5 +61,42 @@ public abstract class AbstractGraphMouseAdapter extends MouseAdapter {
     }
   }
 
-  public abstract Object getObjectForPosition( final int xPos, final int yPos );
+  protected int getLineNumber( final int yPos ) {
+    int yOffset = this.graph.getEventGraphPaintListener().getYOffset();
+    int eventSize = this.graph.getEventGraphPaintListener().getEventSize();
+    int vSpace = this.graph.getEventGraphPaintListener().getVSpace();
+    int numProc = this.graph.getTrace().getNumberOfProcesses();
+    int process = -1;
+    int tmp = yPos + yOffset - eventSize / 2;
+    if( tmp % vSpace <= eventSize / 2 ) {
+      process = tmp / vSpace;
+    }
+    if( vSpace - ( tmp % vSpace ) <= eventSize / 2 ) {
+      process = tmp / vSpace + 1;
+    }
+    if( process > numProc - 1 ) {
+      process = -1;
+    } else {
+      process += this.graph.getEventGraphPaintListener().getFromProcess();
+    }
+    return process;
+  }
+
+  public Object getObjectForPosition( int xPos, int yPos ) {
+    Object obj = null;
+    int graphWidth = this.graph.getClientArea().width;
+    int graphHeight = this.graph.getClientArea().height - 30;
+    int y = getLineNumber( yPos );
+    if( xPos > 30 && yPos > 0 && xPos < graphWidth && yPos < graphHeight ) {
+      if( y != -1 ) {
+        int procNr = y; // TODO map line number to process number
+        obj = getObjectOnProcess( xPos, procNr );
+      } else {
+        obj = this.graph.getTrace();
+      }
+    }
+    return obj;
+  }
+
+  public abstract Object getObjectOnProcess( final int xPos, final int procNr );
 }

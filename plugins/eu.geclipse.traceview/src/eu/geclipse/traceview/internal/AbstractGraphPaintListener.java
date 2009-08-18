@@ -31,9 +31,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.ScrollBar;
 
-import eu.geclipse.traceview.ILamportTrace;
 import eu.geclipse.traceview.ITrace;
-import eu.geclipse.traceview.TraceVisualization;
 import eu.geclipse.traceview.preferences.PreferenceConstants;
 
 
@@ -111,7 +109,13 @@ public abstract class AbstractGraphPaintListener implements PaintListener {
     this.line10 = new Color( Display.getDefault(), new RGB( 64, 64, 64 ) );
   }
 
-  public abstract void setVertical( int i );
+  /**
+   * @param selection
+   */
+  public void setVertical( final int selection ) {
+    this.fromProcess = selection / this.vSpace;
+    this.yOffset = selection % this.vSpace - this.vSpace / 2;
+  }
 
   public abstract void setHorizontal( int i );
   
@@ -438,6 +442,14 @@ public abstract class AbstractGraphPaintListener implements PaintListener {
 
   public int getVSpace() {
     return this.vSpace;
+  }
+
+  public int getYOffset() {
+    return this.yOffset;
+  }
+
+  public int getFromProcess() {
+    return this.fromProcess;
   }
 
   public abstract void handleResize();

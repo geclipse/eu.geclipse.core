@@ -35,64 +35,25 @@ public class PhysicalGraphMouseAdapter extends AbstractGraphMouseAdapter {
     super(physicalGraph);
   }
 
-  private int getLineNumber( final int yPos ) {
-    int yOffset = ((PhysicalGraphPaintListener)this.graph.getEventGraphPaintListener()).getYOffset();
-    int eventSize = this.graph.getEventGraphPaintListener()
-      .getEventSize();
-    int vSpace = this.graph.getEventGraphPaintListener().getVSpace();
-    int numProc = ((PhysicalGraphPaintListener)this.graph.getEventGraphPaintListener()).getNumProc();
-    int process = -1;
-    int tmp = yPos + yOffset - eventSize / 2;
-    if( tmp % vSpace <= eventSize / 2 ) {
-      process = tmp / vSpace;
-    }
-    if( vSpace - ( tmp % vSpace ) <= eventSize / 2 ) {
-      process = tmp / vSpace + 1;
-    }
-    if( process > numProc - 1 ) {
-      process = -1;
-    } else {
-      process += ((PhysicalGraphPaintListener)this.graph.getEventGraphPaintListener())
-        .getFromProcess();
-    }
-    return process;
-  }
-
-  private Object getObject( final int xPos, final int yPos ) {
+  @Override
+  public Object getObjectOnProcess( final int xPos, final int procNr ) {
     Object object = null;
     float hzoomfactor = ((PhysicalGraph)this.graph).getHZoomFactor();
-    int hSelection = ( int )( this.graph.getHorizontalBar()
-      .getSelection()
+    int hSelection = ( int )( this.graph.getHorizontalBar().getSelection()
                               / hzoomfactor * 10 );
     float x = -1;
-    int y = getLineNumber( yPos );
     IPhysicalProcess process = ( IPhysicalProcess )this.graph.getTrace()
-      .getProcess( y );
+      .getProcess( procNr );
     x = hSelection + ( ( ( xPos - 30 ) / hzoomfactor ) - ( 20 / hzoomfactor ) );
     int clock = Math.round( x );
     IPhysicalEvent[] events = process.getEventsByPhysicalClock( clock, clock );
     if( events.length > 0 ) {
       object = events[ 0 ];
     } else {
-      object = this.graph.getTrace().getProcess( y );
+      object = process;
     }
     return object;
   }
 
-  @Override
-  public Object getObjectForPosition( int xPos, int yPos ) {
-    Object obj = null;
-    int graphWidth = this.graph.getClientArea().width;
-    int graphHeight = this.graph.getClientArea().height - 30;
-    int y = -1;
-    y = getLineNumber( yPos );
-    if( xPos > 30 && yPos > 0 && xPos < graphWidth && yPos < graphHeight ) {
-      if( y != -1 ) {
-        obj = getObject( xPos, yPos );
-      } else {
-        obj = this.graph.getTrace();
-      }
-    }
-    return obj;
-  }
+
 }

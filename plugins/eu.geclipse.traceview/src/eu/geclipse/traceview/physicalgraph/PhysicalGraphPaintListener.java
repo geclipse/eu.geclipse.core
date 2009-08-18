@@ -68,10 +68,6 @@ class PhysicalGraphPaintListener extends AbstractGraphPaintListener {
     this.selectedEvent = selectedEvent;
   }
 
-  protected int getYOffset() {
-    return this.yOffset;
-  }
-
   protected float getHZoomfactor() {
     return this.hzoomfactor;
   }
@@ -87,10 +83,6 @@ class PhysicalGraphPaintListener extends AbstractGraphPaintListener {
   protected void setDrawMessages( final boolean drawMessages ) {
     this.drawMessages = drawMessages;
     this.eventGraph.redraw();
-  }
-
-  protected int getFromProcess() {
-    return this.fromProcess;
   }
 
   public void handleResize() {
@@ -419,14 +411,6 @@ class PhysicalGraphPaintListener extends AbstractGraphPaintListener {
       this.horizontalScrollBar.setMaximum( max );
     }
     this.verticalScrollBar.setMaximum( this.vSpace * this.numProc );
-  }
-
-  /**
-   * @param selection
-   */
-  public void setVertical( final int selection ) {
-    this.fromProcess = selection / this.vSpace;
-    this.yOffset = selection % this.vSpace - this.vSpace / 2;
   }
 
   /**

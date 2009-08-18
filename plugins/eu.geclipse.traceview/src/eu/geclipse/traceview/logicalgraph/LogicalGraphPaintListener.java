@@ -691,14 +691,6 @@ class LogicalGraphPaintListener extends AbstractGraphPaintListener {
   /**
    * @param selection
    */
-  public void setVertical( final int selection ) {
-    this.fromProcess = selection / this.vSpace;
-    this.yOffset = selection % this.vSpace - this.hSpace / 2;
-  }
-
-  /**
-   * @param selection
-   */
   public void setHorizontal( final int selection ) {
     this.fromClock = selection / this.hSpace;
     this.xOffset = selection % this.hSpace - this.hSpace / 2;
