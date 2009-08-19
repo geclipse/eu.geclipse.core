@@ -515,6 +515,10 @@ public abstract class AbstractGraphPaintListener implements PaintListener {
     return this.fromProcessLine;
   }
 
+  protected boolean procDrawingEnabled( int procId ) {
+    return this.eventGraph.getProcessToLineMapping()[procId] != -1;
+  }
+
   protected int getYPosForProcId( int procId ) {
     int line = this.eventGraph.getProcessToLineMapping()[procId];
     return ( line - this.fromProcessLine ) * this.vSpace

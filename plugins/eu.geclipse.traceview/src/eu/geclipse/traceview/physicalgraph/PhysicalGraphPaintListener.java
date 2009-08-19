@@ -96,6 +96,7 @@ class PhysicalGraphPaintListener extends AbstractGraphPaintListener {
   private void drawGraph() {
     // draw events from visible processes
     for( int i = 0; i < this.numProc; i++ ) {
+      if (!procDrawingEnabled( i )) continue;
       // calc vertical position
       int y = getYPosForProcId( i ) - this.eventSize/2;
       // get all visible events for the process
@@ -300,28 +301,32 @@ class PhysicalGraphPaintListener extends AbstractGraphPaintListener {
           && structuredSelection.getFirstElement() instanceof IPhysicalEvent )
       {
         IPhysicalEvent event = ( IPhysicalEvent )structuredSelection.getFirstElement();
-        if( this.fromTime <= event.getPhysicalStopClock()
-            || event.getPartnerPhysicalStartClock() <= this.toTime ) {
-          int y = getYPosForProcId( event.getProcessId() ) - this.eventSize/2;
-          this.gc.setForeground( this.selectionColor );
-          this.gc.setBackground( this.selectionColor );
-          int x = getXPosForClock( event.getPhysicalStartClock() );
-          int rectWidth = getXPosForClock( event.getPhysicalStopClock() ) - x;
-          this.gc.fillRectangle( x - 2,
-                                 y - 2,
-                                 rectWidth + 5,
-                                 2 * this.vzoomfactor + 5 );
+        if (procDrawingEnabled( event.getProcessId() )) {
+          if( this.fromTime <= event.getPhysicalStopClock()
+              || event.getPartnerPhysicalStartClock() <= this.toTime ) {
+            int y = getYPosForProcId( event.getProcessId() ) - this.eventSize/2;
+            this.gc.setForeground( this.selectionColor );
+            this.gc.setBackground( this.selectionColor );
+            int x = getXPosForClock( event.getPhysicalStartClock() );
+            int rectWidth = getXPosForClock( event.getPhysicalStopClock() ) - x;
+            this.gc.fillRectangle( x - 2,
+                                   y - 2,
+                                   rectWidth + 5,
+                                   2 * this.vzoomfactor + 5 );
+          }
         }
       } else if( structuredSelection.getFirstElement() instanceof IProcess ) {
         IProcess process = ( IProcess )structuredSelection.getFirstElement();
-        int x = 0;
-        int y = getYPosForProcId( process.getProcessId() ) - this.eventSize/2;
-        this.gc.setForeground( this.selectionColor );
-        this.gc.setBackground( this.selectionColor );
-        this.gc.fillRectangle( x,
-                               y + this.eventSize / 4,
-                               this.width,
-                               this.eventSize / 2 );
+        if (procDrawingEnabled( process.getProcessId() )) {
+          int x = 0;
+          int y = getYPosForProcId( process.getProcessId() ) - this.eventSize/2;
+          this.gc.setForeground( this.selectionColor );
+          this.gc.setBackground( this.selectionColor );
+          this.gc.fillRectangle( x,
+                                 y + this.eventSize / 4,
+                                 this.width,
+                                 this.eventSize / 2 );
+        }
       }
     }
   }
@@ -429,7 +434,9 @@ class PhysicalGraphPaintListener extends AbstractGraphPaintListener {
   }
 
   void drawConnection( IPhysicalEvent event ) {
-    if (event.getPartnerProcessId() != -1) {
+    if (event.getPartnerProcessId() != -1 &&
+        procDrawingEnabled( event.getProcessId() ) &&
+        procDrawingEnabled( event.getPartnerProcessId() )) {
       int x1 = getXPosForClock( event.getPhysicalStopClock() );
       int y1 = getYPosForProcId( event.getProcessId() );
       int x2 = getXPosForClock( event.getPartnerPhysicalStopClock() );

@@ -213,6 +213,9 @@ public abstract class AbstractGraphVisualization extends TraceVisualization {
   }  
 
   void updateProcessToLineMapping() {
+    for(int i = 0; i < this.trace.getNumberOfProcesses(); i++) {
+      this.procToLineMapping[i] = -1;
+    }
     for(int line = 0; line < this.lineToProcMapping.size(); line++) {
       for(Integer proc : this.lineToProcMapping.get( line )) {
         this.procToLineMapping[proc.intValue()] = line;
@@ -234,10 +237,12 @@ public abstract class AbstractGraphVisualization extends TraceVisualization {
     this.lineToProcMapping = new LinkedList<SortedSet<Integer>>();
     for (int proc = 0; proc < this.procToLineMapping.length; proc++) {
       int line = this.procToLineMapping[proc];
-      while(this.lineToProcMapping.size() <= line ) {
-        this.lineToProcMapping.add( new TreeSet<Integer>() );
+      if (line != -1) {
+        while(this.lineToProcMapping.size() <= line ) {
+          this.lineToProcMapping.add( new TreeSet<Integer>() );
+        }
+        this.lineToProcMapping.get( line ).add( Integer.valueOf( proc ) );
       }
-      this.lineToProcMapping.get( line ).add( Integer.valueOf( proc ) );
     }
   }
 

@@ -143,8 +143,9 @@ class LogicalGraphPaintListener extends AbstractGraphPaintListener {
 
   private void drawGraphBackground() {
     for( int i = this.fromProcessLine; i < this.toProcessLine; i++ ) {
-      ILamportEvent[] events = ( ( ILamportProcess )this.eventGraph.getTrace()
-        .getProcess( i ) ).getEventsByLamportClock( this.fromClock, this.toClock );
+      ILamportProcess process = ( ILamportProcess )this.eventGraph.getTrace().getProcess( i );
+      if (!procDrawingEnabled( process.getProcessId() )) continue;
+      ILamportEvent[] events = process.getEventsByLamportClock( this.fromClock, this.toClock );
       for( ILamportEvent event : events ) {
         for( IEventMarker eventmarker : this.eventGraph.getEventMarkers() ) {
           int mark = eventmarker.mark( event );
@@ -177,9 +178,9 @@ class LogicalGraphPaintListener extends AbstractGraphPaintListener {
     for( int i = 0; i < this.numProc; i++ ) {
       // get events
       try {
-        ILamportEvent[] events = ( ( ILamportProcess )this.eventGraph.getTrace()
-          .getProcess( i ) ).getEventsByLamportClock( this.fromClock,
-                                                      this.toClock );
+        ILamportProcess process =  ( ILamportProcess )this.eventGraph.getTrace().getProcess( i );
+        if (!procDrawingEnabled( process.getProcessId() )) continue;
+        ILamportEvent[] events = process.getEventsByLamportClock( this.fromClock, this.toClock );
         for( ILamportEvent event : events ) {
           int x = getXPosForClock( event.getLamportClock() ) - this.eventSize/2;
           int y = getYPosForProcId( event.getProcessId() ) - this.eventSize/2;
@@ -469,25 +470,29 @@ class LogicalGraphPaintListener extends AbstractGraphPaintListener {
         ILamportEvent event = ( ILamportEvent )structuredSelection.getFirstElement();
         if( this.fromClock <= event.getLamportClock()
             && event.getLamportClock() <= this.toClock ) {
-          int x = getXPosForClock( event.getLamportClock() ) - this.eventSize/2;
-          int y = getYPosForProcId( event.getProcessId() ) - this.eventSize/2;
-          this.gc.setForeground( this.selectionColor );
-          this.gc.setBackground( this.selectionColor );
-          this.gc.fillOval( x - this.eventSize / 4,
-                            y - this.eventSize / 4,
-                            this.eventSize + this.eventSize / 2,
-                            this.eventSize + this.eventSize / 2 );
+          if ( procDrawingEnabled( event.getProcessId() ) ) {
+            int x = getXPosForClock( event.getLamportClock() ) - this.eventSize/2;
+            int y = getYPosForProcId( event.getProcessId() ) - this.eventSize/2;
+            this.gc.setForeground( this.selectionColor );
+            this.gc.setBackground( this.selectionColor );
+            this.gc.fillOval( x - this.eventSize / 4,
+                              y - this.eventSize / 4,
+                              this.eventSize + this.eventSize / 2,
+                              this.eventSize + this.eventSize / 2 );
+          }
         }
       } else if( structuredSelection.getFirstElement() instanceof IProcess ) {
         IProcess process = ( IProcess )structuredSelection.getFirstElement();
-        int x = 0;
-        int y = getYPosForProcId( process.getProcessId() ) - this.eventSize/2;
-        this.gc.setForeground( this.selectionColor );
-        this.gc.setBackground( this.selectionColor );
-        this.gc.fillRectangle( x,
-                               y + this.eventSize / 4,
-                               this.width,
-                               this.eventSize / 2 );
+        if ( procDrawingEnabled( process.getProcessId() ) ) {
+          int x = 0;
+          int y = getYPosForProcId( process.getProcessId() ) - this.eventSize/2;
+          this.gc.setForeground( this.selectionColor );
+          this.gc.setBackground( this.selectionColor );
+          this.gc.fillRectangle( x,
+                                 y + this.eventSize / 4,
+                                 this.width,
+                                 this.eventSize / 2 );
+        }
       }
     }
   }
@@ -561,7 +566,9 @@ class LogicalGraphPaintListener extends AbstractGraphPaintListener {
   }
 
   void drawConnection( ILamportEvent event ) {
-    if (event.getPartnerProcessId() != -1) {
+    if (event.getPartnerProcessId() != -1 &&
+        procDrawingEnabled( event.getProcessId() ) &&
+        procDrawingEnabled( event.getPartnerProcessId() )) {
       int x1 = getXPosForClock( event.getLamportClock() );
       int y1 = getYPosForProcId( event.getProcessId() );
       int x2 = getXPosForClock( event.getPartnerLamportClock() );
