@@ -464,34 +464,36 @@ class LogicalGraphPaintListener extends AbstractGraphPaintListener {
     }
     if( selection != null && selection instanceof StructuredSelection ) {
       StructuredSelection structuredSelection = ( StructuredSelection )selection;
-      if( structuredSelection.getFirstElement() != null
-          && structuredSelection.getFirstElement() instanceof ILamportEvent )
-      {
-        ILamportEvent event = ( ILamportEvent )structuredSelection.getFirstElement();
-        if( this.fromClock <= event.getLamportClock()
-            && event.getLamportClock() <= this.toClock ) {
-          if ( procDrawingEnabled( event.getProcessId() ) ) {
-            int x = getXPosForClock( event.getLamportClock() ) - this.eventSize/2;
-            int y = getYPosForProcId( event.getProcessId() ) - this.eventSize/2;
+      for (Object obj : structuredSelection.toList()) {
+        if( obj instanceof ILamportEvent ) {
+          ILamportEvent event = ( ILamportEvent )obj;
+          if (event.getProcess().getTrace() != this.trace) continue;
+          if( this.fromClock <= event.getLamportClock()
+              && event.getLamportClock() <= this.toClock ) {
+            if ( procDrawingEnabled( event.getProcessId() ) ) {
+              int x = getXPosForClock( event.getLamportClock() ) - this.eventSize/2;
+              int y = getYPosForProcId( event.getProcessId() ) - this.eventSize/2;
+              this.gc.setForeground( this.selectionColor );
+              this.gc.setBackground( this.selectionColor );
+              this.gc.fillOval( x - this.eventSize / 4,
+                                y - this.eventSize / 4,
+                                this.eventSize + this.eventSize / 2,
+                                this.eventSize + this.eventSize / 2 );
+            }
+          }
+        } else if( obj instanceof IProcess ) {
+          IProcess process = ( IProcess )obj;
+          if ( process.getTrace() != this.trace ) continue;
+          if ( procDrawingEnabled( process.getProcessId() ) ) {
+            int x = 0;
+            int y = getYPosForProcId( process.getProcessId() ) - this.eventSize/2;
             this.gc.setForeground( this.selectionColor );
             this.gc.setBackground( this.selectionColor );
-            this.gc.fillOval( x - this.eventSize / 4,
-                              y - this.eventSize / 4,
-                              this.eventSize + this.eventSize / 2,
-                              this.eventSize + this.eventSize / 2 );
+            this.gc.fillRectangle( x,
+                                   y + this.eventSize / 4,
+                                   this.width,
+                                   this.eventSize / 2 );
           }
-        }
-      } else if( structuredSelection.getFirstElement() instanceof IProcess ) {
-        IProcess process = ( IProcess )structuredSelection.getFirstElement();
-        if ( procDrawingEnabled( process.getProcessId() ) ) {
-          int x = 0;
-          int y = getYPosForProcId( process.getProcessId() ) - this.eventSize/2;
-          this.gc.setForeground( this.selectionColor );
-          this.gc.setBackground( this.selectionColor );
-          this.gc.fillRectangle( x,
-                                 y + this.eventSize / 4,
-                                 this.width,
-                                 this.eventSize / 2 );
         }
       }
     }

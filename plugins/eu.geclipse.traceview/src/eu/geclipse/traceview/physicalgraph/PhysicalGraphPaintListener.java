@@ -297,35 +297,37 @@ class PhysicalGraphPaintListener extends AbstractGraphPaintListener {
     }
     if( selection != null && selection instanceof StructuredSelection ) {
       StructuredSelection structuredSelection = ( StructuredSelection )selection;
-      if( structuredSelection.getFirstElement() != null
-          && structuredSelection.getFirstElement() instanceof IPhysicalEvent )
-      {
-        IPhysicalEvent event = ( IPhysicalEvent )structuredSelection.getFirstElement();
-        if (procDrawingEnabled( event.getProcessId() )) {
-          if( this.fromTime <= event.getPhysicalStopClock()
-              || event.getPartnerPhysicalStartClock() <= this.toTime ) {
-            int y = getYPosForProcId( event.getProcessId() ) - this.eventSize/2;
+      for ( Object obj : structuredSelection.toList() ) {
+        if( obj instanceof IPhysicalEvent ) {
+          IPhysicalEvent event = ( IPhysicalEvent )obj;
+          if (event.getProcess().getTrace() != this.trace) continue;
+          if (procDrawingEnabled( event.getProcessId() )) {
+            if( this.fromTime <= event.getPhysicalStopClock()
+                || event.getPartnerPhysicalStartClock() <= this.toTime ) {
+              int y = getYPosForProcId( event.getProcessId() ) - this.eventSize/2;
+              this.gc.setForeground( this.selectionColor );
+              this.gc.setBackground( this.selectionColor );
+              int x = getXPosForClock( event.getPhysicalStartClock() );
+              int rectWidth = getXPosForClock( event.getPhysicalStopClock() ) - x;
+              this.gc.fillRectangle( x - 2,
+                                     y - 2,
+                                     rectWidth + 5,
+                                     2 * this.vzoomfactor + 5 );
+            }
+          }
+        } else if( obj instanceof IProcess ) {
+          IProcess process = ( IProcess )obj;
+          if (process.getTrace() != this.trace) continue;
+          if (procDrawingEnabled( process.getProcessId() )) {
+            int x = 0;
+            int y = getYPosForProcId( process.getProcessId() ) - this.eventSize/2;
             this.gc.setForeground( this.selectionColor );
             this.gc.setBackground( this.selectionColor );
-            int x = getXPosForClock( event.getPhysicalStartClock() );
-            int rectWidth = getXPosForClock( event.getPhysicalStopClock() ) - x;
-            this.gc.fillRectangle( x - 2,
-                                   y - 2,
-                                   rectWidth + 5,
-                                   2 * this.vzoomfactor + 5 );
+            this.gc.fillRectangle( x,
+                                   y + this.eventSize / 4,
+                                   this.width,
+                                   this.eventSize / 2 );
           }
-        }
-      } else if( structuredSelection.getFirstElement() instanceof IProcess ) {
-        IProcess process = ( IProcess )structuredSelection.getFirstElement();
-        if (procDrawingEnabled( process.getProcessId() )) {
-          int x = 0;
-          int y = getYPosForProcId( process.getProcessId() ) - this.eventSize/2;
-          this.gc.setForeground( this.selectionColor );
-          this.gc.setBackground( this.selectionColor );
-          this.gc.fillRectangle( x,
-                                 y + this.eventSize / 4,
-                                 this.width,
-                                 this.eventSize / 2 );
         }
       }
     }

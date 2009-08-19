@@ -15,10 +15,13 @@
 
 package eu.geclipse.traceview.internal;
 
-import java.util.SortedSet;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.ui.PartInitException;
@@ -46,15 +49,24 @@ public abstract class AbstractGraphMouseAdapter extends MouseAdapter {
       if( obj instanceof IEvent || obj instanceof IProcess
           || obj instanceof ITrace ) {
         try {
-          ISelection selection = new StructuredSelection( obj );
-          Activator.getDefault()
-            .getWorkbench()
-            .getActiveWorkbenchWindow()
-            .getActivePage()
-            .showView( "eu.geclipse.traceview.views.TraceView" )
-            .getSite()
-            .getSelectionProvider()
-            .setSelection( selection );
+          ISelection selection;
+          ISelectionProvider selectionProvider =
+            Activator.getDefault()
+              .getWorkbench()
+              .getActiveWorkbenchWindow()
+              .getActivePage()
+              .showView( "eu.geclipse.traceview.views.TraceView" )
+              .getSite()
+              .getSelectionProvider();
+          StructuredSelection oldSelection = ( StructuredSelection )selectionProvider.getSelection();
+          if (/*(e.stateMask & SWT.CTRL) != 0 && oldSelection != null*/ false) {
+            List oldSelectionList = new ArrayList( oldSelection.toList() );
+            oldSelectionList.add( obj );
+            selection = new StructuredSelection( oldSelectionList );
+          } else {
+            selection = new StructuredSelection( obj );
+          }
+          selectionProvider.setSelection( selection );
           this.graph.redraw();
         } catch( PartInitException exception ) {
           Activator.logException( exception );
