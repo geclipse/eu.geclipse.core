@@ -60,6 +60,7 @@ public class PhysicalGraph extends AbstractGraphVisualization {
     registerMouseListener( new PhysicalGraphMouseAdapter( this ) );
   }
 
+  @Override
   public PhysicalGraphPaintListener getEventGraphPaintListener() {
     return this.eventGraphPaintListener;
   }
@@ -81,15 +82,10 @@ public class PhysicalGraph extends AbstractGraphVisualization {
     this.eventGraphPaintListener.setVZoomfactor( zoomfactor );
     redraw();
   }
-
-  protected void resetOrdering() {
-    this.eventGraphPaintListener.resetOrdering();
-    redraw();
-  }
   
   protected void calcStartTimeOffset() {
-    for (int i = 0; i < trace.getNumberOfProcesses(); i++) {
-      IPhysicalProcess proc = ( IPhysicalProcess )trace.getProcess( i );
+    for (int i = 0; i < this.trace.getNumberOfProcesses(); i++) {
+      IPhysicalProcess proc = ( IPhysicalProcess )this.trace.getProcess( i );
       for(int j = 0; j < Math.min( 100, proc.getMaximumLogicalClock() ); j++) {
         IPhysicalEvent event = ( IPhysicalEvent )proc.getEventByLogicalClock( j );
         if ((event.getType().equals( EventType.SEND ) ||
@@ -98,7 +94,7 @@ public class PhysicalGraph extends AbstractGraphVisualization {
           int diff = event.getPhysicalStopClock() - event.getPartnerPhysicalStopClock();
           if (event.getType() == EventType.RECV) diff *= -1;
           if (diff > 0) {
-            IPhysicalProcess partnerProc = (IPhysicalProcess)trace.getProcess( event.getPartnerProcessId() );
+            IPhysicalProcess partnerProc = (IPhysicalProcess)this.trace.getProcess( event.getPartnerProcessId() );
             partnerProc.setStartTimeOffset( partnerProc.getStartTimeOffset() + diff );
           }
         }
@@ -113,9 +109,9 @@ public class PhysicalGraph extends AbstractGraphVisualization {
 
   @Override
   public IContributionItem[] getToolBarItems() {
+    IContributionItem[] superItems = super.getToolBarItems();
     Action vzoomin = new Action( Messages.getString( "PhysicalGraph.VerticalZoomIn" ), //$NON-NLS-1$
                                  Activator.getImageDescriptor( "icons/vertical_zoom_in.gif" ) ) { //$NON-NLS-1$
-
       @Override
       public void run() {
         int zoom = getVZoomFactor();
@@ -125,7 +121,6 @@ public class PhysicalGraph extends AbstractGraphVisualization {
     };
     Action vzoomout = new Action( Messages.getString( "PhysicalGraph.VerticalZoomOut" ), //$NON-NLS-1$
                                   Activator.getImageDescriptor( "icons/vertical_zoom_out.gif" ) ) { //$NON-NLS-1$
-
       @Override
       public void run() {
         int zoom = getVZoomFactor();
@@ -135,7 +130,6 @@ public class PhysicalGraph extends AbstractGraphVisualization {
     };
     Action hzoomin = new Action( Messages.getString( "PhysicalGraph.HorizontalZoomIn" ), //$NON-NLS-1$
                                  Activator.getImageDescriptor( "icons/horizontal_zoom_in.gif" ) ) { //$NON-NLS-1$
-
       @Override
       public void run() {
         float zoom = getHZoomFactor();
@@ -147,7 +141,6 @@ public class PhysicalGraph extends AbstractGraphVisualization {
     };
     Action hzoomout = new Action( Messages.getString( "PhysicalGraph.HorizontalZoomOut" ), //$NON-NLS-1$
                                   Activator.getImageDescriptor( "icons/horizontal_zoom_out.gif" ) ) { //$NON-NLS-1$
-
       @Override
       public void run() {
         float zoom = getHZoomFactor();
@@ -157,17 +150,8 @@ public class PhysicalGraph extends AbstractGraphVisualization {
           setHZoomFactor( zoom / 2 );
       }
     };
-    Action reset = new Action( Messages.getString( "PhysicalGraph.Reset" ), //$NON-NLS-1$
-                               Activator.getImageDescriptor( "icons/reset.gif" ) ) { //$NON-NLS-1$
-
-      @Override
-      public void run() {
-        resetOrdering();
-      }
-    };
     Action calcStartTimeOffset = new Action( Messages.getString("PhysicalGraph.calcStartTimeOffset"), //$NON-NLS-1$
                                              Activator.getImageDescriptor( "icons/calc_clock_offset.gif" ) ) { //$NON-NLS-1$
-
       @Override
       public void run() {
         calcStartTimeOffset();
@@ -177,7 +161,6 @@ public class PhysicalGraph extends AbstractGraphVisualization {
     };
     Action messages = new Action( Messages.getString( "PhysicalGraph.Toggle_Messages" ), //$NON-NLS-1$
                                   Activator.getImageDescriptor( "icons/toggle_messages.gif" ) ) { //$NON-NLS-1$
-
       @Override
       public int getStyle() {
         return IAction.AS_CHECK_BOX;
@@ -194,14 +177,14 @@ public class PhysicalGraph extends AbstractGraphVisualization {
       }
     };
     Vector<IContributionItem> items = new Vector<IContributionItem>();
+    for ( IContributionItem item : superItems ) items.add( item );
     items.add( new ActionContributionItem( calcStartTimeOffset ) );
-    items.add( new ActionContributionItem( reset ) );
     items.add( new ActionContributionItem( messages ) );
     items.add( new ActionContributionItem( vzoomin ) );
     items.add( new ActionContributionItem( vzoomout ) );
     items.add( new ActionContributionItem( hzoomin ) );
     items.add( new ActionContributionItem( hzoomout ) );
     items.add( new Separator() );
-    return items.toArray( new IContributionItem[ 0 ] );
+    return items.toArray( new IContributionItem[ items.size() ] );
   }
 }

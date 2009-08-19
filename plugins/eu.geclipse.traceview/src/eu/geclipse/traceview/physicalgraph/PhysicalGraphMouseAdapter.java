@@ -49,8 +49,6 @@ public class PhysicalGraphMouseAdapter extends AbstractGraphMouseAdapter {
     IPhysicalEvent[] events = process.getEventsByPhysicalClock( clock, clock );
     if( events.length > 0 ) {
       object = events[ 0 ];
-    } else {
-      object = process;
     }
     return object;
   }

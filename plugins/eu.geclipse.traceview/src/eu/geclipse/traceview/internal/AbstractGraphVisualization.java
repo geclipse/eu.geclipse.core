@@ -16,10 +16,18 @@
 package eu.geclipse.traceview.internal;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
+import java.util.Vector;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.ActionContributionItem;
+import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.window.DefaultToolTip;
 import org.eclipse.swt.SWT;
@@ -45,6 +53,8 @@ public abstract class AbstractGraphVisualization extends TraceVisualization {
   protected LineType hLines;
   protected LineType vLines;
   protected ITrace trace;
+  protected List<SortedSet<Integer>> lineToProcMapping;
+  protected int[] procToLineMapping;
 
   public AbstractGraphVisualization( final Composite parent,
                        final int style,
@@ -63,6 +73,8 @@ public abstract class AbstractGraphVisualization extends TraceVisualization {
     // set defaults
     this.hLines = LineType.Lines_1;
     this.vLines = LineType.Lines_1;
+    // create process mapping
+    resetOrdering();
     // get the Event Markers
     this.eventMarkers = new ArrayList<IEventMarker>();
     // TODO create possibility to select the eventmakers
@@ -192,6 +204,68 @@ public abstract class AbstractGraphVisualization extends TraceVisualization {
   @Override
   public void printTrace( final GC gc ) {
     getEventGraphPaintListener().print( gc );
+  }
+
+  void setLineToProcessMapping(List<SortedSet<Integer>> mapping) {
+    this.lineToProcMapping = mapping;
+    updateProcessToLineMapping();
+    redraw();
+  }  
+
+  void updateProcessToLineMapping() {
+    for(int line = 0; line < this.lineToProcMapping.size(); line++) {
+      for(Integer proc : this.lineToProcMapping.get( line )) {
+        this.procToLineMapping[proc.intValue()] = line;
+      }
+    }
+  }
+
+  public List<SortedSet<Integer>> getLineToProcessMapping() {
+    return this.lineToProcMapping;
+  }
+
+  public void setProcessToLineMapping( int[] procToLineMapping ) {
+    this.procToLineMapping = procToLineMapping;
+    updateLineToProcessMapping();
+    redraw();
+  }
+  
+  void updateLineToProcessMapping() {
+    this.lineToProcMapping = new LinkedList<SortedSet<Integer>>();
+    for (int proc = 0; proc < this.procToLineMapping.length; proc++) {
+      int line = this.procToLineMapping[proc];
+      while(this.lineToProcMapping.size() <= line ) {
+        this.lineToProcMapping.add( new TreeSet<Integer>() );
+      }
+      this.lineToProcMapping.get( line ).add( Integer.valueOf( proc ) );
+    }
+  }
+
+  public int[] getProcessToLineMapping() {
+    return this.procToLineMapping;
+  }
+
+  void resetOrdering() {
+    this.procToLineMapping = new int[this.trace.getNumberOfProcesses()];
+    for (int i = 0; i < this.trace.getNumberOfProcesses(); i++) {
+      this.procToLineMapping[i] = i;
+    }
+    updateLineToProcessMapping();
+  }
+
+  @Override
+  public IContributionItem[] getToolBarItems() {
+    Vector<IContributionItem> items = new Vector<IContributionItem>();
+    Action reset = new Action( Messages.getString( "PhysicalGraph.Reset" ), //$NON-NLS-1$
+                               Activator.getImageDescriptor( "icons/reset.gif" ) ) { //$NON-NLS-1$
+      @Override
+      public void run() {
+        resetOrdering();
+        redraw();
+      }
+    };
+    items.add( new ActionContributionItem( reset ) );
+    return items.toArray( new IContributionItem[ items.size() ] );
   }
 
   public abstract AbstractGraphPaintListener getEventGraphPaintListener();

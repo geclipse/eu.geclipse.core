@@ -55,6 +55,7 @@ class LogicalGraphPaintListener extends AbstractGraphPaintListener {
     return this.zoomfactor;
   }
 
+  @Override
   public void handleResize() {
     setScrollBarSizes();
   }
@@ -62,7 +63,7 @@ class LogicalGraphPaintListener extends AbstractGraphPaintListener {
   protected void setScrollBarSizes() {
     int clockDiff = Math.min( ( int )( ( this.maxLamport + 1.5 - this.fromClock ) * this.hSpace ),
                               this.width - 31 + this.eventSize );
-    int processDiff = Math.min( ( int )( ( this.numProc - this.fromProcess + 0.5 ) * this.hSpace ),
+    int processDiff = Math.min( ( int )( ( this.numProc - this.fromProcessLine + 0.5 ) * this.hSpace ),
                                 this.height - 31 + this.eventSize );
     if( this.horizontalScrollBar != null ) {
       int selection = this.horizontalScrollBar.getSelection();
@@ -96,121 +97,55 @@ class LogicalGraphPaintListener extends AbstractGraphPaintListener {
     int from = Math.max( this.fromClock - 100, 0 );
     // left
     // for all processes
-    for( int i = 0, y = 0 - this.yOffset - this.fromProcess * this.vSpace; i < this.numProc; i++, y += this.vSpace )
+    for( int i = 0; i < this.numProc; i++ )
     {
       ILamportEvent[] events = ( ( ILamportProcess )this.eventGraph.getTrace()
         .getProcess( i ) ).getEventsByLamportClock( from, this.fromClock - 1 );
-      for( int j = 0; j < events.length; j++ ) {
-        int x = 30
-                - this.xOffset
-                + ( events[ j ].getLamportClock() - this.fromClock )
-                * this.hSpace;
-        ILamportEvent event = events[ j ];
-        // if( event != null ) {
+      for( ILamportEvent event : events ) {
         // only draw send messages and only the ones which could visible
         if( event.getType() == EventType.SEND
-            && event.getPartnerLamportClock() >= this.fromClock )
-        {
-          // draw connections
-          connection( x + this.eventSize / 2,
-                      y + this.eventSize / 2,
-                      ( event.getPartnerLamportClock() - this.fromClock )
-                          * this.hSpace
-                          + 30
-                          - this.xOffset
-                          + this.eventSize
-                          / 2,
-                      ( event.getPartnerProcessId() - this.fromProcess )
-                          * this.vSpace
-                          - this.yOffset
-                          + this.eventSize
-                          / 2, true );
+            && event.getPartnerLamportClock() >= this.fromClock ) {
+          drawConnection( event );
         }
-        // }
       }
     }
     // top
     // for all processes till the first visible one
-    for( int i = 0, y = 0 - this.yOffset - this.fromProcess * this.vSpace; i < this.fromProcess; i++, y += this.vSpace )
+/*    for( int i = 0; i < this.fromProcessLine; i++ )
     {
       ILamportEvent[] events = ( ( ILamportProcess )this.eventGraph.getTrace()
-        .getProcess( i ) ).getEventsByLamportClock( this.fromClock,
-                                                    this.toClock );
-      for( int j = 0; j < events.length; j++ ) {
-        ILamportEvent event = events[ j ];
-        int x = 30
-                - this.xOffset
-                + ( event.getLamportClock() - this.fromClock )
-                * this.hSpace;
-        // only draw send messages and only the ones which could visible TODO
-        // problems with broadcast
+        .getProcess( i ) ).getEventsByLamportClock( this.fromClock, this.toClock );
+      for( ILamportEvent event : events ) {
+        // only draw send messages and only the ones which could visible
+        // TODO problems with broadcast
         if( event.getType() == EventType.SEND
-            && event.getPartnerProcessId() >= this.fromProcess )
-        {
-          connection( x + this.eventSize / 2,
-                      y + this.eventSize / 2,
-                      ( event.getPartnerLamportClock() - this.fromClock )
-                          * this.hSpace
-                          + 30
-                          - this.xOffset
-                          + this.eventSize
-                          / 2,
-                      ( event.getPartnerProcessId() - this.fromProcess )
-                          * this.vSpace
-                          - this.yOffset
-                          + this.eventSize
-                          / 2, true );
+            && event.getPartnerProcessId() >= this.fromProcessLine ) {
+          drawConnection( event );
         }
       }
     }
     // bottom
     // for all processes from the last visible one
-    for( int i = this.toProcess, y = 0
-                                     - this.yOffset
-                                     - ( this.fromProcess - this.toProcess )
-                                     * this.vSpace; i < this.numProc; i++, y += this.vSpace )
+    for( int i = this.toProcessLine; i < this.numProc; i++ )
     {
       ILamportEvent[] events = ( ( ILamportProcess )this.eventGraph.getTrace()
-        .getProcess( i ) ).getEventsByLamportClock( this.fromClock,
-                                                    this.toClock );
-      for( int j = 0; j < events.length; j++ ) {
-        ILamportEvent event = events[ j ];
-        int x = 30
-                - this.xOffset
-                + ( event.getLamportClock() - this.fromClock )
-                * this.hSpace;
+        .getProcess( i ) ).getEventsByLamportClock( this.fromClock, this.toClock );
+      for( ILamportEvent event : events ) {
         // only messages which could be visible
         if( event.getType() == EventType.SEND
-            && event.getPartnerProcessId() < this.toProcess )
-        {
-          connection( x + this.eventSize / 2,
-                      y + this.eventSize / 2,
-                      ( event.getPartnerLamportClock() - this.fromClock )
-                          * this.hSpace
-                          + 30
-                          - this.xOffset
-                          + this.eventSize
-                          / 2,
-                      ( event.getPartnerProcessId() - this.fromProcess )
-                          * this.vSpace
-                          - this.yOffset
-                          + this.eventSize
-                          / 2, true );
+            && event.getPartnerProcessId() < this.toProcessLine ) {
+          drawConnection( event );
         }
       }
-    }
+    }*/
     // TODO right - because of broadcasts
   }
 
   private void drawGraphBackground() {
-    for( int i = this.fromProcess, y = 0 - this.yOffset - this.vSpace/2 + this.eventSize/2; i < this.toProcess; i++, y += this.vSpace ) {
+    for( int i = this.fromProcessLine; i < this.toProcessLine; i++ ) {
       ILamportEvent[] events = ( ( ILamportProcess )this.eventGraph.getTrace()
         .getProcess( i ) ).getEventsByLamportClock( this.fromClock, this.toClock );
       for( ILamportEvent event : events ) {
-        int x = 30 - this.hSpace/2 + this.eventSize/2
-                - this.xOffset
-                + ( event.getLamportClock() - this.fromClock )
-                * this.hSpace;
         for( IEventMarker eventmarker : this.eventGraph.getEventMarkers() ) {
           int mark = eventmarker.mark( event );
           if (mark != IEventMarker.No_Mark) {
@@ -225,6 +160,8 @@ class LogicalGraphPaintListener extends AbstractGraphPaintListener {
                 }
               }
               this.gc.setBackground( color );
+              int x = getXPosForClock( event.getLamportClock() ) - this.hSpace/2;
+              int y = getYPosForProcId( event.getProcessId() ) - this.vSpace/2;
               this.gc.fillRectangle( x, y, bgWidth, this.vSpace );
             }
           }
@@ -237,128 +174,22 @@ class LogicalGraphPaintListener extends AbstractGraphPaintListener {
    * Draws all the visible events and their send & receive connections
    */
   private void drawGraph() {
-    Color color = null;
-    for( int i = this.fromProcess, y = 0 - this.yOffset; i < this.toProcess; i++, y += this.vSpace )
-    {
+    for( int i = 0; i < this.numProc; i++ ) {
       // get events
       try {
         ILamportEvent[] events = ( ( ILamportProcess )this.eventGraph.getTrace()
           .getProcess( i ) ).getEventsByLamportClock( this.fromClock,
                                                       this.toClock );
         for( ILamportEvent event : events ) {
-          int x = 30
-                  - this.xOffset
-                  + ( event.getLamportClock() - this.fromClock )
-                  * this.hSpace;
+          int x = getXPosForClock( event.getLamportClock() ) - this.eventSize/2;
+          int y = getYPosForProcId( event.getProcessId() ) - this.eventSize/2;
           // draw event different?
           boolean standardEvents = true;
           for( IEventMarker eventmarker : this.eventGraph.getEventMarkers() ) {
             int mark = eventmarker.mark( event );
             if( ( mark & 63 ) != 0 ) {
               standardEvents = false;
-              // Diamond
-              if( ( mark & IEventMarker.Diamond_Event ) == IEventMarker.Diamond_Event )
-              {
-                this.gc.setLineStyle( eventmarker.getLineStyle( IEventMarker.Diamond_Event ) );
-                this.gc.setLineWidth( eventmarker.getLineWidth( IEventMarker.Diamond_Event ) );
-                int[] diamond = {
-                  x + this.eventSize / 2,
-                  y,
-                  x,
-                  y + this.eventSize / 2,
-                  x + this.eventSize / 2,
-                  y + this.eventSize,
-                  x + this.eventSize,
-                  y + this.eventSize / 2,
-                  x + this.eventSize / 2,
-                  y
-                };
-                color = eventmarker.getBackgroundColor( IEventMarker.Diamond_Event );
-                if( color != null ) {
-                  this.gc.setBackground( color );
-                  this.gc.fillPolygon( diamond );
-                }
-                color = eventmarker.getForegroundColor( IEventMarker.Diamond_Event );
-                if( color != null ) {
-                  this.gc.setForeground( color );
-                  this.gc.drawPolygon( diamond );
-                }
-              }
-              // Triangle
-              if( ( mark & IEventMarker.Triangle_Event ) == IEventMarker.Triangle_Event )
-              {
-                this.gc.setLineStyle( eventmarker.getLineStyle( IEventMarker.Triangle_Event ) );
-                this.gc.setLineWidth( eventmarker.getLineWidth( IEventMarker.Triangle_Event ) );
-                int[] triangle = {
-                  x + this.eventSize / 2,
-                  y,
-                  x,
-                  y + this.eventSize,
-                  x + this.eventSize,
-                  y + this.eventSize,
-                  x + this.eventSize / 2,
-                  y
-                };
-                color = eventmarker.getBackgroundColor( IEventMarker.Triangle_Event );
-                if( color != null ) {
-                  this.gc.setBackground( color );
-                  this.gc.fillPolygon( triangle );
-                }
-                color = eventmarker.getForegroundColor( IEventMarker.Triangle_Event );
-                if( color != null ) {
-                  this.gc.setForeground( color );
-                  this.gc.drawPolygon( triangle );
-                }
-              }
-              // Ellipse
-              if( ( mark & IEventMarker.Ellipse_Event ) == IEventMarker.Ellipse_Event )
-              {
-                this.gc.setLineStyle( eventmarker.getLineStyle( IEventMarker.Ellipse_Event ) );
-                this.gc.setLineWidth( eventmarker.getLineWidth( IEventMarker.Ellipse_Event ) );
-                color = eventmarker.getBackgroundColor( IEventMarker.Ellipse_Event );
-                if( color != null ) {
-                  this.gc.setBackground( color );
-                  this.gc.fillOval( x, y, this.eventSize, this.eventSize );
-                }
-                color = eventmarker.getForegroundColor( IEventMarker.Ellipse_Event );
-                if( color != null ) {
-                  this.gc.setForeground( color );
-                  this.gc.drawOval( x, y, this.eventSize, this.eventSize );
-                }
-              }
-              // Rectangle
-              if( ( mark & IEventMarker.Rectangle_Event ) == IEventMarker.Rectangle_Event )
-              {
-                this.gc.setLineStyle( eventmarker.getLineStyle( IEventMarker.Rectangle_Event ) );
-                this.gc.setLineWidth( eventmarker.getLineWidth( IEventMarker.Rectangle_Event ) );
-                color = eventmarker.getBackgroundColor( IEventMarker.Rectangle_Event );
-                if( color != null ) {
-                  this.gc.setBackground( color );
-                  this.gc.fillRectangle( x, y, this.eventSize, this.eventSize );
-                }
-                color = eventmarker.getForegroundColor( IEventMarker.Rectangle_Event );
-                if( color != null ) {
-                  this.gc.setForeground( color );
-                  this.gc.drawRectangle( x, y, this.eventSize, this.eventSize );
-                }
-              }
-              // Cross
-              if( ( mark & IEventMarker.Cross_Event ) == IEventMarker.Cross_Event )
-              {
-                this.gc.setLineStyle( eventmarker.getLineStyle( IEventMarker.Cross_Event ) );
-                this.gc.setLineWidth( eventmarker.getLineWidth( IEventMarker.Cross_Event ) );
-                color = eventmarker.getForegroundColor( IEventMarker.Cross_Event );
-                if( color != null ) {
-                  this.gc.setForeground( color );
-                  this.gc.setBackground( color );
-                  this.gc.drawLine( x, y, x + this.eventSize, y
-                                                              + this.eventSize );
-                  this.gc.drawLine( x,
-                                    y + this.eventSize,
-                                    x + this.eventSize,
-                                    y );
-                }
-              }
+              drawMarker( mark, eventmarker, x, y );
             }
           }
           // draw standard types
@@ -438,40 +269,7 @@ class LogicalGraphPaintListener extends AbstractGraphPaintListener {
                 this.gc.setForeground( eventmarker.getForegroundColor( IEventMarker.Connection ) );
               }
             }
-            if( event.getPartnerProcessId() != -1 ) {
-              // draw send messages
-              if( event.getType() == EventType.SEND ) {
-                connection( x + this.eventSize / 2,
-                            y + this.eventSize / 2,
-                            ( event.getPartnerLamportClock() - this.fromClock )
-                                * this.hSpace
-                                + 30
-                                - this.xOffset
-                                + this.eventSize
-                                / 2,
-                            ( event.getPartnerProcessId() - this.fromProcess )
-                                * this.vSpace
-                                - this.yOffset
-                                + this.eventSize
-                                / 2, true );
-                // draw receive messages
-              } else { // needed for broadcast ... better idea ??? perhaps add
-                // more information in reader
-                connection( ( event.getPartnerLamportClock() - this.fromClock )
-                                * this.hSpace
-                                + 30
-                                - this.xOffset
-                                + this.eventSize
-                                / 2,
-                            ( event.getPartnerProcessId() - this.fromProcess )
-                                * this.vSpace
-                                - this.yOffset
-                                + this.eventSize
-                                / 2,
-                            x + this.eventSize / 2,
-                            y + this.eventSize / 2, true );
-              }
-            }
+            drawConnection( event );
           }
         }
       } catch( Exception exception ) {
@@ -483,13 +281,71 @@ class LogicalGraphPaintListener extends AbstractGraphPaintListener {
     this.gc.setLineWidth( 0 );
   }
 
+  void drawMarker( int mark, IEventMarker eventmarker, int x, int y ) {
+    final int[] markTypes = { IEventMarker.Diamond_Event, IEventMarker.Triangle_Event,
+                              IEventMarker.Ellipse_Event, IEventMarker.Rectangle_Event,
+                              IEventMarker.Cross_Event };
+    for (int i = 0; i < markTypes.length; i++) {
+      int markType = markTypes[i];
+      if( ( mark & markType ) == markType ) {
+        int[] poly = null;
+        this.gc.setLineStyle( eventmarker.getLineStyle( markType ) );
+        this.gc.setLineWidth( eventmarker.getLineWidth( markType ) );
+        if ( markType == IEventMarker.Diamond_Event ) {
+          poly = new int[] {
+            x + this.eventSize / 2,
+            y,
+            x,
+            y + this.eventSize / 2,
+            x + this.eventSize / 2,
+            y + this.eventSize,
+            x + this.eventSize,
+            y + this.eventSize / 2,
+            x + this.eventSize / 2,
+            y
+          };
+        } else if ( markType == IEventMarker.Triangle_Event ) {
+          poly = new int[] {
+            x + this.eventSize / 2,
+            y,
+            x,
+            y + this.eventSize,
+            x + this.eventSize,
+            y + this.eventSize,
+            x + this.eventSize / 2,
+            y
+          };
+        }
+        Color color = eventmarker.getBackgroundColor( markType );
+        if( color != null ) {
+          this.gc.setBackground( color );
+          if ( poly != null ) this.gc.fillPolygon( poly );
+          else if ( markType == IEventMarker.Ellipse_Event) this.gc.fillOval( x, y, this.eventSize, this.eventSize );
+          else if ( markType == IEventMarker.Rectangle_Event) this.gc.fillRectangle( x, y, this.eventSize, this.eventSize );
+        }
+        color = eventmarker.getForegroundColor( markType );
+        if( color != null ) {
+          this.gc.setForeground( color );
+          if ( poly != null ) this.gc.drawPolygon( poly );
+          else if ( markType == IEventMarker.Ellipse_Event) this.gc.drawOval( x, y, this.eventSize, this.eventSize );
+          else if ( markType == IEventMarker.Rectangle_Event) this.gc.drawRectangle( x, y, this.eventSize, this.eventSize );
+          else if ( markType == IEventMarker.Cross_Event) {
+            this.gc.drawLine( x, y, x + this.eventSize, y + this.eventSize );
+            this.gc.drawLine( x, y + this.eventSize, x + this.eventSize, y );
+          }
+        }
+      }
+    }
+  }
+
+
   private void drawHRuler() {
     this.gc.setForeground( this.gc.getDevice().getSystemColor( SWT.COLOR_BLACK ) );
     this.gc.setFont( this.smallFont );
     int y = this.height - 22;
     this.gc.setClipping( 31, this.height - 26, this.width - 31, 26 );
-    for( int i = this.fromClock, x = 30 - this.xOffset + this.eventSize / 2; i <= this.toClock; i++, x += this.hSpace )
-    {
+    for( int i = this.fromClock; i <= this.toClock; i++ ) {
+      int x = getXPosForClock( i );
       if( i % 10 == 0 ) {
         this.gc.drawLine( x, y, x, y + 7 );
       } else if( i % 5 == 0 ) {
@@ -521,8 +377,8 @@ class LogicalGraphPaintListener extends AbstractGraphPaintListener {
     this.gc.setForeground( this.line1 );
     LineType vLines = this.eventGraph.getVLines();
     if( vLines != LineType.Lines_None ) {
-      for( int i = this.fromClock, x = 30 - this.xOffset + this.eventSize / 2; i <= this.toClock; i++, x += this.hSpace )
-      {
+      for( int i = this.fromClock; i <= this.toClock; i++ ) {
+        int x = getXPosForClock( i );
         if( i % 10 == 0 ) {
           this.gc.setForeground( this.line10 );
           this.gc.drawLine( x, 1, x, this.height - 31 );
@@ -562,8 +418,8 @@ class LogicalGraphPaintListener extends AbstractGraphPaintListener {
                                    + ( this.width - 31 + this.eventSize )
                                    / this.hSpace
                                    + 2 );
-      this.toProcess = Math.min( this.numProc,
-                                 this.fromProcess
+      this.toProcessLine = Math.min( this.eventGraph.getLineToProcessMapping().size(),
+                                     this.fromProcessLine
                                      + ( this.height - 31 + this.eventSize )
                                      / this.vSpace
                                      + 2 );
@@ -611,41 +467,27 @@ class LogicalGraphPaintListener extends AbstractGraphPaintListener {
           && structuredSelection.getFirstElement() instanceof ILamportEvent )
       {
         ILamportEvent event = ( ILamportEvent )structuredSelection.getFirstElement();
-        if( this.fromProcess <= event.getProcessId()
-            && event.getProcessId() < this.toProcess )
-        {
-          if( this.fromClock <= event.getLamportClock()
-              && event.getLamportClock() <= this.toClock )
-          {
-            int x = ( event.getLamportClock() - this.fromClock )
-                    * this.hSpace
-                    + 30
-                    - this.xOffset;
-            int y = ( ( event.getProcessId() - this.fromProcess ) * this.vSpace )
-                    - this.yOffset;
-            this.gc.setForeground( this.selectionColor );
-            this.gc.setBackground( this.selectionColor );
-            this.gc.fillOval( x - this.eventSize / 4,
-                              y - this.eventSize / 4,
-                              this.eventSize + this.eventSize / 2,
-                              this.eventSize + this.eventSize / 2 );
-          }
+        if( this.fromClock <= event.getLamportClock()
+            && event.getLamportClock() <= this.toClock ) {
+          int x = getXPosForClock( event.getLamportClock() ) - this.eventSize/2;
+          int y = getYPosForProcId( event.getProcessId() ) - this.eventSize/2;
+          this.gc.setForeground( this.selectionColor );
+          this.gc.setBackground( this.selectionColor );
+          this.gc.fillOval( x - this.eventSize / 4,
+                            y - this.eventSize / 4,
+                            this.eventSize + this.eventSize / 2,
+                            this.eventSize + this.eventSize / 2 );
         }
       } else if( structuredSelection.getFirstElement() instanceof IProcess ) {
         IProcess process = ( IProcess )structuredSelection.getFirstElement();
-        if( this.fromProcess <= process.getProcessId()
-            && process.getProcessId() < this.toProcess )
-        {
-          int x = 0;
-          int y = ( ( process.getProcessId() - this.fromProcess ) * this.vSpace )
-                  - this.yOffset;
-          this.gc.setForeground( this.selectionColor );
-          this.gc.setBackground( this.selectionColor );
-          this.gc.fillRectangle( x,
-                                 y + this.eventSize / 4,
-                                 this.width,
-                                 this.eventSize / 2 );
-        }
+        int x = 0;
+        int y = getYPosForProcId( process.getProcessId() ) - this.eventSize/2;
+        this.gc.setForeground( this.selectionColor );
+        this.gc.setBackground( this.selectionColor );
+        this.gc.fillRectangle( x,
+                               y + this.eventSize / 4,
+                               this.width,
+                               this.eventSize / 2 );
       }
     }
   }
@@ -653,6 +495,7 @@ class LogicalGraphPaintListener extends AbstractGraphPaintListener {
   /**
    * @param selection
    */
+  @Override
   public void setHorizontal( final int selection ) {
     this.fromClock = selection / this.hSpace;
     this.xOffset = selection % this.hSpace - this.hSpace / 2;
@@ -665,6 +508,7 @@ class LogicalGraphPaintListener extends AbstractGraphPaintListener {
     return this.toClock - this.fromClock;
   }
 
+  @Override
   public void setTrace( final ITrace trace ) {
     this.trace = ( ILamportTrace )trace;
     if( this.trace != null ) {
@@ -694,9 +538,10 @@ class LogicalGraphPaintListener extends AbstractGraphPaintListener {
     setVertical( vsel );
   }
 
+  @Override
   public void print( final GC gc2 ) {
     this.gc = gc2;
-    gc.setLineAttributes( new LineAttributes(1) );
+    this.gc.setLineAttributes( new LineAttributes(1) );
     drawVRuler();
     drawHRuler();
     this.gc.setClipping( 31, 1, this.width - 31, this.height - 31 );
@@ -708,5 +553,25 @@ class LogicalGraphPaintListener extends AbstractGraphPaintListener {
   @Override
   public int getArrowSize() {
     return this.eventSize / 2;
+  }
+  
+  private int getXPosForClock( int lamportClock ) {
+    return ( lamportClock - this.fromClock ) * this.hSpace
+           + 30 - this.xOffset + this.eventSize / 2;
+  }
+
+  void drawConnection( ILamportEvent event ) {
+    if (event.getPartnerProcessId() != -1) {
+      int x1 = getXPosForClock( event.getLamportClock() );
+      int y1 = getYPosForProcId( event.getProcessId() );
+      int x2 = getXPosForClock( event.getPartnerLamportClock() );
+      int y2 = getYPosForProcId( event.getPartnerProcessId() );
+      if (y1 == y2) return;
+      if( event.getType() == EventType.SEND ) {
+        connection( x1, y1, x2, y2, true );
+      } else {
+        connection( x2, y2, x1, y1, true );
+      }
+    }
   }
 }

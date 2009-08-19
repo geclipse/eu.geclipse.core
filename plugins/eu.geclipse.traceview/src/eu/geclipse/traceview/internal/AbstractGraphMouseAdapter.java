@@ -15,6 +15,8 @@
 
 package eu.geclipse.traceview.internal;
 
+import java.util.SortedSet;
+
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.events.MouseAdapter;
@@ -65,22 +67,22 @@ public abstract class AbstractGraphMouseAdapter extends MouseAdapter {
     int yOffset = this.graph.getEventGraphPaintListener().getYOffset();
     int eventSize = this.graph.getEventGraphPaintListener().getEventSize();
     int vSpace = this.graph.getEventGraphPaintListener().getVSpace();
-    int numProc = this.graph.getTrace().getNumberOfProcesses();
-    int process = -1;
+    int numProcLines = this.graph.getLineToProcessMapping().size();
+    int processLine = -1;
     int tmp = yPos + yOffset - eventSize / 2;
     if( tmp % vSpace <= eventSize / 2 ) {
-      process = tmp / vSpace;
+      processLine = tmp / vSpace;
     }
     if( vSpace - ( tmp % vSpace ) <= eventSize / 2 ) {
-      process = tmp / vSpace + 1;
+      processLine = tmp / vSpace + 1;
     }
-    if ( process != -1 ) {
-      process += this.graph.getEventGraphPaintListener().getFromProcess();
-      if( process >= numProc ) {
-        process = -1;
+    if ( processLine != -1 ) {
+      processLine += this.graph.getEventGraphPaintListener().getFromProcessLine();
+      if( processLine >= numProcLines ) {
+        processLine = -1;
       }
     }
-    return process;
+    return processLine;
   }
 
   public Object getObjectForPosition( int xPos, int yPos ) {
@@ -90,8 +92,15 @@ public abstract class AbstractGraphMouseAdapter extends MouseAdapter {
     int y = getLineNumber( yPos );
     if( xPos > 30 && yPos > 0 && xPos < graphWidth && yPos < graphHeight ) {
       if( y != -1 ) {
-        int procNr = y; // TODO map line number to process number
-        obj = getObjectOnProcess( xPos, procNr );
+        Integer lastProc = null;
+        for (Integer proc : this.graph.getLineToProcessMapping().get( y ) ) {
+          lastProc = proc;
+          obj = getObjectOnProcess( xPos, proc.intValue() );
+          if ( obj != null ) break;
+        }
+        if ( obj == null ) {
+          obj = this.graph.getTrace().getProcess( lastProc.intValue() );
+        }
       } else {
         obj = this.graph.getTrace();
       }

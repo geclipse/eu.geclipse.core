@@ -48,8 +48,6 @@ public class LogicalGraphMouseAdapter extends AbstractGraphMouseAdapter {
     }
     if( x != -1 ) {
       obj = process.getEventByLamportClock( x );
-    } else {
-      obj = process;
     }
     return obj;
   }

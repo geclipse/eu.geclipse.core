@@ -15,6 +15,9 @@
 
 package eu.geclipse.traceview.internal;
 
+import java.util.Iterator;
+import java.util.SortedSet;
+
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceConverter;
 import org.eclipse.jface.util.IPropertyChangeListener;
@@ -47,8 +50,8 @@ public abstract class AbstractGraphPaintListener implements PaintListener {
   protected ScrollBar horizontalScrollBar;
   protected ScrollBar verticalScrollBar;
   // visible
-  protected int fromProcess = 0;
-  protected int toProcess = 0;
+  protected int fromProcessLine = 0;
+  protected int toProcessLine = 0;
   // size
   protected int hSpace = 6;
   protected int vSpace = 6;
@@ -113,7 +116,7 @@ public abstract class AbstractGraphPaintListener implements PaintListener {
    * @param selection
    */
   public void setVertical( final int selection ) {
-    this.fromProcess = selection / this.vSpace;
+    this.fromProcessLine = selection / this.vSpace;
     this.yOffset = selection % this.vSpace - this.vSpace / 2;
   }
 
@@ -342,19 +345,32 @@ public abstract class AbstractGraphPaintListener implements PaintListener {
     this.gc.setForeground( this.gc.getDevice().getSystemColor( SWT.COLOR_BLACK ) );
     this.gc.setFont( this.smallFont );
     this.gc.setClipping( 1, 1, 24, this.height - 31 );
-    for( int i = this.fromProcess, y = 0 - this.yOffset; i < this.toProcess; i++, y += this.vSpace ) {
+    for( int i = this.fromProcessLine, y = 0 - this.yOffset; i < this.toProcessLine; i++, y += this.vSpace ) {
       if (this.vSpace > 8 || i % 2 == 0) {
-        this.gc.drawText( Integer.toString( i ), 3, y - 7 + this.eventSize / 2 );
+        String text = getLabelForLine( i );
+        this.gc.drawText( text, 3, y - 7 + this.eventSize / 2 );
       }
       this.gc.drawLine( 20, y + this.eventSize / 2, 22, y + this.eventSize / 2 );
     }
+  }
+  
+  protected String getLabelForLine( int procLine ) {
+    SortedSet<Integer> procSet = this.eventGraph.getLineToProcessMapping().get( procLine );
+    StringBuilder sb = new StringBuilder();
+    Iterator<Integer> it = procSet.iterator();
+    sb.append( it.next() );
+    while (it.hasNext()) {
+      sb.append( ',' );
+      sb.append( it.next() );
+    }
+    return sb.toString();
   }
 
   protected void drawGridHLines() {
     this.gc.setForeground( this.line1 );
     LineType hLines = this.eventGraph.getHLines();
     if( hLines != LineType.Lines_None ) {
-      for( int i = this.fromProcess, y = 0 - this.yOffset + this.eventSize / 2; i < this.toProcess; i++, y += this.vSpace )
+      for( int i = this.fromProcessLine, y = 0 - this.yOffset + this.eventSize / 2; i < this.toProcessLine; i++, y += this.vSpace )
       {
         if( i % 10 == 0 ) {
           this.gc.setForeground( this.line10 );
@@ -495,8 +511,14 @@ public abstract class AbstractGraphPaintListener implements PaintListener {
     return this.yOffset;
   }
 
-  public int getFromProcess() {
-    return this.fromProcess;
+  public int getFromProcessLine() {
+    return this.fromProcessLine;
+  }
+
+  protected int getYPosForProcId( int procId ) {
+    int line = this.eventGraph.getProcessToLineMapping()[procId];
+    return ( line - this.fromProcessLine ) * this.vSpace
+           - this.yOffset + this.eventSize / 2;
   }
 
   public abstract void handleResize();

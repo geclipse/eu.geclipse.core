@@ -96,19 +96,16 @@ public class LogicalGraph extends AbstractGraphVisualization {
 
   @Override
   public IContributionItem[] getToolBarItems() {
+    IContributionItem[] superItems = super.getToolBarItems();
     Action hLinesAction = new Action( Messages.getString( "LogicalGraph.VLineStyle" ), //$NON-NLS-1$
-                                      Activator.getImageDescriptor( "icons/vertical.gif" ) ) //$NON-NLS-1$
-    {
-
+                                      Activator.getImageDescriptor( "icons/vertical.gif" ) ) { //$NON-NLS-1$
       @Override
       public void run() {
         changeLineStyle( -1 );
       }
     };
     Action vLinesAction = new Action( Messages.getString( "LogicalGraph.HLineStyle" ), //$NON-NLS-1$
-                                      Activator.getImageDescriptor( "icons/horizontal.gif" ) ) //$NON-NLS-1$
-    {
-
+                                      Activator.getImageDescriptor( "icons/horizontal.gif" ) ) { //$NON-NLS-1$
       @Override
       public void run() {
         changeLineStyle( 1 );
@@ -116,7 +113,6 @@ public class LogicalGraph extends AbstractGraphVisualization {
     };
     this.zoomin = new Action( Messages.getString( "LogicalGraph.ZoomIn" ), //$NON-NLS-1$
                               Activator.getImageDescriptor( "icons/zin.gif" ) ) { //$NON-NLS-1$
-
       @Override
       public void run() {
         zoomIn();
@@ -124,7 +120,6 @@ public class LogicalGraph extends AbstractGraphVisualization {
     };
     this.zoomout = new Action( Messages.getString( "LogicalGraph.ZoomOut" ), //$NON-NLS-1$
                                Activator.getImageDescriptor( "icons/zout.gif" ) ) { //$NON-NLS-1$
-
       @Override
       public void run() {
         zoomOut();
@@ -132,12 +127,13 @@ public class LogicalGraph extends AbstractGraphVisualization {
     };
     this.zoomout.setEnabled( false );
     Vector<IContributionItem> items = new Vector<IContributionItem>();
+    for ( IContributionItem item : superItems ) items.add( item );
     items.add( new ActionContributionItem( this.zoomin ) );
     items.add( new ActionContributionItem( this.zoomout ) );
     items.add( new ActionContributionItem( hLinesAction ) );
     items.add( new ActionContributionItem( vLinesAction ) );
     items.add( new Separator() );
-    return items.toArray( new IContributionItem[ 0 ] );
+    return items.toArray( new IContributionItem[ items.size() ] );
   }
 
   void zoomIn() {
