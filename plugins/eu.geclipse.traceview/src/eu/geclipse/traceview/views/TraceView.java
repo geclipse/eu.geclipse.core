@@ -59,6 +59,7 @@ import org.eclipse.ui.part.ViewPart;
 import eu.geclipse.traceview.ITrace;
 import eu.geclipse.traceview.ITraceReader;
 import eu.geclipse.traceview.ITraceView;
+import eu.geclipse.traceview.TraceVisualization;
 import eu.geclipse.traceview.internal.Activator;
 import eu.geclipse.traceview.internal.Messages;
 import eu.geclipse.traceview.views.internal.SelectionProvider;
@@ -300,5 +301,21 @@ public class TraceView extends ViewPart implements ITraceView {
         }
       }
     } );
+  }
+
+  public TraceVisualization getVisualisationForTrace( final ITrace trace ) {
+    final TraceVisualization[] vis = new TraceVisualization[1];
+    Display.getDefault().syncExec( new Runnable() {
+      public void run() {
+        CTabItem[] items = TraceView.this.cTabFolder.getItems();
+        for ( CTabItem item : items ) {
+          TraceVisPage visPage = ( TraceVisPage )item.getControl();
+          if (visPage.getTrace() == trace) {
+            vis[0] = visPage.getVisualization();
+          }
+        }
+      }
+    } );
+    return vis[0];
   }
 }

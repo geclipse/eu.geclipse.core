@@ -37,4 +37,6 @@ public interface ITraceView {
    * Redraws the contents of the trace view. Useful for marker that change.
    */
   void redraw();
+
+  TraceVisualization getVisualisationForTrace( ITrace trace );
 }

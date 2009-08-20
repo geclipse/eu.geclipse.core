@@ -358,10 +358,22 @@ public abstract class AbstractGraphPaintListener implements PaintListener {
     SortedSet<Integer> procSet = this.eventGraph.getLineToProcessMapping().get( procLine );
     StringBuilder sb = new StringBuilder();
     Iterator<Integer> it = procSet.iterator();
-    sb.append( it.next() );
-    while (it.hasNext()) {
-      sb.append( ',' );
-      sb.append( it.next() );
+    if (it.hasNext()) {
+      int procNr = it.next().intValue();
+      boolean hidden = this.eventGraph.hideProcess[procNr];
+      if (hidden) sb.append( '(' );
+      sb.append( procNr );
+      if (hidden) sb.append( ')' );
+      while (it.hasNext()) {
+        procNr = it.next().intValue();
+        hidden = this.eventGraph.hideProcess[procNr];
+        sb.append( ',' );
+        if (hidden) sb.append( '(' );
+        sb.append( procNr );
+        if (hidden) sb.append( ')' );
+      }
+    } else {
+      sb.append( 'X' );
     }
     return sb.toString();
   }
@@ -516,7 +528,8 @@ public abstract class AbstractGraphPaintListener implements PaintListener {
   }
 
   protected boolean procDrawingEnabled( int procId ) {
-    return this.eventGraph.getProcessToLineMapping()[procId] != -1;
+    return !this.eventGraph.hideProcess[procId] &&
+           this.eventGraph.getProcessToLineMapping()[procId] != -1;
   }
 
   protected int getYPosForProcId( int procId ) {

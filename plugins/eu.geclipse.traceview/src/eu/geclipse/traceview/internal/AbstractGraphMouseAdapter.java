@@ -16,6 +16,8 @@
 package eu.geclipse.traceview.internal;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.jface.viewers.ISelection;
@@ -44,34 +46,41 @@ public abstract class AbstractGraphMouseAdapter extends MouseAdapter {
    */
   @Override
   public void mouseDown( final MouseEvent e ) {
-    Object obj = getObjectForPosition( e.x, e.y );
-    if( e.button == 1 || e.button == 3 ) {
-      if( obj instanceof IEvent || obj instanceof IProcess
-          || obj instanceof ITrace ) {
-        try {
-          ISelection selection;
-          ISelectionProvider selectionProvider =
-            Activator.getDefault()
-              .getWorkbench()
-              .getActiveWorkbenchWindow()
-              .getActivePage()
-              .showView( "eu.geclipse.traceview.views.TraceView" )
-              .getSite()
-              .getSelectionProvider();
-          StructuredSelection oldSelection = ( StructuredSelection )selectionProvider.getSelection();
-          if (/*(e.stateMask & SWT.CTRL) != 0 && oldSelection != null*/ false) {
-            List oldSelectionList = new ArrayList( oldSelection.toList() );
-            oldSelectionList.add( obj );
-            selection = new StructuredSelection( oldSelectionList );
+    try {
+      Object[] objs = getObjectsForPosition( e.x, e.y );
+      if( objs.length != 0 && (e.button == 1 || e.button == 3) ) {
+        List<Object> objList = Arrays.asList( objs );
+        ISelection selection = null;
+        ISelectionProvider selectionProvider =
+          Activator.getDefault()
+            .getWorkbench()
+            .getActiveWorkbenchWindow()
+            .getActivePage()
+            .showView( "eu.geclipse.traceview.views.TraceView" )
+            .getSite()
+            .getSelectionProvider();
+        StructuredSelection oldSelection = ( StructuredSelection )selectionProvider.getSelection();
+        if ((e.stateMask & SWT.CTRL) != 0 && oldSelection != null) {
+          List oldSelectionList = new ArrayList( oldSelection.toList() );
+          if (!oldSelectionList.containsAll( objList )) {
+            if (e.button == 1) {
+              for (Object obj : objs){
+                if (!oldSelectionList.contains( obj )) oldSelectionList.add( obj );
+              }
+              selection = new StructuredSelection( oldSelectionList );
+            }
           } else {
-            selection = new StructuredSelection( obj );
+            selection = new StructuredSelection( oldSelectionList );
           }
-          selectionProvider.setSelection( selection );
-          this.graph.redraw();
-        } catch( PartInitException exception ) {
-          Activator.logException( exception );
         }
+        if (selection == null) {
+          selection = new StructuredSelection( objList );
+        }
+        selectionProvider.setSelection( selection );
+        this.graph.redraw();
       }
+    } catch( PartInitException exception ) {
+      Activator.logException( exception );
     }
   }
 
@@ -97,27 +106,29 @@ public abstract class AbstractGraphMouseAdapter extends MouseAdapter {
     return processLine;
   }
 
-  public Object getObjectForPosition( int xPos, int yPos ) {
-    Object obj = null;
+  public Object[] getObjectsForPosition( int xPos, int yPos ) {
+    List<Object> objList = new LinkedList<Object>();
     int graphWidth = this.graph.getClientArea().width;
     int graphHeight = this.graph.getClientArea().height - 30;
     int y = getLineNumber( yPos );
     if( xPos > 30 && yPos > 0 && xPos < graphWidth && yPos < graphHeight ) {
       if( y != -1 ) {
-        Integer lastProc = null;
         for (Integer proc : this.graph.getLineToProcessMapping().get( y ) ) {
-          lastProc = proc;
-          obj = getObjectOnProcess( xPos, proc.intValue() );
-          if ( obj != null ) break;
+          Object obj = getObjectOnProcess( xPos, proc.intValue() );
+          if ( obj != null ) {
+            objList.add( obj );
+          }
         }
-        if ( obj == null ) {
-          obj = this.graph.getTrace().getProcess( lastProc.intValue() );
+        if ( objList.size() == 0 ) {
+          for (Integer proc : this.graph.getLineToProcessMapping().get( y ) ) {
+            objList.add( this.graph.getTrace().getProcess( proc.intValue() ) );
+          }
         }
       } else {
-        obj = this.graph.getTrace();
+        objList.add( this.graph.getTrace() );
       }
     }
-    return obj;
+    return objList.toArray();
   }
 
   public abstract Object getObjectOnProcess( final int xPos, final int procNr );

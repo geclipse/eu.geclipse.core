@@ -82,6 +82,33 @@
             label="Cause Effect">
       </action>
    </objectContribution>
+   <objectContribution
+         id="eu.geclipse.traceview.internal.HideUnhideProcessActionID"
+         objectClass="eu.geclipse.traceview.IProcess">
+      <action
+            class="eu.geclipse.traceview.internal.HideUnhideProcessAction"
+            id="eu.geclipse.traceview.internal.HideUnhideProcessAction"
+            label="Hide / Unhide">
+      </action>
+   </objectContribution>
+   <objectContribution
+         id="eu.geclipse.traceview.internal.RemoveProcessActionID"
+         objectClass="eu.geclipse.traceview.IProcess">
+      <action
+            class="eu.geclipse.traceview.internal.RemoveProcessAction"
+            id="eu.geclipse.traceview.internal.RemoveProcessAction"
+            label="Remove">
+      </action>
+   </objectContribution>
+   <objectContribution
+         id="eu.geclipse.traceview.internal.GroupProcessActionID"
+         objectClass="eu.geclipse.traceview.IProcess">
+      <action
+            class="eu.geclipse.traceview.internal.GroupProcessAction"
+            id="eu.geclipse.traceview.internal.GroupProcessAction"
+            label="Group">
+      </action>
+   </objectContribution>
     </extension>
    <extension
          point="eu.geclipse.traceview.EventMarker">

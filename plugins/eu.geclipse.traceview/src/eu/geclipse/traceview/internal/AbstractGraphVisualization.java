@@ -16,6 +16,7 @@
 package eu.geclipse.traceview.internal;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.SortedSet;
@@ -55,6 +56,7 @@ public abstract class AbstractGraphVisualization extends TraceVisualization {
   protected ITrace trace;
   protected List<SortedSet<Integer>> lineToProcMapping;
   protected int[] procToLineMapping;
+  protected boolean[] hideProcess;
 
   public AbstractGraphVisualization( final Composite parent,
                        final int style,
@@ -122,25 +124,34 @@ public abstract class AbstractGraphVisualization extends TraceVisualization {
     DefaultToolTip toolTip = new DefaultToolTip( this ) {
       @Override
       protected boolean shouldCreateToolTip( final Event event ) {
-        Object obj = mouseAdapter.getObjectForPosition( event.x, event.y );
-        return obj != null && obj.toString() != null;
+        Object[] objs = mouseAdapter.getObjectsForPosition( event.x, event.y );
+        return objs.length != 0 && getText( objs ) != null;
       }
 
       @Override
       protected String getText( final Event event ) {
+        Object[] objs = mouseAdapter.getObjectsForPosition( event.x, event.y );
+        return getText( objs );
+      }
+
+      protected String getText( Object[] objs ) {
         String result = null;
-        Object obj = mouseAdapter.getObjectForPosition( event.x, event.y );
-        if( obj != null ) {
-          result = obj.toString();
-          if (obj instanceof IEvent) {
-            for( IEventMarker eventmarker : getEventMarkers() ) {
-              eventmarker.mark( (IEvent)obj );
-              String markerString = eventmarker.getToolTip();
-              if (markerString != null) {
-                result += '\n' + markerString;
+        if( objs.length != 0 ) {
+          result = "";
+          for (Object obj : objs) {
+            if (result.length() != 0) result += '\n';
+            if (obj.toString() != null) result += obj.toString();
+            if (obj instanceof IEvent) {
+              for( IEventMarker eventmarker : getEventMarkers() ) {
+                eventmarker.mark( (IEvent)obj );
+                String markerString = eventmarker.getToolTip();
+                if (markerString != null) {
+                  result += '\n' + markerString;
+                }
               }
             }
           }
+          if (result.length() == 0) result = null;
         }
         return result;
       }
@@ -232,7 +243,19 @@ public abstract class AbstractGraphVisualization extends TraceVisualization {
     updateLineToProcessMapping();
     redraw();
   }
-  
+
+  void removeEmptyLines() {
+    Iterator<SortedSet<Integer>> it = this.lineToProcMapping.iterator();
+    while (it.hasNext()) {
+      SortedSet<Integer> set = it.next();
+      if (set.isEmpty()) {
+        it.remove();
+      }
+    }
+    updateProcessToLineMapping();
+    redraw();
+  }
+
   void updateLineToProcessMapping() {
     this.lineToProcMapping = new LinkedList<SortedSet<Integer>>();
     for (int proc = 0; proc < this.procToLineMapping.length; proc++) {
@@ -250,8 +273,18 @@ public abstract class AbstractGraphVisualization extends TraceVisualization {
     return this.procToLineMapping;
   }
 
+  public boolean[] getHideProcess() {
+    return this.hideProcess;
+  }
+
+  public void setHideProcess( boolean[] hideProcess ) {
+    this.hideProcess = hideProcess;
+    redraw();
+  }
+
   void resetOrdering() {
     this.procToLineMapping = new int[this.trace.getNumberOfProcesses()];
+    this.hideProcess = new boolean[this.trace.getNumberOfProcesses()];
     for (int i = 0; i < this.trace.getNumberOfProcesses(); i++) {
       this.procToLineMapping[i] = i;
     }

@@ -186,4 +186,8 @@ public class TraceVisPage extends Composite {
   public void printTrace( final GC gc ) {
     this.visualization.printTrace(gc);
   }
+
+  public TraceVisualization getVisualization() {
+    return this.visualization;
+  }
 }
