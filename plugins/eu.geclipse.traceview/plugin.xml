@@ -83,28 +83,21 @@
       </action>
    </objectContribution>
    <objectContribution
-         id="eu.geclipse.traceview.internal.HideUnhideProcessActionID"
+         id="eu.geclipse.traceview.internal.ProcessActions"
          objectClass="eu.geclipse.traceview.IProcess">
       <action
             class="eu.geclipse.traceview.internal.HideUnhideProcessAction"
             id="eu.geclipse.traceview.internal.HideUnhideProcessAction"
             label="Hide / Unhide">
       </action>
-   </objectContribution>
-   <objectContribution
-         id="eu.geclipse.traceview.internal.RemoveProcessActionID"
-         objectClass="eu.geclipse.traceview.IProcess">
       <action
             class="eu.geclipse.traceview.internal.RemoveProcessAction"
             id="eu.geclipse.traceview.internal.RemoveProcessAction"
             label="Remove">
       </action>
-   </objectContribution>
-   <objectContribution
-         id="eu.geclipse.traceview.internal.GroupProcessActionID"
-         objectClass="eu.geclipse.traceview.IProcess">
       <action
             class="eu.geclipse.traceview.internal.GroupProcessAction"
+            enablesFor="2+"
             id="eu.geclipse.traceview.internal.GroupProcessAction"
             label="Group">
       </action>
