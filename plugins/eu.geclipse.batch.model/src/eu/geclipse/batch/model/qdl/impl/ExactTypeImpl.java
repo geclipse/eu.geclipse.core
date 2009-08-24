@@ -145,7 +145,7 @@ public class ExactTypeImpl extends EObjectImpl implements ExactType
    */
   public double getValue()
   {
-    return this.value;
+    return value;
   }
 
   /**
@@ -155,12 +155,12 @@ public class ExactTypeImpl extends EObjectImpl implements ExactType
    */
   public void setValue(double newValue)
   {
-    double oldValue = this.value;
-    this.value = newValue;
-    boolean oldValueESet = this.valueESet;
-    this.valueESet = true;
+    double oldValue = value;
+    value = newValue;
+    boolean oldValueESet = valueESet;
+    valueESet = true;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, QdlPackage.EXACT_TYPE__VALUE, oldValue, this.value, !oldValueESet));
+      eNotify(new ENotificationImpl(this, Notification.SET, QdlPackage.EXACT_TYPE__VALUE, oldValue, value, !oldValueESet));
   }
 
   /**
@@ -170,10 +170,10 @@ public class ExactTypeImpl extends EObjectImpl implements ExactType
    */
   public void unsetValue()
   {
-    double oldValue = this.value;
-    boolean oldValueESet = this.valueESet;
-    this.value = VALUE_EDEFAULT;
-    this.valueESet = false;
+    double oldValue = value;
+    boolean oldValueESet = valueESet;
+    value = VALUE_EDEFAULT;
+    valueESet = false;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.UNSET, QdlPackage.EXACT_TYPE__VALUE, oldValue, VALUE_EDEFAULT, oldValueESet));
   }
@@ -185,7 +185,7 @@ public class ExactTypeImpl extends EObjectImpl implements ExactType
    */
   public boolean isSetValue()
   {
-    return this.valueESet;
+    return valueESet;
   }
 
   /**
@@ -195,7 +195,7 @@ public class ExactTypeImpl extends EObjectImpl implements ExactType
    */
   public double getEpsilon()
   {
-    return this.epsilon;
+    return epsilon;
   }
 
   /**
@@ -205,12 +205,12 @@ public class ExactTypeImpl extends EObjectImpl implements ExactType
    */
   public void setEpsilon(double newEpsilon)
   {
-    double oldEpsilon = this.epsilon;
-    this.epsilon = newEpsilon;
-    boolean oldEpsilonESet = this.epsilonESet;
-    this.epsilonESet = true;
+    double oldEpsilon = epsilon;
+    epsilon = newEpsilon;
+    boolean oldEpsilonESet = epsilonESet;
+    epsilonESet = true;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, QdlPackage.EXACT_TYPE__EPSILON, oldEpsilon, this.epsilon, !oldEpsilonESet));
+      eNotify(new ENotificationImpl(this, Notification.SET, QdlPackage.EXACT_TYPE__EPSILON, oldEpsilon, epsilon, !oldEpsilonESet));
   }
 
   /**
@@ -220,10 +220,10 @@ public class ExactTypeImpl extends EObjectImpl implements ExactType
    */
   public void unsetEpsilon()
   {
-    double oldEpsilon = this.epsilon;
-    boolean oldEpsilonESet = this.epsilonESet;
-    this.epsilon = EPSILON_EDEFAULT;
-    this.epsilonESet = false;
+    double oldEpsilon = epsilon;
+    boolean oldEpsilonESet = epsilonESet;
+    epsilon = EPSILON_EDEFAULT;
+    epsilonESet = false;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.UNSET, QdlPackage.EXACT_TYPE__EPSILON, oldEpsilon, EPSILON_EDEFAULT, oldEpsilonESet));
   }
@@ -235,7 +235,7 @@ public class ExactTypeImpl extends EObjectImpl implements ExactType
    */
   public boolean isSetEpsilon()
   {
-    return this.epsilonESet;
+    return epsilonESet;
   }
 
   /**
@@ -245,11 +245,11 @@ public class ExactTypeImpl extends EObjectImpl implements ExactType
    */
   public FeatureMap getAnyAttribute()
   {
-    if (this.anyAttribute == null)
+    if (anyAttribute == null)
     {
-      this.anyAttribute = new BasicFeatureMap(this, QdlPackage.EXACT_TYPE__ANY_ATTRIBUTE);
+      anyAttribute = new BasicFeatureMap(this, QdlPackage.EXACT_TYPE__ANY_ATTRIBUTE);
     }
-    return this.anyAttribute;
+    return anyAttribute;
   }
 
   /**
@@ -350,7 +350,7 @@ public class ExactTypeImpl extends EObjectImpl implements ExactType
       case QdlPackage.EXACT_TYPE__EPSILON:
         return isSetEpsilon();
       case QdlPackage.EXACT_TYPE__ANY_ATTRIBUTE:
-        return this.anyAttribute != null && !this.anyAttribute.isEmpty();
+        return anyAttribute != null && !anyAttribute.isEmpty();
     }
     return super.eIsSet(featureID);
   }
@@ -366,12 +366,12 @@ public class ExactTypeImpl extends EObjectImpl implements ExactType
     if (eIsProxy()) return super.toString();
 
     StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (value: "); //$NON-NLS-1$
-    if (this.valueESet) result.append(this.value); else result.append("<unset>"); //$NON-NLS-1$
-    result.append(", epsilon: "); //$NON-NLS-1$
-    if (this.epsilonESet) result.append(this.epsilon); else result.append("<unset>"); //$NON-NLS-1$
-    result.append(", anyAttribute: "); //$NON-NLS-1$
-    result.append(this.anyAttribute);
+    result.append(" (value: ");
+    if (valueESet) result.append(value); else result.append("<unset>");
+    result.append(", epsilon: ");
+    if (epsilonESet) result.append(epsilon); else result.append("<unset>");
+    result.append(", anyAttribute: ");
+    result.append(anyAttribute);
     result.append(')');
     return result.toString();
   }

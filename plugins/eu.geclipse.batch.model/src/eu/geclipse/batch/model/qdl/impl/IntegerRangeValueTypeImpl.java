@@ -137,7 +137,7 @@ public class IntegerRangeValueTypeImpl extends EObjectImpl implements IntegerRan
    */
   public IntegerBoundaryType getUpperBoundedRange()
   {
-    return this.upperBoundedRange;
+    return upperBoundedRange;
   }
 
   /**
@@ -147,8 +147,8 @@ public class IntegerRangeValueTypeImpl extends EObjectImpl implements IntegerRan
    */
   public NotificationChain basicSetUpperBoundedRange(IntegerBoundaryType newUpperBoundedRange, NotificationChain msgs)
   {
-    IntegerBoundaryType oldUpperBoundedRange = this.upperBoundedRange;
-    this.upperBoundedRange = newUpperBoundedRange;
+    IntegerBoundaryType oldUpperBoundedRange = upperBoundedRange;
+    upperBoundedRange = newUpperBoundedRange;
     if (eNotificationRequired())
     {
       ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, QdlPackage.INTEGER_RANGE_VALUE_TYPE__UPPER_BOUNDED_RANGE, oldUpperBoundedRange, newUpperBoundedRange);
@@ -164,11 +164,11 @@ public class IntegerRangeValueTypeImpl extends EObjectImpl implements IntegerRan
    */
   public void setUpperBoundedRange(IntegerBoundaryType newUpperBoundedRange)
   {
-    if (newUpperBoundedRange != this.upperBoundedRange)
+    if (newUpperBoundedRange != upperBoundedRange)
     {
       NotificationChain msgs = null;
-      if (this.upperBoundedRange != null)
-        msgs = ((InternalEObject)this.upperBoundedRange).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - QdlPackage.INTEGER_RANGE_VALUE_TYPE__UPPER_BOUNDED_RANGE, null, msgs);
+      if (upperBoundedRange != null)
+        msgs = ((InternalEObject)upperBoundedRange).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - QdlPackage.INTEGER_RANGE_VALUE_TYPE__UPPER_BOUNDED_RANGE, null, msgs);
       if (newUpperBoundedRange != null)
         msgs = ((InternalEObject)newUpperBoundedRange).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - QdlPackage.INTEGER_RANGE_VALUE_TYPE__UPPER_BOUNDED_RANGE, null, msgs);
       msgs = basicSetUpperBoundedRange(newUpperBoundedRange, msgs);
@@ -185,7 +185,7 @@ public class IntegerRangeValueTypeImpl extends EObjectImpl implements IntegerRan
    */
   public IntegerBoundaryType getLowerBoundedRange()
   {
-    return this.lowerBoundedRange;
+    return lowerBoundedRange;
   }
 
   /**
@@ -195,8 +195,8 @@ public class IntegerRangeValueTypeImpl extends EObjectImpl implements IntegerRan
    */
   public NotificationChain basicSetLowerBoundedRange(IntegerBoundaryType newLowerBoundedRange, NotificationChain msgs)
   {
-    IntegerBoundaryType oldLowerBoundedRange = this.lowerBoundedRange;
-    this.lowerBoundedRange = newLowerBoundedRange;
+    IntegerBoundaryType oldLowerBoundedRange = lowerBoundedRange;
+    lowerBoundedRange = newLowerBoundedRange;
     if (eNotificationRequired())
     {
       ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, QdlPackage.INTEGER_RANGE_VALUE_TYPE__LOWER_BOUNDED_RANGE, oldLowerBoundedRange, newLowerBoundedRange);
@@ -212,11 +212,11 @@ public class IntegerRangeValueTypeImpl extends EObjectImpl implements IntegerRan
    */
   public void setLowerBoundedRange(IntegerBoundaryType newLowerBoundedRange)
   {
-    if (newLowerBoundedRange != this.lowerBoundedRange)
+    if (newLowerBoundedRange != lowerBoundedRange)
     {
       NotificationChain msgs = null;
-      if (this.lowerBoundedRange != null)
-        msgs = ((InternalEObject)this.lowerBoundedRange).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - QdlPackage.INTEGER_RANGE_VALUE_TYPE__LOWER_BOUNDED_RANGE, null, msgs);
+      if (lowerBoundedRange != null)
+        msgs = ((InternalEObject)lowerBoundedRange).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - QdlPackage.INTEGER_RANGE_VALUE_TYPE__LOWER_BOUNDED_RANGE, null, msgs);
       if (newLowerBoundedRange != null)
         msgs = ((InternalEObject)newLowerBoundedRange).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - QdlPackage.INTEGER_RANGE_VALUE_TYPE__LOWER_BOUNDED_RANGE, null, msgs);
       msgs = basicSetLowerBoundedRange(newLowerBoundedRange, msgs);
@@ -233,11 +233,11 @@ public class IntegerRangeValueTypeImpl extends EObjectImpl implements IntegerRan
    */
   public EList<IntegerExactType> getExact()
   {
-    if (this.exact == null)
+    if (exact == null)
     {
-      this.exact = new EObjectContainmentEList<IntegerExactType>(IntegerExactType.class, this, QdlPackage.INTEGER_RANGE_VALUE_TYPE__EXACT);
+      exact = new EObjectContainmentEList<IntegerExactType>(IntegerExactType.class, this, QdlPackage.INTEGER_RANGE_VALUE_TYPE__EXACT);
     }
-    return this.exact;
+    return exact;
   }
 
   /**
@@ -247,11 +247,11 @@ public class IntegerRangeValueTypeImpl extends EObjectImpl implements IntegerRan
    */
   public EList<IntegerRangeType> getRange()
   {
-    if (this.range == null)
+    if (range == null)
     {
-      this.range = new EObjectContainmentEList<IntegerRangeType>(IntegerRangeType.class, this, QdlPackage.INTEGER_RANGE_VALUE_TYPE__RANGE);
+      range = new EObjectContainmentEList<IntegerRangeType>(IntegerRangeType.class, this, QdlPackage.INTEGER_RANGE_VALUE_TYPE__RANGE);
     }
-    return this.range;
+    return range;
   }
 
   /**
@@ -261,11 +261,11 @@ public class IntegerRangeValueTypeImpl extends EObjectImpl implements IntegerRan
    */
   public FeatureMap getAnyAttribute()
   {
-    if (this.anyAttribute == null)
+    if (anyAttribute == null)
     {
-      this.anyAttribute = new BasicFeatureMap(this, QdlPackage.INTEGER_RANGE_VALUE_TYPE__ANY_ATTRIBUTE);
+      anyAttribute = new BasicFeatureMap(this, QdlPackage.INTEGER_RANGE_VALUE_TYPE__ANY_ATTRIBUTE);
     }
-    return this.anyAttribute;
+    return anyAttribute;
   }
 
   /**
@@ -389,15 +389,15 @@ public class IntegerRangeValueTypeImpl extends EObjectImpl implements IntegerRan
     switch (featureID)
     {
       case QdlPackage.INTEGER_RANGE_VALUE_TYPE__UPPER_BOUNDED_RANGE:
-        return this.upperBoundedRange != null;
+        return upperBoundedRange != null;
       case QdlPackage.INTEGER_RANGE_VALUE_TYPE__LOWER_BOUNDED_RANGE:
-        return this.lowerBoundedRange != null;
+        return lowerBoundedRange != null;
       case QdlPackage.INTEGER_RANGE_VALUE_TYPE__EXACT:
-        return this.exact != null && !this.exact.isEmpty();
+        return exact != null && !exact.isEmpty();
       case QdlPackage.INTEGER_RANGE_VALUE_TYPE__RANGE:
-        return this.range != null && !this.range.isEmpty();
+        return range != null && !range.isEmpty();
       case QdlPackage.INTEGER_RANGE_VALUE_TYPE__ANY_ATTRIBUTE:
-        return this.anyAttribute != null && !this.anyAttribute.isEmpty();
+        return anyAttribute != null && !anyAttribute.isEmpty();
     }
     return super.eIsSet(featureID);
   }
@@ -413,8 +413,8 @@ public class IntegerRangeValueTypeImpl extends EObjectImpl implements IntegerRan
     if (eIsProxy()) return super.toString();
 
     StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (anyAttribute: "); //$NON-NLS-1$
-    result.append(this.anyAttribute);
+    result.append(" (anyAttribute: ");
+    result.append(anyAttribute);
     result.append(')');
     return result.toString();
   }

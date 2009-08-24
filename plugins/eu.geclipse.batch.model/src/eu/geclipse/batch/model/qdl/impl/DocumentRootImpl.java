@@ -180,11 +180,11 @@ public class DocumentRootImpl extends EObjectImpl implements DocumentRoot
    */
   public FeatureMap getMixed()
   {
-    if (this.mixed == null)
+    if (mixed == null)
     {
-      this.mixed = new BasicFeatureMap(this, QdlPackage.DOCUMENT_ROOT__MIXED);
+      mixed = new BasicFeatureMap(this, QdlPackage.DOCUMENT_ROOT__MIXED);
     }
-    return this.mixed;
+    return mixed;
   }
 
   /**
@@ -194,11 +194,11 @@ public class DocumentRootImpl extends EObjectImpl implements DocumentRoot
    */
   public EMap<String, String> getXMLNSPrefixMap()
   {
-    if (this.xMLNSPrefixMap == null)
+    if (xMLNSPrefixMap == null)
     {
-      this.xMLNSPrefixMap = new EcoreEMap<String,String>(EcorePackage.Literals.ESTRING_TO_STRING_MAP_ENTRY, EStringToStringMapEntryImpl.class, this, QdlPackage.DOCUMENT_ROOT__XMLNS_PREFIX_MAP);
+      xMLNSPrefixMap = new EcoreEMap<String,String>(EcorePackage.Literals.ESTRING_TO_STRING_MAP_ENTRY, EStringToStringMapEntryImpl.class, this, QdlPackage.DOCUMENT_ROOT__XMLNS_PREFIX_MAP);
     }
-    return this.xMLNSPrefixMap;
+    return xMLNSPrefixMap;
   }
 
   /**
@@ -208,11 +208,11 @@ public class DocumentRootImpl extends EObjectImpl implements DocumentRoot
    */
   public EMap<String, String> getXSISchemaLocation()
   {
-    if (this.xSISchemaLocation == null)
+    if (xSISchemaLocation == null)
     {
-      this.xSISchemaLocation = new EcoreEMap<String,String>(EcorePackage.Literals.ESTRING_TO_STRING_MAP_ENTRY, EStringToStringMapEntryImpl.class, this, QdlPackage.DOCUMENT_ROOT__XSI_SCHEMA_LOCATION);
+      xSISchemaLocation = new EcoreEMap<String,String>(EcorePackage.Literals.ESTRING_TO_STRING_MAP_ENTRY, EStringToStringMapEntryImpl.class, this, QdlPackage.DOCUMENT_ROOT__XSI_SCHEMA_LOCATION);
     }
-    return this.xSISchemaLocation;
+    return xSISchemaLocation;
   }
 
   /**
@@ -775,11 +775,11 @@ public class DocumentRootImpl extends EObjectImpl implements DocumentRoot
     switch (featureID)
     {
       case QdlPackage.DOCUMENT_ROOT__MIXED:
-        return this.mixed != null && !this.mixed.isEmpty();
+        return mixed != null && !mixed.isEmpty();
       case QdlPackage.DOCUMENT_ROOT__XMLNS_PREFIX_MAP:
-        return this.xMLNSPrefixMap != null && !this.xMLNSPrefixMap.isEmpty();
+        return xMLNSPrefixMap != null && !xMLNSPrefixMap.isEmpty();
       case QdlPackage.DOCUMENT_ROOT__XSI_SCHEMA_LOCATION:
-        return this.xSISchemaLocation != null && !this.xSISchemaLocation.isEmpty();
+        return xSISchemaLocation != null && !xSISchemaLocation.isEmpty();
       case QdlPackage.DOCUMENT_ROOT__ALLOWED_VIRTUAL_ORGANIZATIONS:
         return getAllowedVirtualOrganizations() != null;
       case QdlPackage.DOCUMENT_ROOT__ASSIGNED_RESOURCES:
@@ -822,7 +822,7 @@ public class DocumentRootImpl extends EObjectImpl implements DocumentRoot
 
     StringBuffer result = new StringBuffer(super.toString());
     result.append(" (mixed: ");
-    result.append(this.mixed);
+    result.append(mixed);
     result.append(')');
     return result.toString();
   }

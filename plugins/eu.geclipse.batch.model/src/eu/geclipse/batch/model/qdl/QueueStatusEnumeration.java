@@ -109,7 +109,7 @@ public enum QueueStatusEnumeration implements Enumerator
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @param literal 
-   * @return return
+   * @return 
    * @generated
    */
   public static QueueStatusEnumeration get(String literal)
@@ -130,7 +130,7 @@ public enum QueueStatusEnumeration implements Enumerator
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @param name 
-   * @return return
+   * @return 
    * @generated
    */
   public static QueueStatusEnumeration getByName(String name)
@@ -151,7 +151,7 @@ public enum QueueStatusEnumeration implements Enumerator
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @param value 
-   * @return return
+   * @return 
    * @generated
    */
   public static QueueStatusEnumeration get(int value)

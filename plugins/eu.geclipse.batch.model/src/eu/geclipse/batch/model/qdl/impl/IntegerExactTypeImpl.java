@@ -142,7 +142,7 @@ public class IntegerExactTypeImpl extends EObjectImpl implements IntegerExactTyp
    */
   public int getValue()
   {
-    return this.value;
+    return value;
   }
 
   /**
@@ -152,12 +152,12 @@ public class IntegerExactTypeImpl extends EObjectImpl implements IntegerExactTyp
    */
   public void setValue(int newValue)
   {
-    int oldValue = this.value;
-    this.value = newValue;
-    boolean oldValueESet = this.valueESet;
-    this.valueESet = true;
+    int oldValue = value;
+    value = newValue;
+    boolean oldValueESet = valueESet;
+    valueESet = true;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, QdlPackage.INTEGER_EXACT_TYPE__VALUE, oldValue, this.value, !oldValueESet));
+      eNotify(new ENotificationImpl(this, Notification.SET, QdlPackage.INTEGER_EXACT_TYPE__VALUE, oldValue, value, !oldValueESet));
   }
 
   /**
@@ -167,10 +167,10 @@ public class IntegerExactTypeImpl extends EObjectImpl implements IntegerExactTyp
    */
   public void unsetValue()
   {
-    int oldValue = this.value;
-    boolean oldValueESet = this.valueESet;
-    this.value = VALUE_EDEFAULT;
-    this.valueESet = false;
+    int oldValue = value;
+    boolean oldValueESet = valueESet;
+    value = VALUE_EDEFAULT;
+    valueESet = false;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.UNSET, QdlPackage.INTEGER_EXACT_TYPE__VALUE, oldValue, VALUE_EDEFAULT, oldValueESet));
   }
@@ -182,7 +182,7 @@ public class IntegerExactTypeImpl extends EObjectImpl implements IntegerExactTyp
    */
   public boolean isSetValue()
   {
-    return this.valueESet;
+    return valueESet;
   }
 
   /**
@@ -192,7 +192,7 @@ public class IntegerExactTypeImpl extends EObjectImpl implements IntegerExactTyp
    */
   public int getEpsilon()
   {
-    return this.epsilon;
+    return epsilon;
   }
 
   /**
@@ -202,12 +202,12 @@ public class IntegerExactTypeImpl extends EObjectImpl implements IntegerExactTyp
    */
   public void setEpsilon(int newEpsilon)
   {
-    int oldEpsilon = this.epsilon;
-    this.epsilon = newEpsilon;
-    boolean oldEpsilonESet = this.epsilonESet;
-    this.epsilonESet = true;
+    int oldEpsilon = epsilon;
+    epsilon = newEpsilon;
+    boolean oldEpsilonESet = epsilonESet;
+    epsilonESet = true;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, QdlPackage.INTEGER_EXACT_TYPE__EPSILON, oldEpsilon, this.epsilon, !oldEpsilonESet));
+      eNotify(new ENotificationImpl(this, Notification.SET, QdlPackage.INTEGER_EXACT_TYPE__EPSILON, oldEpsilon, epsilon, !oldEpsilonESet));
   }
 
   /**
@@ -217,10 +217,10 @@ public class IntegerExactTypeImpl extends EObjectImpl implements IntegerExactTyp
    */
   public void unsetEpsilon()
   {
-    int oldEpsilon = this.epsilon;
-    boolean oldEpsilonESet = this.epsilonESet;
-    this.epsilon = EPSILON_EDEFAULT;
-    this.epsilonESet = false;
+    int oldEpsilon = epsilon;
+    boolean oldEpsilonESet = epsilonESet;
+    epsilon = EPSILON_EDEFAULT;
+    epsilonESet = false;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.UNSET, QdlPackage.INTEGER_EXACT_TYPE__EPSILON, oldEpsilon, EPSILON_EDEFAULT, oldEpsilonESet));
   }
@@ -232,7 +232,7 @@ public class IntegerExactTypeImpl extends EObjectImpl implements IntegerExactTyp
    */
   public boolean isSetEpsilon()
   {
-    return this.epsilonESet;
+    return epsilonESet;
   }
 
   /**
@@ -242,11 +242,11 @@ public class IntegerExactTypeImpl extends EObjectImpl implements IntegerExactTyp
    */
   public FeatureMap getAnyAttribute()
   {
-    if (this.anyAttribute == null)
+    if (anyAttribute == null)
     {
-      this.anyAttribute = new BasicFeatureMap(this, QdlPackage.INTEGER_EXACT_TYPE__ANY_ATTRIBUTE);
+      anyAttribute = new BasicFeatureMap(this, QdlPackage.INTEGER_EXACT_TYPE__ANY_ATTRIBUTE);
     }
-    return this.anyAttribute;
+    return anyAttribute;
   }
 
   /**
@@ -347,7 +347,7 @@ public class IntegerExactTypeImpl extends EObjectImpl implements IntegerExactTyp
       case QdlPackage.INTEGER_EXACT_TYPE__EPSILON:
         return isSetEpsilon();
       case QdlPackage.INTEGER_EXACT_TYPE__ANY_ATTRIBUTE:
-        return this.anyAttribute != null && !this.anyAttribute.isEmpty();
+        return anyAttribute != null && !anyAttribute.isEmpty();
     }
     return super.eIsSet(featureID);
   }
@@ -363,12 +363,12 @@ public class IntegerExactTypeImpl extends EObjectImpl implements IntegerExactTyp
     if (eIsProxy()) return super.toString();
 
     StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (value: "); //$NON-NLS-1$
-    if (this.valueESet) result.append(this.value); else result.append("<unset>"); //$NON-NLS-1$
-    result.append(", epsilon: "); //$NON-NLS-1$
-    if (this.epsilonESet) result.append(this.epsilon); else result.append("<unset>"); //$NON-NLS-1$
-    result.append(", anyAttribute: "); //$NON-NLS-1$
-    result.append(this.anyAttribute);
+    result.append(" (value: ");
+    if (valueESet) result.append(value); else result.append("<unset>");
+    result.append(", epsilon: ");
+    if (epsilonESet) result.append(epsilon); else result.append("<unset>");
+    result.append(", anyAttribute: ");
+    result.append(anyAttribute);
     result.append(')');
     return result.toString();
   }

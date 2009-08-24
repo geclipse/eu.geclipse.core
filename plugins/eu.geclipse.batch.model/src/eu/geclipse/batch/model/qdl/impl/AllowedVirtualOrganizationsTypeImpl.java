@@ -82,11 +82,11 @@ public class AllowedVirtualOrganizationsTypeImpl extends EObjectImpl implements 
    */
   public EList<String> getVOName()
   {
-    if (this.vOName == null)
+    if (vOName == null)
     {
-      this.vOName = new EDataTypeEList<String>(String.class, this, QdlPackage.ALLOWED_VIRTUAL_ORGANIZATIONS_TYPE__VO_NAME);
+      vOName = new EDataTypeEList<String>(String.class, this, QdlPackage.ALLOWED_VIRTUAL_ORGANIZATIONS_TYPE__VO_NAME);
     }
-    return this.vOName;
+    return vOName;
   }
 
   /**
@@ -152,7 +152,7 @@ public class AllowedVirtualOrganizationsTypeImpl extends EObjectImpl implements 
     switch (featureID)
     {
       case QdlPackage.ALLOWED_VIRTUAL_ORGANIZATIONS_TYPE__VO_NAME:
-        return this.vOName != null && !this.vOName.isEmpty();
+        return vOName != null && !vOName.isEmpty();
     }
     return super.eIsSet(featureID);
   }
@@ -168,8 +168,8 @@ public class AllowedVirtualOrganizationsTypeImpl extends EObjectImpl implements 
     if (eIsProxy()) return super.toString();
 
     StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (vOName: "); //$NON-NLS-1$
-    result.append(this.vOName);
+    result.append(" (vOName: ");
+    result.append(vOName);
     result.append(')');
     return result.toString();
   }

@@ -108,8 +108,6 @@ public enum QueueTypeEnumeration implements Enumerator
    * Returns the '<em><b>Queue Type Enumeration</b></em>' literal with the specified literal value.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param literal 
-   * @return return
    * @generated
    */
   public static QueueTypeEnumeration get(String literal)
@@ -129,8 +127,6 @@ public enum QueueTypeEnumeration implements Enumerator
    * Returns the '<em><b>Queue Type Enumeration</b></em>' literal with the specified name.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param name name
-   * @return return
    * @generated
    */
   public static QueueTypeEnumeration getByName(String name)
@@ -150,8 +146,6 @@ public enum QueueTypeEnumeration implements Enumerator
    * Returns the '<em><b>Queue Type Enumeration</b></em>' literal with the specified integer value.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value 
-   * @return return
    * @generated
    */
   public static QueueTypeEnumeration get(int value)

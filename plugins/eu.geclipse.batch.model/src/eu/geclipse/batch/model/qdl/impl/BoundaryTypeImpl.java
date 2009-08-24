@@ -145,7 +145,7 @@ public class BoundaryTypeImpl extends EObjectImpl implements BoundaryType
    */
   public double getValue()
   {
-    return this.value;
+    return value;
   }
 
   /**
@@ -155,12 +155,12 @@ public class BoundaryTypeImpl extends EObjectImpl implements BoundaryType
    */
   public void setValue(double newValue)
   {
-    double oldValue = this.value;
-    this.value = newValue;
-    boolean oldValueESet = this.valueESet;
-    this.valueESet = true;
+    double oldValue = value;
+    value = newValue;
+    boolean oldValueESet = valueESet;
+    valueESet = true;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, QdlPackage.BOUNDARY_TYPE__VALUE, oldValue, this.value, !oldValueESet));
+      eNotify(new ENotificationImpl(this, Notification.SET, QdlPackage.BOUNDARY_TYPE__VALUE, oldValue, value, !oldValueESet));
   }
 
   /**
@@ -170,10 +170,10 @@ public class BoundaryTypeImpl extends EObjectImpl implements BoundaryType
    */
   public void unsetValue()
   {
-    double oldValue = this.value;
-    boolean oldValueESet = this.valueESet;
-    this.value = VALUE_EDEFAULT;
-    this.valueESet = false;
+    double oldValue = value;
+    boolean oldValueESet = valueESet;
+    value = VALUE_EDEFAULT;
+    valueESet = false;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.UNSET, QdlPackage.BOUNDARY_TYPE__VALUE, oldValue, VALUE_EDEFAULT, oldValueESet));
   }
@@ -185,7 +185,7 @@ public class BoundaryTypeImpl extends EObjectImpl implements BoundaryType
    */
   public boolean isSetValue()
   {
-    return this.valueESet;
+    return valueESet;
   }
 
   /**
@@ -195,7 +195,7 @@ public class BoundaryTypeImpl extends EObjectImpl implements BoundaryType
    */
   public boolean isExclusiveBound()
   {
-    return this.exclusiveBound;
+    return exclusiveBound;
   }
 
   /**
@@ -205,12 +205,12 @@ public class BoundaryTypeImpl extends EObjectImpl implements BoundaryType
    */
   public void setExclusiveBound(boolean newExclusiveBound)
   {
-    boolean oldExclusiveBound = this.exclusiveBound;
-    this.exclusiveBound = newExclusiveBound;
-    boolean oldExclusiveBoundESet = this.exclusiveBoundESet;
-    this.exclusiveBoundESet = true;
+    boolean oldExclusiveBound = exclusiveBound;
+    exclusiveBound = newExclusiveBound;
+    boolean oldExclusiveBoundESet = exclusiveBoundESet;
+    exclusiveBoundESet = true;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, QdlPackage.BOUNDARY_TYPE__EXCLUSIVE_BOUND, oldExclusiveBound, this.exclusiveBound, !oldExclusiveBoundESet));
+      eNotify(new ENotificationImpl(this, Notification.SET, QdlPackage.BOUNDARY_TYPE__EXCLUSIVE_BOUND, oldExclusiveBound, exclusiveBound, !oldExclusiveBoundESet));
   }
 
   /**
@@ -220,10 +220,10 @@ public class BoundaryTypeImpl extends EObjectImpl implements BoundaryType
    */
   public void unsetExclusiveBound()
   {
-    boolean oldExclusiveBound = this.exclusiveBound;
-    boolean oldExclusiveBoundESet = this.exclusiveBoundESet;
-    this.exclusiveBound = EXCLUSIVE_BOUND_EDEFAULT;
-    this.exclusiveBoundESet = false;
+    boolean oldExclusiveBound = exclusiveBound;
+    boolean oldExclusiveBoundESet = exclusiveBoundESet;
+    exclusiveBound = EXCLUSIVE_BOUND_EDEFAULT;
+    exclusiveBoundESet = false;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.UNSET, QdlPackage.BOUNDARY_TYPE__EXCLUSIVE_BOUND, oldExclusiveBound, EXCLUSIVE_BOUND_EDEFAULT, oldExclusiveBoundESet));
   }
@@ -235,7 +235,7 @@ public class BoundaryTypeImpl extends EObjectImpl implements BoundaryType
    */
   public boolean isSetExclusiveBound()
   {
-    return this.exclusiveBoundESet;
+    return exclusiveBoundESet;
   }
 
   /**
@@ -245,11 +245,11 @@ public class BoundaryTypeImpl extends EObjectImpl implements BoundaryType
    */
   public FeatureMap getAnyAttribute()
   {
-    if (this.anyAttribute == null)
+    if (anyAttribute == null)
     {
-      this.anyAttribute = new BasicFeatureMap(this, QdlPackage.BOUNDARY_TYPE__ANY_ATTRIBUTE);
+      anyAttribute = new BasicFeatureMap(this, QdlPackage.BOUNDARY_TYPE__ANY_ATTRIBUTE);
     }
-    return this.anyAttribute;
+    return anyAttribute;
   }
 
   /**
@@ -350,7 +350,7 @@ public class BoundaryTypeImpl extends EObjectImpl implements BoundaryType
       case QdlPackage.BOUNDARY_TYPE__EXCLUSIVE_BOUND:
         return isSetExclusiveBound();
       case QdlPackage.BOUNDARY_TYPE__ANY_ATTRIBUTE:
-        return this.anyAttribute != null && !this.anyAttribute.isEmpty();
+        return anyAttribute != null && !anyAttribute.isEmpty();
     }
     return super.eIsSet(featureID);
   }
@@ -366,12 +366,12 @@ public class BoundaryTypeImpl extends EObjectImpl implements BoundaryType
     if (eIsProxy()) return super.toString();
 
     StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (value: "); //$NON-NLS-1$
-    if (this.valueESet) result.append(this.value); else result.append("<unset>"); //$NON-NLS-1$
-    result.append(", exclusiveBound: "); //$NON-NLS-1$
-    if (this.exclusiveBoundESet) result.append(this.exclusiveBound); else result.append("<unset>"); //$NON-NLS-1$
-    result.append(", anyAttribute: "); //$NON-NLS-1$
-    result.append(this.anyAttribute);
+    result.append(" (value: ");
+    if (valueESet) result.append(value); else result.append("<unset>");
+    result.append(", exclusiveBound: ");
+    if (exclusiveBoundESet) result.append(exclusiveBound); else result.append("<unset>");
+    result.append(", anyAttribute: ");
+    result.append(anyAttribute);
     result.append(')');
     return result.toString();
   }
