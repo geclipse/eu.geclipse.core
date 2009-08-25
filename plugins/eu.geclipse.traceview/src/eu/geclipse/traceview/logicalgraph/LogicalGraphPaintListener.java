@@ -470,7 +470,7 @@ class LogicalGraphPaintListener extends AbstractGraphPaintListener {
           if (event.getProcess().getTrace() != this.trace) continue;
           if( this.fromClock <= event.getLamportClock()
               && event.getLamportClock() <= this.toClock ) {
-            if ( procDrawingEnabled( event.getProcessId() ) ) {
+            if ( /*procDrawingEnabled( event.getProcessId() )*/ true ) {
               int x = getXPosForClock( event.getLamportClock() ) - this.eventSize/2;
               int y = getYPosForProcId( event.getProcessId() ) - this.eventSize/2;
               this.gc.setForeground( this.selectionColor );
@@ -484,7 +484,7 @@ class LogicalGraphPaintListener extends AbstractGraphPaintListener {
         } else if( obj instanceof IProcess ) {
           IProcess process = ( IProcess )obj;
           if ( process.getTrace() != this.trace ) continue;
-          if ( procDrawingEnabled( process.getProcessId() ) ) {
+          if ( /*procDrawingEnabled( process.getProcessId() )*/ true ) {
             int x = 0;
             int y = getYPosForProcId( process.getProcessId() ) - this.eventSize/2;
             this.gc.setForeground( this.selectionColor );
