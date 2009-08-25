@@ -15,7 +15,6 @@
 
 package eu.geclipse.traceview.logicalgraph;
 
-import java.util.ArrayList;
 import java.util.Vector;
 
 import org.eclipse.jface.action.Action;
@@ -27,7 +26,6 @@ import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IViewSite;
 
-import eu.geclipse.traceview.IEventMarker;
 import eu.geclipse.traceview.ILamportTrace;
 import eu.geclipse.traceview.internal.AbstractGraphVisualization;
 import eu.geclipse.traceview.internal.Activator;
@@ -83,15 +81,6 @@ public class LogicalGraph extends AbstractGraphVisualization {
 
   protected int getZoomFactor() {
     return this.eventGraphPaintListener.getZoomfactor();
-  }
-
-  /**
-   * Returns the Event Markers
-   *
-   * @return IEventMarker
-   */
-  public ArrayList<IEventMarker> getEventMarkers() {
-    return this.eventMarkers;
   }
 
   @Override

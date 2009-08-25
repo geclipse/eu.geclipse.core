@@ -15,7 +15,6 @@
 
 package eu.geclipse.traceview.internal;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -23,12 +22,10 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.Vector;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IContributionItem;
+import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.window.DefaultToolTip;
 import org.eclipse.swt.SWT;
@@ -50,7 +47,7 @@ import eu.geclipse.traceview.views.TraceView;
 
 
 public abstract class AbstractGraphVisualization extends TraceVisualization {
-  protected ArrayList<IEventMarker> eventMarkers;
+  protected EventMarkers eventMarkers;
   protected LineType hLines;
   protected LineType vLines;
   protected ITrace trace;
@@ -78,18 +75,7 @@ public abstract class AbstractGraphVisualization extends TraceVisualization {
     // create process mapping
     resetOrdering();
     // get the Event Markers
-    this.eventMarkers = new ArrayList<IEventMarker>();
-    // TODO create possibility to select the eventmakers
-    for( IConfigurationElement configurationElement : Platform.getExtensionRegistry()
-      .getConfigurationElementsFor( "eu.geclipse.traceview.EventMarker" ) ) { //$NON-NLS-1$
-      try {
-        IEventMarker eventMarker = ( IEventMarker )configurationElement.createExecutableExtension( "class" ); //$NON-NLS-1$
-        eventMarker.setTrace( trace );
-        this.eventMarkers.add( eventMarker );
-      } catch( CoreException coreException ) {
-        Activator.logException( coreException );
-      }
-    }
+    this.eventMarkers = new EventMarkers( trace );
     TraceView view = ( TraceView )Activator.getDefault()
       .getWorkbench()
       .getActiveWorkbenchWindow()
@@ -137,7 +123,7 @@ public abstract class AbstractGraphVisualization extends TraceVisualization {
       protected String getText( Object[] objs ) {
         String result = null;
         if( objs.length != 0 ) {
-          result = "";
+          result = ""; //$NON-NLS-1$
           for (Object obj : objs) {
             if (result.length() != 0) result += '\n';
             if (obj.toString() != null) result += obj.toString();
@@ -191,8 +177,8 @@ public abstract class AbstractGraphVisualization extends TraceVisualization {
     }
   }
 
-  public  ArrayList<IEventMarker> getEventMarkers() {
-    return this.eventMarkers;
+  public List<IEventMarker> getEventMarkers() {
+    return this.eventMarkers.getEventMarkers();
   }
 
   protected void handleResize() {
@@ -294,7 +280,7 @@ public abstract class AbstractGraphVisualization extends TraceVisualization {
   @Override
   public IContributionItem[] getToolBarItems() {
     Vector<IContributionItem> items = new Vector<IContributionItem>();
-    Action reset = new Action( Messages.getString( "PhysicalGraph.Reset" ), //$NON-NLS-1$
+    Action reset = new Action( Messages.getString( "AbstractGraphVisualization.Reset" ), //$NON-NLS-1$
                                Activator.getImageDescriptor( "icons/reset.gif" ) ) { //$NON-NLS-1$
       @Override
       public void run() {
@@ -303,6 +289,17 @@ public abstract class AbstractGraphVisualization extends TraceVisualization {
       }
     };
     items.add( new ActionContributionItem( reset ) );
+    Action markerSelectionAction = new Action( Messages.getString("AbstractGraphVisualization.toggleMarkers"), //$NON-NLS-1$
+                                               Activator.getImageDescriptor( "icons/marker.gif" ) ) { //$NON-NLS-1$
+      @Override
+      public void run() {
+        // TODO open a dialog for changing the marker order
+      }
+    };
+    IMenuCreator menuCreator = new MarkerSelectionMenuCreator( this );
+    markerSelectionAction.setMenuCreator( menuCreator );
+    items.add( new ActionContributionItem( markerSelectionAction ) );
+
     return items.toArray( new IContributionItem[ items.size() ] );
   }
 
