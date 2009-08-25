@@ -28,6 +28,7 @@ import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.window.DefaultToolTip;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -293,7 +294,13 @@ public abstract class AbstractGraphVisualization extends TraceVisualization {
                                                Activator.getImageDescriptor( "icons/marker.gif" ) ) { //$NON-NLS-1$
       @Override
       public void run() {
-        // TODO open a dialog for changing the marker order
+        MarkerOrderDialog dialog = new MarkerOrderDialog( getShell() );
+        dialog.setEventMarkerEntries( eventMarkers.getEventMarkerEntries() );
+        if (dialog.open() == Window.OK) {
+          eventMarkers.eventMarkerEntries = dialog.getEventMarkerEntries();
+          eventMarkers.buildEventMarkersList();
+          redraw();
+        }
       }
     };
     IMenuCreator menuCreator = new MarkerSelectionMenuCreator( this );
