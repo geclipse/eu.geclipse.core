@@ -20,6 +20,7 @@
             </action>
             <action
                 class="eu.geclipse.traceview.debug.actions.GlobalBreakpointAction"
+                enablesFor="1"
                 icon="icons/obj16/brkp_obj.gif"
                 id="eu.geclipse.traceview.nope.debug.action1"
                 label="Toggle Global Breakpoint">

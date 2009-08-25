@@ -28,10 +28,6 @@ import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.ui.PartInitException;
 
-import eu.geclipse.traceview.IEvent;
-import eu.geclipse.traceview.IProcess;
-import eu.geclipse.traceview.ITrace;
-
 public abstract class AbstractGraphMouseAdapter extends MouseAdapter {
   protected AbstractGraphVisualization graph;
 

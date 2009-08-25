@@ -52,7 +52,7 @@ public abstract class AbstractEventBreakpointAction extends Action
   implements IActionDelegate
 {
 
-  protected Object selectedObject;
+  protected StructuredSelection selection;
 
   /**
    * Returns the Project which contains the Trace
@@ -106,11 +106,11 @@ public abstract class AbstractEventBreakpointAction extends Action
     return resource;
   }
 
-  public void selectionChanged( final IAction action, final ISelection selection )
-  {
+  public void selectionChanged( final IAction action, final ISelection selection ) {
     if( selection instanceof StructuredSelection ) {
-      StructuredSelection structuredSelection = ( StructuredSelection )selection;
-      this.selectedObject = structuredSelection.getFirstElement();
+      this.selection = ( StructuredSelection )selection;
+    } else {
+      this.selection = StructuredSelection.EMPTY;
     }
   }
 

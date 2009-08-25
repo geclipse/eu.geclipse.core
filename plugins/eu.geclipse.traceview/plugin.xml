@@ -69,6 +69,7 @@
         objectClass="eu.geclipse.traceview.ISourceLocation">
             <action
                 id="eu.geclipse.traceview.internal.GotoSourceAction"
+                enablesFor="1"
                 label="Goto Source"
                 class="eu.geclipse.traceview.internal.GotoSourceAction">
             </action>
@@ -78,6 +79,7 @@
          objectClass="eu.geclipse.traceview.IVectorEvent">
       <action
             class="eu.geclipse.traceview.internal.CauseEffectAction"
+            enablesFor="1"
             id="eu.geclipse.traceview.internal.CauseEffectAction"
             label="Cause Effect">
       </action>

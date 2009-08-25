@@ -27,30 +27,31 @@ import eu.geclipse.traceview.debug.EventBreakpoint;
 public class LocalBreakpointAction extends AbstractEventBreakpointAction {
 
   public void run( final IAction action ) {
-    if( this.selectedObject instanceof IEvent ) {
-      IEvent event = ( IEvent )this.selectedObject;
-      try {
-        EventBreakpoint eventBreakpoint = createEventBreakpoint( event );
-        DebugPlugin.getDefault()
-          .getBreakpointManager()
-          .addBreakpoint( eventBreakpoint );
-      } catch( CoreException exception ) {
-        Activator.logException( exception );
-      }
-      Display.getDefault().asyncExec( new Runnable() {
-
-        public void run() {
-          try {
-            ITraceView traceView = ( ITraceView )PlatformUI.getWorkbench()
-              .getActiveWorkbenchWindow()
-              .getActivePage()
-              .showView( "eu.geclipse.traceview.views.TraceView" ); //$NON-NLS-1$
-            traceView.redraw();
-          } catch( PartInitException partInitException ) {
-            Activator.logException( partInitException );
-          }
+    for (Object selectedObject : this.selection.toList()) {
+      if( selectedObject instanceof IEvent ) {
+        IEvent event = ( IEvent )selectedObject;
+        try {
+          EventBreakpoint eventBreakpoint = createEventBreakpoint( event );
+          DebugPlugin.getDefault()
+            .getBreakpointManager()
+            .addBreakpoint( eventBreakpoint );
+        } catch( CoreException exception ) {
+          Activator.logException( exception );
         }
-      } );
+      }
     }
+    Display.getDefault().asyncExec( new Runnable() {
+      public void run() {
+        try {
+          ITraceView traceView = ( ITraceView )PlatformUI.getWorkbench()
+            .getActiveWorkbenchWindow()
+            .getActivePage()
+            .showView( "eu.geclipse.traceview.views.TraceView" ); //$NON-NLS-1$
+          traceView.redraw();
+        } catch( PartInitException partInitException ) {
+          Activator.logException( partInitException );
+        }
+      }
+    } );
   }
 }

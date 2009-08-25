@@ -39,8 +39,9 @@ public class GlobalBreakpointAction extends AbstractEventBreakpointAction {
   private int[] last;
 
   public void run( final IAction action ) {
-    if( this.selectedObject instanceof IEvent ) {
-      IEvent event = ( IEvent )this.selectedObject;
+    Object selectedObject = this.selection.getFirstElement();
+    if( selectedObject instanceof IEvent ) {
+      IEvent event = ( IEvent )selectedObject;
       if( event.getType() == EventType.RECV ) {
         event = event.getPartnerEvent();
       }
