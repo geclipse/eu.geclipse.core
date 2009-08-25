@@ -110,5 +110,10 @@
             id="eu.geclipse.traceview.markers.CauseEffectMarker"
             label="Cause Effect Marker">
       </MarkerClass>
+      <MarkerClass
+            class="eu.geclipse.traceview.internal.SelectionPartnerMarker"
+            id="eu.geclipse.traceview.markers.SelectionPartnerMarker"
+            label="Selection Partner Marker">
+      </MarkerClass>
    </extension>
 </plugin>

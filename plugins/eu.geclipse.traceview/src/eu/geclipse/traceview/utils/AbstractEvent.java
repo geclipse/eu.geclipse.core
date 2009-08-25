@@ -199,4 +199,16 @@ public abstract class AbstractEvent implements IEvent {
     // no editable properties
     return null;
   }
+
+  @Override
+  public boolean equals( Object obj ) {
+    return obj instanceof AbstractEvent &&
+           ((AbstractEvent)obj).getProcess() == this.getProcess() &&
+           ((AbstractEvent)obj).getLogicalClock() == this.getLogicalClock();
+  }
+
+  @Override
+  public int hashCode() {
+    return this.getProcess().hashCode() + this.getLogicalClock();
+  }
 }
