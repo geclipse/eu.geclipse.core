@@ -301,7 +301,7 @@ class PhysicalGraphPaintListener extends AbstractGraphPaintListener {
         if( obj instanceof IPhysicalEvent ) {
           IPhysicalEvent event = ( IPhysicalEvent )obj;
           if (event.getProcess().getTrace() != this.trace) continue;
-          if (/*procDrawingEnabled( event.getProcessId() )*/true) {
+          if (procDrawingEnabled( event.getProcessId(), true )) {
             if( this.fromTime <= event.getPhysicalStopClock()
                 || event.getPartnerPhysicalStartClock() <= this.toTime ) {
               int y = getYPosForProcId( event.getProcessId() ) - this.eventSize/2;
@@ -318,7 +318,7 @@ class PhysicalGraphPaintListener extends AbstractGraphPaintListener {
         } else if( obj instanceof IProcess ) {
           IProcess process = ( IProcess )obj;
           if (process.getTrace() != this.trace) continue;
-          if (/*procDrawingEnabled( process.getProcessId() )*/true) {
+          if (procDrawingEnabled( process.getProcessId(), true )) {
             int x = 0;
             int y = getYPosForProcId( process.getProcessId() ) - this.eventSize/2;
             this.gc.setForeground( this.selectionColor );
