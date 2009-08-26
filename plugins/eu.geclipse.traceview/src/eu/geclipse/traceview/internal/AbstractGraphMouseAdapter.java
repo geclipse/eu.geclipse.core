@@ -19,25 +19,41 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.ui.PartInitException;
 
 import eu.geclipse.traceview.IProcess;
 
-public abstract class AbstractGraphMouseAdapter extends MouseAdapter implements MouseMoveListener {
+public abstract class AbstractGraphMouseAdapter implements MouseListener, MouseMoveListener {
   protected AbstractGraphVisualization graph;
   private int vRulerSelection;
 
   protected AbstractGraphMouseAdapter( final AbstractGraphVisualization graph ) {
     this.graph = graph;
+  }
+
+  public void mouseDoubleClick( MouseEvent e ) {
+    int graphHeight = this.graph.getClientArea().height - 30;
+    if( e.x > 0 && e.y > 0 && e.x < 30 && e.y < graphHeight ) {
+      int y = getLineNumber( e.y );
+      if (y != -1) {
+        boolean[] hideProcs = this.graph.getHideProcess();
+        Set<Integer> procs = this.graph.getLineToProcessMapping().get( y );
+        for (Integer proc : procs) {
+          hideProcs[proc.intValue()] ^= true;
+        }
+        this.graph.setHideProcess( hideProcs );
+      }
+    }
   }
 
   public void mouseMove( final MouseEvent e ) {
@@ -48,17 +64,10 @@ public abstract class AbstractGraphMouseAdapter extends MouseAdapter implements 
     }
   }
 
-  @Override
   public void mouseUp( MouseEvent e ) {
     checkVRuler( e.x, e.y, false );
   }
   
-  /*
-   * (non-Javadoc)
-   *
-   * @see org.eclipse.swt.events.MouseAdapter#mouseDown(org.eclipse.swt.events.MouseEvent)
-   */
-  @Override
   public void mouseDown( final MouseEvent e ) {
     try {
       checkVRuler( e.x, e.y, true );
