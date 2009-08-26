@@ -32,6 +32,10 @@ public class EventMarkers {
           entry.id = configurationElement.getAttribute( "id" ); //$NON-NLS-1$
           entry.label = configurationElement.getAttribute( "label" ); //$NON-NLS-1$
           entry.enabled = true;
+          String defaultEnabled = configurationElement.getAttribute( "defaultEnabled" ); //$NON-NLS-1$
+          if (defaultEnabled != null) {
+            entry.enabled = Boolean.parseBoolean( defaultEnabled );
+          }
           entry.marker.setTrace( trace );
           this.eventMarkerEntries.add( entry );
         } catch( CoreException coreException ) {
