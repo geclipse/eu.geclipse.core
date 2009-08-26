@@ -115,6 +115,7 @@
       <MarkerClass
             class="eu.geclipse.traceview.internal.SelectionPartnerMarker"
             id="eu.geclipse.traceview.markers.SelectionPartnerMarker"
+            defaultEnabled="false"
             label="Selection Partner Marker">
       </MarkerClass>
    </extension>
