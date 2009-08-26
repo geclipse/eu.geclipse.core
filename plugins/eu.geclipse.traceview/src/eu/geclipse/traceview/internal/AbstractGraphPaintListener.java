@@ -452,8 +452,8 @@ public abstract class AbstractGraphPaintListener implements PaintListener {
                              final int y2,
                              final boolean spacing)
   {
-    int xv = x2 - x1;
-    int yv = y2 - y1;
+    long xv = x2 - x1;
+    long yv = y2 - y1;
     float c = ( float )Math.sqrt( xv * xv + yv * yv );
     int ex = Math.round( ( xv / c * getArrowSize() ) );
     int ey = Math.round( ( yv / c * getArrowSize() ) );

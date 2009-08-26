@@ -26,15 +26,30 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.ui.PartInitException;
 
-public abstract class AbstractGraphMouseAdapter extends MouseAdapter {
+import eu.geclipse.traceview.IProcess;
+
+public abstract class AbstractGraphMouseAdapter extends MouseAdapter implements MouseMoveListener {
   protected AbstractGraphVisualization graph;
+  private int vRulerSelection;
 
   protected AbstractGraphMouseAdapter( final AbstractGraphVisualization graph ) {
     this.graph = graph;
   }
 
+  public void mouseMove( final MouseEvent e ) {
+    if ((e.stateMask & SWT.BUTTON1) != 0 && this.vRulerSelection != -1) {
+      // TODO draw drag indicator in vruler
+    }
+  }
+
+  @Override
+  public void mouseUp( MouseEvent e ) {
+    checkVRuler( e.x, e.y, false );
+  }
+  
   /*
    * (non-Javadoc)
    *
@@ -43,6 +58,7 @@ public abstract class AbstractGraphMouseAdapter extends MouseAdapter {
   @Override
   public void mouseDown( final MouseEvent e ) {
     try {
+      checkVRuler( e.x, e.y, true );
       Object[] objs = getObjectsForPosition( e.x, e.y );
       if( objs.length != 0 && (e.button == 1 || e.button == 3) ) {
         List<Object> objList = Arrays.asList( objs );
@@ -81,17 +97,25 @@ public abstract class AbstractGraphMouseAdapter extends MouseAdapter {
   }
 
   protected int getLineNumber( final int yPos ) {
+    return getLineNumber( yPos, false );
+  }
+
+  protected int getLineNumber( final int yPos, boolean areaBelowProcess ) {
     int yOffset = this.graph.getEventGraphPaintListener().getYOffset();
     int eventSize = this.graph.getEventGraphPaintListener().getEventSize();
     int vSpace = this.graph.getEventGraphPaintListener().getVSpace();
     int numProcLines = this.graph.getLineToProcessMapping().size();
     int processLine = -1;
     int tmp = yPos + yOffset - eventSize / 2;
-    if( tmp % vSpace <= eventSize / 2 ) {
+    if (areaBelowProcess) {
       processLine = tmp / vSpace;
-    }
-    if( vSpace - ( tmp % vSpace ) <= eventSize / 2 ) {
-      processLine = tmp / vSpace + 1;
+    } else {
+      if( tmp % vSpace <= eventSize / 2 ) {
+        processLine = tmp / vSpace;
+      }
+      if( vSpace - ( tmp % vSpace ) <= eventSize / 2 ) {
+        processLine = tmp / vSpace + 1;
+      }
     }
     if ( processLine != -1 ) {
       processLine += this.graph.getEventGraphPaintListener().getFromProcessLine();
@@ -100,6 +124,32 @@ public abstract class AbstractGraphMouseAdapter extends MouseAdapter {
       }
     }
     return processLine;
+  }
+  
+  public void checkVRuler( int xPos, int yPos, boolean clicked ) {
+    int graphHeight = this.graph.getClientArea().height - 30;
+    int y = getLineNumber( yPos );
+    if (clicked) this.vRulerSelection = -1;
+    if( xPos > 0 && yPos > 0 && xPos < 30 && yPos < graphHeight &&
+        (clicked || this.vRulerSelection != -1)) {
+      if (y != -1) {
+        if (clicked) this.vRulerSelection = y;
+        else {
+          this.graph.mergeProcessLines( this.vRulerSelection, y );
+        }
+      } else {
+        if (!clicked) {
+          y = getLineNumber( yPos, true );
+          if ( y <  this.vRulerSelection ) {
+            if (y + 1 < this.graph.getLineToProcessMapping().size()) {
+              this.graph.moveProcessLine( this.vRulerSelection, y + 1 );
+            } 
+          } else {
+            this.graph.moveProcessLine( this.vRulerSelection, y );
+          }
+        }
+      }
+    }
   }
 
   public Object[] getObjectsForPosition( int xPos, int yPos ) {
@@ -116,15 +166,21 @@ public abstract class AbstractGraphMouseAdapter extends MouseAdapter {
           }
         }
         if ( objList.size() == 0 ) {
-          for (Integer proc : this.graph.getLineToProcessMapping().get( y ) ) {
-            objList.add( this.graph.getTrace().getProcess( proc.intValue() ) );
-          }
+          objList.addAll( getProcessesOnLine( y ) );
         }
       } else {
         objList.add( this.graph.getTrace() );
       }
     }
     return objList.toArray();
+  }
+
+  public List<IProcess> getProcessesOnLine( int line ) {
+    List<IProcess> procList = new LinkedList<IProcess>();
+    for (Integer proc : this.graph.getLineToProcessMapping().get( line ) ) {
+      procList.add( this.graph.getTrace().getProcess( proc.intValue() ) );
+    }
+    return procList;
   }
 
   public abstract Object getObjectOnProcess( final int xPos, final int procNr );

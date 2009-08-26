@@ -107,6 +107,7 @@ public abstract class AbstractGraphVisualization extends TraceVisualization {
 
   public void registerMouseListener( final AbstractGraphMouseAdapter mouseAdapter ) {
     addMouseListener( mouseAdapter );
+    addMouseMoveListener( mouseAdapter );
     @SuppressWarnings("unused")
     DefaultToolTip toolTip = new DefaultToolTip( this ) {
       @Override
@@ -311,4 +312,36 @@ public abstract class AbstractGraphVisualization extends TraceVisualization {
   }
 
   public abstract AbstractGraphPaintListener getEventGraphPaintListener();
+
+  public void mergeProcessLines( int fromLine, int toLine ) {
+    int[] mapping = getProcessToLineMapping();
+    for ( Integer proc : getLineToProcessMapping().get( fromLine ) ) {
+      mapping[proc.intValue()] = toLine;
+    }
+    setProcessToLineMapping( mapping );
+    removeEmptyLines();
+  }
+
+  public void swapProcessLines( int lineA, int lineB ) {
+    int[] mapping = getProcessToLineMapping();
+    for (int i = 0; i < mapping.length; i++) {
+      if (mapping[i] == lineA ) mapping[i] = lineB;
+      else if (mapping[i] == lineB ) mapping[i] = lineA;
+    }
+    setProcessToLineMapping( mapping );
+  }
+
+  public void moveProcessLine( int oldLine, int newLine ) {
+    int[] mapping = getProcessToLineMapping();
+    for (int i = 0; i < mapping.length; i++) {
+      if (oldLine > newLine) {
+        if (mapping[i] >= newLine && mapping[i] < oldLine) mapping[i]++;
+        else if (mapping[i] == oldLine) mapping[i] = newLine;
+      } else {
+        if (mapping[i] <= newLine && mapping[i] > oldLine) mapping[i]--;
+        else if (mapping[i] == oldLine) mapping[i] = newLine;
+      }
+    }
+    setProcessToLineMapping( mapping );
+  }
 }
