@@ -348,17 +348,18 @@ public abstract class AbstractGraphPaintListener implements PaintListener {
                                 - bottomMargin, arc, arc );
     rulerGC.drawRoundRectangle( 0, 0, leftRulerWidth, this.height
                                 - bottomMargin, arc, arc );
-    drawVRuler( rulerGC );
+    drawVRuler( rulerGC, line );
     rulerGC.drawLine( 20, y , 22, y );
     String text = getLabelForLine( line );
     rulerGC.drawText( text, 3, y - 7 );
   }
 
-  protected void drawVRuler( GC rulerGC ) {
+  protected void drawVRuler( GC rulerGC, int lineToSkip ) {
     rulerGC.setForeground( rulerGC.getDevice().getSystemColor( SWT.COLOR_BLACK ) );
     rulerGC.setFont( this.smallFont );
     rulerGC.setClipping( 1, 1, 24, this.height - 31 );
     for( int i = this.fromProcessLine, y = 0 - this.yOffset; i < this.toProcessLine; i++, y += this.vSpace ) {
+      if (i == lineToSkip) continue;
       if (this.vSpace > 8 || i % 2 == 0) {
         String text = getLabelForLine( i );
         rulerGC.drawText( text, 3, y - 7 + this.eventSize / 2 );

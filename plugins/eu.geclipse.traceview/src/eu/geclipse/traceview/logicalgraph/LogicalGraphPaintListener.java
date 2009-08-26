@@ -425,7 +425,7 @@ class LogicalGraphPaintListener extends AbstractGraphPaintListener {
                                      / this.vSpace
                                      + 2 );
       // draw the rulers to the control
-      drawVRuler(this.gc);
+      drawVRuler(this.gc, -1);
       drawHRuler();
       // set the clipping to the graph area
       this.gc.setClipping( 31, 1, this.width - 31, this.height - 31 );
@@ -549,7 +549,7 @@ class LogicalGraphPaintListener extends AbstractGraphPaintListener {
   public void print( final GC gc2 ) {
     this.gc = gc2;
     this.gc.setLineAttributes( new LineAttributes(1) );
-    drawVRuler(this.gc);
+    drawVRuler(this.gc, -1);
     drawHRuler();
     this.gc.setClipping( 31, 1, this.width - 31, this.height - 31 );
     drawGridHLines();

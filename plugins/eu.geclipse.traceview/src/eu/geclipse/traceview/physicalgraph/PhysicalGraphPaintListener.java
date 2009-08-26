@@ -268,7 +268,7 @@ class PhysicalGraphPaintListener extends AbstractGraphPaintListener {
                                      / this.vSpace
                                      + 2 );
       calculateXStep();
-      drawVRuler(this.gc);
+      drawVRuler(this.gc, -1);
       drawHRuler();
       // set the clipping to the graph area
       this.gc.setClipping( 31, 1, this.width - 31, this.height - 31 );
@@ -418,7 +418,7 @@ class PhysicalGraphPaintListener extends AbstractGraphPaintListener {
     this.gc = gc2;
     this.gc.setLineAttributes( new LineAttributes(1) );
     calculateXStep();
-    drawVRuler(this.gc);
+    drawVRuler(this.gc, -1);
     drawHRuler();
     // set the clipping to the graph area
     this.gc.setClipping( 31, 1, this.width - 31, this.height - 31 );
