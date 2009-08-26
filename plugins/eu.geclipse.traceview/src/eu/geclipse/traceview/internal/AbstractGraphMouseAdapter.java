@@ -27,6 +27,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseMoveListener;
+import org.eclipse.swt.graphics.GC;
 import org.eclipse.ui.PartInitException;
 
 import eu.geclipse.traceview.IProcess;
@@ -41,7 +42,9 @@ public abstract class AbstractGraphMouseAdapter extends MouseAdapter implements 
 
   public void mouseMove( final MouseEvent e ) {
     if ((e.stateMask & SWT.BUTTON1) != 0 && this.vRulerSelection != -1) {
-      // TODO draw drag indicator in vruler
+      GC rulerGC = new GC(this.graph);
+      this.graph.getEventGraphPaintListener().drawVRulerWithMovingLine( rulerGC, this.vRulerSelection, e.y );
+      rulerGC.dispose();
     }
   }
 
@@ -149,6 +152,9 @@ public abstract class AbstractGraphMouseAdapter extends MouseAdapter implements 
           }
         }
       }
+    } else if ( !clicked && this.vRulerSelection != -1) {
+      this.vRulerSelection = -1;
+      this.graph.redraw();
     }
   }
 

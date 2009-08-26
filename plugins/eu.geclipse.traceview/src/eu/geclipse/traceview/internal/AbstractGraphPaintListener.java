@@ -341,16 +341,29 @@ public abstract class AbstractGraphPaintListener implements PaintListener {
     this.smallFont = new Font( font.getDevice(), fontData );
   }
 
-  protected void drawVRuler() {
-    this.gc.setForeground( this.gc.getDevice().getSystemColor( SWT.COLOR_BLACK ) );
-    this.gc.setFont( this.smallFont );
-    this.gc.setClipping( 1, 1, 24, this.height - 31 );
+  protected void drawVRulerWithMovingLine( GC rulerGC, int line, int y ) {
+    rulerGC.setForeground( rulerGC.getDevice().getSystemColor( SWT.COLOR_BLACK ) );
+    rulerGC.setBackground( rulerGC.getDevice().getSystemColor( SWT.COLOR_WHITE ) );
+    rulerGC.fillRoundRectangle( 0, 0, leftRulerWidth, this.height
+                                - bottomMargin, arc, arc );
+    rulerGC.drawRoundRectangle( 0, 0, leftRulerWidth, this.height
+                                - bottomMargin, arc, arc );
+    drawVRuler( rulerGC );
+    rulerGC.drawLine( 20, y , 22, y );
+    String text = getLabelForLine( line );
+    rulerGC.drawText( text, 3, y - 7 );
+  }
+
+  protected void drawVRuler( GC rulerGC ) {
+    rulerGC.setForeground( rulerGC.getDevice().getSystemColor( SWT.COLOR_BLACK ) );
+    rulerGC.setFont( this.smallFont );
+    rulerGC.setClipping( 1, 1, 24, this.height - 31 );
     for( int i = this.fromProcessLine, y = 0 - this.yOffset; i < this.toProcessLine; i++, y += this.vSpace ) {
       if (this.vSpace > 8 || i % 2 == 0) {
         String text = getLabelForLine( i );
-        this.gc.drawText( text, 3, y - 7 + this.eventSize / 2 );
+        rulerGC.drawText( text, 3, y - 7 + this.eventSize / 2 );
       }
-      this.gc.drawLine( 20, y + this.eventSize / 2, 22, y + this.eventSize / 2 );
+      rulerGC.drawLine( 20, y + this.eventSize / 2, 22, y + this.eventSize / 2 );
     }
   }
   
