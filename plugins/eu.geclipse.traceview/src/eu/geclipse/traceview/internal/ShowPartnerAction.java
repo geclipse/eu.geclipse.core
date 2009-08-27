@@ -31,10 +31,16 @@ public class ShowPartnerAction extends AbstractProcessAction {
       for( int i = 0; i < hide.length; i++ ) {
         hide[ i ] = true;
       }
-      for( IProcess process : procs ) {
+      loop: for( IProcess process : procs ) {
         hide[ process.getProcessId() ] = false;
         IEvent event = process.getEventByLogicalClock( 0 );
         while( event != null ) {
+          if (event.getPartnerProcessId() == -1) { // handle broadcast events
+            for (int i = 0; i < hide.length; i++) {
+              hide[ i ] = false;
+            }
+            break loop;
+          }
           hide[ event.getPartnerProcessId() ] = false;
           event = event.getNextEvent();
         }
