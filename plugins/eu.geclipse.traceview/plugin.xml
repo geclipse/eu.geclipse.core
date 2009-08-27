@@ -108,6 +108,11 @@
             id="eu.geclipse.traceview.internal.GroupProcessAction"
             label="Group">
       </action>
+      <action
+            class="eu.geclipse.traceview.internal.ShowPartnerAction"
+            id="eu.geclipse.traceview.internal.ShowPartnerAction"
+            label="Show Partners Only">
+      </action>
    </objectContribution>
     </extension>
    <extension
