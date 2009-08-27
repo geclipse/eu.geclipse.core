@@ -123,5 +123,11 @@
             defaultEnabled="false"
             label="Selection Partner Marker">
       </MarkerClass>
+      <MarkerClass
+            class="eu.geclipse.traceview.internal.SourceLineEventMarker"
+            id="eu.geclipse.traceview.internal.SourceLineEventMarker"
+            defaultEnabled="false"
+            label="Sourceline Event Marker">
+      </MarkerClass>
    </extension>
 </plugin>
