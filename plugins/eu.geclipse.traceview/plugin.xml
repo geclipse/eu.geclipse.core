@@ -93,6 +93,11 @@
             label="Hide / Unhide">
       </action>
       <action
+            class="eu.geclipse.traceview.internal.HideOthersProcessAction"
+            id="eu.geclipse.traceview.internal.HideOthersProcessAction"
+            label="Hide Others">
+      </action>
+      <action
             class="eu.geclipse.traceview.internal.RemoveProcessAction"
             id="eu.geclipse.traceview.internal.RemoveProcessAction"
             label="Remove">
