@@ -28,6 +28,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.MouseMoveListener;
+import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.ui.PartInitException;
 
@@ -36,9 +37,11 @@ import eu.geclipse.traceview.IProcess;
 public abstract class AbstractGraphMouseAdapter implements MouseListener, MouseMoveListener {
   protected AbstractGraphVisualization graph;
   private int vRulerSelection;
+  private Cursor moveProcCursor;
 
   protected AbstractGraphMouseAdapter( final AbstractGraphVisualization graph ) {
     this.graph = graph;
+    this.moveProcCursor= new Cursor(this.graph.getDisplay(), SWT.CURSOR_SIZENS);
   }
 
   public void mouseDoubleClick( MouseEvent e ) {
@@ -61,11 +64,24 @@ public abstract class AbstractGraphMouseAdapter implements MouseListener, MouseM
       GC rulerGC = new GC(this.graph);
       this.graph.getEventGraphPaintListener().drawVRulerWithMovingLine( rulerGC, this.vRulerSelection, e.y );
       rulerGC.dispose();
+    } else if ((e.stateMask & SWT.BUTTON1) == 0) {
+      updateMouseCursor( e );
+    }
+  }
+  
+  protected void updateMouseCursor( final MouseEvent e ) {
+    int graphHeight = this.graph.getClientArea().height - 30;
+    if( e.x > 0 && e.y > 0 && e.x < 30 && e.y < graphHeight &&
+        getLineNumber( e.y ) != -1 ) {
+      this.graph.setCursor( this.moveProcCursor );
+    } else {
+      this.graph.setCursor( null );
     }
   }
 
   public void mouseUp( MouseEvent e ) {
     checkVRuler( e.x, e.y, false );
+    updateMouseCursor( e );
   }
   
   public void mouseDown( final MouseEvent e ) {
