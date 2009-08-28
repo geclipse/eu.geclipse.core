@@ -4,7 +4,6 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceConverter;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PartInitException;
@@ -12,12 +11,11 @@ import org.eclipse.ui.PlatformUI;
 
 import eu.geclipse.traceview.EventType;
 import eu.geclipse.traceview.IEvent;
-import eu.geclipse.traceview.IEventMarker;
-import eu.geclipse.traceview.ITrace;
 import eu.geclipse.traceview.ITraceView;
 import eu.geclipse.traceview.preferences.PreferenceConstants;
+import eu.geclipse.traceview.utils.AbstractEventMarker;
 
-public class DefaultEventMarker implements IEventMarker {
+public class DefaultEventMarker extends AbstractEventMarker {
   protected static boolean sendEventDraw;
   protected static boolean recvEventDraw;
   protected static boolean testEventDraw;
@@ -56,24 +54,8 @@ public class DefaultEventMarker implements IEventMarker {
     return this.bgColor;
   }
 
-  public Color getCanvasBackgroundColor() {
-    return null;
-  }
-
   public Color getForegroundColor( int type ) {
     return this.fgColor;
-  }
-
-  public int getLineStyle( int type ) {
-    return SWT.LINE_SOLID;
-  }
-
-  public int getLineWidth( int type ) {
-    return 0;
-  }
-
-  public String getToolTip() {
-    return null;
   }
 
   public int mark( final IEvent event ) {
@@ -96,9 +78,6 @@ public class DefaultEventMarker implements IEventMarker {
       result = Diamond_Event;
     }  
     return result;
-  }
-
-  public void setTrace( ITrace trace ) {
   }
 
   void updatePropertiesFromPreferences() {
@@ -248,7 +227,7 @@ public class DefaultEventMarker implements IEventMarker {
       ITraceView traceView = ( ITraceView )PlatformUI.getWorkbench()
         .getActiveWorkbenchWindow()
         .getActivePage()
-        .showView( "eu.geclipse.traceview.views.TraceView" );
+        .showView( "eu.geclipse.traceview.views.TraceView" ); //$NON-NLS-1$
       traceView.redraw();
     } catch( PartInitException e ) {
       // TODO Auto-generated catch block

@@ -31,9 +31,9 @@ import org.eclipse.ui.PlatformUI;
 import eu.geclipse.traceview.IEvent;
 import eu.geclipse.traceview.IEventMarker;
 import eu.geclipse.traceview.ISourceLocation;
-import eu.geclipse.traceview.ITrace;
+import eu.geclipse.traceview.utils.AbstractEventMarker;
 
-public class SourceLineEventMarker implements IEventMarker {
+public class SourceLineEventMarker extends AbstractEventMarker {
 
   Set<IEvent> selectedEvents = new HashSet<IEvent>();
 
@@ -41,42 +41,34 @@ public class SourceLineEventMarker implements IEventMarker {
     ISelectionService selectionService = PlatformUI.getWorkbench()
       .getActiveWorkbenchWindow()
       .getSelectionService();
-    selectionService.addSelectionListener( "eu.geclipse.traceview.views.TraceView", //$NON-NLS-1$
-                                           new ISelectionListener() {
-
-                                             public void selectionChanged( final IWorkbenchPart part,
-                                                                           final ISelection selection )
-                                             {
-                                               StructuredSelection sSel = ( StructuredSelection )selection;
-                                               SourceLineEventMarker.this.selectedEvents = new HashSet<IEvent>();
-                                               for( Object obj : sSel.toList() )
-                                               {
-                                                 if( obj instanceof ISourceLocation )
-                                                 {
-                                                   IEvent event = ( IEvent )obj;
-                                                   SourceLineEventMarker.this.selectedEvents.add( event );
-                                                 }
-                                               }
-                                             }
-                                           } );
+    selectionService.addSelectionListener(
+       "eu.geclipse.traceview.views.TraceView", //$NON-NLS-1$
+       new ISelectionListener() {
+         public void selectionChanged( final IWorkbenchPart part,
+                                       final ISelection selection ) {
+           StructuredSelection sSel = ( StructuredSelection )selection;
+           SourceLineEventMarker.this.selectedEvents = new HashSet<IEvent>();
+           for( Object obj : sSel.toList() ) {
+             if( obj instanceof ISourceLocation ) {
+               IEvent event = ( IEvent )obj;
+               SourceLineEventMarker.this.selectedEvents.add( event );
+             }
+           }
+         }
+       } );
   }
 
+  @Override
   public Color getBackgroundColor( final int type ) {
     return Display.getDefault().getSystemColor( SWT.COLOR_CYAN );
   }
 
+  @Override
   public Color getForegroundColor( final int type ) {
     return Display.getDefault().getSystemColor( SWT.COLOR_BLACK );
   }
 
-  public int getLineStyle( final int type ) {
-    return SWT.LINE_SOLID;
-  }
-
-  public int getLineWidth( final int type ) {
-    return 1;
-  }
-
+  @Override
   public int mark( final IEvent event ) {
     int result = 0;
     if( event instanceof ISourceLocation ) {
@@ -96,16 +88,5 @@ public class SourceLineEventMarker implements IEventMarker {
       }
     }
     return result;
-  }
-
-  public String getToolTip() {
-    return null;
-  }
-
-  public Color getCanvasBackgroundColor() {
-    return null;
-  }
-
-  public void setTrace( final ITrace trace ) {
   }
 }

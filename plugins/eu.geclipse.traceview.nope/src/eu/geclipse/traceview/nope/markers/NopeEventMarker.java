@@ -19,29 +19,26 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceConverter;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 
 import eu.geclipse.traceview.IEvent;
-import eu.geclipse.traceview.IEventMarker;
-import eu.geclipse.traceview.ITrace;
 import eu.geclipse.traceview.ITraceView;
 import eu.geclipse.traceview.nope.Activator;
 import eu.geclipse.traceview.nope.preferences.PreferenceConstants;
 import eu.geclipse.traceview.nope.tracereader.Event;
+import eu.geclipse.traceview.utils.AbstractEventMarker;
 
 /**
  * Marks Nope Events according to the preferences of the NOPE Legend
  */
-public class NopeEventMarker implements IEventMarker {
+public class NopeEventMarker extends AbstractEventMarker {
 
   private IPreferenceStore store;
   private Color foreground = null;
   private Color background = null;
-  private int lineStyle = SWT.LINE_SOLID;
   private Color[] colors = new Color[ PreferenceConstants.Names.length ];
   private boolean[] enabled = new boolean[ PreferenceConstants.Names.length ];
   private int[] shapes = new int[ PreferenceConstants.Names.length ];
@@ -58,10 +55,6 @@ public class NopeEventMarker implements IEventMarker {
         handleProperyChanged( event );
       }
     } );
-  }
-
-  public void setTrace( final ITrace trace ) {
-    // not needed
   }
 
   private void updateFromPreferences() {
@@ -135,10 +128,6 @@ public class NopeEventMarker implements IEventMarker {
     return 2;
   }
 
-  public int getLineStyle( final int type ) {
-    return this.lineStyle;
-  }
-
   public int mark( final IEvent event ) {
     int result = 0;
     boolean running = true;
@@ -155,13 +144,5 @@ public class NopeEventMarker implements IEventMarker {
       }
     }
     return result;
-  }
-
-  public String getToolTip() {
-    return null;
-  }
-
-  public Color getCanvasBackgroundColor() {
-    return null;
   }
 }

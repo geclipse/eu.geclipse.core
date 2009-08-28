@@ -21,43 +21,34 @@ import org.eclipse.swt.widgets.Display;
 
 import eu.geclipse.traceview.IEvent;
 import eu.geclipse.traceview.IEventMarker;
-import eu.geclipse.traceview.ITrace;
 import eu.geclipse.traceview.IVectorEvent;
+import eu.geclipse.traceview.utils.AbstractEventMarker;
 import eu.geclipse.traceview.utils.VectorEventComparator;
 
 /**
  * Cause Effekt Marker
  */
-public class CauseEffectMarker implements IEventMarker {
-
+public class CauseEffectMarker extends AbstractEventMarker {
   static String MARKER_ID = "eu.geclipse.traceview.markers.CauseEffectMarker"; //$NON-NLS-1$
-  Color background = null;
-  Color foreground = null;
-  private ITrace trace;
+  Color background;
 
+  @Override
   public Color getBackgroundColor( final int type ) {
     return this.background;
   }
 
+  @Override
   public Color getForegroundColor( final int type ) {
     return Display.getDefault().getSystemColor( SWT.COLOR_BLACK );
   }
 
-  public int getLineStyle( final int type ) {
-    return SWT.LINE_SOLID;
-  }
-
-  public int getLineWidth( final int type ) {
-    return 1;
-  }
-
+  @Override
   public int mark( final IEvent event ) {
     IVectorEvent causeEvent = ( IVectorEvent )this.trace.getUserData( MARKER_ID );
     int result = 0;
     if( causeEvent != null && event instanceof IVectorEvent ) {
       IVectorEvent vectorEvent = ( IVectorEvent )event;
-      if( causeEvent.getVectorClock().length == vectorEvent.getVectorClock().length )
-      {
+      if( causeEvent.getVectorClock().length == vectorEvent.getVectorClock().length ) {
         VectorEventComparator c = new VectorEventComparator();
         int compare = c.compare( causeEvent, vectorEvent );
         if( compare == -2 ) {
@@ -79,17 +70,5 @@ public class CauseEffectMarker implements IEventMarker {
       }
     }
     return result;
-  }
-
-  public void setTrace( final ITrace trace ) {
-    this.trace = trace;
-  }
-
-  public String getToolTip() {
-    return null;
-  }
-
-  public Color getCanvasBackgroundColor() {
-    return null;
   }
 }

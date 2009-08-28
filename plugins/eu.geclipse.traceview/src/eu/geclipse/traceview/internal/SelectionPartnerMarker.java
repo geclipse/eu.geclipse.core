@@ -30,9 +30,9 @@ import org.eclipse.ui.PlatformUI;
 
 import eu.geclipse.traceview.IEvent;
 import eu.geclipse.traceview.IEventMarker;
-import eu.geclipse.traceview.ITrace;
+import eu.geclipse.traceview.utils.AbstractEventMarker;
 
-public class SelectionPartnerMarker implements IEventMarker {
+public class SelectionPartnerMarker extends AbstractEventMarker {
   Set<IEvent> selectedEvents = new HashSet<IEvent>();
   Set<IEvent> partnerEvents = new HashSet<IEvent>();
   
@@ -41,14 +41,14 @@ public class SelectionPartnerMarker implements IEventMarker {
     selectionService.addSelectionListener( "eu.geclipse.traceview.views.TraceView", new ISelectionListener() {
       public void selectionChanged( IWorkbenchPart part, ISelection selection ) {
         StructuredSelection sSel = ( StructuredSelection )selection;
-        selectedEvents = new HashSet<IEvent>();
-        partnerEvents = new HashSet<IEvent>();
+        SelectionPartnerMarker.this.selectedEvents = new HashSet<IEvent>();
+        SelectionPartnerMarker.this.partnerEvents = new HashSet<IEvent>();
         for (Object obj : sSel.toList()) {
           if (obj instanceof IEvent) {
             IEvent event = ( IEvent )obj;
-            selectedEvents.add( event );
+            SelectionPartnerMarker.this.selectedEvents.add( event );
             if (event.getPartnerEvent() != null) {
-              partnerEvents.add( event.getPartnerEvent() );
+              SelectionPartnerMarker.this.partnerEvents.add( event.getPartnerEvent() );
             }
           }
         }
@@ -56,22 +56,17 @@ public class SelectionPartnerMarker implements IEventMarker {
     });
   }
 
+  @Override
   public Color getBackgroundColor( final int type ) {
     return Display.getDefault().getSystemColor( SWT.COLOR_GRAY );
   }
 
+  @Override
   public Color getForegroundColor( final int type ) {
     return Display.getDefault().getSystemColor( SWT.COLOR_BLACK );
   }
 
-  public int getLineStyle( final int type ) {
-    return SWT.LINE_SOLID;
-  }
-
-  public int getLineWidth( final int type ) {
-    return 1;
-  }
-
+  @Override
   public int mark( final IEvent event ) {
     int result = 0;
     for (IEvent parEvent : this.partnerEvents) {
@@ -87,16 +82,5 @@ public class SelectionPartnerMarker implements IEventMarker {
       }
     }
     return result;
-  }
-
-  public String getToolTip() {
-    return null;
-  }
-
-  public Color getCanvasBackgroundColor() {
-    return null;
-  }
-
-  public void setTrace( ITrace trace ) {
   }
 }
