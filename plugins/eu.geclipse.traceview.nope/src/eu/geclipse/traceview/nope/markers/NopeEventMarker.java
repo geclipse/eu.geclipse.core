@@ -152,7 +152,7 @@ public class NopeEventMarker extends AbstractEventMarker {
       }
       Event lenCheckEvent = nopeEvent;
       if (nopeEvent.getType().equals( EventType.SEND )) lenCheckEvent = ( Event )nopeEvent.getPartnerEvent();
-      this.messageColor = Display.getDefault().getSystemColor( SWT.COLOR_GREEN );
+      this.messageColor = Display.getDefault().getSystemColor( SWT.COLOR_BLACK );
       if (lenCheckEvent != null && lenCheckEvent.getType().equals( EventType.RECV )) {
         if (lenCheckEvent.getAcceptedMessageLength() > lenCheckEvent.getSupposedMessageLength()) {
           this.messageColor = Display.getDefault().getSystemColor( SWT.COLOR_RED );
