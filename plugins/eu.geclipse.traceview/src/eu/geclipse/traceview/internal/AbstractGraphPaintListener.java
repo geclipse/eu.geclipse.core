@@ -61,26 +61,6 @@ public abstract class AbstractGraphPaintListener implements PaintListener {
   protected int width;
   protected int height;
   // presentation
-  // event draw
-  protected boolean sendEventDraw;
-  protected boolean recvEventDraw;
-  protected boolean testEventDraw;
-  protected boolean otherEventDraw;
-  // event fill
-  protected boolean sendEventFill;
-  protected boolean recvEventFill;
-  protected boolean testEventFill;
-  protected boolean otherEventFill;
-  // event color
-  protected Color sendEventColor;
-  protected Color recvEventColor;
-  protected Color testEventColor;
-  protected Color otherEventColor;
-  // event fill color
-  protected Color sendEventFillColor;
-  protected Color recvEventFillColor;
-  protected Color testEventFillColor;
-  protected Color otherEventFillColor;
   // message
   protected Color messageColor;
   protected Color selectionColor;
@@ -127,63 +107,11 @@ public abstract class AbstractGraphPaintListener implements PaintListener {
     IPreferenceStore store = Activator.getDefault().getPreferenceStore();
     // settings
     this.antialiasing = store.getBoolean( PreferenceConstants.P_ANTI_ALIASING );
-    // event draw
-    this.sendEventDraw = store.getBoolean( PreferenceConstants.P_SEND_EVENT
-                                           + PreferenceConstants.P_DRAW );
-    this.recvEventDraw = store.getBoolean( PreferenceConstants.P_RECV_EVENT
-                                           + PreferenceConstants.P_DRAW );
-    this.testEventDraw = store.getBoolean( PreferenceConstants.P_TEST_EVENT
-                                           + PreferenceConstants.P_DRAW );
-    this.otherEventDraw = store.getBoolean( PreferenceConstants.P_RECV_EVENT
-                                            + PreferenceConstants.P_DRAW );
-    // event fill
-    this.sendEventFill = store.getBoolean( PreferenceConstants.P_SEND_EVENT
-                                           + PreferenceConstants.P_FILL );
-    this.recvEventFill = store.getBoolean( PreferenceConstants.P_RECV_EVENT
-                                           + PreferenceConstants.P_FILL );
-    this.testEventFill = store.getBoolean( PreferenceConstants.P_TEST_EVENT
-                                           + PreferenceConstants.P_FILL );
-    this.otherEventFill = store.getBoolean( PreferenceConstants.P_RECV_EVENT
-                                            + PreferenceConstants.P_FILL );
     // message color
     this.messageColor = new Color( this.eventGraph.getDisplay(),
                                    PreferenceConverter.getColor( store,
                                                                  PreferenceConstants.P_MESSAGE
                                                                      + PreferenceConstants.P_COLOR ) );
-    // event color
-    this.sendEventColor = new Color( this.eventGraph.getDisplay(),
-                                     PreferenceConverter.getColor( store,
-                                                                   PreferenceConstants.P_SEND_EVENT
-                                                                       + PreferenceConstants.P_COLOR ) );
-    this.recvEventColor = new Color( this.eventGraph.getDisplay(),
-                                     PreferenceConverter.getColor( store,
-                                                                   PreferenceConstants.P_RECV_EVENT
-                                                                       + PreferenceConstants.P_COLOR ) );
-    this.testEventColor = new Color( this.eventGraph.getDisplay(),
-                                     PreferenceConverter.getColor( store,
-                                                                   PreferenceConstants.P_TEST_EVENT
-                                                                       + PreferenceConstants.P_COLOR ) );
-    this.otherEventColor = new Color( this.eventGraph.getDisplay(),
-                                      PreferenceConverter.getColor( store,
-                                                                    PreferenceConstants.P_OTHER_EVENT
-                                                                        + PreferenceConstants.P_COLOR ) );
-    // event fill color
-    this.sendEventFillColor = new Color( this.eventGraph.getDisplay(),
-                                         PreferenceConverter.getColor( store,
-                                                                       PreferenceConstants.P_SEND_EVENT
-                                                                           + PreferenceConstants.P_FILL_COLOR ) );
-    this.recvEventFillColor = new Color( this.eventGraph.getDisplay(),
-                                         PreferenceConverter.getColor( store,
-                                                                       PreferenceConstants.P_RECV_EVENT
-                                                                           + PreferenceConstants.P_FILL_COLOR ) );
-    this.testEventFillColor = new Color( this.eventGraph.getDisplay(),
-                                         PreferenceConverter.getColor( store,
-                                                                       PreferenceConstants.P_TEST_EVENT
-                                                                           + PreferenceConstants.P_FILL_COLOR ) );
-    this.otherEventFillColor = new Color( this.eventGraph.getDisplay(),
-                                          PreferenceConverter.getColor( store,
-                                                                        PreferenceConstants.P_OTHER_EVENT
-                                                                            + PreferenceConstants.P_FILL_COLOR ) );
     // selection color
     this.selectionColor = new Color( this.eventGraph.getDisplay(),
                                      PreferenceConverter.getColor( store,
@@ -201,50 +129,6 @@ public abstract class AbstractGraphPaintListener implements PaintListener {
       }
       this.eventGraph.redraw();
     }
-    // draw
-    else if( event.getProperty().equals( PreferenceConstants.P_SEND_EVENT
-                                         + PreferenceConstants.P_DRAW ) )
-    {
-      this.sendEventDraw = store.getBoolean( event.getProperty() );
-      this.eventGraph.redraw();
-    } else if( event.getProperty().equals( PreferenceConstants.P_RECV_EVENT
-                                           + PreferenceConstants.P_DRAW ) )
-    {
-      this.recvEventDraw = store.getBoolean( event.getProperty() );
-      this.eventGraph.redraw();
-    } else if( event.getProperty().equals( PreferenceConstants.P_TEST_EVENT
-                                           + PreferenceConstants.P_DRAW ) )
-    {
-      this.testEventDraw = store.getBoolean( event.getProperty() );
-      this.eventGraph.redraw();
-    } else if( event.getProperty().equals( PreferenceConstants.P_OTHER_EVENT
-                                           + PreferenceConstants.P_DRAW ) )
-    {
-      this.otherEventDraw = store.getBoolean( event.getProperty() );
-      this.eventGraph.redraw();
-    }
-    // Fill
-    else if( event.getProperty().equals( PreferenceConstants.P_SEND_EVENT
-                                         + PreferenceConstants.P_FILL ) )
-    {
-      this.sendEventFill = store.getBoolean( event.getProperty() );
-      this.eventGraph.redraw();
-    } else if( event.getProperty().equals( PreferenceConstants.P_RECV_EVENT
-                                           + PreferenceConstants.P_FILL ) )
-    {
-      this.recvEventFill = store.getBoolean( event.getProperty() );
-      this.eventGraph.redraw();
-    } else if( event.getProperty().equals( PreferenceConstants.P_TEST_EVENT
-                                           + PreferenceConstants.P_FILL ) )
-    {
-      this.testEventFill = store.getBoolean( event.getProperty() );
-      this.eventGraph.redraw();
-    } else if( event.getProperty().equals( PreferenceConstants.P_OTHER_EVENT
-                                           + PreferenceConstants.P_FILL ) )
-    {
-      this.otherEventFill = store.getBoolean( event.getProperty() );
-      this.eventGraph.redraw();
-    }
     // Message color
     else if( event.getProperty().equals( PreferenceConstants.P_MESSAGE
                                          + PreferenceConstants.P_COLOR ) )
@@ -253,74 +137,6 @@ public abstract class AbstractGraphPaintListener implements PaintListener {
       this.messageColor = new Color( Display.getDefault(),
                                      PreferenceConverter.getColor( store,
                                                                    event.getProperty() ) );
-      this.eventGraph.redraw();
-    }
-    // Event Color
-    else if( event.getProperty().equals( PreferenceConstants.P_SEND_EVENT
-                                         + PreferenceConstants.P_COLOR ) )
-    {
-      this.sendEventColor.dispose();
-      this.sendEventColor = new Color( Display.getDefault(),
-                                       PreferenceConverter.getColor( store,
-                                                                     event.getProperty() ) );
-      this.eventGraph.redraw();
-    } else if( event.getProperty().equals( PreferenceConstants.P_RECV_EVENT
-                                           + PreferenceConstants.P_COLOR ) )
-    {
-      this.recvEventColor.dispose();
-      this.recvEventColor = new Color( Display.getDefault(),
-                                       PreferenceConverter.getColor( store,
-                                                                     event.getProperty() ) );
-      this.eventGraph.redraw();
-    } else if( event.getProperty().equals( PreferenceConstants.P_TEST_EVENT
-                                           + PreferenceConstants.P_COLOR ) )
-    {
-      this.testEventColor.dispose();
-      this.testEventColor = new Color( Display.getDefault(),
-                                       PreferenceConverter.getColor( store,
-                                                                     event.getProperty() ) );
-      this.eventGraph.redraw();
-    } else if( event.getProperty().equals( PreferenceConstants.P_OTHER_EVENT
-                                           + PreferenceConstants.P_COLOR ) )
-    {
-      this.otherEventColor.dispose();
-      this.otherEventColor = new Color( Display.getDefault(),
-                                        PreferenceConverter.getColor( store,
-                                                                      event.getProperty() ) );
-      this.eventGraph.redraw();
-    }
-    // Event Fill Color
-    else if( event.getProperty().equals( PreferenceConstants.P_SEND_EVENT
-                                         + PreferenceConstants.P_FILL_COLOR ) )
-    {
-      this.sendEventFillColor.dispose();
-      this.sendEventFillColor = new Color( Display.getDefault(),
-                                           PreferenceConverter.getColor( store,
-                                                                         event.getProperty() ) );
-      this.eventGraph.redraw();
-    } else if( event.getProperty().equals( PreferenceConstants.P_RECV_EVENT
-                                           + PreferenceConstants.P_FILL_COLOR ) )
-    {
-      this.recvEventFillColor.dispose();
-      this.recvEventFillColor = new Color( Display.getDefault(),
-                                           PreferenceConverter.getColor( store,
-                                                                         event.getProperty() ) );
-      this.eventGraph.redraw();
-    } else if( event.getProperty().equals( PreferenceConstants.P_TEST_EVENT
-                                           + PreferenceConstants.P_FILL_COLOR ) )
-    {
-      this.testEventFillColor.dispose();
-      this.testEventFillColor = new Color( Display.getDefault(),
-                                           PreferenceConverter.getColor( store,
-                                                                         event.getProperty() ) );
-      this.eventGraph.redraw();
-    } else if( event.getProperty().equals( PreferenceConstants.P_OTHER_EVENT
-                                           + PreferenceConstants.P_FILL_COLOR ) )
-    {
-      this.otherEventFillColor.dispose();
-      this.otherEventFillColor = new Color( Display.getDefault(),
-                                            PreferenceConverter.getColor( store,
-                                                                          event.getProperty() ) );
       this.eventGraph.redraw();
     }
     // Selection Color

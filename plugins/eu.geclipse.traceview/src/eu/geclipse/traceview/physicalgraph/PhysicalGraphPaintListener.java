@@ -105,58 +105,14 @@ class PhysicalGraphPaintListener extends AbstractGraphPaintListener {
                                                                   this.toTime );
       Color drawColor = null;
       Color fillColor = null;
-      boolean draw = false;
-      boolean fill = false;
       for( IPhysicalEvent event : events ) {
-        // if( ( event.getPhysicalStopClock() - event.getPhysicalStartClock() )
-        // * this.hzoomfactor > 1 )
-        // {
-        // Color markerDrawColor = null;
-        // Color markerFillColor = null;
-        if( event.getType() == EventType.SEND ) {
-          // this.gc.setForeground( this.sendEventColor );
-          draw = this.sendEventDraw;
-          fill = this.sendEventFill;
-          drawColor = this.sendEventColor;
-          fillColor = this.sendEventFillColor;
-        }
-        if( event.getType() == EventType.RECV ) {
-          // this.gc.setForeground( this.sendEventColor );
-          draw = this.recvEventDraw;
-          fill = this.recvEventFill;
-          drawColor = this.recvEventColor;
-          fillColor = this.recvEventFillColor;
-        }
-        if( event.getType() == EventType.TEST ) {
-          // this.gc.setForeground( this.sendEventColor );
-          draw = this.testEventDraw;
-          fill = this.testEventFill;
-          drawColor = this.testEventColor;
-          fillColor = this.testEventFillColor;
-        }
-        if( event.getType() == EventType.OTHER ) {
-          // this.gc.setForeground( this.sendEventColor );
-          draw = this.otherEventDraw;
-          fill = this.otherEventFill;
-          drawColor = this.otherEventColor;
-          fillColor = this.otherEventFillColor;
-        }
-        // this.gc.setLineStyle( SWT.LINE_SOLID );
-        // if( event == this.getSelectedEvent() )
-        // this.gc.setLineWidth( 4 );
-        // else
-        // this.gc.setLineWidth( 0 );
         for( IEventMarker eventmarker : this.eventGraph.getEventMarkers() ) {
           int mark = eventmarker.mark( event );
           if( mark != 0 ) {
-            fillColor = eventmarker.getBackgroundColor( mark );
-            drawColor = eventmarker.getForegroundColor( mark );
-            if( drawColor == null ) {
-              draw = false;
-            }
-            if( fillColor == null ) {
-              fill = false;
-            }
+            Color newFillColor = eventmarker.getBackgroundColor( mark );
+            Color newDrawColor = eventmarker.getForegroundColor( mark );
+            if (newFillColor != null) fillColor = newFillColor;
+            if (newDrawColor != null) drawColor = newDrawColor;
           }
         }
         if( drawColor != null ) {
@@ -167,7 +123,7 @@ class PhysicalGraphPaintListener extends AbstractGraphPaintListener {
         int x = getXPosForClock( event.getPhysicalStartClock() );
         int rectangleWidth = getXPosForClock( event.getPhysicalStopClock() ) - x;
         int rectangleHeight = 2 * this.vzoomfactor;
-        if( fill ) {
+        if( fillColor != null ) {
           this.gc.fillRectangle( x, y, rectangleWidth, rectangleHeight );
         }
         if( rectangleHeight > this.fontsize + 2 ) {
@@ -182,7 +138,7 @@ class PhysicalGraphPaintListener extends AbstractGraphPaintListener {
             }
           }
         }
-        if( draw ) {
+        if( drawColor != null ) {
           this.gc.drawRectangle( x, y, rectangleWidth, rectangleHeight );
         }
       }

@@ -134,5 +134,10 @@
             defaultEnabled="false"
             label="Sourceline Event Marker">
       </MarkerClass>
+      <MarkerClass
+            class="eu.geclipse.traceview.internal.DefaultEventMarker"
+            id="eu.geclipse.traceview.internal.DefaultEventMarker"
+            label="Default Event Marker">
+      </MarkerClass>
    </extension>
 </plugin>

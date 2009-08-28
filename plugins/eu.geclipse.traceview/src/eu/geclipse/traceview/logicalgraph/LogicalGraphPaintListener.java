@@ -184,76 +184,8 @@ class LogicalGraphPaintListener extends AbstractGraphPaintListener {
         for( ILamportEvent event : events ) {
           int x = getXPosForClock( event.getLamportClock() ) - this.eventSize/2;
           int y = getYPosForProcId( event.getProcessId() ) - this.eventSize/2;
-          // draw event different?
-          boolean standardEvents = true;
-          for( IEventMarker eventmarker : this.eventGraph.getEventMarkers() ) {
-            int mark = eventmarker.mark( event );
-            if( ( mark & 63 ) != 0 ) {
-              standardEvents = false;
-              drawMarker( mark, eventmarker, x, y );
-            }
-          }
-          // draw standard types
-          if( standardEvents ) {
-            this.gc.setLineStyle( SWT.LINE_SOLID );
-            this.gc.setLineWidth( 0 );
-            // draw standard send
-            if( event.getType() == EventType.SEND ) {
-              if( this.sendEventFill ) {
-                this.gc.setBackground( this.sendEventFillColor );
-                this.gc.fillOval( x, y, this.eventSize, this.eventSize );
-              }
-              if( this.sendEventDraw ) {
-                this.gc.setForeground( this.sendEventColor );
-                this.gc.drawOval( x, y, this.eventSize, this.eventSize );
-              }
-            }
-            // draw standard receive
-            else if( event.getType() == EventType.RECV ) {
-              if( this.recvEventFill ) {
-                this.gc.setBackground( this.recvEventFillColor );
-                this.gc.fillOval( x, y, this.eventSize, this.eventSize );
-              }
-              if( this.recvEventDraw ) {
-                this.gc.setForeground( this.recvEventColor );
-                this.gc.drawOval( x, y, this.eventSize, this.eventSize );
-              }
-            }
-            // draw standard test
-            else if( event.getType() == EventType.TEST ) {
-              if( this.testEventFill ) {
-                this.gc.setBackground( this.testEventFillColor );
-                this.gc.fillRectangle( x, y, this.eventSize, this.eventSize );
-              }
-              if( this.testEventDraw ) {
-                this.gc.setForeground( this.testEventColor );
-                this.gc.drawRectangle( x, y, this.eventSize, this.eventSize );
-              }
-            }
-            // draw standard other
-            else if( event.getType() == EventType.OTHER ) {
-              int[] diamond = {
-                x + this.eventSize / 2,
-                y,
-                x,
-                y + this.eventSize / 2,
-                x + this.eventSize / 2,
-                y + this.eventSize,
-                x + this.eventSize,
-                y + this.eventSize / 2,
-                x + this.eventSize / 2,
-                y
-              };
-              if( this.otherEventFill ) {
-                this.gc.setBackground( this.otherEventFillColor );
-                this.gc.fillPolygon( diamond );
-              }
-              if( this.otherEventDraw ) {
-                this.gc.setForeground( this.otherEventColor );
-                this.gc.drawPolygon( diamond );
-              }
-            }
-          }
+          // draw event
+          drawEvent( event, x, y );
           if( event.getType() != EventType.OTHER
               && event.getType() != EventType.TEST )
           {
@@ -282,13 +214,18 @@ class LogicalGraphPaintListener extends AbstractGraphPaintListener {
     this.gc.setLineWidth( 0 );
   }
 
-  void drawMarker( int mark, IEventMarker eventmarker, int x, int y ) {
+  void drawEvent( ILamportEvent event, int x, int y ) {
     final int[] markTypes = { IEventMarker.Diamond_Event, IEventMarker.Triangle_Event,
                               IEventMarker.Ellipse_Event, IEventMarker.Rectangle_Event,
                               IEventMarker.Cross_Event };
-    for (int i = 0; i < markTypes.length; i++) {
-      int markType = markTypes[i];
-      if( ( mark & markType ) == markType ) {
+    for( IEventMarker eventmarker : this.eventGraph.getEventMarkers() ) {
+      int mark = eventmarker.mark( event );
+      if( ( mark & 63 ) != 0 ) {
+        int markType = 0;
+        for (int i = 0; i < markTypes.length; i++) {
+          markType = markTypes[i];
+          if (( mark & markType ) != 0) break;
+        }
         int[] poly = null;
         this.gc.setLineStyle( eventmarker.getLineStyle( markType ) );
         this.gc.setLineWidth( eventmarker.getLineWidth( markType ) );
@@ -338,7 +275,6 @@ class LogicalGraphPaintListener extends AbstractGraphPaintListener {
       }
     }
   }
-
 
   private void drawHRuler() {
     this.gc.setForeground( this.gc.getDevice().getSystemColor( SWT.COLOR_BLACK ) );
