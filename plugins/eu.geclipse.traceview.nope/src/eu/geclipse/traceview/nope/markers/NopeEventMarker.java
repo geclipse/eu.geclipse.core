@@ -19,11 +19,13 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceConverter;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 
+import eu.geclipse.traceview.EventType;
 import eu.geclipse.traceview.IEvent;
 import eu.geclipse.traceview.ITraceView;
 import eu.geclipse.traceview.nope.Activator;
@@ -35,13 +37,14 @@ import eu.geclipse.traceview.utils.AbstractEventMarker;
  * Marks Nope Events according to the preferences of the NOPE Legend
  */
 public class NopeEventMarker extends AbstractEventMarker {
-
   private IPreferenceStore store;
-  private Color foreground = null;
-  private Color background = null;
+  private Color foreground;
+  private Color background;
+  private Color canvasBackground;
   private Color[] colors = new Color[ PreferenceConstants.Names.length ];
   private boolean[] enabled = new boolean[ PreferenceConstants.Names.length ];
   private int[] shapes = new int[ PreferenceConstants.Names.length ];
+  private Color messageColor;
 
   /**
    * Creates a new NopeEventMarker
@@ -78,8 +81,7 @@ public class NopeEventMarker extends AbstractEventMarker {
     boolean running = true;
     for( int i = 0; i < PreferenceConstants.Names.length && running; i++ ) {
       if( event.getProperty().equals( PreferenceConstants.Names[ i ]
-                                      + PreferenceConstants.color ) )
-      {
+                                      + PreferenceConstants.color ) ) {
         this.colors[ i ].dispose();
         this.colors[ i ] = new Color( Display.getDefault(),
                                       PreferenceConverter.getColor( this.store,
@@ -87,21 +89,18 @@ public class NopeEventMarker extends AbstractEventMarker {
                                                                         + PreferenceConstants.color ) );
         running = false;
       } else if( event.getProperty().equals( PreferenceConstants.Names[ i ]
-                                             + PreferenceConstants.enabled ) )
-      {
+                                             + PreferenceConstants.enabled ) ) {
         this.enabled[ i ] = this.store.getBoolean( PreferenceConstants.Names[ i ]
                                                    + PreferenceConstants.enabled );
         running = false;
       } else if( event.getProperty().equals( PreferenceConstants.Names[ i ]
-                                             + PreferenceConstants.shape ) )
-      {
+                                             + PreferenceConstants.shape ) ) {
         this.shapes[ i ] = this.store.getInt( PreferenceConstants.Names[ i ]
                                               + PreferenceConstants.shape );
         running = false;
       }
     }
     Display.getDefault().asyncExec( new Runnable() {
-
       public void run() {
         try {
           ITraceView traceView = ( ITraceView )PlatformUI.getWorkbench()
@@ -116,18 +115,27 @@ public class NopeEventMarker extends AbstractEventMarker {
     } );
   }
 
+  @Override
   public Color getForegroundColor( final int type ) {
     return this.foreground;
   }
 
+  @Override
   public Color getBackgroundColor( final int type ) {
     return this.background;
   }
-
-  public int getLineWidth( final int type ) {
-    return 2;
+  
+  @Override
+  public Color getMessageColor() {
+    return this.messageColor;
   }
 
+  @Override
+  public Color getCanvasBackgroundColor() {
+    return this.canvasBackground;
+  }
+  
+  @Override
   public int mark( final IEvent event ) {
     int result = 0;
     boolean running = true;
@@ -142,7 +150,23 @@ public class NopeEventMarker extends AbstractEventMarker {
           }
         }
       }
+      Event lenCheckEvent = nopeEvent;
+      if (nopeEvent.getType().equals( EventType.SEND )) lenCheckEvent = ( Event )nopeEvent.getPartnerEvent();
+      this.messageColor = Display.getDefault().getSystemColor( SWT.COLOR_GREEN );
+      if (lenCheckEvent != null && lenCheckEvent.getType().equals( EventType.RECV )) {
+        if (lenCheckEvent.getAcceptedMessageLength() > lenCheckEvent.getSupposedMessageLength()) {
+          this.messageColor = Display.getDefault().getSystemColor( SWT.COLOR_RED );
+        } else if (lenCheckEvent.getAcceptedMessageLength() < lenCheckEvent.getSupposedMessageLength()) {
+          this.messageColor = Display.getDefault().getSystemColor( SWT.COLOR_YELLOW );
+        }
+      }
+      if (nopeEvent.getType().equals( EventType.RECV ) &&
+          nopeEvent.getSupposedPartnerProcess() == -1) {
+        this.canvasBackground = Display.getDefault().getSystemColor( SWT.COLOR_GRAY );
+      } else {
+        this.canvasBackground = null;
+      }
     }
-    return result;
+    return Ellipse_Event;
   }
 }
