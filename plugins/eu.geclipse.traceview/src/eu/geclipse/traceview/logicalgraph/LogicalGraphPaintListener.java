@@ -90,9 +90,6 @@ class LogicalGraphPaintListener extends AbstractGraphPaintListener {
    * bottom)
    */
   private void drawLeftRightTopBottom() {
-    // set the message color
-    this.gc.setBackground( this.messageColor );
-    this.gc.setForeground( this.messageColor );
     // draw only last couple of events
     int from = Math.max( this.fromClock - 100, 0 );
     // left
@@ -105,7 +102,18 @@ class LogicalGraphPaintListener extends AbstractGraphPaintListener {
         // only draw send messages and only the ones which could visible
         if( event.getType() == EventType.SEND
             && event.getPartnerLamportClock() >= this.fromClock ) {
-          drawConnection( event );
+          Color messageColor = null;
+          for( IEventMarker eventmarker : this.eventGraph.getEventMarkers() ) {
+            if( eventmarker.mark( event ) != 0 ) {
+              Color newColor = eventmarker.getMessageColor();
+              if (newColor != null) messageColor = newColor;
+            }
+          }
+          if (messageColor != null) {
+            this.gc.setBackground( messageColor );
+            this.gc.setForeground( messageColor );
+            drawConnection( event );
+          }
         }
       }
     }
@@ -147,25 +155,31 @@ class LogicalGraphPaintListener extends AbstractGraphPaintListener {
       if (!procDrawingEnabled( process.getProcessId() )) continue;
       ILamportEvent[] events = process.getEventsByLamportClock( this.fromClock, this.toClock );
       for( ILamportEvent event : events ) {
+        Color color = null;
+        IEventMarker lastMarker = null;
         for( IEventMarker eventmarker : this.eventGraph.getEventMarkers() ) {
           int mark = eventmarker.mark( event );
           if (mark != IEventMarker.No_Mark) {
-            Color color = eventmarker.getCanvasBackgroundColor();
-            if( color != null ) {
-              int bgWidth = this.hSpace;
-              ILamportEvent nextEvent = ( ILamportEvent )event.getNextEvent();
-              if ( nextEvent != null ) {
-                if ( eventmarker.mark( nextEvent ) != IEventMarker.No_Mark &&
-                     color.equals( eventmarker.getCanvasBackgroundColor() )) {
-                  bgWidth *= (nextEvent.getLamportClock() - event.getLamportClock()); 
-                }
-              }
-              this.gc.setBackground( color );
-              int x = getXPosForClock( event.getLamportClock() ) - this.hSpace/2;
-              int y = getYPosForProcId( event.getProcessId() ) - this.vSpace/2;
-              this.gc.fillRectangle( x, y, bgWidth, this.vSpace );
+            Color newColor = eventmarker.getCanvasBackgroundColor();
+            if (newColor != null) {
+              color = newColor;
+              lastMarker = eventmarker;
             }
           }
+        }
+        if( color != null ) {
+          int bgWidth = this.hSpace;
+          ILamportEvent nextEvent = ( ILamportEvent )event.getNextEvent();
+          if ( nextEvent != null ) {
+            if ( lastMarker.mark( nextEvent ) != IEventMarker.No_Mark &&
+                 color.equals( lastMarker.getCanvasBackgroundColor() )) {
+              bgWidth *= (nextEvent.getLamportClock() - event.getLamportClock()); 
+            }
+          }
+          this.gc.setBackground( color );
+          int x = getXPosForClock( event.getLamportClock() ) - this.hSpace/2;
+          int y = getYPosForProcId( event.getProcessId() ) - this.vSpace/2;
+          this.gc.fillRectangle( x, y, bgWidth, this.vSpace );
         }
       }
     }
@@ -186,23 +200,23 @@ class LogicalGraphPaintListener extends AbstractGraphPaintListener {
           int y = getYPosForProcId( event.getProcessId() ) - this.eventSize/2;
           // draw event
           drawEvent( event, x, y );
-          if( event.getType() != EventType.OTHER
-              && event.getType() != EventType.TEST )
-          {
+          if( event.getType() == EventType.SEND
+              || event.getType() == EventType.RECV ) {
             this.gc.setLineWidth( 0 );
             this.gc.setLineStyle( SWT.LINE_SOLID );
             // set connections color
-            this.gc.setBackground( this.messageColor );
-            this.gc.setForeground( this.messageColor );
-            for( IEventMarker eventmarker : this.eventGraph.getEventMarkers() )
-            {
-              if( ( eventmarker.mark( event ) & IEventMarker.Connection ) == IEventMarker.Connection )
-              {
-                this.gc.setBackground( eventmarker.getBackgroundColor( IEventMarker.Connection ) );
-                this.gc.setForeground( eventmarker.getForegroundColor( IEventMarker.Connection ) );
+            Color messageColor = null;
+            for( IEventMarker eventmarker : this.eventGraph.getEventMarkers() ) {
+              if( eventmarker.mark( event ) != 0 ) {
+                Color newColor = eventmarker.getMessageColor();
+                if (newColor != null) messageColor = newColor;
               }
             }
-            drawConnection( event );
+            if (messageColor != null) {
+              this.gc.setBackground( messageColor );
+              this.gc.setForeground( messageColor );
+              drawConnection( event );
+            }
           }
         }
       } catch( Exception exception ) {

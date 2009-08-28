@@ -23,6 +23,10 @@ public abstract class AbstractEventMarker implements IEventMarker {
     return null;
   }
 
+  public Color getMessageColor() {
+    return null;
+  }
+
   public int getLineStyle( int type ) {
     return SWT.LINE_SOLID;
   }

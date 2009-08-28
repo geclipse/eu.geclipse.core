@@ -32,6 +32,7 @@ public class DefaultEventMarker extends AbstractEventMarker {
   protected static Color recvEventColor;
   protected static Color testEventColor;
   protected static Color otherEventColor;
+  protected static Color messageColor;
   protected static IPropertyChangeListener listener;
 
   protected Color bgColor;
@@ -50,14 +51,22 @@ public class DefaultEventMarker extends AbstractEventMarker {
     }
   }
   
+  @Override
   public Color getBackgroundColor( int type ) {
     return this.bgColor;
   }
 
+  @Override
   public Color getForegroundColor( int type ) {
     return this.fgColor;
   }
 
+  @Override
+  public Color getMessageColor() {
+    return messageColor;
+  }
+
+  @Override
   public int mark( final IEvent event ) {
     int result = 0;
     if (event.getType().equals( EventType.SEND )) {
@@ -101,10 +110,10 @@ public class DefaultEventMarker extends AbstractEventMarker {
     otherEventFill = store.getBoolean( PreferenceConstants.P_RECV_EVENT
                                             + PreferenceConstants.P_FILL );
     // message color
-/*    messageColor = new Color( Display.getDefault(),
+    messageColor = new Color( Display.getDefault(),
                                    PreferenceConverter.getColor( store,
                                                                  PreferenceConstants.P_MESSAGE
-                                                                     + PreferenceConstants.P_COLOR ) );*/
+                                                                     + PreferenceConstants.P_COLOR ) );
     // event color
     sendEventColor = new Color( Display.getDefault(),
                                 PreferenceConverter.getColor( store,
@@ -173,12 +182,12 @@ public class DefaultEventMarker extends AbstractEventMarker {
       otherEventFill = store.getBoolean( property );
     }
     // Message color
-/*    else if( property.equals( PreferenceConstants.P_MESSAGE
+    else if( property.equals( PreferenceConstants.P_MESSAGE
                                          + PreferenceConstants.P_COLOR ) ) {
       messageColor.dispose();
       messageColor = new Color( Display.getDefault(),
-                                     PreferenceConverter.getColor( store, property ) );
-    }*/
+                                PreferenceConverter.getColor( store, property ) );
+    }
     // Event Color
     else if( property.equals( PreferenceConstants.P_SEND_EVENT
                                          + PreferenceConstants.P_COLOR ) ) {

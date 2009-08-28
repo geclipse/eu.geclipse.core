@@ -150,13 +150,25 @@ class PhysicalGraphPaintListener extends AbstractGraphPaintListener {
     if( this.arrowsize > 6 ) {
       this.arrowsize = 6;
     }
-    this.gc.setBackground( this.messageColor );
-    this.gc.setForeground( this.messageColor );
     for( int i = 0; i < this.numProc; i++ ) {
       IPhysicalEvent[] events = ( ( IPhysicalProcess )this.eventGraph.getTrace()
         .getProcess( i ) ).getEventsByPhysicalClock( this.fromTime, this.toTime );
       for( IPhysicalEvent event : events ) {
-        drawConnection( event );
+        if ( !event.getType().equals( EventType.SEND ) && !event.getType().equals( EventType.RECV ) ) {
+          continue;
+        }
+        Color messageColor = null;
+        for( IEventMarker marker : this.eventGraph.getEventMarkers() ) {
+          if (marker.mark( event ) != 0) {
+            Color newColor = marker.getMessageColor();
+            if (newColor != null) messageColor = newColor;
+          }
+        }
+        if (messageColor != null) {
+          this.gc.setBackground( messageColor );
+          this.gc.setForeground( messageColor );
+          drawConnection( event );
+        }
       }
     }
   }

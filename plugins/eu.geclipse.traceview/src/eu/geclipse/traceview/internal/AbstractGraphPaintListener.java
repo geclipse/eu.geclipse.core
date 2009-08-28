@@ -61,8 +61,6 @@ public abstract class AbstractGraphPaintListener implements PaintListener {
   protected int width;
   protected int height;
   // presentation
-  // message
-  protected Color messageColor;
   protected Color selectionColor;
   // lines
   protected Color line1;
@@ -107,11 +105,6 @@ public abstract class AbstractGraphPaintListener implements PaintListener {
     IPreferenceStore store = Activator.getDefault().getPreferenceStore();
     // settings
     this.antialiasing = store.getBoolean( PreferenceConstants.P_ANTI_ALIASING );
-    // message color
-    this.messageColor = new Color( this.eventGraph.getDisplay(),
-                                   PreferenceConverter.getColor( store,
-                                                                 PreferenceConstants.P_MESSAGE
-                                                                     + PreferenceConstants.P_COLOR ) );
     // selection color
     this.selectionColor = new Color( this.eventGraph.getDisplay(),
                                      PreferenceConverter.getColor( store,
@@ -129,19 +122,8 @@ public abstract class AbstractGraphPaintListener implements PaintListener {
       }
       this.eventGraph.redraw();
     }
-    // Message color
-    else if( event.getProperty().equals( PreferenceConstants.P_MESSAGE
-                                         + PreferenceConstants.P_COLOR ) )
-    {
-      this.messageColor.dispose();
-      this.messageColor = new Color( Display.getDefault(),
-                                     PreferenceConverter.getColor( store,
-                                                                   event.getProperty() ) );
-      this.eventGraph.redraw();
-    }
     // Selection Color
-    else if( event.getProperty().equals( PreferenceConstants.P_SELECTION_COLOR ) )
-    {
+    else if( event.getProperty().equals( PreferenceConstants.P_SELECTION_COLOR ) ) {
       this.selectionColor.dispose();
       this.selectionColor = new Color( Display.getDefault(),
                                        PreferenceConverter.getColor( store,

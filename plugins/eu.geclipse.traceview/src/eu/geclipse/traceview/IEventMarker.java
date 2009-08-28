@@ -92,6 +92,13 @@ public interface IEventMarker {
   public int getLineStyle( int type );
 
   /**
+   * Returns the color of the connection arrow.
+   * 
+   * @return the color of the connection arrow
+   */
+  public Color getMessageColor();
+
+  /**
    * Sets the Trace for the EventMarker
    * 
    * @param trace
