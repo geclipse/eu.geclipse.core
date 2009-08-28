@@ -45,6 +45,7 @@ public class TraceCacheFile {
       .map( FileChannel.MapMode.READ_WRITE, 0, randAccFile.length() )
       .order( ByteOrder.nativeOrder() )
       .asIntBuffer();
+    randAccFile.close();
   }
 
   public int read( final int offset ) throws IOException {
