@@ -28,7 +28,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
 
 import eu.geclipse.traceview.IEventMarker;
 import eu.geclipse.traceview.nope.Activator;
@@ -43,6 +42,7 @@ public class EventSubTypePreferenceEditor {
   String name;
   Button button;
   Combo combo;
+  ColorSelector colorSelector;
 
   /**
    * Creates a new EventSubTypePreferenceEditor
@@ -55,19 +55,27 @@ public class EventSubTypePreferenceEditor {
   {
     this.name = name;
     this.store = Activator.getDefault().getPreferenceStore();
-    // Label
-    Label label = new Label( composite, SWT.NONE );
-    label.setText( name );
+    // CheckBox
+    this.button = new Button( composite, SWT.CHECK );
+    this.button.setText( name );
+    this.button.setSelection( this.store.getBoolean( name
+                                                     + PreferenceConstants.enabled ) );
+    this.button.addSelectionListener( new SelectionAdapter() {
+      @Override
+      public void widgetSelected( final SelectionEvent event ) {
+        handleSelectionEvent();
+      }
+    } );
     // ColorSelector
-    ColorSelector colorSelector = new ColorSelector( composite );
-    colorSelector.setColorValue( PreferenceConverter.getColor( this.store,
+    this.colorSelector = new ColorSelector( composite );
+    this.colorSelector.setColorValue( PreferenceConverter.getColor( this.store,
                                                                name
                                                                    + PreferenceConstants.color ) );
     GridData gd = new GridData();
     gd.widthHint = 32;
     gd.heightHint = 16;
-    colorSelector.getButton().setLayoutData( gd );
-    colorSelector.addListener( new IPropertyChangeListener() {
+    this.colorSelector.getButton().setLayoutData( gd );
+    this.colorSelector.addListener( new IPropertyChangeListener() {
 
       public void propertyChange( final PropertyChangeEvent event ) {
         handlePropertyChangeEvent( event );
@@ -114,17 +122,7 @@ public class EventSubTypePreferenceEditor {
       }
     } );
     this.combo.select( selection );
-    // CheckBox
-    this.button = new Button( composite, SWT.CHECK );
-    this.button.setSelection( this.store.getBoolean( name
-                                                     + PreferenceConstants.enabled ) );
-    this.button.addSelectionListener( new SelectionAdapter() {
-
-      @Override
-      public void widgetSelected( final SelectionEvent event ) {
-        handleSelectionEvent();
-      }
-    } );
+    setEnabled( this.button.getSelection() );
   }
 
   protected void handlePropertyChangeEvent( final PropertyChangeEvent event ) {
@@ -139,6 +137,12 @@ public class EventSubTypePreferenceEditor {
   protected void handleSelectionEvent() {
     this.store.setValue( this.name + PreferenceConstants.enabled,
                          this.button.getSelection() );
+    setEnabled( this.button.getSelection() );
+  }
+  
+  protected void setEnabled( boolean state ) {
+    this.colorSelector.setEnabled( state );
+    this.combo.setEnabled( state );
   }
 
   protected void handleSelectionEvent2() {

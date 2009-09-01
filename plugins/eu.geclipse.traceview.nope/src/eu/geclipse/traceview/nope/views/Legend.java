@@ -46,7 +46,7 @@ public class Legend extends ViewPart {
     layout.marginRight = 10;
     layout.marginTop = 10;
     layout.marginBottom = 10;
-    layout.numColumns = 4;
+    layout.numColumns = 3;
     composite.setLayout( layout );
     gd = new GridData();
     composite.setLayoutData( gd );
