@@ -29,7 +29,8 @@
       <MarkerClass
             id="eu.geclipse.traceview.nope.markers.NopeEventMarker"
             class="eu.geclipse.traceview.nope.markers.NopeEventMarker"
-            label="Nope Event Marker">
+            label="Nope Event Marker"
+            priority="100">
       </MarkerClass>
    </extension>
    <extension

@@ -120,24 +120,28 @@
       <MarkerClass
             class="eu.geclipse.traceview.internal.CauseEffectMarker"
             id="eu.geclipse.traceview.markers.CauseEffectMarker"
-            label="Cause Effect Marker">
+            label="Cause Effect Marker"
+            priority="300">
       </MarkerClass>
       <MarkerClass
             class="eu.geclipse.traceview.internal.SelectionPartnerMarker"
             id="eu.geclipse.traceview.markers.SelectionPartnerMarker"
             defaultEnabled="false"
-            label="Selection Partner Marker">
+            label="Selection Partner Marker"
+            priority="700">
       </MarkerClass>
       <MarkerClass
             class="eu.geclipse.traceview.internal.SourceLineEventMarker"
             id="eu.geclipse.traceview.internal.SourceLineEventMarker"
             defaultEnabled="false"
-            label="Sourceline Event Marker">
+            label="Sourceline Event Marker"
+            priority="500">
       </MarkerClass>
       <MarkerClass
             class="eu.geclipse.traceview.internal.DefaultEventMarker"
             id="eu.geclipse.traceview.internal.DefaultEventMarker"
-            label="Default Event Marker">
+            label="Default Event Marker"
+            priority="0">
       </MarkerClass>
    </extension>
 </plugin>

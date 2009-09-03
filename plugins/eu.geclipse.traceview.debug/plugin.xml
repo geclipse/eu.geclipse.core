@@ -6,7 +6,8 @@
       <MarkerClass
             id="eu.geclipse.traceview.nope.debug.EventBreakpointMarker"
             class="eu.geclipse.traceview.debug.EventBreakpointMarker"
-            label="Event Breakpoint Marker"/>
+            label="Event Breakpoint Marker"
+            priority="900"/>
    </extension>
    <extension point="org.eclipse.ui.popupMenus">
       <objectContribution
