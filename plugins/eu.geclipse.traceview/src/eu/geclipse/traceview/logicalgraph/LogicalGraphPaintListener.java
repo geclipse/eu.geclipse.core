@@ -150,7 +150,7 @@ class LogicalGraphPaintListener extends AbstractGraphPaintListener {
   }
 
   private void drawGraphBackground() {
-    for( int i = this.fromProcessLine; i < this.toProcessLine; i++ ) {
+    for( int i = 0; i < this.numProc; i++ ) {
       ILamportProcess process = ( ILamportProcess )this.eventGraph.getTrace().getProcess( i );
       if (!procDrawingEnabled( process.getProcessId() )) continue;
       ILamportEvent[] events = process.getEventsByLamportClock( this.fromClock, this.toClock );
