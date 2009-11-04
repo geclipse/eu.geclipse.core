@@ -209,6 +209,44 @@ class PhysicalGraphPaintListener extends AbstractGraphPaintListener {
     }
   }
 
+  private void drawGraphBackground() {
+    for( int i = 0; i < this.numProc; i++ ) {
+      IPhysicalProcess process = ( IPhysicalProcess )this.eventGraph.getTrace().getProcess( i );
+      if (!procDrawingEnabled( process.getProcessId() )) continue;
+      IPhysicalEvent[] events = process.getEventsByPhysicalClock( this.fromTime - 20,
+                                                                  this.toTime );      
+      for( IPhysicalEvent event : events ) {
+        Color color = null;
+        IEventMarker lastMarker = null;
+        for( IEventMarker eventmarker : this.eventGraph.getEventMarkers() ) {
+          int mark = eventmarker.mark( event );
+          if (mark != IEventMarker.No_Mark) {
+            Color newColor = eventmarker.getCanvasBackgroundColor();
+            if (newColor != null) {
+              color = newColor;
+              lastMarker = eventmarker;
+            }
+          }
+        }
+        if( color != null ) {
+          int x = getXPosForClock( event.getPhysicalStartClock() );
+          int bgWidth = getXPosForClock( event.getPhysicalStopClock() ) - x;
+          IPhysicalEvent nextEvent = ( IPhysicalEvent )event.getNextEvent();
+          if ( nextEvent != null ) {
+            if ( lastMarker.mark( nextEvent ) != IEventMarker.No_Mark &&
+                 color.equals( lastMarker.getCanvasBackgroundColor() )) {
+              bgWidth += getXPosForClock( nextEvent.getPhysicalStartClock() )
+                         - getXPosForClock( event.getPhysicalStopClock() );
+            }
+          }
+          this.gc.setBackground( color );
+          int y = getYPosForProcId( event.getProcessId() ) - this.vSpace/2;
+          this.gc.fillRectangle( x, y, bgWidth, this.vSpace );
+        }
+      }
+    }
+  }
+
   /*
    * (non-Javadoc)
    * 
@@ -240,6 +278,8 @@ class PhysicalGraphPaintListener extends AbstractGraphPaintListener {
       drawHRuler();
       // set the clipping to the graph area
       this.gc.setClipping( 31, 1, this.width - 31, this.height - 31 );
+      // Draw background markers of events
+      drawGraphBackground();
       drawGridHLines();
       drawGridVLines();
       drawSelection();
