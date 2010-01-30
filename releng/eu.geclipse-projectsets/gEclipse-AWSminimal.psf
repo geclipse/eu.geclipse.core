@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- and a comment to test git-svn -->
 <psf version="2.0">
 <provider id="org.eclipse.team.cvs.core.cvsnature">
 <project reference="1.0,:extssh:anoncvs@cvs.fzk.de:/data/cvs/fzk/geclipse,geclipse/development/eu.geclipse.efs.sftp,eu.geclipse.efs.sftp"/>
