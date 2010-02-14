@@ -104,11 +104,11 @@ public class BufferedRandomAccessFile {
   }
 
   public int readInt() throws IOException {
-    int a = this.read();
-    int b = this.read();
-    int c = this.read();
-    int d = this.read();
-    return ( a << 24 ) + ( b << 16 ) + ( c << 8 ) + d ;
+    int a = this.read() & 0xff;
+    int b = this.read() & 0xff;
+    int c = this.read() & 0xff;
+    int d = this.read() & 0xff;
+    return ( a << 24 ) | ( b << 16 ) | ( c << 8 ) | d ;
   }
 
   public void writeInt( int value ) throws IOException {
