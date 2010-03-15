@@ -21,3 +21,4 @@ Bundle-Vendor: %Bundle-Vendor
 Bundle-Name: %Bundle-Name
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-Localization: plugin
+Export-Package: eu.geclipse.aws.ec2.ui.actions
