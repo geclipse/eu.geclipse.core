@@ -60,7 +60,15 @@ public class EC2Instance extends AbstractEC2GridResource
   }
 
   public String getName() {
-    StringBuilder strBuilder = new StringBuilder( this.instance.getInstanceId() );
+    String temp = this.instance.getDnsName();
+    String publicIP ; 
+    if (temp.length() > 0) { 
+      publicIP = temp.substring( 0, temp.indexOf( "." ) );
+    }
+    else 
+      publicIP = this.instance.getInstanceId() ; 
+    
+    StringBuilder strBuilder = new StringBuilder( publicIP);
     strBuilder.append( " (" ); //$NON-NLS-1$
     strBuilder.append( this.instance.getImageId() );
     strBuilder.append( ") - " ); //$NON-NLS-1$
