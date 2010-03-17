@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension-point id="UserInfo" name="User Info" schema="schema/eu.geclipse.efs.sftp.userinfo.exsd"/>
+   <extension
+         point="org.eclipse.core.filesystem.filesystems">
+      <filesystem
+            scheme="sftp">
+         <run
+               class="eu.geclipse.efs.sftp.SFTPFileSystem">
+         </run>
+      </filesystem>
+   </extension>
+
+</plugin>

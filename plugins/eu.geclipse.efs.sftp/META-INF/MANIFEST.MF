@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: EFS SSH Plug-in
+Bundle-SymbolicName: eu.geclipse.efs.sftp;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: eu.geclipse.efs.sftp.Activator
+Require-Bundle: com.jcraft.jsch,
+ org.eclipse.jsch.core,
+ org.eclipse.core.runtime,
+ org.eclipse.core.filesystem
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-ActivationPolicy: lazy
+Export-Package: eu.geclipse.efs.sftp
