@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension point="org.eclipse.ui.popupMenus">
+	 <objectContribution 
+		adaptable="true"
+	 	id="eu.neclab.slaservice.action.openservicepage" 
+	 	objectClass="eu.geclipse.aws.ec2.EC2Instance">
+	 	<menu
+               id="eu.geclipse.smila.popupMenu"
+               label="SMILA"
+               path="additions">
+            <separator
+                  name="content">
+            </separator> 
+            <separator
+                  name="webaccess">
+            </separator>
+            <separator
+                  name="crawler">
+            </separator>
+             <separator
+                  name="configuration">
+            </separator>
+         </menu>
+		<action
+           class="eu.geclipse.smila.actions.OpenSmila"
+           enablesFor="1"
+           id="eu.geclipse.smila.opensmilapage"
+           label="Open SMILA Web page"
+           menubarPath="eu.geclipse.smila.popupMenu/webaccess"/>
+     	 <action
+           class="eu.geclipse.smila.actions.OpenSolr"
+           enablesFor="1"
+           id="eu.geclipse.smila.opensolrpage"
+           label="Open Solr Web page"
+           menubarPath="eu.geclipse.smila.popupMenu/webaccess"/>
+         <action
+           class="eu.geclipse.smila.actions.OpenRAP"
+           enablesFor="1"
+           id="eu.geclipse.smila.openrappage"
+           label="Open SMILA RAP page"
+           menubarPath="eu.geclipse.smila.popupMenu/webaccess"/>
+         <action
+           class="eu.geclipse.smila.actions.SetSolrConfig"
+           enablesFor="1"
+           id="eu.geclipse.smila.setsolrconfig"
+           label="Config Solr Search ..."
+           menubarPath="eu.geclipse.smila.popupMenu/content"/>
+         <action
+        	class="eu.geclipse.smila.actions.MountSmilaFileConf"
+        	enablesFor="+"
+        	menubarPath="eu.geclipse.smila.popupMenu/configuration"
+        	id="eu.geclipse.smila.mountfilexml"
+        	label="Mount SMILA file.xml"/>
+         <action
+        	class="eu.geclipse.smila.actions.MountSmilaWebConf"
+        	enablesFor="+"
+        	menubarPath="eu.geclipse.smila.popupMenu/configuration"
+        	id="eu.geclipse.smila.mountfilexml"
+        	label="Mount SMILA web.xml"/>
+      	 <action
+        	class="eu.geclipse.smila.actions.StartFileCrawler"
+        	enablesFor="+"
+        	menubarPath="eu.geclipse.smila.popupMenu/crawler"
+        	id="eu.geclipse.smila.startfilecrawl"
+        	label="Start File Crawler"/>
+         <action
+        	class="eu.geclipse.smila.actions.StartWebCrawler"
+        	enablesFor="+"
+        	menubarPath="eu.geclipse.smila.popupMenu/crawler"
+        	id="eu.geclipse.smila.startwebcrawl"
+        	label="Start Web Crawler"/>        	 
+        <action
+        	class="eu.geclipse.smila.actions.SetWebCrawlerPage"
+        	enablesFor="+"
+        	menubarPath="eu.geclipse.smila.popupMenu/crawler"
+        	id="eu.geclipse.smila.setwebcrawl"
+        	label="Set Web Crawler Page ..."/>
+      </objectContribution>
+   </extension>
+</plugin>

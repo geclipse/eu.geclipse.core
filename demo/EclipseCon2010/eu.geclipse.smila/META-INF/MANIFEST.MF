@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Smila
+Bundle-SymbolicName: eu.geclipse.smila;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: eu.geclipse.smila.internal.Activator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ eu.geclipse.aws.ec2;bundle-version="1.0.0",
+ eu.geclipse.core;bundle-version="1.0.0",
+ org.eclipse.ui.browser;bundle-version="3.2.300",
+ eu.geclipse.aws.ec2.ui;bundle-version="1.0.0",
+ eu.geclipse.ui;bundle-version="1.0.0"
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
