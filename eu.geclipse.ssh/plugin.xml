@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         point="eu.geclipse.ui.authTokenUI">
+      <wizard
+            class="eu.geclipse.ssh.wizard.SSHTokenWizard"
+            icon="icons/obj16/proxy.gif"
+            id="eu.geclipse.ssh.auth.wizard"
+            name="SSH Token">
+      </wizard>
+      <factory
+            class="eu.geclipse.ssh.auth.SSHTokenFactory"
+            id="eu.geclipse.ssh.auth.factory"
+            name="SSH Token UI Factory">
+      </factory>
+   </extension>
+   <extension
+         point="eu.geclipse.ui.efs">
+      <filesystem
+            scheme="sftp">
+         <server
+               host="Host"
+               path="Remote Directory"
+               port="Port"
+               user-info="User Info">
+         </server>
+      </filesystem>
+   </extension>
+   <extension
+         point="eu.geclipse.core.authTokens">
+      <token
+            description="eu.geclipse.ssh.auth.SSHTokenDescription"
+            id="eu.geclipse.ssh.auth.proxy"
+            name="SSH Token"
+            wizard="eu.geclipse.ssh.auth.wizard">
+      </token>
+   </extension>
+   <extension
+         point="eu.geclipse.efs.sftp.UserInfo">
+      <UserInfoProvider
+            class="eu.geclipse.ssh.auth.SSHTokenDescriptionProvider">
+      </UserInfoProvider>
+   </extension>
+
+
+</plugin>

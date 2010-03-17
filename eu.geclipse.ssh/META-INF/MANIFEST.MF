@@ -1,0 +1,21 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: SSH Plug-in
+Bundle-SymbolicName: eu.geclipse.ssh;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: eu.geclipse.ssh.Activator
+Require-Bundle: com.jcraft.jsch,
+ eu.geclipse.core,
+ eu.geclipse.core.reporting,
+ eu.geclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.jsch.core,
+ org.eclipse.ui,
+ eu.geclipse.efs.sftp
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-ActivationPolicy: lazy;exclude:="eu.geclipse.ui.views"
+Export-Package: eu.geclipse.ssh,
+ eu.geclipse.ssh.auth,
+ eu.geclipse.ssh.auth.dialogs,
+ eu.geclipse.ssh.wizard,
+ eu.geclipse.ssh.wizard.pages
