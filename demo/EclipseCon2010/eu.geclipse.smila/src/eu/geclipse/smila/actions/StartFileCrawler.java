@@ -44,13 +44,11 @@ public class StartFileCrawler implements IObjectActionDelegate {
 		instanceList = new ArrayList<EC2Instance>();
 	}
 
-	@Override
 	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
 		this.workbenchPart = targetPart;
 
 	}
 
-	@Override
 	public void run(IAction action) {
 
 		String endpoint = null;
@@ -76,7 +74,6 @@ public class StartFileCrawler implements IObjectActionDelegate {
 		}
 	}
 
-	@Override
 	public void selectionChanged(IAction action, ISelection selection) {
 		boolean enable = false;
 		this.instanceList.clear();

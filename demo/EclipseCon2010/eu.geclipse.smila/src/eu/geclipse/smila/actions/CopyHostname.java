@@ -16,8 +16,6 @@
  *****************************************************************************/
 package eu.geclipse.smila.actions;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,9 +28,6 @@ import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.browser.IWebBrowser;
 
 import eu.geclipse.aws.ec2.EC2Instance;
 
@@ -51,13 +46,11 @@ public class CopyHostname implements IObjectActionDelegate {
 		instanceList = new ArrayList<EC2Instance>();
 	}
 
-	@Override
 	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
 		this.workbenchPart = targetPart;
 
 	}
 
-	@Override
 	public void run(IAction action) {
 
 		String hostname = null;
@@ -76,7 +69,6 @@ public class CopyHostname implements IObjectActionDelegate {
 				new Transfer[] { textTransfer });
 	}
 
-	@Override
 	public void selectionChanged(IAction action, ISelection selection) {
 		boolean enable = false;
 		this.instanceList.clear();

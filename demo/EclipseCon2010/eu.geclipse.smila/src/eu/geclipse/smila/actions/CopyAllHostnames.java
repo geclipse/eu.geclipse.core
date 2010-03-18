@@ -46,13 +46,11 @@ public class CopyAllHostnames implements IObjectActionDelegate {
 		instanceList = new ArrayList<EC2Instance>();
 	}
 
-	@Override
 	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
 		this.workbenchPart = targetPart;
 
 	}
 
-	@Override
 	public void run(IAction action) {
 
 		String hostname = null;
@@ -73,7 +71,6 @@ public class CopyAllHostnames implements IObjectActionDelegate {
 		
 	}
 
-	@Override
 	public void selectionChanged(IAction action, ISelection selection) {
 		boolean enable = false;
 		this.instanceList.clear();
