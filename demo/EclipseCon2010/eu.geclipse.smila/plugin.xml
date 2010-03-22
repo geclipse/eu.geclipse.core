@@ -43,37 +43,37 @@
            menubarPath="eu.geclipse.smila.popupMenu/webaccess"/>
          <action
            class="eu.geclipse.smila.actions.SetSolrConfig"
-           enablesFor="1"
+           enablesFor="+"
            id="eu.geclipse.smila.setsolrconfig"
            label="Config Solr Search ..."
            menubarPath="eu.geclipse.smila.popupMenu/content"/>
          <action
         	class="eu.geclipse.smila.actions.MountSmilaFileConf"
-        	enablesFor="+"
+        	enablesFor="1"
         	menubarPath="eu.geclipse.smila.popupMenu/configuration"
         	id="eu.geclipse.smila.mountfilexml"
         	label="Mount SMILA file.xml"/>
          <action
         	class="eu.geclipse.smila.actions.MountSmilaWebConf"
-        	enablesFor="+"
+        	enablesFor="1"
         	menubarPath="eu.geclipse.smila.popupMenu/configuration"
         	id="eu.geclipse.smila.mountfilexml"
         	label="Mount SMILA web.xml"/>
       	 <action
         	class="eu.geclipse.smila.actions.StartFileCrawler"
-        	enablesFor="+"
+        	enablesFor="1"
         	menubarPath="eu.geclipse.smila.popupMenu/crawler"
         	id="eu.geclipse.smila.startfilecrawl"
         	label="Start File Crawler"/>
          <action
         	class="eu.geclipse.smila.actions.StartWebCrawler"
-        	enablesFor="+"
+        	enablesFor="1"
         	menubarPath="eu.geclipse.smila.popupMenu/crawler"
         	id="eu.geclipse.smila.startwebcrawl"
         	label="Start Web Crawler"/>        	 
         <action
         	class="eu.geclipse.smila.actions.SetWebCrawlerPage"
-        	enablesFor="+"
+        	enablesFor="1"
         	menubarPath="eu.geclipse.smila.popupMenu/crawler"
         	id="eu.geclipse.smila.setwebcrawl"
         	label="Set Web Crawler Page ..."/>
