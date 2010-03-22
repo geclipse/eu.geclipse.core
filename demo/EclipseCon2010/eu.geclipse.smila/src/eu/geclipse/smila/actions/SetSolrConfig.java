@@ -64,7 +64,7 @@ public class SetSolrConfig implements IObjectActionDelegate {
 			String privateIP = inst.getPrivateDnsName();
 
 			if (publicIP != null && privateIP != null) {
-				privateIP = convertPrivateIP(privateIP);
+//				privateIP = convertPrivateIP(privateIP);
 				System.out.println(i + " " + publicIP + "|" + privateIP);
 				liste.add(publicIP + "|" + privateIP);
 			}
@@ -88,7 +88,7 @@ public class SetSolrConfig implements IObjectActionDelegate {
             solrHostNb = input.getValue();
 		}
 		
-		iSolrHost = Integer.valueOf(solrHostNb).intValue(); 
+		iSolrHost = Integer.parseInt(solrHostNb); 
 		
 		// now look for the JMX endpoint 
 		String solrHost = liste.get(iSolrHost);
