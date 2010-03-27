@@ -36,7 +36,7 @@ public abstract class AbstractTrace implements ITrace {
     new PropertyDescriptor( PROP_NUMPROCS, "Number of Processes" ), //$NON-NLS-1$
     new PropertyDescriptor( PROP_NAME, "Trace Name" ) //$NON-NLS-1$
   };
-  protected Map<String, Object> userData;
+  final protected Map<String, Object> userData;
 
   /**
    * Abstract Trace

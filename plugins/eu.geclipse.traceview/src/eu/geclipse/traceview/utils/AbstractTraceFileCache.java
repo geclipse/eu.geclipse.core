@@ -26,10 +26,181 @@ import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 import eu.geclipse.traceview.internal.Activator;
 import eu.geclipse.traceview.preferences.PreferenceConstants;
+
+final class OffsetEntry {
+  final int id;
+  final int[] buffer;
+  final int elementCount;
+  final int intOffset;
+  final int mask;
+  final int shift;
+  final int fillPosShift;
+  final int mask2;
+  final int bits;
+  final boolean signed;
+  final boolean needsRead;
+  final static int[] signedTable = new int[32];
+
+  static {
+    for (int i = 0; i < 32; i++) {
+      signedTable[i] = makeMask( i + 1 , 31 - i );
+    }
+  }  
+  
+  public OffsetEntry( final int id, final int bits, final boolean signed, final int[] intOffset, final int[] shift ) {
+    this( id, 1, bits, signed, intOffset, shift);
+  }  
+
+  public OffsetEntry( final int id, final int elementCount, final int bits, final boolean signed, final int[] intOffset, final int[] shift ) {
+    if (shift[0] == 32) {
+      shift[0] = 0;
+      intOffset[0]++;
+    }
+    this.id = id;
+    this.bits = bits;
+    this.signed = signed;
+    this.intOffset = intOffset[0];
+    this.fillPosShift = shift[0];
+    this.elementCount = elementCount;
+    this.buffer = new int[((shift[0] + this.bits*elementCount) / 32)+1];
+    if ((shift[0] + this.bits)>=32) {
+      int bits1 = 32 - shift[0];
+      int bits2 = bits - bits1;
+      this.mask = makeMask( shift[0], bits1 );
+      this.needsRead = true;
+      this.shift = shift[0] - bits2;
+      this.mask2 = makeMask( 0, bits2 );
+      intOffset[0] += this.buffer.length;
+      shift[0] = (shift[0] + this.bits*elementCount) % 32;
+    } else {
+      this.shift = shift[0];
+      this.mask = makeMask( this.shift, bits );
+      this.needsRead = this.mask != 0xffffffff;
+      this.mask2 = 0; // not used
+      shift[0] += bits;
+    }
+  }
+
+  static int makeMask( final int shift, final int bits ) {
+    int mask = 0;
+    for (int i = 0; i < bits; i++) mask |= 1 << (shift+i);
+    return mask;
+  }
+
+  void checkRange( final int value ) {
+    if (signed) {
+      int max = makeMask( 0, bits-1 );
+      int min = 0-max-1;
+      if (value > max || value < min) 
+        System.out.println( "Value out of range (id: " + id + ", value: " + value + ", min: " + min + ", max: " + max + ")" );
+    } else {
+      long max = makeMask( 0, bits );
+      max &= 0x00000000ffffffffl;
+      if (value > max) 
+        System.out.println( "Value out of range (id: " + id + ", value: " + value + ", max: " + max + ")" );
+    }    
+  }
+
+  void write( final int value ) {
+//    checkRange( value ); // for debugging only
+    buffer[0] &= ~mask;
+    buffer[0] |= (value << shift) & mask;
+    if (mask2 != 0) {
+      buffer[1] &= ~mask2;
+      buffer[1] |= value & mask2;
+    }
+  }
+
+  void writeArray( final int[] value ) {
+    int j=0;
+    int m1 = mask;
+    int m2 = mask2;
+    int sh = shift;
+    int fillPosSh = fillPosShift;
+    for (int i = 0; i < elementCount; i++) {
+      buffer[j] &= ~m1;
+      buffer[j] |= (value[i] << sh) & m1;
+      if (m2 != 0) {
+        j++;
+        buffer[j] &= ~m2;
+        buffer[j] |= value[i] & m2;
+      }
+      long lm1 = m1 & 0x00000000ffffffffl;
+      lm1 <<= bits;
+      long lm2 = m2 & 0x00000000ffffffffl;
+      lm2 <<= bits;
+      if ((0x00000000ffffffffl & lm1) != 0l) {
+        m1 = (int)(0x00000000ffffffffl & lm1);
+        m2 = (int)(0x00000000ffffffffl & (lm1>>>32 | lm2));
+      } else {
+        m1 = (int)(0x00000000ffffffffl & (lm1>>>32 | lm2));
+        m2 = (int)(0x00000000ffffffffl & (lm2>>>32));
+      }
+      fillPosSh += bits;
+      if (fillPosSh >= 32) fillPosSh -= 32;
+      if (m2 != 0) {
+        sh = 32 - bits;
+      } else {
+        sh = fillPosSh;
+      }
+    }
+  }
+
+  int read() {
+    int data = (buffer[0] & mask) >>> shift;
+    if (mask2 != 0) {
+      data |= buffer[1] & mask2;
+    }
+    if (signed && 0 != ( data & (1<<(bits-1)))) {
+      data |= OffsetEntry.signedTable[bits-1];
+    }
+    return data;
+  }
+
+  void readArray( final int[] data ) {
+    int j = 0;
+    int m1 = mask;
+    int m2 = mask2;
+    int sh = shift;
+    int fillPosSh = fillPosShift;
+    for (int i = 0; i < elementCount; i++) {
+      data[i] = (buffer[j] & m1) >>> sh;
+      if (m2 != 0) {
+        j++;
+        data[i] |= buffer[j] & m2;
+      }
+      long lm1 = m1 & 0x00000000ffffffffl;
+      lm1 <<= bits;
+      long lm2 = m2 & 0x00000000ffffffffl;
+      lm2 <<= bits;
+      if ((0x00000000ffffffffl & lm1) != 0l) {
+        m1 = (int)(0x00000000ffffffffl & lm1);
+        m2 = (int)(0x00000000ffffffffl & (lm1>>>32 | lm2));
+      } else {
+        m1 = (int)(0x00000000ffffffffl & (lm1>>>32 | lm2));
+        m2 = (int)(0x00000000ffffffffl & (lm2>>>32));
+      }
+
+      if (signed && 0 != ( data[i] & (1<<(bits-1)))) {
+        data[i] |= OffsetEntry.signedTable[bits-1];
+      }
+
+      fillPosSh += bits;
+      if (fillPosSh >= 32) fillPosSh -= 32;
+      if (m2 != 0) {
+        sh = 32 - bits;
+      } else {
+        sh = fillPosSh;
+      }
+    }
+  }
+}
 
 public abstract class AbstractTraceFileCache extends AbstractTrace {
   private static String metaDataFilename = "cache.data"; //$NON-NLS-1$
@@ -41,13 +212,44 @@ public abstract class AbstractTraceFileCache extends AbstractTrace {
   protected int[] cacheFileNr;
   protected int[] cacheIndex;
   protected int[] maxLogClk;
-  protected Map<String, Integer> sourceFilenames = new HashMap<String, Integer>();
+  protected final Map<String, Integer> sourceFilenames = new HashMap<String, Integer>();
   private int cacheFileCount;
+  private final Vector<OffsetEntry> entries = new Vector<OffsetEntry>();
+  private final int[] intOffset = new int[1];
+  private final int[] shift = new int[1];
+  private String tracefileName;
 
-  abstract public int getEventSize();
+  abstract public int estimateMaxLogicalClock();
 
-  public boolean openCacheDir( final String tracefileName, final String traceOptions, final long lastModified ) throws IOException {
+  final public int getBitsForMaxValue(int value) {
+    int bits = 32;
+    while( ( (1<<(bits-1)) & value ) == 0 || bits == 1 ) {
+      bits--;
+    }
+    return bits;
+  }
+  
+  final public int getEventSize() {
+    return (shift[0] == 0) ? intOffset[0] : intOffset[0] + 1;
+  }
+  
+  final public void addEntry( int id, int bits, boolean signed ) {
+    if (bits > 32) bits = 32;
+    if (id >= entries.size()) entries.setSize( id+1 );
+    OffsetEntry entry = new OffsetEntry(id, bits, signed, intOffset, shift);
+    entries.set( id, entry );
+  }  
+
+  final public void addEntry( int id, int elementCount, int bits, boolean signed ) {
+    if (bits > 32) bits = 32;
+    if (id >= entries.size()) entries.setSize( id+1 );
+    OffsetEntry entry = new OffsetEntry(id, elementCount, bits, signed, intOffset, shift);
+    entries.set( id, entry );
+  }  
+
+  final public boolean openCacheDir( final String tracefileName, final String traceOptions, final long lastModified ) throws IOException {
     boolean cacheLoaded = false;
+    this.tracefileName = tracefileName;
     IPreferenceStore store = Activator.getDefault().getPreferenceStore();
     File tmpDir = new File( store.getString( PreferenceConstants.P_CACHE_DIR ) );
     this.cacheDir = new File(tmpDir, "tracecache_" + Integer.toHexString( traceOptions.hashCode() + tracefileName.hashCode() ) );
@@ -96,7 +298,7 @@ public abstract class AbstractTraceFileCache extends AbstractTrace {
     return cacheLoaded;
   }
 
-  protected void createCacheFileMapping() {
+  final protected void createCacheFileMapping() {
     Vector<Integer> factors = factorize( getNumberOfProcesses() );
     this.cacheFileCount = 1;
     for (int i = factors.size()-1; i>=0; i--) {
@@ -116,7 +318,7 @@ public abstract class AbstractTraceFileCache extends AbstractTrace {
     }
   }
 
-  private Vector<Integer> factorize(int x) {
+  final private Vector<Integer> factorize(int x) {
     Vector<Integer> resultVector = new Vector<Integer>();
     int d = 2;
     do {
@@ -130,14 +332,14 @@ public abstract class AbstractTraceFileCache extends AbstractTrace {
     return resultVector;
   }
 
-  private void openCacheFiles() throws FileNotFoundException {
+  final private void openCacheFiles() throws FileNotFoundException {
     cacheFiles = new TraceCacheFile[cacheFileCount];
     for (int fileNr = 0; fileNr < cacheFileCount; fileNr++ ) {
       cacheFiles[fileNr] = new TraceCacheFile(cacheDir, fileNr);
     }
   }
   
-  private void loadCacheMetadata() throws IOException {
+  final private void loadCacheMetadata() throws IOException {
     metaData = new Properties();
     FileInputStream in = new FileInputStream(dataFile);
     metaData.load( in );
@@ -150,7 +352,7 @@ public abstract class AbstractTraceFileCache extends AbstractTrace {
     }
   }
 
-  protected void saveCacheMetadata() throws IOException {
+  final protected void saveCacheMetadata() throws IOException {
     try {
     for (int i = 0; i < getNumberOfProcesses(); i++) {
       metaData.put( "eventcount_" + i, Integer.toString( maxLogClk[i] ) );
@@ -167,38 +369,52 @@ public abstract class AbstractTraceFileCache extends AbstractTrace {
       metaData.put( "file_" + fileNr, mapping.toString() );
     }
     FileOutputStream out = new FileOutputStream(dataFile);
-    metaData.store( out, "Trace file cache meta data" );
+    metaData.store( out, "Trace file cache meta data (" + tracefileName + ')' );
     out.close();
     }catch(Exception e) {
       e.printStackTrace();
     }
   }
-
-  void write( final int processId, final int logicalClock, final int offset, final int value ) {
-    int eventOffset = calcEventOffset( processId, logicalClock, offset );
+  
+  final void write( final int processId, final int logicalClock, final int id, final int value ) {
     try {
-      cacheFiles[cacheFileNr[processId]].write(eventOffset, value);
+      TraceCacheFile file = cacheFiles[cacheFileNr[processId]];
+      OffsetEntry off = entries.get( id );
+      int offset = calcEventOffset( processId, logicalClock, off.intOffset );
+      if (off.needsRead) {
+        file.read( offset, off.buffer );
+      }
+      off.write( value );
+      file.write( offset, off.buffer );
     } catch( IOException e ) {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
   }
 
-  void write( final int processId, final int logicalClock, final int offset, final int[] value ) {
-    int eventOffset = calcEventOffset( processId, logicalClock, offset );
+  final void writeArray( final int processId, final int logicalClock, final int id, final int[] value ) {
     try {
-      cacheFiles[cacheFileNr[processId]].write(eventOffset, value);
+      TraceCacheFile file = cacheFiles[cacheFileNr[processId]];
+      OffsetEntry off = entries.get( id );
+      int offset = calcEventOffset( processId, logicalClock, off.intOffset );
+      if (off.needsRead) {
+        file.read( offset, off.buffer );
+      }
+      off.writeArray( value );
+      file.write( offset, off.buffer );
     } catch( IOException e ) {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
   }
 
-
-  int read( final int processId, final int logicalClock, final int offset ) {
+  final int read( final int processId, final int logicalClock, final int id ) {
     try {
-      int eventOffset = calcEventOffset( processId, logicalClock, offset );
-      return cacheFiles[cacheFileNr[processId]].read(eventOffset);
+      TraceCacheFile file = cacheFiles[cacheFileNr[processId]];
+      OffsetEntry off = entries.get( id );
+      int offset = calcEventOffset( processId, logicalClock, off.intOffset );
+      file.read( offset, off.buffer );
+      return off.read();
     } catch( IOException e ) {
       // TODO Auto-generated catch block
       e.printStackTrace();
@@ -206,33 +422,36 @@ public abstract class AbstractTraceFileCache extends AbstractTrace {
     return 0;
   }
 
-  void read( final int processId, final int logicalClock, final int offset, int[] data ) {
+  final void readArray( final int processId, final int logicalClock, final int id, final int[] data ) {
     try {
-      int eventOffset = calcEventOffset( processId, logicalClock, offset );
-      cacheFiles[cacheFileNr[processId]].read(eventOffset, data);
+      TraceCacheFile file = cacheFiles[cacheFileNr[processId]];
+      OffsetEntry off = entries.get( id );
+      int offset = calcEventOffset( processId, logicalClock, off.intOffset );
+      file.read( offset, off.buffer );
+      off.readArray( data );
     } catch( IOException e ) {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
   }
 
-  private int calcEventOffset( final int processId, final int logicalClock, final int offset ) {
+  private final int calcEventOffset( final int processId, final int logicalClock, final int offset ) {
     return getEventSize() * (this.cacheIndex[processId] + procsInFile[cacheFileNr[processId]] * logicalClock ) + offset;
   }
   
-  int getMaximumLogicalClock( final int processNr ) {
+  final int getMaximumLogicalClock( final int processNr ) {
     return this.maxLogClk[processNr];
   }
   
-  void setMaximumLogicalClock( final int processNr, final int value) {
+  final void setMaximumLogicalClock( final int processNr, final int value) {
     this.maxLogClk[processNr] = value;
   }
 
-  String getSourceFilenameForIndex( final int index ) {
+  final String getSourceFilenameForIndex( final int index ) {
     return (String)metaData.get( "sourcefile_"+index );
   }
 
-  int addSourceFilename( final String filename ) {
+  final int addSourceFilename( final String filename ) {
     int index;
     if ( sourceFilenames.containsKey( filename ) ) {
       index = sourceFilenames.get( filename );
@@ -244,9 +463,13 @@ public abstract class AbstractTraceFileCache extends AbstractTrace {
     return index;
   }
 
-  protected void enableMemoryMap() throws IOException {
-    for (int fileNr = 0; fileNr < this.cacheFileCount; fileNr++ ) {
-      cacheFiles[fileNr].enableMemoryMap();
+  protected final void enableMemoryMap() {
+    try {
+      for (int fileNr = 0; fileNr < this.cacheFileCount; fileNr++ ) {
+          cacheFiles[fileNr].enableMemoryMap();
+      }
+    } catch( IOException e ) {
+      Activator.logStatus( new Status( IStatus.WARNING, Activator.PLUGIN_ID, "Could not create memory map for all trace cache files, continuing without" ) );
     }
   }
 }

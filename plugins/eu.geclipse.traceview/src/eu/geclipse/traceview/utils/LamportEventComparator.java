@@ -22,7 +22,7 @@ import eu.geclipse.traceview.ILamportEvent;
 /**
  * Comparator for ILamportEvents
  */
-public class LamportEventComparator implements Comparator<ILamportEvent> {
+final public class LamportEventComparator implements Comparator<ILamportEvent> {
 
   public int compare( final ILamportEvent event1, final ILamportEvent event2 ) {
     int result = event1.getLamportClock() - event2.getLamportClock();

@@ -26,15 +26,14 @@ import java.util.List;
 import eu.geclipse.traceview.ITrace;
 
 public abstract class AbstractFileCacheProcess extends AbstractProcess {
-
+  protected final File cacheDir;
+  protected final int processId;
+  protected final List<String> sourceFilenames;
+  protected final ITrace trace;
   protected final static int sizeInc = 1000;
   protected IntBuffer buffer;
   protected int eventSize;
   protected RandomAccessFile file;
-  protected File cacheDir;
-  protected int processId;
-  protected List<String> sourceFilenames;
-  protected ITrace trace;
 
   
   public AbstractFileCacheProcess(final ITrace trace, final int processId, final List<String> sourceFilenames, final File cacheDir) {

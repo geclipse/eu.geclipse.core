@@ -5,10 +5,11 @@ import eu.geclipse.traceview.ILamportEvent;
 import eu.geclipse.traceview.IPhysicalEvent;
 import eu.geclipse.traceview.IProcess;
 import eu.geclipse.traceview.utils.AbstractEvent;
+import eu.geclipse.traceview.utils.AbstractTraceFileCache;
 import eu.geclipse.traceview.utils.IEventPartnerLogicalClockSetter;
 import eu.geclipse.traceview.utils.ILamportEventClockSetter;
 
-class Event extends AbstractEvent implements ILamportEvent,
+final class Event extends AbstractEvent implements ILamportEvent,
                                 IPhysicalEvent, ILamportEventClockSetter,
                                 IEventPartnerLogicalClockSetter {
   private final static int typeOffset = 0;
@@ -17,8 +18,17 @@ class Event extends AbstractEvent implements ILamportEvent,
   private final static int partnerLamportClockOffset = 3;
   private final static int lamportClockOffset = 4;
   private final static int timestampOffset = 5;
-  private int logicalClock;
-  private Process process;
+  private final int logicalClock;
+  private final Process process;
+
+  static void addIds(AbstractTraceFileCache cache) {
+    cache.addEntry( typeOffset, 2, false );
+    cache.addEntry( partnerProcessOffset, cache.getBitsForMaxValue( cache.getNumberOfProcesses()-1 )+1, true );
+    cache.addEntry( partnerLogicalClockOffset, cache.getBitsForMaxValue( cache.estimateMaxLogicalClock() )+2, true );
+    cache.addEntry( lamportClockOffset, cache.getBitsForMaxValue( cache.estimateMaxLogicalClock() )+3, true );
+    cache.addEntry( partnerLamportClockOffset, cache.getBitsForMaxValue( cache.estimateMaxLogicalClock() )+3, true );
+    cache.addEntry( timestampOffset, 31, false );
+  }  
 
   Event( final int logicalClock, final Process process) {
     this.logicalClock = logicalClock;

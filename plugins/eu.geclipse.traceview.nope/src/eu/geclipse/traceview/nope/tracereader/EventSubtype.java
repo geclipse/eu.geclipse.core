@@ -18,7 +18,7 @@ package eu.geclipse.traceview.nope.tracereader;
 /**
  * Nope Event Subtypes
  */
-public class EventSubtype {
+final public class EventSubtype {
 
   /** */
   public final static int NCube_NREAD = 0x00;

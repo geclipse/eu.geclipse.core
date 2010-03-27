@@ -37,7 +37,7 @@ import eu.geclipse.traceview.utils.AbstractProcessFileCache;
 /**
  * NOPE (NOndeterministic Program Evaluator) Process
  */
-public class Process extends AbstractProcessFileCache {
+final public class Process extends AbstractProcessFileCache {
 
   /* StatusByte */
   /** a processors byte ordering */

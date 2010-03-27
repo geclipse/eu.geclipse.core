@@ -3,6 +3,7 @@ package eu.geclipse.traceview.nope.tracereader;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import eu.geclipse.traceview.IVectorEvent;
+import eu.geclipse.traceview.utils.AbstractTraceFileCache;
 
 
 public class VecEvent extends Event implements IVectorEvent {
@@ -11,6 +12,10 @@ public class VecEvent extends Event implements IVectorEvent {
 
   public VecEvent( final int logicalClock, final Process processCache ) {
     super( logicalClock, processCache );
+  }
+
+  static void addIds(AbstractTraceFileCache cache) {
+    cache.addEntry( vectorClockOffset, cache.getNumberOfProcesses(), cache.getBitsForMaxValue( cache.estimateMaxLogicalClock() )+2, true );
   }
 
   @Override
@@ -31,11 +36,11 @@ public class VecEvent extends Event implements IVectorEvent {
    */
   public int[] getVectorClock() {
     int[] result = new int[ getProcess().getTrace().getNumberOfProcesses() ];
-    this.process.read( this.logicalClock, vectorClockOffset, result );
+    this.process.readArray( this.logicalClock, vectorClockOffset, result );
     return result;
   }
 
   protected void setVectorClock( final int[] src ) {
-    this.process.write( this.logicalClock, vectorClockOffset, src );
+    this.process.writeArray( this.logicalClock, vectorClockOffset, src );
   }
 }

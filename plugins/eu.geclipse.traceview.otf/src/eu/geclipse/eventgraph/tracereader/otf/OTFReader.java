@@ -42,6 +42,7 @@ public class OTFReader extends AbstractTraceFileCache
       .substring( 0, file.getAbsolutePath().length() - 4 );
     this.filename = file.getName();
     readOTFMapping( monitor );
+    Event.addIds( this );
     String traceOptions = "";
     boolean hasCache = openCacheDir( file.getAbsolutePath(), traceOptions, modTime );
     if ( !readOTFData( hasCache, monitor ) ) return null;
@@ -155,7 +156,7 @@ public class OTFReader extends AbstractTraceFileCache
   }
 
   @Override
-  public int getEventSize() {
-    return 17;
+  public int estimateMaxLogicalClock() {
+    return Integer.MAX_VALUE;
   }
 }

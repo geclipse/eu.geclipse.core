@@ -80,6 +80,15 @@ public class Activator extends AbstractUIPlugin {
   }
 
   /**
+   * Logs a status object to the eclipse logger.
+   * 
+   * @param status The status to be logged.
+   */
+  public static void logStatus( final IStatus status ) {
+    getDefault().getLog().log( status );
+  }
+
+  /**
    * Logs an exception.
    *
    * @param exception the exception.

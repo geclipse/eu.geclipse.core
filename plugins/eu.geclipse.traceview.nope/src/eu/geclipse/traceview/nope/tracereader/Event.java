@@ -26,6 +26,7 @@ import eu.geclipse.traceview.IPhysicalEvent;
 import eu.geclipse.traceview.IProcess;
 import eu.geclipse.traceview.ISourceLocation;
 import eu.geclipse.traceview.utils.AbstractEvent;
+import eu.geclipse.traceview.utils.AbstractTraceFileCache;
 import eu.geclipse.traceview.utils.ILamportEventClockSetter;
 
 /**
@@ -73,7 +74,27 @@ public class Event extends AbstractEvent
 
   protected final int logicalClock;
   protected final Process process;
-
+  
+  static void addIds(AbstractTraceFileCache cache) {
+    cache.addEntry( acceptedMessageTypeOffset, 32, false );
+    cache.addEntry( supposedMessageTypeOffset, 32, false );
+    cache.addEntry( sourceFilenameIndexOffset, 16, false );
+    cache.addEntry( sourceLineNrOffset, 16, false );
+    cache.addEntry( acceptedMessageLengthOffset, 31, false );
+    cache.addEntry( supposedMessageLengthOffset, 31, false );
+    cache.addEntry( typeOffset, 2, false );
+    cache.addEntry( blockingOffset, 1, false );
+    cache.addEntry( subTypeOffset, 8, false );
+    cache.addEntry( acceptedPartnerProcessOffset, cache.getBitsForMaxValue( cache.getNumberOfProcesses()-1 )+1, true );
+    cache.addEntry( supposedPartnerProcessOffset, cache.getBitsForMaxValue( cache.getNumberOfProcesses()-1 )+1, true );
+    cache.addEntry( partnerLogicalClockOffset, cache.getBitsForMaxValue( cache.estimateMaxLogicalClock() )+2, true );
+    cache.addEntry( ignoreCountOffset, cache.getBitsForMaxValue( cache.estimateMaxLogicalClock() )+2, true );
+    cache.addEntry( lamportClockOffset, cache.getBitsForMaxValue( cache.estimateMaxLogicalClock() )+3, true );
+    cache.addEntry( partnerLamportClockOffset, cache.getBitsForMaxValue( cache.estimateMaxLogicalClock() )+3, true );
+    cache.addEntry( timeStartOffset, 31, false );
+    cache.addEntry( timeStopOffset, 31, false );
+  }
+  
   /**
    * Creates the Event from the processCache based on the logicalClock.
    *
@@ -462,7 +483,7 @@ public class Event extends AbstractEvent
   }
 
   protected void setBlocking( final int blocking ) {
-    process.write( logicalClock, blockingOffset, blocking );
+    process.write( logicalClock, blockingOffset, (blocking != 0) ? 1 : 0 );
   }
 
   /**

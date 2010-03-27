@@ -18,51 +18,51 @@ package eu.geclipse.traceview.utils;
 import eu.geclipse.traceview.ITrace;
 
 public abstract class AbstractProcessFileCache extends AbstractProcess {
-  protected int processId;
-  protected AbstractTraceFileCache trace;
+  protected final int processId;
+  protected final AbstractTraceFileCache trace;
 
   public AbstractProcessFileCache( final AbstractTraceFileCache trace, final int processId ) {
     this.trace = trace;
     this.processId = processId;
   }
 
-  public int getMaximumLogicalClock() {
+  public final int getMaximumLogicalClock() {
     return trace.getMaximumLogicalClock( processId );
   }
 
-  public void setMaximumLogicalClock( final int value ) {
+  public final void setMaximumLogicalClock( final int value ) {
     trace.setMaximumLogicalClock( processId, value );
   }
 
-  public int getProcessId() {
+  public final int getProcessId() {
     return processId;
   }
 
-  public ITrace getTrace() {
+  public final ITrace getTrace() {
     return trace;
   }
 
-  public String getSourceFilenameForIndex( final int index) {
+  public final String getSourceFilenameForIndex( final int index) {
     return trace.getSourceFilenameForIndex( index );
   }
 
-  public int addSourceFilename( final String filename ) {
+  public final int addSourceFilename( final String filename ) {
     return trace.addSourceFilename( filename );
   }
 
-  public void write( final int logicalClock, final int offset, final int value ) {
+  public final void write( final int logicalClock, final int offset, final int value ) {
     trace.write( processId, logicalClock, offset, value );
   }
 
-  public void write( final int logicalClock, final int offset, final int[] value ) {
-    trace.write( processId, logicalClock, offset, value );
+  public final void writeArray( final int logicalClock, final int offset, final int[] value ) {
+    trace.writeArray( processId, logicalClock, offset, value );
   }
 
-  public int read( final int logicalClock, final int offset ) {
+  public final int read( final int logicalClock, final int offset ) {
     return trace.read( processId, logicalClock, offset );
   }
 
-  public void read( final int logicalClock, final int offset, final int[] data ) {
-    trace.read( processId, logicalClock, offset, data );
+  public final void readArray( final int logicalClock, final int offset, final int[] data ) {
+    trace.readArray( processId, logicalClock, offset, data );
   }
 }

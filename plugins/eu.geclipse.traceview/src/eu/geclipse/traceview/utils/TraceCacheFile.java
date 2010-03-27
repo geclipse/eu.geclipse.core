@@ -24,20 +24,17 @@ import java.nio.channels.FileChannel;
 
 import eu.geclipse.traceview.internal.BufferedRandomAccessFile;
 
-public class TraceCacheFile {
+final public class TraceCacheFile {
   private IntBuffer buffer;
-  private BufferedRandomAccessFile randAccFile;
+  final private BufferedRandomAccessFile randAccFile;
 
   public TraceCacheFile( final File dir, final int fileNr ) throws FileNotFoundException {
-    openCacheFile( new File(dir, "cachefile_" + fileNr) );
+    File file = new File(dir, "cachefile_" + fileNr);
+    randAccFile = new BufferedRandomAccessFile( file, "rw" ); //$NON-NLS-1$
   }
 
   public void close() throws IOException {
     if (randAccFile != null) randAccFile.close();
-  }
-
-  public void openCacheFile( final File file ) throws FileNotFoundException {
-    randAccFile = new BufferedRandomAccessFile( file, "rw" ); //$NON-NLS-1$
   }
   
   public void enableMemoryMap() throws IOException {

@@ -42,16 +42,14 @@ import eu.geclipse.traceview.utils.LamportEventComparator;
  * NOPE (NOndeterministic Program Evaluator) Trace.
  */
 public class Trace extends AbstractTraceFileCache
-  implements ILamportTrace, IPhysicalTrace, ITraceReader
-{
-
+  implements ILamportTrace, IPhysicalTrace, ITraceReader {
   private IPath tracePath;
   private String tracedir;
   private Process[] processes;
   private int maximumLamportClock = 0;
   private boolean supportsVectorClocks;
-  private int eventSize;
-
+  private int estimatedMaxLogClock;
+  
   private void updatePartnerClocks() {
     for( int procId = 0; procId < getNumberOfProcesses(); procId++ ) {
       IProcess process = getProcess( procId );
@@ -146,15 +144,21 @@ public class Trace extends AbstractTraceFileCache
       }
     } );
     this.processes = new Process[ files.length ];
+    long maxFileLen = 0;
+    for (File file : files) {
+      long len = file.length();
+      if (len > maxFileLen) maxFileLen = len;
+    }
+    this.estimatedMaxLogClock = (int) (maxFileLen / 47);
+    Event.addIds( this );
+    
     String traceOptions = "";
     this.supportsVectorClocks = Activator.getDefault()
       .getPreferenceStore()
       .getBoolean( PreferenceConstants.vectorClocks );
     if( supportsVectorClocks() ) {
-      this.eventSize = 17 + getNumberOfProcesses();
+      VecEvent.addIds( this );
       traceOptions += "vectorClocks ";
-    } else {
-      this.eventSize = 17;
     }
     // part of the workspace ?
     String projectName = ""; //$NON-NLS-1$
@@ -260,8 +264,9 @@ public class Trace extends AbstractTraceFileCache
   public IPath getPath() {
     return this.tracePath;
   }
-
-  public int getEventSize() {
-    return this.eventSize;
+  
+  @Override
+  public int estimateMaxLogicalClock() {
+    return this.estimatedMaxLogClock;
   }
 }

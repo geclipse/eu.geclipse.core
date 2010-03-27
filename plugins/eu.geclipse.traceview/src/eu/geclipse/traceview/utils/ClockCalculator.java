@@ -35,16 +35,16 @@ public class ClockCalculator {
           while( lastLogicalClock[procId] <= process.getMaximumLogicalClock() ) {
             ILamportEventClockSetter event = ( ILamportEventClockSetter )process.getEventByLogicalClock( lastLogicalClock[procId] );
             if( event.getType() == EventType.RECV ) {
-              ILamportEventClockSetter partnerEvent =  ( ILamportEventClockSetter )( ( ILamportProcess )trace.getProcess( event.getPartnerProcessId() ) ).getEventByLogicalClock( event.getPartnerLogicalClock() );
+              ILamportEventClockSetter partnerEvent = ( ILamportEventClockSetter )( ( ILamportProcess )trace.getProcess( event.getPartnerProcessId() ) ).getEventByLogicalClock( event.getPartnerLogicalClock() );
               int partnerLamClock = partnerEvent.getLamportClock();
               if( partnerLamClock == -1 ) {
                  break;
               }
-              if( lastLamportClock[procId] < partnerLamClock + 1 ) {
-              lastLamportClock[procId] = partnerLamClock + 1;
+              if( lastLamportClock[procId] <= partnerLamClock ) {
+                lastLamportClock[procId] = partnerLamClock + 1;
               }
-                event.setPartnerLamportClock( partnerLamClock );              
-                partnerEvent.setPartnerLamportClock( lastLamportClock[procId] );
+              event.setPartnerLamportClock( partnerLamClock );
+              partnerEvent.setPartnerLamportClock( lastLamportClock[procId] );
             }
             event.setLamportClock( lastLamportClock[procId] );
   
