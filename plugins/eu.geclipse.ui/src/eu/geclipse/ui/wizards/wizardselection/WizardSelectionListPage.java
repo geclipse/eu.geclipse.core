@@ -281,7 +281,7 @@ public class WizardSelectionListPage extends WizardSelectionPage
     for( IWizardSelectionNode node : this.wizardSelectionNodes ) {
       if( node.equals( nodeToRemove ) ) {
         if( this.visibilityMap.keySet().contains( node ) ) {
-          this.visibilityMap.put( node, new Boolean( false ) );
+          this.visibilityMap.put( node, Boolean.FALSE );
         }
       }
     }
@@ -304,7 +304,7 @@ public class WizardSelectionListPage extends WizardSelectionPage
 
   public void resetNodesVisibility() {
     for( IWizardSelectionNode node : this.visibilityMap.keySet() ) {
-      this.visibilityMap.put( node, new Boolean( true ) );
+      this.visibilityMap.put( node, Boolean.TRUE );
     }
     if (this.composite != null){
       this.composite.refreshList( this.wizardSelectionNodes );
