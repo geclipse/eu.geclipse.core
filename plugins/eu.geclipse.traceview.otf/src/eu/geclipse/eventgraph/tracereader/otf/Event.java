@@ -1,4 +1,23 @@
+/*****************************************************************************
+ * Copyright (c) 2009 g-Eclipse Consortium 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Initial development of the original code was made for the
+ * g-Eclipse project founded by European Union
+ * project number: FP6-IST-034327  http://www.geclipse.eu/
+ *
+ * Contributors:
+ *    Thomas Koeckerbauer MNM-Team, LMU Munich - initial API and implementation
+ *    Christof Klausecker MNM-Team, LMU Munich - improved event support
+ *****************************************************************************/
+
 package eu.geclipse.eventgraph.tracereader.otf;
+
+import org.eclipse.ui.views.properties.IPropertyDescriptor;
+import org.eclipse.ui.views.properties.PropertyDescriptor;
 
 import eu.geclipse.traceview.EventType;
 import eu.geclipse.traceview.ILamportEvent;
@@ -9,102 +28,175 @@ import eu.geclipse.traceview.utils.AbstractTraceFileCache;
 import eu.geclipse.traceview.utils.IEventPartnerLogicalClockSetter;
 import eu.geclipse.traceview.utils.ILamportEventClockSetter;
 
-final class Event extends AbstractEvent implements ILamportEvent,
-                                IPhysicalEvent, ILamportEventClockSetter,
-                                IEventPartnerLogicalClockSetter {
+final class Event extends AbstractEvent implements ILamportEvent, IPhysicalEvent, ILamportEventClockSetter, IEventPartnerLogicalClockSetter {
+
+  private static final String PROP_OTF_FUNCTIONID = "OTF.FunctionId"; //$NON-NLS-1$
   private final static int typeOffset = 0;
-  private final static int partnerProcessOffset = 1;
-  private final static int partnerLogicalClockOffset = 2;
-  private final static int partnerLamportClockOffset = 3;
-  private final static int lamportClockOffset = 4;
-  private final static int timestampOffset = 5;
+  private final static int functionIdOffset = 1;
+  private final static int partnerProcessIdOffset = 2;
+  private final static int partnerLogicalClockOffset = 3;
+  private final static int partnerLamportClockOffset = 4;
+  private final static int lamportClockOffset = 5;
+  private final static int timeStartOffset = 6;
+  private final static int timeStopOffset = 7;
+  private static IPropertyDescriptor[] otfEventPropertyDescriptors = new IPropertyDescriptor[]{
+    new PropertyDescriptor( PROP_OTF_FUNCTIONID, "OTF Function Id" )}; //$NON-NLS-1$
   private final int logicalClock;
   private final Process process;
 
-  static void addIds(AbstractTraceFileCache cache) {
-    cache.addEntry( typeOffset, 2, false );
-    cache.addEntry( partnerProcessOffset, cache.getBitsForMaxValue( cache.getNumberOfProcesses()-1 )+1, true );
-    cache.addEntry( partnerLogicalClockOffset, cache.getBitsForMaxValue( cache.estimateMaxLogicalClock() )+2, true );
-    cache.addEntry( lamportClockOffset, cache.getBitsForMaxValue( cache.estimateMaxLogicalClock() )+3, true );
-    cache.addEntry( partnerLamportClockOffset, cache.getBitsForMaxValue( cache.estimateMaxLogicalClock() )+3, true );
-    cache.addEntry( timestampOffset, 31, false );
-  }  
-
-  Event( final int logicalClock, final Process process) {
+  Event( final int logicalClock, final Process process ) {
     this.logicalClock = logicalClock;
     this.process = process;
+  }
+
+  static void addIds( final AbstractTraceFileCache cache ) {
+    cache.addEntry( typeOffset, 2, false );
+    cache.addEntry( functionIdOffset, 31, false ); // determine bit size
+    cache.addEntry( partnerProcessIdOffset, cache.getBitsForMaxValue( cache.getNumberOfProcesses() - 1 ) + 1, true );
+    cache.addEntry( partnerLogicalClockOffset, cache.getBitsForMaxValue( cache.estimateMaxLogicalClock() ) + 2, true );
+    cache.addEntry( partnerLamportClockOffset, cache.getBitsForMaxValue( cache.estimateMaxLogicalClock() ) + 3, true );
+    cache.addEntry( lamportClockOffset, cache.getBitsForMaxValue( cache.estimateMaxLogicalClock() ) + 3, true );
+    cache.addEntry( timeStartOffset, 31, false );
+    cache.addEntry( timeStopOffset, 31, false );
+  }
+
+  @Override
+  public IPropertyDescriptor[] getPropertyDescriptors() {
+    IPropertyDescriptor[] abstractPropertyDescriptors = super.getPropertyDescriptors();
+    IPropertyDescriptor[] propertyDescriptors = new IPropertyDescriptor[ abstractPropertyDescriptors.length + 1 ];
+    System.arraycopy( abstractPropertyDescriptors, 0, propertyDescriptors, 0, abstractPropertyDescriptors.length );
+    System.arraycopy( otfEventPropertyDescriptors, 0, propertyDescriptors, abstractPropertyDescriptors.length, otfEventPropertyDescriptors.length );
+    return propertyDescriptors;
+  }
+
+  @SuppressWarnings("boxing")
+  @Override
+  public Object getPropertyValue( final Object id ) {
+    Object result;
+    if( id.equals( PROP_OTF_FUNCTIONID ) ) {
+      result = getFunctionId();
+    } else {
+      result = super.getPropertyValue( id );
+    }
+    return result;
   }
 
   public IProcess getProcess() {
     return this.process;
   }
 
-  public int getLamportClock() {
-    return process.read( logicalClock, lamportClockOffset );
+  public int getProcessId() {
+    return this.process.getProcessId();
   }
 
   public int getLogicalClock() {
     return this.logicalClock;
   }
 
-  protected void setPartnerProcess( final int partnerProcess ) {
-    process.write( logicalClock, partnerProcessOffset, partnerProcess );
+  // File Cache
+  /**
+   * Returns the Function Id for the Event
+   * 
+   * @return Id of the Function
+   */
+  public int getFunctionId() {
+    return this.process.read( this.logicalClock, functionIdOffset );
   }
 
-  public int getPartnerProcessId() {
-    return process.read( logicalClock, partnerProcessOffset );
+  public void setFunctionId( final int function ) {
+    this.process.write( this.logicalClock, functionIdOffset, function );
   }
 
-  public int getPartnerLamportClock() {
-    return process.read( logicalClock, partnerLamportClockOffset );
-  }
-
-  public int getPartnerLogicalClock() {
-    return process.read( logicalClock, partnerLogicalClockOffset );
+  /*
+   * (non-Javadoc)
+   * @see eu.geclipse.traceview.IEvent#getType()
+   */
+  public EventType getType() {
+    return EventType.getEventType( this.process.read( this.logicalClock, typeOffset ) );
   }
 
   protected void setType( final EventType type ) {
-    process.write( logicalClock, typeOffset, type.id );
+    this.process.write( this.logicalClock, typeOffset, type.id );
   }
 
-  public EventType getType() {
-    return EventType.getEventType( process.read( logicalClock, typeOffset ) );
+  /*
+   * (non-Javadoc)
+   * @see eu.geclipse.traceview.IEvent#getPartnerProcessId()
+   */
+  public int getPartnerProcessId() {
+    return this.process.read( this.logicalClock, partnerProcessIdOffset );
   }
 
-  public void setLamportClock( final int lamportClock ) {
-    process.write( logicalClock, lamportClockOffset, lamportClock );
+  protected void setPartnerProcessId( final int partnerProcess ) {
+    this.process.write( this.logicalClock, partnerProcessIdOffset, partnerProcess );
   }
 
-  public void setPartnerLamportClock( final int partnerLamportClock ) {
-    process.write( logicalClock, partnerLamportClockOffset, partnerLamportClock );
+  /*
+   * (non-Javadoc)
+   * @see eu.geclipse.traceview.IEvent#getPartnerLogicalClock()
+   */
+  public int getPartnerLogicalClock() {
+    return this.process.read( this.logicalClock, partnerLogicalClockOffset );
   }
 
   public void setPartnerLogicalClock( final int partnerLogClock ) {
-    process.write( logicalClock, partnerLogicalClockOffset, partnerLogClock );
+    this.process.write( this.logicalClock, partnerLogicalClockOffset, partnerLogClock );
   }
 
-  public int getProcessId() {
-    return this.process.getProcessId();
+  /*
+   * (non-Javadoc)
+   * @see eu.geclipse.traceview.ILamportEvent#getPartnerLamportClock()
+   */
+  public int getPartnerLamportClock() {
+    return this.process.read( this.logicalClock, partnerLamportClockOffset );
   }
 
+  public void setPartnerLamportClock( final int partnerLamportClock ) {
+    this.process.write( this.logicalClock, partnerLamportClockOffset, partnerLamportClock );
+  }
+
+  /*
+   * (non-Javadoc)
+   * @see eu.geclipse.traceview.ILamportEvent#getLamportClock()
+   */
+  public int getLamportClock() {
+    return this.process.read( this.logicalClock, lamportClockOffset );
+  }
+
+  public void setLamportClock( final int lamportClock ) {
+    this.process.write( this.logicalClock, lamportClockOffset, lamportClock );
+  }
+
+  /*
+   * (non-Javadoc)
+   * @see eu.geclipse.traceview.IPhysicalEvent#getPhysicalStartClock()
+   */
   public int getPhysicalStartClock() {
-    return process.read( logicalClock, timestampOffset ) + process.getStartTimeOffset();
+    return this.process.read( this.logicalClock, timeStartOffset ) + this.process.getStartTimeOffset();
   }
 
+  void setPhysicalStartClock( final int timestamp ) {
+    this.process.write( this.logicalClock, timeStartOffset, timestamp );
+  }
+
+  /*
+   * (non-Javadoc)
+   * @see eu.geclipse.traceview.IPhysicalEvent#getPhysicalStopClock()
+   */
   public int getPhysicalStopClock() {
-    return process.read( logicalClock, timestampOffset ) + process.getStartTimeOffset();
+    return this.process.read( this.logicalClock, timeStopOffset ) + this.process.getStartTimeOffset();
   }
 
-  void setTimestamp( final int timestamp ) {
-    process.write( logicalClock, timestampOffset, timestamp );
+  void setPhysicalStopClock( final int timestamp ) {
+    this.process.write( this.logicalClock, timeStopOffset, timestamp );
   }
 
-  int getSize() {
-    return 6 * 4;
+  @Override
+  public String getName() {
+    return ( ( OTFReader )this.process.getTrace() ).getFunctionName( getFunctionId() );
   }
 
   public Event getPartnerEvent() {
-    // TODO Auto-generated method stub
     return null;
   }
 

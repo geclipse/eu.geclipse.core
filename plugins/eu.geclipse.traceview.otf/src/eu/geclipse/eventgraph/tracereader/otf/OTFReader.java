@@ -1,3 +1,18 @@
+/*****************************************************************************
+ * Copyright (c) 2009 g-Eclipse Consortium 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Initial development of the original code was made for the
+ * g-Eclipse project founded by European Union
+ * project number: FP6-IST-034327  http://www.geclipse.eu/
+ *
+ * Contributors:
+ *    Thomas Koeckerbauer MNM-Team, LMU Munich - initial API and implementation
+ *****************************************************************************/
+
 package eu.geclipse.eventgraph.tracereader.otf;
 
 import java.io.BufferedReader;
@@ -23,37 +38,57 @@ import eu.geclipse.traceview.ITraceReader;
 import eu.geclipse.traceview.utils.AbstractTraceFileCache;
 import eu.geclipse.traceview.utils.ClockCalculator;
 
-public class OTFReader extends AbstractTraceFileCache
-  implements IPhysicalTrace, ILamportTrace, ITraceReader {
+/**
+ * Reader for the Open Trace Format (OTF)
+ */
+public class OTFReader extends AbstractTraceFileCache implements IPhysicalTrace, ILamportTrace, ITraceReader {
+
   private BufferedReader input;
-  private Map<Integer, List<Integer>> streamMap = new HashMap<Integer, List<Integer>>();
-  private Map<Integer, Integer> processIdMap = new HashMap<Integer, Integer>();
+  
   private int numProcs = 0;
+  
+  // Mapping of OTF Ids
+  private Map<Integer, List<Integer>> streamMap;
+  private Map<Integer, Integer> processIdMap;
+  
+  private Map<Integer, Integer>[] entered;
   private Process[] processes;
   private String filenameBase;
   private String filename;
   private OTFUtils otfUtils = new OTFUtils();
+  private OTFDefinitionReader otfDefinitionReader;
+  
+  /**
+   * Creates a new Trace Reader
+   */
+  public OTFReader() {
+    this.streamMap = new HashMap<Integer, List<Integer>>();
+    this.processIdMap = new HashMap<Integer, Integer>();
+  }
 
   public ITrace openTrace( final IPath tracePath, final IProgressMonitor monitor ) throws IOException {
     File file = tracePath.toFile();
     long modTime = file.lastModified();
     this.input = new BufferedReader( new FileReader( file ) );
-    this.filenameBase = file.getAbsolutePath()
-      .substring( 0, file.getAbsolutePath().length() - 4 );
+    this.filenameBase = file.getAbsolutePath().substring( 0, file.getAbsolutePath().length() - 4 );
     this.filename = file.getName();
     readOTFMapping( monitor );
+    this.otfDefinitionReader = new OTFDefinitionReader( new File( this.filenameBase + ".0.def" )); //$NON-NLS-1$
     Event.addIds( this );
     String traceOptions = "";
     boolean hasCache = openCacheDir( file.getAbsolutePath(), traceOptions, modTime );
-    if ( !readOTFData( hasCache, monitor ) ) return null;
+    if( !readOTFData( hasCache, monitor ) )
+      return null;
     enableMemoryMap();
-    if (!hasCache) {
-      if (monitor.isCanceled()) return null;
+    if( !hasCache ) {
+      if( monitor.isCanceled() )
+        return null;
       monitor.subTask( "Calculating logical clocks" );
-      ClockCalculator.calcPartnerLogicalClocks(this);
-      if (monitor.isCanceled()) return null;
+      ClockCalculator.calcPartnerLogicalClocks( this );
+      if( monitor.isCanceled() )
+        return null;
       monitor.subTask( "Calculating lamport clocks" );
-      ClockCalculator.calcLamportClock(this);
+      ClockCalculator.calcLamportClock( this );
       saveCacheMetadata();
     }
     return this;
@@ -69,12 +104,14 @@ public class OTFReader extends AbstractTraceFileCache
       this.processes[ i ] = new Process( i, this );
     }
   }
+
   private boolean readOTFData( final boolean hasCache, final IProgressMonitor monitor ) throws IOException {
-    if (!hasCache) {
+    if( !hasCache ) {
       Set<Integer> streamNrs = this.streamMap.keySet();
       monitor.beginTask( "Loading trace", streamNrs.size() );
       for( Integer streamNr : streamNrs ) {
-        if (monitor.isCanceled()) return false;
+        if( monitor.isCanceled() )
+          return false;
         monitor.subTask( "Loading stream " + streamNr );
         loadStream( streamNr.intValue() );
         monitor.worked( 1 );
@@ -85,9 +122,11 @@ public class OTFReader extends AbstractTraceFileCache
 
   private void loadStream( final int nr ) throws IOException {
     String eventsFilename = this.filenameBase + '.' + Integer.toHexString( nr ) + ".events"; //$NON-NLS-1$
-    new OTFStreamReader( new File( eventsFilename ), this );
+    OTFStreamReader otfStreamReader = new OTFStreamReader( new File( eventsFilename ), this, this.entered );
+    otfStreamReader.readStream();
   }
 
+  @SuppressWarnings("unchecked")
   private void parseStreamFileDef() {
     Integer streamNr = Integer.valueOf( this.otfUtils.readNumber() );
     this.otfUtils.checkChar( ':' );
@@ -102,15 +141,17 @@ public class OTFReader extends AbstractTraceFileCache
       this.processIdMap.put( processNr, Integer.valueOf( this.numProcs ) );
       this.numProcs++;
     } while( this.otfUtils.read() == ',' );
+    this.entered = new HashMap[ this.numProcs ];
+    for( int i = 0; i < this.entered.length; i++ ) {
+      this.entered[ i ] = new HashMap<Integer, Integer>();
+    }
   }
 
   public int getNumberOfProcesses() {
     return this.numProcs;
   }
 
-  public IProcess getProcess( final int processId )
-    throws IndexOutOfBoundsException
-  {
+  public IProcess getProcess( final int processId ) throws IndexOutOfBoundsException {
     return this.processes[ processId ];
   }
 
@@ -118,9 +159,7 @@ public class OTFReader extends AbstractTraceFileCache
     return this.processIdMap.get( Integer.valueOf( processId ) ).intValue();
   }
 
-  Process getProcessTraceForOTFIndex( final int processId )
-    throws IndexOutOfBoundsException
-  {
+  Process getProcessTraceForOTFIndex( final int processId ) throws IndexOutOfBoundsException {
     return this.processes[ getProcessIdForOTFIndex( processId ) ];
   }
 
@@ -139,12 +178,10 @@ public class OTFReader extends AbstractTraceFileCache
     return this.filename;
   }
 
-
   public int getMaximumPhysicalClock() {
     int maxTimeStop = 0;
     for( Process process : this.processes ) {
-      if( maxTimeStop < ( ( ( IPhysicalEvent )process.getEventByLogicalClock( process.getMaximumLogicalClock() ) ).getPhysicalStopClock() ) )
-      {
+      if( maxTimeStop < ( ( ( IPhysicalEvent )process.getEventByLogicalClock( process.getMaximumLogicalClock() ) ).getPhysicalStopClock() ) ) {
         maxTimeStop = ( ( ( IPhysicalEvent )process.getEventByLogicalClock( process.getMaximumLogicalClock() ) ).getPhysicalStopClock() );
       }
     }
@@ -155,7 +192,11 @@ public class OTFReader extends AbstractTraceFileCache
     return null;
   }
 
-  @Override
+  @SuppressWarnings("boxing")
+  public String getFunctionName( int functionId ) {
+    return this.otfDefinitionReader.getFunctionName( functionId );
+  }
+  
   public int estimateMaxLogicalClock() {
     return Integer.MAX_VALUE;
   }
