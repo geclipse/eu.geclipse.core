@@ -27,6 +27,7 @@ import java.util.Set;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 
 import eu.geclipse.traceview.ILamportProcess;
 import eu.geclipse.traceview.ILamportTrace;
@@ -88,7 +89,7 @@ public class OTFReader extends AbstractTraceFileCache implements IPhysicalTrace,
       if( monitor.isCanceled() )
         return null;
       monitor.subTask( "Calculating lamport clocks" );
-      ClockCalculator.calcLamportClock( this );
+      ClockCalculator.calcLamportClock(this, new NullProgressMonitor());
       saveCacheMetadata();
     }
     return this;

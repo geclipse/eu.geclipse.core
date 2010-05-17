@@ -50,7 +50,7 @@ public class Trace extends AbstractTraceFileCache
   private boolean supportsVectorClocks;
   private int estimatedMaxLogClock;
   
-  private void updatePartnerClocks() {
+  private void updatePartnerClocks(final IProgressMonitor monitor) {
     for( int procId = 0; procId < getNumberOfProcesses(); procId++ ) {
       IProcess process = getProcess( procId );
       for( int i = 0; i <= process.getMaximumLogicalClock(); i++ ) {
@@ -61,6 +61,8 @@ public class Trace extends AbstractTraceFileCache
           sendEvent.setPartnerLogicalClock( event.getLogicalClock() );
         }
       }
+      if (monitor.isCanceled()) return;
+      monitor.worked( 1 );
     }
   }
 
@@ -181,7 +183,7 @@ public class Trace extends AbstractTraceFileCache
     for ( File file : files ) {
       if (file.lastModified() > modTime) modTime = file.lastModified();
     }
-    monitor.beginTask( "Loading trace data", this.processes.length );
+    monitor.beginTask( "Loading trace data", this.processes.length * 3 );
     monitor.subTask( "Opening trace cache" );
     boolean hasCache = openCacheDir( dir.getAbsolutePath(), traceOptions, modTime );
     Arrays.sort( files );
@@ -202,14 +204,15 @@ public class Trace extends AbstractTraceFileCache
     if( !hasCache ) {
       if (monitor.isCanceled()) return null;
       monitor.subTask( "Updating logical clocks" );
-      updatePartnerClocks();
+      updatePartnerClocks(monitor);
       if (monitor.isCanceled()) return null;
       monitor.subTask( "Calculating lamport clocks" );
-      ClockCalculator.calcLamportClock( this );
+      ClockCalculator.calcLamportClock( this, monitor );
+      if (monitor.isCanceled()) return null;
       if( this.supportsVectorClocks ) {
-        if (monitor.isCanceled()) return null;
         monitor.subTask( "Calculating vector clocks" );
         updateVectorClocks();
+        if (monitor.isCanceled()) return null;
       }
       saveCacheMetadata();
     }

@@ -15,19 +15,30 @@
 
 package eu.geclipse.traceview.utils;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+
 import eu.geclipse.traceview.EventType;
 import eu.geclipse.traceview.ILamportProcess;
 import eu.geclipse.traceview.ILamportTrace;
 import eu.geclipse.traceview.ITrace;
 
 public class ClockCalculator {
-  public static void calcLamportClock( final ILamportTrace trace ) {
+  public static void calcLamportClock( final ILamportTrace trace, final IProgressMonitor monitor ) {
     boolean allLamportClocksUpdated;
     boolean[] lamportClocksUpdated = new boolean[trace.getNumberOfProcesses()];
     int[] lastLogicalClock = new int[trace.getNumberOfProcesses()];
     int[] lastLamportClock = new int[trace.getNumberOfProcesses()];
-    
+
+    int numberMonitorSteps = trace.getNumberOfProcesses();
+    int stepsDone=0;
     do {
+      int stepsDoneNew = (int)(((long)numberMonitorSteps * lastLamportClock[0]) / trace.getProcess( 0 ).getMaximumLogicalClock());
+      if (stepsDoneNew > stepsDone) {
+        monitor.worked( stepsDoneNew - stepsDone );
+        stepsDone = stepsDoneNew;
+      }
+      if (monitor.isCanceled()) return;
+
       allLamportClocksUpdated = true;
       for( int procId = 0 ; procId < trace.getNumberOfProcesses(); procId++ ) {
         ILamportProcess process = (ILamportProcess) trace.getProcess(procId);
