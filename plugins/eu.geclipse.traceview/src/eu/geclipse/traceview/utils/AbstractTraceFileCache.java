@@ -381,11 +381,13 @@ public abstract class AbstractTraceFileCache extends AbstractTrace {
       TraceCacheFile file = cacheFiles[cacheFileNr[processId]];
       OffsetEntry off = entries.get( id );
       int offset = calcEventOffset( processId, logicalClock, off.intOffset );
-      if (off.needsRead) {
-        file.read( offset, off.buffer );
+      synchronized( off ) {
+        if (off.needsRead) {
+          file.read( offset, off.buffer );
+        }
+        off.write( value );
+        file.write( offset, off.buffer );
       }
-      off.write( value );
-      file.write( offset, off.buffer );
     } catch( IOException e ) {
       // TODO Auto-generated catch block
       e.printStackTrace();
@@ -397,11 +399,13 @@ public abstract class AbstractTraceFileCache extends AbstractTrace {
       TraceCacheFile file = cacheFiles[cacheFileNr[processId]];
       OffsetEntry off = entries.get( id );
       int offset = calcEventOffset( processId, logicalClock, off.intOffset );
-      if (off.needsRead) {
-        file.read( offset, off.buffer );
+      synchronized( off ) {
+        if (off.needsRead) {
+          file.read( offset, off.buffer );
+        }
+        off.writeArray( value );
+        file.write( offset, off.buffer );
       }
-      off.writeArray( value );
-      file.write( offset, off.buffer );
     } catch( IOException e ) {
       // TODO Auto-generated catch block
       e.printStackTrace();
@@ -413,8 +417,10 @@ public abstract class AbstractTraceFileCache extends AbstractTrace {
       TraceCacheFile file = cacheFiles[cacheFileNr[processId]];
       OffsetEntry off = entries.get( id );
       int offset = calcEventOffset( processId, logicalClock, off.intOffset );
-      file.read( offset, off.buffer );
-      return off.read();
+      synchronized( off ) {
+        file.read( offset, off.buffer );
+        return off.read();        
+      }
     } catch( IOException e ) {
       // TODO Auto-generated catch block
       e.printStackTrace();
@@ -427,8 +433,10 @@ public abstract class AbstractTraceFileCache extends AbstractTrace {
       TraceCacheFile file = cacheFiles[cacheFileNr[processId]];
       OffsetEntry off = entries.get( id );
       int offset = calcEventOffset( processId, logicalClock, off.intOffset );
-      file.read( offset, off.buffer );
-      off.readArray( data );
+      synchronized( off ) {
+        file.read( offset, off.buffer );
+        off.readArray( data );
+      }
     } catch( IOException e ) {
       // TODO Auto-generated catch block
       e.printStackTrace();

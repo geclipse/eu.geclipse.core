@@ -50,10 +50,12 @@ final public class TraceCacheFile {
     if (buffer != null) {
       value = buffer.get( offset );
     } else {
-      randAccFile.seek( 4 * offset );
-      value = randAccFile.readInt();
-      if (ByteOrder.nativeOrder() == ByteOrder.LITTLE_ENDIAN) {
-        value = swapInt( value );
+      synchronized( randAccFile ) {
+        randAccFile.seek( 4 * offset );
+        value = randAccFile.readInt();
+        if (ByteOrder.nativeOrder() == ByteOrder.LITTLE_ENDIAN) {
+          value = swapInt( value );
+        }
       }
     }
     return value;
@@ -61,16 +63,20 @@ final public class TraceCacheFile {
 
   public void read( final int offset, final int[] data ) throws IOException {
     if (buffer != null) {
-      buffer.position( offset );
-      buffer.get( data, 0, data.length );
+      synchronized( buffer ) {
+        buffer.position( offset );
+        buffer.get( data, 0, data.length );
+      }
     } else {
-      randAccFile.seek( offset * 4 );
-      for (int i = 0; i < data.length; i++) {
-        int value = randAccFile.readInt();
-        if (ByteOrder.nativeOrder() == ByteOrder.LITTLE_ENDIAN) {
-          value = swapInt( value );
+      synchronized( randAccFile ) {
+        randAccFile.seek( offset * 4 );
+        for (int i = 0; i < data.length; i++) {
+          int value = randAccFile.readInt();
+          if (ByteOrder.nativeOrder() == ByteOrder.LITTLE_ENDIAN) {
+            value = swapInt( value );
+          }
+          data[i] = value;
         }
-        data[i] = value;
       }
     }
   }
@@ -92,23 +98,29 @@ final public class TraceCacheFile {
       if (ByteOrder.nativeOrder() == ByteOrder.LITTLE_ENDIAN) {
         outVal = swapInt( value );
       }
-      randAccFile.seek( offset * 4 );
-      randAccFile.writeInt( outVal );
+      synchronized( randAccFile ) {
+        randAccFile.seek( offset * 4 );
+        randAccFile.writeInt( outVal );
+      }
     }
   }
 
   public void write( final int offset, final int[] value ) throws IOException {
     if (buffer != null) {
-      buffer.position( offset );
-      buffer.put( value, 0, value.length );
+      synchronized( buffer ) {
+        buffer.position( offset );
+        buffer.put( value, 0, value.length );
+      }
     } else {
-      randAccFile.seek( offset * 4 );
-      for (int i = 0; i < value.length; i++) {
-        int outVal = value[i];
-        if (ByteOrder.nativeOrder() == ByteOrder.LITTLE_ENDIAN) {
-          outVal = swapInt( outVal );
+      synchronized( randAccFile ) {
+        randAccFile.seek( offset * 4 );
+        for (int i = 0; i < value.length; i++) {
+          int outVal = value[i];
+          if (ByteOrder.nativeOrder() == ByteOrder.LITTLE_ENDIAN) {
+            outVal = swapInt( outVal );
+          }
+          randAccFile.writeInt( outVal );
         }
-        randAccFile.writeInt( outVal );
       }
     }
   }
