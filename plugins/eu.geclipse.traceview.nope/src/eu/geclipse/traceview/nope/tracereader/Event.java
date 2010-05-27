@@ -250,8 +250,9 @@ public class Event extends AbstractEvent
    */
   public IEvent getPartnerEvent() {
     IEvent result = null;
-    if( this.getPartnerProcessId() != -1 ) {
-      result = this.getProcess().getTrace().getProcess( this.getPartnerProcessId() )
+    int partnerProcId = this.getPartnerProcessId();
+    if( partnerProcId != -1 ) {
+      result = this.getProcess().getTrace().getProcess( partnerProcId )
         .getEventByLogicalClock( getPartnerLogicalClock() );
     }
     return result;
