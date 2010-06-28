@@ -30,11 +30,11 @@ public interface PreferenceConstants {
   public static final String shape = "shape"; //$NON-NLS-1$
   /** Nope Event Sub Type Codes */
   public static final int[] Codes = {
-    0x00,
-    0x01,
-    0x02,
-    0x03,
-    0x04,
+    //0x00,
+    //0x01,
+    //0x02,
+    //0x03,
+    //0x04,
     0xa0,
     0xa1,
     0xa2,
@@ -72,11 +72,11 @@ public interface PreferenceConstants {
   };
   /** Nope Event Sub Type Names */
   public static final String[] Names = {
-    "NCube_NREAD", //$NON-NLS-1$
-    "NCube_NREADP", //$NON-NLS-1$
-    "NCube_NWRITE", //$NON-NLS-1$
-    "NCube_NWRITEP", //$NON-NLS-1$
-    "NCube_NTEST", //$NON-NLS-1$
+    //"NCube_NREAD", //$NON-NLS-1$
+    //"NCube_NREADP", //$NON-NLS-1$
+    //"NCube_NWRITE", //$NON-NLS-1$
+    //"NCube_NWRITEP", //$NON-NLS-1$
+    //"NCube_NTEST", //$NON-NLS-1$
     "MPI_RECV", //$NON-NLS-1$
     "MPI_IRECV", //$NON-NLS-1$
     "MPI_SEND", //$NON-NLS-1$
