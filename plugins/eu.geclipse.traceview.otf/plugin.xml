@@ -8,4 +8,10 @@
             fileextension="otf"
             label="OTF file"/>
    </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="eu.geclipse.eventgraph.tracereader.otf.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
 </plugin>

@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2009 g-Eclipse Consortium 
+ * Copyright (c) 2009, 2010 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -27,21 +27,27 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
-import java.util.zip.InflaterInputStream;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 
-//import com.jcraft.jzlib.ZInputStream;
+// import java.util.zip.InflaterInputStream;
+import com.jcraft.jzlib.ZInputStream;
 
+import eu.geclipse.eventgraph.tracereader.otf.preferences.PreferenceConstants;
+import eu.geclipse.eventgraph.tracereader.otf.util.Node;
 import eu.geclipse.traceview.EventType;
 
 class OTFStreamReader extends OTFUtils {
 
   private BufferedReader input;
   private OTFReader trace;
-  /** read only communication events **/
-  private boolean communication;
+  /* Preferences */
+  /** read function events **/
+  private boolean readFunctions;
+  /** build calltree **/
+  private boolean buildCalltree = true;
+  /* Options */
   /** MPI process number */
   private int processId;
   /** physical time */
@@ -56,9 +62,10 @@ class OTFStreamReader extends OTFUtils {
   private Map<Integer, Integer>[] enteredMap;
   /** unmatched Leave Events */
   private Set<Integer> unmatchedLeaves;
+  private Node node;
 
   OTFStreamReader( final File file, final OTFReader trace, final Map<Integer, Integer>[] entered ) throws IOException {
-    this.communication = false;
+    this.readFunctions = Activator.getDefault().getPreferenceStore().getBoolean( PreferenceConstants.readFunctions );
     this.trace = trace;
     this.enteredMap = entered;
     this.enteredStack = new Stack<Integer>();
@@ -69,9 +76,12 @@ class OTFStreamReader extends OTFUtils {
     } else {
       File zFile = new File( file.getParentFile(), file.getName() + ".z" ); //$NON-NLS-1$
       // jcraft inflater
-      // this.input = new BufferedReader( new InputStreamReader( new ZInputStream( new FileInputStream( zFile ) ) ) );
+      this.input = new BufferedReader( new InputStreamReader( new ZInputStream( new FileInputStream( zFile ) ) ) );
       // SUN inflater, suffers from java bug # 4040920
-      this.input = new BufferedReader( new InputStreamReader( new InflaterInputStream( new FileInputStream( zFile ) ) ) );
+      // this.input = new BufferedReader( new InputStreamReader( new InflaterInputStream( new FileInputStream( zFile ) ) ) );
+    }
+    if( this.buildCalltree ) {
+      this.node = new Node( this.trace.getDefinition(), -1 );
     }
   }
 
@@ -85,12 +95,12 @@ class OTFStreamReader extends OTFUtils {
         readTimestamp();
       }
       // read Enter
-      else if( ch == 'E' ) {
+      else if( ch == 'E' && this.readFunctions ) {
         this.lineIdx++; // skip 'E'
         readEnter();
       }
       // read Leave
-      else if( ch == 'L' ) {
+      else if( ch == 'L' && this.readFunctions ) {
         this.lineIdx++; // skip 'L'
         readLeave();
       }
@@ -111,11 +121,12 @@ class OTFStreamReader extends OTFUtils {
       }
       // read Collective Operation
       else if( this.line.startsWith( "COP" ) ) { //$NON-NLS-1$
-        // TODO implement COP
+        this.lineIdx += 3;
+        readCollective();
       }
       // read Counter
       else if( this.line.startsWith( "CNT" ) ) { //$NON-NLS-1$
-        // TODO implement COP
+        // TODO implement CNT
       }
       // unknown
       else {
@@ -149,6 +160,9 @@ class OTFStreamReader extends OTFUtils {
       this.enteredStack.push( this.trace.getProcess( this.processId ).getMaximumLogicalClock() );
       this.enteredMap[ this.processId ].put( functionId, this.trace.getProcess( this.processId ).getMaximumLogicalClock() );
     }
+    if( this.buildCalltree ) {
+      this.node = this.node.enter( functionId, this.timestamp );
+    }
   }
 
   @SuppressWarnings("boxing")
@@ -177,13 +191,16 @@ class OTFStreamReader extends OTFUtils {
                                                                                                + this.processId ) );
       }
     }
+    if( this.buildCalltree ) {
+      this.node = this.node.leave( this.timestamp );
+    }
   }
 
-  private void readRecv() throws IOException {
+  private void readRecv() {
     int otfPartnerId = readNumber();
     int length = -1;
     int type = -1;
-    int communicator = -1;
+    int group = -1;
     while( this.lineIdx != this.line.length() - 1 ) {
       // Read Length
       if( this.line.charAt( this.lineIdx ) == 'L' ) {
@@ -193,29 +210,39 @@ class OTFStreamReader extends OTFUtils {
       // Read type
       else if( this.line.charAt( this.lineIdx ) == 'T' ) {
         this.lineIdx++; // skip T
-        length = readNumber();
+        type = readNumber();
       }
       // Read Communicator
       else if( this.line.charAt( this.lineIdx ) == 'C' ) {
         this.lineIdx++;
-        communicator = readNumber();
+        group = readNumber();
       }
       // Read Unknown
       else {
-        System.out.println( "Receive contains unknown information " + ( char )this.line.charAt( this.lineIdx ) );
+        //System.out.println( "Receive contains unknown information " + ( char )this.line.charAt( this.lineIdx ) );
         this.lineIdx++;
         readNumber();
       }
     }
     int partnerId = this.trace.getProcessIdForOTFIndex( otfPartnerId );
-    ( ( Process )this.trace.getProcess( this.processId ) ).appendEvent( EventType.RECV, partnerId, this.timestamp );
+    if( this.readFunctions ) {
+      Process process = ( Process )this.trace.getProcess( this.processId );
+      Event event = ( Event )process.getEventByLogicalClock( process.getMaximumLogicalClock() );
+      event.setType( EventType.RECV );
+      event.setPartnerProcessId( partnerId );
+      event.setMessageGroup( group );
+      event.setReceivedMessageLength( length );
+      event.setMessageType( type );
+    } else {
+      ( ( Process )this.trace.getProcess( this.processId ) ).appendEvent( EventType.RECV, partnerId, this.timestamp );
+    }
   }
 
-  private void readSend() throws IOException {
+  private void readSend() {
     int otfPartnerId = readNumber();
     int length = -1;
     int type = -1;
-    int communicator = -1;
+    int group = -1;
     while( this.lineIdx != this.line.length() - 1 ) {
       // Read Length
       if( this.line.charAt( this.lineIdx ) == 'L' ) {
@@ -225,22 +252,68 @@ class OTFStreamReader extends OTFUtils {
       // Read type
       else if( this.line.charAt( this.lineIdx ) == 'T' ) {
         this.lineIdx++; // skip T
-        length = readNumber();
+        type = readNumber();
       }
       // Read Communicator
       else if( this.line.charAt( this.lineIdx ) == 'C' ) {
         this.lineIdx++;
-        communicator = readNumber();
+        group = readNumber();
       }
       // Read Unknown
       else {
-        System.out.println( "Receive contains unknown information " + ( char )this.line.charAt( this.lineIdx ) );
+        //System.out.println( "Sends contains unknown information " + ( char )this.line.charAt( this.lineIdx ) );
         this.lineIdx++;
         readNumber();
       }
     }
     int partnerId = this.trace.getProcessIdForOTFIndex( otfPartnerId );
-    ( ( Process )this.trace.getProcess( this.processId ) ).appendEvent( EventType.SEND, partnerId, this.timestamp );
+    if( this.readFunctions ) {
+      Process process = ( Process )this.trace.getProcess( this.processId );
+      Event event = ( Event )process.getEventByLogicalClock( process.getMaximumLogicalClock() );
+      event.setType( EventType.SEND );
+      event.setPartnerProcessId( partnerId );
+      event.setMessageGroup( group );
+      event.setSentMessageLength( length );
+      event.setMessageType( type );
+    } else {
+      ( ( Process )this.trace.getProcess( this.processId ) ).appendEvent( EventType.SEND, partnerId, this.timestamp );
+    }
+  }
+
+  private void readCollective() {
+    int collectiveOperationId = readNumber();
+    int group = -1;
+    int root = -1;
+    int sent = -1;
+    int received = -1;
+    if( this.line.charAt( this.lineIdx ) == 'C' ) {
+      this.lineIdx++; // skip C
+      group = readNumber(); // Skip
+    }
+    if( this.line.indexOf( "RT" ) == this.lineIdx ) { //$NON-NLS-1$
+      this.lineIdx += 2; // skip RT
+      root = readNumber();
+    }
+    if( this.line.charAt( this.lineIdx ) == 'S' ) {
+      this.lineIdx++; // skip S
+      sent = readNumber();
+    }
+    if( this.line.charAt( this.lineIdx ) == 'R' ) {
+      this.lineIdx++; // skip R
+      received = readNumber();
+    }
+    if( this.readFunctions ) {
+      Process process = ( Process )this.trace.getProcess( this.processId );
+      Event event = ( Event )process.getEventByLogicalClock( process.getMaximumLogicalClock() );
+      event.setType( EventType.OTHER );
+      event.setMessageGroup( group );
+      event.setPartnerProcessId( this.trace.getProcessIdForOTFIndex( root ) );
+      event.setSentMessageLength( sent );
+      event.setReceivedMessageLength( received );
+      // event.setMessageType( type );
+    } else {
+      ( ( Process )this.trace.getProcess( this.processId ) ).appendEvent( EventType.SEND, -1, this.timestamp );
+    }
   }
 
   private void readProcessId() {
@@ -249,5 +322,9 @@ class OTFStreamReader extends OTFUtils {
 
   private void readTimestamp() {
     this.timestamp = readTime();
+  }
+
+  public Node getNode() {
+    return this.node;
   }
 }

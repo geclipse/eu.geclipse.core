@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2009 g-Eclipse Consortium 
+ * Copyright (c) 2009, 2010 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -11,6 +11,7 @@
  *
  * Contributors:
  *    Thomas Koeckerbauer MNM-Team, LMU Munich - initial API and implementation
+ *    Christof Klausecker MNM-Team, LMU Munich - improved event support
  *****************************************************************************/
 
 package eu.geclipse.eventgraph.tracereader.otf;
@@ -29,6 +30,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
+import eu.geclipse.eventgraph.tracereader.otf.util.Node;
 import eu.geclipse.traceview.ILamportProcess;
 import eu.geclipse.traceview.ILamportTrace;
 import eu.geclipse.traceview.IPhysicalEvent;
@@ -42,6 +44,7 @@ import eu.geclipse.traceview.utils.ClockCalculator;
 /**
  * Reader for the Open Trace Format (OTF)
  */
+@SuppressWarnings("boxing")
 public class OTFReader extends AbstractTraceFileCache implements IPhysicalTrace, ILamportTrace, ITraceReader {
 
   private BufferedReader input;
@@ -58,6 +61,7 @@ public class OTFReader extends AbstractTraceFileCache implements IPhysicalTrace,
   private String filename;
   private OTFUtils otfUtils = new OTFUtils();
   private OTFDefinitionReader otfDefinitionReader;
+  private Node[] nodes;
   
   /**
    * Creates a new Trace Reader
@@ -65,6 +69,7 @@ public class OTFReader extends AbstractTraceFileCache implements IPhysicalTrace,
   public OTFReader() {
     this.streamMap = new HashMap<Integer, List<Integer>>();
     this.processIdMap = new HashMap<Integer, Integer>();
+    this.processIdMap.put( 0, -1 ); // OTFs 0 is Trace Viewers -1
   }
 
   public ITrace openTrace( final IPath tracePath, final IProgressMonitor monitor ) throws IOException {
@@ -75,7 +80,8 @@ public class OTFReader extends AbstractTraceFileCache implements IPhysicalTrace,
     this.filename = file.getName();
     readOTFMapping( monitor );
     this.otfDefinitionReader = new OTFDefinitionReader( new File( this.filenameBase + ".0.def" )); //$NON-NLS-1$
-    Event.addIds( this );
+    this.nodes = new Node[this.numProcs];
+    Event.addIds( this,this.otfDefinitionReader );
     String traceOptions = "";
     boolean hasCache = openCacheDir( file.getAbsolutePath(), traceOptions, modTime );
     if( !readOTFData( hasCache, monitor ) )
@@ -125,8 +131,14 @@ public class OTFReader extends AbstractTraceFileCache implements IPhysicalTrace,
     String eventsFilename = this.filenameBase + '.' + Integer.toHexString( nr ) + ".events"; //$NON-NLS-1$
     OTFStreamReader otfStreamReader = new OTFStreamReader( new File( eventsFilename ), this, this.entered );
     otfStreamReader.readStream();
+    nodes[0] = otfStreamReader.getNode();
+    //rec( nodes[0].getChildren()[0] );
   }
-
+  
+  public Node getRootNode(){
+    return this.nodes[0];
+  }
+  
   @SuppressWarnings("unchecked")
   private void parseStreamFileDef() {
     Integer streamNr = Integer.valueOf( this.otfUtils.readNumber() );
@@ -193,9 +205,12 @@ public class OTFReader extends AbstractTraceFileCache implements IPhysicalTrace,
     return null;
   }
 
-  @SuppressWarnings("boxing")
-  public String getFunctionName( int functionId ) {
+  public String getFunctionName( final int functionId ) {
     return this.otfDefinitionReader.getFunctionName( functionId );
+  }
+  
+  public OTFDefinitionReader getDefinition(){
+    return this.otfDefinitionReader;
   }
   
   public int estimateMaxLogicalClock() {

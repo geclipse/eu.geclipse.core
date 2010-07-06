@@ -7,5 +7,9 @@ Bundle-Activator: eu.geclipse.eventgraph.tracereader.otf.Activator
 Require-Bundle: eu.geclipse.traceview,
  org.eclipse.ui,
  org.eclipse.core.runtime,
- org.eclipse.ui.views
+ org.eclipse.ui.views,
+ com.jcraft.jzlib
 Bundle-ActivationPolicy: lazy
+Export-Package: eu.geclipse.eventgraph.tracereader.otf,
+ eu.geclipse.eventgraph.tracereader.otf.preferences,
+ eu.geclipse.eventgraph.tracereader.otf.util
