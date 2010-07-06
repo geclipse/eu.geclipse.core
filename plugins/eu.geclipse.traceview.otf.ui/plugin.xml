@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="eu.geclipse.traceview.preferences.TraceViewPreferencesPage"
+            class="eu.geclipse.traceview.otf.ui.preferences.PreferencePage"
+            id="eu.geclipse.traceview.otf.OTFPreferencesPage"
+            name="OTF Trace Reader">
+      </page>
+   </extension>
+
+</plugin>

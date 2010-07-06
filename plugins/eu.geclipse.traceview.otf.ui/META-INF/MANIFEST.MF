@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: OTF Trace Reader UI Plug-in
+Bundle-SymbolicName: eu.geclipse.traceview.otf.ui;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: eu.geclipse.traceview.otf.ui.Activator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ eu.geclipse.traceview.otf;bundle-version="1.0.0"
+Bundle-ActivationPolicy: lazy
