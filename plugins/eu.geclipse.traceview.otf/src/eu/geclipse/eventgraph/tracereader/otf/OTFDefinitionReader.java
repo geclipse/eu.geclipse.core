@@ -168,7 +168,7 @@ public class OTFDefinitionReader {
         Integer functionID = Integer.valueOf( line.substring( 2, line.indexOf( 'G' ) ), 16 );
         Integer functionGroupId = Integer.valueOf( line.substring( line.indexOf( 'G' ) + 1, line.indexOf( 'N' ) ), 16 );
         String functionName = line.substring( line.indexOf( '\"' ) + 1, line.lastIndexOf( '\"' ) );
-        int sourcelocation = line.indexOf( 'X' );
+        int sourcelocation = line.lastIndexOf( 'X' );
         if( sourcelocation != -1 ) {
           sourceLocationID = Integer.valueOf( line.substring( sourcelocation + 1 ), 16 );
         }
