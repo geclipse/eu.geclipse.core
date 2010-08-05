@@ -30,6 +30,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
+import eu.geclipse.eventgraph.tracereader.otf.preferences.PreferenceConstants;
 import eu.geclipse.eventgraph.tracereader.otf.util.Node;
 import eu.geclipse.traceview.ILamportProcess;
 import eu.geclipse.traceview.ILamportTrace;
@@ -83,6 +84,10 @@ public class OTFReader extends AbstractTraceFileCache implements IPhysicalTrace,
     this.nodes = new Node[this.numProcs];
     Event.addIds( this,this.otfDefinitionReader );
     String traceOptions = "";
+    if (Activator.getDefault().getPreferenceStore()
+    		.getBoolean( PreferenceConstants.readFunctions )) {
+    	traceOptions += "readFunctions";
+    }
     boolean hasCache = openCacheDir( file.getAbsolutePath(), traceOptions, modTime );
     if( !readOTFData( hasCache, monitor ) )
       return null;
