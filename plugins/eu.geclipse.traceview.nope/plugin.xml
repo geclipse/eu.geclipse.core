@@ -38,7 +38,15 @@
       <ReaderClass
             class="eu.geclipse.traceview.nope.tracereader.Trace"
             fileextension="000"
-            label="NOPE trace file">
+            label="NOPE trace">
+      </ReaderClass>
+   </extension>
+   <extension
+         point="eu.geclipse.traceview.TraceReader">
+      <ReaderClass
+            class="eu.geclipse.traceview.nope.tracereader.Trace"
+            fileextension="zip"
+            label="Zipped NOPE trace">
       </ReaderClass>
    </extension>
    <extension

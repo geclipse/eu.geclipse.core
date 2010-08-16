@@ -17,9 +17,16 @@ package eu.geclipse.traceview.nope.tracereader;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
+import java.util.Enumeration;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.TreeSet;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
@@ -136,21 +143,45 @@ public class Trace extends AbstractTraceFileCache
    * @throws IOException thrown if a read error occurs.
    */
   public ITrace openTrace( final IPath trace, final IProgressMonitor monitor ) throws IOException {
-    this.tracePath = trace.removeLastSegments( 1 );
-    File dir = this.tracePath.toFile();
-    this.tracedir = this.tracePath.toPortableString();
-    File[] files = dir.listFiles( new FileFilter() {
-      public boolean accept( final File file ) {
-        return !file.isDirectory() && file.getName().startsWith( "trace" ) //$NON-NLS-1$
-               && file.getName().charAt( file.getName().length() - 4 ) == '.';
-      }
-    } );
-    this.processes = new Process[ files.length ];
+	int numProcs;
     long maxFileLen = 0;
-    for (File file : files) {
-      long len = file.length();
-      if (len > maxFileLen) maxFileLen = len;
-    }
+    long modTime;
+    ZipFile zipFile = null;
+    List fileList = new LinkedList();
+	if (trace.lastSegment().endsWith(".zip")) {
+	  this.tracePath = trace;
+      File file = this.tracePath.toFile();
+	  zipFile = new ZipFile(file);
+	  Enumeration entries = zipFile.entries();
+	  numProcs = zipFile.size(); // currently no other files are allowed in the zip file
+	  while(entries.hasMoreElements()) {
+		  ZipEntry entry = (ZipEntry) entries.nextElement();
+          long len = entry.getSize();
+          if (len > maxFileLen) maxFileLen = len;
+          fileList.add(entry);
+	  }
+	  modTime = file.lastModified();
+	} else {
+      this.tracePath = trace.removeLastSegments( 1 );
+      File dir = this.tracePath.toFile();
+      this.tracedir = this.tracePath.toPortableString();
+      File[] files = dir.listFiles( new FileFilter() {
+        public boolean accept( final File file ) {
+          return !file.isDirectory() && file.getName().startsWith( "trace" ) //$NON-NLS-1$
+                 && file.getName().charAt( file.getName().length() - 4 ) == '.';
+        }
+      } );
+      Arrays.sort( files );
+      numProcs = files.length;
+      modTime = dir.lastModified();
+      for (File file : files) {
+        long len = file.length();
+        if (len > maxFileLen) maxFileLen = len;
+        if (file.lastModified() > modTime) modTime = file.lastModified();
+        fileList.add(file);
+      }
+	}
+    this.processes = new Process[ numProcs ];
     this.estimatedMaxLogClock = (int) (maxFileLen / 47);
     Event.addIds( this );
     
@@ -179,20 +210,31 @@ public class Trace extends AbstractTraceFileCache
         projectName = projectName.substring( device.length() );
       }
     }
-    long modTime = dir.lastModified();
-    for ( File file : files ) {
-      if (file.lastModified() > modTime) modTime = file.lastModified();
-    }
     monitor.beginTask( "Loading trace data", this.processes.length * 3 );
     monitor.subTask( "Opening trace cache" );
-    boolean hasCache = openCacheDir( dir.getAbsolutePath(), traceOptions, modTime );
-    Arrays.sort( files );
-    for( File file : files ) {
+    boolean hasCache = openCacheDir( this.tracePath.toFile().getAbsolutePath(), traceOptions, modTime );
+    for( Object fileObj : fileList ) {
       if (monitor.isCanceled()) return null;
-      String filename = file.getName();
+      String filename;
+      long filesize;
+      InputStream inputStream; 
+      if (fileObj instanceof ZipEntry) {
+    	  ZipEntry zipEntry = (ZipEntry) fileObj;
+    	  filename = zipEntry.getName();
+    	  filesize = zipEntry.getSize();
+    	  inputStream = zipFile.getInputStream(zipEntry);
+      } else {
+    	  File file = (File) fileObj;
+          filename = file.getName();
+          filesize = file.length();
+          File inputFile = new File( this.tracedir, filename );
+          inputStream = new FileInputStream( inputFile );
+      }
       int traceProc = Integer.parseInt( filename.substring( filename.length() - 3 ) );
       monitor.subTask( "Loading process " + traceProc );
-      Process processTrace = new Process( new File( this.tracedir, filename ),
+      Process processTrace = new Process( inputStream,
+    		                              filename,
+                                          filesize,
                                           traceProc,
                                           hasCache,
                                           this

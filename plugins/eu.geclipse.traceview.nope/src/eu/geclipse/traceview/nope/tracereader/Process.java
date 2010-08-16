@@ -113,7 +113,7 @@ final public class Process extends AbstractProcessFileCache {
    * Information of from the File
    */
   private String traceFileName;
-  private int fileSize;
+  private long fileSize;
   /* Information from the Header */
   private int version;
   private boolean isTrcBigEndian;
@@ -149,7 +149,9 @@ final public class Process extends AbstractProcessFileCache {
     };
   }
 
-  protected Process( final File traceFile,
+  protected Process( final InputStream inputStream,
+                     final String filename,
+		  			 final long filesize,
                      final int processId,
                      final boolean hasCache,
                      final Trace trace )
@@ -165,11 +167,10 @@ final public class Process extends AbstractProcessFileCache {
     }
     try {
       // in case the cache does not exist
-      FileInputStream fileInputStream = new FileInputStream( traceFile );
-      InputStream bufferedInputStream = new BufferedInputStream( fileInputStream );
+      InputStream bufferedInputStream = new BufferedInputStream( inputStream );
       this.dataInputStream = new DataInputStream( bufferedInputStream );
-      this.traceFileName = traceFile.getAbsolutePath();
-      this.fileSize = fileInputStream.available();
+      this.traceFileName = filename;
+      this.fileSize = filesize;
       /*
        * header information
        */
