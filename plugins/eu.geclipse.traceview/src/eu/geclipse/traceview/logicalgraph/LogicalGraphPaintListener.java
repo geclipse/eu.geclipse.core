@@ -263,7 +263,7 @@ class LogicalGraphPaintListener extends AbstractGraphPaintListener {
           };
         }
         Color color;
-        if (fastRedraw && zoomfactor == 1) color = null;
+        if (fastRedraw) color = null;
         else color = eventmarker.getBackgroundColor( markType );
         if( color != null ) {
           this.gc.setBackground( color );
