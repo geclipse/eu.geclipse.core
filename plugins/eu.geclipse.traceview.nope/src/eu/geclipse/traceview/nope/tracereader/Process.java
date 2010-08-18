@@ -364,9 +364,7 @@ final public class Process extends AbstractProcessFileCache {
   {
     this.previousLogicalClock++;
     this.setMaximumLogicalClock( this.previousLogicalClock );
-    Event event;
-    if( this.supportsVectorClocks ) event = new VecEvent( this.previousLogicalClock, this );
-    else event = new Event( this.previousLogicalClock, this );
+    Event event = getEventByLogicalClock( this.previousLogicalClock );
     event.setLamportClock( -1 );
     if( this.supportsVectorClocks )
       ((VecEvent)event).setVectorClock( this.initialVectorClock );
@@ -454,9 +452,7 @@ final public class Process extends AbstractProcessFileCache {
     // TODO better support for this event type
     this.previousLogicalClock++;
     this.setMaximumLogicalClock( this.previousLogicalClock );
-    Event event;
-    if( this.supportsVectorClocks ) event = new VecEvent( this.previousLogicalClock, this );
-    else event = new Event( this.previousLogicalClock, this );
+    Event event = getEventByLogicalClock( this.previousLogicalClock );
     event.setLamportClock( -1 );
     if( this.supportsVectorClocks )
       ((VecEvent)event).setVectorClock( this.initialVectorClock );
