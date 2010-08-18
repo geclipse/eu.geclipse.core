@@ -149,13 +149,7 @@ final public class Process extends AbstractProcessFileCache {
     };
   }
 
-  protected Process( final InputStream inputStream,
-                     final String filename,
-		  			 final long filesize,
-                     final int processId,
-                     final boolean hasCache,
-                     final Trace trace )
-  {
+  protected Process( final InputStream inputStream, final String filename, final long filesize, final int processId, final boolean hasCache, final Trace trace ) {
     super( trace, processId );
     // initialise vectorclocks
     this.supportsVectorClocks = ( ( Trace )trace ).supportsVectorClocks();
