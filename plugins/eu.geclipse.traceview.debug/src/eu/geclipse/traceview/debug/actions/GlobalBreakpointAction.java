@@ -69,9 +69,17 @@ public class GlobalBreakpointAction extends AbstractEventBreakpointAction {
               eventBreakpoints.add( eventBreakpoint );
             }
           }
-          DebugPlugin.getDefault()
-            .getBreakpointManager()
-            .addBreakpoints( eventBreakpoints.toArray( new EventBreakpoint[ 0 ] ) );
+          boolean add = true;
+          for( EventBreakpoint e : eventBreakpoints ) {
+            if( e == null ) {
+              add = false;
+            }
+          }
+          if( add ) {
+            DebugPlugin.getDefault()
+              .getBreakpointManager()
+              .addBreakpoints( eventBreakpoints.toArray( new EventBreakpoint[ 0 ] ) );
+          }
         } catch( IndexOutOfBoundsException exception ) {
           Activator.logException( exception );
         } catch( CoreException exception ) {

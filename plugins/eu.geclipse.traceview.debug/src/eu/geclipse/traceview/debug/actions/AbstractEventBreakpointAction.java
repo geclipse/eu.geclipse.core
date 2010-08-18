@@ -24,6 +24,7 @@ import org.eclipse.cdt.core.model.ISourceRoot;
 import org.eclipse.cdt.core.model.ITranslationUnit;
 import org.eclipse.cdt.debug.core.CDebugCorePlugin;
 import org.eclipse.cdt.debug.core.model.ICBreakpoint;
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -56,7 +57,7 @@ public abstract class AbstractEventBreakpointAction extends Action
 
   /**
    * Returns the Project which contains the Trace
-   *
+   * 
    * @param trace
    * @return project
    */
@@ -98,6 +99,7 @@ public abstract class AbstractEventBreakpointAction extends Action
       ITranslationUnit[] units = root.getTranslationUnits();
       for( ITranslationUnit unit : units ) {
         if( source.equals( unit.getResource().getName() ) ) {
+          //unit.getAST().getChildren()[0].
           resource = unit.getResource();
           break;
         }
@@ -118,8 +120,10 @@ public abstract class AbstractEventBreakpointAction extends Action
     boolean existing = false;
     if( event instanceof ISourceLocation ) {
       ISourceLocation sourceLocation = ( ISourceLocation )event;
+      String filename = sourceLocation.getSourceFilename();
+      filename = new Path( filename ).lastSegment();
       String sourceHandle = project.getProject()
-        .getFile( sourceLocation.getSourceFilename() )
+        .getFile( filename )
         .getLocation()
         .toOSString();
       IBreakpoint[] breakpoints = DebugPlugin.getDefault()
@@ -148,6 +152,29 @@ public abstract class AbstractEventBreakpointAction extends Action
     }
     return existing;
   }
+  
+  private IPath findPath( final String fileLocation, final IResource searchPath )
+  throws CoreException
+{
+  
+  IPath file = new Path(fileLocation );
+  String filename = file.lastSegment();
+  IPath result = null;
+  if( searchPath instanceof IContainer
+      && ( ( IContainer )searchPath ).isAccessible() )
+  {
+    for( IResource resource : ( ( IContainer )searchPath ).members() ) {
+      if( resource.getName().equals( filename ) ) {
+        result = resource.getProjectRelativePath();
+      } else {
+        result = findPath( filename, resource );
+      }
+      if( result != null )
+        break;
+    }
+  }
+  return result;
+}
 
   protected EventBreakpoint createEventBreakpoint( final IEvent event )
     throws CoreException
@@ -164,12 +191,16 @@ public abstract class AbstractEventBreakpointAction extends Action
       int ignoreCount = sourceLocation.getOccurrenceCount();
       // get project
       ICProject project = getProject( event.getProcess().getTrace() );
+      
       if( project != null ) {
+        String filename = sourceLocation.getSourceFilename();
+        filename = new Path( filename ).lastSegment();
         sourceHandle = project.getProject()
-          .getFile( sourceLocation.getSourceFilename() )
+          .getFile( filename )
           .getLocation()
           .toOSString();
-        resource = getResource( project, sourceLocation.getSourceFilename() );
+        IPath path = findPath( filename, project.getResource() );
+        resource = getResource( project, path.toString() );
         if( resource != null ) {
           if( !existing( event, project ) ) {
             HashMap<String, Object> attributes = new HashMap<String, Object>( 10 );
@@ -184,8 +215,9 @@ public abstract class AbstractEventBreakpointAction extends Action
             attributes.put( EventBreakpoint.PROCESS,
                             Integer.valueOf( event.getProcessId() ) );
             eventBreakpoint = new EventBreakpoint( resource,
-                                                                   attributes,
-                                                                   register );
+                                                   attributes,
+                                                   register,
+                                                   event );
             eventBreakpoint.addEvent( event );
           }
         } else {

@@ -17,6 +17,8 @@ package eu.geclipse.traceview.debug;
 
 import org.eclipse.cdt.debug.core.model.ICLineBreakpoint;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.model.IBreakpoint;
 import org.eclipse.swt.SWT;
@@ -69,14 +71,16 @@ public class EventBreakpointMarker extends AbstractEventMarker {
           if( event instanceof ISourceLocation ) {
             ISourceLocation sourceLocation = ( ISourceLocation )event;
             try {
-              if( sourceLocation.getSourceFilename()
-                .equals( cLineBreakpoint.getFileName() )
+              String filename = sourceLocation.getSourceFilename();
+              filename = new Path( filename ).lastSegment();
+              if( 
+                filename.equals( cLineBreakpoint.getFileName() )
                   && sourceLocation.getSourceLineNumber() == cLineBreakpoint.getLineNumber() )
               {
                 if(cLineBreakpoint.getIgnoreCount() == 0){
-                  result = Triangle_Event;
+                  result = Rectangle_Event;
                 }else if (cLineBreakpoint.getIgnoreCount() <= sourceLocation.getOccurrenceCount()){
-                  result = Triangle_Event;
+                  result = Rectangle_Event;
                 }
                 
               }
