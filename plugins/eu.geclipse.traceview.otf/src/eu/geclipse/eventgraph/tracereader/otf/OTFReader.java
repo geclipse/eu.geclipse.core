@@ -84,9 +84,8 @@ public class OTFReader extends AbstractTraceFileCache implements IPhysicalTrace,
     this.nodes = new Node[this.numProcs];
     Event.addIds( this,this.otfDefinitionReader );
     String traceOptions = "";
-    if (Activator.getDefault().getPreferenceStore()
-    		.getBoolean( PreferenceConstants.readFunctions )) {
-    	traceOptions += "readFunctions";
+    if( Activator.getDefault().getPreferenceStore().getBoolean( PreferenceConstants.readFunctions ) ) {
+      traceOptions += "readFunctions";
     }
     boolean hasCache = openCacheDir( file.getAbsolutePath(), traceOptions, modTime );
     if( !readOTFData( hasCache, monitor ) )

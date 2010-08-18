@@ -311,8 +311,8 @@ public class OTFDefinitionReader {
    * @return function group id
    */
   public int getFunctionGroupID( final int functionID ) {
-	Integer id = this.functionGroupIDs.get( functionID );
-    return (id == null) ? -1 : id;
+    Integer id = this.functionGroupIDs.get( functionID );
+    return ( id == null ) ? -1 : id;
   }
 
   /**
