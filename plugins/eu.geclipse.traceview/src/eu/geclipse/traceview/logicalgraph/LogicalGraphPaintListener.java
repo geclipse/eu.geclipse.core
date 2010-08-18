@@ -16,6 +16,7 @@
 package eu.geclipse.traceview.logicalgraph;
 
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
@@ -171,8 +172,8 @@ class LogicalGraphPaintListener extends AbstractGraphPaintListener {
           int bgWidth = this.hSpace;
           ILamportEvent nextEvent = ( ILamportEvent )event.getNextEvent();
           if ( nextEvent != null ) {
-            if ( lastMarker.mark( nextEvent ) != IEventMarker.No_Mark &&
-                 color.equals( lastMarker.getCanvasBackgroundColor() )) {
+            if ( lastMarker != null && lastMarker.mark( nextEvent ) != IEventMarker.No_Mark
+                && color.equals( lastMarker.getCanvasBackgroundColor() )) {
               bgWidth *= (nextEvent.getLamportClock() - event.getLamportClock()); 
             }
           }
@@ -228,7 +229,7 @@ class LogicalGraphPaintListener extends AbstractGraphPaintListener {
     this.gc.setLineWidth( 0 );
   }
 
-  void drawEvent( ILamportEvent event, int x, int y ) {
+  void drawEvent( final ILamportEvent event, final int x, final int y ) {
     final int[] markTypes = { IEventMarker.Diamond_Event, IEventMarker.Triangle_Event,
                               IEventMarker.Ellipse_Event, IEventMarker.Rectangle_Event,
                               IEventMarker.Cross_Event };
@@ -280,7 +281,8 @@ class LogicalGraphPaintListener extends AbstractGraphPaintListener {
           this.gc.setForeground( color );
           if ( poly != null ) this.gc.drawPolygon( poly );
           else if ( markType == IEventMarker.Ellipse_Event) this.gc.drawOval( x, y, this.eventSize, this.eventSize );
-          else if ( markType == IEventMarker.Rectangle_Event) this.gc.drawRectangle( x, y, this.eventSize, this.eventSize );
+          else if ( markType == IEventMarker.Rectangle_Event) 
+            this.gc.drawRectangle( x, y, this.eventSize, this.eventSize );
           else if ( markType == IEventMarker.Cross_Event) {
             this.gc.drawLine( x, y, x + this.eventSize, y + this.eventSize );
             this.gc.drawLine( x, y + this.eventSize, x + this.eventSize, y );
@@ -401,14 +403,16 @@ class LogicalGraphPaintListener extends AbstractGraphPaintListener {
   void drawSelection() {
     ISelection selection = null;
     try {
-      selection = Activator.getDefault()
-        .getWorkbench()
-        .getActiveWorkbenchWindow()
-        .getActivePage()
-        .getActivePart()
-        .getSite()
-        .getSelectionProvider()
-        .getSelection();
+      ISelectionProvider provider = Activator.getDefault()
+      .getWorkbench()
+      .getActiveWorkbenchWindow()
+      .getActivePage()
+      .getActivePart()
+      .getSite()
+      .getSelectionProvider();
+      if(provider != null){
+      selection = provider.getSelection();
+      }
     } catch( Exception e ) {
       // ignore
     }
@@ -512,15 +516,15 @@ class LogicalGraphPaintListener extends AbstractGraphPaintListener {
     return this.eventSize / 2;
   }
   
-  private int getXPosForClock( int lamportClock ) {
+  private int getXPosForClock( final int lamportClock ) {
     return ( lamportClock - this.fromClock ) * this.hSpace
            + 30 - this.xOffset + this.eventSize / 2;
   }
 
-  void drawConnection( ILamportEvent event ) {
-    if (event.getPartnerProcessId() != -1 &&
-        procDrawingEnabled( event.getProcessId() ) &&
-        procDrawingEnabled( event.getPartnerProcessId() )) {
+  void drawConnection( final ILamportEvent event ) {
+    if (event.getPartnerProcessId() != -1
+        && procDrawingEnabled( event.getProcessId() )
+        && procDrawingEnabled( event.getPartnerProcessId() )) {
       int x1 = getXPosForClock( event.getLamportClock() );
       int y1 = getYPosForProcId( event.getProcessId() );
       int x2 = getXPosForClock( event.getPartnerLamportClock() );
