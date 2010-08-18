@@ -57,11 +57,12 @@ public abstract class AbstractEvent implements IEvent {
   public static final String PROP_VECTORCLOCK = "VectorEvent.VectorClock"; //$NON-NLS-1$
 
   private static IPropertyDescriptor[] eventDescriptors = new IPropertyDescriptor[] {
-    new PropertyDescriptor( PROP_TYPE, "Message Type" ), //$NON-NLS-1$
+    new PropertyDescriptor( PROP_TYPE, "Event Type" ), //$NON-NLS-1$
     new PropertyDescriptor( PROP_PROCESS, "Process" ), //$NON-NLS-1$
+    new PropertyDescriptor( PROP_PARTNER_PROCESS, "Partner Process" ), //$NON-NLS-1$
     new PropertyDescriptor( PROP_LOGICALCLOCK, "Logical Clock" ), //$NON-NLS-1$
-    new PropertyDescriptor( PROP_PARTNER_LOGICALCLOCK,
-                            "Partner Logical Clock" )}; //$NON-NLS-1$
+    new PropertyDescriptor( PROP_PARTNER_LOGICALCLOCK, "Partner Logical Clock" )}; //$NON-NLS-1$
+    
   private static IPropertyDescriptor[] lamportEventDescriptors = new IPropertyDescriptor[] {
     new PropertyDescriptor( PROP_LAMPORTCLOCK, "Lamport Clock" ), //$NON-NLS-1$
     new PropertyDescriptor( PROP_PARTNER_LAMPORTCLOCK,
