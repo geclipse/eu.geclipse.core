@@ -71,6 +71,7 @@ public abstract class AbstractGraphPaintListener implements PaintListener {
   protected AbstractGraphVisualization eventGraph;
   protected Font smallFont;
   protected int numProc;
+  protected boolean fastRedraw;
 
   protected AbstractGraphPaintListener( final AbstractGraphVisualization eventGraph ) {
     this.listener = new IPropertyChangeListener() {
@@ -194,6 +195,7 @@ public abstract class AbstractGraphPaintListener implements PaintListener {
     this.gc.setForeground( this.line1 );
     LineType hLines = this.eventGraph.getHLines();
     if( hLines != LineType.Lines_None ) {
+      if (fastRedraw) hLines = LineType.Lines_10;
       for( int i = this.fromProcessLine, y = 0 - this.yOffset + this.eventSize / 2; i < this.toProcessLine; i++, y += this.vSpace )
       {
         if( i % 10 == 0 ) {
@@ -267,8 +269,8 @@ public abstract class AbstractGraphPaintListener implements PaintListener {
     long xv = x2 - x1;
     long yv = y2 - y1;
     float c = ( float )Math.sqrt( xv * xv + yv * yv );
-    int ex = Math.round( ( xv / c * getArrowSize() ) );
-    int ey = Math.round( ( yv / c * getArrowSize() ) );
+    int ex = (int)( ( xv / c * getArrowSize() ) + 0.5);
+    int ey = (int)( ( yv / c * getArrowSize() ) + 0.5);
     int ox = spacing ? ex : 0;
     int oy = spacing ? ey : 0;
     this.gc.drawLine( x2 - ox, y2 - oy, x1 + ox, y1 + oy );
@@ -291,6 +293,8 @@ public abstract class AbstractGraphPaintListener implements PaintListener {
     this.horizontalScrollBar.addListener( SWT.Selection, new Listener() {
 
       public void handleEvent( final Event e ) {
+        // might need fixed bug 323092 to work reliable
+        AbstractGraphPaintListener.this.fastRedraw = e.detail == SWT.DRAG;
         handleHorizontalScrollBar();
       }
     } );
@@ -302,6 +306,8 @@ public abstract class AbstractGraphPaintListener implements PaintListener {
     this.verticalScrollBar.addListener( SWT.Selection, new Listener() {
 
       public void handleEvent( final Event e ) {
+        // might need fixed bug 323092 to work reliable
+        AbstractGraphPaintListener.this.fastRedraw = e.detail == SWT.DRAG;
         handleVerticalScrollBar();
       }
     } );

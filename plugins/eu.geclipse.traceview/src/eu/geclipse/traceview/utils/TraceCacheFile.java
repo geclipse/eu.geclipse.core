@@ -64,8 +64,9 @@ final public class TraceCacheFile {
   public void read( final int offset, final int[] data ) throws IOException {
     if (buffer != null) {
       synchronized( buffer ) {
-        buffer.position( offset );
-        buffer.get( data, 0, data.length );
+    	for (int i = 0; i < data.length; i++) {
+    	  data[i] = buffer.get( offset + i );
+    	}
       }
     } else {
       synchronized( randAccFile ) {

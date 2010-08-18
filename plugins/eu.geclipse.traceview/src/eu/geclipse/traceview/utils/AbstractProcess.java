@@ -121,7 +121,9 @@ public abstract class AbstractProcess
    * @see eu.geclipse.traceview.ILamportProcess#getMaximumLamportClock()
    */
   public int getMaximumLamportClock() {
-    return ( ( ILamportEvent )getEventByLogicalClock( getMaximumLogicalClock() ) ).getLamportClock();
+	ILamportEvent event = ( ILamportEvent )getEventByLogicalClock( getMaximumLogicalClock() );
+	int clock = event.getLamportClock();
+    return clock;
   }
 
   /*
@@ -137,16 +139,18 @@ public abstract class AbstractProcess
     while( low <= high ) {
       mid = ( low + high ) / 2;
       result = ( ILamportEvent )getEventByLogicalClock( mid );
-      if( result.getLamportClock() > index ) {
+      int lamClk = result.getLamportClock();
+      if( lamClk > index ) {
         high = mid - 1;
-      } else if( result.getLamportClock() < index ) {
+      } else if( lamClk < index ) {
         low = mid + 1;
       } else {
         break;
       }
     }
-    if( result.getLamportClock() != index )
+    if( result.getLamportClock() != index ) {
       result = null;
+    }
     return result;
   }
 
@@ -173,10 +177,11 @@ public abstract class AbstractProcess
       searchFrom--;
       // get to
       int searchTo;
-      if( to < this.getMaximumLamportClock() ) {
+      int maxLam = this.getMaximumLamportClock();
+      if( to < maxLam ) {
         searchTo = to;
       } else {
-        searchTo = this.getMaximumLamportClock();
+        searchTo = maxLam;
       }
       ILamportEvent toEvent = null;
       // TODO investigate
@@ -189,9 +194,9 @@ public abstract class AbstractProcess
       }
       int length = toEvent.getLogicalClock() - fromEvent.getLogicalClock() + 1;
       events = new ILamportEvent[ length ];
-      for( int i = 0, logicalClock = fromEvent.getLogicalClock(); i < length; logicalClock++, i++ )
-      {
-        events[ i ] = ( ILamportEvent )getEventByLogicalClock( logicalClock );
+      events[ 0 ] = fromEvent;
+      for( int i = 1 ; i < length; i++ ) {
+        events[ i ] = ( ILamportEvent ) events[ i-1 ].getNextEvent();
       }
     } catch( Exception exception ) {
       Activator.logException( exception );
@@ -208,7 +213,9 @@ public abstract class AbstractProcess
    * @see eu.geclipse.traceview.IPhysicalProcess#getMaximumPhysicalClock()
    */
   public int getMaximumPhysicalClock() {
-    return ( ( IPhysicalEvent )getEventByLogicalClock( getMaximumLogicalClock() ) ).getPhysicalStopClock();
+	IPhysicalEvent event = ( IPhysicalEvent )getEventByLogicalClock( getMaximumLogicalClock() );
+	int clock = event.getPhysicalStopClock();
+    return clock;
   }
 
   protected IPhysicalEvent getPhysicalEvent( final int time ) {
@@ -248,7 +255,7 @@ public abstract class AbstractProcess
       if( event != null ) {
         if( event.getPhysicalStartClock() <= timeStop )
           events.add( event );
-        event = ( IPhysicalEvent )getEventByLogicalClock( event.getLogicalClock() + 1 );
+        event = ( IPhysicalEvent )event.getNextEvent();
         while( event != null && event.getPhysicalStartClock() < timeStop ) {
           events.add( event );
           event = ( IPhysicalEvent )event.getNextEvent();
