@@ -121,7 +121,6 @@ public class PreferencePage extends org.eclipse.jface.preference.PreferencePage 
     } );
   }
 
-  @Override
   public void init( final IWorkbench workbench ) {
     // TODO Auto-generated method stub
   }
