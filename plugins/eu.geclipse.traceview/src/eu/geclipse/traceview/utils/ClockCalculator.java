@@ -32,10 +32,13 @@ public class ClockCalculator {
     int numberMonitorSteps = trace.getNumberOfProcesses();
     int stepsDone=0;
     do {
-      int stepsDoneNew = (int)(((long)numberMonitorSteps * lastLamportClock[0]) / trace.getProcess( 0 ).getMaximumLogicalClock());
-      if (stepsDoneNew > stepsDone) {
-        monitor.worked( stepsDoneNew - stepsDone );
-        stepsDone = stepsDoneNew;
+      int maxLogClock = trace.getProcess( 0 ).getMaximumLogicalClock();
+      if (maxLogClock > 0) {
+        int stepsDoneNew = (int)(((long)numberMonitorSteps * lastLamportClock[0]) / maxLogClock);
+        if (stepsDoneNew > stepsDone) {
+          monitor.worked( stepsDoneNew - stepsDone );
+          stepsDone = stepsDoneNew;
+        }
       }
       if (monitor.isCanceled()) return;
 
