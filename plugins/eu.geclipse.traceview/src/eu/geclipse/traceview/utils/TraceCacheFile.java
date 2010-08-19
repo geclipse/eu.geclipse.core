@@ -63,10 +63,8 @@ final public class TraceCacheFile {
 
   public void read( final int offset, final int[] data ) throws IOException {
     if (buffer != null) {
-      synchronized( buffer ) {
-    	for (int i = 0; i < data.length; i++) {
-    	  data[i] = buffer.get( offset + i );
-    	}
+      for (int i = 0; i < data.length; i++) {
+        data[i] = buffer.get( offset + i );
       }
     } else {
       synchronized( randAccFile ) {
@@ -108,9 +106,8 @@ final public class TraceCacheFile {
 
   public void write( final int offset, final int[] value ) throws IOException {
     if (buffer != null) {
-      synchronized( buffer ) {
-        buffer.position( offset );
-        buffer.put( value, 0, value.length );
+      for (int i = 0; i < value.length; i++) {
+        buffer.put( offset + i, value[i] );
       }
     } else {
       synchronized( randAccFile ) {
