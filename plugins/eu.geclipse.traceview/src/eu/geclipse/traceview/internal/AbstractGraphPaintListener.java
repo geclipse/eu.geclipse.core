@@ -72,6 +72,7 @@ public abstract class AbstractGraphPaintListener implements PaintListener {
   protected Font smallFont;
   protected int numProc;
   protected boolean fastRedraw;
+  protected long fullRedrawDuration;
 
   protected AbstractGraphPaintListener( final AbstractGraphVisualization eventGraph ) {
     this.listener = new IPropertyChangeListener() {

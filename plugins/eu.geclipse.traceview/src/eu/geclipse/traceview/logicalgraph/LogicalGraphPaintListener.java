@@ -353,6 +353,13 @@ class LogicalGraphPaintListener extends AbstractGraphPaintListener {
    */
   public void paintControl( final PaintEvent e ) {
     this.gc = e.gc;
+    long drawStartTime = 0;
+    if (fastRedraw) {
+      if (fullRedrawDuration < 100) fastRedraw = false;
+    }
+    if (!fastRedraw) {
+      drawStartTime = System.currentTimeMillis();
+    }
     if( this.antialiasing && !fastRedraw ) {
       this.gc.setAntialias( SWT.ON );
     }
@@ -403,6 +410,10 @@ class LogicalGraphPaintListener extends AbstractGraphPaintListener {
         setScrollBarSizes();
         this.scrollBarsInitialized = true;
       }
+    }
+    if (!fastRedraw) {
+      long drawEndTime = System.currentTimeMillis();
+      fullRedrawDuration = drawEndTime - drawStartTime;
     }
     this.fastRedraw = false;
   }
