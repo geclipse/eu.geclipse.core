@@ -266,23 +266,27 @@ public abstract class AbstractGraphPaintListener implements PaintListener {
                              final int y2,
                              final boolean spacing)
   {
-    long xv = x2 - x1;
-    long yv = y2 - y1;
-    float c = ( float )Math.sqrt( xv * xv + yv * yv );
-    int ex = (int)( ( xv / c * getArrowSize() ) + 0.5);
-    int ey = (int)( ( yv / c * getArrowSize() ) + 0.5);
-    int ox = spacing ? ex : 0;
-    int oy = spacing ? ey : 0;
-    this.gc.drawLine( x2 - ox, y2 - oy, x1 + ox, y1 + oy );
-    int[] arrowhead = {
-      x2 - ox,
-      y2 - oy,
-      x2 - ox - ex - ey,
-      y2 - oy - ey + ex,
-      x2 - ox - ex + ey,
-      y2 - oy - ey - ex
-    };
-    this.gc.fillPolygon( arrowhead );
+	if (fastRedraw) {
+      this.gc.drawLine( x2, y2, x1, y1 );
+	} else {
+      long xv = x2 - x1;
+      long yv = y2 - y1;
+      float c = ( float )Math.sqrt( xv * xv + yv * yv );
+      int ex = (int)( ( xv / c * getArrowSize() ) + 0.5);
+      int ey = (int)( ( yv / c * getArrowSize() ) + 0.5);
+      int ox = spacing ? ex : 0;
+      int oy = spacing ? ey : 0;
+      this.gc.drawLine( x2 - ox, y2 - oy, x1 + ox, y1 + oy );
+      int[] arrowhead = {
+        x2 - ox,
+        y2 - oy,
+        x2 - ox - ex - ey,
+        y2 - oy - ey + ex,
+        x2 - ox - ex + ey,
+        y2 - oy - ey - ex
+      };
+      this.gc.fillPolygon( arrowhead );
+	}
   }
 
   public abstract int getArrowSize();
