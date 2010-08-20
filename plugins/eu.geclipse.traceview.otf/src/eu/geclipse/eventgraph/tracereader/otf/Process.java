@@ -59,7 +59,8 @@ final class Process extends AbstractProcessFileCache {
     this.logClock++;
   }
 
-  public IEvent getEventByLogicalClock( final int index ) throws IndexOutOfBoundsException {
-    return new Event( index, this );
+  public Event getEventByLogicalClock( final int index ) throws IndexOutOfBoundsException {
+    Event event = new Event( index, this ); 
+    return event;
   }
 }

@@ -294,7 +294,7 @@ public class Event extends AbstractEvent implements ILamportEvent, IPhysicalEven
   public Event getNextEvent() {
     Event result = null;
     try {
-      this.process.getEventByLogicalClock( this.logicalClock + 1 );
+      result = this.process.getEventByLogicalClock( this.logicalClock + 1 );
     } catch( IndexOutOfBoundsException e ) {
       // ignore
     }
