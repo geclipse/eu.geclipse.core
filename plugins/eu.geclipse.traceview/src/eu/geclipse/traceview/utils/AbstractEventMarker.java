@@ -11,6 +11,9 @@ import eu.geclipse.traceview.ITrace;
 public abstract class AbstractEventMarker implements IEventMarker {
   protected ITrace trace;
 
+  public void startMarking() {
+  }
+
   public Color getBackgroundColor( int type ) {
     return null;
   }

@@ -42,6 +42,12 @@ public interface IEventMarker {
   public int Long_Rectangle = 128;
 
   /**
+   * Called before a redraw takes place. Can be used to prepare
+   * the marker for drawing the following events.
+   */
+  public void startMarking();
+
+  /**
    * Checks if the specified event should be marked.
    * 
    * @param event The event to check.

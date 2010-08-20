@@ -15,9 +15,11 @@
 
 package eu.geclipse.traceview.debug;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.cdt.debug.core.model.ICLineBreakpoint;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.model.IBreakpoint;
@@ -33,6 +35,7 @@ import eu.geclipse.traceview.utils.AbstractEventMarker;
  * Marks the events on which a breakpoint is set.
  */
 public class EventBreakpointMarker extends AbstractEventMarker {
+  List<IBreakpoint> breakpoints = new ArrayList<IBreakpoint>();
 
   @Override
   public Color getBackgroundColor( final int type ) {
@@ -50,13 +53,22 @@ public class EventBreakpointMarker extends AbstractEventMarker {
   }
 
   @Override
+  public void startMarking() {
+    breakpoints.clear();
+    for( IBreakpoint breakpoint : DebugPlugin.getDefault()
+    	        .getBreakpointManager().getBreakpoints() ) {
+      if( breakpoint instanceof EventBreakpoint
+          || breakpoint instanceof ICLineBreakpoint ) {
+        breakpoints.add(breakpoint);
+      }
+    }
+  }
+
+  @Override
   public int mark( final IEvent event ) {
     int result = 0;
     if( event instanceof ISourceLocation ) {
-      for( IBreakpoint breakpoint : DebugPlugin.getDefault()
-        .getBreakpointManager()
-        .getBreakpoints() )
-      {
+      for( IBreakpoint breakpoint : breakpoints ) {
         if( breakpoint instanceof EventBreakpoint ) {
           EventBreakpoint eventBreakpoint = ( EventBreakpoint )breakpoint;
           try {
@@ -68,25 +80,21 @@ public class EventBreakpointMarker extends AbstractEventMarker {
           }
         } else if( breakpoint instanceof ICLineBreakpoint ) {
           ICLineBreakpoint cLineBreakpoint = ( ICLineBreakpoint )breakpoint;
-          if( event instanceof ISourceLocation ) {
+          try {
             ISourceLocation sourceLocation = ( ISourceLocation )event;
-            try {
+            if( sourceLocation.getSourceLineNumber() == cLineBreakpoint.getLineNumber() ) {
               String filename = sourceLocation.getSourceFilename();
               filename = new Path( filename ).lastSegment();
-              if( 
-                filename.equals( cLineBreakpoint.getFileName() )
-                  && sourceLocation.getSourceLineNumber() == cLineBreakpoint.getLineNumber() )
-              {
+              if( filename.equals( cLineBreakpoint.getFileName() ) ) {
                 if(cLineBreakpoint.getIgnoreCount() == 0){
                   result = Rectangle_Event;
                 }else if (cLineBreakpoint.getIgnoreCount() <= sourceLocation.getOccurrenceCount()){
                   result = Rectangle_Event;
                 }
-                
               }
-            } catch( CoreException e ) {
-              // empty
             }
+          } catch( CoreException e ) {
+            // empty
           }
         }
       }

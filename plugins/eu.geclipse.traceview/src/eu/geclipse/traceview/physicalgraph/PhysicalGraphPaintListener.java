@@ -260,6 +260,9 @@ class PhysicalGraphPaintListener extends AbstractGraphPaintListener {
     this.height = this.eventGraph.getClientArea().height - 1;
     this.width = this.eventGraph.getClientArea().width - 1;
     correctScrollbar();
+    for( IEventMarker eventmarker : this.eventGraph.getEventMarkers() ) {
+      eventmarker.startMarking();
+    }
     // draw controls
     drawBackground();
     // draw rest only if trace is available
