@@ -30,6 +30,7 @@ public abstract class AbstractProcess
   implements ILamportProcess, IPhysicalProcess
 {
   protected int startTimeOffset;
+  private static ILamportEvent[] EMPTY_LAMPORT_EVENT_ARRAY = new ILamportEvent[0];
 
   @Override
   public String toString() {
@@ -132,24 +133,51 @@ public abstract class AbstractProcess
    * @see eu.geclipse.traceview.ILamportProcess#getEventByLamportClock(int)
    */
   public ILamportEvent getEventByLamportClock( final int index ) {
+	  return getEventByLamportClock(index, MATCH_MODE_EXACT);
+  }
+
+  public ILamportEvent getEventByLamportClock( final int index, final int matchMode ) {
     ILamportEvent result = null;
     int low = 0;
     int high = getMaximumLogicalClock();
-    int mid;
     while( low <= high ) {
-      mid = ( low + high ) / 2;
+      int mid = ( low + high ) / 2;
       result = ( ILamportEvent )getEventByLogicalClock( mid );
       int lamClk = result.getLamportClock();
       if( lamClk > index ) {
         high = mid - 1;
       } else if( lamClk < index ) {
         low = mid + 1;
-      } else {
-        break;
+      } else if (lamClk == index) {
+        return result;
       }
     }
-    if( result.getLamportClock() != index ) {
-      result = null;
+    if (result == null || matchMode == MATCH_MODE_EXACT) {
+      return null;
+    }
+    int lamClk = result.getLamportClock();
+    if (lamClk < index) {
+      switch ( matchMode ) {
+        case MATCH_MODE_LOWER_ALLOWED:
+        case MATCH_MODE_LOWER_ALLOWED_GREATER_ALLOWED:
+          return result;
+        case MATCH_MODE_GREATER_ALLOWED:
+        case MATCH_MODE_GREATER_ALLOWED_LOWER_ALLOWED:
+          ILamportEvent next = (ILamportEvent) result.getNextEvent();
+          if (next == null) return matchMode == MATCH_MODE_GREATER_ALLOWED_LOWER_ALLOWED ? result : null;
+          return next;
+      }
+	}
+    // lamClk > index:
+    switch ( matchMode ) {
+      case MATCH_MODE_LOWER_ALLOWED:
+      case MATCH_MODE_LOWER_ALLOWED_GREATER_ALLOWED:
+        int prevEventNr = result.getLogicalClock() - 1;
+        if ( prevEventNr < 0 ) return matchMode == MATCH_MODE_LOWER_ALLOWED_GREATER_ALLOWED ? result : null;
+        return (ILamportEvent) getEventByLogicalClock( prevEventNr );
+      case MATCH_MODE_GREATER_ALLOWED:
+      case MATCH_MODE_GREATER_ALLOWED_LOWER_ALLOWED:
+        return result;
     }
     return result;
   }
@@ -160,39 +188,28 @@ public abstract class AbstractProcess
    * @see eu.geclipse.traceview.ILamportProcess#getEventsByLamportClock(int,
    *      int)
    */
-  public ILamportEvent[] getEventsByLamportClock( final int from, final int to )
+  public ILamportEvent[] getEventsByLamportClock( final int from, final int to ) {
+    return getEventsByLamportClock(from, false, to, false);
+  }
+
+  public ILamportEvent[] getEventsByLamportClock( final int from, boolean allowPrev, final int to, boolean allowNext )
   {
     ILamportEvent[] events = null;
     try {
       // get from
-      int searchFrom = from;
-      ILamportEvent fromEvent = null;
-      while( fromEvent == null && searchFrom <= to ) {
-        fromEvent = getEventByLamportClock( searchFrom );
-        searchFrom++;
-      }
+      ILamportEvent fromEvent = getEventByLamportClock(from, allowPrev ? MATCH_MODE_LOWER_ALLOWED_GREATER_ALLOWED : MATCH_MODE_GREATER_ALLOWED);
       if( fromEvent == null ) {
-        return new ILamportEvent[ 0 ];
+        return EMPTY_LAMPORT_EVENT_ARRAY;
       }
-      searchFrom--;
       // get to
-      int searchTo;
-      int maxLam = this.getMaximumLamportClock();
-      if( to < maxLam ) {
-        searchTo = to;
-      } else {
-        searchTo = maxLam;
-      }
-      ILamportEvent toEvent = null;
-      // TODO investigate
-      while( toEvent == null && searchTo >= searchFrom ) {
-        toEvent = getEventByLamportClock( searchTo );
-        searchTo--;
-      }
+      ILamportEvent toEvent = getEventByLamportClock( to, allowNext ? MATCH_MODE_GREATER_ALLOWED_LOWER_ALLOWED : MATCH_MODE_LOWER_ALLOWED );
       if( toEvent == null ) {
-        return new ILamportEvent[ 0 ];
+        return EMPTY_LAMPORT_EVENT_ARRAY;
       }
       int length = toEvent.getLogicalClock() - fromEvent.getLogicalClock() + 1;
+      if ( length <= 0 ) {
+        return EMPTY_LAMPORT_EVENT_ARRAY;
+      }
       events = new ILamportEvent[ length ];
       events[ 0 ] = fromEvent;
       for( int i = 1 ; i < length; i++ ) {

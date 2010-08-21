@@ -392,7 +392,7 @@ class LogicalGraphPaintListener extends AbstractGraphPaintListener {
       ILamportEvent[][] events = new ILamportEvent[trace.getNumberOfProcesses()][];
       for( int i = 0; i < this.numProc; i++ ) {
           ILamportProcess process = ( ILamportProcess )this.eventGraph.getTrace().getProcess( i );
-          events[i] = process.getEventsByLamportClock( this.fromClock, this.toClock );
+          events[i] = process.getEventsByLamportClock( this.fromClock, true, this.toClock, false );
           // Draw background markers of events
           if (!fastRedraw) drawGraphBackground(i, events[i]);
       }

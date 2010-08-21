@@ -19,6 +19,11 @@ package eu.geclipse.traceview;
  * Interface for a process containing lamport clock events.
  */
 public interface ILamportProcess extends IProcess {
+  final static int MATCH_MODE_EXACT = 0;
+  final static int MATCH_MODE_GREATER_ALLOWED = 1;
+  final static int MATCH_MODE_LOWER_ALLOWED = 2;
+  final static int MATCH_MODE_GREATER_ALLOWED_LOWER_ALLOWED = 3;
+  final static int MATCH_MODE_LOWER_ALLOWED_GREATER_ALLOWED = 4;
 
   /**
    * Returns the maximum lamport clock for this process.
@@ -38,6 +43,8 @@ public interface ILamportProcess extends IProcess {
    */
   ILamportEvent getEventByLamportClock( int index ) throws IndexOutOfBoundsException;
 
+  ILamportEvent getEventByLamportClock( int index, int matchMode ) throws IndexOutOfBoundsException;
+
   /**
    * Returns an array containing ILamportEvents of the specified range.
    * 
@@ -47,4 +54,6 @@ public interface ILamportProcess extends IProcess {
    * @throws IndexOutOfBoundsException 
    */
   ILamportEvent[] getEventsByLamportClock( int fromIndex, int toIndex ) throws IndexOutOfBoundsException;
+
+  ILamportEvent[] getEventsByLamportClock( int fromClock, boolean allowPrev, int toClock, boolean allowNext );
 }
