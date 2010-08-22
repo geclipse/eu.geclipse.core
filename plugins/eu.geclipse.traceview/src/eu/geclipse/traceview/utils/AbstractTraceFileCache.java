@@ -76,15 +76,14 @@ final class OffsetEntry {
       this.needsRead = true;
       this.shift = shift[0] - bits2;
       this.mask2 = makeMask( 0, bits2 );
-      intOffset[0] += this.buffer.length;
-      shift[0] = (shift[0] + this.bits*elementCount) % 32;
     } else {
       this.shift = shift[0];
       this.mask = makeMask( this.shift, bits );
       this.needsRead = this.mask != 0xffffffff;
       this.mask2 = 0; // not used
-      shift[0] += bits;
     }
+    intOffset[0] += this.buffer.length;
+    shift[0] = (shift[0] + this.bits*elementCount) % 32;
   }
 
   static int makeMask( final int shift, final int bits ) {
