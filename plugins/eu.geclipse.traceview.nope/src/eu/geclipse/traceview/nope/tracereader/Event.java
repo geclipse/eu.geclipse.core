@@ -75,14 +75,18 @@ public class Event extends AbstractEvent
   protected final int logicalClock;
   protected final Process process;
   
-  static void addIds(AbstractTraceFileCache cache) {
+  static void addIds(final AbstractTraceFileCache cache) {
+    int maxType = 0;
+    for (EventType type : EventType.values()){
+      maxType = Math.max( maxType, type.id);
+    }
     cache.addEntry( acceptedMessageTypeOffset, 32, false );
     cache.addEntry( supposedMessageTypeOffset, 32, false );
     cache.addEntry( sourceFilenameIndexOffset, 16, false );
     cache.addEntry( sourceLineNrOffset, 16, false );
     cache.addEntry( acceptedMessageLengthOffset, 31, false );
     cache.addEntry( supposedMessageLengthOffset, 31, false );
-    cache.addEntry( typeOffset, 2, false );
+    cache.addEntry( typeOffset, cache.getBitsForMaxValue( maxType ), false );
     cache.addEntry( blockingOffset, 1, false );
     cache.addEntry( subTypeOffset, 8, false );
     cache.addEntry( acceptedPartnerProcessOffset, cache.getBitsForMaxValue( cache.getNumberOfProcesses()-1 )+1, true );

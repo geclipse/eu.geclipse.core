@@ -26,7 +26,9 @@ public enum EventType {
   /** Test event */
   TEST(2),
   /** Other event */
-  OTHER(3);
+  OTHER(3),
+  /** Collective event */
+  COLLECTIVE(4);
 
   /** Id of the EventType */
   public final int id;
@@ -51,6 +53,8 @@ public enum EventType {
       result = TEST;
     else if( id == OTHER.id )
       result = OTHER;
+    else if( id == COLLECTIVE.id )
+      result = COLLECTIVE;
     return result;
   }
 }
