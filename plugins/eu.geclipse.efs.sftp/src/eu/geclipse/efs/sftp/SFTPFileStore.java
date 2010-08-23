@@ -89,13 +89,7 @@ public class SFTPFileStore extends FileStore {
     this.childInfos = new ArrayList<IFileInfo>();
     this.myFileInfo = fileInfo;
     try {
-      this.uri = new URI( this.uri.getScheme(),
-                          this.uri.getUserInfo(),
-                          this.uri.getHost(),
-                          this.uri.getPort(),
-                          this.path.toString(),
-                          this.uri.getQuery(),
-                          this.uri.getFragment() );
+      this.uri = new URI( this.uri.getScheme(), this.uri.getUserInfo(), this.uri.getHost(), this.uri.getPort(), this.path.toString(), this.uri.getQuery(), this.uri.getFragment() );
     } catch( URISyntaxException uriSyntaxException ) {
       Activator.logException( uriSyntaxException );
     }
@@ -108,13 +102,7 @@ public class SFTPFileStore extends FileStore {
     ChannelSftp channel = connection.getChannel();
     if( this.uri.getPath().length() == 0 ) {
       try {
-        this.uri = new URI( this.uri.getScheme(),
-                            this.uri.getUserInfo(),
-                            this.uri.getHost(),
-                            this.uri.getPort(),
-                            channel.getHome(),
-                            this.uri.getQuery(),
-                            this.uri.getFragment() );
+        this.uri = new URI( this.uri.getScheme(), this.uri.getUserInfo(), this.uri.getHost(), this.uri.getPort(), channel.getHome(), this.uri.getQuery(), this.uri.getFragment() );
         this.path = new Path( this.uri.getPath() );
       } catch( URISyntaxException uriSyntaxException ) {
         Activator.logException( uriSyntaxException );
@@ -202,6 +190,11 @@ public class SFTPFileStore extends FileStore {
 
   @Override
   public IFileInfo fetchInfo() {
+    try {
+      update();
+    } catch( CoreException e ) {
+      // empty
+    }
     return this.myFileInfo;
   }
 
@@ -280,19 +273,16 @@ public class SFTPFileStore extends FileStore {
   }
 
   @Override
-  public IFileStore mkdir( final int options, final IProgressMonitor monitor )
-    throws CoreException
-  {
-    SFTPConnection connection = ConnectionManager.getInstance()
-      .acquireConnection( this.connectionKey );
+  public IFileStore mkdir( final int options, final IProgressMonitor monitor ) throws CoreException {
+    SFTPConnection connection = ConnectionManager.getInstance().acquireConnection( this.connectionKey );
     ChannelSftp channel = connection.getChannel();
     try {
       channel.mkdir( this.path.toString() );
       this.myFileInfo.setExists( true );
       this.myFileInfo.setDirectory( true );
     } catch( SftpException sftpException ) {
-      Activator.logException( sftpException );
-      connection.unlock();
+      // Activator.logException( sftpException );
+      // connection.unlock();
     }
     return this;
   }
