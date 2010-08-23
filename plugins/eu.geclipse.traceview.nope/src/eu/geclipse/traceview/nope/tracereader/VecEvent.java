@@ -15,7 +15,7 @@ public class VecEvent extends Event implements IVectorEvent {
   }
 
   static void addIds(AbstractTraceFileCache cache) {
-    cache.addEntry( vectorClockOffset, cache.getNumberOfProcesses(), cache.getBitsForMaxValue( cache.estimateMaxLogicalClock() )+2, true );
+    cache.addEntry( vectorClockOffset, cache.getNumberOfProcesses(), cache.getBitsForMaxValue( cache.estimateMaxLogicalClock() )+3, true ); // TODO find a way to estimate value or change to Integer.MAX_VALUE
   }
 
   @Override
