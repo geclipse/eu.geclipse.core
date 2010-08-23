@@ -143,6 +143,7 @@ final class OffsetEntry {
         m2 = (int)(0x00000000ffffffffl & (lm2>>>32));
       }
       fillPosSh += bits;
+      if (fillPosSh == 32) j++;
       if (fillPosSh >= 32) fillPosSh -= 32;
       if (m2 != 0) {
         sh = 32 - bits;
@@ -192,6 +193,7 @@ final class OffsetEntry {
       }
 
       fillPosSh += bits;
+      if (fillPosSh == 32) j++;
       if (fillPosSh >= 32) fillPosSh -= 32;
       if (m2 != 0) {
         sh = 32 - bits;
