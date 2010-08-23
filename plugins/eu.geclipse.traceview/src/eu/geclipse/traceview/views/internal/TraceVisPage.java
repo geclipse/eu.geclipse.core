@@ -12,7 +12,7 @@
  * Contributors:
  *    Christof Klausecker GUP, JKU - initial API and implementation
  *****************************************************************************/
-
+ 
 package eu.geclipse.traceview.views.internal;
 
 import org.eclipse.core.runtime.CoreException;
@@ -30,6 +30,9 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IViewSite;
 
+import eu.geclipse.traceview.ILamportTrace;
+import eu.geclipse.traceview.IPhysicalTrace;
+import eu.geclipse.traceview.IStatisticsTrace;
 import eu.geclipse.traceview.ITrace;
 import eu.geclipse.traceview.ITraceVisProvider;
 import eu.geclipse.traceview.TraceVisualization;
@@ -56,12 +59,7 @@ public class TraceVisPage extends Composite {
    * @param traceView - the trace view the page is opened in
    * @param trace - the Trace to display
    */
-  public TraceVisPage( final CTabFolder cTabFolder,
-                       final int style,
-                       final IViewSite viewSite,
-                       final TraceView traceView,
-                       final ITrace trace )
-  {
+  public TraceVisPage( final CTabFolder cTabFolder, final int style, final IViewSite viewSite, final TraceView traceView, final ITrace trace ) {
     super( cTabFolder, style );
     this.traceView = traceView;
     this.viewSite = viewSite;
@@ -80,8 +78,15 @@ public class TraceVisPage extends Composite {
     } );
     cTabItem.setText( this.trace.getName() );
     cTabFolder.setSelection( cTabItem );
-    // TODO add preference entry
-    changeToVisualisation( "eu.geclipse.traceview.logicalgraph.LogicalGraphProvider" ); //$NON-NLS-1$
+
+    // TODO allow for other visualization types
+    if( trace instanceof ILamportTrace ) {
+      changeToVisualisation( "eu.geclipse.traceview.logicalgraph.LogicalGraphProvider" ); //$NON-NLS-1$
+    } else if( trace instanceof IPhysicalTrace ) {
+      changeToVisualisation( "eu.geclipse.traceview.physicalgraph.PhysicalGraphProvider" ); //$NON-NLS-1$
+    } else if( trace instanceof IStatisticsTrace ) {
+      changeToVisualisation( "eu.geclipse.traceview.statistics.StatisticsVisProvider" ); //$NON-NLS-1$
+    }
   }
 
   /**
@@ -101,29 +106,27 @@ public class TraceVisPage extends Composite {
   public void changeToVisualisation( final String id ) {
     if( id != null ) {
       this.visualisationID = id;
-      for( IConfigurationElement configurationElement : Platform.getExtensionRegistry()
-        .getConfigurationElementsFor( "eu.geclipse.traceview.TraceVisualization" ) ) { //$NON-NLS-1$^
+      for( IConfigurationElement configurationElement : Platform.getExtensionRegistry().getConfigurationElementsFor( "eu.geclipse.traceview.TraceVisualization" ) ) { //$NON-NLS-1$^
         if( id.equals( configurationElement.getAttribute( "id" ) ) ) { //$NON-NLS-1$
           // remove items from action bar
-          this.traceView.getViewSite()
-            .getActionBars()
-            .getToolBarManager()
-            .removeAll();
-          this.traceView.getViewSite()
-            .getActionBars()
-            .getToolBarManager()
-            .update( true );
+          this.traceView.getViewSite().getActionBars().getToolBarManager().removeAll();
+          this.traceView.getViewSite().getActionBars().getToolBarManager().update( true );
           // dispose visualization
           if( this.visualization != null && !this.visualization.isDisposed() ) {
             this.visualization.dispose();
           }
           // create new visualization
           try {
-            ITraceVisProvider provider = ( ITraceVisProvider )configurationElement.createExecutableExtension( "class" ); //$NON-NLS-1$
-            this.visualization = provider.getTraceVis( this,
-                                                       SWT.NONE,
-                                                       this.viewSite,
-                                                       this.trace );
+            ITraceVisProvider provider = null;
+            // if( ! (this.trace instanceof ILamportTrace)){
+            // configurationElement = Platform.getExtensionRegistry()
+            // .getConfigurationElementsFor( "eu.geclipse.traceview.TraceVisualization" )[0]; // bad hack
+            //              provider = ( ITraceVisProvider )configurationElement.createExecutableExtension( "class" ); //$NON-NLS-1$
+            // }
+            // else{
+            provider = ( ITraceVisProvider )configurationElement.createExecutableExtension( "class" ); //$NON-NLS-1$
+            // }
+            this.visualization = provider.getTraceVis( this, SWT.NONE, this.viewSite, this.trace );
             this.items = this.visualization.getToolBarItems();
           } catch( CoreException coreException ) {
             // nothing
@@ -131,10 +134,7 @@ public class TraceVisPage extends Composite {
           // add visualization specific items to bar
           if( this.items != null ) {
             for( IContributionItem item : this.items ) {
-              this.traceView.getViewSite()
-                .getActionBars()
-                .getToolBarManager()
-                .add( item );
+              this.traceView.getViewSite().getActionBars().getToolBarManager().add( item );
             }
           }
           // add standard bar
@@ -184,7 +184,7 @@ public class TraceVisPage extends Composite {
   }
 
   public void printTrace( final GC gc ) {
-    this.visualization.printTrace(gc);
+    this.visualization.printTrace( gc );
   }
 
   public TraceVisualization getVisualization() {
