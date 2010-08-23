@@ -149,7 +149,7 @@ public class EventSubTypePreferenceEditor {
     int value = 0;
     switch( this.combo.getSelectionIndex() ) {
       case 0:
-        value = IEventMarker.No_Event;
+        value = IEventMarker.No_Mark;
       break;
       case 1:
         value = IEventMarker.Rectangle_Event;

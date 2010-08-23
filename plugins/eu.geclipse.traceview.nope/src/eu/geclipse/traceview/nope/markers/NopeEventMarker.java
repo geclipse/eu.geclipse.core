@@ -145,8 +145,8 @@ public class NopeEventMarker extends AbstractEventMarker {
         if( this.enabled[ i ] ) {
           if( nopeEvent.getSubType() == PreferenceConstants.Codes[ i ] ) {
             result = this.shapes[ i ];
-            this.foreground = this.colors[ i ];
-            this.background = null;
+            this.foreground = this.colors[ i ];//null;
+            this.background = this.colors[ i ];
           }
         }
       }
@@ -167,6 +167,6 @@ public class NopeEventMarker extends AbstractEventMarker {
         this.canvasBackground = null;
       }
     }
-    return Ellipse_Event;
+    return result;
   }
 }
