@@ -330,6 +330,24 @@ public class OTFDefinitionReader {
     return result;
   }
 
+  /**
+   * Returns the names of the function groups
+   * 
+   * @return function group names
+   */
+  public String[] getFunctionGroupNames() {
+    return this.functionGroupNames.values().toArray( new String[0] );
+  }
+  
+  /**
+   * Returns the names of the process groups
+   * 
+   * @return process group names
+   */
+  public String[] getProcessGroupNames() {
+    return this.processGroupNames.values().toArray( new String[0] );
+  }
+  
   protected int getMaxFunctionID() {
     return this.maxFunctionID;
   }

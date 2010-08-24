@@ -29,6 +29,8 @@ import java.util.Set;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.ui.views.properties.IPropertyDescriptor;
+import org.eclipse.ui.views.properties.PropertyDescriptor;
 
 import eu.geclipse.eventgraph.tracereader.otf.preferences.PreferenceConstants;
 import eu.geclipse.eventgraph.tracereader.otf.util.Node;
@@ -48,6 +50,20 @@ import eu.geclipse.traceview.utils.ClockCalculator;
 @SuppressWarnings("boxing")
 public class OTFReader extends AbstractTraceFileCache implements IPhysicalTrace, ILamportTrace, ITraceReader {
 
+  private static final String PROP_TRACE_VERSION = "OTF.TraceVersion"; //$NON-NLS-1$
+  private static final String PROP_TRACE_CODENAME= "OTF.TraceCodename"; //$NON-NLS-1$
+  private static final String PROP_TRACE_CREATOR= "OTF.TraceCreator"; //$NON-NLS-1$
+  private static final String PROP_TRACE_PROCESSGROUPS= "OTF.TraceProcessGroups"; //$NON-NLS-1$
+  private static final String PROP_TRACE_FUNCTIONGROUPS= "OTF.TraceFunctionGroups"; //$NON-NLS-1$
+  
+  private static IPropertyDescriptor[] otfTracePropertyDescriptors = new IPropertyDescriptor[]{
+    new PropertyDescriptor( PROP_TRACE_VERSION, "Version" ), //$NON-NLS-1$
+    new PropertyDescriptor( PROP_TRACE_CODENAME, "Codename" ), //$NON-NLS-1$
+    new PropertyDescriptor( PROP_TRACE_CREATOR, "Creator" ), //$NON-NLS-1$
+    new PropertyDescriptor( PROP_TRACE_PROCESSGROUPS, "Process Groups" ), //$NON-NLS-1$
+    new PropertyDescriptor( PROP_TRACE_FUNCTIONGROUPS, "Function Groups" ), //$NON-NLS-1$
+  };
+  
   private BufferedReader input;
   
   private int numProcs = 0;
@@ -72,6 +88,52 @@ public class OTFReader extends AbstractTraceFileCache implements IPhysicalTrace,
     this.processIdMap = new HashMap<Integer, Integer>();
     this.processIdMap.put( 0, -1 ); // OTFs 0 is Trace Viewers -1
   }
+  
+  /*
+   * (non-Javadoc)
+   * @see eu.geclipse.traceview.utils.AbstractTrace#getPropertyDescriptors()
+   */
+  @Override
+  public IPropertyDescriptor[] getPropertyDescriptors() {
+    IPropertyDescriptor[] abstractPropertyDescriptors = super.getPropertyDescriptors();
+    IPropertyDescriptor[] propertyDescriptors = new IPropertyDescriptor[ abstractPropertyDescriptors.length + otfTracePropertyDescriptors.length ];
+    System.arraycopy( abstractPropertyDescriptors, 0, propertyDescriptors, 0, abstractPropertyDescriptors.length );
+    System.arraycopy( otfTracePropertyDescriptors, 0, propertyDescriptors, abstractPropertyDescriptors.length, otfTracePropertyDescriptors.length );
+    return propertyDescriptors;
+  }
+  
+  /*
+   * (non-Javadoc)
+   * @see eu.geclipse.traceview.utils.AbstractTrace#getPropertyValue(java.lang.Object)
+   */
+  @Override
+  public Object getPropertyValue( final Object id ) {
+    Object result = null;
+    if( PROP_TRACE_VERSION.equals( id ) ) {
+      result = this.otfDefinitionReader.getVersion();
+    } else if( PROP_TRACE_CODENAME.equals( id ) ) {
+      result = this.otfDefinitionReader.getCodename();
+    } else if( PROP_TRACE_CREATOR.equals( id ) ) {
+      result = this.otfDefinitionReader.getCreator();
+    } else if( PROP_TRACE_FUNCTIONGROUPS.equals( id ) ) {
+      String[] functionGroupNames = this.otfDefinitionReader.getFunctionGroupNames();
+      StringBuffer functionGroupNameString = new StringBuffer();
+      for(int i = 0; i<functionGroupNames.length; i++){
+        functionGroupNameString.append( functionGroupNames[i] + ", " ); //$NON-NLS-1$
+      }
+      result = functionGroupNameString.toString(); 
+    } else if( PROP_TRACE_PROCESSGROUPS.equals( id ) ) {
+      String[] processGroupNames = this.otfDefinitionReader.getProcessGroupNames();
+      StringBuffer processGroupNameString = new StringBuffer();
+      for(int i = 0; i<processGroupNames.length; i++){
+        processGroupNameString.append( processGroupNames[i] + ", " ); //$NON-NLS-1$
+      }
+      result = processGroupNameString.toString(); 
+    } else {
+      result = super.getPropertyValue( id );
+    }
+    return result;
+  }
 
   public ITrace openTrace( final IPath tracePath, final IProgressMonitor monitor ) throws IOException {
     File file = tracePath.toFile();
@@ -83,9 +145,9 @@ public class OTFReader extends AbstractTraceFileCache implements IPhysicalTrace,
     this.otfDefinitionReader = new OTFDefinitionReader( new File( this.filenameBase + ".0.def" )); //$NON-NLS-1$
     this.nodes = new Node[this.numProcs];
     Event.addIds( this,this.otfDefinitionReader );
-    String traceOptions = "";
+    String traceOptions = ""; //$NON-NLS-1$
     if( Activator.getDefault().getPreferenceStore().getBoolean( PreferenceConstants.readFunctions ) ) {
-      traceOptions += "readFunctions";
+      traceOptions += "readFunctions"; //$NON-NLS-1$
     }
     boolean hasCache = openCacheDir( file.getAbsolutePath(), traceOptions, modTime );
     if( !readOTFData( hasCache, monitor ) )
