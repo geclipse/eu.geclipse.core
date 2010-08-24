@@ -6,6 +6,6 @@ Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: eu.geclipse.traceview.otf.ui.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
- eu.geclipse.traceview.otf;bundle-version="1.0.0",
- eu.geclipse.traceview;bundle-version="1.0.0"
+ eu.geclipse.traceview.otf,
+ eu.geclipse.traceview
 Bundle-ActivationPolicy: lazy
