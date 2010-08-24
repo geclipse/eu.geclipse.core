@@ -54,12 +54,11 @@ public class EventBreakpointMarker extends AbstractEventMarker {
 
   @Override
   public void startMarking() {
-    breakpoints.clear();
-    for( IBreakpoint breakpoint : DebugPlugin.getDefault()
-    	        .getBreakpointManager().getBreakpoints() ) {
+    this.breakpoints.clear();
+    for( IBreakpoint breakpoint : DebugPlugin.getDefault().getBreakpointManager().getBreakpoints() ) {
       if( breakpoint instanceof EventBreakpoint
           || breakpoint instanceof ICLineBreakpoint ) {
-        breakpoints.add(breakpoint);
+        this.breakpoints.add(breakpoint);
       }
     }
   }
@@ -68,7 +67,7 @@ public class EventBreakpointMarker extends AbstractEventMarker {
   public int mark( final IEvent event ) {
     int result = 0;
     if( event instanceof ISourceLocation ) {
-      for( IBreakpoint breakpoint : breakpoints ) {
+      for( IBreakpoint breakpoint : this.breakpoints ) {
         if( breakpoint instanceof EventBreakpoint ) {
           EventBreakpoint eventBreakpoint = ( EventBreakpoint )breakpoint;
           try {
