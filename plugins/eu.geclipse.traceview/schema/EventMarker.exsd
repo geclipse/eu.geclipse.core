@@ -90,6 +90,16 @@
                </documentation>
             </annotation>
          </attribute>
+         <attribute name="traceClass" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java" basedOn=":eu.geclipse.traceview.ITrace"/>
+               </appinfo>
+            </annotation>
+         </attribute>
       </complexType>
    </element>
 

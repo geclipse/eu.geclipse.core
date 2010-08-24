@@ -15,6 +15,7 @@ class EventMarkerEntry {
   String id;
   boolean enabled;
   String label;
+  String traceClass;
   IEventMarker marker;
   int priority = Integer.MAX_VALUE;
 }
@@ -34,6 +35,15 @@ public class EventMarkers {
           entry.marker = ( IEventMarker )configurationElement.createExecutableExtension( "class" ); //$NON-NLS-1$
           entry.id = configurationElement.getAttribute( "id" ); //$NON-NLS-1$
           entry.label = configurationElement.getAttribute( "label" ); //$NON-NLS-1$
+          entry.traceClass = configurationElement.getAttribute( "traceClass" ); //$NON-NLS-1$
+          if (entry.traceClass != null) {
+            try {
+              Class klass = entry.marker.getClass().getClassLoader().loadClass(entry.traceClass);
+              if (!klass.isInstance(trace)) continue;
+            } catch (ClassNotFoundException e) {
+              Activator.logException(e);
+            }
+          }
           entry.enabled = true;
           String priority = configurationElement.getAttribute( "priority" ); //$NON-NLS-1$
           if( priority != null ) {
