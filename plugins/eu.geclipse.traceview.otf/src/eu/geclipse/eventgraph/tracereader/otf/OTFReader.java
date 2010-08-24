@@ -143,7 +143,7 @@ public class OTFReader extends AbstractTraceFileCache implements IPhysicalTrace,
     this.filename = file.getName();
     readOTFMapping( monitor );
     this.otfDefinitionReader = new OTFDefinitionReader( new File( this.filenameBase + ".0.def" )); //$NON-NLS-1$
-    this.nodes = new Node[this.numProcs];
+    this.nodes = new Node[this.numProcs+1];
     Event.addIds( this,this.otfDefinitionReader );
     String traceOptions = ""; //$NON-NLS-1$
     if( Activator.getDefault().getPreferenceStore().getBoolean( PreferenceConstants.readFunctions ) ) {
@@ -197,12 +197,11 @@ public class OTFReader extends AbstractTraceFileCache implements IPhysicalTrace,
     String eventsFilename = this.filenameBase + '.' + Integer.toHexString( nr ) + ".events"; //$NON-NLS-1$
     OTFStreamReader otfStreamReader = new OTFStreamReader( new File( eventsFilename ), this, this.entered );
     otfStreamReader.readStream();
-    nodes[0] = otfStreamReader.getNode();
-    //rec( nodes[0].getChildren()[0] );
+    this.nodes[this.processIdMap.get( nr )] = otfStreamReader.getNode();
   }
   
-  public Node getRootNode(){
-    return this.nodes[0];
+  public Node getRootNode(final int processId){
+    return this.nodes[processId];
   }
   
   @SuppressWarnings("unchecked")

@@ -19,7 +19,7 @@ import eu.geclipse.traceview.EventType;
 import eu.geclipse.traceview.IEvent;
 import eu.geclipse.traceview.utils.AbstractProcessFileCache;
 
-final class Process extends AbstractProcessFileCache {
+public final class Process extends AbstractProcessFileCache {
 
   private int logClock = 0;
 
