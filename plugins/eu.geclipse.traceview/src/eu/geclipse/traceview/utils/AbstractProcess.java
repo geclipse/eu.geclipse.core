@@ -29,8 +29,10 @@ import eu.geclipse.traceview.internal.Activator;
 public abstract class AbstractProcess
   implements ILamportProcess, IPhysicalProcess
 {
-  protected int startTimeOffset;
+
   private static ILamportEvent[] EMPTY_LAMPORT_EVENT_ARRAY = new ILamportEvent[0];
+
+  protected int startTimeOffset;
 
   @Override
   public String toString() {
@@ -122,8 +124,8 @@ public abstract class AbstractProcess
    * @see eu.geclipse.traceview.ILamportProcess#getMaximumLamportClock()
    */
   public int getMaximumLamportClock() {
-	ILamportEvent event = ( ILamportEvent )getEventByLogicalClock( getMaximumLogicalClock() );
-	int clock = event.getLamportClock();
+    ILamportEvent event = ( ILamportEvent )getEventByLogicalClock( getMaximumLogicalClock() );
+    int clock = event.getLamportClock();
     return clock;
   }
 
@@ -133,9 +135,13 @@ public abstract class AbstractProcess
    * @see eu.geclipse.traceview.ILamportProcess#getEventByLamportClock(int)
    */
   public ILamportEvent getEventByLamportClock( final int index ) {
-	  return getEventByLamportClock(index, MATCH_MODE_EXACT);
+    return getEventByLamportClock( index, MATCH_MODE_EXACT );
   }
 
+  /*
+   * (non-Javadoc)
+   * @see eu.geclipse.traceview.ILamportProcess#getEventByLamportClock(int, int)
+   */
   public ILamportEvent getEventByLamportClock( final int index, final int matchMode ) {
     ILamportEvent result = null;
     int low = 0;
@@ -167,7 +173,7 @@ public abstract class AbstractProcess
           if (next == null) return matchMode == MATCH_MODE_GREATER_ALLOWED_LOWER_ALLOWED ? result : null;
           return next;
       }
-	}
+    }
     // lamClk > index:
     switch ( matchMode ) {
       case MATCH_MODE_LOWER_ALLOWED:
@@ -192,8 +198,7 @@ public abstract class AbstractProcess
     return getEventsByLamportClock(from, false, to, false);
   }
 
-  public ILamportEvent[] getEventsByLamportClock( final int from, boolean allowPrev, final int to, boolean allowNext )
-  {
+  public ILamportEvent[] getEventsByLamportClock( final int from, final boolean allowPrev, final int to, final boolean allowNext )  {
     ILamportEvent[] events = null;
     try {
       // get from
@@ -230,8 +235,8 @@ public abstract class AbstractProcess
    * @see eu.geclipse.traceview.IPhysicalProcess#getMaximumPhysicalClock()
    */
   public int getMaximumPhysicalClock() {
-	IPhysicalEvent event = ( IPhysicalEvent )getEventByLogicalClock( getMaximumLogicalClock() );
-	int clock = event.getPhysicalStopClock();
+    IPhysicalEvent event = ( IPhysicalEvent )getEventByLogicalClock( getMaximumLogicalClock() );
+    int clock = event.getPhysicalStopClock();
     return clock;
   }
 
@@ -285,10 +290,10 @@ public abstract class AbstractProcess
   }
 
   public int getStartTimeOffset() {
-    return startTimeOffset;
+    return this.startTimeOffset;
   }
 
-  public void setStartTimeOffset( int startTimeOffset ) {
+  public void setStartTimeOffset( final int startTimeOffset ) {
     this.startTimeOffset = startTimeOffset;
   }
 }

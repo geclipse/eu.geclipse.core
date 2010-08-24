@@ -150,7 +150,7 @@ class LogicalGraphPaintListener extends AbstractGraphPaintListener {
     // TODO right - because of broadcasts
   }
 
-  private void drawGraphBackground(int procId, ILamportEvent[] events) {
+  private void drawGraphBackground(final int procId, final ILamportEvent[] events) {
     if (!procDrawingEnabled( procId )) return;
     for( ILamportEvent event : events ) {
       Color color = null;
@@ -187,7 +187,7 @@ class LogicalGraphPaintListener extends AbstractGraphPaintListener {
    * @param events 
    * @param i 
    */
-  private void drawGraph(int i, ILamportEvent[] events) {
+  private void drawGraph(final int i, final ILamportEvent[] events) {
     try {
       if (!procDrawingEnabled( i )) return;
       for( ILamportEvent event : events ) {
@@ -206,7 +206,7 @@ class LogicalGraphPaintListener extends AbstractGraphPaintListener {
               Color newColor = eventmarker.getMessageColor();
               if (newColor != null) messageColor = newColor;
             }
-            if (fastRedraw) break; 
+            if (this.fastRedraw) break; 
           }
           if (messageColor != null) {
             this.gc.setBackground( messageColor );
@@ -226,7 +226,7 @@ class LogicalGraphPaintListener extends AbstractGraphPaintListener {
                               IEventMarker.Cross_Event };
     for( IEventMarker eventmarker : this.eventGraph.getEventMarkers() ) {
       int mark;
-      if (fastRedraw) mark = IEventMarker.Rectangle_Event; 
+      if (this.fastRedraw) mark = IEventMarker.Rectangle_Event; 
       else mark = eventmarker.mark( event );
       if( ( mark & 63 ) != 0 ) {
         int markType = 0;
@@ -263,7 +263,7 @@ class LogicalGraphPaintListener extends AbstractGraphPaintListener {
           };
         }
         Color color;
-        if (fastRedraw) color = null;
+        if (this.fastRedraw) color = null;
         else color = eventmarker.getBackgroundColor( markType );
         if( color != null ) {
           this.gc.setBackground( color );
@@ -284,7 +284,7 @@ class LogicalGraphPaintListener extends AbstractGraphPaintListener {
           }
         }
       }
-      if (fastRedraw) break;
+      if (this.fastRedraw) break;
     }
   }
 
@@ -326,7 +326,7 @@ class LogicalGraphPaintListener extends AbstractGraphPaintListener {
     this.gc.setForeground( this.line1 );
     LineType vLines = this.eventGraph.getVLines();
     if( vLines != LineType.Lines_None ) {
-      if (fastRedraw) vLines = LineType.Lines_10;
+      if (this.fastRedraw) vLines = LineType.Lines_10;
       for( int i = this.fromClock; i <= this.toClock; i++ ) {
         int x = getXPosForClock( i );
         if( i % 10 == 0 ) {
@@ -354,13 +354,13 @@ class LogicalGraphPaintListener extends AbstractGraphPaintListener {
   public void paintControl( final PaintEvent e ) {
     this.gc = e.gc;
     long drawStartTime = 0;
-    if (fastRedraw) {
-      if (fullRedrawDuration < 100) fastRedraw = false;
+    if (this.fastRedraw) {
+      if (this.fullRedrawDuration < 100) this.fastRedraw = false;
     }
-    if (!fastRedraw) {
+    if (!this.fastRedraw) {
       drawStartTime = System.currentTimeMillis();
     }
-    if( this.antialiasing && !fastRedraw ) {
+    if( this.antialiasing && !this.fastRedraw ) {
       this.gc.setAntialias( SWT.ON );
     }
     this.height = this.eventGraph.getClientArea().height - 1;
@@ -389,12 +389,12 @@ class LogicalGraphPaintListener extends AbstractGraphPaintListener {
       // set the clipping to the graph area
       this.gc.setClipping( 31, 1, this.width - 31, this.height - 31 );
       // this.gc.setClipping(0, 0, this.width, this.height);
-      ILamportEvent[][] events = new ILamportEvent[trace.getNumberOfProcesses()][];
+      ILamportEvent[][] events = new ILamportEvent[this.trace.getNumberOfProcesses()][];
       for( int i = 0; i < this.numProc; i++ ) {
           ILamportProcess process = ( ILamportProcess )this.eventGraph.getTrace().getProcess( i );
           events[i] = process.getEventsByLamportClock( this.fromClock, true, this.toClock, false );
           // Draw background markers of events
-          if (!fastRedraw) drawGraphBackground(i, events[i]);
+          if (!this.fastRedraw) drawGraphBackground(i, events[i]);
       }
       // draw the grid
       drawGridHLines();
@@ -403,20 +403,20 @@ class LogicalGraphPaintListener extends AbstractGraphPaintListener {
       drawSelection();
       // draw the graph
       for( int i = 0; i < this.numProc; i++ ) {
-    	drawGraph(i, events[i]);
+        drawGraph( i, events[ i ] );
       }
       this.gc.setLineStyle( SWT.LINE_SOLID );
       this.gc.setLineWidth( 0 );
       // draw the additional messages
-      if (!fastRedraw) drawLeftRightTopBottom();
+      if (!this.fastRedraw) drawLeftRightTopBottom();
       if( !this.scrollBarsInitialized ) {
         setScrollBarSizes();
         this.scrollBarsInitialized = true;
       }
     }
-    if (!fastRedraw) {
+    if (!this.fastRedraw) {
       long drawEndTime = System.currentTimeMillis();
-      fullRedrawDuration = drawEndTime - drawStartTime;
+      this.fullRedrawDuration = drawEndTime - drawStartTime;
     }
     this.fastRedraw = false;
   }
@@ -558,7 +558,7 @@ class LogicalGraphPaintListener extends AbstractGraphPaintListener {
       if( event.getType() == EventType.SEND ) {
         connection( x1, y1, x2, y2, true );
       } else {
-        if (!fastRedraw) connection( x2, y2, x1, y1, true );
+        if (!this.fastRedraw) connection( x2, y2, x1, y1, true );
       }
     }
   }

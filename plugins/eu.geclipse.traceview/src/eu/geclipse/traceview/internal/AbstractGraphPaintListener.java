@@ -141,7 +141,7 @@ public abstract class AbstractGraphPaintListener implements PaintListener {
     this.smallFont = new Font( font.getDevice(), fontData );
   }
 
-  protected void drawVRulerWithMovingLine( GC rulerGC, int line, int y ) {
+  protected void drawVRulerWithMovingLine( final GC rulerGC, final int line, final int y ) {
     rulerGC.setForeground( rulerGC.getDevice().getSystemColor( SWT.COLOR_BLACK ) );
     rulerGC.setBackground( rulerGC.getDevice().getSystemColor( SWT.COLOR_WHITE ) );
     rulerGC.fillRoundRectangle( 0, 0, leftRulerWidth, this.height
@@ -154,7 +154,7 @@ public abstract class AbstractGraphPaintListener implements PaintListener {
     rulerGC.drawText( text, 3, y - 7 );
   }
 
-  protected void drawVRuler( GC rulerGC, int lineToSkip ) {
+  protected void drawVRuler( final GC rulerGC, final int lineToSkip ) {
     rulerGC.setForeground( rulerGC.getDevice().getSystemColor( SWT.COLOR_BLACK ) );
     rulerGC.setFont( this.smallFont );
     rulerGC.setClipping( 1, 1, 24, this.height - 31 );
@@ -168,7 +168,7 @@ public abstract class AbstractGraphPaintListener implements PaintListener {
     }
   }
   
-  protected String getLabelForLine( int procLine ) {
+  protected String getLabelForLine( final int procLine ) {
     SortedSet<Integer> procSet = this.eventGraph.getLineToProcessMapping().get( procLine );
     StringBuilder sb = new StringBuilder();
     Iterator<Integer> it = procSet.iterator();
@@ -196,7 +196,7 @@ public abstract class AbstractGraphPaintListener implements PaintListener {
     this.gc.setForeground( this.line1 );
     LineType hLines = this.eventGraph.getHLines();
     if( hLines != LineType.Lines_None ) {
-      if (fastRedraw) hLines = LineType.Lines_10;
+      if (this.fastRedraw) hLines = LineType.Lines_10;
       for( int i = this.fromProcessLine, y = 0 - this.yOffset + this.eventSize / 2; i < this.toProcessLine; i++, y += this.vSpace )
       {
         if( i % 10 == 0 ) {
@@ -267,9 +267,9 @@ public abstract class AbstractGraphPaintListener implements PaintListener {
                              final int y2,
                              final boolean spacing)
   {
-	if (fastRedraw) {
+    if( this.fastRedraw ) {
       this.gc.drawLine( x2, y2, x1, y1 );
-	} else {
+    } else {
       long xv = x2 - x1;
       long yv = y2 - y1;
       float c = ( float )Math.sqrt( xv * xv + yv * yv );
@@ -287,7 +287,7 @@ public abstract class AbstractGraphPaintListener implements PaintListener {
         y2 - oy - ey - ex
       };
       this.gc.fillPolygon( arrowhead );
-	}
+    }
   }
 
   public abstract int getArrowSize();
@@ -350,16 +350,16 @@ public abstract class AbstractGraphPaintListener implements PaintListener {
     return this.fromProcessLine;
   }
 
-  protected boolean procDrawingEnabled( int procId, boolean ignoreHide ) {
+  protected boolean procDrawingEnabled( final int procId, final boolean ignoreHide ) {
     return (!this.eventGraph.hideProcess[procId] || ignoreHide) &&
            this.eventGraph.getProcessToLineMapping()[procId] != -1;
   }
 
-  protected boolean procDrawingEnabled( int procId ) {
+  protected boolean procDrawingEnabled( final int procId ) {
     return procDrawingEnabled( procId, false );
   }
 
-  protected int getYPosForProcId( int procId ) {
+  protected int getYPosForProcId( final int procId ) {
     int line = this.eventGraph.getProcessToLineMapping()[procId];
     return ( line - this.fromProcessLine ) * this.vSpace
            - this.yOffset + this.eventSize / 2;
