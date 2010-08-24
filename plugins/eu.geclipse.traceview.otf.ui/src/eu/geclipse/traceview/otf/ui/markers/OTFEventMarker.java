@@ -74,20 +74,20 @@ public class OTFEventMarker extends AbstractEventMarker {
     if( trace instanceof OTFReader ) {
       OTFReader otfTrace = ( OTFReader )trace;
       this.otfDefinitionReader = otfTrace.getDefinition();
-    }
-    String[] functionGroupNames = this.otfDefinitionReader.getFunctionGroupNames();
-    this.colors = new Color[ functionGroupNames.length + 1];
-    for( int i = 0; i < functionGroupNames.length; i++ ) {
-      if( "Application".equals( functionGroupNames[ i ] ) ) { //$NON-NLS-1$
-        this.colors[ i + 1] = Display.getDefault().getSystemColor( SWT.COLOR_CYAN );
-      } else if( "MPI".equals( functionGroupNames[ i ] ) ) { //$NON-NLS-1$
-        this.colors[ i + 1 ] = Display.getDefault().getSystemColor( SWT.COLOR_RED );
-      } else if( "LIBC".equals( functionGroupNames[ i ] ) ) { //$NON-NLS-1$
-        this.colors[ i + 1 ] = Display.getDefault().getSystemColor( SWT.COLOR_BLUE );
-      } else if( "VT_API".equals( functionGroupNames[ i ] ) ) { //$NON-NLS-1$
-        this.colors[ i + 1 ] = Display.getDefault().getSystemColor( SWT.COLOR_GRAY );
-      } else {
-        this.colors[ i + 1 ] = null;
+      String[] functionGroupNames = this.otfDefinitionReader.getFunctionGroupNames();
+      this.colors = new Color[ functionGroupNames.length + 1];
+      for( int i = 0; i < functionGroupNames.length; i++ ) {
+        if( "Application".equals( functionGroupNames[ i ] ) ) { //$NON-NLS-1$
+          this.colors[ i + 1] = Display.getDefault().getSystemColor( SWT.COLOR_CYAN );
+        } else if( "MPI".equals( functionGroupNames[ i ] ) ) { //$NON-NLS-1$
+          this.colors[ i + 1 ] = Display.getDefault().getSystemColor( SWT.COLOR_RED );
+        } else if( "LIBC".equals( functionGroupNames[ i ] ) ) { //$NON-NLS-1$
+          this.colors[ i + 1 ] = Display.getDefault().getSystemColor( SWT.COLOR_BLUE );
+        } else if( "VT_API".equals( functionGroupNames[ i ] ) ) { //$NON-NLS-1$
+          this.colors[ i + 1 ] = Display.getDefault().getSystemColor( SWT.COLOR_GRAY );
+        } else {
+          this.colors[ i + 1 ] = null;
+        }
       }
     }
   }
