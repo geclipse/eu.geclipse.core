@@ -10,5 +10,14 @@
             name="OTF Trace Reader">
       </page>
    </extension>
-
+   <extension
+            point="eu.geclipse.traceview.EventMarker">
+      <MarkerClass
+            class="eu.geclipse.traceview.otf.ui.markers.OTFEventMarker"
+            defaultEnabled="false"
+            id="eu.geclipse.traceview.otf.OTFEventMarker"
+            label="OTF Event Marker"
+            priority="100">
+      </MarkerClass>
+   </extension>
 </plugin>
