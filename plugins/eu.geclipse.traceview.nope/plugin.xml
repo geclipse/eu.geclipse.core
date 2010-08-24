@@ -28,6 +28,7 @@
          point="eu.geclipse.traceview.EventMarker">
       <MarkerClass
             id="eu.geclipse.traceview.nope.markers.NopeEventMarker"
+            traceClass="eu.geclipse.traceview.nope.tracereader.Trace"
             class="eu.geclipse.traceview.nope.markers.NopeEventMarker"
             label="Nope Event Marker"
             priority="100">
