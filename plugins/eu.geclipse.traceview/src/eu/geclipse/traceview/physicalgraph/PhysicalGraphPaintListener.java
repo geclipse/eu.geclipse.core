@@ -114,6 +114,7 @@ class PhysicalGraphPaintListener extends AbstractGraphPaintListener {
             if (newFillColor != null) fillColor = newFillColor;
             if (newDrawColor != null) drawColor = newDrawColor;
           }
+          if ( fastRedraw ) break;
         }
         if( drawColor != null ) {
           this.gc.setForeground( drawColor );
@@ -126,7 +127,7 @@ class PhysicalGraphPaintListener extends AbstractGraphPaintListener {
         if( fillColor != null ) {
           this.gc.fillRectangle( x, y, rectangleWidth, rectangleHeight );
         }
-        if( rectangleHeight > this.fontsize + 2 ) {
+        if( rectangleHeight > this.fontsize + 2 && !fastRedraw ) {
           String name = event.getName();
           if( name != null ) {
             int textWidth = this.gc.textExtent( name ).x;
@@ -227,6 +228,7 @@ class PhysicalGraphPaintListener extends AbstractGraphPaintListener {
               lastMarker = eventmarker;
             }
           }
+          if ( fastRedraw ) break;
         }
         if( color != null ) {
           int x = getXPosForClock( event.getPhysicalStartClock() );
