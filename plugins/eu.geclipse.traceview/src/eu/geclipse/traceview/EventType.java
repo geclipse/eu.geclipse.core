@@ -19,6 +19,8 @@ package eu.geclipse.traceview;
  * Enum of all supported Event types.
  */
 public enum EventType {
+  /** Should not happen */
+  INVALID(-1),
   /** Send event */
   SEND(0),
   /** Receive event */
@@ -55,6 +57,8 @@ public enum EventType {
       result = OTHER;
     else if( id == COLLECTIVE.id )
       result = COLLECTIVE;
+    else
+      result = INVALID;
     return result;
   }
 }
