@@ -99,14 +99,12 @@ public class CallGraphView extends ViewPart implements IZoomableWorkbenchPart {
     this.graph.addPaintListener( new PaintListener() {
 
       @SuppressWarnings("synthetic-access")
-      @Override
       public void paintControl( final PaintEvent e ) {
         CallGraphView.this.graph.layout();
       }
     } );
     this.selectionListener = new ISelectionListener() {
       @SuppressWarnings("synthetic-access")
-      @Override
       public void selectionChanged( final IWorkbenchPart part, final ISelection selection ) {
         if( graph.isDisposed() ) {
         	getSite().getWorkbenchWindow().getSelectionService().removeSelectionListener( selectionListener );
@@ -303,7 +301,6 @@ public class CallGraphView extends ViewPart implements IZoomableWorkbenchPart {
    * (non-Javadoc)
    * @see org.eclipse.zest.core.viewers.IZoomableWorkbenchPart#getZoomableViewer()
    */
-  @Override
   public AbstractZoomableViewer getZoomableViewer() {
     return this.viewer;
   }
