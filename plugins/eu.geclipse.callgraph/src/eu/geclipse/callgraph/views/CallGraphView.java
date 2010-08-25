@@ -71,6 +71,7 @@ public class CallGraphView extends ViewPart implements IZoomableWorkbenchPart {
   private int depth;
   private int x;
   private Stack<GraphNode> stack;
+  private ISelectionListener selectionListener;
 
   /**
    * Constructs a new CallGraphView
@@ -103,11 +104,14 @@ public class CallGraphView extends ViewPart implements IZoomableWorkbenchPart {
         CallGraphView.this.graph.layout();
       }
     } );
-    getSite().getWorkbenchWindow().getSelectionService().addSelectionListener( new ISelectionListener() {
-
+    this.selectionListener = new ISelectionListener() {
       @SuppressWarnings("synthetic-access")
       @Override
       public void selectionChanged( final IWorkbenchPart part, final ISelection selection ) {
+        if( graph.isDisposed() ) {
+        	getSite().getWorkbenchWindow().getSelectionService().removeSelectionListener( selectionListener );
+        	return;
+        }
         if( selection instanceof IStructuredSelection ) {
           IStructuredSelection structuredSelection = ( IStructuredSelection )selection;
           // OTF based call graph
@@ -174,7 +178,8 @@ public class CallGraphView extends ViewPart implements IZoomableWorkbenchPart {
           }
         }
       }
-    } );
+    };
+    getSite().getWorkbenchWindow().getSelectionService().addSelectionListener( this.selectionListener );
   }
 
   private void nodeIf( final IASTIfStatement ifStatement ) {
