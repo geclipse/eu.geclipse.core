@@ -26,10 +26,14 @@ import eu.geclipse.traceview.utils.AbstractEventMarker;
 import eu.geclipse.traceview.utils.VectorEventComparator;
 
 /**
- * Cause Effekt Marker
+ * Cause Effect Marker
  */
 public class CauseEffectMarker extends AbstractEventMarker {
   static String MARKER_ID = "eu.geclipse.traceview.markers.CauseEffectMarker"; //$NON-NLS-1$
+  private final Color beforeColor = Display.getDefault().getSystemColor( SWT.COLOR_BLUE );
+  private final Color afterColor = Display.getDefault().getSystemColor( SWT.COLOR_RED );
+  private final Color identicalColor = Display.getDefault().getSystemColor( SWT.COLOR_GREEN );
+  private final Color unknownColor = Display.getDefault().getSystemColor( SWT.COLOR_WHITE );
   Color background;
 
   @Override
@@ -52,21 +56,15 @@ public class CauseEffectMarker extends AbstractEventMarker {
         VectorEventComparator c = new VectorEventComparator();
         int compare = c.compare( causeEvent, vectorEvent );
         if( compare == -2 ) {
-          this.background = Display.getDefault()
-            .getSystemColor( SWT.COLOR_GREEN );
-          result = IEventMarker.Ellipse_Event;
+          this.background = identicalColor;
         } else if( compare < 0 ) {
-          this.background = Display.getDefault().getSystemColor( SWT.COLOR_RED );
-          result = IEventMarker.Ellipse_Event;
+          this.background = afterColor;
         } else if( compare > 0 ) {
-          this.background = Display.getDefault()
-            .getSystemColor( SWT.COLOR_BLUE );
-          result = IEventMarker.Ellipse_Event;
+          this.background = beforeColor;
         } else {
-          this.background = Display.getDefault()
-            .getSystemColor( SWT.COLOR_WHITE );
-          result = IEventMarker.Ellipse_Event;
+          this.background = unknownColor;
         }
+        result = IEventMarker.Ellipse_Event;
       }
     }
     return result;

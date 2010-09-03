@@ -45,6 +45,10 @@ public class NopeEventMarker extends AbstractEventMarker {
   private boolean[] enabled = new boolean[ PreferenceConstants.Names.length ];
   private int[] shapes = new int[ PreferenceConstants.Names.length ];
   private Color messageColor;
+  private final Color normalMessageColor = Display.getDefault().getSystemColor( SWT.COLOR_BLACK );
+  private final Color truncatedMessageColor = Display.getDefault().getSystemColor( SWT.COLOR_RED );
+  private final Color smallMessageColor = Display.getDefault().getSystemColor( SWT.COLOR_YELLOW );
+  private final Color anySourceBgColor = Display.getDefault().getSystemColor( SWT.COLOR_GRAY );
 
   /**
    * Creates a new NopeEventMarker
@@ -152,17 +156,17 @@ public class NopeEventMarker extends AbstractEventMarker {
       }
       Event lenCheckEvent = nopeEvent;
       if (nopeEvent.getType().equals( EventType.SEND )) lenCheckEvent = ( Event )nopeEvent.getPartnerEvent();
-      this.messageColor = Display.getDefault().getSystemColor( SWT.COLOR_BLACK );
+      this.messageColor = normalMessageColor;
       if (lenCheckEvent != null && lenCheckEvent.getType().equals( EventType.RECV )) {
         if (lenCheckEvent.getAcceptedMessageLength() > lenCheckEvent.getSupposedMessageLength()) {
-          this.messageColor = Display.getDefault().getSystemColor( SWT.COLOR_RED );
+          this.messageColor = truncatedMessageColor;
         } else if (lenCheckEvent.getAcceptedMessageLength() < lenCheckEvent.getSupposedMessageLength()) {
-          this.messageColor = Display.getDefault().getSystemColor( SWT.COLOR_YELLOW );
+          this.messageColor = smallMessageColor;
         }
       }
       if (nopeEvent.getType().equals( EventType.RECV ) &&
           nopeEvent.getSupposedPartnerProcess() == -1) {
-        this.canvasBackground = Display.getDefault().getSystemColor( SWT.COLOR_GRAY );
+        this.canvasBackground = anySourceBgColor;
       } else {
         this.canvasBackground = null;
       }

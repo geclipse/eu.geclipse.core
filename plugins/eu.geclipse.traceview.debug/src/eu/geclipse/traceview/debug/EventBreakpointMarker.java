@@ -35,16 +35,18 @@ import eu.geclipse.traceview.utils.AbstractEventMarker;
  * Marks the events on which a breakpoint is set.
  */
 public class EventBreakpointMarker extends AbstractEventMarker {
-  List<IBreakpoint> breakpoints = new ArrayList<IBreakpoint>();
+  private List<IBreakpoint> breakpoints = new ArrayList<IBreakpoint>();
+  private final Color bgColor = Display.getDefault().getSystemColor( SWT.COLOR_GRAY );
+  private final Color fgColor = Display.getDefault().getSystemColor( SWT.COLOR_RED );
 
   @Override
   public Color getBackgroundColor( final int type ) {
-    return Display.getDefault().getSystemColor( SWT.COLOR_GRAY );
+    return bgColor;
   }
 
   @Override
   public Color getForegroundColor( final int type ) {
-    return Display.getDefault().getSystemColor( SWT.COLOR_RED );
+    return fgColor;
   }
 
   @Override

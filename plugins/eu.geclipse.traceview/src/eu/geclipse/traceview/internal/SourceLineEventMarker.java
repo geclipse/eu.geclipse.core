@@ -34,8 +34,9 @@ import eu.geclipse.traceview.ISourceLocation;
 import eu.geclipse.traceview.utils.AbstractEventMarker;
 
 public class SourceLineEventMarker extends AbstractEventMarker {
-
-  Set<IEvent> selectedEvents = new HashSet<IEvent>();
+  private Set<IEvent> selectedEvents = new HashSet<IEvent>();
+  private final Color bgColor = Display.getDefault().getSystemColor( SWT.COLOR_CYAN );
+  private final Color fgColor = Display.getDefault().getSystemColor( SWT.COLOR_BLACK );
 
   public SourceLineEventMarker() {
     ISelectionService selectionService = PlatformUI.getWorkbench()
@@ -60,12 +61,12 @@ public class SourceLineEventMarker extends AbstractEventMarker {
 
   @Override
   public Color getBackgroundColor( final int type ) {
-    return Display.getDefault().getSystemColor( SWT.COLOR_CYAN );
+    return bgColor;
   }
 
   @Override
   public Color getForegroundColor( final int type ) {
-    return Display.getDefault().getSystemColor( SWT.COLOR_BLACK );
+    return fgColor;
   }
 
   @Override
