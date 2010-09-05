@@ -136,6 +136,7 @@ public class OTFReader extends AbstractTraceFileCache implements IPhysicalTrace,
   }
 
   public ITrace openTrace( final IPath tracePath, final IProgressMonitor monitor ) throws IOException {
+    this.tracePath = tracePath;
     File file = tracePath.toFile();
     long modTime = file.lastModified();
     this.input = new BufferedReader( new FileReader( file ) );
@@ -264,10 +265,6 @@ public class OTFReader extends AbstractTraceFileCache implements IPhysicalTrace,
       }
     }
     return maxTimeStop;
-  }
-
-  public IPath getPath() {
-    return null;
   }
 
   public String getFunctionName( final int functionId ) {

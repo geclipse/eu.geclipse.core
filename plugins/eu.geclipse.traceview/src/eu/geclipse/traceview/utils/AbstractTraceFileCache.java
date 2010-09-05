@@ -26,6 +26,7 @@ import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -215,6 +216,7 @@ public abstract class AbstractTraceFileCache extends AbstractTrace {
   protected int[] cacheIndex;
   protected int[] maxLogClk;
   protected final Map<String, Integer> sourceFilenames = new HashMap<String, Integer>();
+  protected IPath tracePath;
   private int cacheFileCount;
   private final Vector<OffsetEntry> entries = new Vector<OffsetEntry>();
   private final int[] intOffset = new int[1];
@@ -481,5 +483,9 @@ public abstract class AbstractTraceFileCache extends AbstractTrace {
     } catch( IOException e ) {
       Activator.logStatus( new Status( IStatus.WARNING, Activator.PLUGIN_ID, "Could not create memory map for all trace cache files, continuing without" ) );
     }
+  }
+
+  public IPath getPath() {
+    return this.tracePath;
   }
 }

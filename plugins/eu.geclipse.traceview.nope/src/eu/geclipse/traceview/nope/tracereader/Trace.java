@@ -50,7 +50,6 @@ import eu.geclipse.traceview.utils.LamportEventComparator;
  */
 public class Trace extends AbstractTraceFileCache
   implements ILamportTrace, IPhysicalTrace, ITraceReader {
-  private IPath tracePath;
   private String tracedir;
   private Process[] processes;
   private int maximumLamportClock = 0;
@@ -300,10 +299,6 @@ public class Trace extends AbstractTraceFileCache
 
   protected boolean supportsVectorClocks() {
     return this.supportsVectorClocks;
-  }
-
-  public IPath getPath() {
-    return this.tracePath;
   }
   
   @Override
