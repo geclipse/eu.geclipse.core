@@ -77,6 +77,28 @@ public class TraceView extends ViewPart implements ITraceView {
   private MenuManager contextMenuMgr;
   private Action visualisationDropDownAction;
 
+  public ITrace openTrace( final String tracePathString, IProgressMonitor monitor ) throws IOException {
+    if( tracePathString != null ) {
+      final IPath path = new Path( tracePathString );
+      String extension = path.getFileExtension();
+      // get the trace reader
+      for( IConfigurationElement configurationElement : Platform.getExtensionRegistry()
+        .getConfigurationElementsFor( "eu.geclipse.traceview.TraceReader" ) ) { //$NON-NLS-1$
+        if( configurationElement.getAttribute( "fileextension" ).equals( extension ) ) { //$NON-NLS-1$
+          ITraceReader traceReader;
+          try {
+	        traceReader = ( ITraceReader )configurationElement.createExecutableExtension( "class" );
+            final ITrace trace = traceReader.openTrace( path, monitor );
+            return trace;
+		  } catch (CoreException e) {
+		    Activator.logException(e);
+		  }
+        }
+      }
+    }
+    return null;
+  }
+
   public void addTrace( final ITrace trace ) {
     if( trace != null ) {
       try {
@@ -105,43 +127,30 @@ public class TraceView extends ViewPart implements ITraceView {
 
       @Override
       public void run() {
-        String tracePathString = TraceView.this.fileDialog.open();
-        if( tracePathString != null ) {
-          final IPath path = new Path( tracePathString );
-          String extension = path.getFileExtension();
-          // get the trace reader
-          for( IConfigurationElement configurationElement : Platform.getExtensionRegistry()
-            .getConfigurationElementsFor( "eu.geclipse.traceview.TraceReader" ) ) { //$NON-NLS-1$
-            if( configurationElement.getAttribute( "fileextension" ).equals( extension ) ) { //$NON-NLS-1$
+        final String tracePathString = TraceView.this.fileDialog.open();
+        if (tracePathString != null) {
+          Job openTraceJob = new Job("Opening Trace") {
+            @Override
+            protected IStatus run( final IProgressMonitor monitor ) {
+              IStatus status = Status.OK_STATUS;
               try {
-                final ITraceReader traceReader = ( ITraceReader )configurationElement.createExecutableExtension( "class" ); //$NON-NLS-1$
-                Job openTraceJob = new Job("Opening Trace") {
-                  @Override
-                  protected IStatus run( final IProgressMonitor monitor ) {
-                    IStatus status = Status.OK_STATUS;
-                    try {
-                      final ITrace trace = traceReader.openTrace( path, monitor );
-                      if ( trace != null ) {
-                        Display.getDefault().syncExec( new Runnable() {
-                          public void run() {
-                            addTrace( trace );                        
-                          }
-                        } );
-                      }
-                    } catch( IOException exception ) {
-                      Activator.logException( exception );
-                      status = Status.CANCEL_STATUS;
+                final ITrace trace = openTrace( tracePathString, monitor );
+                if ( trace != null ) {
+                  Display.getDefault().syncExec( new Runnable() {
+                    public void run() {
+                      addTrace( trace );
                     }
-                    return status;
-                  }
-                };
-                openTraceJob.setUser( true );
-                openTraceJob.schedule();
-              } catch( CoreException exception ) {
+                  } );
+                }
+              } catch( IOException exception ) {
                 Activator.logException( exception );
+                status = Status.CANCEL_STATUS;
               }
+              return status;
             }
-          }
+          };
+          openTraceJob.setUser( true );
+          openTraceJob.schedule();
         }
       }
     };

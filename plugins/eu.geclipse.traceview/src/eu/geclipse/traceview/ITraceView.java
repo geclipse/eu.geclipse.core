@@ -15,6 +15,10 @@
 
 package eu.geclipse.traceview;
 
+import java.io.IOException;
+
+import org.eclipse.core.runtime.IProgressMonitor;
+
 /**
  * Interface to the Trace View that allows other plugins to access it. Use
  * following code to get the trace view instance: <code>
@@ -32,6 +36,16 @@ public interface ITraceView {
    * @param trace trace to add.
    */
   void addTrace( ITrace trace );
+
+  /**
+   * Tries to load the specified trace file using the registered
+   * trace readers.
+   *
+   * @param tracePath path of the trace file to open.
+   * @param monitor   progress monitor used to display load progress
+   * @throws IOException in case of error during loading the trace
+   */
+  ITrace openTrace( String tracePath, IProgressMonitor monitor ) throws IOException;
 
   /**
    * Redraws the contents of the trace view. Useful for marker that change.
