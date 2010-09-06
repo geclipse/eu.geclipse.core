@@ -157,13 +157,17 @@ public class OTFReader extends AbstractTraceFileCache implements IPhysicalTrace,
     if( !hasCache ) {
       if( monitor.isCanceled() )
         return null;
-      monitor.subTask( "Calculating logical clocks" );
-      ClockCalculator.calcPartnerLogicalClocks( this );
-      if( monitor.isCanceled() )
-        return null;
-      monitor.subTask( "Calculating lamport clocks" );
-      ClockCalculator.calcLamportClock(this, new NullProgressMonitor());
-      saveCacheMetadata();
+      try {
+        monitor.subTask( "Calculating logical clocks" );
+        ClockCalculator.calcPartnerLogicalClocks( this );
+        if( monitor.isCanceled() )
+          return null;
+        monitor.subTask( "Calculating lamport clocks" );
+        ClockCalculator.calcLamportClock(this, new NullProgressMonitor());
+        saveCacheMetadata();
+      } catch (IndexOutOfBoundsException e) {
+        Activator.logException(new Exception("Clock calculation failed for trace \"" + file.getAbsolutePath() + '"', e));
+      }
     }
     return this;
   }
