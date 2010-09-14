@@ -48,12 +48,11 @@ public class SelectionPartnerMarker extends AbstractEventMarker {
         for (Object obj : sSel.toList()) {
           if (obj instanceof IEvent) {
             IEvent event = ( IEvent )obj;
-            if (event.getProcess().getTrace() != trace) {
-            	return;
-            }
-            newSelectedEvents.add( event );
-            if (event.getPartnerEvent() != null) {
-              newPartnerEvents.add( event.getPartnerEvent() );
+            if (event.getProcess().getTrace() == trace) {
+              newSelectedEvents.add( event );
+              if (event.getPartnerEvent() != null) {
+                newPartnerEvents.add( event.getPartnerEvent() );
+              }
             }
           }
         }
