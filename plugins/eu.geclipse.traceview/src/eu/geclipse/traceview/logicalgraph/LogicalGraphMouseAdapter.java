@@ -15,6 +15,10 @@
 
 package eu.geclipse.traceview.logicalgraph;
 
+import java.util.LinkedList;
+import java.util.List;
+
+import eu.geclipse.traceview.ILamportEvent;
 import eu.geclipse.traceview.ILamportProcess;
 import eu.geclipse.traceview.internal.AbstractGraphMouseAdapter;
 
@@ -50,5 +54,22 @@ public class LogicalGraphMouseAdapter extends AbstractGraphMouseAdapter {
       obj = process.getEventByLamportClock( x );
     }
     return obj;
+  }
+
+  public List<Object> getObjectsOnProcess( final int xStart, final int xEnd, final int procNr ) {
+    List<Object> objs = new LinkedList<Object>();
+    int hSpace = this.graph.getEventGraphPaintListener().getHSpace();
+    int hSelection = this.graph.getHorizontalBar().getSelection();
+    int firstClock = hSelection / hSpace;
+    int eventSize = this.graph.getEventGraphPaintListener().getEventSize();
+    int xOffset = hSelection % hSpace - hSpace / 2;
+    ILamportProcess process = ( ILamportProcess )this.graph.getTrace().getProcess( procNr );
+    int x = ( xStart + xOffset - 30 - eventSize / 2 + hSpace ) / hSpace + firstClock;
+    int count = (xEnd - xStart + hSpace / 2) / hSpace;
+    for (int i = 0; i < count; i++ ) {
+      ILamportEvent event = process.getEventByLamportClock( x+i );
+      if (event != null) objs.add(event);
+    }
+    return objs;
   }
 }

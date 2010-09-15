@@ -17,8 +17,8 @@ package eu.geclipse.traceview.internal;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.LinkedList;
 import java.util.Set;
 
 import org.eclipse.jface.viewers.ISelection;
@@ -30,6 +30,7 @@ import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.ui.PartInitException;
 
 import eu.geclipse.traceview.IProcess;
@@ -38,6 +39,7 @@ public abstract class AbstractGraphMouseAdapter implements MouseListener, MouseM
   protected AbstractGraphVisualization graph;
   private int vRulerSelection;
   private Cursor moveProcCursor;
+  private Rectangle selectionRect;
 
   protected AbstractGraphMouseAdapter( final AbstractGraphVisualization graph ) {
     this.graph = graph;
@@ -60,10 +62,15 @@ public abstract class AbstractGraphMouseAdapter implements MouseListener, MouseM
   }
 
   public void mouseMove( final MouseEvent e ) {
-    if ((e.stateMask & SWT.BUTTON1) != 0 && this.vRulerSelection != -1) {
-      GC rulerGC = new GC(this.graph);
-      this.graph.getEventGraphPaintListener().drawVRulerWithMovingLine( rulerGC, this.vRulerSelection, e.y );
-      rulerGC.dispose();
+    if ((e.stateMask & SWT.BUTTON1) != 0) {
+      if (this.vRulerSelection != -1) {
+        GC rulerGC = new GC(this.graph);
+        this.graph.getEventGraphPaintListener().drawVRulerWithMovingLine( rulerGC, this.vRulerSelection, e.y );
+        rulerGC.dispose();
+      }
+      if ( selectionRect != null ) {
+        this.graph.getEventGraphPaintListener().updateSelectionRectangle(selectionRect, e);
+      }
     } else if ((e.stateMask & SWT.BUTTON1) == 0) {
       updateMouseCursor( e );
     }
@@ -82,45 +89,62 @@ public abstract class AbstractGraphMouseAdapter implements MouseListener, MouseM
   public void mouseUp( MouseEvent e ) {
     checkVRuler( e.x, e.y, false );
     updateMouseCursor( e );
-  }
-  
-  public void mouseDown( final MouseEvent e ) {
-    try {
-      checkVRuler( e.x, e.y, true );
-      Object[] objs = getObjectsForPosition( e.x, e.y );
-      if( objs.length != 0 && (e.button == 1 || e.button == 3) ) {
-        List<Object> objList = Arrays.asList( objs );
-        ISelection selection = null;
-        ISelectionProvider selectionProvider =
-          Activator.getDefault()
-            .getWorkbench()
-            .getActiveWorkbenchWindow()
-            .getActivePage()
-            .showView( "eu.geclipse.traceview.views.TraceView" )
-            .getSite()
-            .getSelectionProvider();
-        StructuredSelection oldSelection = ( StructuredSelection )selectionProvider.getSelection();
-        if ((e.stateMask & SWT.CTRL) != 0 && oldSelection != null) {
-          List oldSelectionList = new ArrayList( oldSelection.toList() );
-          if (!oldSelectionList.containsAll( objList )) {
-            if (e.button == 1) {
-              for (Object obj : objs){
-                if (!oldSelectionList.contains( obj )) oldSelectionList.add( obj );
-              }
-              selection = new StructuredSelection( oldSelectionList );
-            }
-          } else {
-            selection = new StructuredSelection( oldSelectionList );
-          }
-        }
-        if (selection == null) {
-          selection = new StructuredSelection( objList );
-        }
-        selectionProvider.setSelection( selection );
+    if ( selectionRect != null ) {
+      this.graph.getEventGraphPaintListener().updateSelectionRectangle(selectionRect, null);
+      Object[] objs = getObjectsForArea(selectionRect);
+      List<Object> objList = Arrays.asList( objs );
+      if (!objList.isEmpty()) {
+        updateSelection(e, objList);
         this.graph.redraw();
       }
+      selectionRect = null;
+    }
+  }
+  
+  private void updateSelection(final MouseEvent e, final List<Object> newSelection) {
+    try {
+      ISelection selection = null;
+      ISelectionProvider selectionProvider =
+        Activator.getDefault()
+          .getWorkbench()
+          .getActiveWorkbenchWindow()
+          .getActivePage()
+          .showView( "eu.geclipse.traceview.views.TraceView" )
+          .getSite()
+          .getSelectionProvider();
+      StructuredSelection oldSelection = ( StructuredSelection )selectionProvider.getSelection();
+      if ((e.stateMask & SWT.CTRL) != 0 && oldSelection != null) {
+        List oldSelectionList = new ArrayList( oldSelection.toList() );
+        if (!oldSelectionList.containsAll( newSelection )) {
+          if (e.button == 1) {
+            for (Object obj : newSelection){
+              if (!oldSelectionList.contains( obj )) oldSelectionList.add( obj );
+            }
+            selection = new StructuredSelection( oldSelectionList );
+          }
+        } else {
+          selection = new StructuredSelection( oldSelectionList );
+        }
+      }
+      if (selection == null) {
+        selection = new StructuredSelection( newSelection );
+      }
+      selectionProvider.setSelection( selection );
     } catch( PartInitException exception ) {
       Activator.logException( exception );
+    }  
+  }
+
+  public void mouseDown( final MouseEvent e ) {
+    checkVRuler( e.x, e.y, true );
+    Object[] objs = getObjectsForPosition( e.x, e.y );
+    if( objs.length != 0 && (e.button == 1 || e.button == 3) ) {
+      List<Object> objList = Arrays.asList( objs );
+      updateSelection(e, objList);
+      this.graph.redraw();
+    }
+    if (e.button == 1 && this.graph.getEventGraphPaintListener().isInGraphArea(e.x, e.y)) {
+      selectionRect = new Rectangle(e.x, e.y, 0, 0);
     }
   }
 
@@ -185,10 +209,8 @@ public abstract class AbstractGraphMouseAdapter implements MouseListener, MouseM
 
   public Object[] getObjectsForPosition( int xPos, int yPos ) {
     List<Object> objList = new LinkedList<Object>();
-    int graphWidth = this.graph.getClientArea().width;
-    int graphHeight = this.graph.getClientArea().height - 30;
     int y = getLineNumber( yPos );
-    if( xPos > 30 && yPos > 0 && xPos < graphWidth && yPos < graphHeight ) {
+    if( this.graph.getEventGraphPaintListener().isInGraphArea(xPos, yPos) ) {
       if( y != -1 ) {
         for (Integer proc : this.graph.getLineToProcessMapping().get( y ) ) {
           Object obj = getObjectOnProcess( xPos, proc.intValue() );
@@ -206,6 +228,30 @@ public abstract class AbstractGraphMouseAdapter implements MouseListener, MouseM
     return objList.toArray();
   }
 
+  public Object[] getObjectsForArea( final Rectangle rect ) {
+	Rectangle rect2 = new Rectangle(rect.x, rect.y, rect.width, rect.height);
+	if (rect2.width < 0) {
+	  rect2.x += rect2.width;
+	  rect2.width *= -1;
+	}
+	if (rect2.height < 0) {
+	  rect2.y += rect2.height;
+	  rect2.height *= -1;
+	}
+    List<Object> objList = new LinkedList<Object>();
+    int yStart = getLineNumber( rect2.y, true ) + 1;
+    int yEnd = getLineNumber( rect2.y + rect2.height, true );
+    for( int y = yStart; y <= yEnd; y++ ) {
+      if( y != -1 ) {
+        for (Integer proc : this.graph.getLineToProcessMapping().get( y ) ) {
+          List<Object> objs = getObjectsOnProcess( rect2.x, rect2.x + rect2.width, proc.intValue() );
+          objList.addAll( objs );
+        }
+      }
+    }
+    return objList.toArray();
+  }
+
   public List<IProcess> getProcessesOnLine( int line ) {
     List<IProcess> procList = new LinkedList<IProcess>();
     for (Integer proc : this.graph.getLineToProcessMapping().get( line ) ) {
@@ -215,4 +261,6 @@ public abstract class AbstractGraphMouseAdapter implements MouseListener, MouseM
   }
 
   public abstract Object getObjectOnProcess( final int xPos, final int procNr );
+
+  public abstract List<Object> getObjectsOnProcess( final int xStart, final int xEnd, final int procNr );
 }

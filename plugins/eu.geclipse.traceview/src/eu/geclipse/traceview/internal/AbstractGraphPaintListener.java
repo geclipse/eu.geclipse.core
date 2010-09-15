@@ -23,12 +23,14 @@ import org.eclipse.jface.preference.PreferenceConverter;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.RGB;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
@@ -363,6 +365,28 @@ public abstract class AbstractGraphPaintListener implements PaintListener {
     int line = this.eventGraph.getProcessToLineMapping()[procId];
     return ( line - this.fromProcessLine ) * this.vSpace
            - this.yOffset + this.eventSize / 2;
+  }
+
+  public boolean isInGraphArea(int x, int y) {
+    return x >= 31 && y >= 1 && x <= this.width - 31 && y <= this.height - 31;
+  }
+
+  public void updateSelectionRectangle(Rectangle selectionRect, MouseEvent e) {
+    GC selectionGC = new GC(this.eventGraph);
+    selectionGC.setClipping( 31, 1, this.width - 31, this.height - 31 );
+    selectionGC.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
+    selectionGC.setXORMode(true);
+    if (selectionRect.width != 0 || selectionRect.height != 0) {
+      selectionGC.drawRectangle(selectionRect);
+    }
+    if (e != null) {
+      selectionRect.width = e.x - selectionRect.x;
+      selectionRect.height = e.y - selectionRect.y;
+      if (selectionRect.width != 0 || selectionRect.height != 0) {
+        selectionGC.drawRectangle(selectionRect);
+      }
+    }
+    selectionGC.dispose();
   }
 
   public abstract void handleResize();

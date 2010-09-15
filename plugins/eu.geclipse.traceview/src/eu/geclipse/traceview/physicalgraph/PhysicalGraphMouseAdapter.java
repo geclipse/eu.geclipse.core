@@ -17,6 +17,9 @@
 
 package eu.geclipse.traceview.physicalgraph;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import eu.geclipse.traceview.IPhysicalEvent;
 import eu.geclipse.traceview.IPhysicalProcess;
 import eu.geclipse.traceview.internal.AbstractGraphMouseAdapter;
@@ -53,5 +56,9 @@ public class PhysicalGraphMouseAdapter extends AbstractGraphMouseAdapter {
     return object;
   }
 
-
+  @Override
+  public List<Object> getObjectsOnProcess(int xStart, int xEnd, int procNr) {
+    // TODO to be implemented
+    return new LinkedList<Object>();
+  }
 }
