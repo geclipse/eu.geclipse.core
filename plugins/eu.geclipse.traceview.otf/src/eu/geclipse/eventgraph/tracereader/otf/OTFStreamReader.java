@@ -63,6 +63,7 @@ class OTFStreamReader extends OTFUtils {
   /** unmatched Leave Events */
   private Set<Integer> unmatchedLeaves;
   private Node node;
+  private int logicalClock=0;
 
   OTFStreamReader( final File file, final OTFReader trace, final Map<Integer, Integer>[] entered ) throws IOException {
     this.readFunctions = Activator.getDefault().getPreferenceStore().getBoolean( PreferenceConstants.readFunctions );
@@ -163,6 +164,10 @@ class OTFStreamReader extends OTFUtils {
     if( this.buildCalltree ) {
       this.node = this.node.enter( functionId, this.timestamp );
     }
+    this.logicalClock++;
+    if(this.logicalClock%1000 == 0){
+      ((Process)this.trace.getProcess( this.processId )).addPreviousEvents( this.enteredStack.toArray( new Integer[0] ));
+    }
   }
 
   @SuppressWarnings("boxing")
@@ -227,7 +232,7 @@ class OTFStreamReader extends OTFUtils {
     int partnerId = this.trace.getProcessIdForOTFIndex( otfPartnerId );
     if( this.readFunctions ) {
       Process process = ( Process )this.trace.getProcess( this.processId );
-      Event event = ( Event )process.getEventByLogicalClock( process.getMaximumLogicalClock() );
+      Event event = process.getEventByLogicalClock( process.getMaximumLogicalClock() );
       event.setType( EventType.RECV );
       event.setPartnerProcessId( partnerId );
       event.setMessageGroup( group );
@@ -269,7 +274,7 @@ class OTFStreamReader extends OTFUtils {
     int partnerId = this.trace.getProcessIdForOTFIndex( otfPartnerId );
     if( this.readFunctions ) {
       Process process = ( Process )this.trace.getProcess( this.processId );
-      Event event = ( Event )process.getEventByLogicalClock( process.getMaximumLogicalClock() );
+      Event event = process.getEventByLogicalClock( process.getMaximumLogicalClock() );
       event.setType( EventType.SEND );
       event.setPartnerProcessId( partnerId );
       event.setMessageGroup( group );
@@ -304,7 +309,7 @@ class OTFStreamReader extends OTFUtils {
     }
     if( this.readFunctions ) {
       Process process = ( Process )this.trace.getProcess( this.processId );
-      Event event = ( Event )process.getEventByLogicalClock( process.getMaximumLogicalClock() );
+      Event event = process.getEventByLogicalClock( process.getMaximumLogicalClock() );
       event.setType( EventType.OTHER );
       event.setMessageGroup( group );
       event.setPartnerProcessId( this.trace.getProcessIdForOTFIndex( root ) );

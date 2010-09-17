@@ -300,6 +300,16 @@ public class Event extends AbstractEvent implements ILamportEvent, IPhysicalEven
     }
     return result;
   }
+  
+  public Event getPreviousEvent() {
+    Event result = null;
+    try {
+      result = this.process.getEventByLogicalClock( this.logicalClock -1 );
+    } catch( IndexOutOfBoundsException e ) {
+      // ignore
+    }
+    return result;
+  }
 
   /*
    * (non-Javadoc)
