@@ -64,6 +64,8 @@ public abstract class AbstractGraphPaintListener implements PaintListener {
   protected int height;
   // presentation
   protected Color selectionColor;
+  // black
+  protected Color black;
   // lines
   protected Color line1;
   protected Color line5;
@@ -89,6 +91,7 @@ public abstract class AbstractGraphPaintListener implements PaintListener {
     updatePropertiesFromPreferences();
     setHorizontal( 0 );
     setVertical( 0 );
+    this.black = Display.getDefault().getSystemColor( SWT.COLOR_BLACK);
     this.line1 = new Color( Display.getDefault(), new RGB( 196, 196, 196 ) );
     this.line5 = new Color( Display.getDefault(), new RGB( 128, 128, 128 ) );
     this.line10 = new Color( Display.getDefault(), new RGB( 64, 64, 64 ) );

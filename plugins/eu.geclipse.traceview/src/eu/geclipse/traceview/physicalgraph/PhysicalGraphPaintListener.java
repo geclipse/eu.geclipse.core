@@ -94,6 +94,7 @@ class PhysicalGraphPaintListener extends AbstractGraphPaintListener {
    * @throws IOException
    */
   private void drawGraph() {
+    int rectangleHeight = 2 * this.vzoomfactor;
     // draw events from visible processes
     for( int i = 0; i < this.numProc; i++ ) {
       if (!procDrawingEnabled( i )) continue;
@@ -106,49 +107,54 @@ class PhysicalGraphPaintListener extends AbstractGraphPaintListener {
       Color drawColor = null;
       Color fillColor = null;
       for( IPhysicalEvent event : events ) {
-        for( IEventMarker eventmarker : this.eventGraph.getEventMarkers() ) {
-          int mark = eventmarker.mark( event );
-          if( mark != 0 ) {
-            Color newFillColor = eventmarker.getBackgroundColor( mark );
-            Color newDrawColor = eventmarker.getForegroundColor( mark );
-            if (newFillColor != null) fillColor = newFillColor;
-            if (newDrawColor != null) drawColor = newDrawColor;
-          }
-          if ( fastRedraw ) break;
-        }
-        if( drawColor != null ) {
-          this.gc.setForeground( drawColor );
-        }
-        if( fillColor != null )
-          this.gc.setBackground( fillColor );
         int x = getXPosForClock( event.getPhysicalStartClock() );
         int rectangleWidth = getXPosForClock( event.getPhysicalStopClock() ) - x;
-        int rectangleHeight = 2 * this.vzoomfactor;
-        if( fillColor != null ) {
-          // fix for clipping problems -- TODO look into additional problems
-          if(x<0)
-            this.gc.fillRectangle( 0, y, x+rectangleWidth, rectangleHeight );
-          else
-            this.gc.fillRectangle( x, y, rectangleWidth, rectangleHeight );
-        }
-        if( rectangleHeight > this.fontsize + 2 && !fastRedraw ) {
-          String name = event.getName();
-          if( name != null ) {
-            int textWidth = this.gc.textExtent( name ).x;
-            int textHeight = this.gc.textExtent( name ).y;
-            if( textWidth < rectangleWidth ) {
-              this.gc.drawText( name,
-                                x + rectangleWidth / 2 - textWidth / 2,
-                                y + rectangleHeight / 2 - textHeight / 2 );
+        if( rectangleWidth != 0 ) {
+          for( IEventMarker eventmarker : this.eventGraph.getEventMarkers() ) {
+            int mark = eventmarker.mark( event );
+            if( mark != 0 ) {
+              Color newFillColor = eventmarker.getBackgroundColor( mark );
+              Color newDrawColor = eventmarker.getForegroundColor( mark );
+              if( newFillColor != null )
+                fillColor = newFillColor;
+              if( newDrawColor != null )
+                drawColor = newDrawColor;
+            }
+            if( this.fastRedraw )
+              break;
+          }
+//          if( drawColor != null )
+            this.gc.setForeground( drawColor );
+//          if( fillColor != null )
+            this.gc.setBackground( fillColor );
+
+          if( fillColor != null ) {
+            // fix for clipping problems -- TODO look into additional problems
+            if( x < 0 )
+              this.gc.fillRectangle( 0, y, x + rectangleWidth, rectangleHeight );
+            else
+              this.gc.fillRectangle( x, y, rectangleWidth, rectangleHeight );
+          }
+          if( rectangleWidth > 10 && rectangleHeight > this.fontsize + 2 && !fastRedraw ) {
+            String name = event.getName();
+            if( name != null ) {
+              int textWidth = this.gc.textExtent( name ).x;
+              int textHeight = this.gc.textExtent( name ).y;
+              if( textWidth < rectangleWidth ) {
+                this.gc.drawText( name, x + rectangleWidth / 2 - textWidth / 2, y + rectangleHeight / 2 - textHeight / 2 );
+              }
             }
           }
-        }
-        if( drawColor != null ) {
-       // fix for clipping problems -- TODO look into additional problems
-          if(x<0)
-            this.gc.drawRectangle( 0, y, x+rectangleWidth, rectangleHeight );
-          else
-            this.gc.drawRectangle( x, y, rectangleWidth, rectangleHeight );
+          if( drawColor != null ) {
+            // fix for clipping problems -- TODO look into additional problems
+            if( x < 0 )
+              this.gc.drawRectangle( 0, y, x + rectangleWidth, rectangleHeight );
+            else
+              this.gc.drawRectangle( x, y, rectangleWidth, rectangleHeight );
+          }
+        } else {
+          this.gc.setForeground( this.black );
+          this.gc.drawLine( x, y, x, y+rectangleHeight );
         }
       }
     }
