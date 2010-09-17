@@ -87,12 +87,12 @@ public class TraceView extends ViewPart implements ITraceView {
         if( configurationElement.getAttribute( "fileextension" ).equals( extension ) ) { //$NON-NLS-1$
           ITraceReader traceReader;
           try {
-	        traceReader = ( ITraceReader )configurationElement.createExecutableExtension( "class" );
+            traceReader = ( ITraceReader )configurationElement.createExecutableExtension( "class" );
             final ITrace trace = traceReader.openTrace( path, monitor );
             return trace;
-		  } catch (CoreException e) {
-		    Activator.logException(e);
-		  }
+          } catch( CoreException e ) {
+            Activator.logException( e );
+          }
         }
       }
     }

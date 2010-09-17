@@ -229,15 +229,15 @@ public abstract class AbstractGraphMouseAdapter implements MouseListener, MouseM
   }
 
   public Object[] getObjectsForArea( final Rectangle rect ) {
-	Rectangle rect2 = new Rectangle(rect.x, rect.y, rect.width, rect.height);
-	if (rect2.width < 0) {
-	  rect2.x += rect2.width;
-	  rect2.width *= -1;
-	}
-	if (rect2.height < 0) {
-	  rect2.y += rect2.height;
-	  rect2.height *= -1;
-	}
+    Rectangle rect2 = new Rectangle( rect.x, rect.y, rect.width, rect.height );
+    if( rect2.width < 0 ) {
+      rect2.x += rect2.width;
+      rect2.width *= -1;
+    }
+    if( rect2.height < 0 ) {
+      rect2.y += rect2.height;
+      rect2.height *= -1;
+    }
     List<Object> objList = new LinkedList<Object>();
     int yStart = getLineNumber( rect2.y, true ) + 1;
     int yEnd = getLineNumber( rect2.y + rect2.height, true );
