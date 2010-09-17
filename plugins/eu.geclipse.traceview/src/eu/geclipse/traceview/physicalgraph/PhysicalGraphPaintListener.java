@@ -125,7 +125,11 @@ class PhysicalGraphPaintListener extends AbstractGraphPaintListener {
         int rectangleWidth = getXPosForClock( event.getPhysicalStopClock() ) - x;
         int rectangleHeight = 2 * this.vzoomfactor;
         if( fillColor != null ) {
-          this.gc.fillRectangle( x, y, rectangleWidth, rectangleHeight );
+          // fix for clipping problems -- TODO look into additional problems
+          if(x<0)
+            this.gc.fillRectangle( 0, y, x+rectangleWidth, rectangleHeight );
+          else
+            this.gc.fillRectangle( x, y, rectangleWidth, rectangleHeight );
         }
         if( rectangleHeight > this.fontsize + 2 && !fastRedraw ) {
           String name = event.getName();
@@ -140,7 +144,11 @@ class PhysicalGraphPaintListener extends AbstractGraphPaintListener {
           }
         }
         if( drawColor != null ) {
-          this.gc.drawRectangle( x, y, rectangleWidth, rectangleHeight );
+       // fix for clipping problems -- TODO look into additional problems
+          if(x<0)
+            this.gc.drawRectangle( 0, y, x+rectangleWidth, rectangleHeight );
+          else
+            this.gc.drawRectangle( x, y, rectangleWidth, rectangleHeight );
         }
       }
     }
