@@ -137,7 +137,7 @@ public abstract class AbstractGraphMouseAdapter implements MouseListener, MouseM
 
   public void mouseDown( final MouseEvent e ) {
     checkVRuler( e.x, e.y, true );
-    Object[] objs = getObjectsForPosition( e.x, e.y );
+    Object[] objs = getObjectsForPosition( e.x, e.y, (e.stateMask & SWT.CTRL) == 0 );
     if( objs.length != 0 && (e.button == 1 || e.button == 3) ) {
       List<Object> objList = Arrays.asList( objs );
       updateSelection(e, objList);
@@ -149,10 +149,10 @@ public abstract class AbstractGraphMouseAdapter implements MouseListener, MouseM
   }
 
   protected int getLineNumber( final int yPos ) {
-    return getLineNumber( yPos, false );
+    return getLineNumber( yPos, false, false );
   }
 
-  protected int getLineNumber( final int yPos, boolean areaBelowProcess ) {
+  protected int getLineNumber( final int yPos, boolean areaBelowProcess, boolean mapAreaBelowLastLineToLastLine ) {
     int yOffset = this.graph.getEventGraphPaintListener().getYOffset();
     int eventSize = this.graph.getEventGraphPaintListener().getEventSize();
     int vSpace = this.graph.getEventGraphPaintListener().getVSpace();
@@ -160,7 +160,8 @@ public abstract class AbstractGraphMouseAdapter implements MouseListener, MouseM
     int processLine = -1;
     int tmp = yPos + yOffset - eventSize / 2;
     if (areaBelowProcess) {
-      processLine = tmp / vSpace;
+      if (tmp < 0) processLine = -1;
+      else processLine = tmp / vSpace;
     } else {
       if( tmp % vSpace <= eventSize / 2 ) {
         processLine = tmp / vSpace;
@@ -172,7 +173,11 @@ public abstract class AbstractGraphMouseAdapter implements MouseListener, MouseM
     if ( processLine != -1 ) {
       processLine += this.graph.getEventGraphPaintListener().getFromProcessLine();
       if( processLine >= numProcLines ) {
-        processLine = -1;
+        if (mapAreaBelowLastLineToLastLine) {
+          processLine = numProcLines - 1;
+        } else {
+          processLine = -1;
+        }
       }
     }
     return processLine;
@@ -191,7 +196,7 @@ public abstract class AbstractGraphMouseAdapter implements MouseListener, MouseM
         }
       } else {
         if (!clicked) {
-          y = getLineNumber( yPos, true );
+          y = getLineNumber( yPos, true, true );
           if ( y <  this.vRulerSelection ) {
             if (y + 1 < this.graph.getLineToProcessMapping().size()) {
               this.graph.moveProcessLine( this.vRulerSelection, y + 1 );
@@ -207,7 +212,7 @@ public abstract class AbstractGraphMouseAdapter implements MouseListener, MouseM
     }
   }
 
-  public Object[] getObjectsForPosition( int xPos, int yPos ) {
+  public Object[] getObjectsForPosition( int xPos, int yPos, boolean allowTraceObj ) {
     List<Object> objList = new LinkedList<Object>();
     int y = getLineNumber( yPos );
     if( this.graph.getEventGraphPaintListener().isInGraphArea(xPos, yPos) ) {
@@ -222,7 +227,7 @@ public abstract class AbstractGraphMouseAdapter implements MouseListener, MouseM
           objList.addAll( getProcessesOnLine( y ) );
         }
       } else {
-        objList.add( this.graph.getTrace() );
+        if (allowTraceObj) objList.add( this.graph.getTrace() );
       }
     }
     return objList.toArray();
@@ -239,8 +244,8 @@ public abstract class AbstractGraphMouseAdapter implements MouseListener, MouseM
       rect2.height *= -1;
     }
     List<Object> objList = new LinkedList<Object>();
-    int yStart = getLineNumber( rect2.y, true ) + 1;
-    int yEnd = getLineNumber( rect2.y + rect2.height, true );
+    int yStart = getLineNumber( rect2.y, true, true ) + 1;
+    int yEnd = getLineNumber( rect2.y + rect2.height, true, true );
     for( int y = yStart; y <= yEnd; y++ ) {
       if( y != -1 ) {
         for (Integer proc : this.graph.getLineToProcessMapping().get( y ) ) {

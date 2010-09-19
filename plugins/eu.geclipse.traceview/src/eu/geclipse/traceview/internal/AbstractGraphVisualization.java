@@ -112,13 +112,13 @@ public abstract class AbstractGraphVisualization extends TraceVisualization {
     DefaultToolTip toolTip = new DefaultToolTip( this ) {
       @Override
       protected boolean shouldCreateToolTip( final Event event ) {
-        Object[] objs = mouseAdapter.getObjectsForPosition( event.x, event.y );
+        Object[] objs = mouseAdapter.getObjectsForPosition( event.x, event.y, true );
         return objs.length != 0 && getText( objs ) != null;
       }
 
       @Override
       protected String getText( final Event event ) {
-        Object[] objs = mouseAdapter.getObjectsForPosition( event.x, event.y );
+        Object[] objs = mouseAdapter.getObjectsForPosition( event.x, event.y, true );
         return getText( objs );
       }
 
