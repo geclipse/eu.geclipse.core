@@ -46,6 +46,9 @@ public final class Process extends AbstractProcessFileCache {
     event.setSentMessageLength( 0 );
     event.setReceivedMessageLength( 0 );
     event.setPhysicalStartClock( timestamp );
+    // set this since it is the last field in the event and if it is not set
+    // there will be an out of bounds exception if it is accessed
+    event.setMessageGroup( -1 );
     this.logClock++;
   }
 
@@ -62,6 +65,9 @@ public final class Process extends AbstractProcessFileCache {
     event.setReceivedMessageLength( 0 );
     event.setLamportClock( -1 );
     event.setPhysicalStartClock( timestamp );
+    // set this since it is the last field in the event and if it is not set
+    // there will be an out of bounds exception if it is accessed
+    event.setMessageGroup( -1 );
     this.logClock++;
   }
 
