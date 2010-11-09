@@ -86,6 +86,13 @@ public class BufferedRandomAccessFile {
     }
   }
 
+  public void readFully(byte[] b) throws IOException {
+    flush();
+    this.file.seek( this.bufferPos + this.startOffset );
+    this.file.readFully(b);
+    seek(this.bufferPos + this.startOffset + b.length);
+  }
+
   public void flush() throws IOException {
     if ( this.dirty ) {
       this.file.seek( this.startOffset );
