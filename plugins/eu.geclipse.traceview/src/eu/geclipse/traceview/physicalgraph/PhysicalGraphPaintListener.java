@@ -104,12 +104,13 @@ class PhysicalGraphPaintListener extends AbstractGraphPaintListener {
       IPhysicalProcess process = ( IPhysicalProcess )( this.eventGraph.getTrace().getProcess( i ) );
       IPhysicalEvent[] events = process.getEventsByPhysicalClock( this.fromTime - 20,
                                                                   this.toTime );
+      this.gc.setForeground( this.black );
       Color drawColor = null;
       Color fillColor = null;
       for( IPhysicalEvent event : events ) {
         int x = getXPosForClock( event.getPhysicalStartClock() );
         int rectangleWidth = getXPosForClock( event.getPhysicalStopClock() ) - x;
-        if( rectangleWidth != 0 ) {
+        if( rectangleWidth > 1 ) {
           for( IEventMarker eventmarker : this.eventGraph.getEventMarkers() ) {
             int mark = eventmarker.mark( event );
             if( mark != 0 ) {
@@ -135,7 +136,7 @@ class PhysicalGraphPaintListener extends AbstractGraphPaintListener {
             else
               this.gc.fillRectangle( x, y, rectangleWidth, rectangleHeight );
           }
-          if( rectangleWidth > 10 && rectangleHeight > this.fontsize + 2 && !fastRedraw ) {
+          if( rectangleWidth > 10 && rectangleHeight > this.fontsize + 2 && !this.fastRedraw ) {
             String name = event.getName();
             if( name != null ) {
               int textWidth = this.gc.textExtent( name ).x;
