@@ -33,6 +33,23 @@ public final class Process extends AbstractProcessFileCache {
     this.previousEvents.add( new Integer[0] );
   }
 
+  void appendEvent( final EventType type, final int partnerId, final int sentMessageLength, final int receivedMessageLength, final int messageType, final int messageGroup, final int timestamp ) {
+    setMaximumLogicalClock( this.logClock );
+    Event event = new Event( this.logClock, this );
+    event.setType( type );
+    event.setFunctionId( -1 );
+    event.setPartnerProcessId( partnerId );
+    event.setPartnerLogicalClock( -1 );
+    event.setMessageGroup( messageGroup );
+    event.setMessageType( messageType );
+    event.setPartnerLamportClock( -1 );
+    event.setLamportClock( -1 );
+    event.setSentMessageLength( sentMessageLength );
+    event.setReceivedMessageLength( receivedMessageLength );
+    event.setPhysicalStartClock( timestamp );
+    this.logClock++;
+  }
+  
   void appendEvent( final EventType type, final int partnerId, final int timestamp ) {
     setMaximumLogicalClock( this.logClock );
     Event event = new Event( this.logClock, this );

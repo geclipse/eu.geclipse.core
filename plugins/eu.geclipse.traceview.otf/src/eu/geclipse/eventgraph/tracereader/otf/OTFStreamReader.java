@@ -53,7 +53,7 @@ class OTFStreamReader extends OTFUtils {
   /** physical time */
   private int timestamp = 0;
   /** unknown event types */
-  private Map<Integer, int[]> unknown;
+  private Map<String, int[]> unknownEventTypes;
   /** Stack or mapped Enter Events **/
   private int stacked = 0;
   /** stack to match Enter and Leave Events **/
@@ -63,14 +63,14 @@ class OTFStreamReader extends OTFUtils {
   /** unmatched Leave Events */
   private Set<Integer> unmatchedLeaves;
   private Node node;
-  private int logicalClock=0;
+  private int logicalClock = 0;
 
   OTFStreamReader( final File file, final OTFReader trace, final Map<Integer, Integer>[] entered ) throws IOException {
     this.readFunctions = Activator.getDefault().getPreferenceStore().getBoolean( PreferenceConstants.readFunctions );
     this.trace = trace;
     this.enteredMap = entered;
     this.enteredStack = new Stack<Integer>();
-    this.unknown = new HashMap<Integer, int[]>();
+    this.unknownEventTypes = new HashMap<String, int[]>();
     this.unmatchedLeaves = new HashSet<Integer>();
     if( file.exists() ) {
       this.input = new BufferedReader( new FileReader( file ) );
@@ -90,7 +90,7 @@ class OTFStreamReader extends OTFUtils {
   public void readStream() throws IOException {
     while( ( this.line = this.input.readLine() ) != null ) {
       this.lineIdx = 0;
-      int ch = this.line.charAt( 0 );
+      char ch = this.line.charAt( this.lineIdx );
       // read TimeStamp
       if( Character.isDigit( ch ) || Character.isLowerCase( ch ) ) {
         readTimestamp();
@@ -131,22 +131,30 @@ class OTFStreamReader extends OTFUtils {
       }
       // unknown
       else {
-        int[] value = this.unknown.get( ch );
+        StringBuffer stringBuffer = new StringBuffer();
+        while( !( ch >= '0' && ch <= '9' ) && !( ch >= 'a' && ch <= 'f' ) ) {
+          stringBuffer.append( ch );
+          this.lineIdx++;
+          if( this.lineIdx < this.line.length() ) {
+            ch = this.line.charAt( this.lineIdx );
+          } else {
+            break;
+          }
+        }
+        int[] value = this.unknownEventTypes.get( stringBuffer.toString() );
         if( value == null ) {
           value = new int[ 1 ];
           value[ 0 ] = 1;
-          this.unknown.put( new Integer( ch ), value );
+          this.unknownEventTypes.put( stringBuffer.toString(), value );
         } else {
           value[ 0 ]++;
         }
       }
     }
-    // for( Integer key : this.unknown.keySet() ) {
-    // int[] value = this.unknown.get( key );
-    // Activator.getDefault().getLog().log( new Status( IStatus.WARNING,
-    // Activator.PLUGIN_ID, "Unsupported OTF Event Type " + ( char
-    // )key.intValue() + " occured " + value[ 0 ] + " times in file" ) );
-    // }
+    for( String key : this.unknownEventTypes.keySet() ) {
+      int[] value = this.unknownEventTypes.get( key );
+      Activator.getDefault().getLog().log( new Status( IStatus.WARNING, Activator.PLUGIN_ID, "Unsupported OTF Event Type " + key + " occured " + value[ 0 ] + " times in file" ) );
+    }
   }
 
   @SuppressWarnings("boxing")
@@ -165,8 +173,8 @@ class OTFStreamReader extends OTFUtils {
       this.node = this.node.enter( functionId, this.timestamp );
     }
     this.logicalClock++;
-    if(this.logicalClock%1000 == 0){
-      ((Process)this.trace.getProcess( this.processId )).addPreviousEvents( this.enteredStack.toArray( new Integer[0] ));
+    if( this.logicalClock % 1000 == 0 ) {
+      ( ( Process )this.trace.getProcess( this.processId ) ).addPreviousEvents( this.enteredStack.toArray( new Integer[ 0 ] ) );
     }
   }
 
@@ -224,7 +232,7 @@ class OTFStreamReader extends OTFUtils {
       }
       // Read Unknown
       else {
-        //System.out.println( "Receive contains unknown information " + ( char )this.line.charAt( this.lineIdx ) );
+        // System.out.println( "Receive contains unknown information " + ( char )this.line.charAt( this.lineIdx ) );
         this.lineIdx++;
         readNumber();
       }
@@ -239,7 +247,7 @@ class OTFStreamReader extends OTFUtils {
       event.setReceivedMessageLength( length );
       event.setMessageType( type );
     } else {
-      ( ( Process )this.trace.getProcess( this.processId ) ).appendEvent( EventType.RECV, partnerId, this.timestamp );
+      ( ( Process )this.trace.getProcess( this.processId ) ).appendEvent( EventType.RECV, partnerId, 0, length, type, group, this.timestamp );
     }
   }
 
@@ -266,9 +274,7 @@ class OTFStreamReader extends OTFUtils {
       }
       // Read Unknown
       else {
-        //System.out.println( "Sends contains unknown information " + ( char )this.line.charAt( this.lineIdx ) );
         this.lineIdx++;
-        readNumber();
       }
     }
     int partnerId = this.trace.getProcessIdForOTFIndex( otfPartnerId );
@@ -281,19 +287,43 @@ class OTFStreamReader extends OTFUtils {
       event.setSentMessageLength( length );
       event.setMessageType( type );
     } else {
-      ( ( Process )this.trace.getProcess( this.processId ) ).appendEvent( EventType.SEND, partnerId, this.timestamp );
+      ( ( Process )this.trace.getProcess( this.processId ) ).appendEvent( EventType.SEND, partnerId, length, 0, type, group, this.timestamp );
     }
   }
 
   private void readCollective() {
-    int collectiveOperationId = readNumber();
+    // TODO add support for COPE
+    if( this.line.charAt( this.lineIdx ) == 'E' ) {
+      int[] value = this.unknownEventTypes.get( "COPE" ); //$NON-NLS-1$
+      if( value == null ) {
+        value = new int[ 1 ];
+        value[ 0 ] = 1;
+        this.unknownEventTypes.put( "COPE", value ); //$NON-NLS-1$
+      } else {
+        value[ 0 ]++;
+      }
+      return;
+    }
+    int collectiveOperationId;
+    // TODO improve support for COPB
+    if( this.line.charAt( this.lineIdx ) == 'B' ) {
+      this.lineIdx++;
+      collectiveOperationId = readNumber();
+      if( this.line.charAt( this.lineIdx ) == 'H' ) {
+        this.lineIdx++; // skip H
+        readNumber(); // skip value
+      }
+    }else{
+      collectiveOperationId = readNumber();
+    }
+    
     int group = -1;
     int root = -1;
     int sent = -1;
     int received = -1;
     if( this.line.charAt( this.lineIdx ) == 'C' ) {
       this.lineIdx++; // skip C
-      group = readNumber(); // Skip
+      group = readNumber();
     }
     if( this.line.indexOf( "RT" ) == this.lineIdx ) { //$NON-NLS-1$
       this.lineIdx += 2; // skip RT
@@ -310,14 +340,13 @@ class OTFStreamReader extends OTFUtils {
     if( this.readFunctions ) {
       Process process = ( Process )this.trace.getProcess( this.processId );
       Event event = process.getEventByLogicalClock( process.getMaximumLogicalClock() );
-      event.setType( EventType.OTHER );
+      event.setType( EventType.COLLECTIVE );
       event.setMessageGroup( group );
       event.setPartnerProcessId( this.trace.getProcessIdForOTFIndex( root ) );
       event.setSentMessageLength( sent );
       event.setReceivedMessageLength( received );
-      // event.setMessageType( type );
     } else {
-      ( ( Process )this.trace.getProcess( this.processId ) ).appendEvent( EventType.SEND, -1, this.timestamp );
+      ( ( Process )this.trace.getProcess( this.processId ) ).appendEvent( EventType.COLLECTIVE, this.trace.getProcessIdForOTFIndex( root ), sent, received, -1, group, this.timestamp );
     }
   }
 
