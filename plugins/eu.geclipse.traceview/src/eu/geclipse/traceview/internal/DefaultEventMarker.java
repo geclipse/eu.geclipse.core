@@ -81,6 +81,15 @@ public class DefaultEventMarker extends AbstractEventMarker {
       this.bgColor = testEventFill ? testEventFillColor : null;
       this.fgColor = testEventDraw ? testEventColor : null;
       result = Rectangle_Event;
+    } else if (event.getType().equals( EventType.COLLECTIVE)) {
+      if(event.getProcessId() == event.getPartnerProcessId()){
+        this.bgColor = sendEventFill ? sendEventFillColor : null;
+        this.fgColor = sendEventDraw ? sendEventColor : null;
+      }else{
+        this.bgColor = recvEventFill ? recvEventFillColor : null;
+        this.fgColor = recvEventDraw ? recvEventColor : null;
+      }
+      result = Ellipse_Event;
     } else if (event.getType().equals( EventType.OTHER )) {
       this.bgColor = otherEventFill ? otherEventFillColor : null;
       this.fgColor = otherEventDraw ? otherEventColor : null;
