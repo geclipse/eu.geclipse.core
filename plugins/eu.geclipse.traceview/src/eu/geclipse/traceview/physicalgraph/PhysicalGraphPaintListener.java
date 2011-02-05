@@ -450,6 +450,7 @@ class PhysicalGraphPaintListener extends AbstractGraphPaintListener {
     drawHRuler();
     // set the clipping to the graph area
     this.gc.setClipping( 31, 1, this.width - 31, this.height - 31 );
+    drawGraphBackground();
     drawGridHLines();
     drawGridVLines();
     drawSelection();

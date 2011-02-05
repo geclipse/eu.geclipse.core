@@ -527,12 +527,17 @@ class LogicalGraphPaintListener extends AbstractGraphPaintListener {
     drawVRuler(this.gc, -1);
     drawHRuler();
     this.gc.setClipping( 31, 1, this.width - 31, this.height - 31 );
+    ILamportEvent[][] events = new ILamportEvent[this.trace.getNumberOfProcesses()][];
+    for( int i = 0; i < this.numProc; i++ ) {
+        ILamportProcess process = ( ILamportProcess )this.eventGraph.getTrace().getProcess( i );
+        events[i] = process.getEventsByLamportClock( this.fromClock, true, this.toClock, false );
+        // Draw background markers of events
+        if (!this.fastRedraw) drawGraphBackground(i, events[i]);
+    }
     drawGridHLines();
     drawGridVLines();
     for( int i = 0; i < this.numProc; i++ ) {
-        ILamportProcess process = ( ILamportProcess )this.eventGraph.getTrace().getProcess( i );
-        ILamportEvent[] events = process.getEventsByLamportClock( this.fromClock, this.toClock );
-        drawGraph(i, events);
+        drawGraph(i, events[i]);
     }
   }
 
