@@ -19,6 +19,7 @@ import java.net.URI;
 
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.filesystem.IFileTree;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -53,7 +54,13 @@ public class SFTPFileSystem
   public IFileTree fetchFileTree( final IFileStore root,
                                   final IProgressMonitor monitor )
   {
-    return super.fetchFileTree( root, monitor );
+    try {
+		return super.fetchFileTree( root, monitor );
+	} catch (CoreException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		return null ; 
+	}
   }
 
   @Override

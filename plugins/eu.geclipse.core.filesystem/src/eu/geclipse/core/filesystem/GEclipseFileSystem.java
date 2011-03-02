@@ -137,7 +137,14 @@ public class GEclipseFileSystem
     }
       
     if ( fileTree == null ) {
-      fileTree = super.fetchFileTree( root, monitor );
+      
+    	try {
+			fileTree = super.fetchFileTree( root, monitor );
+		} catch (CoreException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fileTree = null ; 
+		}
     }
     
     return fileTree;
