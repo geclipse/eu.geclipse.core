@@ -57,7 +57,7 @@ public class PerspectivePreferencePage extends FieldEditorPreferencePage
     ImageDescriptor developerPerspectiveImage=null;
 
     RadioGroupFieldEditor editor = new RadioGroupFieldEditor( KEY_REMEMBER_SWITCHING,
-                                                              "Open a g-Eclipse perspective after creating a Grid Project",
+                                                              "Open a g-Eclipse perspective after creating a Cloud/Grid Project",
                                                               3,
                                                               new String[][]{
                                                                 {
@@ -111,7 +111,7 @@ public class PerspectivePreferencePage extends FieldEditorPreferencePage
     }
 
     editor = new RadioGroupFieldEditor( KEY_DEFAULT_PERSPECTIVE,
-                                        "Choose perspective to open for new Grid Projects",
+                                        "Choose perspective to open for new Cloud/Grid Projects",
                                         1,
                                         labels,
                                         getFieldEditorParent(),

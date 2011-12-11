@@ -109,7 +109,7 @@ public class GridProjectStructureComposite extends Composite {
     this.previewTree.setLayoutData( gData );
     
     this.rootItem = new TreeItem( this.previewTree, SWT.NONE );
-    this.rootItem.setText( "My Grid Project" );
+    this.rootItem.setText( "My Cloud/Grid Project" );
     this.rootItem.setImage(
         PlatformUI.getWorkbench()
         .getSharedImages()
