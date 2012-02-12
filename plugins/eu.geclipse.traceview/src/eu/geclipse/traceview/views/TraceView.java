@@ -101,18 +101,23 @@ public class TraceView extends ViewPart implements ITraceView {
 
   public void addTrace( final ITrace trace ) {
     if( trace != null ) {
-      try {
-        PlatformUI.getWorkbench().getActiveWorkbenchWindow()
-                  .getActivePage().showView( "eu.geclipse.traceview.views.TraceView" );
-        getViewSite().getActionBars().getToolBarManager().removeAll();
-        this.traceVisPage = new TraceVisPage( this.cTabFolder,
-                                              SWT.NONE,
-                                              this.getViewSite(),
-                                              this,
-                                              trace );
-      } catch( PartInitException exception ) {
-        Activator.logException( exception );
-      }
+      Display.getDefault().syncExec(new Runnable() {
+		@Override
+		public void run() {
+		      try {
+		        PlatformUI.getWorkbench().getActiveWorkbenchWindow()
+		                  .getActivePage().showView( "eu.geclipse.traceview.views.TraceView" );
+		        getViewSite().getActionBars().getToolBarManager().removeAll();
+		        TraceView.this.traceVisPage = new TraceVisPage( TraceView.this.cTabFolder,
+		                                              SWT.NONE,
+		                                              TraceView.this.getViewSite(),
+		                                              TraceView.this,
+		                                              trace );
+		      } catch( PartInitException exception ) {
+		        Activator.logException( exception );
+		      }
+		    }
+      	});
     }
   }
 
