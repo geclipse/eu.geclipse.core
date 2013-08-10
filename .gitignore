@@ -1,0 +1,13 @@
+*~
+*.bak
+bin/
+*.class
+core
+core.*
+.DS_Store/
+heapdump.*
+javacore.*
+*.patch
+*.rej
+*.so
+target/
